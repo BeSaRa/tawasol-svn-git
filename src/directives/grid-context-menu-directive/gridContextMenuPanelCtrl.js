@@ -1,13 +1,9 @@
 module.exports = function (app) {
-    app.controller('gridActionsDirectiveCtrl', function ($q,
-                                                         $scope,
-                                                         langService,
-                                                         LangWatcher,
-                                                         _,
-                                                         Lookup,
-                                                         $timeout,
+    app.controller('gridContextMenuPanelCtrl', function (mdPanelRef, $timeout, $scope, $q,
+                                                         LangWatcher, langService, cmsTemplate, _,
+                                                         record, contextActions,
                                                          lookupService,
-                                                         employeeService,
+                                                         gridService,
                                                          Outgoing,
                                                          Incoming,
                                                          Internal,
@@ -17,21 +13,50 @@ module.exports = function (app) {
                                                          G2GMessagingHistory,
                                                          SentItemDepartmentInbox,
                                                          Information,
-                                                         gridService,
-                                                         FollowupBook) {
+                                                         FollowupBook,
+                                                         Lookup) {
         'ngInject';
-        var self = this, actionParentRow;
-        self.controllerName = 'gridActionsDirectiveCtrl';
-        self.langService = langService;
+        var self = this;
+
+        self.controllerName = 'gridContextMenuPanelCtrl';
+        self.record = record;
+        self.contextActions = [];
         LangWatcher($scope);
 
         /**
-         * @description Checks if actions will be shown or not
-         * @param action
-         * @returns {*}
+         * @description Opens the grid context menu
+         * @param $mdMenu
+         * @param $event
          */
-        self.isShowAction = function (action) {
-            return action.checkShow(action, self.model);
+        self.openContextMenu = function ($mdMenu, $event) {
+            $mdMenu.open();
+        };
+
+        /**
+         * @description Opens the cascade menu if action is enabled
+         * @param $mdMenu
+         * @param action
+         */
+        self.openCascadeMenu = function ($mdMenu, action) {
+            if (action.disabledAction)
+                return;
+            $mdMenu.open();
+        };
+
+        /**
+         * @description Process the callback for the action button
+         * @param action
+         * @param $event
+         * @param $mdMenu
+         */
+        self.processMenu = function (action, $event, $mdMenu) {
+            if (action.hasOwnProperty('params') && action.params && action.params.length) {
+                action.callback(self.record, action.params, $event);
+            } else {
+                action.callback(self.record, $event);
+            }
+            $mdMenu.close();
+            mdPanelRef && mdPanelRef.close('processMenu');
         };
 
         /**
@@ -42,7 +67,7 @@ module.exports = function (app) {
         self.isActionDisabled = function (action) {
             if (action.hasOwnProperty('disabled')) {
                 if (typeof action.disabled === 'function')
-                    return !!action.disabled(self.model);
+                    return !!action.disabled(self.record);
                 return !!action.disabled;
             }
             return false;
@@ -56,7 +81,7 @@ module.exports = function (app) {
         self.getActionText = function (action, isShortcutRequest) {
             var langKey = "";
             if (action.hasOwnProperty('textCallback') && angular.isFunction(action.textCallback)) {
-                return langService.get(action.textCallback(self.model));
+                return langService.get(action.textCallback(self.record));
             }
 
             if (angular.isFunction(action.text)) {
@@ -69,6 +94,7 @@ module.exports = function (app) {
             }
             return langService.get(langKey);
         };
+
 
         /**
          * @description Checks if security level information can be shown or not.
@@ -86,14 +112,14 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.showCommentsInfo = function (gridName) {
-            return !(self.model instanceof Outgoing
-                || self.model instanceof Incoming
-                || self.model instanceof Internal
-                || self.model instanceof EventHistory
-                || self.model instanceof SentItemDepartmentInbox
-                || self.model instanceof G2G
-                || self.model instanceof G2GMessagingHistory
-                || self.model instanceof FollowupBook
+            return !(self.record instanceof Outgoing
+                || self.record instanceof Incoming
+                || self.record instanceof Internal
+                || self.record instanceof EventHistory
+                || self.record instanceof SentItemDepartmentInbox
+                || self.record instanceof G2G
+                || self.record instanceof G2GMessagingHistory
+                || self.record instanceof FollowupBook
             );
         };
 
@@ -103,8 +129,8 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.showPriorityLevel = function (gridName) {
-            return !((self.model instanceof EventHistory && (gridName === 'user-sent-items' || gridName === gridService.grids.inbox.sentItem))
-                || self.model instanceof G2GMessagingHistory);
+            return !((self.record instanceof EventHistory && (gridName === 'user-sent-items' || gridName === gridService.grids.inbox.sentItem))
+                || self.record instanceof G2GMessagingHistory);
         };
 
         /**
@@ -113,12 +139,12 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.showAuthorInfo = function (gridName) {
-            return !(self.model instanceof EventHistory
-                || self.model instanceof SentItemDepartmentInbox
-                || self.model instanceof G2G
-                || self.model instanceof G2GMessagingHistory
-                || self.model instanceof WorkItem
-                || self.model instanceof FollowupBook
+            return !(self.record instanceof EventHistory
+                || self.record instanceof SentItemDepartmentInbox
+                || self.record instanceof G2G
+                || self.record instanceof G2GMessagingHistory
+                || self.record instanceof WorkItem
+                || self.record instanceof FollowupBook
             );
         };
 
@@ -128,11 +154,11 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.showTagsInfo = function (gridName) {
-            return !(self.model instanceof G2G
-                || self.model instanceof G2GMessagingHistory
-                || self.model instanceof EventHistory
-                || self.model instanceof SentItemDepartmentInbox
-                || self.model instanceof FollowupBook
+            return !(self.record instanceof G2G
+                || self.record instanceof G2GMessagingHistory
+                || self.record instanceof EventHistory
+                || self.record instanceof SentItemDepartmentInbox
+                || self.record instanceof FollowupBook
             );
         };
 
@@ -152,7 +178,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.getDocumentInfo = function (property, gridName) {
-            var model = self.model;
+            var model = self.record;
             if (property === 'securityLevel') {
                 var securityLevel = null;
                 if (model instanceof WorkItem) {
@@ -208,97 +234,96 @@ module.exports = function (app) {
             }
         };
 
-        /**
-         * @description Process the callback for the action button
-         * @param action
-         * @param $event
-         */
-        self.processMenu = function (action, $event) {
-            if (action.hasOwnProperty('params') && action.params && action.params.length) {
-                action.callback(self.model, action.params, $event);
+
+        function _setAdditionalActionProperties(action, isMainAction) {
+            action.disabledAction = self.isActionDisabled(action);
+
+            action.isSeparator = action.type.toLowerCase() === 'separator';
+            action.isInfoMenu = action.type.toLowerCase() === 'info';
+            action.isActionMenu = action.type.toLowerCase() === 'action';
+
+            action.icon = isMainAction ? action.icon : null; // only main action will have icon
+
+            // if action is separator/info, it will not have title and subMenu
+            if (action.isSeparator || action.isInfoMenu) {
+                action.title = null;
+                action.hasSubMenu = false;
             } else {
-                action.callback(self.model, $event);
-            }
-            _removeHighlightParentRow();
-        };
-
-
-        /**
-         * @description Opens the grid shortcut menu
-         * @param $mdMenu
-         * @param $event
-         */
-        self.openShortcutMenu = function ($mdMenu, $event) {
-            var parentRow = $($event.target).parents('tr')[0];
-            // gridActionRowClass is the unique number
-            // It is set as class of parent row and passed to gridActionsDirective.
-            // When menu opens, we will find the row by class=contextRowUniqueClass and highlight it.
-            // When menu with main-context-menu or main-shortcut-menu class is closed, the (contextRowUniqueClass, background-grid-action) classes will be removed.
-            self.gridActionRowClass = gridService.getUniqueIdentifier();
-            if (parentRow) {
-                parentRow.classList.add(self.gridActionRowClass);
+                action.title = self.getActionText(action, false);
+                action.hasSubMenu = isMainAction && (!!action.subMenu && action.subMenu.length > 0);
             }
 
-            _setAndHighlightParentRow();
-            $mdMenu.open();
-            _handleCloseGridActionsMenu();
-        };
-
-        /**
-         * @description Opens the grid context menu
-         * @param $mdMenu
-         * @param $event
-         */
-        self.openContextMenu = function ($mdMenu, $event) {
-            _setAndHighlightParentRow();
-            $mdMenu.open();
-            _handleCloseGridActionsMenu();
-        };
-
-        /**
-         * @description Opens the cascade menu if action is enabled
-         * @param $mdMenu
-         * @param action
-         */
-        self.openCascadeMenu = function ($mdMenu, action) {
-            if (self.isActionDisabled(action))
-                return;
-            $mdMenu.open();
-        };
-
-        var _setAndHighlightParentRow = function () {
-            actionParentRow = document.getElementsByClassName(self.gridActionRowClass);
-            if (actionParentRow && actionParentRow.length) {
-                actionParentRow = actionParentRow[0];
-                // highlight the record when action menu opens
-                actionParentRow.classList.add('background-grid-action');
+            if (action.isInfoMenu) {
+                _setDocumentInfo(action);
             }
-        };
+        }
+
+        function _setDocumentInfo(action) {
+            action.isShowSecurityLevelInfo = self.showSecurityLevelInfo(action.gridName);
+            if (action.isShowSecurityLevelInfo) {
+                action.securityLevelInfo = self.getDocumentInfo('securityLevel', action.gridName);
+            }
+
+            action.isShowPriorityLevelInfo = self.showPriorityLevel(action.gridName);
+            if (action.isShowPriorityLevelInfo) {
+                action.priorityLevelInfo = self.getDocumentInfo('priorityLevel', action.gridName);
+            }
+
+            action.isShowAuthorInfo = self.showAuthorInfo(action.gridName);
+            if (action.isShowAuthorInfo) {
+                action.authorInfo = self.getDocumentInfo('author', action.gridName);
+            }
+
+            action.isShowTagsInfo = self.showTagsInfo(action.gridName);
+            if (action.isShowTagsInfo) {
+                action.tagsInfo = self.getDocumentInfo('tags', action.gridName);
+            }
+
+            action.isShowCommentsInfo = self.showCommentsInfo(action.gridName);
+            if (action.isShowCommentsInfo) {
+                action.commentsInfo = self.getDocumentInfo('comments', action.gridName);
+            }
+
+            action.isShowBroadcastInfo = self.showBroadcastedInfo(action.gridName);
+            if (action.isShowBroadcastInfo) {
+                action.broadcastedInfo = self.getDocumentInfo('broadcasted', action.gridName);
+            }
+        }
 
         /**
-         * @description Removes the classes(gridActionRowClass and background-grid-action) when grid action menu with class (main-context-menu or main-shortcut-menu) closes
+         * @description Filters the given actions to check if actions will be shown or not
+         * @returns {Array}
          * @private
          */
-        var _removeHighlightParentRow = function () {
-            actionParentRow = document.getElementsByClassName(self.gridActionRowClass);
-            if (actionParentRow && actionParentRow.length && $(actionParentRow).hasClass('background-grid-action') && $(actionParentRow).hasClass(self.gridActionRowClass)) {
-                actionParentRow[0].classList.remove('background-grid-action', self.gridActionRowClass);
-                self.gridActionRowClass = '';
-                actionParentRow = null;
-            }
-        };
+        function _filterAllowedActions(actions) {
+            return _.filter(actions, function (action) {
 
-        /**
-         * @description Handles the close of grid action menu
-         * @private
-         */
-        var _handleCloseGridActionsMenu = function () {
-            $scope.$on("$mdMenuClose", function (event, el) {
-                // if closed main context menu or shortcut menu, remove highlight from parent row
-                if ((el[0].classList.contains('main-context-menu')) || (el[0].classList.contains('main-shortcut-menu'))) {
-                    _removeHighlightParentRow();
+                var _hasSubMenu = action.type.toLowerCase() === 'action' && (action.subMenu && action.subMenu.length > 0);
+
+                if (_hasSubMenu) {
+                    var allowedSubMenus = [];
+                    _.map(action.subMenu, function (subAction) {
+                        if (subAction.checkShow(subAction, self.record)) {
+                            allowedSubMenus.push(subAction);
+                            _setAdditionalActionProperties(subAction, false);
+                        }
+                        return subAction;
+                    });
+                    if (allowedSubMenus && allowedSubMenus.length) {
+                        action.subMenu = allowedSubMenus;
+                    }
                 }
+
+                if (!action.checkShow(action, self.record)) {
+                    return false;
+                }
+                _setAdditionalActionProperties(action, true);
+                return true;
             });
+        }
+
+        self.$onInit = function () {
+            self.contextActions = _filterAllowedActions(contextActions);
         };
     });
 };

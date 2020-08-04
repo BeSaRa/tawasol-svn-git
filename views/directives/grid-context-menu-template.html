@@ -1,0 +1,91 @@
+<md-menu-bar>
+    <md-menu id="context-menu-bar-menu" class="main-context-menu">
+        <md-button class="menu-trigger" ng-click="ctrl.openContextMenu($mdMenu, $event)">click</md-button>
+        <md-menu-content class="context-menu md-dense" width="4">
+            <md-menu-item ng-repeat="action in ctrl.contextActions track by $index"
+                          ng-disabled="action.disabledAction"
+                          ng-class="{'gm-separator-horizontal':action.type === 'separator', 'gm-info':action.isInfoMenu}">
+                <!-- Divider -->
+                <md-menu-divider ng-if="action.isSeparator" class="p0 m4_0"></md-menu-divider>
+                <!-- Action Button -->
+                <md-button ng-if="action.isActionMenu && !action.hasSubMenu"
+                           aria-label="{{action.title}}" role="menuitem"
+                           ng-click="ctrl.processMenu(action, $event, $mdMenu)"
+                           ng-disabled="action.disabledAction"
+                           class="btn-main-context-menu"
+                           md-prevent-menu-close="md-prevent-menu-close">
+                    <div layout="row">
+                        <md-icon ng-if="action.icon"
+                                 class="{{action.class}}"
+                                 md-svg-icon="{{action.icon}}"
+                                 md-menu-align-target></md-icon>
+                        <p flex class="{{action.class}}">{{action.title}}</p>
+                    </div>
+                </md-button>
+                <!-- Cascade(Sub) Menu -->
+                <md-menu ng-if="action.isActionMenu && action.hasSubMenu" class="nested-menu sub-context-menu">
+                    <md-button ng-click="ctrl.openCascadeMenu($mdMenu, action)"
+                               aria-label="{{action.title}}" class="btn-cascade"
+                               ng-disabled="action.disabledAction">
+                        <div layout="row" flex>
+                            <md-icon ng-if="action.icon"
+                                     md-svg-icon="{{action.icon}}"
+                                     md-menu-align-target></md-icon>
+                            <p flex class="m0">{{action.title}}</p>
+                        </div>
+                    </md-button>
+                    <md-menu-content class="sub-context-menu md-dense" width="4"
+                                     ng-show="!action.disabledAction">
+                        <md-menu-item ng-repeat="subAction in action.subMenu track by $index"
+                                      ng-disabled="subAction.disabledAction"
+                                      ng-class="{'gm-separator-horizontal':subAction.isSeparator, 'gm-info':subAction.isInfoMenu}">
+                            <!-- Sub Menu Button -->
+                            <md-button ng-if="subAction.isActionMenu && !subAction.hasSubMenu"
+                                       aria-label="{{subAction.title}}" role="menuitem"
+                                       class="btn-sub-context-menu"
+                                       ng-click="ctrl.processMenu(subAction, $event, $mdMenu)"
+                                       ng-disabled="subAction.disabledAction">
+                                <div layout="row" flex>
+                                    <p flex class="{{subAction.class}}">{{subAction.title}}</p>
+                                </div>
+                            </md-button>
+                            <!-- Sub Menu Divider -->
+                            <md-menu-divider ng-if="subAction.isSeparator" class="p0 m4_0"></md-menu-divider>
+                            <!-- Document Info Table-->
+                            <md-table-container flex ng-if="subAction.isInfoMenu" class="docInfoTable">
+                                <table md-table>
+                                    <tbody md-body>
+                                    <tr md-row ng-if="subAction.isShowSecurityLevelInfo">
+                                        <td md-cell><b>{{lang.security_level}}</b></td>
+                                        <td md-cell>{{subAction.securityLevelInfo}}</td>
+                                    </tr>
+                                    <tr md-row ng-if="subAction.isShowPriorityLevelInfo">
+                                        <td md-cell><b>{{lang.priority_level}}</b></td>
+                                        <td md-cell>{{subAction.priorityLevelInfo}}</td>
+                                    </tr>
+                                    <tr md-row ng-if="subAction.isShowAuthorInfo">
+                                        <td md-cell><b>{{lang.author}}</b></td>
+                                        <td md-cell>{{subAction.authorInfo}}</td>
+                                    </tr>
+                                    <tr md-row ng-if="subAction.isShowTagsInfo">
+                                        <td md-cell><b>{{lang.tags}}</b></td>
+                                        <td md-cell>{{subAction.tagsInfo}}</td>
+                                    </tr>
+                                    <tr md-row ng-if="subAction.isShowCommentsInfo">
+                                        <td md-cell><b>{{lang.comments}}</b></td>
+                                        <td md-cell>{{subAction.commentsInfo}}</td>
+                                    </tr>
+                                    <tr md-row ng-if="subAction.isShowBroadcastInfo">
+                                        <td md-cell><b>{{lang.broadcasted}}</b></td>
+                                        <td md-cell>{{subAction.broadcastedInfo}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </md-table-container>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-menu-item>
+        </md-menu-content>
+    </md-menu>
+</md-menu-bar>

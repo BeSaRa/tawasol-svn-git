@@ -1368,7 +1368,7 @@ module.exports = function (app) {
                         checkShow: function (action, model) {
                             return true;
                         },
-                        gridName: 'user-inbox'
+                        gridName: gridService.grids.inbox.userInbox
                     }
                 ],
                 class: "action-green",

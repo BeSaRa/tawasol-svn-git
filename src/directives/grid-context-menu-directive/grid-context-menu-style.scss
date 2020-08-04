@@ -1,0 +1,53 @@
+.context-menu {
+  padding: 0 !important;
+
+  .context-menu-item-container {
+    max-height: 90vh;
+    overflow-y: auto;
+
+    &.lang-en button {
+      padding-right: 0 !important;
+    }
+  }
+
+  .active-panel-action {
+    background-color: rgba(158, 158, 158, 0.2);
+  }
+
+  .gm-separator-horizontal {
+    min-height: 9px;
+    max-height: 9px;
+    height: 9px;
+  }
+
+  .gm-info {
+    height: auto !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+
+    .docInfoTable {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+
+    .docInfoTable tr {
+      height: 32px !important;
+    }
+
+    .docInfoTable tr td.md-cell {
+      border: none !important;
+    }
+  }
+}
+
+html.rtl {
+  .context-menu-item-container {
+    &.lang-ar button {
+      padding-left: 0 !important;
+    }
+  }
+}
+
+.menu-trigger {
+  opacity: 0;
+}
