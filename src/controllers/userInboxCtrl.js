@@ -12,7 +12,7 @@ module.exports = function (app) {
                                               generator,
                                               userFilterService,
                                               correspondenceService,
-                                              userFilters,
+                                              // userFilters,
                                               $state,
                                               counterService,
                                               $q,
@@ -198,7 +198,7 @@ module.exports = function (app) {
 
         self.filterGrid = [];
 
-        self.userFilters = $filter('orderBy')(userFilters, 'sortOptionId');
+     //   self.userFilters = $filter('orderBy')(userFilters, 'sortOptionId');
 
         self.workItemsFilters = [];
         self.workItemsFiltersCopy = [];
@@ -236,7 +236,7 @@ module.exports = function (app) {
             }
         }
 
-        _prepareFilters();
+      //  _prepareFilters();
 
         /**
          * @description create filter
@@ -2368,6 +2368,13 @@ module.exports = function (app) {
             }
         });
 
+        self.$onInit = function () {
+            userFilterService.loadUserFilters().then(function (userFilters) {
+                self.userFilters = $filter('orderBy')(userFilters, 'sortOptionId');
+                _prepareFilters();
+            });
+            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+        }
 
     });
 };

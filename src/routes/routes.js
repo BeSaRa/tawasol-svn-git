@@ -1004,23 +1004,23 @@ module.exports = function (app) {
                         'ngInject';
                         return userInboxService.loadUserInboxes();
                     },
-                    userFilters: function (userFilterService, correspondenceSiteTypes) {
+                   /* userFilters: function (userFilterService, correspondenceSiteTypes) {
                         'ngInject';
                         return userFilterService.loadUserFilters();
-                    },
+                    },*/
                     correspondenceSiteTypes: function (correspondenceSiteTypeService) {
                         'ngInject';
                         return correspondenceSiteTypeService.getCorrespondenceSiteTypes();
                     },
                     // just to update notifications when opening user inbox
-                    notifications: function (mailNotificationService) {
+                  /*  notifications: function (mailNotificationService) {
                         'ngInject';
                         return mailNotificationService
                             .loadMailNotifications(mailNotificationService.notificationsRequestCount)
                             .catch(function () {
                                 return [];
                             });
-                    },
+                    },*/
                     emailItem: function (userInboxes, langService, dialog, _, $stateParams) {
                         'ngInject';
                         var action = $stateParams.action, source = $stateParams.source,
