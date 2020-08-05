@@ -105,8 +105,7 @@
             </thead>
             <tbody md-body>
             <tr md-row md-select="userInbox"
-                grid-right-click-directive="userInbox"
-                model="userInbox"
+                grid-context-menu-directive="ctrl.contextMenuActions"
                 ng-class="!userInbox.generalStepElm.isOpen ? 'unread-row': 'read-row'"
                 selected-length="{{ctrl.selectedWorkItems.length ? ctrl.selectedWorkItems.length : 0}}"
                 ng-repeat="userInbox in searchResults = (ctrl.workItems | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
@@ -115,7 +114,7 @@
                          ng-class="userInbox.generalStepElm.isOpen===true? 'read' : 'unread'"
                          ng-click="ctrl.markAsReadUnread(userInbox, $event)"
                          ng-if="!ctrl.selectedWorkItems.length
-                                                          || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === userInbox.generalStepElm.workObjectNumber"
+                                                          || (ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === userInbox.generalStepElm.workObjectNumber)"
                          tooltip="{{userInbox.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"
                          tooltip-direction="top">
                     </div>
@@ -223,10 +222,10 @@
                 <td md-cell class="p-r0"
                     ng-if="ctrl.selectedWorkItems.length < 2">
                     <div layout-align="start center" flex ng-if="!ctrl.selectedWorkItems.length
-                                                          || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === userInbox.generalStepElm.workObjectNumber">
-                        <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
-                                                model="userInbox">
-                        </grid-actions-directive>
+                                                          || (ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === userInbox.generalStepElm.workObjectNumber)">
+                        <grid-shortcut-actions-directive actions="ctrl.shortcutActions"
+                                                         model="userInbox">
+                        </grid-shortcut-actions-directive>
                     </div>
                 </td>
             </tr>
