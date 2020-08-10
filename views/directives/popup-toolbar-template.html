@@ -1,6 +1,6 @@
 <md-toolbar>
     <div class="md-toolbar-tools">
-        <span md-truncate ng-if="ctrl.headerText" tooltip="{{ctrl.showTooltip ? ctrl.headerText : ''}}">{{ctrl.headerText}}</span>
+        <span md-truncate class="dialog-title-span" ng-if="ctrl.headerText" tooltip="{{ctrl.showTooltip ? ctrl.headerText : ''}}">{{ctrl.headerText}}</span>
         <span flex></span>
         <div ng-if="ctrl.fullScreenButton">
             <md-button class="md-icon-button" ng-click="ctrl.toggleFullScreen()">

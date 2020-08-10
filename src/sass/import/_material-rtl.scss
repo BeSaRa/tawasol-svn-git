@@ -2,27 +2,34 @@ html.rtl {
   table.md-table td.md-cell, table.md-table th.md-column {
     text-align: right;
   }
+
   table.md-table td.md-cell:last-child, table.md-table th.md-column:last-child {
     padding: 0 0 0 24px;
   }
+
   table.md-table.md-row-select td.md-cell:first-child, table.md-table.md-row-select th.md-column:first-child {
     padding: 0 24px 0 24px;
   }
+
   .md-table-pagination > .buttons:not(:first-child), .md-table-pagination > .limit-select:not(:first-child) {
     margin-left: 0;
     margin-right: 32px;
   }
+
   .md-table-pagination > .buttons:not(:first-child), .md-table-pagination > .limit-select:not(:first-child) {
     button {
       transform: rotate(180deg);
     }
   }
+
   .table-selector-header {
     padding: 0 24px 0 56px !important;
   }
+
   table.md-table.md-row-select td.md-cell:nth-child(n+3):nth-last-child(n+2), table.md-table.md-row-select th.md-column:nth-child(n+3):nth-last-child(n+2) {
     padding: 0 0 0 24px !important;
   }
+
   //md-tabs-wrapper {
   //  direction: ltr;
   //}
@@ -37,8 +44,15 @@ html.rtl {
   .md-datepicker-input-container {
     margin-right: 0 !important;
   }
+
   table.md-table th.md-column md-icon:not(:last-child) {
     margin-right: 0 !important;
+  }
+
+  md-radio-button .md-label {
+    margin-right: 20px !important;
+    margin-left: auto !important;
+    font-size: 14px !important;
   }
 }
 
