@@ -5,423 +5,217 @@
             'ngInject';
             urlServiceProvider
                 .addToAllWithSegment('desktopEdit', '/goedit?mimtype={type}&vsid={vsId}&docsubject={subject}&docclassname={documentClass}&token={token}&view-only={mode}&entity={entityIdentifier}&ouid={currentOuId}&base-url={base_url}', 'desktopWord')
-                // to load languages
                 .addToAll('language', 'dist/resources/lang.json')
-                // to load sidebar menus
                 .addToAll('menus', 'dist/resources/menu.json')
                 .addToAllWithSegment('icnLogin', '/navigator/jaxrs/logon?userid={{username}}&password={{password}}', 'icn')
                 .addToAllWithSegment('icnSearch', '/navigator/bookmark.jsp?desktop=cms&repositoryId=EBLAICN&repositoryType=p8&docid=StoredSearch%2C%7BF4B4E428-6FC3-4BD3-BC91-AF46EC513DB1%7D%2C%7B76B326FF-8873-CB36-8524-6381F0800000%7D&mimeType=application%2Fx-filenet-searchtemplate&template_name=StoredSearch&version=current&vsId=%7BFF5CAE8D-D59D-CDF2-8488-6381F0800000%7D', 'icn')
                 .addToAllWithSegment('icnAdd', '/navigator/bookmark.jsp?desktop=cms&repositoryId=EBLAICN&repositoryType=p8&docid=EntryTemplate%2C%7BF4B4E428-6FC3-4BD3-BC91-AF46EC513DB1%7D%2C%7BFB387ADC-CD58-C442-87A2-6381EEA00000%7D&mimeType=application%2Fx-icn-documententrytemplate&template_name=EntryTemplate&version=current&vsId=%7B2248377B-9A84-C3F3-845F-6381EEA00000%7D', 'icn')
 
                 .addToAllWithSegment('reports', '/Reports/report/Reports/{reportName}?rs:embed=true&token={token}', 'report')
-                // http://100.100.3.201/ReportServer/logon.aspx?ReturnUrl=
                 .addToAllWithSegment('portal', '/ReportServer/logon.aspx?ReturnUrl={reportUrl}', 'report')
-                // to make authenticate
                 .addToAllWithBase('login', 'auth/login')
-                // manage localizations
                 .addToAllWithBase('localizations', 'cms-entity/admin/localization')
-                // to logout
                 .addToAllWithBase('logout', 'auth/logout')
-                // select organization if user has more then one
                 .addToAllWithBase('selectOrganizationLogin', 'auth/login/select-ou')
-                // validate token
                 .addToAllWithBase('validateToken', 'auth/validate-token')
-                // organizations units
                 .addToAllWithBase('organizations', 'cms-entity/admin/ou')
-                // organization types
                 .addToAllWithBase('organizationTypes', 'cms-entity/admin/ou-type')
-                // lookups
                 .addToAllWithBase('lookups', 'cloud/global-lookup/:lookupName')
-                // applicationUsers
                 .addToAllWithBase('applicationUsers', 'cms-entity/admin/application-user')
-                // ldap application user
                 .addToAllWithBase('applicationUserLdap', 'cms-entity/admin/ldap/entites/check-user-exists?loginName=:domainName')
-                // customRoles
                 .addToAllWithBase('roles', 'cms-entity/admin/custom-role')
-                // global lookups
-                // global reference plan Numbers
                 .addToAllWithBase('referencePlanNumbers', 'cms-entity/admin/reference-plan')
-                // document types
                 .addToAllWithBase('documentTypes', 'cms-entity/admin/doc-type')
-                // document statuses
                 .addToAllWithBase('documentStatus', 'cms-entity/admin/doc-status')
-                //role permissions
                 .addToAllWithBase('rolePermissions', 'cloud/permission')
-                // theme
                 .addToAllWithBase('themes', 'cms-entity/admin/theme')
-                //workflow groups
                 .addToAllWithBase('workflowGroups', 'cms-entity/admin/wf-group')
-                // job title
                 .addToAllWithBase('jobTitles', 'cms-entity/admin/job-title')
-                // ranks
                 .addToAllWithBase('ranks', 'cms-entity/admin/rank')
-                // entity type
                 .addToAllWithBase('entityTypes', 'cms-entity/admin/entity-type')
-                //sms templates
                 .addToAllWithBase('smsTemplates', 'cms-entity/admin/sms-template')
-                //correspondence site type
                 .addToAllWithBase('correspondenceSiteTypes', 'cms-entity/admin/correspondence-site-type')
-                //government entities
                 .addToAllWithBase('entities', 'cloud/root-entity')
-                //global settings for root entity
                 .addToAllWithBase('globalSettingsByRootId', 'cloud/root-entity/{ID}/global-settings')
                 .addToAllWithBase('globalSettings', 'cms-entity/admin/global-setting')
-                //public announcements
                 .addToAllWithBase('publicAnnouncements', 'cms-entity/admin/public-announcement')
-                // classifications
                 .addToAllWithBase('classifications', 'cms-entity/admin/classification')
-                //private announcements
                 .addToAllWithBase('privateAnnouncements', 'cms-entity/admin/private-announcement')
-                // document file
                 .addToAllWithBase('documentFiles', 'cms-entity/admin/document-file')
-                // document file
                 .addToAllWithBase('relatedOUDocumentFiles', 'cms-entity/admin/ou-document-file')
-                // ou document files
-                .addToAllWithBase('ouDocumentFiles', 'cms-entity/admin/ou-document-file') // this replacement for relatedOuDocumentFile.
-                //user classification permission
+                .addToAllWithBase('ouDocumentFiles', 'cms-entity/admin/ou-document-file')
                 .addToAllWithBase('userClassificationViewPermissions', 'cms-entity/admin/user-classification-permission')
-                //organization unit application users
                 .addToAllWithBase('ouApplicationUsers', 'cms-entity/admin/ou-application-user')
-                // followup user organization
                 .addToAllWithBase('followupOrganization', 'cms-entity/admin/user-follow-up')
-                //ou application users by application id
                 .addToAllWithBase('ouApplicationUsersByUserId', 'cms-entity/admin/ou-application-user/userid/:userId')
-                // related application user
                 .addToAllWithBase('relatedApplicationUsersByOUId', 'cms-entity/admin/ou-application-user/ouid/:OUId')
-                // Unrelated application user
                 .addToAllWithBase('unRelatedApplicationUsersByOUId', 'cms-entity/admin/application-user/unassigned/:OUId')
-                //related OUClassifications
                 .addToAllWithBase('ouClassifications', 'cms-entity/admin/ou-classification')
-                //user ou permission
                 .addToAllWithBase('userOuPermissions', 'cms-entity/admin/user-ou-permission')
-                //distribution lists
                 .addToAllWithBase('distributionLists', 'cms-entity/admin/distribution-list')
-                //related OUDistributionLists
                 .addToAllWithBase('ouDistributionLists', 'cms-entity/admin/ou-distribution-list')
-                //workflow actions
                 .addToAllWithBase('workflowActions', 'cms-entity/admin/wf-action')
-                // userWorkflowActions
                 .addToAllWithBase('userWorkflowActions', 'cms-entity/admin/user-wf-action')
-                // correspondence sites
                 .addToAllWithBase('correspondenceSites', 'cms-entity/admin/correspondence-site')
-                //related OUCorrespondenceSites
                 .addToAllWithBase('ouCorrespondenceSites', 'cms-entity/admin/ou-correspondence-site')
-                // to make authenticate
                 .addToAllWithBase('information', 'auth/login/info')
-                // encrypt password
                 .addToAllWithBase('encryptPassword', 'auth/password/encrypt')
-                // user comments
                 .addToAllWithBase('userComments', 'cms-entity/user/user-comment')
-                // to check connection
                 .addToAllWithBase('connectionTest', 'cloud/connection-test')
-                // to get all globalLocalizations
                 .addToAllWithBase('globalLocalizationLookups', 'cloud/global-localization')
-                // user workflow group
                 .addToAllWithBase('userWorkflowGroups', 'cms-entity/admin/user-wf-group')
-                // prepare outgoings
                 .addToAllWithBase('prepareOutgoings', 'cms-entity/correspondence/outgoing/ou/:id/prepare')
-                // draft outgoings
                 .addToAllWithBase('draftOutgoings', 'cms-entity/correspondence/outgoing/ou/:id/draft')
-                // review outgoings
                 .addToAllWithBase('reviewOutgoings', 'cms-entity/correspondence/outgoing/ou/:id/review')
-                // ready to send outgoings
                 .addToAllWithBase('readyToSendOutgoings', 'cms-entity/correspondence/outgoing/ou/:id/ready-to-sent')
-                // rejected outgoings
                 .addToAllWithBase('rejectedOutgoings', 'cms-entity/correspondence/outgoing/ou/:id/rejected')
-                // outgoing urls
                 .addToAllWithBase('outgoings', 'cms-entity/correspondence/outgoing')
-                // document templates
                 .addToAllWithBase('documentTemplates', 'cms-entity/admin/tawasol-template')
-                // attachment types
                 .addToAllWithBase('attachmentTypes', 'cms-entity/admin/attachment-type')
-                // search for tags
                 .addToAllWithBase('documentTags', '/cms-entity/correspondence/tag/search?criteria={{tag}}')
-                //add signature for application user
                 .addToAllWithBase('applicationUserSignatures', '/cms-entity/user/signature')
-                // attachments urls
                 .addToAllWithBase('attachments', '/cms-entity/correspondence/{{documentClass}}/{{vsId}}/attachments')
-                // attachments urls
                 .addToAllWithBase('documentComments', 'cms-entity/user/document-comment')
-                // property Configurations
                 .addToAllWithBase('propertyConfigurations', '/cms-entity/correspondence/property-configuration')
-                // search document
                 .addToAllWithBase('searchDocument', '/cms-entity/correspondence/search/:searchType')
-                // favoritesDWF for launch workflow
                 .addToAllWithBase('favoritesDWF', '/cms-entity/user/user-frequent-list')
-                // to get workflow dist users
                 .addToAllWithBase('distributionWF', '/cms-entity/admin/ou-application-user/dist')
-                // get all government users
                 .addToAllWithBase('distributionWFEUsers', '/cms-entity/admin/application-user/dist/ge-heads')
-                // current user workflow actions
                 .addToAllWithBase('distributionWFActions', '/cms-entity/admin/wf-action/wf')
-                // private users for distribution workflow
                 .addToAllWithBase('distributionWFPrivate', '/cms-entity/admin/ou-application-user/dist/private-users')
-                // search managers distribution workflow
                 .addToAllWithBase('distributionWFManagers', '/cms-entity/admin/ou-application-user/dist/managers')
-                // search vice managers distribution workflow
                 .addToAllWithBase('distributionWFViceManagers', '/cms-entity/admin/ou-application-user/dist/vice-managers')
-                // workflow groups for distribution workflow.
-                // .addToAllWithBase('distributionWFGroups', 'cms-entity/admin/user-wf-group/user/active')
                 .addToAllWithBase('distributionWFGroups', '/cms-entity/admin/user-wf-group/user')
-                // dist workflow reg ou
                 .addToAllWithBase('distributionWFREGOrganization', '/cms-entity/admin/ou/dist/reg-ous')
-                // dist workflow normal ou
                 .addToAllWithBase('distributionWFOrganization', '/cms-entity/admin/ou/dist/ous')
-                // get sender information to reply.
                 .addToAllWithBase('distributionWFSender', 'cms-entity/user/inbox/{wobNum}/reply')
-                /*// search outgoing
-                .addToAllWithBase('searchOutgoings', '/cms-entity/correspondence/search')
-                // search incoming
-                .addToAllWithBase('searchIncomings', '/cms-entity/correspondence/search')
-                // search internal
-                .addToAllWithBase('searchInternals', '/cms-entity/correspondence/search')*/
-                // favorite users distribution workflow
                 .addToAllWithBase('favoriteUserDW', '/cms-entity/user/user-frequent-list')
-                // search private users distribution workflow
                 .addToAllWithBase('privateUsers', '/cms-entity/admin/ou-application-user/dist/private-users')
-                // search managers distribution workflow
                 .addToAllWithBase('managerDistributionWorkflow', '/cms-entity/admin/ou-application-user/dist/managers')
-                // search OU distribution workflow | same url is used in broadcast page
                 .addToAllWithBase('ouDistributionWorkflow', '/cms-entity/admin/ou/dist/reg-ous')
-                // actions distribution workflow
                 .addToAllWithBase('actionsDistributionWorkflow', '/cms-entity/admin/wf-action/wf')
-                // user event
                 .addToAllWithBase('vts_userEventLog', 'cms-entity/user/event-log')
-                //// user action
-                //.addToAllWithBase('userActionLog', 'cms-entity/user/action-log')
-                // find attachments
                 .addToAllWithBase('vts_linkedAttachments', 'cms-entity/user/action-log/attachment/')
-                //find linked documents
                 .addToAllWithBase('vts_linkedDocuments', 'cms-entity/user/action-log/linkedDocument/')
-                //find linked entity
                 .addToAllWithBase('vts_linkedEntity', 'cms-entity/user/action-log/linkedEntity/')
-                //find linked destinations
                 .addToAllWithBase('vts_destinations', 'cms-entity/user/action-log/destinations/')
-                //messaging history
                 .addToAllWithBase('vts_messagingHistory', 'cms-entity/user/messaging-history/vsid')
-                //incoming delivery report
                 .addToAllWithBase('vts_receivedIncomingHistory', 'cms-entity/user/event-log/export/history/vsid')
-                //view content
                 .addToAllWithBase('vts_viewContentLog', 'cms-entity/user/view-content-log/vsid/')
-                //sms
                 .addToAllWithBase('vts_smsLog', 'cms-entity/user/sms-log/vsid/')
-                //full history
                 .addToAllWithBase('vts_fullHistory', 'cms-entity/user/full-history/vsid')
-                //document status history
                 .addToAllWithBase('vts_viewActionLog', 'cms-entity/user/view-action-log/vsid')
-                // user inbox
                 .addToAllWithBase('userInbox', '/cms-entity/user/inbox')
-                // user inbox actions
                 .addToAllWithBase('userInboxActions', '/cms-entity/correspondence/wf')
-                // workflow groups distribution workflow
                 .addToAllWithBase('workflowGroupDistributionWorkflow', 'cms-entity/admin/user-wf-group/user/active')
-                // launch distribution workflow
                 .addToAllWithBase('sendDistributionWorkflow', '/cms-entity/correspondence/wf/{{documentClass}}')
-                // incoming department inbox
                 .addToAllWithBase('departmentInboxes', '/cms-entity/user/ou-inbox')
-                // department inbox actions
                 .addToAllWithBase('departmentInboxActions', '/cms-entity/correspondence/wf')
-                // layouts
                 .addToAllWithBase('layouts', 'cms-entity/user/layouts')
-                //user folders
                 .addToAllWithBase('userFolders', '/cms-entity/user/user-folder')
-                //government entities distribution workflow
                 .addToAllWithBase('governmentEntityDistributionWorkflow', '/cms-entity/admin/application-user/dist/ge-heads')
-                //download main document
                 .addToAllWithBase('downloadDocument', '/cms-entity/correspondence/download-document/vsid')
-                //download composite document
                 .addToAllWithBase('downloadDocumentComposite', '/cms-entity/correspondence/download-document/composite/vsid')
-                //download Attachment
                 .addToAllWithBase('downloadDocumentAttachment', '/cms-entity/correspondence/download-document/attachment/vsid')
-                //download documentTemplate
                 .addToAllWithBase('downloadDocumentTemplate', '/cms-entity/correspondence/download-document/template/vsid')
-                //get document email content
                 .addToAllWithBase('getDocumentEmailContent', '/cms-entity/correspondence/download-document/email/vsid')
-                //get composite document email content
                 .addToAllWithBase('getDocumentCompositeEmailContent', '/cms-entity/correspondence/download-document/composite/email/vsid')
-                // counters
                 .addToAllWithBase('counters', 'cms-entity/correspondence/outgoing/counters')
-                // prepare template
                 .addToAllWithBase('prepareTemplate', 'cms-entity/correspondence/{{classDescription}}/prepare/{{vsId}}')
-                // view the document
                 .addToAllWithBase('officeWebApps', 'cms-entity/correspondence/owas/content/{{vsId}}/edit')
-                // quick accept incoming department inbox
-                //.addToAllWithBase('quickReceiveIncomingDepartmentInbox', 'cms-entity/user/ou-inbox/{{workObjectNumber}}/receive-quick')
-                // ready to export outgoing
-                // .addToAllWithBase('readyToExports', 'cms-entity/correspondence/wf/outgoing/ready-to-export')
-                // new ready to export
                 .addToAllWithBase('readyToExports', 'cms-entity/user/ou-inbox/ready-to-export')
-                // export outgoing document
                 .addToAllWithBase('exportDocumentByVsId', 'cms-entity/correspondence/wf/outgoing/book/{{vsId}}/export')
-                // export ready to export outgoing
                 .addToAllWithBase('exportReadyToExports', 'cms-entity/correspondence/wf/outgoing/book/{{vsId}}/wob-num/{{wobNum}}/export')
-                // selective export by vsId
                 .addToAllWithBase('selectiveExportByVsId', 'cms-entity/correspondence/wf/outgoing/book/{{vsId}}/selective-export')
-                // selective export
                 .addToAllWithBase('selectiveExport', 'cms-entity/correspondence/wf/outgoing/book/{{vsId}}/wob-num/{{wobNum}}/selective-export')
-                // terminate single ready to export outgoing
                 .addToAllWithBase('terminateReadyToExports', 'cms-entity/correspondence/wf/outgoing/terminate/ready-to-export')
-                // correspondence views.
                 .addToAllWithBase('correspondenceViews', 'cms-entity/correspondence/correspondence-site-view')
-                // quick search
                 .addToAllWithBase('quickSearchCorrespondence', 'cms-entity/correspondence/search/quick')
-                // incoming
                 .addToAllWithBase('incomings', 'cms-entity/correspondence/incoming')
-                // internal
                 .addToAllWithBase('internals', 'cms-entity/correspondence/internal')
-                // to manage any common correspondences
                 .addToAllWithBase('correspondence', 'cms-entity/correspondence')
-                // follow up employee inbox
                 .addToAllWithBase('followupEmployeeInbox', 'cms-entity/user/inbox/followup-emp-inbox/user/:domainName/ou/:ouId')
-                // follow up employee sent items
                 .addToAllWithBase('followupEmployeeSentItems', 'cms-entity/user/inbox/user-sent-items/user-id/:userId/ou/:ouId')
-                // view workitem
                 .addToAllWithBase('viewWorkItem', 'cms-entity/user/inbox/wob-num/')
-                // follow up employee inbox actions
                 .addToAllWithBase('followupEmployeeInboxActions', '/cms-entity/correspondence/wf')
-                // proxy mail inbox
                 .addToAllWithBase('proxyMailInbox', 'cms-entity/user/inbox/manager-inbox/')
-                // user sent items
                 .addToAllWithBase('userInboxSentItems', 'cms-entity/user/inbox/user-sent-items')
-                //
                 .addToAllWithBase('departmentSentItems', 'cms-entity/user/ou-inbox/dept-sent-items')
-                // broadcast
                 .addToAllWithBase('broadcast', 'cms-entity/correspondence/wf/outgoing/vsid/{{VSID}}/broadcast')
-                // correspondence workFlow
                 .addToAllWithBase('correspondenceWF', 'cms-entity/correspondence/wf')
-                //search correspondence sites
                 .addToAllWithBase('searchCorrespondenceSites', '/cms-entity/correspondence/correspondence-site-view')
-                //Approved Internal
                 .addToAllWithBase('approvedInternal', '/cms-entity/correspondence/wf/internal/approved-queue')
-                // approved internal actions
                 .addToAllWithBase('approvedInternalActions', '/cms-entity/correspondence/wf')
-                //search OU application user
                 .addToAllWithBase('searchOUApplicationUser', '/cms-entity/admin/ou-application-user')
-                // for outgoing lookups
                 .addToAllWithBase('correspondenceLookups', 'cms-entity/correspondence/{{documentClass}}/load-lookup')
-                // department workFlow link
                 .addToAllWithBase('departmentWF', 'cms-entity/user/ou-inbox')
-                // user inbox workFlow link
                 .addToAllWithBase('inboxWF', 'cms-entity/user/inbox')
-                // notifications
                 .addToAllWithBase('notifications', 'cms-entity/user/inbox/notifications/:count')
-                // user favorite documents
                 .addToAllWithBase('favoriteDocuments', 'cms-entity/user/user-favourite-document')
-                // file types
                 .addToAllWithBase('fileTypes', 'cloud/file-type')
-                //export to excel
                 .addToAllWithBase('exportToExcel', 'common/export/excel')
-                //export to pdf
                 .addToAllWithBase('exportToPdf', 'common/export/pdf')
-                // export to word
                 .addToAllWithBase('exportToWord', 'common/export/word')
-                //all private users
                 .addToAllWithBase('allPrivateUsers', 'cms-entity/admin/ou-application-user/all-private-users')
-                // all folder count
                 .addToAllWithBase('folderCount', '/cms-entity/user/inbox/all-folders-count')
-                // all available organization for central archive
                 .addToAllWithBase('availableCentralArchive', 'cms-entity/admin/ou/ou-with-central-archive')
-                // user filters.
                 .addToAllWithBase('userFilters', '/cms-entity/user/user-inbox-filter')
-                // user-subscription
                 .addToAllWithBase('userSubscriptions', 'cms-entity/user/user-subscription')
-                // all users who set this user as proxy
                 .addToAllWithBase('usersWhoSetYouAsProxy', 'cms-entity/admin/ou-application-user/proxy/')
-                // update manager proxy
                 .addToAllWithBase('updateManagerProxy', 'cms-entity/admin/ou-application-user/update-manager-proxy')
-                // G2G inbox
                 .addToAllWithBase('g2gInbox', '/g2g/')
-                // document security in global settings
                 .addToAllWithBase('documentSecurity', 'cms-entity/admin/documentsecurity')
-                // load entity/lookups with limit
                 .addToAllWithBase('entityWithlimit', 'cms-entity/admin/{entityName}/limit/{number}')
-                // load entity/lookups with search text
                 .addToAllWithBase('entityBySearchText', 'cms-entity/admin/{entityName}/lookup/criteria')
-                // get children for the mainEntities
                 .addToAllWithBase('childrenEntities', 'cms-entity/admin/{entityName}/childs/{entityId}')
-                // menu items
                 .addToAllWithBase('dynamicMenuItems', 'cms-entity/user/menu-item')
-                // maip labels
                 .addToAllWithBase('maipLabels', '/cms-entity/correspondence/download-document/maip/labels')
-                // central archives for user
                 .addToAllWithBase('distributionWFCentralArchiveForUser', 'cms-entity/admin/ou/dist/central-archive')
-                //follow up ou
                 .addToAllWithBase('followupOu', 'cms-entity/admin/ou/dist/follow-up-ou')
-                // add manager to all
                 .addToAllWithBase('addManagerToAllUsers', "cms-entity/admin/ou/ou/:ouId/add-:manager-to-all")
-                // task management
                 .addToAllWithBase('tasks', 'cms-entity/user/tasks')
-                // user admin list
                 .addToAllWithBase('userAdminList', 'cms-entity/admin/user-admin-list')
-                // user view ou permission
                 .addToAllWithBase('ouViewPermission', 'cms-entity/admin/user-view-ou-permission')
-                // linked entities: hr employee integration
                 .addToAllWithBase('hrEmployeeIntegration', 'cms-entity/admin/employee/criteria')
-                // document link
                 .addToAllWithBase('documentLink', 'cms-entity/user/document-link')
-                // view document link (no-auth)
                 .addToAllWithBase('viewDocumentLink', 'no-auth/view-link/:subscriberId/entity/:entity?otp=:otp')
-                // refresh cache service from UI
                 .addToAllWithBase('refreshCache', 'cloud/root-entity/refresh-cache')
-                // resend G2G Kuwait
                 .addToAllWithBase('resendG2GKuwait', 'g2g/correspondence/g2gActionID/{g2gActionID}/resend')
-                // refresh cache service from UI
                 .addToAllWithBase('deliveryReportG2GKuwait', 'g2g/get-delivery-report/g2gActionID/{g2gActionId}')
-                // recallAndTerminate
                 .addToAllWithBase('recallAndTerminate', 'g2g/correspondence/recall-and-terminate')
-                // recall and resend
                 .addToAllWithBase('recallAndForward', 'g2g/correspondence/g2gActionID/{g2gActionID}/recall-and-forward')
-                // recall and resend
                 .addToAllWithBase('g2gAttachments', 'g2g/correspondence/g2gActionID/{g2gActionID}/update-document-attachments')
-                // get correspondnce by g2gActionID
                 .addToAllWithBase('g2gCorrespondenceByActionID', 'g2g/correspondence/g2gActionID/{g2gActionID}/update-document-properties')
-                // g2g pending items
                 .addToAllWithBase('messagingHistory', 'cms-entity/user/messaging-history')
-                // get correspondnce by g2gActionID
                 .addToAllWithBase('g2gTerminateByActionID', 'g2g/terminate/g2gActionID/{g2gActionID}')
-                // ou private registry
                 .addToAllWithBase('privateRegistryOU', 'cms-entity/admin/ou-private-registry')
-                // correspondence common
                 .addToAllWithBase('correspondenceCommon', 'cms-entity/correspondence/common')
-                // download selected book options
                 .addToAllWithBase('downloadSelected', 'cms-entity/correspondence/{documentClass}/merge-book')
-                // downlaod document content
                 .addToAllWithBase('downloadDocumentContent', 'cms-entity/correspondence/common/download-content/{vsId}')
-                // downlaod document content as PDF
                 .addToAllWithBase('downloadDocumentContentPDF', 'cms-entity/correspondence/common/mobility/vsid/{vsId}')
-                // downlaod attachment content as PDF
                 .addToAllWithBase('downloadAttachmentContentPDF', 'cms-entity/correspondence/common/mobility/attachment/vsid/{vsId}')
-                // quick search overdue results
                 .addToAllWithBase('ouicksearchOverdueCounters', 'cms-entity/correspondence/search/quick/followup/{documentClass}')
-                // overdue Counters
                 .addToAllWithBase('overdueCounters', 'cms-entity/user/landing-page/followup-counter')
-                // linked person
                 .addToAllWithBase('linkedPerson', 'cms-entity/admin/linked-person')
-                // predefined actions
                 .addToAllWithBase('predefinedAction', 'cms-entity/admin/user-dist-wf')
-                // get followup folders
                 .addToAllWithBase('followUpFolders', 'cms-entity/user/user-followup-book/folder')
-                // get followup folders
                 .addToAllWithBase('userFollowUp', 'cms-entity/user/user-followup-book')
-                // preapre followup
                 .addToAllWithBase('prepareFollowUp', 'cms-entity/user/user-followup-book/prepare-followup/vsid/:vsId/doc-class/:classKey')
-                // document stamps
                 .addToAllWithBase('documentStamp', 'cms-entity/admin/tawasol-stamp')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();
             tokenServiceProvider.setLastLoginOrganizationIdKey('orgLogin');
-            // exclude urls form token provider
+
             tokenServiceProvider
                 .excludeTokenFromUrl(urlService.login)
                 .excludeUpdateToken(urlService.logut)
                 .excludeUpdateToken(urlService.information)
                 .excludeTokenFromUrl(urlService.information);
 
-            // to allow theme render.
+
             themeServiceProvider.allowRender(false);
 
-            // to add a groupExtensions
             attachmentServiceProvider
                 .addExtensionGroup('png_jpg', [
                     '.png',
