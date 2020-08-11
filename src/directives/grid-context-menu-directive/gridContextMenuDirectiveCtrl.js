@@ -20,15 +20,21 @@ module.exports = function (app) {
 
         self.controllerName = 'gridContextMenuDirectiveCtrl';
         //self.contextMenuActions = $scope.$eval($attrs.gridContextMenuDirective, $scope.$parent);
-
-        $element.on('contextmenu', function ($event) {
-            if (!_isValidContextMenu($event)) {
-                return false;
-            }
-            $event.preventDefault();
+        var handelContextMenu = _.debounce(function ($event) {
             self.record = $scope.$eval($attrs.mdSelect);
             _openContextMenu($event);
-        });
+        }, 100);
+
+        function handelPreventDefault($event) {
+            if (!_isValidContextMenu($event)) {
+                return null;
+            } else {
+                $event.preventDefault();
+            }
+        }
+
+        $element.on('contextmenu', handelPreventDefault);
+        $element.on('contextmenu', handelContextMenu);
 
         /**
          * @description Opens the context menu on grid row if its valid
@@ -36,14 +42,17 @@ module.exports = function (app) {
          * @private
          */
         function _openContextMenu($event) {
+            if (!targetElement)
+                return;
+
             self.contextMenuActions = $scope.$eval($attrs.gridContextMenuDirective, $scope.$parent);
             var parentRow = targetElement.parents('tr')[0];
 
             _highlightParentRow(parentRow);
 
             var position = $mdPanel.newPanelPosition()
-                    .relativeTo(angular.element($event.target))
-                    .addPanelPosition($mdPanel.xPosition.ALIGN_END, $mdPanel.yPosition.BELOW);
+                .relativeTo(angular.element($event.target))
+                .addPanelPosition($mdPanel.xPosition.ALIGN_END, $mdPanel.yPosition.BELOW);
 
             var menuRef = $mdPanel.open({
                 id: 'contextPanel_' + 0,
@@ -143,5 +152,14 @@ module.exports = function (app) {
 
         };
 
+
+        self.disposable = function () {
+            $element.off('contextmenu', handelPreventDefault);
+            $element.off('contextmenu', handelContextMenu);
+        };
+
+        $scope.$on('$destroy', function (event) {
+            self.disposable();
+        })
     });
 };
