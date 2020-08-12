@@ -60,6 +60,7 @@ module.exports = function (app) {
             self.backLogMode = false;
             self.slowConnectionMode = false;
             self.pinCodePrompt = false;
+            self.subAdminOuList = [];
 
             var collectionResults = [
                 'reminderSmsPriority',
@@ -336,7 +337,7 @@ module.exports = function (app) {
              * @returns {Promise|*}
              */
             Employee.prototype.getRegistryOrganization = function () {
-                if (!this.userOrganization){
+                if (!this.userOrganization) {
                     return $q.reject(null);
                 }
                 return this.userOrganization.hasRegistry

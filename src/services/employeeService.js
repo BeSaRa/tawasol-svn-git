@@ -68,7 +68,8 @@ module.exports = function (app) {
                     isCloudAdmin: result.isCloudAdmin,
                     isSuperAdmin: result.isSuperAdmin,
                     isSubAdmin: result.isSubAdmin,
-                    mappedToCentralArchive: result.mappedToCentralArchive
+                    mappedToCentralArchive: result.mappedToCentralArchive,
+                    subAdminOuList: result.subAdminOuList
                 });
                 if (result.isAdminUser) {
                     employee.setPermissions(result.permissions); // set permissions
@@ -81,6 +82,7 @@ module.exports = function (app) {
                 employee.isSubAdmin = result.isSubAdmin;
                 employee.isAdmin = result.isAdminUser;
                 employee.mappedToCentralArchive = result.mappedToCentralArchive;
+                employee.subAdminOuList = result.subAdminOuList;
             }
             // set globalSetting for root entity
             if (result.hasOwnProperty('globalSetting') && result.globalSetting)
@@ -239,6 +241,10 @@ module.exports = function (app) {
          */
         self.isSubAdminUser = function () {
             return employee && employee.isSubAdmin;
+        };
+
+        self.isSubAdminInCurrentOu = function () {
+            return self.isSubAdminUser() && !!employee.subAdminOuList.find(ou => ou === employee.getOUID());
         };
 
         /**
