@@ -106,6 +106,7 @@
             <tbody md-body>
             <tr md-row md-select="userInbox"
                 grid-context-menu-directive="ctrl.contextMenuActions"
+                context-menu-type="grid"
                 ng-class="!userInbox.generalStepElm.isOpen ? 'unread-row': 'read-row'"
                 selected-length="{{ctrl.selectedWorkItems.length ? ctrl.selectedWorkItems.length : 0}}"
                 ng-repeat="userInbox in searchResults = (ctrl.workItems | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">

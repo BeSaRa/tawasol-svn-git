@@ -19,14 +19,19 @@ module.exports = function (app) {
             };
 
         self.controllerName = 'gridContextMenuDirectiveCtrl';
-        //self.contextMenuActions = $scope.$eval($attrs.gridContextMenuDirective, $scope.$parent);
+
         var handelContextMenu = _.debounce(function ($event) {
-            self.record = $scope.$eval($attrs.mdSelect);
+            self.record = $scope.$eval((self.contextMenuType === 'grid') ? $attrs.mdSelect : $attrs.model);
+            if (!self.record) {
+                return false;
+            }
             _openContextMenu($event);
         }, 100);
 
         function handelPreventDefault($event) {
-            if (!_isValidContextMenu($event)) {
+            self.contextMenuType = $attrs.contextMenuType || 'grid';
+            if ((self.contextMenuType.toLowerCase() === 'grid' && !_isValidGridContextMenu($event)) ||
+                (self.contextMenuType.toLowerCase() === 'magazine' && !_isValidMagazineContextMenu($event))) {
                 return null;
             } else {
                 $event.preventDefault();
@@ -84,12 +89,12 @@ module.exports = function (app) {
         }
 
         /**
-         * @description Validates if user has right clicked on right element
+         * @description Validates if user has right clicked on right element on grid view
          * @param $event
          * @returns {boolean}
          * @private
          */
-        function _isValidContextMenu($event) {
+        function _isValidGridContextMenu($event) {
             // if there is no "md-select" attribute provided on row, throw an exception to log.
             if (!$attrs.mdSelect) {
                 console.error('PLEASE ADD "md-select" ATTRIBUTE TO GRID ROW');
@@ -114,6 +119,46 @@ module.exports = function (app) {
                 ((targetTagName === 'a' || targetTagName === 'div' || targetTagName === 'span')
                     && (targetElement.parents("td.subject").length > 0 || targetElement.parents("td.td-data").length > 0))
             )) {
+                targetTagName = '';
+                targetElement = null;
+                return false;
+            }
+            return true;
+        }
+
+        /**
+         * @description Validates if user has right clicked on right element on magazine view
+         * @param $event
+         * @returns {boolean}
+         * @private
+         */
+        function _isValidMagazineContextMenu($event) {
+            // if there is no "model" attribute provided on row, throw an exception to log.
+            if (!$attrs.model) {
+                console.error('PLEASE ADD "model" ATTRIBUTE TO MAGAZINE ROW');
+                return false;
+            }
+
+            // if there is no "selected-length" attribute provided on row, throw an exception to log.
+            if (!$attrs['selectedLength']) {
+                console.error('PLEASE ADD "selected-length" ATTRIBUTE TO MAGAZINE ROW');
+                return false;
+            }
+
+            var selectedLength = $scope.$eval($attrs['selectedLength']);
+            // if the selected length more than one item OR If 1 record is selected and not right click on same element, don't complete the process to open the menu.
+            if (Number(selectedLength) > 1 || (Number(selectedLength) === 1 && $($event.target).parents('div.magazine-item.selected').length === 0)) {
+                return false;
+            }
+
+            targetTagName = $event.target.tagName.toLowerCase();
+            targetElement = $($event.target);
+
+            // If right click on element (md-icon or md-checkbox or indicators span or read/undread anchor) don't complete the process to open the menu.
+            if (targetTagName === 'md-icon' || targetElement.parents('md-checkbox').length > 0 ||
+                (targetTagName === 'span' && (targetElement.hasClass('magazine-indicator-key') || targetElement.hasClass('magazine-indicator-value'))) ||
+                (targetTagName === 'a' && targetElement.hasClass('magazine-read-unread'))
+            ) {
                 targetTagName = '';
                 targetElement = null;
                 return false;
