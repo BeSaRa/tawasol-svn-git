@@ -11,4 +11,5 @@ module.exports = function (app) {
     require('./CryptoJS')(app);
     require('./d3')(app);
     require('./PSPDFKit')(app);
+    require('./uuidv4')(app);
 };

@@ -47,7 +47,8 @@
     "perfect-scrollbar": "^0.7.1",
     "pspdfkit": "^2020.3.0",
     "textangular": "^1.5.16",
-    "tinycolor2": "^1.4.1"
+    "tinycolor2": "^1.4.1",
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
     "css-loader": "^2.1.1",
