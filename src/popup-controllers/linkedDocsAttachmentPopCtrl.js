@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('linkedDocsAttachmentPopCtrl', function (dialog, exportOptions, _, langService, model, linkedDocs, gridService) {
+    app.controller('linkedDocsAttachmentPopCtrl', function (dialog, exportOptions, _, langService, model, linkedDocs, gridService, generator) {
         'ngInject';
         var self = this;
         self.controllerName = 'linkedDocsAttachmentPopCtrl';
@@ -66,6 +66,16 @@ module.exports = function (app) {
 
         self.sendSelectedLinkedDocuments = function () {
             dialog.hide(self.selectedCorrespondences);
+        };
+
+        /**
+         * @description Get the sorting key for information or lookup model
+         * @param property
+         * @param modelType
+         * @returns {*}
+         */
+        self.getSortingKey = function (property, modelType) {
+            return generator.getColumnSortingKey(property, modelType);
         };
 
         self.closeDialog = function () {

@@ -14,6 +14,7 @@ module.exports = function (app) {
                                                             Correspondence,
                                                             $timeout,
                                                             _,
+                                                            generator,
                                                             employeeService,
                                                             isAdminSearch,
                                                             gridService,
@@ -222,6 +223,16 @@ module.exports = function (app) {
          */
         self.getSortedData = function () {
             self.correspondences = $filter('orderBy')(self.correspondences, self.grid.order);
+        };
+
+        /**
+         * @description Get the sorting key for information or lookup model
+         * @param property
+         * @param modelType
+         * @returns {*}
+         */
+        self.getSortingKey = function (property, modelType) {
+            return generator.getColumnSortingKey(property, modelType);
         };
 
         self.grid = {

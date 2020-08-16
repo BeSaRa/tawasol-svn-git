@@ -41,7 +41,7 @@
                                 <th md-column md-order-by="securityLevel" ng-if="!ctrl.selectedCorrespondences.length">
                                     <span>{{lang.security_level}}</span>
                                 </th>
-                                <th md-column md-order-by="createdBy" ng-if="!ctrl.selectedCorrespondences.length">
+                                <th md-column md-order-by="{{ctrl.getSortingKey('creatorInfo', 'Information')}}" ng-if="!ctrl.selectedCorrespondences.length">
                                     <span>{{lang.creator}}</span>
                                 </th>
                                 <th md-column md-order-by="createdOn" ng-if="!ctrl.selectedCorrespondences.length">
@@ -119,7 +119,7 @@
                                 </td>
                                 <td md-cell>{{correspondence.priorityLevel.getTranslatedName()}}</td>
                                 <td md-cell>{{correspondence.securityLevel.getTranslatedName()}}</td>
-                                <td md-cell>{{correspondence.getTranslatedCreator()}}</td>
+                                <td md-cell>{{correspondence.creatorInfo.getTranslatedName()}}</td>
                                 <td md-cell>{{correspondence.createdOn}}</td>
                             </tr>
                             </tbody>

@@ -371,7 +371,7 @@
                                                     <span>{{lang.label_document_type}}</span>
                                                 </th>
                                                 <th md-column ng-if="!ctrl.selectedCorrespondences.length"
-                                                    md-order-by="createdBy">
+                                                    md-order-by="{{ctrl.getSortingKey('creatorInfo', 'Information')}}">
                                                     <span>{{lang.creator}}</span>
                                                 </th>
                                                 <th md-column ng-if="!ctrl.selectedCorrespondences.length"
@@ -456,7 +456,7 @@
                                                 <td md-cell>{{lang[correspondence.getInfo().documentClass
                                                     +"_document_class"]}}
                                                 </td>
-                                                <td md-cell>{{correspondence.getTranslatedCreator()}}</td>
+                                                <td md-cell>{{correspondence.creatorInfo.getTranslatedName()}}</td>
                                                 <td md-cell>{{correspondence.createdOn}}</td>
                                             </tr>
                                             </tbody>
