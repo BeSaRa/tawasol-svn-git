@@ -28,7 +28,7 @@ module.exports = function (app) {
             return $attrs.contextMenuType && $attrs.contextMenuType.toLowerCase() === 'magazine';
         }
 
-        function _resetTarget(){
+        function _resetTarget() {
             targetTagName = null;
             targetElement = null;
         }
@@ -64,7 +64,7 @@ module.exports = function (app) {
                 return;
 
             self.contextMenuActions = $scope.$eval($attrs.gridContextMenuDirective, $scope.$parent);
-            var parentRow = targetElement.parents('tr')[0];
+            var parentRow = _getParentRow(targetElement);
 
             _highlightParentRow(parentRow);
 
@@ -124,7 +124,19 @@ module.exports = function (app) {
 
 
         function _getRecord() {
-           return $scope.$eval(_isGridContextMenu() ? $attrs.mdSelect : $attrs.model);
+            return $scope.$eval(_isGridContextMenu() ? $attrs.mdSelect : $attrs.model);
+        }
+
+        function _getParentRow(targetElement) {
+            if (!targetElement) {
+                return null;
+            }
+            if (_isGridContextMenu()) {
+                return targetElement.parents('tr').length ? targetElement.parents('tr')[0] : null;
+            } else if (_isMagazineContextMenu()) {
+                return targetElement.parents('div.magazine-item').length ? targetElement.parents('div.magazine-item')[0] : null;
+            }
+            return null;
         }
 
         function _isValidRecord() {
