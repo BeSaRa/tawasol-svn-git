@@ -63,6 +63,7 @@ module.exports = function (app) {
             self.msTeamsSupoortURL = null;
             self.orderUsersByRank = false;
             self.stampModuleEnabled = false;
+            self.filterInternalBookRegOU = true;
             //endregion
 
             // every model has required fields

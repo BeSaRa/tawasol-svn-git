@@ -639,6 +639,19 @@
                                     </md-switch>
                                 </div>
                             </div>
+                            <div layout="row" flex class="p20">
+                                <div flex>
+                                    <!-- Filter Internal Book Reg Ou -->
+                                    <md-switch ng-model="ctrl.globalSetting.filterInternalBookRegOU"
+                                               aria-label="{{lang.filter_internal_books_by_dep}}">
+                                        <span>{{lang.filter_internal_books_by_dep}} : </span>{{
+                                        ctrl.globalSetting.getTranslatedYesNo('filterInternalBookRegOU')}}
+                                    </md-switch>
+                                </div>
+                                <div flex>
+
+                                </div>
+                            </div>
                         </div>
                         <br/>
                         <br/>
