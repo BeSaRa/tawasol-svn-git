@@ -136,6 +136,10 @@ module.exports = function (app) {
                         lookups: function (correspondenceService) {
                             'ngInject';
                             return correspondenceService.loadCorrespondenceLookups('common');
+                        },
+                        correspondenceSiteTypes: function (correspondenceSiteTypeService) {
+                            'ngInject';
+                            return correspondenceSiteTypeService.getCorrespondenceSiteTypes();
                         }
                     }
                 }).then(function (correspondences) {

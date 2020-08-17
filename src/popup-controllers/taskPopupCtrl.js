@@ -279,6 +279,10 @@ module.exports = function (app) {
                                         return organization.hasRegistry;
                                     })
                                 });
+                        },
+                        correspondenceSiteTypes: function (correspondenceSiteTypeService) {
+                            'ngInject';
+                            return correspondenceSiteTypeService.getCorrespondenceSiteTypes();
                         }
                     }
                 })

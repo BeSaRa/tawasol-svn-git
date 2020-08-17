@@ -19,7 +19,6 @@ module.exports = function (app) {
                                                             isAdminSearch,
                                                             gridService,
                                                             organizations,
-                                                            generator,
                                                             correspondenceSiteTypes,
                                                             correspondenceViewService,
                                                             Site_Search,
