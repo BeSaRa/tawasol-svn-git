@@ -1744,6 +1744,13 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_document_stamps'
             })
+            .state('app.administration.sequential-workflows', {
+                url: '/sequential-workflows',
+                templateUrl: templateProvider.getView('sequential-workflows'),
+                controller: 'sequentialWorkflowCtrl',
+                controllerAs: 'ctrl',
+                permission: 'menu_item_sequential_workflows'
+            })
 
     });
 };

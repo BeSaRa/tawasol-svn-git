@@ -1,0 +1,143 @@
+<!-- start of view -->
+<div background-directive="tall" class="page-content" flex="">
+    <div layout="column" class="content">
+        <!-- page-header start -->
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <span>{{lang.menu_item_sequential_workflows}}</span>
+            <md-button ng-click="ctrl.openAddSequentialWorkflowDialog($event)"
+                       class="md-icon-button"
+                       ng-if="ctrl.employeeService.hasPermissionTo('ADD_SEQ_WF')"
+                       tooltip="{{lang.add}}">
+                <md-icon md-svg-icon="plus"></md-icon>
+            </md-button>
+            <md-button ng-click="ctrl.reloadSequentialWorkflows()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <md-input-container flex class="cms-default">
+                <label for="organization">{{ctrl.selectedOrganization > 0 ? lang.organization_unit : "" }}</label>
+                <md-select id="organization" name="organization" aria-label="{{lang.organization_unit}}"
+                           ng-change="ctrl.regOuChanged()"
+                           ng-model="ctrl.selectedOrganization"
+                           ng-model-options="{trackBy: '$value'}"
+                           md-on-close="ctrl.clearSearchText('ou')"
+                           data-md-container-class="select-header-container sticky-search-bar">
+                    <md-select-header class="select-header">
+                        <input ng-model="ctrl.ouSearchText"
+                               ng-keydown="ctrl.preventSearchKeyDown($event)"
+                               placeholder="{{lang.search}}"
+                               class="select-header-input">
+                    </md-select-header>
+                    <md-option ng-value="organization.id"
+                               ng-repeat="organization in ctrl.organizations |translatedNameFilter: ctrl.ouSearchText">
+                        <span
+                                md-highlight-text="ctrl.ouSearchText"
+                                md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
+        </div>
+        <!-- end page-header -->
+        <!-- page-content -->
+        <div layout="column" flex>
+            <div>
+                <div class="page-padding">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                        <md-table-container>
+                            <div table-height-directive overlay-scroll-bar-directive>
+                                <table md-table md-row-select multiple ng-model="ctrl.selectedSequentialWorkflows"
+                                       md-progress="ctrl.grid.progress">
+                                    <thead fix-head md-head md-order="ctrl.grid.order"
+                                           md-on-reorder="ctrl.getSortedData">
+                                    <tr md-row>
+                                        <th colspan="5" ng-if="ctrl.selectedSequentialWorkflows.length" md-column>
+                                            <div layout="row" layout-align="start center">
+                                                <span>{{ctrl.selectedSequentialWorkflows.length}} {{lang.items_selected}} </span>
+                                                <span flex></span>
+                                                <table-status-directive
+                                                        ng-if="ctrl.employeeService.hasPermissionTo('ADD_SEQ_WF') && ctrl.isBulkActionAllowed()"
+                                                        when-close="ctrl.changeStatusBulkSequentialWorkflows"></table-status-directive>
+                                                <md-button class="md-icon-button"
+                                                           ng-if="ctrl.employeeService.hasPermissionTo('ADD_SEQ_WF') && ctrl.isBulkActionAllowed()"
+                                                           ng-click="ctrl.removeBulkSequentialWorkflows($event)">
+                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedSequentialWorkflows.length" md-column
+                                            md-order-by="arName">
+                                            <span>{{lang.arabic_name}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedSequentialWorkflows.length" md-column
+                                            md-order-by="enName">
+                                            <span>{{lang.english_name}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedSequentialWorkflows.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('docClassInfo', 'Lookup')}}">
+                                            <span>{{lang.label_document_type}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedSequentialWorkflows.length" md-column
+                                            md-order-by="status">
+                                            <span>{{lang.status}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedSequentialWorkflows.length" md-column>
+                                            <span>{{lang.actions}}</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="record"
+                                        ng-repeat="record in ctrl.sequentialWorkflows | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                        <td md-cell>{{record.arName}}</td>
+                                        <td md-cell>{{record.enName}}</td>
+                                        <td md-cell>{{record.docClassInfo.getTranslatedName()}}</td>
+                                        <td md-cell>
+                                            <md-switch aria-label="{{lang.status}}"
+                                                       title="{{record.getTranslatedStatus()}}"
+                                                       ng-change="ctrl.changeStatusSequentialWorkflow(record)"
+                                                       ng-disabled="!ctrl.employeeService.hasPermissionTo('ADD_SEQ_WF') || !ctrl.isActionAllowed(record)"
+                                                       ng-readonly="!ctrl.isActionAllowed(record)"
+                                                       ng-model="record.status">
+                                            </md-switch>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="row" layout-align="start center">
+                                                <md-button class="md-icon-button" title="{{lang.create_copy}}"
+                                                           ng-if="ctrl.employeeService.hasPermissionTo('ADD_SEQ_WF') && ctrl.isActionAllowed(record)"
+                                                           ng-click="ctrl.openCopyDialog(record, $event)">
+                                                    <md-icon md-svg-icon="content-copy"></md-icon>
+                                                </md-button>
+                                                <md-button class="md-icon-button" title="{{lang.delete}}"
+                                                           ng-if="ctrl.employeeService.hasPermissionTo('ADD_SEQ_WF') && ctrl.isActionAllowed(record)"
+                                                           ng-click="ctrl.removeSequentialWorkflow(record, $event)">
+                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                </md-button>
+                                                <md-button class="md-icon-button" title="{{lang.edit}}"
+                                                           ng-if="ctrl.employeeService.hasPermissionTo('ADD_SEQ_WF') && ctrl.isActionAllowed(record)"
+                                                           ng-click="ctrl.openEditSequentialWorkflowDialog(record, $event)">
+                                                    <md-icon md-svg-icon="pencil"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </md-table-container>
+                        <md-table-pagination
+                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                md-limit-options="ctrl.grid.limitOptions"
+                                md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                md-total="{{(ctrl.sequentialWorkflows).length}}"
+                                md-page-select
+                                md-on-paginate="ctrl.grid.pagingCallback">
+                        </md-table-pagination>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+        <!-- end page content -->
+    </div>
+</div>
+<!-- end of view -->

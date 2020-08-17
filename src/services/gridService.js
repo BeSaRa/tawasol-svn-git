@@ -120,7 +120,8 @@ module.exports = function (app) {
                 dynamicMenuItem: 'dynamicMenu',
                 organization: 'organization',
                 serialNumbers: 'serialNumbers',
-                documentStamp: 'docStamp'
+                documentStamp: 'docStamp',
+                sequentialWF: 'seqWF'
             },
             others: {
                 linkedDoc: 'linkedDoc',

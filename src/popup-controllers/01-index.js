@@ -151,4 +151,6 @@ module.exports = function (app) {
     require('./manageCorrespondenceSiteStatusPopCtrl')(app);
     require('./conditionalApprovePopCtrl')(app);
     require('./documentStampPopCtrl')(app);
+    require('./sequentialWorkflowPopCtrl')(app);
+    require('./sequentialWorkflowStepPopCtrl')(app);
 };

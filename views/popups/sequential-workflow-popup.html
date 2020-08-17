@@ -1,0 +1,104 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{!ctrl.editMode ? lang.sequential_workflow : ctrl.model.getNames()}}">
+    <popup-toolbar-directive ng-if="!ctrl.editMode" full-screen-button="true" full-screen="ctrl.fullScreen"
+                             header-text="{{lang.add_new_sequential_workflow}}"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="ctrl.editMode" full-screen-button="true" full-screen="ctrl.fullScreen"
+                             header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <div>
+                <form name="sequentialWorkflowForm" autocomplete="off">
+                    <div layout="row">
+                        <!-- Arabic Name -->
+                        <md-input-container flex>
+                            <label for="arName">{{lang.arabic_name}}</label>
+                            <input name="arName" id="arName" required minlength="4"
+                                   ng-disabled="ctrl.viewOnly"
+                                   ng-model="ctrl.sequentialWorkflow.arName" maxlength="80">
+                            <div ng-messages="sequentialWorkflowForm.arName.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- English Name -->
+                        <md-input-container flex>
+                            <label for="enName">{{lang.english_name}}</label>
+                            <input name="enName" id="enName" required minlength="4"
+                                   ng-disabled="ctrl.viewOnly"
+                                   ng-model="ctrl.sequentialWorkflow.enName" maxlength="80">
+                            <div ng-messages="sequentialWorkflowForm.enName.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="docClass">{{lang.label_document_type}}</label>
+                            <md-select id="docClass" name="docClass" required
+                                       ng-disabled="ctrl.viewOnly || ctrl.editMode"
+                                       ng-change="ctrl.handleDocTypeChange()"
+                                       ng-model="ctrl.selectedDocClass">
+                                <md-option ng-repeat="type in ctrl.documentClasses track by $index"
+                                           ng-value="type.lookupKey">
+                                    {{type.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="sequentialWorkflowForm.docClass.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <div flex class="p020">
+                            <md-switch flex ng-model="ctrl.sequentialWorkflow.status"
+                                       ng-disabled="ctrl.viewOnly"
+                                       aria-label="{{lang.status}}">
+                                <label>{{lang.status}} :
+                                    {{ctrl.sequentialWorkflow.getTranslatedStatus()}}</label>
+                            </md-switch>
+                        </div>
+                    </div>
+                    <!--<fieldset>
+                        <legend class="md-accent">{{lang.label_document_type}}</legend>
+                        <md-radio-group flex layout="row" name="docClassId"
+                                        ng-change="ctrl.handleDocTypeChange()"
+                                        ng-model="ctrl.selectedDocClass">
+                            <md-radio-button ng-repeat="type in ctrl.documentClasses"
+                                             ng-disabled="ctrl.viewOnly || ctrl.record.id"
+                                             ng-value="type.lookupKey" flex
+                                             aria-label="{{type.getTranslatedName()}}">
+                                {{type.getTranslatedName()}}
+                            </md-radio-button>
+                        </md-radio-group>
+                    </fieldset>-->
+                    <br/>
+                    <fieldset id="steps-wrapper">
+                        <legend class="md-accent">Steps</legend>
+                        <sequential-workflow-steps-directive
+                                record="ctrl.sequentialWorkflow"
+                                redraw-steps="ctrl.redrawSteps"
+                                view-only="ctrl.viewOnly"
+                        ></sequential-workflow-steps-directive>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary"
+                   ng-if="!ctrl.viewOnly"
+                   ng-disabled="!ctrl.isValidForm(sequentialWorkflowForm)"
+                   ng-click="ctrl.saveSequentialWorkflow($event)">
+            {{ctrl.editMode? lang.save : lang.add}}
+        </md-button>
+        <md-button class="md-raised"
+                   ng-if="!ctrl.viewOnly"
+                   ng-click="ctrl.resetModel(sequentialWorkflowForm)">
+            {{lang.reset}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup($event)">{{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

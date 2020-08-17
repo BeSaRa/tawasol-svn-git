@@ -123,4 +123,5 @@ module.exports = function (app) {
     require('./predefinedActionService')(app);
     require('./followUpUserService')(app);
     require('./documentStampService')(app);
+    require('./sequentialWorkflowService')(app);
 };

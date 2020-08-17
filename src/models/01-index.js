@@ -191,4 +191,6 @@ module.exports = function (app) {
     require('./UserFollowupRequest')(app);
     require('./TawasolDocument')(app);
     require('./TawasolStamp')(app);
+    require('./SequentialWF')(app);
+    require('./SequentialWFStep')(app);
 };

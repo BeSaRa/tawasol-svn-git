@@ -1306,5 +1306,17 @@
     "sort_order": 3,
     "active": true,
     "sort_value": 0
+  },
+  {
+    "ID": 122,
+    "lang_key": "menu_item_sequential_workflows",
+    "icon": "stamper",
+    "parent": 8,
+    "link": "#sequential-workflows",
+    "state": "app.administration.sequential-workflows",
+    "icon_type": "font",
+    "sort_order": 3,
+    "active": true,
+    "sort_value": 0
   }
 ]

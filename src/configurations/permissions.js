@@ -46,6 +46,9 @@ module.exports = function (app) {
             .addMenuPermission('menu_item_search_viewers_log', function (employee) {
                 return employee.isSuperAdmin && !employee.isAdmin;
             })
+            .addMenuPermissions('menu_item_sequential_workflows', function (employee) {
+                return employee.hasPermissionTo('ADD_SEQ_WF') && employee.isInDepartment();
+            })
             .end()
             // department inbox
             .addMenuPermissionGroup('menu_item_department_inbox')

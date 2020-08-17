@@ -1,382 +1,382 @@
 module.exports = function (app) {
-                app.service('generator', function (_,
-                                                   CMSModelInterceptor,
-                                                   tableGeneratorService,
-                                                   listGeneratorService,
-                                                   moment,
-                                                   $location,
-                                                   $q,
-                                                   $sce) {
-                    'ngInject';
-                    var self = this, dialog, langService, toast, rootEntity;
-                    //TODO: This property is just added to show/hide feature according for demo build. It will be removed soon.
-                    self.isDemoBuild = false;
+    app.service('generator', function (_,
+                                       CMSModelInterceptor,
+                                       tableGeneratorService,
+                                       listGeneratorService,
+                                       moment,
+                                       $location,
+                                       $q,
+                                       $sce) {
+        'ngInject';
+        var self = this, dialog, langService, toast, rootEntity;
+        //TODO: This property is just added to show/hide feature according for demo build. It will be removed soon.
+        self.isDemoBuild = false;
 
-                    self.selectedSearchCtrl = null;
+        self.selectedSearchCtrl = null;
 
-                    var popupNumber = 0;
+        var popupNumber = 0;
 
-                    self.addPopupNumber = function () {
-                        ++popupNumber;
-                    };
+        self.addPopupNumber = function () {
+            ++popupNumber;
+        };
 
-                    self.removePopupNumber = function () {
-                        --popupNumber;
-                    };
+        self.removePopupNumber = function () {
+            --popupNumber;
+        };
 
-                    self.getPopupNumber = function () {
-                        return popupNumber;
-                    };
+        self.getPopupNumber = function () {
+            return popupNumber;
+        };
 
-                    var megaByteToBytesValue = 1000000;
-                    self.convertMBtoBytes = function (megaByteValue) {
-                        return !megaByteValue ? megaByteValue : (megaByteToBytesValue * megaByteValue);
-                    };
+        var megaByteToBytesValue = 1000000;
+        self.convertMBtoBytes = function (megaByteValue) {
+            return !megaByteValue ? megaByteValue : (megaByteToBytesValue * megaByteValue);
+        };
 
-                    self.convertBytesToMB = function (bytesValue) {
-                        return !bytesValue ? bytesValue : (bytesValue / megaByteToBytesValue);
-                    };
-
-
-                    var documentClassMap = {
-                        OUTGOING: 1,
-                        INCOMING: 2,
-                        INTERNAL: 4
-                    };
-
-                    self.defaultDateFormat = 'YYYY-MM-DD';
-                    self.defaultDateTimeFormat = 'YYYY-MM-DD hh:mm:ss A';
+        self.convertBytesToMB = function (bytesValue) {
+            return !bytesValue ? bytesValue : (bytesValue / megaByteToBytesValue);
+        };
 
 
-                    self.dayHours = _.range(0, 24);
-                    self.calenderHours = [];
+        var documentClassMap = {
+            OUTGOING: 1,
+            INCOMING: 2,
+            INTERNAL: 4
+        };
 
-                    _.map(self.dayHours, function (hour) {
-                        var h = hour.toString().length === 1 ? '0' + hour : "" + hour;
-                        var hh = h + ':30';
-                        var remainingHour = (hour === 0 || hour > 12) ? (12 - hour) : hour;
+        self.defaultDateFormat = 'YYYY-MM-DD';
+        self.defaultDateTimeFormat = 'YYYY-MM-DD hh:mm:ss A';
 
-                        var hourValue = Math.abs(remainingHour);
-                        var AMPM = hour < 12 ? ' AM' : ' PM';
 
-                        self.calenderHours.push({
-                            hour: hour,
-                            min: 0,
-                            label: hourValue + ":00" + AMPM,
-                            value: h + ':00',
-                            compareValue: self.calenderHours.length
-                        });
+        self.dayHours = _.range(0, 24);
+        self.calenderHours = [];
 
-                        self.calenderHours.push({
-                            hour: hour,
-                            min: 30,
-                            label: hourValue + ":30" + AMPM,
-                            value: hh,
-                            compareValue: self.calenderHours.length
-                        });
+        _.map(self.dayHours, function (hour) {
+            var h = hour.toString().length === 1 ? '0' + hour : "" + hour;
+            var hh = h + ':30';
+            var remainingHour = (hour === 0 || hour > 12) ? (12 - hour) : hour;
 
-                    });
+            var hourValue = Math.abs(remainingHour);
+            var AMPM = hour < 12 ? ' AM' : ' PM';
 
-                    self.months = [
-                        {
-                            text: 'january',
-                            value: 1
-                        },
-                        {
-                            text: 'february',
-                            value: 2
-                        },
-                        {
-                            text: 'march',
-                            value: 3
-                        },
-                        {
-                            text: 'april',
-                            value: 4
-                        },
-                        {
-                            text: 'may',
-                            value: 5
-                        },
-                        {
-                            text: 'june',
-                            value: 6
-                        },
-                        {
-                            text: 'july',
-                            value: 7
-                        },
-                        {
-                            text: 'august',
-                            value: 8
-                        },
-                        {
-                            text: 'september',
-                            value: 9
-                        },
-                        {
-                            text: 'october',
-                            value: 10
-                        },
-                        {
-                            text: 'november',
-                            value: 11
-                        },
-                        {
-                            text: 'december',
-                            value: 12
-                        }
-                    ];
+            self.calenderHours.push({
+                hour: hour,
+                min: 0,
+                label: hourValue + ":00" + AMPM,
+                value: h + ':00',
+                compareValue: self.calenderHours.length
+            });
 
-                    self.documentStatusAndGridMap = {
-                        UNDER_RECEIVE: 1,
-                        /**
-                         * @description Status = 2; Prepare/Scan (Correspondence)
-                         */
-                        META_DATA_ONLY: 2,
-                        /**
-                         * @description Status = 3; Draft Outgoing/Internal (Correspondence)
-                         */
-                        DRAFT: 3,
-                        COMPLETED: 4,
-                        EDIT_AFTER_AUTHORIZED: 5,
-                        EDIT_AFTER_EXPORTED: 6,
-                        /**
-                         * @description Status = 7; Rejected Outgoing/Incoming/Internal (Correspondence)
-                         */
-                        SENT_TO_RE_AUDIT: 7/* Rejected Books*/,
-                        /**
-                         * @description Status = 8; Ready To Send Outgoing/Incoming/Internal (Correspondence)
-                         */
-                        ACCEPTED: 8/*Ready for Sent*/,
-                        REMOVED: 9,
-                        CONTENT_ADDED: 10,
-                        CONTENT_UPDATED: 11,
-                        META_DATA_UPDATED: 12,
-                        ARCHIVED: 21,
-                        /**
-                         * @description Status = 22; User inbox (WorkItem)
-                         */
-                        SENT: 22,
-                        /**
-                         * @description Status = 23; User inbox (WorkItem); Number of times signed is less than signature count
-                         */
-                        PARTIALLY_AUTHORIZED: 23,
-                        /**
-                         * @description Status = 24; Ready To Export (WorkItem)
-                         */
-                        FULLY_AUTHORIZED: 24,
-                        /**
-                         * @description Status = 25; Department Incoming/Returned (WorkItem)
-                         */
-                        EXPORTED: 25,
-                        PARTIALLY_EXPORTED: 26,
-                        REPLY_BOOK_CREATED: 27,
-                        SENT_TO_READY_TO_EXPORT: 28
-                    };
-                    self.setDialog = function (dialogPass) {
-                        dialog = dialogPass;
-                    };
+            self.calenderHours.push({
+                hour: hour,
+                min: 30,
+                label: hourValue + ":30" + AMPM,
+                value: hh,
+                compareValue: self.calenderHours.length
+            });
 
-                    self.setLangService = function (langPass) {
-                        langService = langPass;
-                    };
-                    self.setToast = function (toastPass) {
-                        toast = toastPass;
-                    };
+        });
 
-                    /**
-                     * intercept instance of model.
-                     * @param modelName
-                     * @param event
-                     * @param instance
-                     * @return {*}
-                     */
-                    var interceptInstance = function (modelName, event, instance) {
-                        return CMSModelInterceptor.runEvent(modelName, event, instance);
-                    };
-                    /**
-                     * intercept collection of models.
-                     * @param modelName
-                     * @param event
-                     * @param collection
-                     * @return {*}
-                     */
-                    var interceptCollection = function (modelName, event, collection) {
-                        for (var i = 0; i < collection.length; i++) {
-                            collection[i] = interceptInstance(modelName, event, collection[i]);
-                        }
-                        return collection;
-                    };
-                    /**
-                     * intercept hashMap of models.
-                     * @param modelName
-                     * @param event
-                     * @param hashMap
-                     * @return {*}
-                     */
-                    var interceptHashMap = function (modelName, event, hashMap) {
-                        for (var i in hashMap) {
-                            hashMap[i] = interceptCollection(modelName, event, hashMap[i]);
-                        }
-                        return hashMap;
-                    };
-                    /**
-                     *
-                     * @param modelName
-                     * @param collection
-                     * @return {*}
-                     */
-                    self.interceptSendCollection = function (modelName, collection) {
-                        return interceptCollection(modelName, 'send', _.cloneDeep(collection));
-                    };
+        self.months = [
+            {
+                text: 'january',
+                value: 1
+            },
+            {
+                text: 'february',
+                value: 2
+            },
+            {
+                text: 'march',
+                value: 3
+            },
+            {
+                text: 'april',
+                value: 4
+            },
+            {
+                text: 'may',
+                value: 5
+            },
+            {
+                text: 'june',
+                value: 6
+            },
+            {
+                text: 'july',
+                value: 7
+            },
+            {
+                text: 'august',
+                value: 8
+            },
+            {
+                text: 'september',
+                value: 9
+            },
+            {
+                text: 'october',
+                value: 10
+            },
+            {
+                text: 'november',
+                value: 11
+            },
+            {
+                text: 'december',
+                value: 12
+            }
+        ];
 
-                    self.interceptSendInstance = function (modelName, model) {
-                        return interceptInstance(modelName, 'send', _.cloneDeep(model));
-                    };
+        self.documentStatusAndGridMap = {
+            UNDER_RECEIVE: 1,
+            /**
+             * @description Status = 2; Prepare/Scan (Correspondence)
+             */
+            META_DATA_ONLY: 2,
+            /**
+             * @description Status = 3; Draft Outgoing/Internal (Correspondence)
+             */
+            DRAFT: 3,
+            COMPLETED: 4,
+            EDIT_AFTER_AUTHORIZED: 5,
+            EDIT_AFTER_EXPORTED: 6,
+            /**
+             * @description Status = 7; Rejected Outgoing/Incoming/Internal (Correspondence)
+             */
+            SENT_TO_RE_AUDIT: 7/* Rejected Books*/,
+            /**
+             * @description Status = 8; Ready To Send Outgoing/Incoming/Internal (Correspondence)
+             */
+            ACCEPTED: 8/*Ready for Sent*/,
+            REMOVED: 9,
+            CONTENT_ADDED: 10,
+            CONTENT_UPDATED: 11,
+            META_DATA_UPDATED: 12,
+            ARCHIVED: 21,
+            /**
+             * @description Status = 22; User inbox (WorkItem)
+             */
+            SENT: 22,
+            /**
+             * @description Status = 23; User inbox (WorkItem); Number of times signed is less than signature count
+             */
+            PARTIALLY_AUTHORIZED: 23,
+            /**
+             * @description Status = 24; Ready To Export (WorkItem)
+             */
+            FULLY_AUTHORIZED: 24,
+            /**
+             * @description Status = 25; Department Incoming/Returned (WorkItem)
+             */
+            EXPORTED: 25,
+            PARTIALLY_EXPORTED: 26,
+            REPLY_BOOK_CREATED: 27,
+            SENT_TO_READY_TO_EXPORT: 28
+        };
+        self.setDialog = function (dialogPass) {
+            dialog = dialogPass;
+        };
 
-                    self.interceptReceivedCollection = function (modelName, collection) {
-                        return interceptCollection(modelName, 'received', collection);
-                    };
+        self.setLangService = function (langPass) {
+            langService = langPass;
+        };
+        self.setToast = function (toastPass) {
+            toast = toastPass;
+        };
 
-                    self.interceptReceivedHashMap = function (modelName, hashMap) {
-                        return interceptHashMap(modelName, 'received', hashMap);
-                    };
+        /**
+         * intercept instance of model.
+         * @param modelName
+         * @param event
+         * @param instance
+         * @return {*}
+         */
+        var interceptInstance = function (modelName, event, instance) {
+            return CMSModelInterceptor.runEvent(modelName, event, instance);
+        };
+        /**
+         * intercept collection of models.
+         * @param modelName
+         * @param event
+         * @param collection
+         * @return {*}
+         */
+        var interceptCollection = function (modelName, event, collection) {
+            for (var i = 0; i < collection.length; i++) {
+                collection[i] = interceptInstance(modelName, event, collection[i]);
+            }
+            return collection;
+        };
+        /**
+         * intercept hashMap of models.
+         * @param modelName
+         * @param event
+         * @param hashMap
+         * @return {*}
+         */
+        var interceptHashMap = function (modelName, event, hashMap) {
+            for (var i in hashMap) {
+                hashMap[i] = interceptCollection(modelName, event, hashMap[i]);
+            }
+            return hashMap;
+        };
+        /**
+         *
+         * @param modelName
+         * @param collection
+         * @return {*}
+         */
+        self.interceptSendCollection = function (modelName, collection) {
+            return interceptCollection(modelName, 'send', _.cloneDeep(collection));
+        };
 
-                    self.interceptReceivedInstance = function (modelName, model) {
-                        return interceptInstance(modelName, 'received', model);
-                    };
-                    /**
-                     * generate collection of given model
-                     * @param collection
-                     * @param model
-                     * @param sharedMethods
-                     * @returns {*}
-                     */
-                    self.generateCollection = function (collection, model, sharedMethods) {
-                        if (!angular.isArray(collection))
-                            return [];
+        self.interceptSendInstance = function (modelName, model) {
+            return interceptInstance(modelName, 'send', _.cloneDeep(model));
+        };
 
-                        for (var i = 0; i < collection.length; i++) {
-                            collection[i] = self.generateInstance(collection[i], model, sharedMethods);
-                        }
-                        return collection;
-                    };
+        self.interceptReceivedCollection = function (modelName, collection) {
+            return interceptCollection(modelName, 'received', collection);
+        };
 
-                    self.generateHashMap = function (hashMap, model, sharedMethods) {
-                        for (var i in hashMap) {
-                            hashMap[i] = self.generateCollection(hashMap[i], model, sharedMethods);
-                        }
-                        return hashMap;
-                    };
-                    /**
-                     * generate instance of given model
-                     * @param instance
-                     * @param model
-                     * @param sharedMethods
-                     * @returns {*}
-                     */
-                    self.generateInstance = function (instance, model, sharedMethods) {
-                        return sharedMethods ? angular.extend(new model(instance), sharedMethods) : new model(instance);
-                    };
-                    /**
-                     * generate the shared method from delete and update methods
-                     * @param deleteMethod
-                     * @param updateMethod
-                     * @returns {{delete: generator.delete, update: generator.update}}
-                     */
-                    self.generateSharedMethods = function (deleteMethod, updateMethod) {
-                        return {
-                            delete: function () {
-                                if (deleteMethod)
-                                    return deleteMethod(this);
-                                else return null;
-                            },
-                            update: function () {
-                                if (updateMethod)
-                                    return updateMethod(this);
-                                else return null;
-                            }
-                        }
-                    };
-                    /**
-                     * create a new id from any collection
-                     * @param collection
-                     * @param key
-                     * @returns {number}
-                     */
-                    self.createNewID = function (collection, key) {
-                        var id = 0;
-                        if (collection.length > 0) {
-                            var maxResult = _(collection).map(key).max();
-                            id = (maxResult ? Number(maxResult) : 0) + 1;
-                        } else
-                            id += 1;
+        self.interceptReceivedHashMap = function (modelName, hashMap) {
+            return interceptHashMap(modelName, 'received', hashMap);
+        };
 
-                        return id;
-                    };
+        self.interceptReceivedInstance = function (modelName, model) {
+            return interceptInstance(modelName, 'received', model);
+        };
+        /**
+         * generate collection of given model
+         * @param collection
+         * @param model
+         * @param sharedMethods
+         * @returns {*}
+         */
+        self.generateCollection = function (collection, model, sharedMethods) {
+            if (!angular.isArray(collection))
+                return [];
 
-                    /**
-                     * @description Find the control by name in given form
-                     * @param form
-                     * @param controlName
-                     * @returns {null|*}
-                     */
-                    self.getFormControlByName = function (form, controlName) {
-                        if (!form || !controlName) {
-                            return null;
-                        }
-                        return _.find(form.$$controls, function (control) {
-                            return control.$name && control.$name.toLowerCase() === controlName.toLowerCase();
-                        });
-                    };
+            for (var i = 0; i < collection.length; i++) {
+                collection[i] = self.generateInstance(collection[i], model, sharedMethods);
+            }
+            return collection;
+        };
 
-                    function _checkIfSelectFormControl(control) {
-                        // 0 property in object $$element is the control itself
-                        if (!control || !control.$$element || !control.$$element.hasOwnProperty('0')) {
-                            return false;
-                        }
-                        return control.$$element[0].tagName === 'MD-SELECT';
-                    }
+        self.generateHashMap = function (hashMap, model, sharedMethods) {
+            for (var i in hashMap) {
+                hashMap[i] = self.generateCollection(hashMap[i], model, sharedMethods);
+            }
+            return hashMap;
+        };
+        /**
+         * generate instance of given model
+         * @param instance
+         * @param model
+         * @param sharedMethods
+         * @returns {*}
+         */
+        self.generateInstance = function (instance, model, sharedMethods) {
+            return sharedMethods ? angular.extend(new model(instance), sharedMethods) : new model(instance);
+        };
+        /**
+         * generate the shared method from delete and update methods
+         * @param deleteMethod
+         * @param updateMethod
+         * @returns {{delete: generator.delete, update: generator.update}}
+         */
+        self.generateSharedMethods = function (deleteMethod, updateMethod) {
+            return {
+                delete: function () {
+                    if (deleteMethod)
+                        return deleteMethod(this);
+                    else return null;
+                },
+                update: function () {
+                    if (updateMethod)
+                        return updateMethod(this);
+                    else return null;
+                }
+            }
+        };
+        /**
+         * create a new id from any collection
+         * @param collection
+         * @param key
+         * @returns {number}
+         */
+        self.createNewID = function (collection, key) {
+            var id = 0;
+            if (collection.length > 0) {
+                var maxResult = _(collection).map(key).max();
+                id = (maxResult ? Number(maxResult) : 0) + 1;
+            } else
+                id += 1;
 
-                    /**
-                     * @description Find the md-select controls in given form
-                     * @param form
-                     * @param filterRequired
-                     * if true, filters the md-select controls with required attribute
-                     * @returns {null|*}
-                     */
-                    self.getSelectFormControls = function (form, filterRequired) {
-                        if (!form || form.$$controls.length === 0) {
-                            return null;
-                        }
-                        return _.filter(form.$$controls, function (control) {
-                            if (!_checkIfSelectFormControl(control)) {
-                                return false;
-                            }
-                            if (!filterRequired) {
-                                return true;
-                            }
+            return id;
+        };
 
-                            return control.hasOwnProperty('$validators') && control.$validators.hasOwnProperty('required')
-                                && (control.$$attr.required && control.$$attr.required === true);
-                        });
-                    };
+        /**
+         * @description Find the control by name in given form
+         * @param form
+         * @param controlName
+         * @returns {null|*}
+         */
+        self.getFormControlByName = function (form, controlName) {
+            if (!form || !controlName) {
+                return null;
+            }
+            return _.find(form.$$controls, function (control) {
+                return control.$name && control.$name.toLowerCase() === controlName.toLowerCase();
+            });
+        };
 
-                    self.validateRequiredSelectFields = function (form) {
-                        var selectControls = self.getSelectFormControls(form, true);
-                        if (selectControls) {
-                            _.map(selectControls, function (control) {
-                                self.validateRequiredFieldValue(control, true);
-                            });
-                        }
-                    };
+        function _checkIfSelectFormControl(control) {
+            // 0 property in object $$element is the control itself
+            if (!control || !control.$$element || !control.$$element.hasOwnProperty('0')) {
+                return false;
+            }
+            return control.$$element[0].tagName === 'MD-SELECT';
+        }
 
-                    self.validateRequiredFieldValue = function (field, isRequired) {
-                        if (!field)
-                            return;
+        /**
+         * @description Find the md-select controls in given form
+         * @param form
+         * @param filterRequired
+         * if true, filters the md-select controls with required attribute
+         * @returns {null|*}
+         */
+        self.getSelectFormControls = function (form, filterRequired) {
+            if (!form || form.$$controls.length === 0) {
+                return null;
+            }
+            return _.filter(form.$$controls, function (control) {
+                if (!_checkIfSelectFormControl(control)) {
+                    return false;
+                }
+                if (!filterRequired) {
+                    return true;
+                }
 
-                        if (!isRequired) {
+                return control.hasOwnProperty('$validators') && control.$validators.hasOwnProperty('required')
+                    && (control.$$attr.required && control.$$attr.required === true);
+            });
+        };
+
+        self.validateRequiredSelectFields = function (form) {
+            var selectControls = self.getSelectFormControls(form, true);
+            if (selectControls) {
+                _.map(selectControls, function (control) {
+                    self.validateRequiredFieldValue(control, true);
+                });
+            }
+        };
+
+        self.validateRequiredFieldValue = function (field, isRequired) {
+            if (!field)
+                return;
+
+            if (!isRequired) {
                 field.$setValidity('required', true);
                 return;
             }
@@ -752,6 +752,14 @@ module.exports = function (app) {
             else if (modelType === 'applicationuser')
                 return property + '.' + (langService.current === 'ar' ? 'arFullName' : 'enFullName');
             return property;
+        };
+
+        /**
+         * @description Get the unique number
+         * @returns {string}
+         */
+        self.getUniqueIdentifier = function () {
+            return (new Date().valueOf()).toString();
         };
 
         /**

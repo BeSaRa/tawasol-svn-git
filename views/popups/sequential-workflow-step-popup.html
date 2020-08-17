@@ -1,0 +1,166 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{ctrl.stepCopy.getNames()}}">
+    <popup-toolbar-directive full-screen-button="true" full-screen="ctrl.fullScreen"
+                             header-text="{{ctrl.stepCopy.getNames()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <div>
+                <form name="sequentialWorkflowStepForm" autocomplete="off">
+                    <div layout="row">
+                        <!-- Arabic Name -->
+                        <md-input-container flex>
+                            <label for="arName">{{lang.arabic_name}}</label>
+                            <input name="arName" id="arName" required minlength="4"
+                                   ng-disabled="ctrl.viewOnly"
+                                   ng-model="ctrl.step.arName" maxlength="80">
+                            <div ng-messages="sequentialWorkflowStepForm.arName.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- English Name -->
+                        <md-input-container flex>
+                            <label for="enName">{{lang.english_name}}</label>
+                            <input name="enName" id="enName" required minlength="4"
+                                   ng-disabled="ctrl.viewOnly"
+                                   ng-model="ctrl.step.enName" maxlength="80">
+                            <div ng-messages="sequentialWorkflowStepForm.enName.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <!-- Organizations -->
+                        <md-input-container flex>
+                            <label for="organization">{{lang.organization_unit}}</label>
+                            <md-select id="organization" name="organization"
+                                       ng-disabled="ctrl.viewOnly"
+                                       ng-required="ctrl.isUserRequired"
+                                       ng-change="ctrl.getAppUsersForOU(false, $event)"
+                                       aria-label="{{lang.organization_unit}}"
+                                       ng-model="ctrl.step.toOUID"
+                                       md-on-close="ctrl.clearSearchText('ou')"
+                                       ng-model-options="{trackBy: '$value'}"
+                                       data-md-container-class="select-header-container sticky-search-bar">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.ouSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <md-option
+                                        ng-repeat="organization in ctrl.organizations | translatedNameFilter: ctrl.ouSearchText"
+                                        ng-value="organization.id">
+                                        <span
+                                                md-highlight-text="ctrl.ouSearchText"
+                                                md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="sequentialWorkflowStepForm.organization.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- User -->
+                        <md-input-container flex>
+                            <label for="applicationUser">{{lang.select_user}}</label>
+                            <md-select name="applicationUser" id="applicationUser"
+                                       ng-change="ctrl.onChangeUser()"
+                                       ng-required="ctrl.isUserRequired"
+                                       ng-disabled="ctrl.viewOnly"
+                                       aria-label="{{lang.select_user}}"
+                                       ng-model="ctrl.step.toUserId"
+                                       ng-model-options="{trackBy: '$value'}"
+                                       md-on-close="ctrl.clearSearchText('appUser')"
+                                       data-md-container-class="select-header-container sticky-search-bar">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.appUserSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <md-option ng-value="user.id"
+                                           ng-repeat="user in ctrl.applicationUsers | translatedNameFilter: ctrl.appUserSearchText">
+                                       <span md-highlight-text="ctrl.appUserSearchText"
+                                             md-highlight-flags="i">{{user.getTranslatedName()}}</span>
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="sequentialWorkflowStepForm.applicationUser.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <!-- Action -->
+                        <md-input-container flex>
+                            <label for="workflowAction">{{lang.workflow_action}}</label>
+                            <md-select name="workflowAction" id="workflowAction"
+                                       ng-model="ctrl.step.actionId"
+                                       ng-disabled="ctrl.viewOnly"
+                                       ng-required="ctrl.isActionRequired"
+                                       ng-model-options="{trackBy:'$value'}"
+                                       aria-label="{{lang.workflow_action}}"
+                                       md-on-close="ctrl.clearSearchText('appUser')"
+                                       data-md-container-class="select-header-container sticky-search-bar">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.actionSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <md-option
+                                        ng-repeat="action in ctrl.workflowActions | translatedNameFilter: ctrl.actionSearchText"
+                                        ng-value="action.id">
+                                <span
+                                        md-highlight-text="ctrl.actionSearchText"
+                                        md-highlight-flags="i">{{action.getTranslatedName()}}</span>
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="sequentialWorkflowStepForm.workflowAction.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- Item Order -->
+                        <md-input-container flex>
+                            <label for="itemOrder">{{lang.item_order}}</label>
+                            <input name="itemOrder" id="itemOrder" required
+                                   custom-validate-directive="number"
+                                   ng-disabled="ctrl.viewOnly"
+                                   ng-model="ctrl.step.itemOrder">
+                            <div ng-messages="sequentialWorkflowStepForm.itemOrder.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="number">{{lang.numberonly}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <div flex class="p020">
+                            <md-checkbox ng-disabled="ctrl.viewOnly"
+                                    ng-model="ctrl.step.sendSMS">
+                                {{lang.sms_workflow_notification}}
+                            </md-checkbox>
+                        </div>
+                        <div flex class="p020">
+                            <md-checkbox ng-disabled="ctrl.viewOnly"
+                                         ng-model="ctrl.step.sendEmail">
+                                {{lang.email_workflow_notification}}
+                            </md-checkbox>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary"
+                   ng-if="!ctrl.viewOnly"
+                   ng-disabled="!ctrl.isValidForm(sequentialWorkflowStepForm)"
+                   ng-click="ctrl.setStep($event)">{{lang.set}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">{{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

@@ -1,0 +1,22 @@
+<div flex layout="row">
+    <div class="block-display" layout="column" ng-if="!ctrl.viewOnly && !ctrl.record.id">
+        <div ng-repeat="item in ctrl.actionsList track by $index"
+             class="step-item" ng-class="{'disabled':item.disabled()}"
+             seq-action-draggable="item" flex>
+            <span md-truncate>{{item.getTranslatedName()}}</span>
+        </div>
+    </div>
+    <div flex class="step-layout-border" layout="column">
+        <div class="step-layout-generator" layout="column">
+            <md-button class="md-raised add-row-button"
+                       ng-if="!ctrl.viewOnly && !ctrl.record.id"
+                       ng-disabled="!ctrl.record.hasAnyDocumentType()"
+                       ng-click="ctrl.insertRowElement()">
+                <md-icon md-svg-icon="plus"></md-icon>
+            </md-button>
+            <div seq-container-sortable layout="column" class="step-layout-rows">
+
+            </div>
+        </div>
+    </div>
+</div>

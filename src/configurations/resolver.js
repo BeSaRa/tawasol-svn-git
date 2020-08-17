@@ -109,6 +109,33 @@ module.exports = function (app) {
                     return employeeService.isAdminUser() ? -1 : employeeService.getEmployee().organization.ouRegistryID;
                 }
             })
+            .bulkResolveToState('app.administration.sequential-workflows', {
+                organizations: function (organizationService, employeeService, ouApplicationUserService, $q, _) {
+                    'ngInject';
+                    var defer = $q.defer();
+                    if (employeeService.isSuperAdminUser()) {
+                        organizationService.loadOrganizations(true)
+                            .then(function (result) {
+                                defer.resolve(result);
+                            });
+                    } else if (employeeService.isSubAdminInCurrentOu()) {
+                        organizationService.loadOrganizations()
+                            .then(function (result) {
+                                defer.resolve(result);
+                            });
+                    } else {
+                        ouApplicationUserService.getOUApplicationUsersByUserId(employeeService.getEmployee().id)
+                            .then(function (result) {
+                                defer.resolve(_.map(result, 'ouid'));
+                            });
+                    }
+                    return defer.promise.then(function (organizations) {
+                        return _.filter(organizations, function (ou) {
+                            return ou.hasRegistry;
+                        });
+                    });
+                }
+            })
             .bulkResolveToState('app.administration.organizations', {
                 escalationProcess: function (lookupService) {
                     'ngInject';

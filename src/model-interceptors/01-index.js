@@ -120,4 +120,6 @@ module.exports = function (app) {
     require('./UserFollowupBookLogInterceptor')(app);
     require('./UserFollowupRequestInterceptor')(app);
     require('./TawasolStampInterceptor')(app);
+    require('./SequentialWFInterceptor')(app);
+    require('./SequentialWFStepInterceptor')(app);
 };

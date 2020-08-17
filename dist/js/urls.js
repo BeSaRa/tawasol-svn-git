@@ -202,6 +202,7 @@
                 .addToAllWithBase('userFollowUp', 'cms-entity/user/user-followup-book')
                 .addToAllWithBase('prepareFollowUp', 'cms-entity/user/user-followup-book/prepare-followup/vsid/:vsId/doc-class/:classKey')
                 .addToAllWithBase('documentStamp', 'cms-entity/admin/tawasol-stamp')
+                .addToAllWithBase('sequentialWorkflow', 'cms-entity/admin/seq-wf')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();
