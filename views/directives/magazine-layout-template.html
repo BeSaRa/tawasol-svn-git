@@ -92,7 +92,8 @@
              grid-context-menu-directive="ctrl.contextMenuActions"
              context-menu-type="magazine"
              ng-class="{'selected':ctrl.isWorkItemSelected(workItem)}"
-             magazine-item-directive="workItem" selected-length="ctrl.selectedWorkItems.length" md-whiteframe="1"
+             magazine-item-directive="workItem"
+             selected-length="{{ctrl.selectedWorkItems.length ? ctrl.selectedWorkItems.length : 0}}" md-whiteframe="1"
              ng-repeat="workItem in ctrl.workItems | limitTo:ctrl.pageLimit:( ( ctrl.page - 1) * ctrl.pageLimit) track by $index"
              class="magazine-item">
             <div layout="row">

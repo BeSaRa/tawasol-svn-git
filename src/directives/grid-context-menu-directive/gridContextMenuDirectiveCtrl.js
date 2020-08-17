@@ -20,26 +20,39 @@ module.exports = function (app) {
 
         self.controllerName = 'gridContextMenuDirectiveCtrl';
 
-        var handelContextMenu = _.debounce(function ($event) {
-            self.record = $scope.$eval((self.contextMenuType === 'grid') ? $attrs.mdSelect : $attrs.model);
+        function _isGridContextMenu() {
+            return !$attrs.contextMenuType || $attrs.contextMenuType.toLowerCase() === 'grid';
+        }
+
+        function _isMagazineContextMenu() {
+            return $attrs.contextMenuType && $attrs.contextMenuType.toLowerCase() === 'magazine';
+        }
+
+        function _resetTarget(){
+            targetTagName = null;
+            targetElement = null;
+        }
+
+        var handleContextMenu = _.debounce(function ($event) {
+            self.record = _getRecord();
             if (!self.record) {
                 return false;
             }
             _openContextMenu($event);
         }, 100);
 
-        function handelPreventDefault($event) {
-            self.contextMenuType = $attrs.contextMenuType || 'grid';
-            if ((self.contextMenuType.toLowerCase() === 'grid' && !_isValidGridContextMenu($event)) ||
-                (self.contextMenuType.toLowerCase() === 'magazine' && !_isValidMagazineContextMenu($event))) {
+        function handlePreventDefault($event) {
+            if ((_isGridContextMenu() && !_isValidGridContextMenu($event)) || (_isMagazineContextMenu() && !_isValidMagazineContextMenu($event))) {
+                _resetTarget();
                 return null;
             } else {
                 $event.preventDefault();
             }
         }
 
-        $element.on('contextmenu', handelPreventDefault);
-        $element.on('contextmenu', handelContextMenu);
+        $element.on('contextmenu', handlePreventDefault);
+        $element.on('contextmenu', handleContextMenu);
+
 
         /**
          * @description Opens the context menu on grid row if its valid
@@ -47,7 +60,7 @@ module.exports = function (app) {
          * @private
          */
         function _openContextMenu($event) {
-            if (!targetElement)
+            if (!targetElement || !_isValidSelectedLength($event))
                 return;
 
             self.contextMenuActions = $scope.$eval($attrs.gridContextMenuDirective, $scope.$parent);
@@ -88,6 +101,51 @@ module.exports = function (app) {
                 });
         }
 
+        function _isValidSelectedLength($event) {
+            var selectedLength = _getSelectedLength();
+            // If no selected length attribute or if the selected length more than one item, ignore context menu
+            // If 1 record is selected and not right click on same element, don't complete the process to open the menu.
+            if (_isGridContextMenu()) {
+                return !(selectedLength === null || selectedLength > 1 || (selectedLength === 1 && $($event.target).parents('tr.md-selected').length === 0));
+            } else if (_isMagazineContextMenu()) {
+                return !(selectedLength === null || selectedLength > 1 || (selectedLength === 1 && $($event.target).parents('div.magazine-item.selected').length === 0));
+            }
+            return false;
+        }
+
+        function _getSelectedLength() {
+            // if there is no "selected-length" attribute provided on row, throw an exception to log.
+            if (!$attrs['selectedLength']) {
+                console.error('PLEASE ADD "selected-length" ATTRIBUTE TO GRID ROW');
+                return null;
+            }
+            return Number($attrs['selectedLength']);
+        }
+
+
+        function _getRecord() {
+           return $scope.$eval(_isGridContextMenu() ? $attrs.mdSelect : $attrs.model);
+        }
+
+        function _isValidRecord() {
+            if (_isGridContextMenu()) {
+                // if there is no "md-select" attribute provided on row, throw an exception to log.
+                if (!$attrs.mdSelect) {
+                    console.error('PLEASE ADD "md-select" ATTRIBUTE TO GRID ROW');
+                    return false;
+                }
+                return true;
+            } else if (_isMagazineContextMenu()) {
+                // if there is no "model" attribute provided on row, throw an exception to log.
+                if (!$attrs.model) {
+                    console.error('PLEASE ADD "model" ATTRIBUTE TO MAGAZINE ROW');
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
         /**
          * @description Validates if user has right clicked on right element on grid view
          * @param $event
@@ -95,19 +153,7 @@ module.exports = function (app) {
          * @private
          */
         function _isValidGridContextMenu($event) {
-            // if there is no "md-select" attribute provided on row, throw an exception to log.
-            if (!$attrs.mdSelect) {
-                console.error('PLEASE ADD "md-select" ATTRIBUTE TO GRID ROW');
-                return false;
-            }
-            //selectedLength = $scope.$eval(targetElement.parents('table').attr('ng-model'))
-            // if there is no "selected-length" attribute provided on row, throw an exception to log.
-            if (!$attrs['selectedLength']) {
-                console.error('PLEASE ADD "selected-length" ATTRIBUTE TO GRID ROW');
-                return false;
-            }
-            // if the selected length more than one item OR If 1 record is selected and not right click on same element, don't complete the process to open the menu.
-            if (Number($attrs['selectedLength']) > 1 || (Number($attrs['selectedLength']) === 1 && $($event.target).parents('tr.md-selected').length === 0)) {
+            if (!_isValidRecord() || !_isValidSelectedLength($event)) {
                 return false;
             }
 
@@ -133,21 +179,7 @@ module.exports = function (app) {
          * @private
          */
         function _isValidMagazineContextMenu($event) {
-            // if there is no "model" attribute provided on row, throw an exception to log.
-            if (!$attrs.model) {
-                console.error('PLEASE ADD "model" ATTRIBUTE TO MAGAZINE ROW');
-                return false;
-            }
-
-            // if there is no "selected-length" attribute provided on row, throw an exception to log.
-            if (!$attrs['selectedLength']) {
-                console.error('PLEASE ADD "selected-length" ATTRIBUTE TO MAGAZINE ROW');
-                return false;
-            }
-
-            var selectedLength = $scope.$eval($attrs['selectedLength']);
-            // if the selected length more than one item OR If 1 record is selected and not right click on same element, don't complete the process to open the menu.
-            if (Number(selectedLength) > 1 || (Number(selectedLength) === 1 && $($event.target).parents('div.magazine-item.selected').length === 0)) {
+            if (!_isValidRecord() || !_isValidSelectedLength($event)) {
                 return false;
             }
 
@@ -199,8 +231,8 @@ module.exports = function (app) {
 
 
         self.disposable = function () {
-            $element.off('contextmenu', handelPreventDefault);
-            $element.off('contextmenu', handelContextMenu);
+            $element.off('contextmenu', handlePreventDefault);
+            $element.off('contextmenu', handleContextMenu);
         };
 
         $scope.$on('$destroy', function (event) {
