@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const NGAnnotate = require('ng-annotate-webpack-plugin');
+// const NGAnnotate = require('ng-annotate-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = function (env) {
@@ -45,6 +45,17 @@ module.exports = function (env) {
         },
         module: {
             rules: [
+                {
+                    test: /\.m?js$/,
+                    exclude: /(node_modules|bower_components)/,
+                    use: {
+                        loader: 'babel-loader',
+                        options: {
+                            presets: ['@babel/preset-env'],
+                            plugins: ['angularjs-annotate']
+                        }
+                    }
+                },
                 // load html as text by raw loader
                 {test: /\.html$/i, use: 'raw-loader'},
                 {
@@ -84,8 +95,8 @@ module.exports = function (env) {
                 jsPDF: 'jspdf',
                 tinycolor: 'tinycolor2',
                 CountUp: 'countup.js'
-            }),
-            new NGAnnotate()
+            })/*,
+            new NGAnnotate()*/
         ].concat((!isProduction(env) ? [new webpack.HotModuleReplacementPlugin()] : [
             new MiniCssExtractPlugin({
                 filename: 'dist/css/style.css'
