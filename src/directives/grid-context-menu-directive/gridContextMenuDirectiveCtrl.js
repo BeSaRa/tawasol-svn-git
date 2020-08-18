@@ -90,11 +90,12 @@ module.exports = function (app) {
                 panelClass: 'context-menu-panel-container'
             })
                 .then(function (panelReference) {
+                    panelReference.panelEl.css({top: $event.clientY, left: $event.clientX});
+
                     document.querySelector('.menu-trigger').click();
                     var deRegister = $rootScope.$on('$mdMenuClose', function (event, element) {
                         if (element[0].id === 'context-menu-bar-menu') {
                             panelReference.close();
-                            //_removeHighlightParentRow(parentRow);
                             deRegister();
                         }
                     });
