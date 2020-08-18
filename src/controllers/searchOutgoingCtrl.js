@@ -13,6 +13,7 @@ module.exports = function (app) {
                                                    validationService,
                                                    generator,
                                                    $state,
+                                                   ignoreReload,
                                                    rootEntity,
                                                    managerService,
                                                    contextHelpService,
@@ -264,6 +265,10 @@ module.exports = function (app) {
          * @return {*|Promise<U>}
          */
         self.reloadSearchedOutgoingDocument = function (pageNumber) {
+            if (ignoreReload) {
+                // ignoreReload is used from tasks
+                return $q.resolve([]);
+            }
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return searchOutgoingService

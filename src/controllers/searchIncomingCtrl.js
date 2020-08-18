@@ -23,6 +23,7 @@ module.exports = function (app) {
                                                    employeeService,
                                                    correspondenceService,
                                                    $state,
+                                                   ignoreReload,
                                                    dialog,
                                                    mailNotificationService,
                                                    gridService,
@@ -297,6 +298,10 @@ module.exports = function (app) {
          * @return {*|Promise<U>}
          */
         self.reloadSearchedIncomingDocument = function (pageNumber) {
+            if (ignoreReload) {
+                // ignoreReload is used from tasks
+                return $q.resolve([]);
+            }
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return searchIncomingService

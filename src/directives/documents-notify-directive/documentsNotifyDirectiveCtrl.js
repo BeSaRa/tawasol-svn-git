@@ -23,7 +23,8 @@ module.exports = function (app) {
             userFilters: [],
             $scope: $scope,
             fromNotification: true,
-            emailItem: false
+            emailItem: false,
+            ignoreReload: false
         });
         userInboxCtrl.controllerName = 'documentsNotifyDirectiveCtrl';
         angular.extend(this, userInboxCtrl);

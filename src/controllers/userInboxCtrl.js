@@ -14,6 +14,7 @@ module.exports = function (app) {
                                               correspondenceService,
                                               // userFilters,
                                               $state,
+                                              ignoreReload,
                                               counterService,
                                               $q,
                                               $rootScope,
@@ -409,6 +410,10 @@ module.exports = function (app) {
          * @return {*|Promise<WorkItem>}
          */
         self.reloadUserInboxes = function (pageNumber) {
+            if (ignoreReload) {
+                // ignoreReload is used from tasks
+                return $q.resolve([]);
+            }
             var defer = $q.defer();
             if (self.selectedFilter) {
                 self.filterGrid[self.selectedFilter.index].progress = defer.promise;

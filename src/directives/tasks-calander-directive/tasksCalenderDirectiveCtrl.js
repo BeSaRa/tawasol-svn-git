@@ -48,7 +48,8 @@ module.exports = function (app) {
                 registryOrganizations: false,
                 approvers: [],
                 reviewOutgoings: [],
-                ignoreHelp: true
+                ignoreHelp: true,
+                ignoreReload: true
             });
         });
         // get controller of review incoming
@@ -58,7 +59,8 @@ module.exports = function (app) {
                 propertyConfigurations: [],
                 registryOrganizations: false,
                 reviewIncomings: [],
-                ignoreHelp: true
+                ignoreHelp: true,
+                ignoreReload: true
             });
         });
         // get controller of review internal
@@ -69,7 +71,8 @@ module.exports = function (app) {
                 registryOrganizations: false,
                 approvers: [],
                 reviewInternals: [],
-                ignoreHelp: true
+                ignoreHelp: true,
+                ignoreReload: true
             });
         });
 
@@ -80,7 +83,8 @@ module.exports = function (app) {
                 userInboxes: [],
                 userFilters: [],
                 fromNotification: true,
-                emailItem: false
+                emailItem: false,
+                ignoreReload: true
             });
         });
 

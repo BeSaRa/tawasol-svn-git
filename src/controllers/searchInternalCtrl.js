@@ -17,6 +17,7 @@ module.exports = function (app) {
                                                    contextHelpService,
                                                    toast,
                                                    $state,
+                                                   ignoreReload,
                                                    organizationService,
                                                    viewTrackingSheetService,
                                                    downloadService,
@@ -278,6 +279,10 @@ module.exports = function (app) {
          * @return {*|Promise<U>}
          */
         self.reloadSearchedInternalDocuments = function (pageNumber) {
+            if (ignoreReload) {
+                // ignoreReload is used from tasks
+                return $q.resolve([]);
+            }
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return searchInternalService

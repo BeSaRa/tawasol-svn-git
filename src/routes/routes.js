@@ -667,6 +667,10 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_search_module_outgoing',
                 resolve: {
+                    ignoreReload: function () {
+                        'ngInject';
+                        return false;
+                    },
                     organizations: function (organizationService, _) {
                         'ngInject';
                         return organizationService.loadAllOrganizationsStructure()
@@ -703,6 +707,10 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_search_module_incoming',
                 resolve: {
+                    ignoreReload: function () {
+                        'ngInject';
+                        return false;
+                    },
                     organizations: function (organizationService, _) {
                         'ngInject';
                         return organizationService.loadAllOrganizationsStructure()
@@ -732,6 +740,10 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_search_module_internal',
                 resolve: {
+                    ignoreReload: function () {
+                        'ngInject';
+                        return false;
+                    },
                     organizations: function (organizationService, _) {
                         'ngInject';
                         return organizationService.loadAllOrganizationsStructure()
@@ -996,6 +1008,10 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_user_inbox',
                 resolve: {
+                    ignoreReload: function () {
+                        'ngInject';
+                        return false;
+                    },
                     fromNotification: function () {
                         'ngInject';
                         return false;
@@ -1004,23 +1020,10 @@ module.exports = function (app) {
                         'ngInject';
                         return userInboxService.loadUserInboxes();
                     },
-                   /* userFilters: function (userFilterService, correspondenceSiteTypes) {
-                        'ngInject';
-                        return userFilterService.loadUserFilters();
-                    },*/
                     correspondenceSiteTypes: function (correspondenceSiteTypeService) {
                         'ngInject';
                         return correspondenceSiteTypeService.getCorrespondenceSiteTypes();
                     },
-                    // just to update notifications when opening user inbox
-                  /*  notifications: function (mailNotificationService) {
-                        'ngInject';
-                        return mailNotificationService
-                            .loadMailNotifications(mailNotificationService.notificationsRequestCount)
-                            .catch(function () {
-                                return [];
-                            });
-                    },*/
                     emailItem: function (userInboxes, langService, dialog, _, $stateParams) {
                         'ngInject';
                         var action = $stateParams.action, source = $stateParams.source,
