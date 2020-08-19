@@ -94,7 +94,6 @@ module.exports = function (app) {
         self.isCreateReplyDisabled = function () {
             var disabled = self.addMethod === null;
             if (self.isSpecificVersion) {
-                console.log('self.selectedVersion', self.selectedVersions);
                 disabled = disabled || !self.selectedVersions || !self.selectedVersions.length;
             }
             return disabled;

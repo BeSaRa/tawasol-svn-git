@@ -22,6 +22,7 @@ module.exports = function (app) {
                                                          fullHistoryRecords,
                                                          documentLinkViewerRecords,
                                                          followupLogRecords,
+                                                         annotationLogRecords,
                                                          viewTrackingSheetService,
                                                          gridService,
                                                          employeeService,
@@ -68,6 +69,7 @@ module.exports = function (app) {
         self.fullHistoryRecords = fullHistoryRecords;
         self.documentLinkViewerRecords = documentLinkViewerRecords;
         self.followupLogRecords = followupLogRecords;
+        self.annotationLogRecords = annotationLogRecords;
         self.selectedReceivedIncomingSiteLength = 0;
         self.trackingSheetService.selectedReceivedIncomingSite = null;
         // self.selectedReceivedIncomingSite = null;
@@ -342,6 +344,27 @@ module.exports = function (app) {
             }
         };
 
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataAnnotationLog = function () {
+            self.annotationLogRecords = $filter('orderBy')(self.annotationLogRecords, self.annotationLogGrid.order);
+        };
+
+        self.annotationLogGrid = {
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.trackingSheet.annotationLog) || 5, // default limit
+            page: 1, // first page
+            order: '', // default sorting order
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.trackingSheet.annotationLog, self.annotationLogRecords.length),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.trackingSheet.annotationLog, limit);
+            },
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.annotationLog),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.annotationLog, self.annotationLogGrid.truncateSubject);
+            }
+        };
+
         self.sortMergedLinkedDocs = function () {
             self.mergedLinkedDocumentHistoryRecords = $filter('orderBy')(self.mergedLinkedDocumentHistoryRecords, self.mergedLinkedDocHistoryGrid.order);
 
@@ -391,7 +414,8 @@ module.exports = function (app) {
             'view_tracking_sheet_destination_history',
             'view_tracking_sheet_sms_logs',
             'view_tracking_sheet_document_link_viewer_history',
-            'view_tracking_sheet_followup_logs'
+            'view_tracking_sheet_followup_logs',
+            'view_tracking_sheet_annotation_logs'
             //'view_tracking_sheet_doc_update_history',
             //'view_tracking_sheet_doc_status_history'
         ];
@@ -471,7 +495,8 @@ module.exports = function (app) {
             'view_tracking_sheet_destination_history': self.destinationHistoryRecords.length,
             'view_tracking_sheet_sms_logs': self.smsLogRecords.length,
             'view_tracking_sheet_document_link_viewer_history': self.documentLinkViewerRecords.length,
-            'view_tracking_sheet_followup_logs': self.followupLogRecords.length
+            'view_tracking_sheet_followup_logs': self.followupLogRecords.length,
+            'view_tracking_sheet_annotation_logs': self.annotationLogRecords.length
         };
 
         self.checkDisabled = function ($event) {

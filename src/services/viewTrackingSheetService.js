@@ -12,6 +12,7 @@ module.exports = function (app) {
                                                       LinkedEntity,
                                                       LinkedAttachment,
                                                       LinkedDocument,
+                                                      ActionLogView,
                                                       DestinationHistory,
                                                       ContentViewHistory,
                                                       SmsLog,
@@ -43,6 +44,7 @@ module.exports = function (app) {
             self.fullHistory = [];
             self.documentLinkViewerRecords = [];
             self.followupLogRecords = [];
+            self.annotationLogRecords = [];
             self.selectedReceivedIncomingSite = null;
 
             self.printPage = 'views/print/TrackingSheetPrint.html';
@@ -242,6 +244,19 @@ module.exports = function (app) {
                             checkShow: function (action, model) {
                                 return true;
                             }
+                        },
+                        //  Annotation Logs
+                        {
+                            type: 'action',
+                            icon: '',
+                            text: 'view_tracking_sheet_annotation_logs',
+                            shortcut: false,
+                            callback: self.viewTrackingSheet,
+                            params: ['view_tracking_sheet_annotation_logs', 'grid', parentGridName],
+                            class: "action-green",
+                            checkShow: function (action, model) {
+                                return true;
+                            }
                         }
                     ];
                 }
@@ -385,6 +400,14 @@ module.exports = function (app) {
                                 'ngInject';
                                 return (heading === 'view_tracking_sheet_followup_logs' || gridType === 'tabs')
                                     ? self.loadFollowupLogs(document)
+                                        .then(function (result) {
+                                            return result;
+                                        }) : [];
+                            },
+                            annotationLogRecords: function () {
+                                'ngInject';
+                                return (heading === 'view_tracking_sheet_annotation_logs' || gridType === 'tabs')
+                                    ? self.loadAnnotationLogs(document)
                                         .then(function (result) {
                                             return result;
                                         }) : [];
@@ -735,6 +758,26 @@ module.exports = function (app) {
                 });
             };
 
+            /**
+             * @description load annotation logs update history by vsId
+             * @param document
+             */
+            self.loadAnnotationLogs = function (document) {
+                var vsId = getVsId(document);
+                return $http.get(urlService.vts_annotationLog.change({
+                    vsId: vsId
+                })).then(function (result) {
+                    self.annotationLogRecords = generator.generateCollection(result.data.rs, ActionLogView, self._sharedMethods);
+                    self.annotationLogRecords = generator.interceptReceivedCollection(['ActionLog', 'ActionLogView'], self.annotationLogRecords);
+                    return self.annotationLogRecords;
+                }).catch(function (error) {
+                    if (errorCode.checkIf(error, 'ACCESS_DENIED') === true) {
+                        dialog.errorMessage(langService.get('access_denied'));
+                        return $q.reject(false);
+                    }
+                    return [];
+                });
+            };
 
             /* self.loadDocumentUpdateHistory = function(document){
              var vsId = getVsId(document);
@@ -1051,7 +1094,7 @@ module.exports = function (app) {
                                 record.actionToInfo.getTranslatedName(),
                                 record.actionTypeInfo.getTranslatedName(),
                                 record.comments
-                               // _splitToNumberOfWords(record.comments || '', splitNumber)
+                                // _splitToNumberOfWords(record.comments || '', splitNumber)
                             ]);
                         }
                     }
@@ -1095,6 +1138,26 @@ module.exports = function (app) {
                                 record.actionDate_vts,
                                 record.userComment
                             ]);
+                        }
+                    }
+                }
+                /* Annotation Logs */
+                else if (heading === 'view_tracking_sheet_annotation_logs') {
+                    if (self.annotationLogRecords.length) {
+                        headerNames = [
+                            langService.get('view_tracking_sheet_action'),
+                            langService.get('annotation_type'),
+                            langService.get('view_tracking_sheet_action_by'),
+                            langService.get('view_tracking_sheet_action_date'),
+                        ];
+                        for (i = 0; i < self.annotationLogRecords.length; i++) {
+                            record = self.annotationLogRecords[i];
+                            data.push([
+                                record.eventTypeInfo.getTranslatedName(),
+                                record.itemTypeInfo.getTranslatedName(),
+                                record.actionByInfo.getTranslatedName(),
+                                record.actionDate_vts,
+                            ])
                         }
                     }
                 }

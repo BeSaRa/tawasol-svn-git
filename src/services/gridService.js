@@ -150,7 +150,8 @@ module.exports = function (app) {
                 docLinkViewers: 'vts_docLinkViewer',
                 mergedLinkedDocsHistoryActions: 'vts_mergedLinkedDocsHistoryActions',
                 contentViewHistoryViewers: 'vts_contentViewHistoryViewers',
-                followupLog: 'vts_followupLog'
+                followupLog: 'vts_followupLog',
+                annotationLog: 'vts_annotationLog'
             },
             launch: {
                 favoritesUsers: 'launchFavUsers',

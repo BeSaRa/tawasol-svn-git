@@ -867,6 +867,52 @@
                         </md-table-container>
                     </md-card>
                 </div>
+                <!-- Annotation Logs -->
+                <div ng-if="ctrl.heading === 'view_tracking_sheet_annotation_logs' && ctrl.showTab('view_tracking_sheet_annotation_logs')">
+                    <md-card>
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table>
+                                    <thead md-head md-order="ctrl.annotationLogGrid.order">
+                                    <tr md-row>
+                                        <th md-column
+                                            md-order-by="{{ctrl.getSortingKey('eventTypeInfo','Information')}}">
+                                            <span>{{lang.view_tracking_sheet_action}}</span>
+                                        </th>
+                                        <th md-column
+                                            md-order-by="{{ctrl.getSortingKey('itemTypeInfo','Information')}}">
+                                            <span>{{lang.annotation_type}}</span>
+                                        </th>
+                                        <th md-column
+                                            md-order-by="{{ctrl.getSortingKey('actionByInfo', 'Information')}}">
+                                            <span>{{lang.view_tracking_sheet_action_by}}</span>
+                                        </th>
+                                        <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-select="followupLog" md-row
+                                        ng-repeat="annotationLog in ctrl.annotationLogRecords | filter:ctrl.searchModelAnnotationLog | limitTo: ctrl.annotationLogGrid.limit: ((ctrl.annotationLogGrid.page - 1) * ctrl.annotationLogGrid.limit) |orderBy:ctrl.annotationLogGrid.order  track by $index">
+                                        <td md-cell>{{annotationLog.eventTypeInfo.getTranslatedName()}}</td>
+                                        <td md-cell>{{annotationLog.itemTypeInfo.getTranslatedName()}}</td>
+                                        <td md-cell>{{annotationLog.actionByInfo.getTranslatedName()}}</td>
+                                        <td md-cell>{{annotationLog.actionDate_vts}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.annotationLogGrid.limitOptions"
+                                    md-limit="ctrl.annotationLogGrid.limit"
+                                    md-page="ctrl.annotationLogGrid.page"
+                                    md-total="{{ctrl.annotationLogRecords.length}}"
+                                    md-page-select
+                                    md-on-paginate="ctrl.annotationLogGrid.pagingCallback"></md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
             </div>
         </div>
     </md-dialog-content>
