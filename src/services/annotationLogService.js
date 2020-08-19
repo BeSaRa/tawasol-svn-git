@@ -15,7 +15,7 @@ module.exports = function (app) {
          * @private
          */
         function _getInkType(annotation) {
-            return annotation.isSignature ? AnnotationLogType.TAWASOL_SIGNATURE : AnnotationLogType.INK;
+            return annotation.isSignature ? AnnotationLogType.TawasolSignature : AnnotationLogType.InkAnnotation;
         }
 
         /**
@@ -26,11 +26,11 @@ module.exports = function (app) {
          */
         function _getImageType(annotation) {
             if (!annotation.customData) {
-                return AnnotationLogType.IMAGE;
+                return AnnotationLogType.ImageAnnotation;
             } else if (annotation.customData.additionalData.type === AnnotationType.SIGNATURE) {
-                return AnnotationLogType.TAWASOL_SIGNATURE;
+                return AnnotationLogType.TawasolSignature;
             } else if (annotation.customData.additionalData.type === AnnotationType.STAMP) {
-                return AnnotationLogType.TAWASOL_STAMP;
+                return AnnotationLogType.TawasolStamp;
             }
             return 0;
         }
@@ -64,57 +64,24 @@ module.exports = function (app) {
         }
 
         /**
+         * @description
+         * @param annotation
+         * @private
+         */
+        function _getAnnotationType(annotation) {
+            return annotation instanceof PSPDFKit.Annotations.InkAnnotation ? _getInkType(annotation) : AnnotationLogType[annotation.readableName + 'Annotation'];
+        }
+
+        /**
          * @description map annotation type to be ready for sending to the server
          * @param annotation
          * @private
          */
         function _mapAnnotationType(annotation) {
-            switch (annotation.constructor.readableName) {
-                case PSPDFKit.Annotations.Annotation.readableName:
-                    annotation.annotationType = null;
-                    break;
-                case PSPDFKit.Annotations.CommentMarkerAnnotation.readableName:
-                    annotation.annotationType = AnnotationLogType.NOTE;
-                    break;
-                case PSPDFKit.Annotations.EllipseAnnotation.readableName:
-                    annotation.annotationType = AnnotationLogType.ELLIPSE;
-                    break;
-                case PSPDFKit.Annotations.ImageAnnotation.readableName:
-                    annotation.annotationType = _getImageType(annotation);
-                    break;
-                case PSPDFKit.Annotations.InkAnnotation.readableName:
-                    annotation.annotationType = _getInkType(annotation);
-                    break;
-                case PSPDFKit.Annotations.LineAnnotation.readableName:
-                    annotation.annotationType = AnnotationLogType.LINE;
-                    break;
-                case PSPDFKit.Annotations.LinkAnnotation.readableName:
-                    annotation.annotationType = AnnotationLogType.LINK;
-                    break;
-                case PSPDFKit.Annotations.NoteAnnotation.readableName:
-                    annotation.annotationType = AnnotationLogType.NOTE;
-                    break;
-                case PSPDFKit.Annotations.PolygonAnnotation.readableName:
-                    annotation.annotationType = AnnotationLogType.POLYGON;
-                    break;
-                case PSPDFKit.Annotations.PolylineAnnotation.readableName:
-                    annotation.annotationType = AnnotationLogType.POLYLINE;
-                    break;
-                case PSPDFKit.Annotations.RectangleAnnotation.readableName:
-                    annotation.annotationType = AnnotationLogType.RECTANGLE;
-                    break;
-                case PSPDFKit.Annotations.StampAnnotation.readableName:
-                    annotation.annotationType = AnnotationLogType.STAMP;
-                    break;
-                case PSPDFKit.Annotations.TextAnnotation.readableName:
-                    annotation.annotationType = AnnotationLogType.TEXT;
-                    break;
-                case PSPDFKit.Annotations.UnknownAnnotation.readableName:
-                    annotation.annotationType = null;
-                    break;
-                case PSPDFKit.Annotations.WidgetAnnotation.readableName:
-                    annotation.annotationType = null;
-                    break;
+            if (annotation.constructor.hasOwnProperty('readableName')) {
+                annotation.annotationType = _getAnnotationType(annotation);
+            } else {
+                annotation.annotationType = AnnotationLogType.UnknownAnnotation;
             }
             return {
                 annotationType: annotation.annotationType,
