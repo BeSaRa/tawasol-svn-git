@@ -60,7 +60,7 @@ module.exports = function (app) {
                 return this;
             };
             SignDocumentModel.prototype.setSignatureVsid = function (signatureVsid) {
-                this.signatureVsid = signatureVsid.hasOwnProperty('vsId') ? signatureVsid.vsId : signatureVsid;
+                this.signatureVsid = signatureVsid && signatureVsid.hasOwnProperty('vsId') ? signatureVsid.vsId : signatureVsid;
                 return this;
             };
             SignDocumentModel.prototype.setWobNum = function (wobNum) {

@@ -1,0 +1,30 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-attr-aria-label="Barcode">
+    <popup-toolbar-directive
+            header-text="{{lang.please_select_annotation_type}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <div layout="column">
+                <div flex layout="row">
+                    <md-radio-group flex ng-model="ctrl.selectedAnnotationType">
+                        <div ng-repeat="type in ctrl.annotationTypes track by type.id" flex layout-padding
+                             layout-align="start center">
+                            <md-radio-button ng-disabled="!type.allow" flex ng-value="type.lookupKey">
+                                {{type.getTranslatedName()}}
+                            </md-radio-button>
+                        </div>
+                    </md-radio-group>
+                </div>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button ng-disabled="!ctrl.selectedAnnotationType" class="md-raised md-primary"
+                   ng-click="ctrl.selectAnnotationType()">
+            {{lang.select}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup($event)">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

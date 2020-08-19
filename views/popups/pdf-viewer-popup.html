@@ -1,0 +1,30 @@
+<md-dialog id="correspondence-dialog" class="fullscreen document-dialog" layout="column">
+    <div layout="row" layout-align="start center">
+        <div flex layout-align="center center" layout="row">
+            <md-progress-circular ng-show="ctrl.loadingIndicatorService.loading" md-mode="indeterminate"
+                                  md-diameter="30"></md-progress-circular>
+            <span flex md-truncate class="font-bold text-center">{{::ctrl.correspondence.getTranslatedName()}}</span>
+            <md-button ng-if="ctrl.correspondence" ng-click="ctrl.closeDialog()"
+                       class="md-icon-button">
+                <md-icon md-svg-icon="close" class="red-text"></md-icon>
+            </md-button>
+        </div>
+    </div>
+    <md-dialog-content layout="column" flex scroll-directive>
+        <div layout="row" layout-fill flex>
+            <div id="pdf-viewer" layout="column" class="relative" flex></div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <div>
+            <md-button class="md-raised md-primary"
+                       ng-click="ctrl.saveDocumentAnnotations()">{{lang.save}}
+            </md-button>
+        </div>
+        <div>
+            <md-button ng-click="ctrl.closeDialog()" class="md-raised red-text">
+                {{lang.close}}
+            </md-button>
+        </div>
+    </md-dialog-actions>
+</md-dialog>

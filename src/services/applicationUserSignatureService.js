@@ -6,14 +6,58 @@ module.exports = function (app) {
                                                              ApplicationUserSignature,
                                                              _,
                                                              dialog,
+                                                             employeeService,
                                                              langService,
                                                              toast,
+                                                             encryptionService,
                                                              cmsTemplate,
+                                                             InkSignature,
                                                              AppUserCertificate) {
         'ngInject';
         var self = this;
         self.serviceName = 'applicationUserSignatureService';
         self.applicationUserSignatures = [];
+
+        /**
+         * @description load user ink signature
+         * @returns {*}
+         */
+        self.loadUserInkSignatures = function () {
+            return $http.get(urlService.userInkSignature + '/user-id/' + employeeService.getEmployee().id)
+                .then(function (result) {
+                    return generator.generateCollection(result.data.rs, InkSignature);
+                });
+        };
+        /**
+         * @description add user ink signature
+         * @param annotation
+         * @returns {*}
+         */
+        self.addUserInkSignature = function (annotation) {
+            var inkSignature = (new InkSignature())
+                .setAnnotationContent('Bad idea')
+                .setAppUserId(employeeService.getEmployee().id);
+            var formData = new FormData();
+            formData.append('entity', angular.toJson(inkSignature));
+            formData.append('content', new Blob([angular.toJson(annotation)], {type: 'application/pdf'}));
+            return $http.post(urlService.userInkSignature, formData, {
+                headers: {
+                    'Content-Type': undefined
+                }
+            }).then(function (result) {
+                return result.data.rs;
+            });
+        };
+        /**
+         * @description delete user ink signature
+         * @returns {*}
+         * @param vsId
+         */
+        self.deleteUserInkSignature = function (vsId) {
+            return $http.delete(urlService.userInkSignature + '/' + vsId).then(function (result) {
+                return result.data.rs;
+            });
+        };
 
         /**
          * @description Load the application user signature s from server.

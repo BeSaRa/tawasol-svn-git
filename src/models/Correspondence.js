@@ -21,6 +21,8 @@ module.exports = function (app) {
                                             rootEntity,
                                             Lookup,
                                             ResolveDefer,
+                                            SignDocumentModel,
+                                            encryptionService,
                                             cmsTemplate) {
         'ngInject';
         return function Correspondence(model) {
@@ -379,8 +381,8 @@ module.exports = function (app) {
                 });
             };
 
-            Correspondence.prototype.addDocumentContentFile = function () {
-                return correspondenceService.saveDocumentContentFile(this);
+            Correspondence.prototype.addDocumentContentFile = function (content) {
+                return correspondenceService.saveDocumentContentFile(this, content);
             };
 
             Correspondence.prototype.saveDocumentEntities = function (entity, index) {
@@ -997,6 +999,100 @@ module.exports = function (app) {
              */
             Correspondence.prototype.changeFollowupStatus = function ($event) {
                 return managerService.manageCorrespondenceSiteFollowupStatus(this, $event)
+            };
+
+            Correspondence.prototype.openForAnnotation = function ($event) {
+                return correspondenceService.annotateCorrespondence(this);
+            };
+
+            Correspondence.prototype.prepareSignatureModel = function (pinCode, isComposite, ignoreValidateMultiSignature) {
+                return (new SignDocumentModel())
+                    .setSignature(this, null)
+                    .setIsComposite(isComposite)
+                    .setPinCode(pinCode ? encryptionService.encrypt(pinCode) : null)
+                    .setValidateMultiSignature(!ignoreValidateMultiSignature);
+            };
+
+            Correspondence.prototype.authorizeByAnnotation = function (signatureModel, content) {
+                return correspondenceService.authorizeCorrespondenceByAnnotation(this, signatureModel, content);
+            };
+
+            Correspondence.prototype.displayCompositeMessage = function (pinCode) {
+                var composite = this.isCompositeSites();
+                return $q(function (resolve) {
+                    if (composite) {
+                        dialog
+                            .confirmMessage(langService.get('document_is_composite'))
+                            .then(function () {
+                                resolve({
+                                    pinCode: pinCode,
+                                    composite: true
+                                });
+                            })
+                            .catch(function () {
+                                resolve({
+                                    pinCode: pinCode,
+                                    composite: false
+                                });
+                            });
+                    } else {
+                        resolve({
+                            pinCode: pinCode,
+                            composite: composite
+                        });
+                    }
+                });
+            };
+
+            Correspondence.prototype.displayPinCodeMessage = function () {
+                var requirePinCode = rootEntity.getGlobalSettings().isDigitalCertificateEnabled() && employeeService.getEmployee().hasPinCodePrompt();
+                return $q(function (resolve, reject) {
+                    if (!requirePinCode) {
+                        resolve(null)
+                    } else {
+                        dialog
+                            .showDialog({
+                                templateUrl: cmsTemplate.getPopup('pincode'),
+                                controller: 'pinCodePopCtrl',
+                                controllerAs: 'ctrl'
+                            })
+                            .then(function (result) {
+                                result ? resolve(result) : reject('PINCODE_MISSING');
+                            })
+                            .catch(function () {
+                                reject('PINCODE_MISSING');
+                            });
+                    }
+                });
+            };
+
+            Correspondence.prototype.handelPinCodeAndCompositeThenCompleteAuthorization = function (content, ignoreValidationSignature) {
+                var self = this;
+                return $q(function (resolve, reject) {
+                    self.displayPinCodeMessage()
+                        .then(self.displayCompositeMessage.bind(self))
+                        .then(function (info) {
+                            var signatureModel = self.prepareSignatureModel(info.pinCode, info.composite, ignoreValidationSignature);
+                            return info.pinCode === 'PINCODE_MISSING' ? reject(info.pinCode) : resolve(self.authorizeByAnnotation(signatureModel, content));
+                        })
+                        .catch(reject);
+                });
+            };
+
+            Correspondence.prototype.addAnnotationAsAttachment = function (content) {
+                var info = this.getInfo();
+                var attachment = new Attachment({
+                    docSubject: langService.get('attached_annotation'),
+                    documentTitle: langService.get('attached_annotation'),
+                    securityLevel: info.securityLevel,
+                    priorityLevel: info.priorityLevel,
+                    attachmentType : 0,
+                    updateActionStatus: 0
+                });
+                attachment.file = content;
+                return attachmentService.addAttachment(info, attachment).then(function (result) {
+                    return result;
+                })
             };
 
             // don't remove CMSModelInterceptor from last line

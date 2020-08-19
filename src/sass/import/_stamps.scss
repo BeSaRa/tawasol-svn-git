@@ -1,0 +1,13 @@
+.custom-stamp-image {
+  outline: none;
+  width: 100px;
+  height: 100px;
+  margin: 10px;
+  border: #EEE 2px solid;
+  border-radius: 10px;
+
+  &.selected {
+    border-color: red;
+  }
+}
+

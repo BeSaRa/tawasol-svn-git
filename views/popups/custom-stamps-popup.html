@@ -1,0 +1,27 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-attr-aria-label="Stamps">
+    <popup-toolbar-directive
+            header-text="{{lang.stamps_options}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <md-switch ng-disabled="!ctrl.repeatAble" ng-model="ctrl.repeatOption">
+                <span>{{lang.repeat_for_each_page}} : {{ ctrl.repeatOption ? lang.get('yes') : lang.get('no')}}</span>
+            </md-switch>
+            <div class="custom-stamp-image-container" ng-repeat="row in ctrl.rows track by $index">
+                <img ng-class="{selected: ctrl.isSelectedStamp(stamp)}" ng-click="ctrl.setSelectedStamp(stamp)"
+                     class="custom-stamp-image"
+                     ng-repeat="stamp in row track by stamp.vsId"
+                     ng-src="{{stamp.contentElementUrl}}" alt="{{stamp.documentTitle}}"/>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button ng-disabled="!ctrl.selectedStamp" class="md-raised md-primary"
+                   ng-click="ctrl.addStamp($event)">
+            {{lang.add}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup($event)">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

@@ -252,6 +252,11 @@
                                        ng-click="ctrl.openEditAttachmentContent(attachment, $event)">
                                 <md-icon md-svg-icon="file-edit-outline"></md-icon>
                             </md-button>
+                            <md-button class="md-icon-button" title="{{lang.annotate_document}}"
+                                       ng-if="ctrl.isAttachmentDeletable(attachment, true) && ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')"
+                                       ng-click="ctrl.openAnnotateAttachment(attachment, $event)">
+                                <md-icon md-svg-icon="draw"></md-icon>
+                            </md-button>
                         </div>
                     </td>
                 </tr>

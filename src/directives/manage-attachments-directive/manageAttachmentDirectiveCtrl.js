@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                               $timeout,
                                                               attachmentTypeService,
                                                               Attachment,
+                                                              AnnotationType,
                                                               scannerService,
                                                               rootEntity,
                                                               $q,
@@ -115,7 +116,7 @@ module.exports = function (app) {
             return self.receiveG2g;
         }
 
-        self.checkReceiveOrReceiveG2G = function() {
+        self.checkReceiveOrReceiveG2G = function () {
             return (self.receive || self.receiveG2g);
         };
 
@@ -262,7 +263,7 @@ module.exports = function (app) {
                 .then(function () {
                     var attachments = angular.copy(self.attachments);
                     if (attachments) {
-                        var attachmentIndex =  _.findIndex(self.attachments, function (item) {
+                        var attachmentIndex = _.findIndex(self.attachments, function (item) {
                             return item.vsId === attachment.vsId;
                         });
                         if (attachmentIndex > -1) {
@@ -543,6 +544,11 @@ module.exports = function (app) {
                             self.activeAttachment = null;
                         })
                 })
+        };
+
+        self.openAnnotateAttachment = function (attachment, $event) {
+            correspondenceService
+                .annotateCorrespondence(attachment, AnnotationType.ANNOTATION);
         }
     });
 };

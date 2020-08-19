@@ -9,6 +9,7 @@ module.exports = function (app) {
                                       taskService,
                                       viewDocumentService,
                                       Correspondence,
+                                      Attachment,
                                       $q,
                                       dialog,
                                       generator,
@@ -20,6 +21,8 @@ module.exports = function (app) {
                                       rootEntity,
                                       lookupService,
                                       cmsTemplate,
+                                      SignDocumentModel,
+                                      encryptionService,
                                       Lookup) {
         'ngInject';
 
@@ -29,6 +32,7 @@ module.exports = function (app) {
                 followUpUserService = null,
                 managerService = null,
                 downloadService = null,
+                attachmentService = null,
                 classesMap = {
                     outgoing: Outgoing,
                     incoming: Incoming,
@@ -64,6 +68,11 @@ module.exports = function (app) {
 
             if (model)
                 angular.extend(this, model);
+
+            WorkItem.prototype.setAttachmentService = function (service) {
+                attachmentService = service;
+                return this;
+            };
             /**
              * @description Get all required fields
              * @return {Array|requiredFields}
@@ -1058,6 +1067,108 @@ module.exports = function (app) {
                 return followUpUserService.addCorrespondenceToEmployeeFollowUp(this).then(function () {
                     return counterService.loadCounters();
                 });
+            };
+
+            WorkItem.prototype.addDocumentContentFile = function (content) {
+                if (!content)
+                    throw Error('Need To Pass the Content for this work Item');
+
+                var correspondence = this.convertToCorrespondence();
+                return correspondenceService.saveDocumentContentFile(correspondence, content);
+            };
+
+            WorkItem.prototype.openForAnnotation = function () {
+                return correspondenceService.annotateCorrespondence(this);
+            };
+
+            WorkItem.prototype.prepareSignatureModel = function (pinCode, isComposite, ignoreValidateMultiSignature) {
+                return (new SignDocumentModel())
+                    .setSignature(this, null)
+                    .setIsComposite(isComposite)
+                    .setPinCode(pinCode ? encryptionService.encrypt(pinCode) : null)
+                    .setValidateMultiSignature(!ignoreValidateMultiSignature);
+            };
+
+            WorkItem.prototype.authorizeByAnnotation = function (signatureModel, content) {
+                return correspondenceService.authorizeCorrespondenceByAnnotation(this, signatureModel, content);
+            };
+
+            WorkItem.prototype.displayCompositeMessage = function (pinCode) {
+                var composite = this.isComposite();
+                return $q(function (resolve) {
+                    if (composite) {
+                        dialog
+                            .confirmMessage(langService.get('document_is_composite'))
+                            .then(function () {
+                                resolve({
+                                    pinCode: pinCode,
+                                    composite: true
+                                });
+                            })
+                            .catch(function () {
+                                resolve({
+                                    pinCode: pinCode,
+                                    composite: false
+                                });
+                            });
+                    } else {
+                        resolve({
+                            pinCode: pinCode,
+                            composite: composite
+                        });
+                    }
+                });
+            };
+
+            WorkItem.prototype.displayPinCodeMessage = function () {
+                var requirePinCode = rootEntity.getGlobalSettings().isDigitalCertificateEnabled() && employeeService.getEmployee().hasPinCodePrompt();
+                return $q(function (resolve, reject) {
+                    if (!requirePinCode) {
+                        resolve(null)
+                    } else {
+                        dialog
+                            .showDialog({
+                                templateUrl: cmsTemplate.getPopup('pincode'),
+                                controller: 'pinCodePopCtrl',
+                                controllerAs: 'ctrl'
+                            })
+                            .then(function (result) {
+                                result ? resolve(result) : reject('PINCODE_MISSING');
+                            })
+                            .catch(function () {
+                                reject('PINCODE_MISSING');
+                            });
+                    }
+                });
+            };
+
+            WorkItem.prototype.handelPinCodeAndCompositeThenCompleteAuthorization = function (content, ignoreValidationSignature) {
+                var self = this;
+                return $q(function (resolve, reject) {
+                    self.displayPinCodeMessage()
+                        .then(self.displayCompositeMessage.bind(self))
+                        .then(function (info) {
+                            var signatureModel = self.prepareSignatureModel(info.pinCode, info.composite, ignoreValidationSignature);
+                            return info.pinCode === 'PINCODE_MISSING' ? reject(info.pinCode) : resolve(self.authorizeByAnnotation(signatureModel, content));
+                        })
+                        .catch(reject);
+                });
+            };
+
+            WorkItem.prototype.addAnnotationAsAttachment = function (content) {
+                var info = this.getInfo();
+                var attachment = new Attachment({
+                    docSubject: langService.get('attached_annotation'),
+                    documentTitle: langService.get('attached_annotation'),
+                    securityLevel: info.securityLevel,
+                    priorityLevel: info.priorityLevel,
+                    attachmentType: 0,
+                    updateActionStatus: 0
+                });
+                attachment.file = content;
+                return attachmentService.addAttachment(info, attachment).then(function (result) {
+                    return result;
+                })
             };
 
             // don't remove CMSModelInterceptor from last line

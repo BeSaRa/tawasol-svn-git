@@ -195,8 +195,7 @@ module.exports = function (app) {
                     // if no vsId for document, means, document is not added yet. so user can edit/delete
                     else if (!documentInfo.vsId) {
                         return true;
-                    }
-                    else if (receiveOrReceiveG2G){
+                    } else if (receiveOrReceiveG2G) {
                         return employeeService.getEmployee().hasPermissionTo('DELETE_ATTACHMENT_RECEIPT');
                     }
                     return attachment.isDeletable;
@@ -210,8 +209,7 @@ module.exports = function (app) {
                     // if no vsId for document, means, document is not added yet. so user can edit/delete
                     else if (!documentInfo.vsId) {
                         return true;
-                    }
-                    else if (receiveOrReceiveG2G){
+                    } else if (receiveOrReceiveG2G) {
                         return true;
                     }
                     return attachment.isDeletable;
@@ -428,7 +426,7 @@ module.exports = function (app) {
                     });
                 };
 
-                var _getAllowedExtensions = function(groupName){
+                var _getAllowedExtensions = function (groupName) {
                     return fileTypeService.getDocumentFileTypes()
                         .then(function (allFileTypes) {
                             var allowedExtensions = [];
@@ -751,6 +749,39 @@ module.exports = function (app) {
                 self.downloadDocumentContent = function (vsId) {
                     return $http
                         .get(urlService.downloadDocumentContent.replace('{vsId}', vsId), {
+                            responseType: 'blob'
+                        })
+                        .then(function (result) {
+                            return result.data;
+                        });
+                };
+                /**
+                 * @description download document Content without watermark
+                 * @param correspondence
+                 * @returns {*}
+                 */
+                self.downloadDocumentContentWithoutWaterMark = function (correspondence) {
+                    var info = correspondence.getInfo();
+                    return $http
+                        .get(urlService.downloadDocumentContent.replace('{vsId}', info.vsId), {
+                            responseType: 'blob'
+                        })
+                        .then(function (result) {
+                            return result.data;
+                        });
+                };
+                /**
+                 * @description download document content for Approval.
+                 * @param correspondence
+                 * @returns {Promise<T>}
+                 */
+                self.downloadDocumentContentForApproval = function (correspondence) {
+                    var info = correspondence.getInfo();
+                    return $http
+                        .put(urlService.openForApproval.change({
+                            vsId: info.vsId,
+                            documentClass: info.documentClass
+                        }), {}, {
                             responseType: 'blob'
                         })
                         .then(function (result) {

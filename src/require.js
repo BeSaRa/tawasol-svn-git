@@ -19,4 +19,5 @@ module.exports = function (app) {
     require('./decorators/01-index')(app);
     require('./relation-services/01-index')(app);
     require('./correspondence-interceptor/01-index')(app);
+    require('./constants/01-index')(app);
 };

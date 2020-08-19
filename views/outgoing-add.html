@@ -36,6 +36,16 @@
                                 {{lang.outgoing_save_print_barcode}}
                             </md-button>
                         </div>
+                        <div ng-if="ctrl.outgoing.addMethod">
+                            <md-button ng-disabled="ctrl.saveInProgress
+                                                    || ctrl.document_properties.$invalid
+                                                    || !ctrl.outgoing.sitesInfoTo.length
+                                                    || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist))
+                                                    && !(ctrl.documentInformation || ctrl.outgoing.contentFile))"
+                                       ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised">
+                                {{lang.save_and_insert}}
+                            </md-button>
+                        </div>
                         <div ng-if="(!ctrl.outgoing.addMethod && ctrl.duplicateVersion) || (!ctrl.outgoing.addMethod && !ctrl.editContent)">
                             <md-button ng-disabled="ctrl.document_properties.$invalid
                                                     || !ctrl.outgoing.sitesInfoTo.length
@@ -270,6 +280,16 @@
                                                     && !(ctrl.documentInformation || ctrl.outgoing.contentFile))"
                                        ng-click="ctrl.saveCorrespondenceAndPrintBarcode()" class="md-raised">
                                 {{lang.outgoing_save_print_barcode}}
+                            </md-button>
+                        </div>
+                        <div ng-if="ctrl.outgoing.addMethod">
+                            <md-button ng-disabled="ctrl.saveInProgress
+                                                    || ctrl.document_properties.$invalid
+                                                    || !ctrl.outgoing.sitesInfoTo.length
+                                                    || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist))
+                                                    && !(ctrl.documentInformation || ctrl.outgoing.contentFile))"
+                                       ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised">
+                                {{lang.save_and_insert}}
                             </md-button>
                         </div>
                         <div ng-if="(!ctrl.outgoing.addMethod && ctrl.duplicateVersion) || (!ctrl.outgoing.addMethod && !ctrl.editContent)">

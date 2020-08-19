@@ -105,6 +105,7 @@
                 .addToAllWithBase('vts_smsLog', 'cms-entity/user/sms-log/vsid/')
                 .addToAllWithBase('vts_fullHistory', 'cms-entity/user/full-history/vsid')
                 .addToAllWithBase('vts_viewActionLog', 'cms-entity/user/view-action-log/vsid')
+                .addToAllWithBase('vts_annotationLog', 'cms-entity/user/action-log/annotation/:vsId')
                 .addToAllWithBase('userInbox', '/cms-entity/user/inbox')
                 .addToAllWithBase('userInboxActions', '/cms-entity/correspondence/wf')
                 .addToAllWithBase('workflowGroupDistributionWorkflow', 'cms-entity/admin/user-wf-group/user/active')
@@ -203,6 +204,10 @@
                 .addToAllWithBase('prepareFollowUp', 'cms-entity/user/user-followup-book/prepare-followup/vsid/:vsId/doc-class/:classKey')
                 .addToAllWithBase('documentStamp', 'cms-entity/admin/tawasol-stamp')
                 .addToAllWithBase('sequentialWorkflow', 'cms-entity/admin/seq-wf')
+                .addToAllWithBase('annotationContent', 'cms-entity/correspondence/common/annotation-content')
+                .addToAllWithBase('openForApproval', 'cms-entity/correspondence/:documentClass/open-for-approval/vsid/:vsId')
+                .addToAllWithBase('authorizeDocumentByAnnotation', 'cms-entity/correspondence/:documentClass/annotation/authorize')
+                .addToAllWithBase('userInkSignature', 'cms-entity/user/annotation')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

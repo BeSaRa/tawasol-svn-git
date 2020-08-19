@@ -1356,6 +1356,10 @@ module.exports = function (app) {
             item.addToUserFollowUp();
         };
 
+        self.annotateDocument = function (workItem) {
+            workItem.openForAnnotation();
+        };
+
         /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
@@ -1477,6 +1481,20 @@ module.exports = function (app) {
                 text: 'grid_action_terminate',
                 shortcut: true,
                 callback: self.terminate,
+                class: "action-green",
+                sticky: true,
+                stickyIndex: 1,
+                checkShow: function (action, model) {
+                    return true;
+                }
+            },
+            // Annotate Document
+            {
+                type: 'action',
+                icon: 'draw',
+                text: 'grid_action_annotate_document',
+                shortcut: true,
+                callback: self.annotateDocument,
                 class: "action-green",
                 sticky: true,
                 stickyIndex: 1,

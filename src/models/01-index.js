@@ -193,4 +193,8 @@ module.exports = function (app) {
     require('./TawasolStamp')(app);
     require('./SequentialWF')(app);
     require('./SequentialWFStep')(app);
+    require('./InkSignature')(app);
+    require('./ActionLog')(app);
+    require('./ActionLogView')(app);
+
 };

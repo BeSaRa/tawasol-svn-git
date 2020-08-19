@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.factory('Attachment', function (CMSModelInterceptor,
                                         _,
                                         langService,
+                                        CorrespondenceInfo,
                                         Indicator) {
         'ngInject';
         return function Attachment(model) {
@@ -72,6 +73,16 @@ module.exports = function (app) {
             var indicator = new Indicator();
             Attachment.prototype.getIsLinkedExportedDocIndicator = function () {
                 return indicator.getIsLinkedExportedDocIndicator();
+            };
+
+            Attachment.prototype.getInfo = function () {
+                var self = this;
+                return new CorrespondenceInfo({
+                    documentClass: self.classDescription,
+                    isAttachment: true,
+                    vsId: self.vsId,
+                    securityLevel: self.securityLevel
+                });
             };
 
 

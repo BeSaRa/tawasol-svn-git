@@ -1,6 +1,8 @@
 module.exports = function (app) {
     app.service('downloadService', function (urlService,
                                              $http,
+                                             CMSModelInterceptor,
+                                             AnnotationType,
                                              $q,
                                              tokenService,
                                              helper,
@@ -18,6 +20,7 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.serviceName = 'downloadService';
+        var attachmentService;
 
         self.controllerMethod = {
             /**
@@ -524,6 +527,48 @@ module.exports = function (app) {
                 });
                 return false;
             })
-        }
+        };
+        /**
+         * @description download content without Water mark
+         * @param correspondence = required correspondence or workItem to get from inside some information like vsId,documentClass
+         * @param annotationType = optional param if it is exist and the value equal to AnnotationType.SIGNATURE
+         * then we will use another service to get the content (openForApproval) to remove the signatureBox if exists.
+         * @returns {*}
+         */
+        self.downloadContentWithOutWaterMark = function (correspondence, annotationType) {
+            var method = annotationType === AnnotationType.SIGNATURE ? 'downloadDocumentContentForApproval' : 'downloadDocumentContentWithoutWaterMark';
+            return attachmentService[method](correspondence);
+        };
+        /**
+         * @description download content with waterMark.
+         * @param correspondence
+         * @param annotationType
+         * @returns {*}
+         */
+        self.downloadContentWithWaterMark = function (correspondence, annotationType) {
+            if (annotationType === AnnotationType.SIGNATURE) {
+                return self.downloadContentWithOutWaterMark(correspondence, annotationType);
+            }
+            var info = correspondence.getInfo();
+            var url = urlService.downloadDocumentContentPDF.replace('{vsId}', info.vsId);
+            if (info.isAttachment) {
+                url = url.replace('mobility', 'mobility/attachment');
+            }
+            return $http.get(url, {
+                responseType: 'blob'
+            }).then(function (result) {
+                return result.data;
+            })
+        };
+
+        self.setAttachmentService = function (service) {
+            attachmentService = service;
+            return self;
+        };
+
+        $timeout(function () {
+            CMSModelInterceptor.runEvent('downloadService', 'init', self);
+        }, 100);
+
     });
 };

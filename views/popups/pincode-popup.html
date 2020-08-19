@@ -8,7 +8,7 @@
                 <div layout="row">
                     <md-input-container flex>
                         <label for="pinCode">{{lang.pin}}</label>
-                        <input name="pinCode" id="pinCode" type="password"
+                        <input autocomplete="off" name="pinCode" id="pinCode" type="password"
                                ng-model="ctrl.pinCode" required
                                custom-validate-directive="ENSS" maxlength="15">
                         <div ng-messages="pinCodeForm.pinCode.$error">

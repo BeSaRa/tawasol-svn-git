@@ -15,10 +15,8 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             var file = model.type === 'scanner' ? model.file.file : model.file, formData = new FormData();
-            model.attachmentType = model.attachmentType.lookupKey;
-            model.updateActionStatus = model.updateActionStatus.lookupKey;
-            // model.securityLevel = .hasOwnProperty('id') ? model.securityLevel.lookupKey : model.securityLevel;
-            //model.securityLevel = self.document.securityLevel;
+            model.attachmentType = model.attachmentType.hasOwnProperty('lookupKey') ? model.attachmentType.lookupKey : model.attachmentType;
+            model.updateActionStatus = model.updateActionStatus.hasOwnProperty('lookupKey') ? model.updateActionStatus.lookupKey : model.updateActionStatus;
             if (model.securityLevel instanceof Lookup) {
                 model.securityLevel = model.securityLevel.lookupKey;
             } else if (typeof model.securityLevel !== 'number' && model.securityLevel.hasOwnProperty('id')) {

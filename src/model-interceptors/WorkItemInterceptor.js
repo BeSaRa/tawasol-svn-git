@@ -18,14 +18,15 @@ module.exports = function (app) {
                       lookupService,
                       followUpUserService,
                       Information,
+                      attachmentService,
                       generator) {
         'ngInject';
 
         var modelName = 'WorkItem';
 
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
-            // model.download();
             model
+                .setAttachmentService(attachmentService)
                 .setCorrespondenceService(correspondenceService)
                 .setManagerService(managerService)
                 .setDownloadService(downloadService)

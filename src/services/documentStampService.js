@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                   TawasolStamp,
                                                   _,
                                                   dialog,
+                                                  employeeService,
                                                   langService,
                                                   toast,
                                                   cmsTemplate) {
@@ -18,11 +19,14 @@ module.exports = function (app) {
         /**
          * @description Load the document stamps from server.
          * @param organizationId
+         * @param withContent
          * @returns {Promise|documentStamps}
          */
-        self.loadDocumentStamps = function (organizationId) {
+        self.loadDocumentStamps = function (organizationId, withContent) {
             organizationId = generator.getNormalizedValue(organizationId, 'id');
-            return $http.get(urlService.documentStamp + '/ou/' + organizationId).then(function (result) {
+            return $http.get(urlService.documentStamp + '/ou/' + organizationId, {
+                params: {'with-content': withContent}
+            }).then(function (result) {
                 self.documentStamps = generator.generateCollection(result.data.rs, TawasolStamp, self._sharedMethods);
                 self.documentStamps = generator.interceptReceivedCollection('TawasolStamp', self.documentStamps);
                 return self.documentStamps;
@@ -311,6 +315,34 @@ module.exports = function (app) {
                     || existingDocumentStamp.documentTitle.toLowerCase() === documentStamp.documentTitle.toLowerCase();
             }), function (matchingResult) {
                 return matchingResult === true;
+            });
+        };
+
+        self.loadActiveStamps = function () {
+            return $http.get(urlService.documentStamp + '/active/ou/' + employeeService.getEmployee().getOUID())
+                .then(function (result) {
+                    var stamps = generator.generateCollection(result.data.rs, TawasolStamp, self._sharedMethods);
+                    return generator.interceptReceivedCollection('TawasolStamp', stamps);
+                });
+        };
+        /**
+         * @description return annotation image for specified annotation type
+         * @param bookVsId
+         * @param annotationType
+         * @param docClassId
+         * @param vsId
+         * @returns {Blob}
+         */
+        self.loadAnnotationContent = function (bookVsId, annotationType, docClassId, vsId) {
+            return $http.put(urlService.annotationContent, {
+                bookVsId: bookVsId,
+                annotationType: annotationType,
+                docClassId: docClassId,
+                vsId: vsId
+            }, {
+                responseType: 'blob'
+            }).then(function (result) {
+                return result.data;
             });
         };
 

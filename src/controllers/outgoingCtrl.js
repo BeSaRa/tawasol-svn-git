@@ -166,7 +166,7 @@ module.exports = function (app) {
         self.requestCompleted = false;
         self.saveInProgress = false;
 
-        self.saveCorrespondence = function (status) {
+        self.saveCorrespondence = function (status, ignoreLaunch) {
             if (status && !self.documentInformation) {
                 toast.error(langService.get('cannot_save_as_draft_without_content'));
                 return;
@@ -229,8 +229,7 @@ module.exports = function (app) {
                             .then(function () {
                                 self.contentFileExist = !!(self.outgoing.hasOwnProperty('contentFile') && self.outgoing.contentFile);
                                 self.contentFileSizeExist = !!(self.contentFileExist && self.outgoing.contentFile.size);
-
-                                saveCorrespondenceFinished(status);
+                                saveCorrespondenceFinished(status, ignoreLaunch);
                             })
                     } else if (duplicateVersion && self.outgoing.hasContent() && self.outgoing.addMethod) {
                         return self.outgoing
@@ -238,12 +237,12 @@ module.exports = function (app) {
                             .then(function () {
                                 self.contentFileExist = true;
                                 self.contentFileSizeExist = true;
-                                saveCorrespondenceFinished(status);
+                                saveCorrespondenceFinished(status, ignoreLaunch);
                             });
                     } else {
                         self.contentFileExist = false;
                         self.contentFileSizeExist = false;
-                        saveCorrespondenceFinished(status);
+                        saveCorrespondenceFinished(status, ignoreLaunch);
                         return true;
                     }
                 })
@@ -259,12 +258,12 @@ module.exports = function (app) {
         };
 
         self.saveCorrespondenceAndPrintBarcode = function ($event) {
-            self.saveCorrespondence().then(function () {
+            self.saveCorrespondence(false, true).then(function () {
                 self.docActionPrintBarcode(self.outgoing, $event);
             })
         };
 
-        var saveCorrespondenceFinished = function (status) {
+        var saveCorrespondenceFinished = function (status, ignoreLaunch) {
             counterService.loadCounters();
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             if (replyTo) {
@@ -289,6 +288,12 @@ module.exports = function (app) {
                     self.outgoing.contentSize = self.outgoing.contentFile.size;
                     successKey = 'save_success';
                 }
+                self.requestCompleted = true;
+                self.saveInProgress = false;
+                toast.success(langService.get(successKey));
+                if (ignoreLaunch) {
+                    return;
+                }
 
                 if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist))) {
                     dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
@@ -296,10 +301,6 @@ module.exports = function (app) {
                             self.docActionLaunchDistributionWorkflow(self.outgoing);
                         });
                 }
-
-                self.requestCompleted = true;
-                self.saveInProgress = false;
-                toast.success(langService.get(successKey));
             }
         };
 
@@ -369,6 +370,12 @@ module.exports = function (app) {
 
         self.docActionPrintBarcode = function (document, $event) {
             document.barcodePrint(document);
+        };
+
+        self.saveAndAnnotateDocument = function (document, $event) {
+            self.saveCorrespondence(false, true).then(function () {
+                self.outgoing.openForAnnotation();
+            });
         };
 
         self.docActionLaunchDistributionWorkflow = function (document, $event) {

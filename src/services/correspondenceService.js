@@ -1,10 +1,13 @@
 module.exports = function (app) {
     app.service('correspondenceService', function (urlService,
                                                    $http,
+                                                   PSPDFKit,
                                                    ImageThumbnail,
                                                    FollowUpFolder,
                                                    cmsTemplate,
                                                    tokenService,
+                                                   PDFService,
+                                                   AnnotationType,
                                                    Pair,
                                                    downloadService,
                                                    helper,
@@ -442,8 +445,8 @@ module.exports = function (app) {
             }
             /*in case of G2G*/
             else if (correspondence.hasOwnProperty('correspondence')) {
-                if (correspondence.hasOwnProperty('priorityLevel')) {
-                    priorityLevel = correspondence.correspondence.priorityLevel;
+                if (correspondence.hasOwnProperty('prioretyLevel')) {
+                    priorityLevel = correspondence.correspondence.prioretyLevel;
                 } else {
                     priorityLevel = correspondence.correspondence.priorityLevel;
                 }
@@ -451,6 +454,22 @@ module.exports = function (app) {
                 priorityLevel = correspondence.priorityLevel;
             }
             return priorityLevel;
+        }
+
+        function _getSecurityLevel(correspondence) {
+            var securityLevel = null;
+            if (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm) { /* WorkItem */
+                securityLevel = correspondence.generalStepElm.securityLevel;
+            } else if (correspondence.hasOwnProperty('securityLevel')) { /* Event History */
+                securityLevel = correspondence.securityLevel;
+            }
+            /*in case of G2G*/
+            else if (correspondence.hasOwnProperty('correspondence')) {
+                securityLevel = correspondence.correspondence.securityLevel;
+            } else {  /* Correspondence */
+                securityLevel = correspondence.securityLevel;
+            }
+            return securityLevel;
         }
 
         /**
@@ -539,7 +558,9 @@ module.exports = function (app) {
                 docType: _getDocType(correspondence),
                 editByDeskTop: _getEditInDesktop(correspondence),
                 docClassId: self.docClassIds[dc],
-                priorityLevel: _getPriorityLevel(correspondence)
+                priorityLevel: _getPriorityLevel(correspondence),
+                securityLevel: _getSecurityLevel(correspondence),
+                isAttachment: false
             });
         };
         /**
@@ -769,11 +790,12 @@ module.exports = function (app) {
         /**
          * @description add content file into document.
          * @param correspondence
+         * @param content
          */
-        self.saveDocumentContentFile = function (correspondence) {
+        self.saveDocumentContentFile = function (correspondence, content) {
             if (correspondence.hasVsId()) {
                 var form = new FormData();
-                form.append('content', correspondence.contentFile);
+                form.append('content', content ? content : correspondence.contentFile);
                 return $http.post(_createUrlSchema(correspondence.vsId, correspondence.docClassName, 'content'), form, {
                     headers: {
                         'Content-Type': undefined
@@ -4255,8 +4277,8 @@ module.exports = function (app) {
 
                         return applicationUserService.loadApplicationUserById(receivingUser)
                             .then(function (appUser) {
-                            return (!!appUser ? generator.getNormalizedValue(appUser, 'mobile') : null);
-                        });
+                                return (!!appUser ? generator.getNormalizedValue(appUser, 'mobile') : null);
+                            });
                     }
                 }
             })
@@ -4921,6 +4943,42 @@ module.exports = function (app) {
                     }
                 })
         }
+
+        self.authorizeCorrespondenceByAnnotation = function (correspondence, signatureModel, content) {
+            var formData = new FormData(), info = correspondence.getInfo();
+            formData.append('entity', angular.toJson(signatureModel));
+            formData.append('content', content);
+            return $http
+                .post(urlService.authorizeDocumentByAnnotation.change({documentClass: info.documentClass}), formData, {
+                    headers: {
+                        'Content-Type': undefined
+                    }
+                })
+                .then(function (result) {
+                    return result.data.rs;
+                });
+
+        };
+
+        self.annotateCorrespondence = function (correspondence, annotationType, attachedBook) {
+            var info = correspondence.getInfo();
+            return downloadService
+                .downloadContentWithWaterMark(correspondence, annotationType)
+                .then(function (blob) {
+                    var fr = new FileReader();
+                    return $q(function (resolve, reject) {
+                        fr.onloadend = function () {
+                            resolve(PDFService.openPDFViewer(fr.result, correspondence, annotationType, attachedBook));
+                        };
+                        fr.readAsArrayBuffer(blob);
+                    });
+                }).then(function (result) {
+                    if (result === AnnotationType.SIGNATURE) {
+                        return self.annotateCorrespondence(correspondence, AnnotationType.SIGNATURE);
+                    }
+                });
+
+        };
 
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);

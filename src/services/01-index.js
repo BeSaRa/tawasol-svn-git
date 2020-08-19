@@ -124,4 +124,6 @@ module.exports = function (app) {
     require('./followUpUserService')(app);
     require('./documentStampService')(app);
     require('./sequentialWorkflowService')(app);
+    require('./PDFService')(app);
+    require('./annotationLogService')(app);
 };
