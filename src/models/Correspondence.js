@@ -1082,7 +1082,7 @@ module.exports = function (app) {
                 });
             };
 
-            Correspondence.prototype.handelPinCodeAndCompositeThenCompleteAuthorization = function (content, ignoreValidationSignature) {
+            Correspondence.prototype.handlePinCodeAndCompositeThenCompleteAuthorization = function (content, ignoreValidationSignature) {
                 var self = this;
                 return $q(function (resolve, reject) {
                     self.displayPinCodeMessage()

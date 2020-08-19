@@ -25,14 +25,13 @@ module.exports = function (app) {
          * @private
          */
         function _getImageType(annotation) {
-            if (!annotation.customData) {
+            if (!annotation.customData || annotation.customData.additionalData.type === AnnotationType.ANNOTATION) {
                 return AnnotationLogType.ImageAnnotation;
             } else if (annotation.customData.additionalData.type === AnnotationType.SIGNATURE) {
                 return AnnotationLogType.TawasolSignature;
             } else if (annotation.customData.additionalData.type === AnnotationType.STAMP) {
                 return AnnotationLogType.TawasolStamp;
             }
-            return 0;
         }
 
         /**
@@ -64,12 +63,22 @@ module.exports = function (app) {
         }
 
         /**
+         * @description get annotation type if it Image or other types
+         * @param annotation
+         * @return {Number}
+         * @private
+         */
+        function _getImageOrOtherAnnotationType(annotation) {
+            return annotation instanceof PSPDFKit.Annotations.ImageAnnotation ? _getImageType(annotation) : AnnotationLogType[annotation.readableName + 'Annotation']
+        }
+
+        /**
          * @description
          * @param annotation
          * @private
          */
         function _getAnnotationType(annotation) {
-            return annotation instanceof PSPDFKit.Annotations.InkAnnotation ? _getInkType(annotation) : AnnotationLogType[annotation.readableName + 'Annotation'];
+            return annotation instanceof PSPDFKit.Annotations.InkAnnotation ? _getInkType(annotation) : _getImageOrOtherAnnotationType(annotation);
         }
 
         /**

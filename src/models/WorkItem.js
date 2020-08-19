@@ -1163,7 +1163,7 @@ module.exports = function (app) {
                 });
             };
 
-            WorkItem.prototype.handelPinCodeAndCompositeThenCompleteAuthorization = function (content, ignoreValidationSignature) {
+            WorkItem.prototype.handlePinCodeAndCompositeThenCompleteAuthorization = function (content, ignoreValidationSignature) {
                 var self = this;
                 return $q(function (resolve, reject) {
                     self.displayPinCodeMessage()

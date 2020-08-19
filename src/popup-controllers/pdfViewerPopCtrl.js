@@ -51,6 +51,8 @@ module.exports = function (app) {
 
         self.skippedPdfObjectIds = [];
 
+        self.info = self.correspondence.getInfo();
+
         function makeToolbarItems(getInstance, callback) {
             var defaultToolbar = angular.copy(PSPDFKit.defaultToolbarItems);
             if (typeof callback !== "function") {
@@ -114,26 +116,32 @@ module.exports = function (app) {
             var approveButton = {
                 type: "custom",
                 id: "approve",
-                title: "Authorize By digital Signature",
+                title: "Electronic Signatures",
                 icon: "./assets/images/approve.svg",
                 onPress: self.openSignaturesDialog
             };
+            var openForApprovalButton = {
+                type: "custom",
+                id: "open-for-approval",
+                title: "open for approval",
+                icon: "./assets/images/open-for-approve.svg",
+                onPress: function () {
+                    dialog.hide(AnnotationType.SIGNATURE);
+                }
+            };
 
-            var instanceToolbar = defaultToolbar.concat([printWithoutAnnotationButton, customStampsButton, exportButton]);
+            var toolbarInstance = defaultToolbar.concat([printWithoutAnnotationButton, customStampsButton, exportButton]);
 
-            if (self.annotationType === AnnotationType.SIGNATURE) {
-                instanceToolbar = instanceToolbar.concat(approveButton)
-            } else {
-                instanceToolbar = _.filter(instanceToolbar, function (button) {
-                    return button.type !== 'ink-signature';
-                });
+            toolbarInstance = toolbarInstance.concat(approveButton);
+            // displaying barcode button
+            if (self.info.docStatus >= 24 || self.info.docStatus >= 23 || self.annotationType === AnnotationType.SIGNATURE) {
+                toolbarInstance = toolbarInstance.concat(barcodeButton);
             }
-            // barcode Button
-            if (self.annotationType === AnnotationType.BARCODE) {
-                instanceToolbar = instanceToolbar.concat(barcodeButton);
+            // displaying open for approval Button
+            if (!self.info.isAttachment && self.info.docStatus <= 23 && self.annotationType !== AnnotationType.SIGNATURE) {
+                toolbarInstance.push(openForApprovalButton);
             }
-
-            return instanceToolbar;
+            return toolbarInstance;
         }
 
         function downloadPdf(blob) {
@@ -145,6 +153,29 @@ module.exports = function (app) {
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+        }
+
+
+        /**
+         * @description check if the given annotation is signature
+         * @param annotation
+         * @return {boolean}
+         * @private
+         */
+        function _isSignature(annotation) {
+            if (annotation instanceof PSPDFKit.Annotations.InkAnnotation && annotation.isSignature) {
+                return true;
+            } else return !!(annotation instanceof PSPDFKit.Annotations.ImageAnnotation && annotation.customData && annotation.customData.additionalData.type === AnnotationType.SIGNATURE);
+        }
+
+        /**
+         * @description check if the given annotation is signature and not old signature
+         * @param annotation
+         * @return {boolean}
+         * @private
+         */
+        function _isCurrentUserSignature(annotation) {
+            return annotation.pdfObjectId ? false : _isSignature(annotation);
         }
 
 
@@ -496,8 +527,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.printWithOutAnnotations = function ($event) {
-            dialog.hide(AnnotationType.SIGNATURE);
-            return;
             var updatedAnnotations = [];
             self.getDocumentAnnotations()
                 .then(function (annotations) {
@@ -538,10 +567,10 @@ module.exports = function (app) {
                 });
         };
         /**
-         * @description handel Annotations Changes
+         * @description handle Annotations Changes
          * @param event
          */
-        self.handelAnnotationChanges = function (event) {
+        self.handleAnnotationChanges = function (event) {
             var annotation = event.annotations.get(0), promises = [];
             if (!annotation)
                 return;
@@ -578,7 +607,7 @@ module.exports = function (app) {
          * @param annotation
          * @returns {*}
          */
-        self.handelCreateInkSignatureAnnotation = function (annotation) {
+        self.handleCreateInkSignatureAnnotation = function (annotation) {
             annotation = annotation.set('customData', {
                 additionalData: {
                     type: AnnotationType.SIGNATURE,
@@ -609,17 +638,49 @@ module.exports = function (app) {
          * @param annotation
          * @returns {*}
          */
-        self.handelDeleteInkSignatureAnnotation = function (annotation) {
+        self.handleDeleteInkSignatureAnnotation = function (annotation) {
             return applicationUserSignatureService.deleteUserInkSignature(annotation.customData.additionalData.vsId);
         };
         /**
          * @description create annotation handler
          * @param annotations
          */
-        self.handelCreateAnnotations = function (annotations) {
+        self.handleCreateAnnotations = function (annotations) {
             var annotation = annotations.first();
             if (annotation instanceof PSPDFKit.Annotations.InkAnnotation && annotation.isSignature && !annotation.customData) {
                 self.latestInkAnnotation = annotation;
+            }
+
+            if (annotation instanceof PSPDFKit.Annotations.InkAnnotation && annotation.isSignature && annotation.customData && self.annotationType !== AnnotationType.SIGNATURE) {
+                annotation = annotation.set('isSignature', false);
+                return self.currentInstance.updateAnnotation(annotation);
+            }
+        };
+        /**
+         * @description handle delete Signature Annotations
+         * @param event
+         */
+        self.handleDeleteAnnotations = function (event) {
+            var annotation = event.annotations.get(0);
+            var reason = PSPDFKit.AnnotationsWillChangeReason.DELETE_START;
+            // in case if the current annotation is Ink Signature.
+            if (event.reason === reason &&
+                annotation instanceof PSPDFKit.Annotations.InkAnnotation &&
+                annotation.isSignature &&
+                !!(annotation.pdfObjectId)
+            ) {
+                toast.error(langService.get('delete_saved_signature_no_allowed'));
+                throw Error(langService.get('delete_saved_signature_no_allowed'));
+            }
+            // in case if the current annotation is Tawasol Electronic Signature.
+            if (event.reason === reason &&
+                annotation instanceof PSPDFKit.Annotations.ImageAnnotation &&
+                annotation.customData &&
+                annotation.customData.additionalData.type === AnnotationType.SIGNATURE &&
+                !!(annotation.pdfObjectId)
+            ) {
+                toast.error(langService.get('delete_saved_signature_no_allowed'));
+                throw Error(langService.get('delete_saved_signature_no_allowed'));
             }
         };
         /**
@@ -652,10 +713,10 @@ module.exports = function (app) {
          * @description remove all event listeners and unload the PDFViewer
          */
         self.disposable = function () {
-            self.currentInstance.removeEventListener('annotations.willChange', self.handelAnnotationChanges);
-            self.currentInstance.removeEventListener("inkSignatures.create", self.handelCreateInkSignatureAnnotation);
-            self.currentInstance.removeEventListener("inkSignatures.delete", self.handelDeleteInkSignatureAnnotation);
-            self.currentInstance.removeEventListener("annotations.create", self.handelCreateAnnotations);
+            self.currentInstance.removeEventListener('annotations.willChange', self.handleAnnotationChanges);
+            self.currentInstance.removeEventListener("inkSignatures.create", self.handleCreateInkSignatureAnnotation);
+            self.currentInstance.removeEventListener("inkSignatures.delete", self.handleDeleteInkSignatureAnnotation);
+            self.currentInstance.removeEventListener("annotations.create", self.handleCreateAnnotations);
             try {
                 PSPDFKit.unload($element.find('#pdf-viewer')[0]);
             } catch (e) {
@@ -666,17 +727,16 @@ module.exports = function (app) {
          * @default handle success Authorize
          * @param result
          */
-        self.handelSuccessAuthorize = function (result) {
+        self.handleSuccessAuthorize = function (result) {
             if (result === correspondenceService.authorizeStatus.PARTIALLY_AUTHORIZED.text) {
                 self.sendAnnotationLogs();
-
                 toast.success(langService.get('sign_specific_success').change({name: self.correspondence.getTranslatedName()}));
                 dialog
                     .confirmMessage(langService.get('book_needs_more_signatures_launch_to_user').change({name: self.correspondence.getTranslatedName()}))
                     .then(function () {
                         return self.correspondence.launchWorkFlow(null, 'forward', 'favorites')
                             .then(dialog.hide)
-                            .catch(self.handelExceptions);
+                            .catch(self.handleExceptions);
                     }).catch(dialog.hide);
             } else if (result === correspondenceService.authorizeStatus.SAME_USER_AUTHORIZED.text) {
                 dialog
@@ -709,10 +769,10 @@ module.exports = function (app) {
                 });
         };
         /**
-         * @default handel all expected exceptions.
+         * @default handle all expected exceptions.
          * @param error
          */
-        self.handelExceptions = function (error) {
+        self.handleExceptions = function (error) {
             if (error === 'PINCODE_MISSING') {
                 toast.error(langService.get('pincode_required_to_complete_authorization'));
             } else {
@@ -732,6 +792,50 @@ module.exports = function (app) {
             }
         };
         /**
+         * @description handle
+         * @param pdfContent
+         */
+        self.handleSaveAttachment = function (pdfContent) {
+            self.correspondence.file = pdfContent;
+            attachmentService.updateAttachment(attachedBook, self.correspondence)
+                .then(function () {
+                    toast.success(langService.get('save_success'));
+                    dialog.hide();
+                }).catch(self.handleExceptions);
+        };
+        /**
+         * @description handle open for approval save action.
+         * @param ignoreValidationSignature
+         */
+        self.handleOpenForApprovalSave = function (ignoreValidationSignature) {
+            var info = self.correspondence.getInfo();
+            self.isDocumentHasCurrentUserSignature().then(function () {
+                self.currentInstance.exportPDF({flatten: info.signaturesCount === 1}).then(function (buffer) {
+                    var pdfContent = new Blob([buffer], {type: 'application/pdf'});
+                    self.correspondence
+                        .handlePinCodeAndCompositeThenCompleteAuthorization(pdfContent, ignoreValidationSignature)
+                        .then(self.handleSuccessAuthorize)
+                        .catch(self.handleExceptions);
+                });
+            }).catch(function () {
+                toast.error('PLEASE Provide your signature');
+            });
+        };
+
+        self.isDocumentHasCurrentUserSignature = function () {
+            return $q(function (resolve, reject) {
+                $timeout(function () {
+                    return self.getDocumentAnnotations();
+                }).then(function (annotations) {
+                    return _.some(annotations, function (annotation) {
+                        return _isCurrentUserSignature(annotation);
+                    });
+                }).then(function (result) {
+                    result ? resolve(result) : reject(result);
+                });
+            });
+        };
+        /**
          * @description save document annotations
          * @param ignoreValidationSignature
          */
@@ -740,40 +844,27 @@ module.exports = function (app) {
             self.getDocumentAnnotations().then(function (newAnnotations) {
                 self.newAnnotations = newAnnotations;
                 if (self.annotationType === AnnotationType.SIGNATURE) {
-                    self.currentInstance.exportPDF({flatten: info.signaturesCount === 1}).then(function (buffer) {
-                        var pdfContent = new Blob([buffer], {type: 'application/pdf'});
-                        self.correspondence
-                            .handelPinCodeAndCompositeThenCompleteAuthorization(pdfContent, ignoreValidationSignature)
-                            .then(self.handelSuccessAuthorize)
-                            .catch(self.handelExceptions);
-                    });
+                    self.handleOpenForApprovalSave(ignoreValidationSignature);
                 } else {
                     self.currentInstance.exportInstantJSON().then(function (instantJSON) {
                         delete instantJSON.pdfId;
-
                         instantJSON.skippedPdfObjectIds = _.difference(instantJSON.skippedPdfObjectIds, self.skippedPdfObjectIds);
-
                         PDFService.applyAnnotationsOnPDFDocument(self.correspondence, AnnotationType.ANNOTATION, instantJSON)
                             .then(function (pdfContent) {
                                 self.skippedPdfObjectIds = self.skippedPdfObjectIds.concat(instantJSON.skippedPdfObjectIds);
                                 if (self.correspondence instanceof Attachment) {
-                                    self.correspondence.file = pdfContent;
-                                    attachmentService.updateAttachment(attachedBook, self.correspondence)
-                                        .then(function () {
-                                            toast.success(langService.get('save_success'));
-                                            dialog.hide();
-                                        }).catch(self.handelExceptions);
+                                    self.handleSaveAttachment(pdfContent);
                                 } else {
                                     if (info.isPaper) {
                                         self.correspondence.addDocumentContentFile(pdfContent).then(function () {
                                             toast.success(langService.get('save_success'));
                                             self.sendAnnotationLogs();
-                                        }).catch(self.handelExceptions);
+                                        }).catch(self.handleExceptions);
                                     } else {
                                         self.correspondence.addAnnotationAsAttachment(pdfContent).then(function () {
                                             toast.success(langService.get('save_success'));
                                             dialog.hide();
-                                        }).catch(self.handelExceptions);
+                                        }).catch(self.handleExceptions);
                                     }
                                 }
                             });
@@ -798,6 +889,23 @@ module.exports = function (app) {
             return returnValue;
         };
         /**
+         * @description load ink signature for the current user while clicking on ink Signature button.
+         * @return {PSPDFKit.Immutable.List}
+         */
+        self.populateInkSignatures = function () {
+            return applicationUserSignatureService
+                .loadUserInkSignatures()
+                .then(function (signatures) {
+                    var signatureList = [];
+                    signatures.map(function (sign) {
+                        signatureList.push(sign.fetchPSPDFKitSignature());
+                    });
+                    return $q.all(signatureList).then(function (list) {
+                        return PSPDFKit.Immutable.List(list);
+                    });
+                });
+        };
+        /**
          * @description viewer initialization
          */
         self.$onInit = function () {
@@ -812,19 +920,7 @@ module.exports = function (app) {
                     toolbarItems: makeToolbarItems(function () {
                         return self.currentInstance;
                     }),
-                    populateInkSignatures: function () {
-                        return applicationUserSignatureService
-                            .loadUserInkSignatures()
-                            .then(function (signatures) {
-                                var signatureList = [];
-                                signatures.map(function (sign) {
-                                    signatureList.push(sign.fetchPSPDFKitSignature());
-                                });
-                                return $q.all(signatureList).then(function (list) {
-                                    return PSPDFKit.Immutable.List(list);
-                                });
-                            });
-                    },
+                    populateInkSignatures: self.populateInkSignatures,
                     licenseKey: 'VGY-5RnVwIvECCo92mgVKqwBhdffibQ7xdO_3dVCUPBFJuvQhE3FYbuzLsxjOGmLBwfN18npbT52undRB5-CP3Lvb4oU3BLqmaFUMR2lzxvvXQpGfNOkU47LpA1j4yvR46aUZJiqc26xKUg4kbKPQm49UeY7Z00hjTJOzL4xk49pe0-B9VH958oeawkXUqzmhnjwKo_Fq7VwR_24-_OVhii3qXOsHXbEUpHTR7uFA4Xwc1mFsBpqIis3X_JLCTQ8gcuIH2Ab4AkHv1sgD8Ugv7CpwAzdOwHCz2Jl5qRK0u9c08yyrT-0Wn7htmoMZuttHZXu8CStgLyyKtMeH0uiwm4KTXVKB7oN0dSElT0ifLsazf_ABlmxYjf-JAx5HG4C0pElg2Dc4-7Ru_lz-HCIOn52UzcAZUTKBRcpAs_7uUSaS7r0YH0chnTOj8ExP9c2'
                 }).then(function (instance) {
                     self.currentInstance = instance;
@@ -844,10 +940,17 @@ module.exports = function (app) {
                     }
                     self.canRepeatAnnotations = self.isAbleToRepeatAnnotations();
                     self.currentInstance.setAnnotationCreatorName(employeeService.getEmployee().domainName);
-                    self.currentInstance.addEventListener("annotations.willChange", self.handelAnnotationChanges);
-                    self.currentInstance.addEventListener("inkSignatures.create", self.handelCreateInkSignatureAnnotation);
-                    self.currentInstance.addEventListener("inkSignatures.delete", self.handelDeleteInkSignatureAnnotation);
-                    self.currentInstance.addEventListener("annotations.create", self.handelCreateAnnotations);
+                    self.currentInstance.addEventListener("annotations.willChange", self.handleAnnotationChanges);
+                    self.currentInstance.addEventListener("inkSignatures.create", self.handleCreateInkSignatureAnnotation);
+                    self.currentInstance.addEventListener("inkSignatures.delete", self.handleDeleteInkSignatureAnnotation);
+                    self.currentInstance.addEventListener("annotations.create", self.handleCreateAnnotations);
+                    // to handle delete annotations
+                    self.currentInstance.addEventListener("annotations.willChange", self.handleDeleteAnnotations);
+                    // for debug purpose
+                    self.currentInstance.addEventListener("annotations.focus", function (event) {
+                        var annotation = event.annotation;
+                        console.log('Focused Annotation', annotation);
+                    });
                 });
             });
         };
