@@ -1,5 +1,5 @@
 <div flex layout="row">
-    <div class="block-display" layout="column" ng-if="!ctrl.viewOnly && !ctrl.record.id">
+    <div class="block-display" layout="column" ng-if="!ctrl.viewOnly && !ctrl.seqWF.id">
         <div ng-repeat="item in ctrl.actionsList track by $index"
              class="step-item" ng-class="{'disabled':item.disabled()}"
              seq-action-draggable="item" flex>
@@ -7,10 +7,16 @@
         </div>
     </div>
     <div flex class="step-layout-border" layout="column">
+        <div layout="row" class="step-legend-container">
+            <div ng-repeat="item in ctrl.stepLegendList track by $index"
+                 class="step-item {{item.class}}">
+                <span md-truncate>{{lang[item.key]}}</span>
+            </div>
+        </div>
         <div class="step-layout-generator" layout="column">
             <md-button class="md-raised add-row-button"
-                       ng-if="!ctrl.viewOnly && !ctrl.record.id"
-                       ng-disabled="!ctrl.record.hasAnyDocumentType()"
+                       ng-if="!ctrl.viewOnly && !ctrl.seqWF.id"
+                       ng-disabled="!ctrl.seqWF.hasAnyDocumentType()"
                        ng-click="ctrl.insertRowElement()">
                 <md-icon md-svg-icon="plus"></md-icon>
             </md-button>

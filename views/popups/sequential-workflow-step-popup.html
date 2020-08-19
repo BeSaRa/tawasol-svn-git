@@ -128,7 +128,8 @@
                             <label for="itemOrder">{{lang.item_order}}</label>
                             <input name="itemOrder" id="itemOrder" required
                                    custom-validate-directive="number"
-                                   ng-disabled="ctrl.viewOnly"
+                                   ng-disabled="true"
+                                   ng-readonly="true"
                                    ng-model="ctrl.step.itemOrder">
                             <div ng-messages="sequentialWorkflowStepForm.itemOrder.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
@@ -139,7 +140,7 @@
                     <div layout="row">
                         <div flex class="p020">
                             <md-checkbox ng-disabled="ctrl.viewOnly"
-                                    ng-model="ctrl.step.sendSMS">
+                                         ng-model="ctrl.step.sendSMS">
                                 {{lang.sms_workflow_notification}}
                             </md-checkbox>
                         </div>

@@ -1,0 +1,58 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           aria-label="{{lang.grid_action_launch_sequential_workflow}}">
+    <popup-toolbar-directive header-text="{{lang.grid_action_launch_sequential_workflow}} : {{ctrl.record.getInfo().title}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <div layout="column">
+                <form name="launchSequentialWFForm" autocomplete="off">
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="seqWF">{{lang.sequential_workflow}}</label>
+                            <md-select name="seqWF" id="seqWF" required
+                                       ng-model="ctrl.selectedSeqWF"
+                                       ng-model-options="{trackBy: '$value.id'}"
+                                       ng-change="ctrl.onChangeSequentialWorkflow($event)"
+                                       md-on-close="ctrl.clearSearchText('seqWF')"
+                                       data-md-container-class="select-header-container sticky-search-bar">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.seqWFSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <md-option
+                                        ng-repeat="option in ctrl.sequentialWorkflows | translatedNameFilter: ctrl.seqWFSearchText"
+                                        ng-value="option">
+                                    <span
+                                            md-highlight-text="ctrl.seqWFSearchText"
+                                            md-highlight-flags="i">{{option.getTranslatedName()}}</span>
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="launchSequentialWFForm.seqWF.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <sequential-workflow-steps-directive ng-if="ctrl.selectedSeqWF"
+                                                             seq-w-f="ctrl.selectedSeqWF"
+                                                             redraw-steps="ctrl.redrawSteps"
+                                                             view-only="true"
+                                                             is-launch-seq-w-f="true"
+                        ></sequential-workflow-steps-directive>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary"
+                   ng-disabled="!ctrl.isValidForm(launchSequentialWFForm)"
+                   ng-click="ctrl.launchSeqWF($event)">
+            {{lang.send}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">{{lang.close}}</md-button>
+    </md-dialog-actions>
+</md-dialog>

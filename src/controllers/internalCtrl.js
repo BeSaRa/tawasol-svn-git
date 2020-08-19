@@ -359,6 +359,24 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Launch distribution workflow with sequential workflow
+         * @param document
+         * @param $event
+         */
+        self.launchSequentialWorkflow = function (document, $event) {
+            if (!self.internal.hasContent()) {
+                dialog.alertMessage(langService.get("content_not_found"));
+                return;
+            }
+            document.openLaunchSequentialWorkflowDialog($event)
+                .then(function () {
+                    counterService.loadCounters();
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    self.resetAddCorrespondence();
+                })
+        };
+
+        /**
          * @description Send Link To Document By Email
          * @param model
          * @param $event
@@ -501,6 +519,18 @@ module.exports = function (app) {
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model, index) {
                     isVisible = gridService.checkToShowAction(action) && _hasContent();
+                    self.setDropdownAvailability(index, isVisible);
+                    return isVisible;
+                }
+            },
+            // Launch Sequential Workflow
+            {
+                text: langService.get('grid_action_launch_sequential_workflow'),
+                callback: self.launchSequentialWorkflow,
+                class: "action-green",
+                permissionKey: 'LAUNCH_SEQ_WF',
+                checkShow: function (action, model, index) {
+                    isVisible = gridService.checkToShowAction(action) && _hasContent() && !model.hasActiveSeqWF();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }

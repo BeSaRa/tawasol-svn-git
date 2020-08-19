@@ -9,9 +9,11 @@ module.exports = function (app) {
             bindToController: true,
             replace: true,
             scope: {
-                record: '=',
+                seqWF: '=',
                 redrawSteps: '=',
-                viewOnly: '='
+                viewOnly: '=',
+                correspondence: '=',
+                isLaunchSeqWF: '='
             }
         }
     })

@@ -153,5 +153,6 @@ module.exports = function (app) {
     require('./documentStampPopCtrl')(app);
     require('./sequentialWorkflowPopCtrl')(app);
     require('./sequentialWorkflowStepPopCtrl')(app);
+    require('./launchSequentialWorkflowPopCtrl')(app);
     require('./pdfViewerPopCtrl')(app);
 };

@@ -22,6 +22,7 @@ module.exports = function (app) {
         self.controllerName = 'quickSendDocumentPopCtrl';
 
         self.record = record;
+        self.employeeService = employeeService;
         self.predefinedActions = predefinedActions;
 
         self.headerText = langService.get('quick_send') + ' : ' + self.record.getInfo().title;
@@ -205,6 +206,17 @@ module.exports = function (app) {
             dialog.cancel();
             self.record.launchWorkFlowFromPredefinedAction($event, 'forward', defaultTab, isDeptIncoming, isDeptSent, self.includedMembers)
                 .then(function () {
+                    dialog.hide();
+                })
+        };
+
+        self.openSequentialWorkFlowPopup = function ($event) {
+            if (self.record.hasActiveSeqWF()) {
+                return false;
+            }
+            dialog.cancel();
+            self.record.openLaunchSequentialWorkflowDialog($event)
+                .then(function (result) {
                     dialog.hide();
                 })
         };

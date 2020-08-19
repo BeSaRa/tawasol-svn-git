@@ -912,7 +912,8 @@ module.exports = function (app) {
                 exportAndSend: 'file-export-outline',
                 launch: 'sitemap',
                 quickSend: 'sitemap',
-                conditionalApprove: 'clock-start'
+                conditionalApprove: 'clock-start',
+                sequentialWF: 'sitemap'
             },
             indicators: {
                 securityLevel: 'security',

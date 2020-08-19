@@ -4980,6 +4980,26 @@ module.exports = function (app) {
 
         };
 
+        self.openLaunchSeqWFDialog = function (record, $event) {
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('launch-sequential-workflow'),
+                    controller: 'launchSequentialWorkflowPopCtrl',
+                    controllerAs: 'ctrl',
+                    targetEvent: $event,
+                    locals: {
+                        record: record
+                    },
+                    resolve: {
+                        sequentialWorkflows: function (sequentialWorkflowService, employeeService) {
+                            'ngInject';
+                            return sequentialWorkflowService
+                                .loadSequentialWorkflowsByRegOuDocClassActive(employeeService.getEmployee().getRegistryOUID(), record.getInfo().docClassId);
+                        }
+                    }
+                });
+        };
+
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);
         }, 100);

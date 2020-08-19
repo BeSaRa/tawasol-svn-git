@@ -40,9 +40,47 @@
     margin: 0 2.5px;
     cursor: pointer;
 
-    &.valid-item {
+    &.step-valid {
       background-color: green;
     }
+
+    &.step-invalid {
+      background-color: red;
+    }
+
+    &.step-future {
+      background-color: green !important;
+    }
+
+    &.step-current {
+      background-color: #3598DC !important;
+    }
+
+    &.step-past {
+      background-color: red !important;
+    }
+  }
+}
+
+.step-item {
+  &.step-valid {
+    background-color: green;
+  }
+
+  &.step-invalid {
+    background-color: red;
+  }
+
+  &.step-future {
+    background-color: green !important;
+  }
+
+  &.step-current {
+    background-color: #3598DC !important;
+  }
+
+  &.step-past {
+    background-color: red !important;
   }
 }
 
@@ -87,4 +125,20 @@ md-icon.indicator-size {
   height: 18px;
   width: 18px;
   color: white;
+}
+
+.step-legend-container {
+  .step-item {
+    margin-right: 10px;
+    margin-left: 0;
+  }
+}
+
+html.rtl {
+  .step-legend-container {
+    .step-item {
+      margin-left: 10px;
+      margin-right: 0;
+    }
+  }
 }

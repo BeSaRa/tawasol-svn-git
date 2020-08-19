@@ -27,7 +27,7 @@ module.exports = function (app) {
                 enName: langService.getByLangKey('seq_send_doc', 'en'),
                 actionType: sequentialWorkflowService.workflowStepActionTypes.user,
                 disabled: function () {
-                    return !self.record.hasAnyDocumentType();
+                    return !self.seqWF.hasAnyDocumentType();
                 }
             }),
             new SequentialWFStep({
@@ -36,30 +36,38 @@ module.exports = function (app) {
                 enName: langService.getByLangKey('seq_authorize_and_send_doc', 'en'),
                 actionType: sequentialWorkflowService.workflowStepActionTypes.user,
                 disabled: function () {
-                    return !self.record.hasAnyDocumentType() || self.record.isIncomingSeqWF();
+                    return !self.seqWF.hasAnyDocumentType() || self.seqWF.isIncomingSeqWF();
                 }
             })
         ];
+        self.stepLegendList = [];
+        self.stepLegendClassList = {
+            validStep: {key: 'valid_step', class: 'step-valid'},
+            inValidStep: {key: 'invalid_step', class: 'step-invalid'},
+            pastStep: {key: 'previous_seq_step', class: 'step-past'},
+            currentStep: {key: 'current_seq_step', class: 'step-current'},
+            futureStep: {key: 'next_seq_step', class: 'step-future'}
+        };
 
         self.selectedRowIndex = null;
         self.$generatorElement = $element.find('.step-layout-rows');
 
         self.insertRowElement = function () {
-            if (!self.record.hasAnyDocumentType()) {
+            if (!self.seqWF.hasAnyDocumentType()) {
                 return false;
             }
-            self.record.stepRows.splice(self.record.stepRows.length, 0, null);
-            self.compileAll(self.record.stepRows);
+            self.seqWF.stepRows.splice(self.seqWF.stepRows.length, 0, null);
+            self.compileAll(self.seqWF.stepRows);
         };
 
         self.createRow = function (stepRow, idx) {
             return angular
                 .element('<div />', {
                     layout: 'row',
-                    class: 'step-row ' + (self.record.id ? 'sort-cancel' : ''),
-                    'seq-step-droppable': 'ctrl.record'
+                    class: 'step-row ' + (self.seqWF.id ? 'sort-cancel' : ''),
+                    'seq-step-droppable': 'ctrl.seqWF'
                 })
-                .append(self.record.id ? '' : self.createDeleteButton('row', idx))
+                .append(self.seqWF.id ? '' : self.createDeleteButton('row', idx))
                 .data('rowIndex', idx);
         };
 
@@ -84,17 +92,38 @@ module.exports = function (app) {
 
         self.createItem = function (stepAction, idx) {
             stepAction.dummyId = uuidv4();
+            stepAction.itemOrder = idx;
             var element = angular
                 .element('<div />', {
                     class: 'step-item no-style',
                     flex: ''
                 })
-                .append(self.record.id ? '' : self.createDeleteButton('item', idx))
+                .append(self.seqWF.id ? '' : self.createDeleteButton('item', idx))
                 .append()
                 .data('item', stepAction)
                 .data('rowIndex', idx)
-                .attr('ng-dblclick', 'ctrl.editStep(item, $event)')
-                .attr('ng-class', "{'valid-item':item.isValidStep(ctrl.record)}");
+                .attr('ng-dblclick', 'ctrl.editStep(item, $event)');
+
+            // if isLaunchSeqWF, first step is current, all other steps are future
+            // no self.correspondence means we are using from admin screen
+            // otherwise from next actions screen
+            if (self.isLaunchSeqWF) {
+                element.attr('ng-class', "{" +
+                    "'step-current': " + (idx === 0) + ", " +
+                    "'step-future': " + (idx > 0) +
+                    "}");
+            } else if (!self.correspondence) {
+                element.attr('ng-class', "{" +
+                    "'step-valid':item.isValidStep(ctrl.seqWF), " +
+                    "'step-invalid':!item.isValidStep(ctrl.seqWF)" +
+                    "}");
+            } else {
+                element.attr('ng-class', "{" +
+                    "'step-past':item.isPastSeqWFStep(ctrl.correspondence), " +
+                    "'step-current':item.isCurrentSeqWFStep(ctrl.correspondence), " +
+                    "'step-future':item.isFutureSeqWFStep(ctrl.correspondence)" +
+                    "}");
+            }
 
             var title = angular.element('<span class="no-style" />', {'md-truncate': ''}).html('{{ item.getTranslatedName() }}');
             var stepTypeIcon = angular.element('<md-icon />', {
@@ -130,7 +159,7 @@ module.exports = function (app) {
 
         self.updateRows = function (element) {
             _updateStructure();
-            self.compileAll(self.record.stepRows);
+            self.compileAll(self.seqWF.stepRows);
         };
 
         self.compileElement = function (element, scope) {
@@ -158,12 +187,28 @@ module.exports = function (app) {
             if ($row && $row.length) {
                 var rowIndex = $row.data('rowIndex'),
                     item = $item.data('item');
-                self.record.stepRows[rowIndex] = null;
+                self.seqWF.stepRows[rowIndex] = null;
                 $item.remove();
                 _updateStructure();
             }
         };
 
+        self.setStepLegend = function () {
+            // if isLaunchSeqWF, show current step, future step
+            // if no self.correspondence means we are using from admin screen, show valid, invalid steps
+            // otherwise from next actions after launch, show past, current, future steps
+            if (self.isLaunchSeqWF) {
+                self.stepLegendList.push(self.stepLegendClassList.currentStep);
+                self.stepLegendList.push(self.stepLegendClassList.futureStep);
+            } else if (!self.correspondence) {
+                self.stepLegendList.push(self.stepLegendClassList.validStep);
+                self.stepLegendList.push(self.stepLegendClassList.inValidStep);
+            } else {
+                self.stepLegendList.push(self.stepLegendClassList.pastStep);
+                self.stepLegendList.push(self.stepLegendClassList.currentStep);
+                self.stepLegendList.push(self.stepLegendClassList.futureStep);
+            }
+        };
 
         /*self.setSelectedRow = function (element) {
             self.selectedRowIndex = angular.element(element).data('rowIndex');
@@ -173,20 +218,20 @@ module.exports = function (app) {
             $event.preventDefault();
             var rowIndex = angular.element($event.target).parents('.step-item').data('rowIndex');
             sequentialWorkflowService.controllerMethod
-                .sequentialWorkflowStepEdit(self.record, seqWFStep, self.viewOnly, $event)
+                .sequentialWorkflowStepEdit(self.seqWF, seqWFStep, self.viewOnly, $event)
                 .then(function (updatedSeqWFStep) {
-                    self.record.stepRows.splice(rowIndex, 1, updatedSeqWFStep);
-                    self.compileAll(self.record.stepRows);
+                    self.seqWF.stepRows.splice(rowIndex, 1, updatedSeqWFStep);
+                    self.compileAll(self.seqWF.stepRows);
                 })
         };
 
         function _updateStructure() {
-            self.record.stepRows = [];
+            self.seqWF.stepRows = [];
             self.$generatorElement.children('.step-row').each(function (idx, row) {
-                self.record.stepRows[idx] = null;
+                self.seqWF.stepRows[idx] = null;
                 angular.element(row).children('.step-item').each(function (index, item) {
                     angular.element(item).data('rowIndex', idx);
-                    self.record.stepRows[idx] = angular.element(item).data('item');
+                    self.seqWF.stepRows[idx] = angular.element(item).data('item');
                 });
             });
         }
@@ -195,13 +240,15 @@ module.exports = function (app) {
             return self.redrawSteps;
         }, function (newVal) {
             if (newVal)
-                self.compileAll(self.record.stepRows);
+                self.compileAll(self.seqWF.stepRows);
         });
 
 
         self.$onInit = function () {
             $timeout(function () {
-                self.compileAll(self.record.stepRows);
+                self.compileAll(self.seqWF.stepRows);
+
+                self.setStepLegend();
             });
         };
 

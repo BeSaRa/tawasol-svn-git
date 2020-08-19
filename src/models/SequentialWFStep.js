@@ -106,12 +106,12 @@ module.exports = function (app) {
             };
 
             SequentialWFStep.prototype.isSendDocumentStepValid = function () {
-                return !!this.arName && !!this.enName && !!this.itemOrder && this.toUserId
+                return !!this.arName && !!this.enName && generator.validRequired(this.itemOrder) && this.toUserId
                     && generator.validRequired(generator.getNormalizedValue(this.actionId, 'id'));
             };
 
             SequentialWFStep.prototype.isAuthorizeAndSendStepValid = function (sequentialWF) {
-                var isValid = !!this.arName && !!this.enName && !!this.itemOrder;
+                var isValid = !!this.arName && !!this.enName && generator.validRequired(this.itemOrder);
 
                 if (!isValid) {
                     return false;
@@ -143,6 +143,19 @@ module.exports = function (app) {
                     return langService.get('seq_authorize_and_send_doc');
                 }
                 return '';
+            };
+
+            SequentialWFStep.prototype.isPastSeqWFStep = function (correspondenceRecord) {
+                //return this.id < correspondenceRecord.getSeqWFCurrentStepId();
+                return this.id === correspondenceRecord.getSeqWFCurrentStepId();
+            };
+            SequentialWFStep.prototype.isCurrentSeqWFStep = function (correspondenceRecord) {
+                //return this.id === correspondenceRecord.getSeqWFCurrentStepId();
+                return this.id === correspondenceRecord.getSeqWFNextStepId();
+            };
+            SequentialWFStep.prototype.isFutureSeqWFStep = function (correspondenceRecord) {
+                //return this.id >= correspondenceRecord.getSeqWFNextStepId();
+                return this.id > this.getSeqWFNextStepId();
             };
 
             // don't remove CMSModelInterceptor from last line

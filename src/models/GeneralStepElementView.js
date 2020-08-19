@@ -134,6 +134,18 @@ module.exports = function (app) {
                 return 0;
             };
 
+            GeneralStepElementView.prototype.getSeqWFId = function () {
+                return this.generalStepElm.seqWFId;
+            };
+
+            /**
+             * @description Checks if correspondence already has any active sequential workflow
+             * @returns {boolean}
+             */
+            GeneralStepElementView.prototype.hasActiveSeqWF = function () {
+                return !!this.getSeqWFId();
+            };
+
             /**
              * @description Check if book has create reply permission
              * @param isSpecificVersion

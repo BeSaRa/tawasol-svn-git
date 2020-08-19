@@ -134,6 +134,11 @@
         <md-button class="md-raised md-primary" ng-disabled="!ctrl.isValidMembers()"
                    ng-click="ctrl.advanceLaunch($event)">{{lang.more_details}}
         </md-button>
+        <md-button class="md-raised md-primary"
+                   ng-if="ctrl.employeeService.hasPermissionTo('LAUNCH_SEQ_WF') && !ctrl.record.hasActiveSeqWF()"
+                   ng-click="ctrl.openSequentialWorkFlowPopup($event)">
+            {{lang.sequential_workflow}}
+        </md-button>
         <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">{{lang.close}}</md-button>
     </md-dialog-actions>
 </md-dialog>

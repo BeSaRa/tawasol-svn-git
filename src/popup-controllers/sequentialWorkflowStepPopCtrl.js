@@ -8,7 +8,8 @@ module.exports = function (app) {
                                                               langService,
                                                               toast) {
         'ngInject';
-        var self = this;
+        var self = this,
+            readonlyFields = ['itemOrder'];
 
         self.controllerName = 'sequentialWorkflowStepPopCtrl';
 
@@ -28,6 +29,16 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Sets the original value for readonly fields
+         * @private
+         */
+        function _resetReadonlyFields() {
+            for (var i = 0; i < readonlyFields.length; i++) {
+                self.step[readonlyFields[i]] = angular.copy(self.stepCopy[readonlyFields[i]]);
+            }
+        }
+
+        /**
          * @description Set the step values and close dialog
          * @param $event
          */
@@ -40,6 +51,7 @@ module.exports = function (app) {
             if (!self.isValidForm()) {
                 return;
             }
+            _resetReadonlyFields();
             dialog.hide(self.step);
         };
 

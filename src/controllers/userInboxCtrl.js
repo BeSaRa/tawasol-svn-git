@@ -697,6 +697,23 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Launch distribution workflow with sequential workflow
+         * @param record
+         * @param $event
+         * @param defer
+         */
+        self.launchSequentialWorkflow = function (record, $event, defer) {
+            record.openLaunchSequentialWorkflowDialog($event)
+                .then(function () {
+                    self.reloadUserInboxes(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        });
+                })
+        };
+
+        /**
          * @description luanch workflow from after approve.
          * @param workItem
          * @param $event
@@ -1637,6 +1654,18 @@ module.exports = function (app) {
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model) {
                     return true;
+                }
+            },
+            // Launch Sequential Workflow
+            {
+                type: 'action',
+                icon: gridService.gridIcons.actions.sequentialWF,
+                text: 'grid_action_launch_sequential_workflow',
+                callback: self.launchSequentialWorkflow,
+                class: "action-green",
+                permissionKey: 'LAUNCH_SEQ_WF',
+                checkShow: function (action, model) {
+                    return !model.hasActiveSeqWF();
                 }
             },
             // Broadcast

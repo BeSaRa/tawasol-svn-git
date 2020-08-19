@@ -547,6 +547,12 @@
             {{lang.get(ctrl.textButton)}}
         </md-button>
         <md-button class="md-raised md-primary"
+                   ng-if="!ctrl.multi && ctrl.actionKey === 'forward' && ctrl.employeeService.hasPermissionTo('LAUNCH_SEQ_WF')"
+                   ng-click="ctrl.openSequentialWorkFlowPopup($event)"
+                   ng-disabled="ctrl.disableSend">
+            {{lang.sequential_workflow}}
+        </md-button>
+        <md-button class="md-raised md-primary"
                    ng-if="!ctrl.multi && ctrl.actionKey === 'forward' && !ctrl.fromQuickSend"
                    ng-click="ctrl.quickSendCorrespondenceWorkFlow($event)"
                    ng-disabled="ctrl.disableSend">

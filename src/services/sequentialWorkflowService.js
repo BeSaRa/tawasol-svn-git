@@ -66,19 +66,19 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Loads all the active sequential workflows by regOu and sequentialWorkflowId
+         * @description Loads all the active sequential workflows by regOu and docClassId
          * @param regOuId
-         * @param sequentialWorkflowId
+         * @param docClassId
          * @returns {Promise|*}
          */
-        self.loadActiveSequentialWorkflowsByRegOuAndId = function (regOuId, sequentialWorkflowId) {
+        self.loadSequentialWorkflowsByRegOuDocClassActive = function (regOuId, docClassId) {
             if (!regOuId) {
                 return $q.reject('MISSING_REGISTRY_ORGANIZATION');
             }
-            if (!sequentialWorkflowId) {
-                return $q.reject('sequentialWorkflowId is missing');
+            if (!generator.validRequired(docClassId)) {
+                return $q.reject('docClassId is missing');
             }
-            var url = urlService.sequentialWorkflow + '/reg-ou/' + generator.getNormalizedValue(regOuId, 'id') + '/doc-class-id/' + generator.getNormalizedValue(sequentialWorkflowId, 'id');
+            var url = urlService.sequentialWorkflow + '/reg-ou/' + generator.getNormalizedValue(regOuId, 'id') + '/doc-class-id/' + generator.getNormalizedValue(docClassId, 'id');
             return $http.get(url)
                 .then(function (result) {
                     return generator.interceptReceivedCollection('SequentialWF', generator.generateCollection(result.data.rs, SequentialWF, self._sharedMethods));
@@ -296,7 +296,6 @@ module.exports = function (app) {
                 });
         };
 
-
         /**
          * @description Activate sequential workflow
          * @param sequentialWorkflow
@@ -384,6 +383,33 @@ module.exports = function (app) {
                     return (failedRecords.indexOf(item.id) > -1);
                 });
             });
+        };
+
+        /**
+         * @description Launches the sequential workflow for given record
+         * @param record
+         * @param seqWFId
+         * @param ignoreValidateMultiSign
+         */
+        self.launchSequentialWorkflow = function (record, seqWFId, ignoreValidateMultiSign) {
+            var info = record.getInfo();
+            var data = {
+                vsid: info.vsId,
+                wobNum: info.isWorkItem() ? info.wobNumber : null,
+                validateMultiSignature: ignoreValidateMultiSign || false,
+                seqWFId: generator.getNormalizedValue(seqWFId, 'id')
+            };
+            var form = new FormData();
+            form.append('entity', JSON.stringify(data));
+            //TODO: send (authorizedFile after annotation) as content in formData if authorize step
+            return $http
+                .post((urlService.correspondenceWF + '/' + info.documentClass + '/seq-wf/launch'), form, {
+                    headers: {
+                        'Content-Type': undefined
+                    }
+                }).then(function () {
+                    return record;
+                });
         };
 
         /**

@@ -103,6 +103,7 @@ module.exports = function (app) {
             self.linkedAttachmenstList = [];
             self.linkedExportedDocsList = [];
             self.isMigrated = false;
+            self.seqWFId = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -182,6 +183,18 @@ module.exports = function (app) {
              */
             Correspondence.prototype.getRequiredFields = function () {
                 return requiredFields;
+            };
+
+            Correspondence.prototype.getSeqWFId = function () {
+                return this.seqWFId;
+            };
+
+            /**
+             * @description Checks if correspondence already has any active sequential workflow
+             * @returns {boolean}
+             */
+            Correspondence.prototype.hasActiveSeqWF = function () {
+                return !!this.getSeqWFId();
             };
 
             /**
@@ -577,6 +590,9 @@ module.exports = function (app) {
             Correspondence.prototype.quickSendLaunchWorkflow = function ($event, tab, action, isDeptIncoming, isDeptSent) {
                 action = action || 'forward';
                 return correspondenceService.openQuickSendDialog(this, tab, action, isDeptIncoming, isDeptSent, $event);
+            };
+            Correspondence.prototype.openLaunchSequentialWorkflowDialog = function ($event) {
+                return correspondenceService.openLaunchSeqWFDialog(this, $event);
             };
 
             Correspondence.prototype.launchWorkFlowAndCheckExists = function ($event, action, tab, isDeptIncoming, ignoreConformation) {

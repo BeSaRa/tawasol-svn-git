@@ -398,6 +398,27 @@ module.exports = function (app) {
                 action = action || 'forward';
                 return correspondenceService.openQuickSendDialog(this, tab, action, isDeptIncoming, isDeptSent, $event);
             };
+            WorkItem.prototype.openLaunchSequentialWorkflowDialog = function ($event) {
+                return correspondenceService.openLaunchSeqWFDialog(this, $event);
+            };
+
+            WorkItem.prototype.getSeqWFId = function () {
+                return this.generalStepElm.seqWFId;
+            };
+            /**
+             * @description Checks if correspondence already has any active sequential workflow
+             * @returns {boolean}
+             */
+            WorkItem.prototype.hasActiveSeqWF = function () {
+                return !!this.getSeqWFId();
+            };
+            WorkItem.prototype.getSeqWFCurrentStepId = function () {
+                return this.generalStepElm.seqWFCurStepId;
+            };
+            WorkItem.prototype.getSeqWFNextStepId = function () {
+                return this.generalStepElm.seqWFNextStepId;
+            };
+
             /**
              * @description to start simple launch workflow item.
              * @param $event

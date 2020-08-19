@@ -42,6 +42,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'launchCorrespondenceWorkflowPopCtrl';
         self.inlineUserOUSearchText = '';
+        self.employeeService = employeeService;
         var currentOUEscalationProcess = employeeService.getEmployee().userOrganization.escalationProcess;
         self.disableSend = false;
 
@@ -1474,6 +1475,17 @@ module.exports = function (app) {
         self.quickSendCorrespondenceWorkFlow = function ($event) {
             dialog.cancel();
             self.correspondence.quickSendLaunchWorkflow($event, 'favorites', null, isDeptIncoming)
+                .then(function (result) {
+                    dialog.hide();
+                })
+        };
+
+        self.openSequentialWorkFlowPopup = function ($event) {
+            if (self.correspondence.hasActiveSeqWF()) {
+                return false;
+            }
+            dialog.cancel();
+            self.correspondence.openLaunchSequentialWorkflowDialog($event)
                 .then(function (result) {
                     dialog.hide();
                 })

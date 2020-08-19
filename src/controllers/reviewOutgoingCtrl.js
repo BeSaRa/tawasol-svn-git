@@ -305,6 +305,27 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Launch distribution workflow with sequential workflow
+         * @param record
+         * @param $event
+         * @param defer
+         */
+        self.launchSequentialWorkflow = function (record, $event, defer) {
+            if (!record.hasContent()) {
+                dialog.alertMessage(langService.get("content_not_found"));
+                return;
+            }
+            record.openLaunchSequentialWorkflowDialog($event)
+                .then(function () {
+                    self.reloadReviewOutgoings(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        });
+                })
+        };
+
+        /**
          * @description Archive the review outgoing item
          * @param correspondence
          * @param $event
@@ -889,6 +910,18 @@ module.exports = function (app) {
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model) {
                     return true;
+                }
+            },
+            // Launch Sequential Workflow
+            {
+                type: 'action',
+                icon: gridService.gridIcons.actions.sequentialWF,
+                text: 'grid_action_launch_sequential_workflow',
+                callback: self.launchSequentialWorkflow,
+                class: "action-green",
+                permissionKey: 'LAUNCH_SEQ_WF',
+                checkShow: function (action, model) {
+                    return !model.hasActiveSeqWF();
                 }
             },
             // Archive
