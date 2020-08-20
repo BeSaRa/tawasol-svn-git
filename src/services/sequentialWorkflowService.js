@@ -415,16 +415,15 @@ module.exports = function (app) {
         /**
          * @description Advance the sequential workflow to next step for given record
          * @param record
-         * @param seqWFId
          * @param ignoreValidateMultiSign
          */
-        self.launchNextStepSequentialWorkflow = function (record, seqWFId, ignoreValidateMultiSign) {
+        self.launchNextStepSequentialWorkflow = function (record, ignoreValidateMultiSign) {
             var info = record.getInfo();
             var data = {
                 vsid: info.vsId,
                 wobNum: info.isWorkItem() ? info.wobNumber : null,
                 validateMultiSignature: !ignoreValidateMultiSign,
-                seqWFId: generator.getNormalizedValue(seqWFId, 'id')
+                seqWFId: generator.getNormalizedValue(record.getSeqWFId(), 'id')
             };
             var form = new FormData();
             form.append('entity', JSON.stringify(data));
