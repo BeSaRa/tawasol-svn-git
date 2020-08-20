@@ -472,6 +472,10 @@ module.exports = function (app) {
             return securityLevel;
         }
 
+        function _getHasActiveSeqWF(correspondence) {
+            return correspondence.hasActiveSeqWF();
+        }
+
         /**
          * @description bulk message for any bulk actions.
          * @param result
@@ -560,7 +564,8 @@ module.exports = function (app) {
                 docClassId: self.docClassIds[dc],
                 priorityLevel: _getPriorityLevel(correspondence),
                 securityLevel: _getSecurityLevel(correspondence),
-                isAttachment: false
+                isAttachment: false,
+                hasActiveSeqWF: _getHasActiveSeqWF(correspondence)
             });
         };
         /**

@@ -17,6 +17,7 @@ module.exports = function (app) {
             self.priorityLevel = null;
             self.isAttachment = null;
             self.securityLevel = null;
+            self.hasActiveSeqWF = null;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
