@@ -87,21 +87,19 @@
                                                     workflow-comments="ctrl.comments"
                                                     workflow-actions="ctrl.workflowActions"
                                                     grid="ctrl.grid"
-                                                    multi-select="true"
+                                                    multi-select="ctrl.canSendToMultiple"
                                                     grid-name="favoriteUsers"
                                                     grid-items="ctrl.favoriteUsers"
                                                     organization-groups="ctrl.organizationGroupsCopy"></workflow-users-directive>
-                                            <!--multi-select="!ctrl.getApprovedStatus()"-->
                                         </div>
                                     </md-tab>
                                     <!-- Organizations -->
-                                    <md-tab ng-disabled="ctrl.getApprovedStatus() || ctrl.isPrivateDoc()"
+                                    <md-tab ng-disabled="ctrl.correspondence.hasActiveSeqWF() || ctrl.getApprovedStatus() || ctrl.isPrivateDoc()"
                                             md-on-select="ctrl.setCurrentFavoriteTab('ou')"
                                             label="{{lang.organizations}}">
                                         <div>
-                                            <!--                                            multi-select="!ctrl.getApprovedStatus()"-->
                                             <workflow-items-directive
-                                                    multi-select="true"
+                                                    multi-select="ctrl.canSendToMultiple"
                                                     exclude-selected="false"
                                                     allow-favorites="true"
                                                     grid-type="Organization"
@@ -173,7 +171,7 @@
                                     <!--                                        <md-icon md-svg-icon="plus"></md-icon>-->
                                     <!--                                    </md-button>-->
                                     <md-button tooltip="{{lang.send_to_whole_department}}" id="add_organization"
-                                               ng-disabled="!ctrl.workItemNotExists(ctrl.usersCriteria.ou) || ctrl.loadingIndicatorService.loading || !ctrl.usersCriteria.ou || ctrl.isPrivateDoc()"
+                                               ng-disabled="ctrl.correspondence.hasActiveSeqWF() || !ctrl.workItemNotExists(ctrl.usersCriteria.ou) || ctrl.loadingIndicatorService.loading || !ctrl.usersCriteria.ou || ctrl.isPrivateDoc()"
                                                class="md-icon-button mt16"
                                                ng-click="ctrl.addToSelected(ctrl.usersCriteria.ou)">
                                         <md-icon md-svg-icon="bank-plus"></md-icon>
@@ -215,11 +213,10 @@
                                     grid="ctrl.grid"
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
-                                    multi-select="true"
+                                    multi-select="ctrl.canSendToMultiple"
                                     grid-name="users"
                                     grid-items="ctrl.users"
                                     organization-groups="ctrl.organizationGroupsCopy"></workflow-users-directive>
-                            <!--multi-select="!ctrl.getApprovedStatus()"-->
                             <div>
                                 <br/>
                             </div>
@@ -267,11 +264,10 @@
                                     grid="ctrl.grid"
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
-                                    multi-select="true"
+                                    multi-select="ctrl.canSendToMultiple"
                                     grid-name="privateUsers"
                                     grid-items="ctrl.privateUsers"
                                     organization-groups="ctrl.organizationGroupsCopy"></workflow-users-directive>
-                            <!--multi-select="!ctrl.getApprovedStatus()"-->
                             <div>
                                 <br/>
                             </div>
@@ -319,11 +315,10 @@
                                     grid="ctrl.grid"
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
-                                    multi-select="true"
+                                    multi-select="ctrl.canSendToMultiple"
                                     grid-name="managerUsers"
                                     grid-items="ctrl.managerUsers"
                                     organization-groups="ctrl.organizationGroupsCopy"></workflow-users-directive>
-                            <!--multi-select="!ctrl.getApprovedStatus()"-->
                             <div>
                                 <br/>
                             </div>
@@ -371,11 +366,10 @@
                                     grid="ctrl.grid"
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
-                                    multi-select="true"
+                                    multi-select="ctrl.canSendToMultiple"
                                     grid-name="viceManagerUsers"
                                     grid-items="ctrl.viceManagerUsers"
                                     organization-groups="ctrl.organizationGroupsCopy"></workflow-users-directive>
-                            <!--multi-select="!ctrl.getApprovedStatus()"-->
                             <div>
                                 <br/>
                             </div>
@@ -423,11 +417,10 @@
                                     grid="ctrl.grid"
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
-                                    multi-select="true"
+                                    multi-select="ctrl.canSendToMultiple"
                                     grid-name="governmentEntitiesHeads"
                                     grid-items="ctrl.governmentEntitiesHeads"
                                     organization-groups="ctrl.organizationGroupsCopy"></workflow-users-directive>
-                            <!--multi-select="!ctrl.getApprovedStatus()"-->
                             <div>
                                 <br/>
                             </div>
@@ -457,7 +450,7 @@
                                 <br/>
                             </div>
                             <workflow-items-directive
-                                    multi-select="true"
+                                    multi-select="ctrl.canSendToMultiple"
                                     exclude-selected="false"
                                     allow-favorites="false"
                                     grid-type="Organization"
@@ -502,7 +495,7 @@
                                 <br/>
                             </div>
                             <workflow-items-directive
-                                    multi-select="true"
+                                    multi-select="ctrl.canSendToMultiple"
                                     exclude-selected="true"
                                     allow-favorites="true"
                                     grid-type="Organization"
@@ -547,7 +540,7 @@
             {{lang.get(ctrl.textButton)}}
         </md-button>
         <md-button class="md-raised md-primary"
-                   ng-if="!ctrl.multi && ctrl.actionKey === 'forward' && ctrl.employeeService.hasPermissionTo('LAUNCH_SEQ_WF')"
+                   ng-if="ctrl.canLaunchSeqWF()"
                    ng-click="ctrl.openSequentialWorkFlowPopup($event)"
                    ng-disabled="ctrl.disableSend">
             {{lang.sequential_workflow}}

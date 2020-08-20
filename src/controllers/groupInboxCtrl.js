@@ -181,7 +181,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.forwardBulk = function ($event) {
-            var selectedItems = angular.copy(self.selectedWorkItems);
+            /*var selectedItems = angular.copy(self.selectedWorkItems);
             if (!self.checkIfForwardBulkAvailable()) {
                 if (self.itemsAlreadyBroadCasted.length === selectedItems.length) {
                     dialog.alertMessage(langService.get('selected_items_are_broadcasted_can_not_forward'));
@@ -196,7 +196,8 @@ module.exports = function (app) {
                 })
             } else {
                 forwardBulk(selectedItems, $event);
-            }
+            }*/
+            forwardBulk(self.selectedWorkItems, $event);
         };
 
         function forwardBulk(selectedItems, $event) {
@@ -211,12 +212,7 @@ module.exports = function (app) {
         }
 
         self.checkIfForwardBulkAvailable = function () {
-            self.itemsAlreadyBroadCasted = [];
-            _.map(self.selectedWorkItems, function (workItem) {
-                if (workItem.isBroadcasted())
-                    self.itemsAlreadyBroadCasted.push(workItem.generalStepElm.vsId);
-            });
-            return !(self.itemsAlreadyBroadCasted && self.itemsAlreadyBroadCasted.length);
+            return true;
         };
 
         /**
@@ -1195,7 +1191,7 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                    return true;
+                    return !model.hasActiveSeqWF();
                 }
             },
             // Broadcast
@@ -1227,7 +1223,7 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                    return true;
+                    return !model.hasActiveSeqWF();
                 }
             },
             // Get Link
@@ -1626,6 +1622,9 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
+                    if (model.hasActiveSeqWF()){
+                        return false;
+                    }
                     //addMethod = 0 (Electronic/Digital) - show the button
                     //addMethod = 1 (Paper) - hide the button
 

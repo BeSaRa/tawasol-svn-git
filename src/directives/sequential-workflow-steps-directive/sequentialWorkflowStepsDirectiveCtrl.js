@@ -103,6 +103,7 @@ module.exports = function (app) {
                 .data('item', stepAction)
                 .data('rowIndex', idx)
                 .attr('ng-dblclick', 'ctrl.editStep(item, $event)');
+                //.attr('tooltip', '{{item.getTranslatedName()}}');
 
             // if isLaunchSeqWF, first step is current, all other steps are future
             // no self.correspondence means we are using from admin screen

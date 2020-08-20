@@ -1049,7 +1049,7 @@ module.exports = function (app) {
                 class: "action-green",
                 showInViewOnly: true,
                 checkShow: function (action, model) {
-                    return true;
+                    return !model.hasActiveSeqWF();
                 }
             },
             // Get Link
@@ -1439,6 +1439,9 @@ module.exports = function (app) {
                 showInViewOnly: true,
                 //docClass: "Outgoing",
                 checkShow: function (action, model, showInViewOnly) {
+                    if (model.hasActiveSeqWF()){
+                        return false;
+                    }
                     //addMethod = 0 (Electronic/Digital) - show the button
                     //addMethod = 1 (Paper) - hide the button
 

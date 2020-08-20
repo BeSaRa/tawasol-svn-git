@@ -52,6 +52,7 @@
                                                  </md-button>-->
                                                 <md-button class="md-icon-button" aria-label="{{lang.transfer_mail}}"
                                                            tooltip="{{lang.transfer_mail}}"
+                                                           ng-if="ctrl.checkIfBulkTransferAllowed()"
                                                            ng-click="ctrl.transferToAnotherEmployeeBulk($event)">
                                                     <md-icon md-svg-icon="transfer" class="action-green"></md-icon>
                                                 </md-button>

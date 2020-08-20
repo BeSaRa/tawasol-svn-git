@@ -214,6 +214,9 @@ module.exports = function (app) {
                             errorCode.checkIf(error, 'CANNOT_RECALL_NON_EXISTING_BOOK', function () {
                                 dialog.errorMessage(langService.get('cannot_call_non_existing_book'));
                             });
+                            errorCode.checkIf(error, 'SEQ_WF_RECALL_WF', function () {
+                                dialog.errorMessage(langService.get('error_recall_book'));
+                            });
                             return false;
                         });
                     });

@@ -396,7 +396,7 @@ module.exports = function (app) {
             var data = {
                 vsid: info.vsId,
                 wobNum: info.isWorkItem() ? info.wobNumber : null,
-                validateMultiSignature: ignoreValidateMultiSign || false,
+                validateMultiSignature: !ignoreValidateMultiSign,
                 seqWFId: generator.getNormalizedValue(seqWFId, 'id')
             };
             var form = new FormData();
@@ -404,6 +404,33 @@ module.exports = function (app) {
             //TODO: send (authorizedFile after annotation) as content in formData if authorize step
             return $http
                 .post((urlService.correspondenceWF + '/' + info.documentClass + '/seq-wf/launch'), form, {
+                    headers: {
+                        'Content-Type': undefined
+                    }
+                }).then(function () {
+                    return record;
+                });
+        };
+
+        /**
+         * @description Advance the sequential workflow to next step for given record
+         * @param record
+         * @param seqWFId
+         * @param ignoreValidateMultiSign
+         */
+        self.launchNextStepSequentialWorkflow = function (record, seqWFId, ignoreValidateMultiSign) {
+            var info = record.getInfo();
+            var data = {
+                vsid: info.vsId,
+                wobNum: info.isWorkItem() ? info.wobNumber : null,
+                validateMultiSignature: !ignoreValidateMultiSign,
+                seqWFId: generator.getNormalizedValue(seqWFId, 'id')
+            };
+            var form = new FormData();
+            form.append('entity', JSON.stringify(data));
+            //TODO: send (authorizedFile after annotation) as content in formData if authorize step
+            return $http
+                .post((urlService.correspondenceWF + '/' + info.documentClass + '/seq-wf/advance'), form, {
                     headers: {
                         'Content-Type': undefined
                     }

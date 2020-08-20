@@ -2518,21 +2518,33 @@ module.exports = function (app) {
          * @param ignoreMessage
          */
         self.terminateWorkItem = function (workItem, $event, ignoreMessage) {
-            var info = workItem.getInfo();
-            return self.showReasonDialog('terminate_reason', $event)
-                .then(function (reason) {
-                    return $http
-                        .put(urlService.userInboxActions + "/" + info.documentClass + "/terminate/wob-num", {
-                            first: info.wobNumber,
-                            second: reason
-                        })
-                        .then(function () {
-                            if (!ignoreMessage) {
-                                toast.success(langService.get("terminate_specific_success").change({name: workItem.getTranslatedName()}));
-                            }
-                            return workItem;
-                        });
-                });
+            var defer = $q.defer();
+            if (!workItem.hasActiveSeqWF()) {
+                defer.resolve(true);
+            } else {
+                dialog.confirmMessage(langService.get('confirm_terminate_seq_wf'))
+                    .then(function () {
+                        defer.resolve(true);
+                    })
+            }
+            return defer.promise.then(function () {
+                return self.showReasonDialog('terminate_reason', $event)
+                    .then(function (reason) {
+                        var info = workItem.getInfo();
+                        return $http
+                            .put(urlService.userInboxActions + "/" + info.documentClass + "/terminate/wob-num", {
+                                first: info.wobNumber,
+                                second: reason
+                            })
+                            .then(function () {
+                                if (!ignoreMessage) {
+                                    toast.success(langService.get("terminate_specific_success").change({name: workItem.getTranslatedName()}));
+                                }
+                                return workItem;
+                            });
+                    });
+
+            });
 
         };
 

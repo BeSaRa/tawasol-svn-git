@@ -610,6 +610,12 @@ module.exports = function (app) {
             workItem.barcodePrint($event);
         };
 
+        self.checkIfBulkTransferAllowed = function () {
+            return _.every(self.selectedFollowupEmployeeInboxes, function (item) {
+                return !item.hasActiveSeqWF();
+            });
+        };
+
         /**
          * @description Transfer to another employee
          * @param workItem
@@ -1129,7 +1135,7 @@ module.exports = function (app) {
                 class: "action-green",
                 showInView: true,
                 checkShow: function (action, model) {
-                    return true;
+                    return !model.hasActiveSeqWF();
                 }
             },
             /* // Move To Folder

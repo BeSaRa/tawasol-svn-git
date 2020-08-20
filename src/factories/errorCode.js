@@ -112,7 +112,8 @@ module.exports = function (app) {
                 3044: 'g2g_recall_failed',
                 3049: 'duplicate_followup_book',
                 2060: 'cannot_export_too_many_attachments_or_linked_documents',
-                3062: 'error_delete_seq_wf_active_wf'
+                3062: 'error_delete_seq_wf_active_wf',
+                3055: 'error_recall_book'
             };
 
         return {
@@ -144,12 +145,12 @@ module.exports = function (app) {
              * Message will override the error message and messageLangKey
              */
             showErrorDialog: function (error, messageLangKey, message) {
-                var code = error.hasOwnProperty('data') && error.data ? error.data.ec : error;
                 if (message) {
                     dialog.errorMessage(message);
                 } else if (messageLangKey) {
                     dialog.errorMessage(langService.get(messageLangKey));
                 } else {
+                    var code = error.hasOwnProperty('data') && error.data ? error.data.ec : error;
                     var errorExists = _.values(errorCodes).indexOf(code) !== -1;
                     if (errorExists && errorLangKeys[code]) {
                         dialog.errorMessage(langService.get(errorLangKeys[code]));

@@ -1011,7 +1011,7 @@ module.exports = function (app) {
                 },
                 checkShow: function (action, model) {
                     //var info = model.getInfo();
-                    return model.generalStepElm.isReassigned;//!info.incomingVsId;
+                    return !model.hasActiveSeqWF() && model.generalStepElm.isReassigned;//!info.incomingVsId;
                 }
             },
             // Duplicate

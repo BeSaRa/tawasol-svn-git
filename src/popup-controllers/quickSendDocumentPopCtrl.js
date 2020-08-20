@@ -16,7 +16,9 @@ module.exports = function (app) {
                                                          DistributionWF,
                                                          employeeService,
                                                          tableGeneratorService,
-                                                         moment) {
+                                                         moment,
+                                                         rootEntity,
+                                                         SentItemDepartmentInbox) {
         'ngInject';
         var self = this;
         self.controllerName = 'quickSendDocumentPopCtrl';
@@ -24,7 +26,7 @@ module.exports = function (app) {
         self.record = record;
         self.employeeService = employeeService;
         self.predefinedActions = predefinedActions;
-
+        self.rootEntity = rootEntity;
         self.headerText = langService.get('quick_send') + ' : ' + self.record.getInfo().title;
 
         self.selectedPredefinedAction = null;
@@ -190,6 +192,8 @@ module.exports = function (app) {
                                 var info = self.record.getInfo();
                                 dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                                 return false;
+                            } else {
+                                return errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
                             }
                         });
                 })
@@ -211,7 +215,7 @@ module.exports = function (app) {
         };
 
         self.openSequentialWorkFlowPopup = function ($event) {
-            if (self.record.hasActiveSeqWF()) {
+            if (!employeeService.hasPermissionTo('LAUNCH_SEQ_WF') || self.record.hasActiveSeqWF() || !rootEntity.hasPSPDFViewer()) {
                 return false;
             }
             dialog.cancel();
@@ -219,6 +223,12 @@ module.exports = function (app) {
                 .then(function (result) {
                     dialog.hide();
                 })
+        };
+
+
+        self.canLaunchSeqWF = function () {
+            return employeeService.hasPermissionTo('LAUNCH_SEQ_WF') && rootEntity.hasPSPDFViewer()
+                && !self.record.hasActiveSeqWF() && !(self.record instanceof SentItemDepartmentInbox);
         };
 
         /**

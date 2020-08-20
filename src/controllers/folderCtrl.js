@@ -194,7 +194,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.forwardBulk = function ($event) {
-            var itemsAlreadyBroadCasted = [];
+            /*var itemsAlreadyBroadCasted = [];
             _.filter(self.selectedWorkItems, function (workItem) {
                 if (workItem.isBroadcasted())
                     itemsAlreadyBroadCasted.push(workItem.generalStepElm.vsId);
@@ -214,7 +214,8 @@ module.exports = function (app) {
                 })
             } else {
                 forwardBulk(selectedItems, $event);
-            }
+            }*/
+            forwardBulk(self.selectedWorkItems, $event);
         };
 
         function forwardBulk(selectedItems, $event) {
@@ -1152,7 +1153,7 @@ module.exports = function (app) {
                 callback: self.forward,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return true;//!model.isBroadcasted();
+                    return true;
                 }
             },
             // Quick Send (Quick Launch)
@@ -1166,7 +1167,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model) {
-                    return true;
+                    return !model.hasActiveSeqWF();
                 }
             },
             // Broadcast
@@ -1192,7 +1193,7 @@ module.exports = function (app) {
                 callback: self.reply,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return !model.isBroadcasted();
+                    return !model.hasActiveSeqWF() && !model.isBroadcasted();
                 }
             },
             // Get Link
@@ -1576,6 +1577,9 @@ module.exports = function (app) {
                 text: 'grid_action_approve',//signature
                 shortcut: false,
                 checkShow: function (action, model) {
+                    if (model.hasActiveSeqWF()){
+                        return false;
+                    }
                     return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
@@ -1816,12 +1820,7 @@ module.exports = function (app) {
 
 
         self.checkIfForwardBulkAvailable = function () {
-            self.itemsAlreadyBroadCasted = [];
-            _.map(self.selectedWorkItems, function (workItem) {
-                if (workItem.isBroadcasted())
-                    self.itemsAlreadyBroadCasted.push(workItem.generalStepElm.vsId);
-            });
-            return !(self.itemsAlreadyBroadCasted && self.itemsAlreadyBroadCasted.length);
+            return true;
         };
 
 
@@ -1848,7 +1847,7 @@ module.exports = function (app) {
                 callback: self.reply,
                 class: "",
                 checkShow: function (action, model) {
-                    return gridService.checkToShowAction(action) && !model.isBroadcasted();
+                    return gridService.checkToShowAction(action) && !model.hasActiveSeqWF() && !model.isBroadcasted();
                 }
             },
             // Forward
@@ -1861,7 +1860,6 @@ module.exports = function (app) {
                 class: "",
                 checkShow: function (action, model) {
                     return gridService.checkToShowAction(action);
-                    /*&& !model.isBroadcasted()*/ // remove the this cond. after talk  with ;
                 }
             },
             // Approve(e-Signature)

@@ -1102,7 +1102,7 @@ module.exports = function (app) {
                     documentTitle: langService.get('attached_annotation'),
                     securityLevel: info.securityLevel,
                     priorityLevel: info.priorityLevel,
-                    attachmentType : 0,
+                    attachmentType: 0,
                     updateActionStatus: 0
                 });
                 attachment.file = content;

@@ -1561,7 +1561,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_SEQ_WF',
                 checkShow: function (action, model) {
-                    return !model.hasActiveSeqWF();
+                    return rootEntity.hasPSPDFViewer() && !model.hasActiveSeqWF();
                 }
             },
             // Subscribe

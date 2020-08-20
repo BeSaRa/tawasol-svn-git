@@ -36,7 +36,7 @@ module.exports = function (app) {
                                                    $stateParams,
                                                    correspondenceService,
                                                    $q,
-                                                   downloadService) {
+                                                   rootEntity) {
         'ngInject';
         var self = this;
 
@@ -517,7 +517,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_SEQ_WF',
                 checkShow: function (action, model, index) {
-                    isVisible = gridService.checkToShowAction(action) && _hasContent() && !model.hasActiveSeqWF();
+                    isVisible = gridService.checkToShowAction(action) && _hasContent() && rootEntity.hasPSPDFViewer() && !model.hasActiveSeqWF();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -607,7 +607,7 @@ module.exports = function (app) {
                 permissionKey: "ELECTRONIC_SIGNATURE_MEMO",
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && _hasContent() && !model.isPrivateSecurityLevel() && !model.isInternalPersonal(); //Don't show if its paper outgoing
+                    isVisible = !model.hasActiveSeqWF() && gridService.checkToShowAction(action) && !info.isPaper && _hasContent() && !model.isPrivateSecurityLevel() && !model.isInternalPersonal(); //Don't show if its paper outgoing
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }

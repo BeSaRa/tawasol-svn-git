@@ -135,7 +135,7 @@
                    ng-click="ctrl.advanceLaunch($event)">{{lang.more_details}}
         </md-button>
         <md-button class="md-raised md-primary"
-                   ng-if="ctrl.employeeService.hasPermissionTo('LAUNCH_SEQ_WF') && !ctrl.record.hasActiveSeqWF()"
+                   ng-if="ctrl.canLaunchSeqWF()"
                    ng-click="ctrl.openSequentialWorkFlowPopup($event)">
             {{lang.sequential_workflow}}
         </md-button>

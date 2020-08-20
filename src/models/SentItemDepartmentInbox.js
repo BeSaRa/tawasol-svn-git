@@ -82,6 +82,13 @@ module.exports = function (app) {
                 // return this.contentSize;
             };
 
+            /**
+             * @description Checks if correspondence already has any active sequential workflow
+             * @returns {boolean}
+             */
+            SentItemDepartmentInbox.prototype.hasActiveSeqWF = function () {
+                return false;
+            };
 
             /**
              * @description Returns the security level lookup based on value from database
@@ -91,8 +98,7 @@ module.exports = function (app) {
                 var securityLevel = this.securityLevel;
                 if (securityLevel.hasOwnProperty('lookupKey')) {
                     return securityLevel;
-                }
-                else if (securityLevel.hasOwnProperty('id')) {
+                } else if (securityLevel.hasOwnProperty('id')) {
                     return lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel.id);
                 }
                 return lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel);
@@ -218,6 +224,18 @@ module.exports = function (app) {
                 return viewDocumentService.viewG2GPendingItemDocument(model, actions, queueName, $event);
             };
 
+            /**
+             * @description Checks if the security level is private/personal for given document
+             * @returns {boolean}
+             */
+            SentItemDepartmentInbox.prototype.isPrivateSecurityLevel = function () {
+                if (this.securityLevel.hasOwnProperty('lookupKey')) {
+                    return this.securityLevel.lookupKey === 4;
+                } else if (this.securityLevel.hasOwnProperty('id')) {
+                    return this.securityLevel.id === 4;
+                }
+                return this.securityLevel === 4;
+            };
             /**
              * @description check if subSiteTo internal RegOu
              */

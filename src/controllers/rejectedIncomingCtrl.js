@@ -726,7 +726,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model) {
-                    return true;
+                    return !model.hasActiveSeqWF();
                 }
             },
             // Archive

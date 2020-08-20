@@ -35,7 +35,8 @@ module.exports = function (app) {
                                                    gridService,
                                                    errorCode,
                                                    downloadService,
-                                                   _) {
+                                                   _,
+                                                   rootEntity) {
         'ngInject';
         var self = this;
         self.controllerName = 'simpleIncomingCtrl';
@@ -475,7 +476,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_SEQ_WF',
                 checkShow: function (action, model, index) {
-                    isVisible = gridService.checkToShowAction(action) && _hasContent() && !model.hasActiveSeqWF();
+                    isVisible = gridService.checkToShowAction(action) && _hasContent() && rootEntity.hasPSPDFViewer() && !model.hasActiveSeqWF();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }

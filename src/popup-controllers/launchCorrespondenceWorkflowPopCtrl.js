@@ -10,6 +10,7 @@ module.exports = function (app) {
                                                                     cmsTemplate,
                                                                     errorMessage,
                                                                     _,
+                                                                    generator,
                                                                     organizationService,
                                                                     replyOn,
                                                                     centralArchiveOUs,
@@ -37,7 +38,9 @@ module.exports = function (app) {
                                                                     gridService,
                                                                     predefinedActionService,
                                                                     predefinedActionMembers,
-                                                                    fromQuickSend) {
+                                                                    fromQuickSend,
+                                                                    rootEntity,
+                                                                    SentItemDepartmentInbox) {
         'ngInject';
         var self = this;
         self.controllerName = 'launchCorrespondenceWorkflowPopCtrl';
@@ -45,6 +48,7 @@ module.exports = function (app) {
         self.employeeService = employeeService;
         var currentOUEscalationProcess = employeeService.getEmployee().userOrganization.escalationProcess;
         self.disableSend = false;
+        self.rootEntity = rootEntity;
 
         /**
          * get multi info in case the correspondence array.
@@ -477,7 +481,7 @@ module.exports = function (app) {
                 lang: 'workflow_menu_item_workflow_groups',
                 icon: 'account-group',
                 show: _checkPermission('SEND_TO_GROUPS_') && !self.isPrivateDoc(),
-                disabled: _getApprovedStatus(),
+                disabled: _canSendToRegOuOrWFGroup(),// _getApprovedStatus(),
                 modelName: 'workflowGroups'
             }, /*,
              organizational_unit_mail: {
@@ -492,10 +496,20 @@ module.exports = function (app) {
                 lang: 'workflow_menu_item_registry_organizations',
                 icon: 'bank',
                 show: _checkPermission('SEND_TO_ELECTRONIC_INCOMING_QUEUES') && self.checkIfNotInternalDocument() && !self.isPrivateDoc(),
-                disabled: _getApprovedStatus(),
+                disabled: _canSendToRegOuOrWFGroup(),// _getApprovedStatus(),
                 modelName: 'registryOrganizations'
             }
         };
+
+        function _canSendToRegOuOrWFGroup() {
+            var canSend = false;
+            if (self.multi) {
+                canSend = correspondence[0].hasActiveSeqWF() || _getApprovedStatus()
+            } else {
+                canSend = correspondence.hasActiveSeqWF() || _getApprovedStatus()
+            }
+            return canSend;
+        }
 
         self.defaultWorkflowTabSettings = {};
 
@@ -1267,18 +1281,18 @@ module.exports = function (app) {
          * @param $event
          */
         self.addSelectedUserWithIgnoreToGrid = function (selectedUser, $event) {
-            /* if (self.selectedWorkflowItems.length && self.getApprovedStatus()) {
-                 dialog
-                     .confirmMessage(langService.get('user_will_replaced_by_new_selection'))
-                     .then(function () {
-                         self.selectedWorkflowItems = [];
-                         var user = _getUsersNotExists([selectedUser]);
-                         _addUsersToSelectedGrid(user);
-                     });
-             } else {*/
-            var user = _getUsersNotExists([selectedUser]);
-            _addUsersToSelectedGrid(user);
-            //   }
+            if (!self.canSendToMultiple) {
+                dialog
+                    .confirmMessage(langService.get('user_will_replaced_by_new_selection'))
+                    .then(function () {
+                        self.selectedWorkflowItems = [];
+                        var user = _getUsersNotExists([selectedUser]);
+                        _addUsersToSelectedGrid(user);
+                    });
+            } else {
+                var user = _getUsersNotExists([selectedUser]);
+                _addUsersToSelectedGrid(user);
+            }
         };
         /**
          * @description add selected user to grid
@@ -1288,29 +1302,28 @@ module.exports = function (app) {
         self.addSelectedUserToGrid = function (selectedUser, $event) {
             // just to filter the users before add.
             var users = _getUsersNotExists([selectedUser]);
-
-            /*           if (self.selectedWorkflowItems.length && self.getApprovedStatus()) {
-                           dialog
-                               .confirmMessage(langService.get('user_will_replaced_by_new_selection'))
-                               .then(function () {
-                                   self.selectedWorkflowItems = [];
-                                   // get proxies users to display message before add.
-                                   var proxies = _getProxiesUsers(users);
-                                   // display proxy message
-                                   if (proxies.length)
-                                       dialog.alertMessage(_prepareProxyMessage(proxies));
-                                   // add users to grid
-                                   _addUsersToSelectedGrid(users);
-                               });
-                       } else {*/
-            // get proxies users to display message before add.
-            var proxies = _getProxiesUsers(users);
-            // display proxy message
-            if (proxies.length)
-                dialog.alertMessage(_prepareProxyMessage(proxies));
-            // add users to grid
-            _addUsersToSelectedGrid(users);
-            //}
+            if (!self.canSendToMultiple) {
+                dialog
+                    .confirmMessage(langService.get('user_will_replaced_by_new_selection'))
+                    .then(function () {
+                        self.selectedWorkflowItems = [];
+                        // get proxies users to display message before add.
+                        var proxies = _getProxiesUsers(users);
+                        // display proxy message
+                        if (proxies.length)
+                            dialog.alertMessage(_prepareProxyMessage(proxies));
+                        // add users to grid
+                        _addUsersToSelectedGrid(users);
+                    });
+            } else {
+                // get proxies users to display message before add.
+                var proxies = _getProxiesUsers(users);
+                // display proxy message
+                if (proxies.length)
+                    dialog.alertMessage(_prepareProxyMessage(proxies));
+                // add users to grid
+                _addUsersToSelectedGrid(users);
+            }
 
         };
         /**
@@ -1425,6 +1438,8 @@ module.exports = function (app) {
                             var info = self.correspondence.getInfo();
                             dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                             return false;
+                        } else {
+                            return errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
                         }
                     });
                 }).catch(function () {
@@ -1481,7 +1496,7 @@ module.exports = function (app) {
         };
 
         self.openSequentialWorkFlowPopup = function ($event) {
-            if (self.correspondence.hasActiveSeqWF()) {
+            if (self.multi || self.actionKey !== 'forward' || !employeeService.hasPermissionTo('LAUNCH_SEQ_WF') || self.correspondence.hasActiveSeqWF() || !rootEntity.hasPSPDFViewer()) {
                 return false;
             }
             dialog.cancel();
@@ -1489,6 +1504,13 @@ module.exports = function (app) {
                 .then(function (result) {
                     dialog.hide();
                 })
+        };
+
+        self.canLaunchSeqWF = function () {
+            return !self.multi && self.actionKey === 'forward'
+                && employeeService.hasPermissionTo('LAUNCH_SEQ_WF')
+                && rootEntity.hasPSPDFViewer() && !correspondence.hasActiveSeqWF()
+                && !(correspondence instanceof SentItemDepartmentInbox);
         };
 
         /**
@@ -1512,6 +1534,10 @@ module.exports = function (app) {
         };
 
         $timeout(function () {
+            self.canSendToMultiple = true;
+            if (!self.multi) {
+                self.canSendToMultiple = !correspondence.hasActiveSeqWF();
+            }
             self.fromQuickSend = fromQuickSend;
             if (predefinedActionMembers && predefinedActionMembers.length) {
                 self.selectedWorkflowItems = [];

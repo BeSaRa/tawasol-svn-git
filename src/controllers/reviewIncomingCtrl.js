@@ -23,7 +23,8 @@ module.exports = function (app) {
                                                    ResolveDefer,
                                                    mailNotificationService,
                                                    gridService,
-                                                   userSubscriptionService) {
+                                                   userSubscriptionService,
+                                                   rootEntity) {
         'ngInject';
         var self = this;
 
@@ -822,7 +823,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model) {
-                    return true;
+                    return !model.hasActiveSeqWF();
                 }
             },
             // Launch Sequential Workflow
@@ -834,7 +835,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_SEQ_WF',
                 checkShow: function (action, model) {
-                    return !model.hasActiveSeqWF();
+                    return rootEntity.hasPSPDFViewer() && !model.hasActiveSeqWF();
                 }
             },
             // Archive

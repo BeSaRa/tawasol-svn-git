@@ -38,7 +38,7 @@ module.exports = function (app) {
                                              editAfterReturnG2G,
                                              gridService,
                                              _,
-                                             downloadService) {
+                                             rootEntity) {
         'ngInject';
         var self = this;
         self.controllerName = 'outgoingCtrl';
@@ -647,7 +647,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_SEQ_WF',
                 checkShow: function (action, model, index) {
-                    isVisible = gridService.checkToShowAction(action) && _hasContent() && !model.hasActiveSeqWF();
+                    isVisible = gridService.checkToShowAction(action) && _hasContent() && rootEntity.hasPSPDFViewer() && !model.hasActiveSeqWF();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -767,7 +767,7 @@ module.exports = function (app) {
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
                     //Don't show if its paper outgoing  or signatures count more than 1 or personal/private security level
-                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && _hasContent() && _hasSingleSignature(model) && !model.isPrivateSecurityLevel();
+                    isVisible = !model.hasActiveSeqWF() && gridService.checkToShowAction(action) && !info.isPaper && _hasContent() && _hasSingleSignature(model) && !model.isPrivateSecurityLevel();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -784,7 +784,7 @@ module.exports = function (app) {
 
                     var info = model.getInfo();
                     //Don't show if its paper outgoing or any site is external/g2g or signatures count more than 1 or personal/private security level
-                    isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !info.isPaper && !_hasExternalOrG2GSite(model) && _hasContent() && _hasSingleSignature(model);
+                    isVisible = !model.hasActiveSeqWF() && gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !info.isPaper && !_hasExternalOrG2GSite(model) && _hasContent() && _hasSingleSignature(model);
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }

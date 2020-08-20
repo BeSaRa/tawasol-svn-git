@@ -469,12 +469,7 @@ module.exports = function (app) {
 
 
         self.checkIfForwardBulkAvailable = function () {
-            self.itemsAlreadyBroadCasted = [];
-            _.map(self.selectedUserInboxes, function (workItem) {
-                if (workItem.isBroadcasted())
-                    self.itemsAlreadyBroadCasted.push(workItem.generalStepElm.vsId);
-            });
-            return !(self.itemsAlreadyBroadCasted && self.itemsAlreadyBroadCasted.length);
+            return true;
         };
 
         /**
@@ -482,7 +477,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.forwardBulk = function ($event) {
-            var selectedItems = angular.copy(self.selectedUserInboxes);
+            /*var selectedItems = angular.copy(self.selectedUserInboxes);
             if (!self.checkIfForwardBulkAvailable()) {
                 if (self.itemsAlreadyBroadCasted.length === selectedItems.length) {
                     dialog.alertMessage(langService.get('selected_items_are_broadcasted_can_not_forward'));
@@ -497,7 +492,8 @@ module.exports = function (app) {
                 })
             } else {
                 forwardBulk(selectedItems, $event);
-            }
+            }*/
+            forwardBulk(self.selectedUserInboxes, $event);
         };
 
         function forwardBulk(selectedItems, $event) {
@@ -1637,8 +1633,7 @@ module.exports = function (app) {
                 stickyIndex: 4,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return true
-                    /*&& !model.isBroadcasted()*/ // remove the this cond. after talk  with ;
+                    return true;
                 }
             },
             // Quick Send (Quick Launch)
@@ -1653,7 +1648,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model) {
-                    return true;
+                    return !model.hasActiveSeqWF();
                 }
             },
             // Launch Sequential Workflow
@@ -1665,7 +1660,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_SEQ_WF',
                 checkShow: function (action, model) {
-                    return !model.hasActiveSeqWF();
+                    return rootEntity.hasPSPDFViewer() && !model.hasActiveSeqWF();
                 }
             },
             // Broadcast
@@ -1693,7 +1688,7 @@ module.exports = function (app) {
                 stickyIndex: 5,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return !model.isBroadcasted();
+                    return !model.hasActiveSeqWF() && !model.isBroadcasted();
                 }
             },
             // Get Link
@@ -2131,6 +2126,9 @@ module.exports = function (app) {
                 icon: 'check-decagram',
                 text: 'grid_action_approve',//signature
                 checkShow: function (action, model) {
+                    if (model.hasActiveSeqWF()){
+                        return false;
+                    }
                     return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
