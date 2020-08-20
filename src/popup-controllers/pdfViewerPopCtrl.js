@@ -810,6 +810,7 @@ module.exports = function (app) {
          */
         self.handleSaveAttachment = function (pdfContent) {
             self.correspondence.file = pdfContent;
+            console.log('attachedBook)', attachedBook);
             attachmentService.updateAttachment(attachedBook, self.correspondence)
                 .then(function () {
                     toast.success(langService.get('save_success'));

@@ -548,7 +548,7 @@ module.exports = function (app) {
 
         self.openAnnotateAttachment = function (attachment, $event) {
             correspondenceService
-                .annotateCorrespondence(attachment, AnnotationType.ANNOTATION);
+                .annotateCorrespondence(attachment, AnnotationType.ANNOTATION, self.document);
         }
     });
 };
