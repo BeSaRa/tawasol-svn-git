@@ -32,27 +32,37 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'pdfViewerPopCtrl';
+        // pdf buffer to load inside the viewer
         self.pdfData = pdfData;
+        // current viewer instance
         self.currentInstance = null;
-
+        // pdf viewer license key
+        self.licenseKey = rootEntity.returnRootEntity().rootEntity.psPDFLicenseKey;
+        // to user it later to display
         self.canRepeatAnnotations = false;
-
+        // current document meta data
         self.correspondence = correspondence;
-
+        // current annotation mode to load the document from right service and set the annotation types for all signature Annotations (ink,Imag)
         self.annotationType = annotationType;
-
+        // loading  service
         self.loadingIndicatorService = loadingIndicatorService;
-
+        // all document annotations after load the document
         self.oldAnnotations = {};
-
+        // all document annotations after click on  save button
         self.newAnnotations = {};
-
+        // used to save last ink annotation from signature dialog to update it later after set the vsId
         self.latestInkAnnotation = null;
-
+        // the skipped pdf Object , will use it later
         self.skippedPdfObjectIds = [];
-
+        // document information
         self.info = self.correspondence.getInfo();
 
+        /**
+         * @description create custom buttons and attache it to  viewer toolbar.
+         * @param getInstance
+         * @param callback
+         * @return {*}
+         */
         function makeToolbarItems(getInstance, callback) {
             var defaultToolbar = angular.copy(PSPDFKit.defaultToolbarItems);
             if (typeof callback !== "function") {
@@ -144,6 +154,10 @@ module.exports = function (app) {
             return toolbarInstance;
         }
 
+        /**
+         * @description download the document after annotate
+         * @param blob
+         */
         function downloadPdf(blob) {
             var a = document.createElement("a");
             a.href = blob;
@@ -154,7 +168,6 @@ module.exports = function (app) {
             a.click();
             document.body.removeChild(a);
         }
-
 
         /**
          * @description check if the given annotation is signature
@@ -177,7 +190,6 @@ module.exports = function (app) {
         function _isCurrentUserSignature(annotation) {
             return annotation.pdfObjectId ? false : _isSignature(annotation);
         }
-
 
         /**
          * @description select given annotation
@@ -822,7 +834,10 @@ module.exports = function (app) {
                 toast.error('PLEASE Provide your signature');
             });
         };
-
+        /**
+         * @description to check if the current document has user signature , it will not count the old signature from current user.
+         * @return {Promise}
+         */
         self.isDocumentHasCurrentUserSignature = function () {
             return $q(function (resolve, reject) {
                 $timeout(function () {
@@ -837,39 +852,58 @@ module.exports = function (app) {
             });
         };
         /**
+         * @description handle update document content
+         * @param pdfContent
+         */
+        self.handleUpdateDocumentContent = function (pdfContent) {
+            self.correspondence.addDocumentContentFile(pdfContent).then(function () {
+                toast.success(langService.get('save_success'));
+                self.sendAnnotationLogs();
+            }).catch(self.handleExceptions);
+        };
+        /**
+         * @description save annotations as attachments
+         * @param pdfContent
+         */
+        self.handleSaveAnnotationAsAttachment = function (pdfContent) {
+            self.correspondence.addAnnotationAsAttachment(pdfContent).then(function () {
+                toast.success(langService.get('save_success'));
+                dialog.hide();
+            }).catch(self.handleExceptions);
+        };
+        /**
+         * @description handle none signature save part
+         */
+        self.handleSaveNoneSignaturePart = function () {
+            self.currentInstance.exportInstantJSON().then(function (instantJSON) {
+                delete instantJSON.pdfId;
+                instantJSON.skippedPdfObjectIds = _.difference(instantJSON.skippedPdfObjectIds, self.skippedPdfObjectIds);
+                PDFService.applyAnnotationsOnPDFDocument(self.correspondence, AnnotationType.ANNOTATION, instantJSON)
+                    .then(function (pdfContent) {
+                        self.skippedPdfObjectIds = self.skippedPdfObjectIds.concat(instantJSON.skippedPdfObjectIds);
+                        if (self.correspondence instanceof Attachment) {
+                            self.handleSaveAttachment(pdfContent);
+                        } else {
+                            if (self.info.isPaper) {
+                                self.handleUpdateDocumentContent(pdfContent);
+                            } else {
+                                self.handleSaveAnnotationAsAttachment(pdfContent);
+                            }
+                        }
+                    });
+            });
+        };
+        /**
          * @description save document annotations
          * @param ignoreValidationSignature
          */
         self.saveDocumentAnnotations = function (ignoreValidationSignature) {
-            var info = self.correspondence.getInfo();
             self.getDocumentAnnotations().then(function (newAnnotations) {
                 self.newAnnotations = newAnnotations;
                 if (self.annotationType === AnnotationType.SIGNATURE) {
                     self.handleOpenForApprovalSave(ignoreValidationSignature);
                 } else {
-                    self.currentInstance.exportInstantJSON().then(function (instantJSON) {
-                        delete instantJSON.pdfId;
-                        instantJSON.skippedPdfObjectIds = _.difference(instantJSON.skippedPdfObjectIds, self.skippedPdfObjectIds);
-                        PDFService.applyAnnotationsOnPDFDocument(self.correspondence, AnnotationType.ANNOTATION, instantJSON)
-                            .then(function (pdfContent) {
-                                self.skippedPdfObjectIds = self.skippedPdfObjectIds.concat(instantJSON.skippedPdfObjectIds);
-                                if (self.correspondence instanceof Attachment) {
-                                    self.handleSaveAttachment(pdfContent);
-                                } else {
-                                    if (info.isPaper) {
-                                        self.correspondence.addDocumentContentFile(pdfContent).then(function () {
-                                            toast.success(langService.get('save_success'));
-                                            self.sendAnnotationLogs();
-                                        }).catch(self.handleExceptions);
-                                    } else {
-                                        self.correspondence.addAnnotationAsAttachment(pdfContent).then(function () {
-                                            toast.success(langService.get('save_success'));
-                                            dialog.hide();
-                                        }).catch(self.handleExceptions);
-                                    }
-                                }
-                            });
-                    });
+                    self.handleSaveNoneSignaturePart();
                 }
             }); // get document annotations
         };
@@ -907,6 +941,22 @@ module.exports = function (app) {
                 });
         };
         /**
+         * @description to register all event listener that we need during annotate the document.
+         */
+        self.registerEventListeners = function () {
+            self.currentInstance.addEventListener("annotations.willChange", self.handleAnnotationChanges);
+            self.currentInstance.addEventListener("inkSignatures.create", self.handleCreateInkSignatureAnnotation);
+            self.currentInstance.addEventListener("inkSignatures.delete", self.handleDeleteInkSignatureAnnotation);
+            self.currentInstance.addEventListener("annotations.create", self.handleCreateAnnotations);
+            // to handle delete annotations
+            self.currentInstance.addEventListener("annotations.willChange", self.handleDeleteAnnotations);
+            // for debug purpose
+            self.currentInstance.addEventListener("annotations.focus", function (event) {
+                var annotation = event.annotation;
+                console.log('Focused Annotation', annotation);
+            });
+        };
+        /**
          * @description viewer initialization
          */
         self.$onInit = function () {
@@ -922,7 +972,7 @@ module.exports = function (app) {
                         return self.currentInstance;
                     }),
                     populateInkSignatures: self.populateInkSignatures,
-                    licenseKey: 'VGY-5RnVwIvECCo92mgVKqwBhdffibQ7xdO_3dVCUPBFJuvQhE3FYbuzLsxjOGmLBwfN18npbT52undRB5-CP3Lvb4oU3BLqmaFUMR2lzxvvXQpGfNOkU47LpA1j4yvR46aUZJiqc26xKUg4kbKPQm49UeY7Z00hjTJOzL4xk49pe0-B9VH958oeawkXUqzmhnjwKo_Fq7VwR_24-_OVhii3qXOsHXbEUpHTR7uFA4Xwc1mFsBpqIis3X_JLCTQ8gcuIH2Ab4AkHv1sgD8Ugv7CpwAzdOwHCz2Jl5qRK0u9c08yyrT-0Wn7htmoMZuttHZXu8CStgLyyKtMeH0uiwm4KTXVKB7oN0dSElT0ifLsazf_ABlmxYjf-JAx5HG4C0pElg2Dc4-7Ru_lz-HCIOn52UzcAZUTKBRcpAs_7uUSaS7r0YH0chnTOj8ExP9c2'
+                    licenseKey: self.licenseKey
                 }).then(function (instance) {
                     self.currentInstance = instance;
                     if (instantJSON) {
@@ -938,20 +988,10 @@ module.exports = function (app) {
                         self.getDocumentAnnotations().then(function (annotations) {
                             self.oldAnnotations = annotations;
                         });
+                        self.canRepeatAnnotations = self.isAbleToRepeatAnnotations();
+                        self.currentInstance.setAnnotationCreatorName(employeeService.getEmployee().domainName);
+                        self.registerEventListeners();
                     }
-                    self.canRepeatAnnotations = self.isAbleToRepeatAnnotations();
-                    self.currentInstance.setAnnotationCreatorName(employeeService.getEmployee().domainName);
-                    self.currentInstance.addEventListener("annotations.willChange", self.handleAnnotationChanges);
-                    self.currentInstance.addEventListener("inkSignatures.create", self.handleCreateInkSignatureAnnotation);
-                    self.currentInstance.addEventListener("inkSignatures.delete", self.handleDeleteInkSignatureAnnotation);
-                    self.currentInstance.addEventListener("annotations.create", self.handleCreateAnnotations);
-                    // to handle delete annotations
-                    self.currentInstance.addEventListener("annotations.willChange", self.handleDeleteAnnotations);
-                    // for debug purpose
-                    self.currentInstance.addEventListener("annotations.focus", function (event) {
-                        var annotation = event.annotation;
-                        console.log('Focused Annotation', annotation);
-                    });
                 });
             });
         };
