@@ -87,6 +87,7 @@ module.exports = function (app) {
              * @returns {boolean}
              */
             SentItemDepartmentInbox.prototype.hasActiveSeqWF = function () {
+                // return false as property is missing in sent items
                 return false;
             };
 
