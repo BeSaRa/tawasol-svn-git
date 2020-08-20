@@ -1,7 +1,7 @@
 <div layout="column" class="dialog-alert-box">
     <div scroll-directive class="dialog-content">
         <img class="dialog-image" src="assets/images/info.png"/>
-        <div class="dialog-paragraph">{{ctrl.message}}</div>
+        <div class="dialog-paragraph">{{lang.get('document_saving_please_wait')}}</div>
         <br/>
         <md-progress-linear md-mode="intermediate"></md-progress-linear>
         <div id="pdf-viewer"  ng-hide="true" flex></div>

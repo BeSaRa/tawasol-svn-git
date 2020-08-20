@@ -713,10 +713,11 @@ module.exports = function (app) {
          * @description remove all event listeners and unload the PDFViewer
          */
         self.disposable = function () {
-            self.currentInstance.removeEventListener('annotations.willChange', self.handleAnnotationChanges);
+            self.currentInstance.removeEventListener("annotations.willChange", self.handleAnnotationChanges);
             self.currentInstance.removeEventListener("inkSignatures.create", self.handleCreateInkSignatureAnnotation);
             self.currentInstance.removeEventListener("inkSignatures.delete", self.handleDeleteInkSignatureAnnotation);
             self.currentInstance.removeEventListener("annotations.create", self.handleCreateAnnotations);
+            self.currentInstance.removeEventListener("annotations.willChange", self.handleDeleteAnnotations);
             try {
                 PSPDFKit.unload($element.find('#pdf-viewer')[0]);
             } catch (e) {
