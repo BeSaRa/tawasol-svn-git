@@ -151,7 +151,7 @@ module.exports = function (app) {
             };
             SequentialWFStep.prototype.isFutureSeqWFStep = function (correspondenceRecord) {
                 //return this.id >= correspondenceRecord.getSeqWFNextStepId();
-                return this.id > this.getSeqWFNextStepId();
+                return this.id > correspondenceRecord.getSeqWFNextStepId();
             };
 
             // don't remove CMSModelInterceptor from last line
