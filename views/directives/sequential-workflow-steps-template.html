@@ -7,7 +7,7 @@
         </div>
     </div>
     <div flex class="step-layout-border" layout="column">
-        <div layout="row" class="step-legend-container">
+        <div layout="row" layout-align="end start" class="step-legend-container">
             <div ng-repeat="item in ctrl.stepLegendList track by $index"
                  class="step-item {{item.class}}">
                 <span md-truncate>{{lang[item.key]}}</span>
@@ -22,6 +22,9 @@
             </md-button>
             <div seq-container-sortable layout="column" class="step-layout-rows">
 
+            </div>
+            <div class="help-text-div p10"ng-if="!ctrl.viewOnly && !ctrl.seqWF.id">
+                {{lang.seq_wf_last_step_note}}
             </div>
         </div>
     </div>

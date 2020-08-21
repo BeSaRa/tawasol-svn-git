@@ -17,7 +17,8 @@ module.exports = function (app) {
                     outgoing: 0,
                     incoming: 1,
                     internal: 2
-                };
+                },
+                minimumStepsCount = 2;
             self.controllerName = 'sequentialWorkflowPopCtrl';
 
             self.form = null;
@@ -41,7 +42,7 @@ module.exports = function (app) {
                     return true;
                 }
                 generator.validateRequiredSelectFields(form);
-                return form.$valid && _isValidSteps();
+                return form.$valid && _isValidSteps() && _isLastStepAuthorizeAndSend();
             };
 
             function _hasStepRows() {
@@ -58,6 +59,10 @@ module.exports = function (app) {
                     }
                     return stepRow.isValidStep(self.sequentialWorkflow);
                 })
+            }
+
+            function _isLastStepAuthorizeAndSend() {
+                return _.last(self.sequentialWorkflow.stepRows).isAuthorizeAndSendStep();
             }
 
             /**
@@ -113,7 +118,12 @@ module.exports = function (app) {
              */
             self.saveSequentialWorkflow = function ($event) {
                 if (self.viewOnly || !self.isValidForm()) {
-                    console.log('VIEW_ONLY_OR_MISSING_REQUIRED_FIELDS');
+                    return;
+                } else if (self.sequentialWorkflow.stepRows.length < minimumStepsCount) {
+                    toast.info(langService.get('error_min_steps').change({number: minimumStepsCount}));
+                    return;
+                } else if (!_isLastStepAuthorizeAndSend()) {
+                    toast.info(langService.get('seq_wf_last_step_note'));
                     return;
                 }
                 self.editMode ? _updateSequentialWorkflow() : _addSequentialWorkflow();

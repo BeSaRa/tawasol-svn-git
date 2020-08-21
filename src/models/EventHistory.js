@@ -144,6 +144,14 @@ module.exports = function (app) {
             };
 
             /**
+             * @description Checks if correspondence already has any active sequential workflow
+             * @returns {boolean}
+             */
+            EventHistory.prototype.hasActiveSeqWF = function () {
+                return false;
+            };
+
+            /**
              * @description Set the main site sub site string to display/sort in the grid
              * @returns {*}
              */

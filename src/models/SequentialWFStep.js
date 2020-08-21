@@ -101,10 +101,6 @@ module.exports = function (app) {
                 }
             };
 
-            SequentialWFStep.prototype.checkActionRequired = function () {
-                return this.isSendDocumentStep();
-            };
-
             SequentialWFStep.prototype.isSendDocumentStepValid = function () {
                 return !!this.arName && !!this.enName && generator.validRequired(this.itemOrder) && this.toUserId
                     && generator.validRequired(generator.getNormalizedValue(this.actionId, 'id'));

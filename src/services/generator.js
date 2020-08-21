@@ -363,16 +363,16 @@ module.exports = function (app) {
             });
         };
 
-        self.validateRequiredSelectFields = function (form) {
+        self.validateRequiredSelectFields = function (form, setTouched) {
             var selectControls = self.getSelectFormControls(form, true);
             if (selectControls) {
                 _.map(selectControls, function (control) {
-                    self.validateRequiredFieldValue(control, true);
+                    self.validateRequiredFieldValue(control, true, setTouched);
                 });
             }
         };
 
-        self.validateRequiredFieldValue = function (field, isRequired) {
+        self.validateRequiredFieldValue = function (field, isRequired, setTouched) {
             if (!field)
                 return;
 
@@ -382,6 +382,9 @@ module.exports = function (app) {
             }
 
             field.$setValidity('required', (typeof field.$modelValue !== 'undefined' && field.$modelValue !== null));
+            if (setTouched) {
+                field.$setTouched();
+            }
         };
 
         /**

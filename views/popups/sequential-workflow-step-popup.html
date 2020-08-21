@@ -100,7 +100,7 @@
                             <md-select name="workflowAction" id="workflowAction"
                                        ng-model="ctrl.step.actionId"
                                        ng-disabled="ctrl.viewOnly"
-                                       ng-required="ctrl.isActionRequired"
+                                       ng-required="ctrl.step.toUserId"
                                        ng-model-options="{trackBy:'$value'}"
                                        aria-label="{{lang.workflow_action}}"
                                        md-on-close="ctrl.clearSearchText('appUser')"

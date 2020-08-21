@@ -129,16 +129,15 @@ md-icon.indicator-size {
 
 .step-legend-container {
   .step-item {
-    margin-right: 10px;
-    margin-left: 0;
+    margin-left: 10px;
   }
 }
 
 html.rtl {
   .step-legend-container {
     .step-item {
-      margin-left: 10px;
-      margin-right: 0;
+      margin-right: 10px;
+      margin-left: 0;
     }
   }
 }

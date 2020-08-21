@@ -3,10 +3,7 @@ module.exports = function (app) {
                                                               dialog,
                                                               generator,
                                                               $scope,
-                                                              distributionWFService,
-                                                              $q,
-                                                              langService,
-                                                              toast) {
+                                                              distributionWFService) {
         'ngInject';
         var self = this,
             readonlyFields = ['itemOrder'];
@@ -19,12 +16,12 @@ module.exports = function (app) {
         self.actionSearchText = '';
         self.applicationUsers = [];
 
-        self.isValidForm = function (form) {
+        self.isValidForm = function (form, setTouched) {
             form = form || self.form;
             if (!form) {
                 return true;
             }
-            generator.validateRequiredSelectFields(form);
+            generator.validateRequiredSelectFields(form, setTouched);
             return form.$valid && self.step.isValidStep(self.record);
         };
 
@@ -117,7 +114,6 @@ module.exports = function (app) {
                 self.recordCopy = angular.copy(self.record);
                 self.stepCopy = angular.copy(self.step);
 
-                self.isActionRequired = self.step.checkActionRequired();
                 self.isUserRequired = self.step.checkUserRequired(self.record);
 
                 if (self.stepCopy.toOUID) {
