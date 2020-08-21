@@ -42,7 +42,7 @@ module.exports = function (app) {
                     return true;
                 }
                 generator.validateRequiredSelectFields(form);
-                return form.$valid && _isValidSteps() && _isLastStepAuthorizeAndSend();
+                return form.$valid && _isValidSteps() && _isLastStepValid();
             };
 
             function _hasStepRows() {
@@ -61,7 +61,10 @@ module.exports = function (app) {
                 })
             }
 
-            function _isLastStepAuthorizeAndSend() {
+            function _isLastStepValid() {
+                if (self.sequentialWorkflow.isIncomingSeqWF()) {
+                    return true;
+                }
                 return _.last(self.sequentialWorkflow.stepRows).isAuthorizeAndSendStep();
             }
 
@@ -122,7 +125,7 @@ module.exports = function (app) {
                 } else if (self.sequentialWorkflow.stepRows.length < minimumStepsCount) {
                     toast.info(langService.get('error_min_steps').change({number: minimumStepsCount}));
                     return;
-                } else if (!_isLastStepAuthorizeAndSend()) {
+                } else if (!_isLastStepValid()) {
                     toast.info(langService.get('seq_wf_last_step_note'));
                     return;
                 }
