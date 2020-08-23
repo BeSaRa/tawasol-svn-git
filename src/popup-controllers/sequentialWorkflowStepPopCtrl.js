@@ -3,7 +3,7 @@ module.exports = function (app) {
                                                               dialog,
                                                               generator,
                                                               $scope,
-                                                              distributionWFService) {
+                                                              ouApplicationUserService) {
         'ngInject';
         var self = this,
             readonlyFields = ['itemOrder'];
@@ -14,7 +14,7 @@ module.exports = function (app) {
         self.ouSearchText = '';
         self.appUserSearchText = '';
         self.actionSearchText = '';
-        self.applicationUsers = [];
+        self.ouApplicationUsers = [];
 
         self.isValidForm = function (form, setTouched) {
             form = form || self.form;
@@ -70,13 +70,13 @@ module.exports = function (app) {
                 self.step.toUserId = null;
             }
             if (!self.step.toOUID) {
-                self.applicationUsers = [];
+                self.ouApplicationUsers = [];
                 return;
             }
-            return distributionWFService
-                .searchUsersByCriteria({ou: self.step.toOUID})
+            return ouApplicationUserService
+                .searchByCriteria({regOu: generator.getNormalizedValue(self.step.toOUID, 'id')})
                 .then(function (result) {
-                    self.applicationUsers = result;
+                    self.ouApplicationUsers = result;
                     return result;
                 });
         };

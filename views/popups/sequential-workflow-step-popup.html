@@ -82,10 +82,10 @@
                                            placeholder="{{lang.search}}"
                                            class="select-header-input">
                                 </md-select-header>
-                                <md-option ng-value="user.id"
-                                           ng-repeat="user in ctrl.applicationUsers | translatedNameFilter: ctrl.appUserSearchText">
+                                <md-option ng-value="user.applicationUser.id"
+                                           ng-repeat="user in ctrl.ouApplicationUsers | translatedNameFilter: ctrl.appUserSearchText:'getAppUserAndOuTranslate'">
                                        <span md-highlight-text="ctrl.appUserSearchText"
-                                             md-highlight-flags="i">{{user.getTranslatedName()}}</span>
+                                             md-highlight-flags="i">{{user.getAppUserAndOuTranslate()}}</span>
                                 </md-option>
                             </md-select>
                             <div ng-messages="sequentialWorkflowStepForm.applicationUser.$error">
