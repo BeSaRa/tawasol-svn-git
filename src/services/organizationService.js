@@ -590,7 +590,9 @@ module.exports = function (app) {
                             return organizationService.loadOrganizationById(organization.id)
                                 .then(function (item) {
                                     item.referencePlanItemStartSerialList = _.filter(item.referencePlanItemStartSerialList, 'referencePlanItemId');
-                                    item.referenceNumberPlanId.referencePlanItemStartSerialList = angular.copy(item.referencePlanItemStartSerialList);
+                                    if (item.referenceNumberPlanId) {
+                                        item.referenceNumberPlanId.referencePlanItemStartSerialList = angular.copy(item.referencePlanItemStartSerialList);
+                                    }
                                     return item;
                                 });
                         },
