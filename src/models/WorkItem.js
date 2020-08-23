@@ -820,8 +820,8 @@ module.exports = function (app) {
                 return model.generalStepElm.attachementsNO ? langService.get('indicator_doc_has_attachment') : null;
             };
             WorkItem.prototype.getIndicatorSequentialWF = function (model) {
-                return model.hasActiveSeqWF()? langService.get('sequential_workflow'):null
-            }
+                return model.hasActiveSeqWF() ? langService.get('sequential_workflow') : null;
+            };
 
             WorkItem.prototype.getTypeIcon = function () {
                 var icons = [

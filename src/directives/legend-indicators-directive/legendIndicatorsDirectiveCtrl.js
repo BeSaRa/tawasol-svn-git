@@ -95,6 +95,9 @@ module.exports = function (app) {
                     case 'siteFollowUpEnded':
                         self.legendIndicators.push(indicator.getSiteFollowUpEndedIndicator(true));
                         break;
+                    case 'sequentialWF':
+                        self.legendIndicators.push(indicator.getSequentialWFIndicator());
+                        break;
                 }
             });
         };

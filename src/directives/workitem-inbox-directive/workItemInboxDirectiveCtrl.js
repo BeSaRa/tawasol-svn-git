@@ -10,7 +10,7 @@ module.exports = function (app) {
         self.langService = langService;
         LangWatcher($scope);
         self.employeeService = employeeService;
-        self.gridLegends = ['docClass', 'hasAttachment', 'hasLinkedDocuments', 'paperElectronic', 'securityLevel', 'priorityLevel', 'followupStatus', 'isReassigned', 'siteFollowUpDueDate', 'siteFollowUpEnded'];//, 'broadcast'
+        self.gridLegends = ['docClass', 'hasAttachment', 'hasLinkedDocuments', 'paperElectronic', 'securityLevel', 'priorityLevel', 'followupStatus', 'isReassigned', 'siteFollowUpDueDate', 'siteFollowUpEnded', 'sequentialWF'];//, 'broadcast'
 
 
         /**
