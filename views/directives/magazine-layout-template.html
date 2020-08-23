@@ -152,7 +152,11 @@
                         </div>
                     </div>
                     <div layout="column" class="magazine-middle">
-                        <div layout="row" class="magazine-title">
+                        <div layout="row" class="magazine-title" layout-align="start center">
+                            <!-- Electronic/Paper Document -->
+                            <grid-indicator-directive record="workItem"
+                                                      indicator-type="paperElectronic"
+                                                      record-type="WorkItem"></grid-indicator-directive>
                             <span flex>
                                 <a md-truncate href="" ng-click="ctrl.viewDocument(workItem , $event)" tooltip="{{workItem.getSubject()}}">{{workItem.getSubject()}}</a>
                             </span>
@@ -161,11 +165,6 @@
                     </div>
                     <div layout="row" layout-align="start center" class="magazine-bottom">
                         <div layout-align="start center" layout="row" flex>
-                            <magazine-indicator
-                                    icon-callback="workItem.getIndicatorDocumentType"
-                                    color="#3498db"
-                                    callback="workItem.getIndicatorBookType"
-                                    model="workItem"></magazine-indicator>
                             <magazine-indicator
                                     icon="alert-circle"
                                     key="priority_level"
@@ -199,6 +198,11 @@
                                     ng-if="workItem.generalStepElm.linkedDocsNO"
                                     icon="link-variant"
                                     callback="workItem.getIndicatorHasLinkedDoc"
+                                    model="workItem"></magazine-indicator>
+                            <magazine-indicator
+                                    ng-if="workItem.hasActiveSeqWF()"
+                                    icon="view-sequential"
+                                    callback="workItem.getIndicatorSequentialWF"
                                     model="workItem"></magazine-indicator>
                         </div>
                         <div ng-if="workItem.getInfo().documentClass !== 'internal'">

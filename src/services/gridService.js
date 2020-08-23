@@ -914,7 +914,7 @@ module.exports = function (app) {
                 launch: 'sitemap',
                 quickSend: 'sitemap',
                 conditionalApprove: 'clock-start',
-                sequentialWF: 'sitemap'
+                sequentialWF: 'view-sequential'
             },
             indicators: {
                 securityLevel: 'security',
@@ -957,7 +957,8 @@ module.exports = function (app) {
                 inactive: 'close',
                 conditionalApprove: 'clock-start',
                 comments: 'comment-account-outline',
-                date: 'calendar-today'
+                date: 'calendar-today',
+                sequentialWF: 'view-sequential'
             }
         };
     });

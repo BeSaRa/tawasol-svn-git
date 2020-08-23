@@ -819,6 +819,9 @@ module.exports = function (app) {
             WorkItem.prototype.getIndicatorHasAttachment = function (model) {
                 return model.generalStepElm.attachementsNO ? langService.get('indicator_doc_has_attachment') : null;
             };
+            WorkItem.prototype.getIndicatorSequentialWF = function (model) {
+                return model.hasActiveSeqWF()? langService.get('sequential_workflow'):null
+            }
 
             WorkItem.prototype.getTypeIcon = function () {
                 var icons = [
@@ -1112,6 +1115,10 @@ module.exports = function (app) {
 
             WorkItem.prototype.authorizeByAnnotation = function (signatureModel, content) {
                 return correspondenceService.authorizeCorrespondenceByAnnotation(this, signatureModel, content);
+            };
+
+            WorkItem.prototype.getSequentialWFIndicator = function () {
+                return indicator.getSequentialWFIndicator();
             };
 
             WorkItem.prototype.displayCompositeMessage = function (pinCode) {

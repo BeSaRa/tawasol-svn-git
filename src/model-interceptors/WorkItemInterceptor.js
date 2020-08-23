@@ -121,6 +121,7 @@ module.exports = function (app) {
             model.isReassignedIndicator = model.getReassignedIndicator(model.generalStepElm.isReassigned);
             model.isOpenedIndicator = model.getOpenedIndicator(model.generalStepElm.isOpen);
             model.isPaperIndicator = model.getIsPaperIndicator(model.generalStepElm.hasOwnProperty('addMethod') ? model.generalStepElm.addMethod : 1);
+            model.hasSequentialWFIndicator = model.hasActiveSeqWF() ? model.getSequentialWFIndicator() : null;
             model.exportViaCentralArchiveIndicator = model.getExportViaCentralArchiveIndicator(model.generalStepElm.exportViaCentralArchive);
             model.originalCopyIndicator = model.generalStepElm.hasOwnProperty('orginality') ? model.getOriginalCopyIndicator() : null;
             model.sender = new Information(model.senderInfo);

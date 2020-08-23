@@ -600,6 +600,23 @@ module.exports = function (app) {
             };
 
             /**
+             * @description Returns the conditional approved indicator and description
+             * @param isConditionalApproved
+             * @returns {Indicator}
+             */
+            Indicator.prototype.getSequentialWFIndicator = function () {
+                return new Indicator({
+                    class: 'indicator',
+                    text: 'sequential_workflow',
+                    icon: self.getIndicatorIcons('sequentialWF'),
+                    tooltip: 'sequential_workflow',
+                    legendText: function (indicator) {
+                        return langService.get('sequential_workflow');
+                    }
+                });
+            };
+
+            /**
              * @description Returns the difference in days and date status(passed/today/coming)
              * @param dateToCheck
              * @param iconType

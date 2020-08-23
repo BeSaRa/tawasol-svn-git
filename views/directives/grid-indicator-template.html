@@ -272,3 +272,12 @@
              ng-click="ctrl.indicatorCallback(ctrl.record, $event)"
     ></md-icon>
 </span>
+<!-- Sequential Workflow -->
+<span ng-if="ctrl.indicatorType === 'sequentialWF'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.hasSequentialWFIndicator}">
+    <md-icon ng-if="ctrl.record.hasSequentialWFIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.hasSequentialWFIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.hasSequentialWFIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.hasSequentialWFIndicator.tooltip)}}"
+    ></md-icon>
+</span>
