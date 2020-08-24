@@ -1095,8 +1095,9 @@ module.exports = function (app) {
             _getNextStepFromSeqWF();
             $timeout(function () {
                 // PSPDFKit.Options.IGNORE_DOCUMENT_PERMISSIONS = true;
+                console.log('location.host',location.host);
                 PSPDFKit.load({
-                    baseUrl: location.protocol + '//' + location.host + '/node_modules/pspdfkit/dist/',
+                    baseUrl: location.protocol + '//' + location.host + '/pspdfkit/',
                     container: $element.find('#pdf-viewer')[0],
                     document: self.pdfData,
                     instantJSON: instantJSON,

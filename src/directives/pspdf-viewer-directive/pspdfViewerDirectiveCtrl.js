@@ -28,7 +28,7 @@ module.exports = function (app) {
             });
             self.destroyInstance();
             PSPDFKit.load({
-                baseUrl: location.protocol + '//' + location.host + '/node_modules/pspdfkit/dist/',
+                baseUrl: location.protocol + '//' + location.host + '/pspdfkit/',
                 container: self.container,
                 document: typeof self.docUrl === 'object' ? self.docUrl.$$unwrapTrustedValue() : self.docUrl,
                 licenseKey: rootEntity.returnRootEntity().rootEntity.psPDFLicenseKey,

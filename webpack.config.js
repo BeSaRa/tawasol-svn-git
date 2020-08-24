@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 // const NGAnnotate = require('ng-annotate-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
+const CopyPlugin = require('copy-webpack-plugin');
 module.exports = function (env) {
     const cssResolver = isProduction(env) ? {
         loader: MiniCssExtractPlugin.loader, options: {
@@ -27,6 +27,20 @@ module.exports = function (env) {
             useRelativePath: false
         }
     });
+    var toFolder = './build';
+    const copyFiles = [
+        {from: './index.html', to: toFolder},
+        {from: './views', to: toFolder + '/views'},
+        {from: './dist', to: toFolder + '/dist'},
+        {from: './assets', to: toFolder + '/assets'},
+        {from: './guides', to: toFolder + '/guides'},
+        {from: './help', to: toFolder + '/help'},
+        {from: './node_modules/pspdfkit/dist/pspdfkit-lib', to: toFolder + '/pspdfkit/pspdfkit-lib'},
+    ];
+
+    const copyDevFiles = [
+        {from: './node_modules/pspdfkit/dist/pspdfkit-lib', to: './pspdfkit/pspdfkit-lib'},
+    ];
 
 
     return {
@@ -97,9 +111,15 @@ module.exports = function (env) {
                 CountUp: 'countup.js'
             })/*,
             new NGAnnotate()*/
-        ].concat((!isProduction(env) ? [new webpack.HotModuleReplacementPlugin()] : [
+        ].concat((!isProduction(env) ? [new webpack.HotModuleReplacementPlugin(),
+            new CopyPlugin({
+                patterns: copyDevFiles
+            })] : [
             new MiniCssExtractPlugin({
                 filename: 'dist/css/style.css'
+            }),
+            new CopyPlugin({
+                patterns: copyFiles
             })
         ]))
     };
