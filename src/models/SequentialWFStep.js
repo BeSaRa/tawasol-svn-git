@@ -23,6 +23,7 @@ module.exports = function (app) {
             self.itemOrder = null;
             self.sequentialWFId = null;
 
+            self.userAndOuId = null; // combination of user and ouId. To be deleted before sending
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -102,7 +103,7 @@ module.exports = function (app) {
             };
 
             SequentialWFStep.prototype.isSendDocumentStepValid = function () {
-                return !!this.arName && !!this.enName && generator.validRequired(this.itemOrder) && this.toUserId
+                return !!this.arName && !!this.enName && generator.validRequired(this.itemOrder) && (this.userAndOuId)
                     && generator.validRequired(generator.getNormalizedValue(this.actionId, 'id'));
             };
 
@@ -112,7 +113,7 @@ module.exports = function (app) {
                 if (!isValid) {
                     return false;
                 }
-                return !this.isLastStep(sequentialWF) ? !!this.toUserId : true;
+                return !this.isLastStep(sequentialWF) ? !!(this.userAndOuId) : true;
             };
 
             SequentialWFStep.prototype.isLastStep = function (sequentialWF) {
@@ -153,6 +154,19 @@ module.exports = function (app) {
                 //return this.id >= correspondenceRecord.getSeqWFNextStepId();
                 return this.id > correspondenceRecord.getSeqWFNextStepId();
             };
+            SequentialWFStep.prototype.getUserAndOuCombination = function () {
+                if (this.toUserId && this.toOUID) {
+                    return generator.getNormalizedValue(this.toUserId, 'id') + '-' + generator.getNormalizedValue(this.toOUID, 'id');
+                }
+                return '';
+            };
+            SequentialWFStep.prototype.getUserFromUserAndOUCombination = function () {
+                if (this.userAndOuId) {
+                    return this.userAndOuId.split('-')[0];
+                }
+                return null;
+            };
+
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

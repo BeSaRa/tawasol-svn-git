@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                               dialog,
                                                               generator,
                                                               $scope,
+                                                              _,
                                                               ouApplicationUserService) {
         'ngInject';
         var self = this,
@@ -62,6 +63,13 @@ module.exports = function (app) {
             }
         };
 
+        function _setUserAndOUIdCombination(ouApplicationUsers) {
+            return _.map(ouApplicationUsers, function (item) {
+                item.userAndOuId = generator.getNormalizedValue(item.applicationUser, 'id') + '-' + generator.getNormalizedValue(item.ouid, 'id');
+                return item;
+            });
+        }
+
         /**
          * @description Get the Application Users for the selected Organization
          */
@@ -71,12 +79,14 @@ module.exports = function (app) {
             }
             if (!self.step.toOUID) {
                 self.ouApplicationUsers = [];
+                self.step.toUserId = null;
                 return;
             }
             return ouApplicationUserService
                 .searchByCriteria({regOu: generator.getNormalizedValue(self.step.toOUID, 'id')})
                 .then(function (result) {
-                    self.ouApplicationUsers = result;
+                    self.ouApplicationUsers = _setUserAndOUIdCombination(result);
+                    console.log(self.ouApplicationUsers);
                     return result;
                 });
         };

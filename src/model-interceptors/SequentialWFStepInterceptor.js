@@ -12,7 +12,8 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            model.toUserId = generator.getNormalizedValue(model.toUserId, 'id');
+            // model.toUserId = generator.getNormalizedValue(model.toUserId, 'id');
+            model.toUserId = model.getUserFromUserAndOUCombination();
             model.toOUID = generator.getNormalizedValue(model.toOUID, 'id');
             model.actionId = generator.getNormalizedValue(model.actionId, 'id');
 
@@ -20,11 +21,13 @@ module.exports = function (app) {
             model.sendEmail = model.sendEmail || false;
 
             delete model.dummyId;
+            delete model.userAndOuId;
             return model;
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.dummyId = uuidv4();
+            model.userAndOuId = model.getUserAndOuCombination(); //// used in binding user in step popup. because it is binding to applicationUserId which will be multiple in ouApplicationUser list.
             return model;
         });
 
