@@ -17,7 +17,8 @@ module.exports = function (app) {
             STATES_DISABLED_WHILE_ADD_TASK: [1],
             G2G_QATAR_SOURCE: true,
             FOLLOWUP_BOOK_FILTER_START_BEFORE_TYPE: 'days', //'months', 'days'
-            FOLLOWUP_BOOK_FILTER_START_BEFORE_VALUE: 30
+            FOLLOWUP_BOOK_FILTER_START_BEFORE_VALUE: 30,
+            ANNOTATE_DOCUMENT_PERMISSION: ''
         };
         var configurationServiceProvider = provider;
         /**

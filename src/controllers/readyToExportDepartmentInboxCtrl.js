@@ -30,7 +30,9 @@ module.exports = function (app) {
                                                                  mailNotificationService,
                                                                  gridService,
                                                                  $timeout,
-                                                                 errorCode) {
+                                                                 errorCode,
+                                                                 rootEntity,
+                                                                 configurationService) {
         'ngInject';
         var self = this;
         /*
@@ -474,6 +476,24 @@ module.exports = function (app) {
             });
         };
 
+        /**
+         * @description annotate document
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.annotateDocument = function (workItem, $event, defer) {
+            workItem.openForAnnotation()
+                .then(function () {
+                    self.reloadReadyToExports(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
+                })
+                .catch(function () {
+                    self.reloadReadyToExports(self.grid.page);
+                });
+        };
 
         /**
          * @description add an item to the favorite documents
@@ -1173,6 +1193,19 @@ module.exports = function (app) {
                 },
                 checkShow: function (action, model) {
                     return true;
+                }
+            },
+            // Annotate Document
+            {
+                type: 'action',
+                icon: 'draw',
+                text: 'grid_action_annotate_document',
+                shortcut: true,
+                callback: self.annotateDocument,
+                class: "action-green",
+                sticky: true,
+                checkShow: function (action, model) {
+                    return rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION);
                 }
             },
             // Add To Favorite

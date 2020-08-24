@@ -38,17 +38,21 @@ module.exports = function (app) {
                                              editAfterReturnG2G,
                                              gridService,
                                              _,
-                                             rootEntity) {
+                                             rootEntity,
+                                             configurationService) {
         'ngInject';
         var self = this;
         self.controllerName = 'outgoingCtrl';
         contextHelpService.setHelpTo('add-outgoing');
         self.isDemoBuild = generator.isDemoBuild;
-
         self.employeeService = employeeService;
         self.emptySubSites = false;
         // current employee
         self.employee = employeeService.getEmployee();
+
+        self.hasPSPDFViewer = rootEntity.hasPSPDFViewer();
+        self.annotationPermission = configurationService.ANNOTATE_DOCUMENT_PERMISSION;
+
         // validation for accordion
         self.validation = true;
         // collapse from label
@@ -291,17 +295,30 @@ module.exports = function (app) {
                 self.requestCompleted = true;
                 self.saveInProgress = false;
                 toast.success(langService.get(successKey));
+
                 if (ignoreLaunch) {
                     return;
                 }
-
-                if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist))) {
-                    dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
-                        .then(function () {
-                            self.docActionLaunchDistributionWorkflow(self.outgoing);
-                        });
-                }
+                _launchAfterSave();
             }
+        };
+
+        function _launchAfterSave(){
+            if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist))) {
+                dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
+                    .then(function () {
+                        self.docActionLaunchDistributionWorkflow(self.outgoing);
+                    });
+            }
+        }
+
+        self.saveAndAnnotateDocument = function ($event) {
+            self.saveCorrespondence(false, true).then(function () {
+                self.outgoing.openForAnnotation()
+                    .then(function(){
+                        _launchAfterSave();
+                    });
+            });
         };
 
         /**
@@ -372,14 +389,7 @@ module.exports = function (app) {
             document.barcodePrint(document);
         };
 
-        self.saveAndAnnotateDocument = function (document, $event) {
-            self.saveCorrespondence(false, true).then(function () {
-                self.outgoing.openForAnnotation();
-            });
-        };
-
         self.docActionLaunchDistributionWorkflow = function (document, $event) {
-            //console.log('launch distribution workflow', document);
             if (!self.outgoing.hasContent()) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
@@ -647,7 +657,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_SEQ_WF',
                 checkShow: function (action, model, index) {
-                    isVisible = gridService.checkToShowAction(action) && _hasContent() && rootEntity.hasPSPDFViewer() && !model.hasActiveSeqWF();
+                    isVisible = gridService.checkToShowAction(action) && _hasContent() && self.hasPSPDFViewer && !model.hasActiveSeqWF();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }

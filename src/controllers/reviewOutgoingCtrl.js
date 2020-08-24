@@ -25,7 +25,8 @@ module.exports = function (app) {
                                                    ResolveDefer,
                                                    mailNotificationService,
                                                    userSubscriptionService,
-                                                   rootEntity) {
+                                                   rootEntity,
+                                                   configurationService) {
         'ngInject';
         var self = this;
 
@@ -174,6 +175,26 @@ module.exports = function (app) {
                         .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
+                });
+        };
+
+        /**
+         * @description annotate document
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.annotateDocument = function (correspondence, $event, defer) {
+            correspondence.openForAnnotation()
+                .then(function () {
+                    self.reloadReviewOutgoings(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        });
+                })
+                .catch(function () {
+                    self.reloadReviewOutgoings(self.grid.page);
                 });
         };
 
@@ -871,6 +892,19 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: function (action, model) {
                     return true;
+                }
+            },
+            // Annotate Document
+            {
+                type: 'action',
+                icon: 'draw',
+                text: 'grid_action_annotate_document',
+                shortcut: true,
+                callback: self.annotateDocument,
+                class: "action-green",
+                sticky: true,
+                checkShow: function (action, model) {
+                    return rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION);
                 }
             },
             // Print Barcode

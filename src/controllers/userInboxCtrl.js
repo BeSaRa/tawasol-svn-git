@@ -41,7 +41,8 @@ module.exports = function (app) {
                                               fromNotification,
                                               emailItem,
                                               gridService,
-                                              WorkItem) {
+                                              WorkItem,
+                                              configurationService) {
         'ngInject';
         var self = this;
         self.controllerName = 'userInboxCtrl';
@@ -1384,11 +1385,16 @@ module.exports = function (app) {
         /**
          * @description annotate document
          * @param workItem
+         * @param $event
+         * @param defer
          */
-        self.annotateDocument = function (workItem) {
+        self.annotateDocument = function (workItem, $event, defer) {
             workItem.openForAnnotation()
                 .then(function () {
-                    self.reloadUserInboxes(self.grid.page);
+                    self.reloadUserInboxes(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
                 })
                 .catch(function () {
                     self.reloadUserInboxes(self.grid.page);
@@ -1534,7 +1540,7 @@ module.exports = function (app) {
                 sticky: true,
                 stickyIndex: 1,
                 checkShow: function (action, model) {
-                    return true;
+                    return rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION);
                 }
             },
             // Add To

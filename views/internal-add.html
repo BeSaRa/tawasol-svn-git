@@ -20,7 +20,6 @@
                                        ng-disabled="ctrl.saveInProgress || ctrl.document_properties.$invalid || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.internal.contentFile))"
                                        class="md-raised"
                                        ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
-                                <!--|| (ctrl.documentInformation || ctrl.internal.contentFile)-->
                                 {{lang.internal_save}}
                             </md-button>
                         </div>
@@ -29,6 +28,12 @@
                                        ng-disabled="ctrl.saveInProgress || ctrl.document_properties.$invalid || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.internal.contentFile))"
                                        class="md-raised">
                                 {{lang.internal_save_print_barcode}}
+                            </md-button>
+                        </div>
+                        <div ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)">
+                            <md-button ng-disabled="ctrl.saveInProgress || ctrl.document_properties.$invalid || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.internal.contentFile))"
+                                       ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised">
+                                {{lang.save_and_insert}}
                             </md-button>
                         </div>
                         <div ng-if="!ctrl.internal.addMethod">

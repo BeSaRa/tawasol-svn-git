@@ -77,9 +77,14 @@
                                         </md-button>
                                     </div>
                                 </div>
-                                <div class="mb10" layout="row">
-                                    <md-button ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}"
-                                               ng-click="ctrl.confirmResetAddCorrespondence($event)" class="md-raised">
+                                <div layout="row">
+                                    <md-button ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)"
+                                               ng-disabled="ctrl.isInValidForm(ctrl.document_properties)"
+                                               ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised"
+                                               ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
+                                        {{lang.save_and_insert}}
+                                    </md-button>
+                                    <md-button ng-click="ctrl.confirmResetAddCorrespondence($event)" class="md-raised">
                                         {{lang.outgoing_new}}
                                     </md-button>
                                     <md-button ng-click="ctrl.cancelAddCorrespondence($event)" class="md-raised">

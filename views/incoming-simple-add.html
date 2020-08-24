@@ -70,12 +70,18 @@
                                         {{lang.incoming_save_print_barcode}}
                                     </md-button>
                                 </div>
-                                <div class="mb10" layout="row">
+                                <div layout="row">
+                                    <md-button
+                                            ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)"
+                                            ng-disabled="ctrl.isInValidForm(ctrl.document_properties)"
+                                            ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised"
+                                            ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
+                                        {{lang.save_and_insert}}
+                                    </md-button>
                                     <md-button ng-click="ctrl.confirmResetAddCorrespondence($event)" class="md-raised">
                                         {{lang.incoming_new}}
                                     </md-button>
-                                    <md-button ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}"
-                                               ng-click="ctrl.cancelAddCorrespondence($event)" class="md-raised">
+                                    <md-button ng-click="ctrl.cancelAddCorrespondence($event)" class="md-raised">
                                         {{lang.incoming_cancel}}
                                     </md-button>
                                 </div>

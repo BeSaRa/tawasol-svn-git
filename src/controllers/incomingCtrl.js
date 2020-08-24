@@ -35,7 +35,8 @@ module.exports = function (app) {
                                              errorCode,
                                              downloadService,
                                              _,
-                                             rootEntity) {
+                                             rootEntity,
+                                             configurationService) {
         'ngInject';
         var self = this;
         self.controllerName = 'incomingCtrl';
@@ -46,6 +47,10 @@ module.exports = function (app) {
         self.employeeService = employeeService;
         // current employee
         self.employee = employeeService.getEmployee();
+
+        self.hasPSPDFViewer = rootEntity.hasPSPDFViewer();
+        self.annotationPermission = configurationService.ANNOTATE_DOCUMENT_PERMISSION;
+
         // validation for accordion
         self.validation = true;
         // collapse from label
@@ -151,7 +156,7 @@ module.exports = function (app) {
 
         self.requestCompleted = false;
         self.saveInProgress = false;
-        self.saveCorrespondence = function (status, skipCheck, isSaveAndPrintBarcode) {
+        self.saveCorrespondence = function (status, skipCheck, ignoreLaunch) {
             if (status && !self.documentInformation) {
                 toast.error(langService.get('cannot_save_as_draft_without_content'));
                 return;
@@ -180,7 +185,7 @@ module.exports = function (app) {
                             self.contentFileExist = !!(self.incoming.hasOwnProperty('contentFile') && self.incoming.contentFile);
                             self.contentFileSizeExist = !!(self.contentFileExist && self.incoming.contentFile.size);
 
-                            saveCorrespondenceFinished(status, isSaveAndPrintBarcode);
+                            saveCorrespondenceFinished(status, ignoreLaunch);
                             return true;
                         })
                 } else if (duplicateVersion && self.incoming.hasContent()) {
@@ -189,27 +194,27 @@ module.exports = function (app) {
                         .then(function () {
                             self.contentFileExist = true;
                             self.contentFileSizeExist = true;
-                            saveCorrespondenceFinished(status, isSaveAndPrintBarcode);
+                            saveCorrespondenceFinished(status, ignoreLaunch);
                             return true;
                         });
                 } else {
                     self.contentFileExist = false;
                     self.contentFileSizeExist = false;
 
-                    saveCorrespondenceFinished(status, isSaveAndPrintBarcode);
+                    saveCorrespondenceFinished(status, ignoreLaunch);
                     return true;
                 }
 
             })
                 .catch(function (error) {
                     self.saveInProgress = false;
-                    if (isSaveAndPrintBarcode) {
+                    if (ignoreLaunch) {
                         return $q.reject(error);
                     }
                     if (errorCode.checkIf(error, 'ALREADY_EXISTS_INCOMING_BOOK_WITH_SAME_REFERENCE_NUMBER') === true) {
                         dialog.confirmMessage(langService.get('incoming_book_exists_same_number_site_year') + "<br/>" + langService.get('confirm_continue_message'))
                             .then(function () {
-                                return self.saveCorrespondence(status, true, isSaveAndPrintBarcode);
+                                return self.saveCorrespondence(status, true, ignoreLaunch);
                             }).catch(function () {
                             return $q.reject(error);
                         });
@@ -244,7 +249,7 @@ module.exports = function (app) {
                 })
         };
 
-        var saveCorrespondenceFinished = function (status, isSaveAndPrintBarcode) {
+        var saveCorrespondenceFinished = function (status, ignoreLaunch) {
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             self.incoming.updateDocumentVersion();
             counterService.loadCounters();
@@ -268,17 +273,51 @@ module.exports = function (app) {
                 self.requestCompleted = true;
                 self.saveInProgress = false;
                 toast.success(langService.get(successKey));
-                if (!isSaveAndPrintBarcode && employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')) {
-                    if (centralArchives && self.incoming.hasContent()) {
-                        self.docActionLaunchDistributionWorkflow(self.incoming);
-                    } else if (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist)) {
-                        dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
-                            .then(function () {
-                                self.docActionLaunchDistributionWorkflow(self.incoming);
-                            });
-                    }
+
+                if (ignoreLaunch) {
+                    return;
+                }
+                _launchAfterSave();
+            }
+        };
+
+        function _launchAfterSave() {
+            if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')) {
+                if (centralArchives && self.incoming.hasContent()) {
+                    self.docActionLaunchDistributionWorkflow(self.incoming);
+                } else if (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist)) {
+                    dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
+                        .then(function () {
+                            self.docActionLaunchDistributionWorkflow(self.incoming);
+                        });
                 }
             }
+        }
+
+        self.saveAndAnnotateDocument = function ($event) {
+            self.saveCorrespondence(null, false, true)
+                .then(function () {
+                    self.incoming.openForAnnotation()
+                        .then(function () {
+                            _launchAfterSave();
+                        });
+                })
+                .catch(function (error) {
+                    if (errorCode.checkIf(error, 'ALREADY_EXISTS_INCOMING_BOOK_WITH_SAME_REFERENCE_NUMBER') === true) {
+                        dialog.confirmMessage(langService.get('incoming_book_exists_same_number_site_year') + "<br/>" + langService.get('confirm_continue_message'))
+                            .then(function () {
+                                self.saveCorrespondence(null, true, true)
+                                    .then(function () {
+                                        self.incoming.openForAnnotation()
+                                            .then(function () {
+                                                _launchAfterSave();
+                                            });
+                                    })
+                            }).catch(function () {
+                            return $q.reject(error);
+                        });
+                    }
+                });
         };
 
         /**

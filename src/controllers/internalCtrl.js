@@ -33,7 +33,8 @@ module.exports = function (app) {
                                              replyTo,
                                              $stateParams,
                                              correspondenceService,
-                                             rootEntity) {
+                                             rootEntity,
+                                             configurationService) {
         'ngInject';
         var self = this;
         self.controllerName = 'internalCtrl';
@@ -44,6 +45,10 @@ module.exports = function (app) {
         self.employeeService = employeeService;
         // current employee
         self.employee = employeeService.getEmployee();
+
+        self.hasPSPDFViewer = rootEntity.hasPSPDFViewer();
+        self.annotationPermission = configurationService.ANNOTATE_DOCUMENT_PERMISSION;
+
         // validation for accordion
         self.validation = true;
         // collapse from label
@@ -130,7 +135,7 @@ module.exports = function (app) {
 
         self.requestCompleted = false;
         self.saveInProgress = false;
-        self.saveCorrespondence = function (status) {
+        self.saveCorrespondence = function (status, ignoreLaunch) {
             if (status && !self.documentInformation) {
                 toast.error(langService.get('cannot_save_as_draft_without_content'));
                 return;
@@ -195,7 +200,7 @@ module.exports = function (app) {
                                 self.contentFileExist = !!(self.internal.hasOwnProperty('contentFile') && self.internal.contentFile);
                                 self.contentFileSizeExist = !!(self.contentFileExist && self.internal.contentFile.size);
 
-                                saveCorrespondenceFinished(status);
+                                saveCorrespondenceFinished(status, ignoreLaunch);
                             })
                     } else if (duplicateVersion && self.internal.hasContent() && self.internal.addMethod) {
                         return self.internal
@@ -203,12 +208,12 @@ module.exports = function (app) {
                             .then(function () {
                                 self.contentFileExist = true;
                                 self.contentFileSizeExist = true;
-                                saveCorrespondenceFinished(status);
+                                saveCorrespondenceFinished(status, ignoreLaunch);
                             });
                     } else {
                         self.contentFileExist = false;
                         self.contentFileSizeExist = false;
-                        saveCorrespondenceFinished(status);
+                        saveCorrespondenceFinished(status, ignoreLaunch);
                         return true;
                     }
                 }).catch(function (error) {
@@ -219,13 +224,13 @@ module.exports = function (app) {
         };
 
         self.saveCorrespondenceAndPrintBarcode = function ($event) {
-            self.saveCorrespondence()
+            self.saveCorrespondence(false, true)
                 .then(function () {
                     self.docActionPrintBarcode(self.internal, $event);
                 })
         };
 
-        var saveCorrespondenceFinished = function (status) {
+        var saveCorrespondenceFinished = function (status, ignoreLaunch) {
             counterService.loadCounters();
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             if (replyTo) {
@@ -252,17 +257,33 @@ module.exports = function (app) {
                     successKey = 'save_success';
                 }
 
-                if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && _hasContent()) {
-                    dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
-                        .then(function () {
-                            self.docActionLaunchDistributionWorkflow(self.internal);
-                        });
-                }
-
                 self.requestCompleted = true;
                 self.saveInProgress = false;
                 toast.success(langService.get(successKey));
+
+                if (ignoreLaunch) {
+                    return;
+                }
+                _launchAfterSave();
             }
+        };
+
+        function _launchAfterSave() {
+            if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && _hasContent()) {
+                dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
+                    .then(function () {
+                        self.docActionLaunchDistributionWorkflow(self.internal);
+                    });
+            }
+        }
+
+        self.saveAndAnnotateDocument = function ($event) {
+            self.saveCorrespondence(false, true).then(function () {
+                self.internal.openForAnnotation()
+                    .then(function () {
+                        _launchAfterSave();
+                    });
+            });
         };
 
         /**

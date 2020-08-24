@@ -49,6 +49,10 @@ module.exports = function (app) {
         self.emptySubSites = false;
         // current employee
         self.employee = employeeService.getEmployee();
+
+        self.hasPSPDFViewer = rootEntity.hasPSPDFViewer();
+        self.annotationPermission = configurationService.ANNOTATE_DOCUMENT_PERMISSION;
+
         // validation for accordion
         self.validation = false;
         // collapse from label
@@ -178,7 +182,7 @@ module.exports = function (app) {
 
         self.requestCompleted = false;
 
-        self.saveCorrespondence = function (status) {
+        self.saveCorrespondence = function (status, ignoreLaunch) {
             self.saveInProgress = true;
            // loadingIndicatorService.loading = true;
             if (status && !self.documentInformation) {
@@ -256,12 +260,12 @@ module.exports = function (app) {
                                 self.contentFileExist = !!(self.outgoing.hasOwnProperty('contentFile') && self.outgoing.contentFile);
                                 self.contentFileSizeExist = !!(self.contentFileExist && self.outgoing.contentFile.size);
 
-                                saveCorrespondenceFinished(status);
+                                saveCorrespondenceFinished(status, ignoreLaunch);
                             })
                     } else {
                         self.contentFileExist = false;
                         self.contentFileSizeExist = false;
-                        saveCorrespondenceFinished(status);
+                        saveCorrespondenceFinished(status, ignoreLaunch);
                         return true;
                     }
                 })
@@ -277,12 +281,12 @@ module.exports = function (app) {
         };
 
         self.saveCorrespondenceAndPrintBarcode = function ($event) {
-            self.saveCorrespondence().then(function () {
+            self.saveCorrespondence(false, true).then(function () {
                 self.docActionPrintBarcode(self.outgoing, $event);
             })
         };
 
-        var saveCorrespondenceFinished = function (status) {
+        var saveCorrespondenceFinished = function (status, ignoreLaunch) {
             counterService.loadCounters();
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             if (replyTo) {
@@ -309,17 +313,34 @@ module.exports = function (app) {
                     successKey = 'save_success';
                 }
 
-                if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist))) {
-                    dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
-                        .then(function () {
-                            self.docActionLaunchDistributionWorkflow(self.outgoing);
-                        });
-                }
-
                 self.requestCompleted = true;
                 self.saveInProgress = false;
                 toast.success(langService.get(successKey));
+
+                if (ignoreLaunch){
+                    return;
+                }
+                _launchAfterSave();
+
             }
+        };
+
+        function _launchAfterSave(){
+            if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist))) {
+                dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
+                    .then(function () {
+                        self.docActionLaunchDistributionWorkflow(self.outgoing);
+                    });
+            }
+        }
+
+        self.saveAndAnnotateDocument = function ($event) {
+            self.saveCorrespondence(false, true).then(function () {
+                self.outgoing.openForAnnotation()
+                    .then(function(){
+                        _launchAfterSave();
+                    });
+            });
         };
 
         /**
@@ -660,7 +681,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_SEQ_WF',
                 checkShow: function (action, model, index) {
-                    isVisible = gridService.checkToShowAction(action) && _hasContent() && rootEntity.hasPSPDFViewer() && !model.hasActiveSeqWF();
+                    isVisible = gridService.checkToShowAction(action) && _hasContent() && self.hasPSPDFViewer && !model.hasActiveSeqWF();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }

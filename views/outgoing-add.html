@@ -36,7 +36,7 @@
                                 {{lang.outgoing_save_print_barcode}}
                             </md-button>
                         </div>
-                        <div ng-if="ctrl.outgoing.addMethod">
+                        <div ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)">
                             <md-button ng-disabled="ctrl.saveInProgress
                                                     || ctrl.document_properties.$invalid
                                                     || !ctrl.outgoing.sitesInfoTo.length
@@ -282,7 +282,7 @@
                                 {{lang.outgoing_save_print_barcode}}
                             </md-button>
                         </div>
-                        <div ng-if="ctrl.outgoing.addMethod">
+                        <div ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)">
                             <md-button ng-disabled="ctrl.saveInProgress
                                                     || ctrl.document_properties.$invalid
                                                     || !ctrl.outgoing.sitesInfoTo.length
