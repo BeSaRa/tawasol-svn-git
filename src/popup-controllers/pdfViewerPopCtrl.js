@@ -896,6 +896,7 @@ module.exports = function (app) {
             self.correspondence.addDocumentContentFile(pdfContent).then(function () {
                 toast.success(langService.get('save_success'));
                 self.sendAnnotationLogs();
+                dialog.hide();
             }).catch(self.handleExceptions);
         };
         /**
