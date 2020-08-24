@@ -69,7 +69,7 @@ module.exports = function (app) {
             .bulkResolveToState('app.administration.classifications', {
                 classifications: function (classificationService, organizations) {
                     'ngInject';
-                    return classificationService.loadClassificationsWithLimit(50);
+                    return classificationService.loadClassificationsWithLimit(150);
                 },
                 organizations: function (organizationService) {
                     'ngInject';

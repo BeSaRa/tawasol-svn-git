@@ -104,7 +104,7 @@ module.exports = function (app) {
             self.searchMode = false;
             self.searchModel = '';
             return classificationService
-                .loadClassificationsWithLimit()
+                .loadClassificationsWithLimit(150)
                 .then(function (classifications) {
                     self.classifications = classificationService.getMainClassifications(classifications);
                     self.selectedClassifications = [];
