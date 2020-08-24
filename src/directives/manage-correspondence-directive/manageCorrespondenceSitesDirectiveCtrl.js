@@ -468,13 +468,13 @@ module.exports = function (app) {
                 dialog.confirmMessage(langService.get('sites_with_need_reply_missing_date_confirm_skip'))
                     .then(function () {
                         _.map(sitesWithoutNeedReply, function (site) {
-                            self.addSiteTo(site);
+                            self.addSiteTo(site, isDistributionListRecord);
                         });
                         _resetSelectedData(isDistributionListRecord);
                     });
             } else {
                 _.map(sites, function (site) {
-                    self.addSiteTo(site);
+                    self.addSiteTo(site, isDistributionListRecord);
                 });
                 _resetSelectedData(isDistributionListRecord);
             }
@@ -527,13 +527,13 @@ module.exports = function (app) {
                 dialog.confirmMessage(langService.get('sites_with_need_reply_missing_date_confirm_skip'))
                     .then(function () {
                         _.map(sitesWithoutNeedReply, function (site) {
-                            self.addSiteTo(site);
+                            self.addSiteTo(site, isDistributionListRecord);
                         });
                         _resetSelectedData(isDistributionListRecord);
                     });
             } else {
                 _.map(sites, function (site) {
-                    self.addSiteTo(site);
+                    self.addSiteTo(site, isDistributionListRecord);
                 });
                 _resetSelectedData(isDistributionListRecord);
             }
@@ -559,13 +559,13 @@ module.exports = function (app) {
                 dialog.confirmMessage(langService.get('sites_with_need_reply_missing_date_confirm_skip'))
                     .then(function () {
                         _.map(sitesWithoutNeedReply, function (site) {
-                            self.addSiteCC(site);
+                            self.addSiteCC(site, isDistributionListRecord);
                         });
                         _resetSelectedData(isDistributionListRecord);
                     });
             } else {
                 _.map(sites, function (site) {
-                    self.addSiteCC(site);
+                    self.addSiteCC(site, isDistributionListRecord);
                 });
                 _resetSelectedData(isDistributionListRecord);
             }
@@ -618,13 +618,13 @@ module.exports = function (app) {
                 dialog.confirmMessage(langService.get('sites_with_need_reply_missing_date_confirm_skip'))
                     .then(function () {
                         _.map(sitesWithoutNeedReply, function (site) {
-                            self.addSiteCC(site);
+                            self.addSiteCC(site, isDistributionListRecord);
                         });
                         _resetSelectedData(isDistributionListRecord);
                     });
             } else {
                 _.map(sites, function (site) {
-                    self.addSiteCC(site);
+                    self.addSiteCC(site, isDistributionListRecord);
                 });
                 _resetSelectedData(isDistributionListRecord);
             }
