@@ -3,21 +3,56 @@
     <div layout="row" flex ng-if="ctrl.isSimpleCorrespondenceSiteSearchType">
         <!-- Site Type -->
         <md-input-container flex>
-            <label for="siteType">{{lang.sites_select_site_type}}</label>
-            <md-select id="siteType" ng-model="ctrl.selectedSiteType" ng-change="ctrl.onSiteTypeChange($event)">
-                <md-option ng-value="type" ng-repeat="type in ctrl.correspondenceSiteTypes">
-                    {{type.getTranslatedName()}}
+            <label for="siteTypeSimple">{{lang.sites_select_site_type}}</label>
+            <md-select id="siteTypeSimple" ng-model="ctrl.selectedSiteType"
+                       ng-change="ctrl.onSiteTypeSimpleChange($event)"
+                       md-on-close="ctrl.clearSearchText('siteType')"
+                       data-md-container-class="select-header-container sticky-search-bar">
+                <md-select-header class="select-header">
+                    <input ng-model="ctrl.siteTypeSearchText"
+                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                           placeholder="{{lang.search}}"
+                           class="select-header-input">
+                </md-select-header>
+                <md-option ng-value="null">{{lang.none}}</md-option>
+                <md-option ng-value="type"
+                           ng-repeat="type in ctrl.correspondenceSiteTypes | translatedNameFilter:ctrl.siteTypeSearchText">
+                    <span md-highlight-text="ctrl.siteTypeSearchText"
+                          md-highlight-flags="i">{{type.getTranslatedName()}}</span>
                 </md-option>
             </md-select>
         </md-input-container>
         <!-- Main Site -->
         <md-input-container flex>
-            <label for="mainSite">{{lang.main_site}}</label>
-            <md-select id="mainSite" ng-model="ctrl.selectedMainSite"
+            <label for="mainSiteSimple">{{lang.main_site}}</label>
+            <md-select id="mainSiteSimple" ng-model="ctrl.selectedMainSite"
+                       ng-model-options="{trackBy: '$value.id'}"
                        ng-disabled="!ctrl.selectedSiteType || !ctrl.selectedSiteType.id"
-                       ng-change="ctrl.getSubSites($event)">
-                <md-option ng-value="type" ng-repeat="type in ctrl.mainSites">
-                    {{type.getTranslatedName()}}
+                       ng-change="ctrl.onMainSiteChangeSimple($event)"
+                       md-on-close="ctrl.clearSearchText('mainSite')"
+                       data-md-container-class="select-header-container sticky-search-bar">
+                <md-select-header class="select-header" layout="column">
+                    <div layout="row" flex class="size-100">
+                        <input ng-model="ctrl.mainSiteSearchText"
+                               ng-keydown="ctrl.preventSearchKeyDown($event, 'mainSite')"
+                               placeholder="{{lang.search}}"
+                               class="select-header-input">
+                        <md-button ng-if="ctrl.mainSiteSearchText"
+                                   ng-click="ctrl.loadMainSitesRecords($event)"
+                                   class="select-header-icon md-icon-button"
+                                   tooltip="{{lang.load_more_records}}">
+                            <md-icon md-svg-icon="magnify-plus"></md-icon>
+                        </md-button>
+                    </div>
+                    <div class="help-text-div" ng-if="ctrl.mainSiteSearchText">
+                        {{lang.press_enter_to_load_more_records}}
+                    </div>
+                </md-select-header>
+                <md-option ng-repeat="site in ctrl.mainSites | translatedNameFilter: ctrl.mainSiteSearchText"
+                           ng-value="site">
+                    <span
+                            md-highlight-text="ctrl.mainSiteSearchText"
+                            md-highlight-flags="i">{{site.getTranslatedName()}}</span>
                 </md-option>
             </md-select>
         </md-input-container>
@@ -25,45 +60,94 @@
         <md-input-container flex>
             <label for="subSiteSimpleSearchText">{{lang.sites_select_sub_site}}</label>
             <input id="subSiteSimpleSearchText" ng-model="ctrl.subSiteSearchText"
-                   ng-disabled="!ctrl.selectedMainSite || !ctrl.selectedMainSite.id">
-        </md-input-container>
-        <div>
-            <md-button class="md-raised md-primary"
-                       ng-disabled="!ctrl.selectedMainSite || !ctrl.selectedMainSite.id || ctrl.subSiteSearchText.length < 3"
-                       ng-click="ctrl.onSubSearch($event)">{{lang.search}}
+                   ng-disabled="!ctrl.selectedMainSite || !ctrl.selectedMainSite.id"
+                   ng-enter="ctrl.loadSubSitesRecords(false)"
+                   ng-change="ctrl.onChangeSubSiteText()">
+            <!--ng-change="ctrl.onSubSiteSearch(false)"-->
+            <md-button ng-if="ctrl.subSiteSearchText"
+                       ng-click="ctrl.loadSubSitesRecords($event)"
+                       class="cms-input-overlay-button md-icon-button"
+                       tooltip="{{lang.load_more_records}}">
+                <md-icon md-svg-icon="magnify-plus"></md-icon>
             </md-button>
-        </div>
+            <div class="help-text-div" ng-if="ctrl.subSiteSearchText">
+                {{lang.press_enter_to_load_more_records}}
+            </div>
+        </md-input-container>
     </div>
+
     <!-- Advanced Search -->
     <div layout="row" flex ng-if="!ctrl.isSimpleCorrespondenceSiteSearchType">
         <!-- Correspondence Site Type -->
         <md-input-container flex>
-            <label for="siteType">{{lang.sites_select_site_type}}</label>
-            <md-select id="siteType" ng-model="ctrl.selectedSiteType">
-                <md-option ng-value="type" ng-repeat="type in ctrl.correspondenceSiteTypes">
-                    {{type.getTranslatedName()}}
+            <label for="siteTypeAdvanced">{{lang.sites_select_site_type}}</label>
+            <md-select id="siteTypeAdvanced" ng-model="ctrl.selectedSiteType"
+                       ng-change="ctrl.onSiteTypeChangeAdvanced($event)"
+                       md-on-close="ctrl.clearSearchText('siteType')"
+                       data-md-container-class="select-header-container sticky-search-bar">
+                <md-select-header class="select-header">
+                    <input ng-model="ctrl.siteTypeSearchText"
+                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                           placeholder="{{lang.search}}"
+                           class="select-header-input">
+                </md-select-header>
+                <md-option ng-value="null">{{lang.none}}</md-option>
+                <md-option ng-value="type"
+                           ng-repeat="type in ctrl.correspondenceSiteTypes | translatedNameFilter:ctrl.siteTypeSearchText">
+                    <span md-highlight-text="ctrl.siteTypeSearchText"
+                          md-highlight-flags="i">{{type.getTranslatedName()}}</span>
                 </md-option>
             </md-select>
         </md-input-container>
         <!-- Main Site -->
-        <md-autocomplete
-                flex
-                md-autoselect
-                md-no-cache="true"
-                md-selected-item="ctrl.selectedMainSite"
-                md-search-text="ctrl.mainSiteSearchText"
-                md-selected-item-change="ctrl.onMainSiteChange(item)"
-                md-items="item in ctrl.onMainSiteSearch(ctrl.mainSearch)"
-                md-item-text="item.display"
-                md-min-length="3"
-                md-floating-label="{{lang.sites_select_main_site}}">
-            <span>{{item.getTranslatedName()}}</span>
-        </md-autocomplete>
+        <md-input-container flex>
+            <label for="mainSiteAdvanced">{{lang.main_site}}</label>
+            <md-select id="mainSiteAdvanced" ng-model="ctrl.selectedMainSite"
+                       ng-model-options="{trackBy: '$value.id'}"
+                       ng-change="ctrl.onMainSiteChangeAdvanced($event)"
+                       md-on-close="ctrl.clearSearchText('mainSite')"
+                       data-md-container-class="select-header-container sticky-search-bar">
+                <md-select-header class="select-header" layout="column">
+                    <div layout="row" flex class="size-100">
+                        <input ng-model="ctrl.mainSiteSearchText"
+                               ng-keydown="ctrl.preventSearchKeyDown($event, 'mainSite')"
+                               placeholder="{{lang.search}}"
+                               class="select-header-input">
+                        <md-button ng-if="ctrl.mainSiteSearchText"
+                                   ng-click="ctrl.loadMainSitesRecords($event)"
+                                   class="select-header-icon md-icon-button"
+                                   tooltip="{{lang.load_more_records}}">
+                            <md-icon md-svg-icon="magnify-plus"></md-icon>
+                        </md-button>
+                    </div>
+                    <div class="help-text-div" ng-if="ctrl.mainSiteSearchText">
+                        {{lang.press_enter_to_load_more_records}}
+                    </div>
+                </md-select-header>
+                <md-option
+                        ng-repeat="site in ctrl.mainSites | translatedNameFilter: ctrl.mainSiteSearchText"
+                        ng-value="site">
+                                <span md-highlight-text="ctrl.mainSiteSearchText"
+                                      md-highlight-flags="i">{{site.getTranslatedName()}}</span>
+                </md-option>
+            </md-select>
+        </md-input-container>
         <!-- Sub Site -->
         <md-input-container flex>
             <label for="subSiteSearchText">{{lang.sites_select_sub_site}}</label>
-            <input id="subSiteSearchText" ng-model="ctrl.subSiteSearchText" ng-enter="ctrl.onSubSearch()"
-                   ng-change="ctrl.onSubSearch($event)">
+            <input id="subSiteSearchText" ng-model="ctrl.subSiteSearchText"
+                   ng-enter="ctrl.loadSubSitesRecords(false)"
+                   ng-change="ctrl.onChangeSubSiteText()">
+            <!--ng-change="ctrl.onSubSiteSearch(false)"-->
+            <md-button ng-if="ctrl.subSiteSearchText"
+                       ng-click="ctrl.loadSubSitesRecords($event)"
+                       class="cms-input-overlay-button md-icon-button"
+                       tooltip="{{lang.load_more_records}}">
+                <md-icon md-svg-icon="magnify-plus"></md-icon>
+            </md-button>
+            <div class="help-text-div" ng-if="ctrl.subSiteSearchText">
+                {{lang.press_enter_to_load_more_records}}
+            </div>
         </md-input-container>
     </div>
 
@@ -115,7 +199,7 @@
                         </thead>
                         <tbody md-body>
                         <tr md-row md-select="site"
-                            ng-repeat="site in ctrl.subSearchResult  | filter:ctrl.searchModel | limitTo: ctrl.grid.subSearchResult.limit: ((ctrl.grid.subSearchResult.page - 1) * ctrl.grid.subSearchResult.limit) |orderBy:ctrl.grid.subSearchResult.order  track by $index">
+                            ng-repeat="site in ctrl.subSearchResult  | filter:ctrl.subSiteSearchText | limitTo: ctrl.grid.subSearchResult.limit: ((ctrl.grid.subSearchResult.page - 1) * ctrl.grid.subSearchResult.limit) |orderBy:ctrl.grid.subSearchResult.order  track by $index">
                             <td md-cell>
                                 <div flex layout="column">
                                     <span class="span-column">{{site.parentInfo.getTranslatedName()}}</span>
@@ -123,7 +207,8 @@
                             </td>
                             <td md-cell>
                                 <div flex layout="column">
-                                    <span md-highlight-text="ctrl.subSiteSearchText" class="span-column">{{site.getTranslatedName()}}</span>
+                                    <span md-highlight-text="ctrl.subSiteSearchText" md-highlight-flags="i"
+                                          class="span-column">{{site.getTranslatedName()}}</span>
                                 </div>
                             </td>
                             <td md-cell>
@@ -145,7 +230,7 @@
                         md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                         md-limit-options="ctrl.grid.subSearchResult.limitOptions"
                         md-limit="ctrl.grid.subSearchResult.limit" md-page="ctrl.grid.subSearchResult.page"
-                        md-total="{{ctrl.subSearchResult.length}}" md-page-select>
+                        md-total="{{(ctrl.subSearchResult | filter:ctrl.subSiteSearchText).length}}" md-page-select>
                 </md-table-pagination>
             </md-table-container>
         </md-card>
