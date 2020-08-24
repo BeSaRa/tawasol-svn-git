@@ -473,7 +473,10 @@ module.exports = function (app) {
         }
 
         function _getHasActiveSeqWF(correspondence) {
-            return correspondence.hasActiveSeqWF();
+            if (correspondence.hasActiveSeqWF && typeof correspondence.hasActiveSeqWF === 'function') {
+                return correspondence.hasActiveSeqWF();
+            }
+            return false;
         }
 
         function _getSignatureCount(correspondence) {
