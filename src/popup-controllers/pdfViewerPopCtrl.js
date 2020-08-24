@@ -1012,7 +1012,7 @@ module.exports = function (app) {
             self.getDocumentAnnotations()
                 .then(function (newAnnotations) {
                     self.newAnnotations = newAnnotations;
-                    if (self.nextSeqStep.isAuthorizeAndSendStep()) {
+                    if (self.nextSeqStep.isAuthorizeAndSendStep() && !self.info.isPaper) {
                         self.isDocumentHasCurrentUserSignature()
                             .then(function () {
                                 self.getPDFContentForCurrentDocument()
@@ -1033,7 +1033,7 @@ module.exports = function (app) {
                         self.currentInstance.exportInstantJSON().then(function (instantJSON) {
                             delete instantJSON.pdfId;
                             PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON).then(function (pdfContent) {
-                                sef.applyNextStepOnCorrespondence(pdfContent, null, true);
+                                self.applyNextStepOnCorrespondence(pdfContent, null, true);
                             });
                         });
                     } // end nextSeqStep.isAuthorizeAndSendStep()
@@ -1095,7 +1095,7 @@ module.exports = function (app) {
             _getNextStepFromSeqWF();
             $timeout(function () {
                 // PSPDFKit.Options.IGNORE_DOCUMENT_PERMISSIONS = true;
-                console.log('location.host',location.host);
+                console.log('location.host', location.host);
                 PSPDFKit.load({
                     baseUrl: location.protocol + '//' + location.host + '/pspdfkit/',
                     container: $element.find('#pdf-viewer')[0],
