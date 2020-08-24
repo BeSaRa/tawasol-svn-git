@@ -6,14 +6,12 @@
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <div>
-                <fieldset id="steps-wrapper">
-                    <legend class="md-accent">{{lang.steps}}</legend>
-                    <sequential-workflow-steps-directive
-                            seq-w-f="ctrl.sequentialWF"
-                            view-only="true"
-                            is-launch-seq-w-f="false"
-                            correspondence="ctrl.correspondence"></sequential-workflow-steps-directive>
-                </fieldset>
+                <sequential-workflow-steps-directive
+                        seq-w-f="ctrl.sequentialWF"
+                        view-only="true"
+                        is-launch-seq-w-f="false"
+                        correspondence="ctrl.correspondence">
+                </sequential-workflow-steps-directive>
             </div>
         </div>
     </md-dialog-content>

@@ -950,9 +950,6 @@ module.exports = function (app) {
          * @return {promise}
          */
         self.displaySeqWFSteps = function () {
-            // self.correspondence , self.sequentialWF
-
-            console.log(self.correspondence, self.sequentialWF);
             return dialog.showDialog({
                 templateUrl: cmsTemplate.getPopup('view-seq-wf-steps'),
                 locals: {

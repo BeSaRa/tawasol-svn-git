@@ -1,7 +1,8 @@
 <md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            aria-label="{{lang.grid_action_launch_sequential_workflow}}">
-    <popup-toolbar-directive header-text="{{lang.grid_action_launch_sequential_workflow}} : {{ctrl.record.getInfo().title}}"></popup-toolbar-directive>
+    <popup-toolbar-directive
+            header-text="{{lang.grid_action_launch_sequential_workflow}} : {{ctrl.record.getInfo().title}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <div layout="column">
@@ -34,14 +35,14 @@
                             </div>
                         </md-input-container>
                     </div>
-                    <div layout="row">
-                        <sequential-workflow-steps-directive ng-if="ctrl.selectedSeqWF"
-                                                             seq-w-f="ctrl.selectedSeqWF"
-                                                             redraw-steps="ctrl.redrawSteps"
-                                                             view-only="true"
-                                                             is-launch-seq-w-f="true"
-                        ></sequential-workflow-steps-directive>
-                    </div>
+
+                    <sequential-workflow-steps-directive
+                            ng-if="ctrl.selectedSeqWF"
+                            seq-w-f="ctrl.selectedSeqWF"
+                            redraw-steps="ctrl.redrawSteps"
+                            view-only="true"
+                            is-launch-seq-w-f="true"
+                    ></sequential-workflow-steps-directive>
                 </form>
 
             </div>

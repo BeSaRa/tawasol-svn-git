@@ -74,16 +74,14 @@
                             </md-radio-button>
                         </md-radio-group>
                     </fieldset>-->
-                    <br/>
-                    <fieldset id="steps-wrapper">
-                        <legend class="md-accent">{{lang.steps}}</legend>
-                        <sequential-workflow-steps-directive
-                                seq-w-f="ctrl.sequentialWorkflow"
-                                redraw-steps="ctrl.redrawSteps"
-                                view-only="ctrl.viewOnly"
-                                is-launch-seq-w-f="false"
-                        ></sequential-workflow-steps-directive>
-                    </fieldset>
+
+                    <sequential-workflow-steps-directive
+                            seq-w-f="ctrl.sequentialWorkflow"
+                            redraw-steps="ctrl.redrawSteps"
+                            view-only="ctrl.viewOnly"
+                            is-launch-seq-w-f="false"
+                    ></sequential-workflow-steps-directive>
+
                 </form>
             </div>
         </div>

@@ -86,7 +86,6 @@ module.exports = function (app) {
                 .searchByCriteria({regOu: generator.getNormalizedValue(self.step.toOUID, 'id')})
                 .then(function (result) {
                     self.ouApplicationUsers = _setUserAndOUIdCombination(result);
-                    console.log(self.ouApplicationUsers);
                     return result;
                 });
         };
