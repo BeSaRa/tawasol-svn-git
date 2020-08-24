@@ -185,7 +185,9 @@ module.exports = function (app) {
             // displaying open for approval Button
             if (!self.info.isAttachment &&
                 (self.info.docStatus <= 23 && !self.sequentialWF || self.info.docStatus <= 23 && self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep()) &&
-                self.annotationType !== AnnotationType.SIGNATURE) {
+                self.annotationType !== AnnotationType.SIGNATURE &&
+                !self.info.isPaper
+            ) {
                 toolbarInstance.push(openForApprovalButton);
             }
             return toolbarInstance;
