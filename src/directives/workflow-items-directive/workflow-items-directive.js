@@ -25,7 +25,9 @@ module.exports = function (app) {
                 grid: '=',
                 wfGroupMemberAddCallback: '=?',
                 organizationGroups: '=',
-                fromPredefined: '='
+                fromPredefined: '=',
+                item: '=',
+                hiddenForwardSenderInfo: '='
             }
         }
     })

@@ -176,6 +176,7 @@ module.exports = function (app) {
                 delete this.commentSearchText;
                 delete this.tempRegOUSection;
                 delete this.showCommentDropdown;
+                delete this.forwardSenderActionAndComment;
 
                 this.escalationStatus = (this.escalationStatus && this.escalationStatus.hasOwnProperty('id')) ? this.escalationStatus.lookupKey : this.escalationStatus;
                 if (this.escalationStatus === -1) {

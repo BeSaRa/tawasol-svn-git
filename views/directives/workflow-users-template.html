@@ -260,6 +260,7 @@
                         <!--ng-change="ctrl.setWFAction(workflowUser, $event)" -->
                         <md-select ng-model="workflowUser.action"
                                    class="select-wf-action"
+                                   ng-model-options="{trackBy: '$value.id'}"
                                    aria-label="workflow action"
                                    md-on-close="workflowUser.clearWFActionSearchText()"
                                    data-md-container-class="select-header-container sticky-search-bar"

@@ -113,7 +113,9 @@
                                                     grid-name="favoriteOUs"
                                                     grid="ctrl.grid.favoriteOus"
                                                     organization-groups="ctrl.organizationGroupsCopy"
-                                                    from-predefined="false"></workflow-items-directive>
+                                                    from-predefined="false"
+                                                    item="ctrl.correspondence"
+                                                    hidden-forward-sender-info="ctrl.isHiddenForwardSenderInfo()"></workflow-items-directive>
                                         </div>
                                     </md-tab>
                                 </md-tabs>
@@ -133,7 +135,9 @@
                                     workflow-actions="ctrl.workflowActions"
                                     workflow-items="ctrl.selectedWorkflowItems"
                                     organization-groups="ctrl.organizationGroupsCopy"
-                                    from-predefined="false"></selected-workflow-items-directive>
+                                    from-predefined="false"
+                                    item="ctrl.correspondence"
+                                    hidden-forward-sender-info="ctrl.isHiddenForwardSenderInfo()"></selected-workflow-items-directive>
                         </div>
                         <!-- Users -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('users')">
@@ -232,7 +236,9 @@
                                     workflow-actions="ctrl.workflowActions"
                                     workflow-items="ctrl.selectedWorkflowItems"
                                     organization-groups="ctrl.organizationGroupsCopy"
-                                    from-predefined="false"></selected-workflow-items-directive>
+                                    from-predefined="false"
+                                    item="ctrl.correspondence"
+                                    hidden-forward-sender-info="ctrl.isHiddenForwardSenderInfo()"></selected-workflow-items-directive>
                         </div>
                         <!-- Private Users -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('private_users')">
@@ -283,7 +289,9 @@
                                     workflow-actions="ctrl.workflowActions"
                                     workflow-items="ctrl.selectedWorkflowItems"
                                     organization-groups="ctrl.organizationGroupsCopy"
-                                    from-predefined="false"></selected-workflow-items-directive>
+                                    from-predefined="false"
+                                    item="ctrl.correspondence"
+                                    hidden-forward-sender-info="ctrl.isHiddenForwardSenderInfo()"></selected-workflow-items-directive>
                         </div>
                         <!-- Managers -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('manager_users')">
@@ -334,7 +342,9 @@
                                     workflow-actions="ctrl.workflowActions"
                                     workflow-items="ctrl.selectedWorkflowItems"
                                     organization-groups="ctrl.organizationGroupsCopy"
-                                    from-predefined="false"></selected-workflow-items-directive>
+                                    from-predefined="false"
+                                    item="ctrl.correspondence"
+                                    hidden-forward-sender-info="ctrl.isHiddenForwardSenderInfo()"></selected-workflow-items-directive>
                         </div>
                         <!-- Vice Managers -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('vice_manager_users')">
@@ -385,7 +395,9 @@
                                     workflow-actions="ctrl.workflowActions"
                                     workflow-items="ctrl.selectedWorkflowItems"
                                     organization-groups="ctrl.organizationGroupsCopy"
-                                    from-predefined="false"></selected-workflow-items-directive>
+                                    from-predefined="false"
+                                    item="ctrl.correspondence"
+                                    hidden-forward-sender-info="ctrl.isHiddenForwardSenderInfo()"></selected-workflow-items-directive>
                         </div>
                         <!-- Head of government entities -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('heads_of_government_entities')">
@@ -436,7 +448,9 @@
                                     workflow-actions="ctrl.workflowActions"
                                     workflow-items="ctrl.selectedWorkflowItems"
                                     organization-groups="ctrl.organizationGroupsCopy"
-                                    from-predefined="false"></selected-workflow-items-directive>
+                                    from-predefined="false"
+                                    item="ctrl.correspondence"
+                                    hidden-forward-sender-info="ctrl.isHiddenForwardSenderInfo()"></selected-workflow-items-directive>
                         </div>
                         <!-- Workflow Groups -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('workflow_groups')">
@@ -465,7 +479,9 @@
                                     grid="ctrl.grid.workflowGroups"
                                     wf-group-member-add-callback="ctrl.addSelectedUsersToGrid"
                                     organization-groups="ctrl.organizationGroupsCopy"
-                                    from-predefined="false"></workflow-items-directive>
+                                    from-predefined="false"
+                                    item="ctrl.correspondence"
+                                    hidden-forward-sender-info="ctrl.isHiddenForwardSenderInfo()"></workflow-items-directive>
                             <div>
                                 <br/>
                             </div>
@@ -481,7 +497,9 @@
                                     workflow-actions="ctrl.workflowActions"
                                     workflow-items="ctrl.selectedWorkflowItems"
                                     organization-groups="ctrl.organizationGroupsCopy"
-                                    from-predefined="false"></selected-workflow-items-directive>
+                                    from-predefined="false"
+                                    item="ctrl.correspondence"
+                                    hidden-forward-sender-info="ctrl.isHiddenForwardSenderInfo()"></selected-workflow-items-directive>
                         </div>
                         <!-- Organization Units -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('registry_organizations')">
@@ -510,7 +528,9 @@
                                     grid-name="Ous"
                                     grid="ctrl.grid.ous"
                                     organization-groups="ctrl.organizationGroupsCopy"
-                                    from-predefined="false"></workflow-items-directive>
+                                    from-predefined="false"
+                                    item="ctrl.correspondence"
+                                    hidden-forward-sender-info="ctrl.isHiddenForwardSenderInfo()"></workflow-items-directive>
                             <div>
                                 <br/>
                             </div>
@@ -526,7 +546,9 @@
                                     workflow-actions="ctrl.workflowActions"
                                     workflow-items="ctrl.selectedWorkflowItems"
                                     organization-groups="ctrl.organizationGroupsCopy"
-                                    from-predefined="false"></selected-workflow-items-directive>
+                                    from-predefined="false"
+                                    item="ctrl.correspondence"
+                                    hidden-forward-sender-info="ctrl.isHiddenForwardSenderInfo()"></selected-workflow-items-directive>
                         </div>
                     </div>
                 </md-content>

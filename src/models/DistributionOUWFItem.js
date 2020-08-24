@@ -115,6 +115,7 @@ module.exports = function (app) {
                 delete this.commentSearchText;
                 delete this.tempRegOUSection;
                 delete this.showCommentDropdown;
+                delete this.forwardSenderActionAndComment;
 
                 if (emptyEscalation) {
                     this.escalationUserId = null;

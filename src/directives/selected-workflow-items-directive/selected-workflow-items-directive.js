@@ -16,7 +16,9 @@ module.exports = function (app) {
                 deleteCallback: '=',
                 deleteBulkCallback: '=',
                 organizationGroups : '=',
-                fromPredefined: '='
+                fromPredefined: '=',
+                item: '=',
+                hiddenForwardSenderInfo: '='
             }
         }
     })

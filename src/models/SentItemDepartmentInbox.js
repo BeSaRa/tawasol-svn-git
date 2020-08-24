@@ -225,6 +225,10 @@ module.exports = function (app) {
                 return viewDocumentService.viewG2GPendingItemDocument(model, actions, queueName, $event);
             };
 
+            SentItemDepartmentInbox.prototype.isWorkItem = function () {
+                return false;
+            };
+
             /**
              * @description Checks if the security level is private/personal for given document
              * @returns {boolean}

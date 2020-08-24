@@ -106,7 +106,8 @@ module.exports = function (app) {
                 .setSendEmail(result.sendEmail)
                 .setEscalationStatus(result.escalationStatus)
                 .setEscalationUser(result.escalationUserId)
-                .setEscalationUserOUId(result.escalationUserId);
+                .setEscalationUserOUId(result.escalationUserId)
+                .setForwardSenderActionAndComment(result.forwardSenderActionAndComment);
 
             if (self.fromPredefined) {
                 if (!self.isSLADueDateDisabled(distWorkflowItem)) {
@@ -167,7 +168,10 @@ module.exports = function (app) {
                     distWorkflowItem: distWorkflowItem,
                     gridName: self.gridName,
                     organizationGroups: self.organizationGroups,
-                    fromPredefined: self.fromPredefined
+                    fromPredefined: self.fromPredefined,
+                    item: self.item,
+                    isWorkItem: self.item.isWorkItem(),
+                    hiddenForwardSenderInfo: self.hiddenForwardSenderInfo
                 }
             })
         };

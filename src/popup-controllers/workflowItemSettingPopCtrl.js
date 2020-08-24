@@ -196,5 +196,12 @@ module.exports = function (app) {
             return self.distWorkflowItem.escalationStatus && self.distWorkflowItem.escalationStatus.hasOwnProperty('lookupKey') && self.distWorkflowItem.escalationStatus.lookupKey !== -1
         };
 
+        self.setSenderActionAndComment = function ($event) {
+            if (self.isWorkItem && self.item) {
+                self.distWorkflowItem
+                    .setComments(self.distWorkflowItem.forwardSenderActionAndComment ? self.item.generalStepElm.comments : null)
+                    .setAction(self.distWorkflowItem.forwardSenderActionAndComment ? self.item.action : null);
+            }
+        }
     });
 };

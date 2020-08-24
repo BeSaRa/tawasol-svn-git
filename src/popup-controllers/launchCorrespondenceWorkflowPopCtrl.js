@@ -121,6 +121,8 @@ module.exports = function (app) {
         self.comments = comments;
         // all current user workflow actions
         self.workflowActions = workflowActions;
+        // if reply action
+        self.replyOn = replyOn;
 
         self.favoritesTypes = {
             users: {
@@ -718,7 +720,8 @@ module.exports = function (app) {
                 .setSecureAction(result.isSecureAction)
                 .setEscalationStatus(result.escalationStatus)
                 .setEscalationUser(result.escalationUserId)
-                .setEscalationUserOUId(result.escalationUserId);
+                .setEscalationUserOUId(result.escalationUserId)
+                .setForwardSenderActionAndComment(result.forwardSenderActionAndComment);
         }
 
         /**
@@ -1193,7 +1196,10 @@ module.exports = function (app) {
                     distWorkflowItem: distWorkflowItem,
                     gridName: currentGridName || false,
                     organizationGroups: self.organizationGroupsCopy,
-                    fromPredefined: false
+                    fromPredefined: false,
+                    item: self.correspondence,
+                    isWorkItem: self.correspondence.isWorkItem(),
+                    hiddenForwardSenderInfo: self.isHiddenForwardSenderInfo()
                 }
             })
         };
@@ -1547,6 +1553,15 @@ module.exports = function (app) {
                     });
             }
         })
+
+
+        /**
+         * @description hide forward with sender ifo (action and comment) when reply action and returned mail queue
+         */
+        self.isHiddenForwardSenderInfo = function () {
+            return self.replyOn ||
+                (self.correspondence.hasOwnProperty('hideForwardSenderInfo') && self.correspondence.hideForwardSenderInfo)
+        };
 
     });
 };

@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('selectedWorkflowItemsDirectiveCtrl', function ($scope,
                                                                    _,
                                                                    $q,
+                                                                   $timeout,
                                                                    rootEntity,
                                                                    dialog,
                                                                    cmsTemplate,
@@ -25,6 +26,11 @@ module.exports = function (app) {
 
         self.defaultWorkflowItemsSettings = new DistributionWFItem();
         self.sendRelatedDocsBulk = false;
+        self.forwardSenderActionAndCommentBulk = false;
+
+        $timeout(function () {
+            self.isWorkItem = self.item.isWorkItem();
+        });
 
         self.grid = {
             limit: 5, // default limit
@@ -70,7 +76,8 @@ module.exports = function (app) {
                 .setSecureAction(result.isSecureAction)
                 .setEscalationStatus(result.escalationStatus)
                 .setEscalationUser(result.escalationUserId)
-                .setEscalationUserOUId(result.escalationUserId);
+                .setEscalationUserOUId(result.escalationUserId)
+                .setForwardSenderActionAndComment(result.forwardSenderActionAndComment);
 
             if (self.fromPredefined) {
                 if (!self.isSLADueDateDisabled(distWorkflowItem)) {
@@ -196,7 +203,10 @@ module.exports = function (app) {
                     distWorkflowItem: distWorkflowItem,
                     gridName: self.gridName,
                     organizationGroups: self.organizationGroups,
-                    fromPredefined: self.fromPredefined
+                    fromPredefined: self.fromPredefined,
+                    item: self.item,
+                    isWorkItem: self.isWorkItem,
+                    hiddenForwardSenderInfo: self.hiddenForwardSenderInfo
                 }
             })
         };
@@ -217,6 +227,61 @@ module.exports = function (app) {
             });
         };
 
+        self.setBulkSenderActionAndComment = function ($event) {
+            if (self.isWorkItem && !self.hiddenForwardSenderInfo) {
+                _.map(self.workflowItems, function (workflowItem, index) {
+                    workflowItem
+                        .setComments(workflowItem.forwardSenderActionAndComment ? self.item.generalStepElm.comments : null)
+                        .setAction(workflowItem.forwardSenderActionAndComment ? self.item.action : null)
+                });
+            }
+        };
+
+        self.setSenderActionAndComment = function (workflowItem) {
+            if (self.isWorkItem && !self.hiddenForwardSenderInfo) {
+                workflowItem.setComments(workflowItem.forwardSenderActionAndComment ? self.item.generalStepElm.comments : null)
+                    .setAction(workflowItem.forwardSenderActionAndComment ? self.item.action : null);
+            }
+        };
+
+        var _getWorkflowItemsWithForwardSenderActionAndComment = function () {
+            return _.filter(self.workflowItems, function (workflowItem) {
+                return !!workflowItem.forwardSenderActionAndComment;
+            });
+        };
+
+        var _toggleAllForwardSenderActionAndComment = function (value) {
+            self.workflowItems = _.map(self.workflowItems, function (workflowItem) {
+                workflowItem.forwardSenderActionAndComment = value;
+                return workflowItem;
+            });
+        };
+
+        /**
+         * @description Toggle the forwardSenderActionAndComment checkbox for all added items
+         * @param $event
+         */
+        self.toggleBulkForwardSenderActionAndComment = function ($event) {
+            if (self.forwardSenderActionAndCommentBulk) {
+                if (_getWorkflowItemsWithForwardSenderActionAndComment().length === self.workflowItems.length) {
+                    _toggleAllForwardSenderActionAndComment(false);
+                } else {
+                    _toggleAllForwardSenderActionAndComment(true);
+                }
+            } else {
+                _toggleAllForwardSenderActionAndComment(true);
+            }
+
+            self.setBulkSenderActionAndComment($event);
+        };
+
+        self.isCheckedForwardSenderActionAndComment = function () {
+            return !!(self.workflowItems.length && _getWorkflowItemsWithForwardSenderActionAndComment().length === self.workflowItems.length);
+        };
+
+        self.isIndeterminateForwardSenderActionAndComments = function () {
+            return !!(_getWorkflowItemsWithForwardSenderActionAndComment().length && _getWorkflowItemsWithForwardSenderActionAndComment().length < self.workflowItems.length);
+        };
 
         self.setWorkflowItemSettings = function (workflowItem, $event, currentGridName) {
             return self

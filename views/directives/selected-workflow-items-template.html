@@ -5,7 +5,8 @@
                    md-row-select="true">
                 <thead md-head md-order="ctrl.grid.order" md-on-reoder="ctrl.getSortedData">
                 <tr md-row>
-                    <th colspan="5" ng-if="ctrl.selectedWorkflowItems.length" md-column>
+                    <th colspan="{{(ctrl.isWorkItem && !ctrl.hiddenForwardSenderInfo) ? 6 : 5}}"
+                        ng-if="ctrl.selectedWorkflowItems.length" md-column>
                         <span>{{ctrl.selectedWorkflowItems.length}} {{lang.items_selected}} </span>
                     </th>
                     <th md-column ng-if="!ctrl.selectedWorkflowItems.length"
@@ -14,6 +15,15 @@
                     </th>
                     <th md-column ng-if="!ctrl.selectedWorkflowItems.length">
                         {{lang.type}}
+                    </th>
+                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length && ctrl.isWorkItem && !ctrl.hiddenForwardSenderInfo">
+                        <md-checkbox ng-model="ctrl.forwardSenderActionAndCommentBulk"
+                                     tooltip="{{lang.forward_with_sender_info}}"
+                                     ng-click="ctrl.toggleBulkForwardSenderActionAndComment($event)"
+                                     ng-checked="ctrl.isCheckedForwardSenderActionAndComment()"
+                                     md-indeterminate="ctrl.isIndeterminateForwardSenderActionAndComments()"
+                                     aria-label="{{lang.forward_with_sender_info}}">
+                        </md-checkbox>
                     </th>
                     <th md-column ng-if="!ctrl.selectedWorkflowItems.length">
                         {{lang.action}}
@@ -99,6 +109,13 @@
                     <td md-cell>
                         <md-icon tooltip="{{lang.get(workflowItem.getWorkflowItemIconTooltip())}}"
                                  md-svg-icon="{{workflowItem.getWorkflowItemIcon()}}"></md-icon>
+                    </td>
+                    <td md-cell ng-if="ctrl.isWorkItem && !ctrl.hiddenForwardSenderInfo">
+                        <md-checkbox ng-change="ctrl.setSenderActionAndComment(workflowItem)"
+                                     ng-model="workflowItem.forwardSenderActionAndComment"
+                                     tooltip="{{lang.forward_with_sender_info}}"
+                                     aria-label="{{lang.forward_with_sender_info}}">
+                        </md-checkbox>
                     </td>
                     <td md-cell>
                         <md-select ng-model="workflowItem.action"

@@ -271,6 +271,7 @@ module.exports = function (app) {
             //returnedDepartmentInbox.generalStepElm.workFlowName = Export,
             // but it need in DW popup to create URL, records will always come from Outgoing export
             workItem.generalStepElm.workFlowName = "Outgoing";
+            workItem.hideForwardSenderInfo = true;
             dialog.confirmMessage(langService.get("confirm_launch_workflow")).then(function () {
                 workItem.launchWorkFlow($event, 'forward', 'favorites')
                     .then(function () {

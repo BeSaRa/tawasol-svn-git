@@ -25,6 +25,7 @@ module.exports = function (app) {
             self.commentSearchText = '';
             self.tempRegOUSection = null;
             self.showCommentDropdown = false;
+            self.forwardSenderActionAndComment = false;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -118,6 +119,10 @@ module.exports = function (app) {
             };
             DistributionWFItem.prototype.setTempRegOUSection = function (tempRegOUSection) {
                 this.tempRegOUSection = tempRegOUSection;
+                return this;
+            };
+            DistributionWFItem.prototype.setForwardSenderActionAndComment = function (forwardSenderActionAndComment) {
+                this.forwardSenderActionAndComment = forwardSenderActionAndComment || false;
                 return this;
             };
             DistributionWFItem.prototype.clearWFCommentSearchText = function () {

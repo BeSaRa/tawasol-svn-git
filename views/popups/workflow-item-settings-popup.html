@@ -75,7 +75,7 @@
                         </md-checkbox>
                     </div>
                 </div>
-                <div>
+                <div layout="row">
                     <div flex>
                         <!-- Secure Action -->
                         <md-checkbox
@@ -84,6 +84,15 @@
                             {{lang.secure_comment}}
                         </md-checkbox>
                         <div class="help-text-div mb10">{{lang.secure_comment_note}}</div>
+                    </div>
+                    <div flex ng-if="ctrl.isWorkItem && !ctrl.hiddenForwardSenderInfo">
+                        <!-- forward with sender action and comments -->
+                        <md-checkbox
+                                ng-model="ctrl.distWorkflowItem.forwardSenderActionAndComment"
+                                ng-change="ctrl.setSenderActionAndComment($event)"
+                                aria-label="{{lang.forward_with_sender_info}}">
+                            {{lang.forward_with_sender_info}}
+                        </md-checkbox>
                     </div>
                 </div>
                 <div layout="row" ng-if="ctrl.currentUserOrg.enableEscalation && !ctrl.isEscalationHidden()">
