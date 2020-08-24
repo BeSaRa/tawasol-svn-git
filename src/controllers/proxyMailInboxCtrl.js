@@ -37,6 +37,7 @@ module.exports = function (app) {
         self.proxyUsers = angular.copy(proxyUsers);
         contextHelpService.setHelpTo('proxy-mail-inbox');
 
+        self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
         /**
          * @description All proxy Mail inboxes
          * @type {*}
@@ -753,10 +754,22 @@ module.exports = function (app) {
          * @param $event
          */
         self.viewDocument = function (workItem, $event) {
+            var info = workItem.getInfo();
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
+
+            if (info.hasActiveSeqWF && info.docStatus < 24 && self.psPDFViewerEnabled) {
+                return workItem.openSequentialDocument()
+                    .then(function () {
+                        self.reloadProxyMailInboxes(self.grid.page);
+                    })
+                    .catch(function () {
+                        self.reloadProxyMailInboxes(self.grid.page);
+                    });
+            }
+
             workItem
                 .viewNewProxyDocument(self.gridActions, 'proxyMail', $event)
                 .then(function () {

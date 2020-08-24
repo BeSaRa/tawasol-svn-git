@@ -32,6 +32,7 @@ module.exports = function (app) {
         var self = this;
 
         self.controllerName = 'followupEmployeeInboxCtrl';
+        self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
 
         self.progress = null;
         contextHelpService.setHelpTo('followup-employee-inbox');
@@ -587,10 +588,22 @@ module.exports = function (app) {
          * @param $event
          */
         self.viewDocument = function (workItem, $event) {
+            var info = workItem.getInfo();
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
+
+            if (info.hasActiveSeqWF && info.docStatus < 24 && self.psPDFViewerEnabled) {
+                return workItem.openSequentialDocument()
+                    .then(function () {
+                        self.reloadFollowupEmployeeInboxes(self.grid.page);
+                    })
+                    .catch(function () {
+                        self.reloadFollowupEmployeeInboxes(self.grid.page);
+                    });
+            }
+
             workItem
                 .viewNewProxyDocument(self.gridActions, 'proxyMail', $event)
                 .then(function () {

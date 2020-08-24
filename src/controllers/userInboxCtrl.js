@@ -72,6 +72,7 @@ module.exports = function (app) {
 
         self.selectedTab = 0;
         self.selectedGridType = 'inbox';
+        self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
 
         self.changeCriteria = function () {
             var local = angular.copy(self.searchModel);
@@ -1283,7 +1284,7 @@ module.exports = function (app) {
                 return;
             }
 
-            if (info.hasActiveSeqWF && info.docStatus < 24) {
+            if (info.hasActiveSeqWF && info.docStatus < 24 && self.psPDFViewerEnabled) {
                 return workItem.openSequentialDocument()
                     .then(function () {
                         self.reloadUserInboxes(self.grid.page);

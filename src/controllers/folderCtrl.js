@@ -23,6 +23,7 @@ module.exports = function (app) {
                                            generator,
                                            _,
                                            gridService,
+                                           rootEntity,
                                            $scope) {
         'ngInject';
         var self = this;
@@ -34,6 +35,7 @@ module.exports = function (app) {
         self.workItemsCopy = angular.copy(self.workItems);
         self.selectedWorkItems = [];
         self.folders = folders;
+        self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
 
         self.sidebarStatus = false;
         // to display the user Inbox folder
@@ -753,10 +755,22 @@ module.exports = function (app) {
          * @param $event
          */
         self.viewDocument = function (workItem, $event) {
+            var info = workItem.getInfo();
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
+
+            if (info.hasActiveSeqWF && info.docStatus < 24 && self.psPDFViewerEnabled) {
+                return workItem.openSequentialDocument()
+                    .then(function () {
+                        self.reloadFolders(self.grid.page);
+                    })
+                    .catch(function () {
+                        self.reloadFolders(self.grid.page);
+                    });
+            }
+
             workItem.viewNewWorkItemDocument(self.gridActions, 'folder', $event)
                 .then(function () {
                     return self.reloadFolders(self.grid.page);

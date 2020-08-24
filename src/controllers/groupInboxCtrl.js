@@ -40,6 +40,7 @@ module.exports = function (app) {
 
         self.workItems = workItems;
         self.workItemsCopy = angular.copy(self.workItems);
+        self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
 
         contextHelpService.setHelpTo('group-inbox');
 
@@ -445,6 +446,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.viewDocument = function (workItem, $event) {
+            var info = workItem.getInfo();
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
@@ -453,6 +455,17 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
+
+            if (info.hasActiveSeqWF && info.docStatus < 24 && self.psPDFViewerEnabled) {
+                return workItem.openSequentialDocument()
+                    .then(function () {
+                        self.reloadGroupInbox(self.grid.page);
+                    })
+                    .catch(function () {
+                        self.reloadGroupInbox(self.grid.page);
+                    });
+            }
+
             workItem.viewNewGroupMailDocument(self.gridActions, 'groupMail', $event)
                 .then(function () {
                     correspondenceService.unlockWorkItem(workItem, true, $event).then(function () {
