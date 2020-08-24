@@ -103,26 +103,25 @@ module.exports = function (app) {
                 .data('item', stepAction)
                 .data('rowIndex', idx)
                 .attr('ng-dblclick', 'ctrl.editStep(item, $event)');
-                //.attr('tooltip', '{{item.getTranslatedName()}}');
 
             // if isLaunchSeqWF, first step is current, all other steps are future
             // no self.correspondence means we are using from admin screen
             // otherwise from next actions screen
             if (self.isLaunchSeqWF) {
                 element.attr('ng-class', "{" +
-                    "'step-current': " + (idx === 0) + ", " +
-                    "'step-future': " + (idx > 0) +
+                    "'" + self.stepLegendClassList.currentStep.class + "' : " + (idx === 0) + ", " +
+                    "'" + self.stepLegendClassList.futureStep.class + "' : " + (idx > 0) +
                     "}");
             } else if (!self.correspondence) {
                 element.attr('ng-class', "{" +
-                    "'step-valid':item.isValidStep(ctrl.seqWF), " +
-                    "'step-invalid':!item.isValidStep(ctrl.seqWF)" +
+                    "'" + self.stepLegendClassList.validStep.class + "' : item.isValidStep(ctrl.seqWF), " +
+                    "'" + self.stepLegendClassList.inValidStep.class + "' : !item.isValidStep(ctrl.seqWF)" +
                     "}");
             } else {
                 element.attr('ng-class', "{" +
-                    "'step-past':item.isPastSeqWFStep(ctrl.correspondence), " +
-                    "'step-current':item.isCurrentSeqWFStep(ctrl.correspondence), " +
-                    "'step-future':item.isFutureSeqWFStep(ctrl.correspondence)" +
+                    "'" + self.stepLegendClassList.pastStep.class + "' : item.isPastSeqWFStep(ctrl.correspondence), " +
+                    "'" + self.stepLegendClassList.currentStep.class + "' : item.isCurrentSeqWFStep(ctrl.correspondence), " +
+                    "'" + self.stepLegendClassList.futureStep.class + "' : item.isFutureSeqWFStep(ctrl.correspondence)" +
                     "}");
             }
 
