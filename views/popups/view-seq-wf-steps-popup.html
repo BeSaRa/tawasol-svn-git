@@ -1,0 +1,24 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{ctrl.sequentialWF.getNames()}}">
+    <popup-toolbar-directive full-screen-button="true" full-screen="ctrl.fullScreen"
+                             header-text="{{ctrl.sequentialWF.getNames()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <div>
+                <fieldset id="steps-wrapper">
+                    <legend class="md-accent">{{lang.steps}}</legend>
+                    <sequential-workflow-steps-directive
+                            seq-w-f="ctrl.sequentialWF"
+                            view-only="true"
+                            is-launch-seq-w-f="false"
+                            correspondence="ctrl.correspondence"></sequential-workflow-steps-directive>
+                </fieldset>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup($event)">{{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

@@ -945,6 +945,31 @@ module.exports = function (app) {
             }); // get document annotations
         };
         /**
+         * @description display sequentialWF Steps
+         * @return {promise}
+         */
+        self.displaySeqWFSteps = function () {
+            // self.correspondence , self.sequentialWF
+
+            console.log(self.correspondence, self.sequentialWF);
+            return dialog.showDialog({
+                templateUrl: cmsTemplate.getPopup('view-seq-wf-steps'),
+                locals: {
+                    correspondence: self.correspondence,
+                    sequentialWF: self.sequentialWF
+                },
+                controllerAs: 'ctrl',
+                bindToController: true,
+                controller: function (dialog) {
+                    'ngInject';
+                    var ctrl = this;
+                    ctrl.closePopup = function () {
+                        dialog.cancel();
+                    }
+                }
+            })
+        };
+        /**
          * @description get PDF Content for current document with changes
          * @param flatten
          * @return {Promise<Blob>}
