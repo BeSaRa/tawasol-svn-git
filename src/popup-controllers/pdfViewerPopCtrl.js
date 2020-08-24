@@ -27,7 +27,9 @@ module.exports = function (app) {
                                                  flatten,
                                                  correspondenceService,
                                                  annotationLogService,
-                                                 viewTrackingSheetService,
+                                                 sequentialWF,
+                                                 sequentialWorkflowService,
+                                                 WorkItem,
                                                  cmsTemplate) {
         'ngInject';
         var self = this;
@@ -56,6 +58,39 @@ module.exports = function (app) {
         self.skippedPdfObjectIds = [];
         // document information
         self.info = self.correspondence.getInfo();
+
+        self.sequentialWF = sequentialWF;
+
+        self.nextSeqStep = null;
+
+        self.isLaunchStep = false;
+
+        /**
+         * @description getNext step of seqWF
+         * @private
+         */
+        function _getNextStepFromSeqWF() {
+            if (self.sequentialWF) {
+                if (self.correspondence instanceof WorkItem) {
+                    self.nextSeqStep = _getStepById(self.correspondence.getSeqWFNextStepId());
+                    if (!self.nextSeqStep) {
+                        self.nextSeqStep = self.sequentialWF.stepRows[0];
+                        console.log('It Is launch SEQ , WorkItem ');
+                        self.isLaunchStep = true
+                    }
+                } else {
+                    self.nextSeqStep = self.sequentialWF.stepRows[0];
+                    console.log('It Is launch SEQ , Correspondence ');
+                    self.isLaunchStep = true
+                }
+            }
+        }
+
+        function _getStepById(stepId) {
+            return _.find(self.sequentialWF.stepRows, function (step) {
+                return step.id === stepId;
+            });
+        }
 
         /**
          * @description create custom buttons and attache it to  viewer toolbar.
@@ -148,7 +183,9 @@ module.exports = function (app) {
                 toolbarInstance = toolbarInstance.concat(barcodeButton);
             }
             // displaying open for approval Button
-            if (!self.info.isAttachment && self.info.docStatus <= 23 && self.annotationType !== AnnotationType.SIGNATURE) {
+            if (!self.info.isAttachment &&
+                (self.info.docStatus <= 23 && !self.sequentialWF || self.info.docStatus <= 23 && self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep()) &&
+                self.annotationType !== AnnotationType.SIGNATURE) {
                 toolbarInstance.push(openForApprovalButton);
             }
             return toolbarInstance;
@@ -810,7 +847,6 @@ module.exports = function (app) {
          */
         self.handleSaveAttachment = function (pdfContent) {
             self.correspondence.file = pdfContent;
-            console.log('attachedBook)', attachedBook);
             attachmentService.updateAttachment(attachedBook, self.correspondence)
                 .then(function () {
                     toast.success(langService.get('save_success'));
@@ -822,17 +858,15 @@ module.exports = function (app) {
          * @param ignoreValidationSignature
          */
         self.handleOpenForApprovalSave = function (ignoreValidationSignature) {
-            var info = self.correspondence.getInfo();
             self.isDocumentHasCurrentUserSignature().then(function () {
-                self.currentInstance.exportPDF({flatten: info.signaturesCount === 1}).then(function (buffer) {
-                    var pdfContent = new Blob([buffer], {type: 'application/pdf'});
+                self.getPDFContentForCurrentDocument().then(function (pdfContent) {
                     self.correspondence
                         .handlePinCodeAndCompositeThenCompleteAuthorization(pdfContent, ignoreValidationSignature)
                         .then(self.handleSuccessAuthorize)
                         .catch(self.handleExceptions);
                 });
             }).catch(function () {
-                toast.error('PLEASE Provide your signature');
+                toast.error(langService.get('provide_signature_to_proceed'));
             });
         };
         /**
@@ -909,6 +943,103 @@ module.exports = function (app) {
             }); // get document annotations
         };
         /**
+         * @description get PDF Content for current document with changes
+         * @param flatten
+         * @return {Promise<Blob>}
+         */
+        self.getPDFContentForCurrentDocument = function (flatten) {
+            return self.currentInstance.exportPDF({flatten: typeof flatten === 'undefined' ? self.info.signaturesCount === 1 : flatten}).then(function (buffer) {
+                return new Blob([buffer], {type: 'application/pdf'});
+            });
+        };
+        /**
+         * @description handle Seq WorkFlow
+         * @param error
+         */
+        self.handleSeqExceptions = function (error) {
+            errorCode.checkIf(error, 'SEQ_WF_INVALID_SIGNATURE_COUNT', function () {
+                toast.error(error.data.eo[langService.current + 'Name']);
+            });
+        };
+        /**
+         * @description apply next step for Seq workflow
+         * @param content
+         * @param signatureModel
+         * @param ignoreValidateMultiSignature
+         * @return {*}
+         */
+        self.applyNextStep = function (content, signatureModel, ignoreValidateMultiSignature) {
+            signatureModel.setValidateMultiSignature(!ignoreValidateMultiSignature);
+            signatureModel.setSeqWFId(self.sequentialWF.id);
+            return sequentialWorkflowService
+                .launchSeqWFCorrespondence(self.correspondence, signatureModel, content, self.isLaunchStep)
+                .then(function (result) {
+                    if (result === correspondenceService.authorizeStatus.SAME_USER_AUTHORIZED.text) {
+                        return dialog
+                            .confirmMessage(langService.get('confirm_authorize_same_user').change({user: employeeService.getEmployee().getTranslatedName()}))
+                            .then(function () {
+                                return self.applyNextStep(content, signatureModel, true);
+                            });
+                    }
+                    return result;
+                });
+        };
+        /**
+         * @description apply Next step on Correspondence and send/or not the annotation  log
+         * @param pdfContent
+         * @param signatureModel
+         * @param logAnnotations
+         */
+        self.applyNextStepOnCorrespondence = function (pdfContent, signatureModel, logAnnotations) {
+            signatureModel = signatureModel ? signatureModel : self.correspondence.prepareSignatureModel(null, null, null);
+            self.applyNextStep(pdfContent, signatureModel)
+                .then(logAnnotations ? function (result) {
+                    toast.success(langService.get('launch_success_distribution_workflow'));
+                    self.sendAnnotationLogs(function () {
+                        dialog.hide();
+                    }, function (error) {
+                        toast.error('ERROR While Sending the log to Server', error);
+                    });
+                } : function () {
+                    toast.success(langService.get('launch_success_distribution_workflow'));
+                    dialog.hide();
+                });
+        };
+        /**
+         * @description start Next Step Validation to launch or advance seq workflow.
+         */
+        self.startNextStepValidation = function () {
+            self.getDocumentAnnotations()
+                .then(function (newAnnotations) {
+                    self.newAnnotations = newAnnotations;
+                    if (self.nextSeqStep.isAuthorizeAndSendStep()) {
+                        self.isDocumentHasCurrentUserSignature()
+                            .then(function () {
+                                self.getPDFContentForCurrentDocument()
+                                    .then(function (pdfContent) {
+                                        self.correspondence.handlePinCodeAndComposite().then(function (signatureModel) {
+                                            self.applyNextStepOnCorrespondence(pdfContent, signatureModel, true);
+                                        }).catch(self.handleExceptions);
+                                    });
+                            })
+                            .catch(function () {
+                                toast.error(langService.get('provide_signature_to_proceed'));
+                            });
+                    } else { // else nextSeqStep.isAuthorizeAndSendStep()
+                        var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations);
+                        if (!hasChanges) {
+                            return self.applyNextStepOnCorrespondence(null);
+                        }
+                        self.currentInstance.exportInstantJSON().then(function (instantJSON) {
+                            delete instantJSON.pdfId;
+                            PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON).then(function (pdfContent) {
+                                sef.applyNextStepOnCorrespondence(pdfContent, null, true);
+                            });
+                        });
+                    } // end nextSeqStep.isAuthorizeAndSendStep()
+                }); //end getDocumentAnnotations
+        };
+        /**
          * @description check if the current user can edit annotation or not
          * @param annotation
          * @return {Boolean}
@@ -961,6 +1092,7 @@ module.exports = function (app) {
          * @description viewer initialization
          */
         self.$onInit = function () {
+            _getNextStepFromSeqWF();
             $timeout(function () {
                 // PSPDFKit.Options.IGNORE_DOCUMENT_PERMISSIONS = true;
                 PSPDFKit.load({

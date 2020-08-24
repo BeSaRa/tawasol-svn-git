@@ -22,6 +22,7 @@ module.exports = function (app) {
                                             Lookup,
                                             ResolveDefer,
                                             SignDocumentModel,
+                                            sequentialWorkflowService,
                                             encryptionService,
                                             cmsTemplate) {
         'ngInject';
@@ -1020,7 +1021,15 @@ module.exports = function (app) {
             Correspondence.prototype.openForAnnotation = function ($event) {
                 return correspondenceService.annotateCorrespondence(this);
             };
-
+            Correspondence.prototype.openSequentialDocument = function (annotationType, seqWF) {
+                var self = this;
+                if (seqWF) {
+                    return correspondenceService.annotateCorrespondence(self, typeof annotationType !== 'undefined' ? annotationType : null, null, seqWF);
+                }
+                return sequentialWorkflowService.loadSequentialWorkflowById(self.getSeqWFId()).then(function (seqWF) {
+                    return correspondenceService.annotateCorrespondence(self, typeof annotationType !== 'undefined' ? annotationType : null, null, seqWF);
+                });
+            };
             Correspondence.prototype.prepareSignatureModel = function (pinCode, isComposite, ignoreValidateMultiSignature) {
                 return (new SignDocumentModel())
                     .setSignature(this, null)
@@ -1095,6 +1104,20 @@ module.exports = function (app) {
                 });
             };
 
+            Correspondence.prototype.handlePinCodeAndComposite = function () {
+                var self = this;
+                return $q(function (resolve, reject) {
+                    self.displayPinCodeMessage()
+                        .then(self.displayCompositeMessage.bind(self))
+                        .then(function (info) {
+                            var signatureModel = self.prepareSignatureModel(info.pinCode, info.composite);
+                            return info.pinCode === 'PINCODE_MISSING' ? reject(info.pinCode) : resolve(signatureModel);
+                        })
+                        .catch(reject);
+                });
+            };
+
+
             Correspondence.prototype.addAnnotationAsAttachment = function (content) {
                 var info = this.getInfo();
                 var attachment = new Attachment({
@@ -1110,6 +1133,7 @@ module.exports = function (app) {
                     return result;
                 })
             };
+
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

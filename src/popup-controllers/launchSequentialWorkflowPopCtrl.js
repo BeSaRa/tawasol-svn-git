@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                                 generator,
                                                                 dialog,
                                                                 $scope,
+                                                                AnnotationType,
                                                                 $timeout,
                                                                 langService,
                                                                 record,
@@ -54,10 +55,24 @@ module.exports = function (app) {
             if (!self.isValidForm()) {
                 return false;
             }
-            sequentialWorkflowService.launchSequentialWorkflow(self.record, self.selectedSeqWF)
-                .then(function (result) {
-                    dialog.hide(true);
-                })
+
+            if (self.selectedSeqWF.steps[0].isAuthorizeAndSendStep()) {
+                self.record.openSequentialDocument(AnnotationType.SIGNATURE, self.selectedSeqWF)
+                    .then(dialog.hide)
+                    .catch(function (error) {
+                        console.log('ERROR  FORM LAUNCH', error);
+                    });
+            } else {
+                // cause no need any of those properties is case it is just send (pinCode , composite , ignoreMultiSignValidation)
+                var signatureModel = self.record.prepareSignatureModel(null, null, null);
+                signatureModel.setSeqWFId(self.selectedSeqWF.id);
+                console.log('signatureModel FORM Launch SEQ', signatureModel);
+                sequentialWorkflowService.launchSeqWFCorrespondence(self.record, signatureModel, null, true)
+                    .then(function (result) {
+                        toast.success(langService.get('launch_success_distribution_workflow'));
+                        dialog.hide(true);
+                    });
+            }
         };
 
 

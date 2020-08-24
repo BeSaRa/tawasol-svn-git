@@ -10,9 +10,10 @@ module.exports = function (app) {
          * @param correspondence
          * @param annotationType
          * @param attachedBook
+         * @param sequentialWF
          * @returns {promise}
          */
-        self.openPDFViewer = function (pdfData, correspondence, annotationType, attachedBook) {
+        self.openPDFViewer = function (pdfData, correspondence, annotationType, attachedBook, sequentialWF) {
             if (!annotationType)
                 annotationType = AnnotationType.ANNOTATION;
 
@@ -26,7 +27,8 @@ module.exports = function (app) {
                     annotationType: annotationType,
                     instantJSON: false,
                     attachedBook: attachedBook,
-                    flatten: false
+                    flatten: false,
+                    sequentialWF: sequentialWF
                 }
             })
         };
@@ -52,7 +54,8 @@ module.exports = function (app) {
                     annotationType: annotationType,
                     instantJSON: instantJSON ? instantJSON : false,
                     attachedBook: false,
-                    flatten: flatten
+                    flatten: flatten,
+                    sequentialWF: false
                 }
             })
         };

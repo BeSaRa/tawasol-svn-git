@@ -199,7 +199,7 @@ module.exports = function (app) {
 
         self.filterGrid = [];
 
-     //   self.userFilters = $filter('orderBy')(userFilters, 'sortOptionId');
+        //   self.userFilters = $filter('orderBy')(userFilters, 'sortOptionId');
 
         self.workItemsFilters = [];
         self.workItemsFiltersCopy = [];
@@ -237,7 +237,7 @@ module.exports = function (app) {
             }
         }
 
-      //  _prepareFilters();
+        //  _prepareFilters();
 
         /**
          * @description create filter
@@ -1277,10 +1277,22 @@ module.exports = function (app) {
 
         // view document
         self.viewDocument = function (workItem, $event) {
+            var info = workItem.getInfo();
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
+
+            if (info.hasActiveSeqWF && info.docStatus < 24) {
+                return workItem.openSequentialDocument()
+                    .then(function () {
+                        self.reloadUserInboxes(self.grid.page);
+                    })
+                    .catch(function () {
+                        self.reloadUserInboxes(self.grid.page);
+                    });
+            }
+
             workItem.viewNewWorkItemDocument(self.gridActions, 'userInbox', $event)
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page);
@@ -1368,9 +1380,18 @@ module.exports = function (app) {
         self.addToEmployeeFollowUp = function (item) {
             item.addToUserFollowUp();
         };
-
+        /**
+         * @description annotate document
+         * @param workItem
+         */
         self.annotateDocument = function (workItem) {
-            workItem.openForAnnotation();
+            workItem.openForAnnotation()
+                .then(function () {
+                    self.reloadUserInboxes(self.grid.page);
+                })
+                .catch(function () {
+                    self.reloadUserInboxes(self.grid.page);
+                });
         };
 
         /**
@@ -2126,7 +2147,7 @@ module.exports = function (app) {
                 icon: 'check-decagram',
                 text: 'grid_action_approve',//signature
                 checkShow: function (action, model) {
-                    if (model.hasActiveSeqWF()){
+                    if (model.hasActiveSeqWF()) {
                         return false;
                     }
                     return gridService.checkToShowMainMenuBySubMenu(action, model);

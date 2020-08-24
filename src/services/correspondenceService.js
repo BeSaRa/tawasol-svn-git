@@ -476,6 +476,17 @@ module.exports = function (app) {
             return correspondence.hasActiveSeqWF();
         }
 
+        function _getSignatureCount(correspondence) {
+            if (correspondence.hasOwnProperty('generalStepElm')) {
+                return correspondence.generalStepElm.signaturesCount;
+            } else if (correspondence.hasOwnProperty('stepElm')) {
+                return correspondence.stepElm.signaturesCount;
+            } else if (correspondence.hasOwnProperty('signaturesCount')) {
+                return correspondence.signaturesCount;
+            }
+            return 0;
+        }
+
         /**
          * @description bulk message for any bulk actions.
          * @param result
@@ -565,7 +576,8 @@ module.exports = function (app) {
                 priorityLevel: _getPriorityLevel(correspondence),
                 securityLevel: _getSecurityLevel(correspondence),
                 isAttachment: false,
-                hasActiveSeqWF: _getHasActiveSeqWF(correspondence)
+                hasActiveSeqWF: _getHasActiveSeqWF(correspondence),
+                signaturesCount: _getSignatureCount(correspondence)
             });
         };
         /**
@@ -4977,7 +4989,7 @@ module.exports = function (app) {
 
         };
 
-        self.annotateCorrespondence = function (correspondence, annotationType, attachedBook) {
+        self.annotateCorrespondence = function (correspondence, annotationType, attachedBook, sequentialWF) {
             var info = correspondence.getInfo();
             return downloadService
                 .downloadContentWithWaterMark(correspondence, annotationType)
@@ -4985,14 +4997,15 @@ module.exports = function (app) {
                     var fr = new FileReader();
                     return $q(function (resolve, reject) {
                         fr.onloadend = function () {
-                            resolve(PDFService.openPDFViewer(fr.result, correspondence, annotationType, attachedBook));
+                            resolve(PDFService.openPDFViewer(fr.result, correspondence, annotationType, attachedBook, sequentialWF));
                         };
                         fr.readAsArrayBuffer(blob);
                     });
                 }).then(function (result) {
                     if (result === AnnotationType.SIGNATURE) {
-                        return self.annotateCorrespondence(correspondence, AnnotationType.SIGNATURE);
+                        return self.annotateCorrespondence(correspondence, AnnotationType.SIGNATURE, attachedBook, sequentialWF);
                     }
+                    return result;
                 });
 
         };

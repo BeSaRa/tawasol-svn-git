@@ -164,6 +164,15 @@ module.exports = function (app) {
                 return annotation;
             });
         };
+
+        self.getAnnotationsChanges = function (oldAnnotations, newAnnotations) {
+            self.oldAnnotations = _createObjectFromCollection(oldAnnotations, 'id');
+            self.newAnnotations = _createObjectFromCollection(newAnnotations, 'id');
+            var createdAnnotations = self.getCreatedAnnotations(oldAnnotations, newAnnotations);
+            var deletedAnnotations = self.getDeletedAnnotations(oldAnnotations, newAnnotations);
+            var updatedAnnotations = self.getUpdatedAnnotations(oldAnnotations, newAnnotations);
+            return _generateAnnotationsList([].concat(createdAnnotations, deletedAnnotations, updatedAnnotations));
+        };
         /**
          * @description get all operation that happens to the Annotations for teh document
          * @param oldAnnotations
@@ -172,13 +181,7 @@ module.exports = function (app) {
          * @return {Promise<boolean>}
          */
         self.applyAnnotationChanges = function (oldAnnotations, newAnnotations, correspondence) {
-            self.oldAnnotations = _createObjectFromCollection(oldAnnotations, 'id');
-            self.newAnnotations = _createObjectFromCollection(newAnnotations, 'id');
-
-            var createdAnnotations = self.getCreatedAnnotations(oldAnnotations, newAnnotations);
-            var deletedAnnotations = self.getDeletedAnnotations(oldAnnotations, newAnnotations);
-            var updatedAnnotations = self.getUpdatedAnnotations(oldAnnotations, newAnnotations);
-            var annotationLogs = _generateAnnotationsList([].concat(createdAnnotations, deletedAnnotations, updatedAnnotations));
+            var annotationLogs = self.getAnnotationsChanges(oldAnnotations, newAnnotations);
             return self.sendDifferenceAnnotations(annotationLogs, correspondence);
         };
         /**
@@ -189,7 +192,7 @@ module.exports = function (app) {
          */
         self.sendDifferenceAnnotations = function (annotationLogs, correspondence) {
             return $q(function (resolve, reject) {
-                return annotationLogs.length ? _sendAnnotationLogToServer(annotationLogs, correspondence) : resolve([]);
+                return annotationLogs.length ? resolve(_sendAnnotationLogToServer(annotationLogs, correspondence)) : resolve([]);
             });
         }
 

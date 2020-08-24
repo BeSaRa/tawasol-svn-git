@@ -389,9 +389,10 @@ module.exports = function (app) {
          * @description Launches the sequential workflow for given record
          * @param record
          * @param seqWFId
+         * @param content
          * @param ignoreValidateMultiSign
          */
-        self.launchSequentialWorkflow = function (record, seqWFId, ignoreValidateMultiSign) {
+        self.launchSequentialWorkflow = function (record, seqWFId, ignoreValidateMultiSign, content) {
             var info = record.getInfo();
             var data = {
                 vsid: info.vsId,
@@ -401,23 +402,26 @@ module.exports = function (app) {
             };
             var form = new FormData();
             form.append('entity', JSON.stringify(data));
+            if (content)
+                form.append('content', content);
             //TODO: send (authorizedFile after annotation) as content in formData if authorize step
             return $http
                 .post((urlService.correspondenceWF + '/' + info.documentClass + '/seq-wf/launch'), form, {
                     headers: {
                         'Content-Type': undefined
                     }
-                }).then(function () {
-                    return record;
+                }).then(function (result) {
+                    return result.data.rs;
                 });
         };
 
         /**
          * @description Advance the sequential workflow to next step for given record
          * @param record
+         * @param content
          * @param ignoreValidateMultiSign
          */
-        self.launchNextStepSequentialWorkflow = function (record, ignoreValidateMultiSign) {
+        self.launchNextStepSequentialWorkflow = function (record, ignoreValidateMultiSign, content) {
             var info = record.getInfo();
             var data = {
                 vsid: info.vsId,
@@ -427,17 +431,44 @@ module.exports = function (app) {
             };
             var form = new FormData();
             form.append('entity', JSON.stringify(data));
+
+            if (content)
+                form.append('content', content);
             //TODO: send (authorizedFile after annotation) as content in formData if authorize step
             return $http
                 .post((urlService.correspondenceWF + '/' + info.documentClass + '/seq-wf/advance'), form, {
                     headers: {
                         'Content-Type': undefined
                     }
-                }).then(function () {
-                    return record;
+                }).then(function (result) {
+                    return result.data.rs;
                 });
         };
 
+        /**
+         * @description launch seqWF of run next step
+         * @param correspondence
+         * @param signatureModel
+         * @param content
+         * @param launch
+         * @return {*}
+         */
+        self.launchSeqWFCorrespondence = function (correspondence, signatureModel, content, launch) {
+            var info = correspondence.getInfo();
+            var form = new FormData();
+            form.append('entity', JSON.stringify(signatureModel));
+            if (content) {
+                form.append('content', content);
+            }
+            return $http
+                .post((urlService.correspondenceWF + '/' + info.documentClass + '/seq-wf/' + (launch ? 'launch' : 'advance')), form, {
+                    headers: {
+                        'Content-Type': undefined
+                    }
+                }).then(function (result) {
+                    return result.data.rs;
+                });
+        };
         /**
          * @description create the shared method to the model.
          * @type {{delete: generator.delete, update: generator.update}}
