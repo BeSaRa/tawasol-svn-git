@@ -3,6 +3,8 @@ const webpack = require('webpack');
 // const NGAnnotate = require('ng-annotate-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const RemoveFilesPlugin = require('remove-files-webpack-plugin');
+
 module.exports = function (env) {
     const cssResolver = isProduction(env) ? {
         loader: MiniCssExtractPlugin.loader, options: {
@@ -115,6 +117,11 @@ module.exports = function (env) {
             new CopyPlugin({
                 patterns: copyDevFiles
             })] : [
+            new RemoveFilesPlugin({
+                before: {
+                    include: ['./build']
+                }
+            }),
             new MiniCssExtractPlugin({
                 filename: 'dist/css/style.css'
             }),
