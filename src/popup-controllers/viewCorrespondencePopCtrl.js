@@ -270,6 +270,15 @@ module.exports = function (app) {
             return self.employeeService.hasPermissionTo(permissionName) && self.pageName !== 'g2gReturned';
         };
 
+        self.isEditContentDisabled = function () {
+            if (self.editMode) {
+                return true;
+            } else if (!self.correspondence.isCorrespondenceApprovedBefore()) {
+                return false;
+            }
+            return !rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
+        };
+
         $timeout(function () {
             self.detailsReady = true;
             self.model = angular.copy(self.correspondence);

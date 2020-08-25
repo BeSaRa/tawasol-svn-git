@@ -1231,10 +1231,10 @@ module.exports = function (app) {
             }
             correspondenceService.viewCorrespondence(correspondence, self.gridActions, checkIfEditPropertiesAllowed(correspondence, true), checkIfEditCorrespondenceSiteAllowed(correspondence, true))
                 .then(function () {
-                       return self.reloadSearchCorrespondence(self.grid.page);
+                    return self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function () {
-                       return self.reloadSearchCorrespondence(self.grid.page);
+                    return self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -2091,19 +2091,20 @@ module.exports = function (app) {
                         callback: self.editContent,
                         class: "action-green",
                         checkShow: function (action, model) {
-                            var info = model.getInfo();
-                            /*If partially approved, don't show edit content*/
-                            if (info.docStatus === 23)
+                            var info = model.getInfo(), isAllowed = true;
+                            if (model.isCorrespondenceApprovedBefore()) {
+                                isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
+                            }
+                            if (!isAllowed || info.docStatus >= 24) {
                                 return false;
+                            }
                             var hasPermission = false;
                             if (info.documentClass === "incoming")
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
                             else if (info.documentClass === "outgoing") {
                                 hasPermission = (info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
                             }
-
-                            return hasPermission && info.docStatus < 23;
-                            /*If partially or fully approved, don't show edit content*/
+                            return hasPermission;
                         }
                     },
                     // Properties

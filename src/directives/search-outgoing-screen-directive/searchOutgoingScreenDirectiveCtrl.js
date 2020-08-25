@@ -2051,14 +2051,14 @@ module.exports = function (app) {
                         callback: self.editContent,
                         class: "action-green",
                         checkShow: function (action, model) {
-                            var info = model.getInfo();
-                            /*If partially approved, don't show edit content*/
-                            if (info.docStatus === 23)
+                            var info = model.getInfo(), isAllowed = true;
+                            if (model.isCorrespondenceApprovedBefore()) {
+                                isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
+                            }
+                            if (!isAllowed || info.docStatus >= 24) {
                                 return false;
-                            var hasPermission = (info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
-
-                            return hasPermission && info.docStatus < 23;
-                            /*If partially or fully approved, don't show edit content*/
+                            }
+                            return (info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
                         }
                     },
                     // Properties

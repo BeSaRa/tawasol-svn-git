@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                       downloadService,
                                                       toast,
                                                       $state,
+                                                      rootEntity,
                                                       dialog,
                                                       gridService,
                                                       contextHelpService,
@@ -654,7 +655,13 @@ module.exports = function (app) {
                         callback: self.editContent,
                         class: "action-green",
                         checkShow: function (action, model) {
-                            var info = model.getInfo();
+                            var info = model.getInfo(), isAllowed = true;
+                            if (model.isCorrespondenceApprovedBefore()) {
+                                isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
+                            }
+                            if (!isAllowed || info.docStatus >= 24) {
+                                return false;
+                            }
                             var hasPermission = false;
                             if (info.documentClass === "internal")
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
@@ -663,7 +670,7 @@ module.exports = function (app) {
                             else if (info.documentClass === "outgoing") {
                                 hasPermission = (info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
                             }
-                            return hasPermission && info.docStatus < 24;
+                            return hasPermission;
                         }
                     },
                     // Properties
@@ -693,7 +700,13 @@ module.exports = function (app) {
                         class: "action-green",
                         showInView: false,
                         checkShow: function (action, model) {
-                            var info = model.getInfo();
+                            var info = model.getInfo(), isAllowed = true;
+                            if (model.isCorrespondenceApprovedBefore()) {
+                                isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
+                            }
+                            if (!isAllowed || info.docStatus >= 24) {
+                                return false;
+                            }
                             var hasPermission = false;
                             if (info.documentClass === 'outgoing') {
                                 hasPermission = (info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));

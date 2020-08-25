@@ -154,6 +154,10 @@ module.exports = function (app) {
                 return this.slowConnectionMode;
             };
 
+            GlobalSetting.prototype.isAllowEditAfterFirstApprove = function () {
+                return this.allowEditAfterFirstApprove;
+            };
+
             GlobalSetting.prototype.isDigitalCertificateEnabled = function () {
                 return this.digitalCertificateEnabled;
             };

@@ -872,6 +872,10 @@ module.exports = function (app) {
                 return !!this.thumbnails.length;
             };
 
+            WorkItem.prototype.isCorrespondenceApprovedBefore = function () {
+                return !!this.generalStepElm.isApprovedBefore;
+            };
+
             WorkItem.prototype.loadVersions = function () {
                 return correspondenceService.loadDocumentVersions(this);
             };

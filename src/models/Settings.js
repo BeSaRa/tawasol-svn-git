@@ -43,6 +43,9 @@ module.exports = function (app) {
             Settings.prototype.isSlowConnectionMode = function () {
                 return this.slowConnectionMode;
             };
+            Settings.prototype.isAllowEditAfterFirstApprove = function(){
+                return this.allowEditAfterFirstApprove;
+            };
 
             Settings.prototype.isDigitalCertificateEnabled = function () {
                 return this.digitalCertificateEnabled;

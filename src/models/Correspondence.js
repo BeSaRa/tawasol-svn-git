@@ -241,6 +241,9 @@ module.exports = function (app) {
             Correspondence.prototype.hasContent = function () {
                 return !!this.contentSize;
             };
+            Correspondence.prototype.isCorrespondenceApprovedBefore = function () {
+                return !!this.isApprovedBefore;
+            };
             Correspondence.prototype.updateDocument = function (skipCheck) {
                 return correspondenceService.updateCorrespondence(this, skipCheck);
             };
