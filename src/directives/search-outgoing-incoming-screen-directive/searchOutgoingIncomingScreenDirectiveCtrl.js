@@ -34,7 +34,8 @@ module.exports = function (app) {
                                                                           favoriteDocumentsService,
                                                                           mailNotificationService,
                                                                           userSubscriptionService,
-                                                                          printService) {
+                                                                          printService,
+                                                                          configurationService) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchOutgoingIncomingScreenDirectiveCtrl';
@@ -1335,6 +1336,26 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description annotate document
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.annotateDocument = function (correspondence, $event, defer) {
+            correspondence.openForAnnotation()
+                .then(function () {
+                    self.reloadSearchCorrespondence(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        });
+                })
+                .catch(function () {
+                    self.reloadSearchCorrespondence(self.grid.page);
+                });
+        };
+
         self.viewInDeskTop = function (workItem) {
             return correspondenceService.viewWordInDesktop(workItem);
         };
@@ -1673,6 +1694,18 @@ module.exports = function (app) {
                     return model.registryOU === self.employee.getRegistryOUID() &&
                         ((model.hasDocumentClass('outgoing') && employeeService.hasPermissionTo('DELETE_OUTGOING')) ||
                             (model.hasDocumentClass('incoming') && employeeService.hasPermissionTo('DELETE_INCOMING')))
+                }
+            },
+            // Annotate Document
+            {
+                type: 'action',
+                icon: 'draw',
+                text: 'grid_action_annotate_document',
+                shortcut: true,
+                callback: self.annotateDocument,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION);
                 }
             },
             // Print Barcode
