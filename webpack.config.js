@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const RemoveFilesPlugin = require('remove-files-webpack-plugin');
+const FileManagerPlugin = require('filemanager-webpack-plugin');
 
 module.exports = function (env) {
     const cssResolver = isProduction(env) ? {
@@ -31,13 +32,13 @@ module.exports = function (env) {
     });
     var toFolder = './build';
     const copyFiles = [
-        {from: './index.html', to: toFolder},
-        {from: './views', to: toFolder + '/views'},
-        {from: './dist', to: toFolder + '/dist'},
-        {from: './assets', to: toFolder + '/assets'},
-        {from: './guides', to: toFolder + '/guides'},
-        {from: './help', to: toFolder + '/help'},
-        {from: './node_modules/pspdfkit/dist/pspdfkit-lib', to: toFolder + '/pspdfkit-lib'},
+        {source: './index.html', destination: toFolder},
+        {source: './views', destination: toFolder + '/views'},
+        {source: './dist', destination: toFolder + '/dist'},
+        {source: './assets', destination: toFolder + '/assets'},
+        {source: './guides', destination: toFolder + '/guides'},
+        {source: './help', destination: toFolder + '/help'},
+        {source: './node_modules/pspdfkit/dist/pspdfkit-lib', destination: toFolder + '/pspdfkit-lib'},
     ];
 
     const copyDevFiles = [
@@ -125,8 +126,10 @@ module.exports = function (env) {
             new MiniCssExtractPlugin({
                 filename: 'dist/css/style.css'
             }),
-            new CopyPlugin({
-                patterns: copyFiles
+            new FileManagerPlugin({
+                onEnd: {
+                    copy: copyFiles
+                }
             })
         ]))
     };
