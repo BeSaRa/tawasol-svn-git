@@ -281,6 +281,9 @@ module.exports = function (app) {
                 .then(function (result) {
                     return sequentialWorkflow;
                 })
+                .catch(function (error) {
+                    return errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
+                });
         };
 
         /**
@@ -293,6 +296,9 @@ module.exports = function (app) {
                 .put(urlService.sequentialWorkflow, generator.interceptSendInstance('SequentialWF', sequentialWorkflow))
                 .then(function () {
                     return sequentialWorkflow;
+                })
+                .catch(function (error) {
+                    return errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
                 });
         };
 
