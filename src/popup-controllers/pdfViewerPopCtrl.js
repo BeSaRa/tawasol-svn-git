@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                  PDFService,
                                                  errorCode,
                                                  loadingIndicatorService,
+                                                 configurationService,
                                                  rootEntity,
                                                  langService,
                                                  documentStampService,
@@ -1120,9 +1121,8 @@ module.exports = function (app) {
             _getNextStepFromSeqWF();
             $timeout(function () {
                 // PSPDFKit.Options.IGNORE_DOCUMENT_PERMISSIONS = true;
-                console.log('location.host', location.host);
                 PSPDFKit.load({
-                    baseUrl: location.protocol + '//' + location.host + '/pspdfkit/',
+                    baseUrl: (location.protocol + '//' + location.host + '/'),
                     container: $element.find('#pdf-viewer')[0],
                     document: self.pdfData,
                     instantJSON: instantJSON,

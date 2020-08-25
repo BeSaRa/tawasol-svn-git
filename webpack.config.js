@@ -35,11 +35,11 @@ module.exports = function (env) {
         {from: './assets', to: toFolder + '/assets'},
         {from: './guides', to: toFolder + '/guides'},
         {from: './help', to: toFolder + '/help'},
-        {from: './node_modules/pspdfkit/dist/pspdfkit-lib', to: toFolder + '/pspdfkit/pspdfkit-lib'},
+        {from: './node_modules/pspdfkit/dist/pspdfkit-lib', to: toFolder + '/pspdfkit-lib'},
     ];
 
     const copyDevFiles = [
-        {from: './node_modules/pspdfkit/dist/pspdfkit-lib', to: './pspdfkit/pspdfkit-lib'},
+        {from: './node_modules/pspdfkit/dist/pspdfkit-lib', to: './pspdfkit-lib'},
     ];
 
 
