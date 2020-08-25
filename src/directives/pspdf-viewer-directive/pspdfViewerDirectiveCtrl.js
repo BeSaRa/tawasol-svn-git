@@ -27,7 +27,6 @@ module.exports = function (app) {
                 allowPrinting: employeeService.hasPermissionTo('PRINT_DOCUMENT')
             });
             self.destroyInstance();
-            console.log("URL ", (location.protocol + '//' + location.host + '/' + (configurationService.APP_CONTEXT ? configurationService.APP_CONTEXT + '/' : '')));
             PSPDFKit.load({
                 baseUrl: (location.protocol + '//' + location.host + '/' + (configurationService.APP_CONTEXT ? configurationService.APP_CONTEXT + '/' : '')),
                 container: self.container,

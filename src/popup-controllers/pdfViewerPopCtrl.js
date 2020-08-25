@@ -842,6 +842,9 @@ module.exports = function (app) {
                     toast.error(langService.get('work_item_not_found').change({wobNumber: self.correspondence.getInfo().wobNumber}));
                     dialog.hide();
                 });
+                errorCode.checkIf(error, 'AUTHORIZE_FAILED', function () {
+                    dialog.errorMessage(langService.get('authorize_failed'))
+                });
             }
         };
         /**
@@ -983,9 +986,10 @@ module.exports = function (app) {
          * @param error
          */
         self.handleSeqExceptions = function (error) {
-            errorCode.checkIf(error, 'SEQ_WF_INVALID_SIGNATURE_COUNT', function () {
-                toast.error(error.data.eo[langService.current + 'Name']);
-            });
+            toast.error(error.data.eo[langService.current + 'Name']);
+            // errorCode.checkIf(error, 'SEQ_WF_INVALID_SIGNATURE_COUNT', function () {
+            //
+            // });
         };
         /**
          * @description apply next step for Seq workflow
@@ -1018,7 +1022,7 @@ module.exports = function (app) {
          */
         self.applyNextStepOnCorrespondence = function (pdfContent, signatureModel, logAnnotations) {
             signatureModel = signatureModel ? signatureModel : self.correspondence.prepareSignatureModel(null, null, null);
-            self.applyNextStep(pdfContent, signatureModel)
+            return self.applyNextStep(pdfContent, signatureModel)
                 .then(logAnnotations ? function (result) {
                     toast.success(langService.get('launch_success_distribution_workflow'));
                     self.sendAnnotationLogs(function () {
@@ -1044,7 +1048,7 @@ module.exports = function (app) {
                                 self.getPDFContentForCurrentDocument()
                                     .then(function (pdfContent) {
                                         self.correspondence.handlePinCodeAndComposite().then(function (signatureModel) {
-                                            self.applyNextStepOnCorrespondence(pdfContent, signatureModel, true);
+                                            self.applyNextStepOnCorrespondence(pdfContent, signatureModel, true).catch(self.handleSeqExceptions);
                                         }).catch(self.handleExceptions);
                                     });
                             })
@@ -1054,12 +1058,12 @@ module.exports = function (app) {
                     } else { // else nextSeqStep.isAuthorizeAndSendStep()
                         var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations);
                         if (!hasChanges) {
-                            return self.applyNextStepOnCorrespondence(null);
+                            return self.applyNextStepOnCorrespondence(null).catch(self.handleSeqExceptions);
                         }
                         self.currentInstance.exportInstantJSON().then(function (instantJSON) {
                             delete instantJSON.pdfId;
                             PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON).then(function (pdfContent) {
-                                self.applyNextStepOnCorrespondence(pdfContent, null, true);
+                                self.applyNextStepOnCorrespondence(pdfContent, null, true).catch(self.handleSeqExceptions);
                             });
                         });
                     } // end nextSeqStep.isAuthorizeAndSendStep()
@@ -1121,7 +1125,6 @@ module.exports = function (app) {
             _getNextStepFromSeqWF();
             $timeout(function () {
                 // PSPDFKit.Options.IGNORE_DOCUMENT_PERMISSIONS = true;
-                console.log("URL ", (location.protocol + '//' + location.host + '/' + (configurationService.APP_CONTEXT ? configurationService.APP_CONTEXT + '/' : '')));
                 PSPDFKit.load({
                     baseUrl: (location.protocol + '//' + location.host + '/' + (configurationService.APP_CONTEXT ? configurationService.APP_CONTEXT + '/' : '')),
                     container: $element.find('#pdf-viewer')[0],
