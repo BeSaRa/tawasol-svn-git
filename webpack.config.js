@@ -42,7 +42,7 @@ module.exports = function (env) {
     ];
 
     const copyDevFiles = [
-        {from: './node_modules/pspdfkit/dist/pspdfkit-lib', to: './pspdfkit-lib'},
+        {from: './node_modules/pspdfkit/dist/pspdfkit-lib', to: './ui/pspdfkit-lib'},
     ];
 
 
