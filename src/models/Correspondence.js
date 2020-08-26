@@ -896,7 +896,7 @@ module.exports = function (app) {
                         resolve: {
                             versions: function () {
                                 'ngInject';
-                                return isSpecificVersion ? correspondenceService.loadDocumentVersions(record) : null;
+                                return isSpecificVersion ? correspondenceService.loadDocumentVersions(record) : [];
                             }
                         }
                     });
