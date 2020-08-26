@@ -55,5 +55,14 @@
     });
     window['GET_PRIVATE_BUILD'] = function () {
         return app.$_privateBuildNumber;
+    };
+    /**
+     * @description Refresh the service cache and reload the page
+     * @param skipReload
+     * if passed, page reload will be skipped
+     * @constructor
+     */
+    window['REFRESH_CACHE'] = function (skipReload) {
+        return app.refreshServerCache(skipReload);
     }
 })(document);

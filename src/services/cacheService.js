@@ -8,7 +8,8 @@ module.exports = function (app) {
             return $http
                 .post(urlService.refreshCache)
                 .then(function () {
-                    return toast.success(langService.get('cache_refreshed_successfully'));
+                    toast.success(langService.get('cache_refreshed_successfully'));
+                    return true;
                 });
         }
 

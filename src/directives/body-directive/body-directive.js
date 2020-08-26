@@ -15,6 +15,17 @@ module.exports = function (app) {
                 }).html('{{"version: " + bundleVersion}} - {{buildNumber}}');
                 element.append($compile(div)(scope));
 
+                app.refreshServerCache = function(skipReload){
+                    if (tokenService.getToken()) {
+                        cacheService.refreshCache()
+                            .then(function () {
+                                if (!skipReload){
+                                    $window.location.reload();
+                                }
+                            });
+                    }
+                };
+
                 angular
                     .element($window)
                     .on('keydown', function (e) {
