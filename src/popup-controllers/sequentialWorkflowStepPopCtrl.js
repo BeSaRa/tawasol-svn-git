@@ -15,7 +15,9 @@ module.exports = function (app) {
         self.ouSearchText = '';
         self.appUserSearchText = '';
         self.actionSearchText = '';
+        self.commentSearchText = '';
         self.ouApplicationUsers = [];
+        self.comment = null;
 
         self.isValidForm = function (form, setTouched) {
             form = form || self.form;
@@ -88,6 +90,13 @@ module.exports = function (app) {
                     self.ouApplicationUsers = _setUserAndOUIdCombination(result);
                     return result;
                 });
+        };
+
+        /**
+         * @description when selected comment changed.
+         */
+        self.onCommentChange = function () {
+            self.step.userComment = self.comment.getComment();
         };
 
         /**
