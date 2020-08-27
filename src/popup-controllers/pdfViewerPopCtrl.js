@@ -93,6 +93,14 @@ module.exports = function (app) {
             });
         }
 
+        function _hasAnyApprovePermission() {
+            return employeeService.hasPermissionTo('ELECTRONIC_SIGNATURE_MEMO') || employeeService.hasPermissionTo('ELECTRONIC_SIGNATURE');
+        }
+
+        function _addButtonToToolbar(toolbarInstance, button) {
+            toolbarInstance.push(button);
+        }
+
         /**
          * @description create custom buttons and attache it to  viewer toolbar.
          * @param getInstance
@@ -178,7 +186,23 @@ module.exports = function (app) {
 
             var toolbarInstance = defaultToolbar.concat([printWithoutAnnotationButton, customStampsButton, exportButton]);
 
-            toolbarInstance = toolbarInstance.concat(approveButton);
+            if (_checkForDocumentAllowedSignatures('internal', 'ELECTRONIC_SIGNATURE_MEMO')) {
+                _addButtonToToolbar(toolbarInstance, approveButton)
+            } else if (_checkForDocumentAllowedSignatures('outgoing', 'ELECTRONIC_SIGNATURE')) {
+                _addButtonToToolbar(toolbarInstance, approveButton)
+            } else if (_checkForDocumentAllowedSignatures('incoming')) {
+                _addButtonToToolbar(toolbarInstance, approveButton)
+            } else if (self.info.documentClass === 'outgoing' && employeeService.hasPermissionTo('ELECTRONIC_SIGNATURE')) {
+                _addButtonToToolbar(toolbarInstance, approveButton)
+            } else if (self.documentClass === 'internal' && employeeService.hasPermissionTo('ELECTRONIC_SIGNATURE_MEMO')) {
+                _addButtonToToolbar(toolbarInstance, approveButton)
+            } else {
+                toolbarInstance = toolbarInstance.filter(function (toolbarItem) {
+                    return toolbarItem.type !== 'ink-signature';
+                });
+            }
+
+
             // displaying barcode button
             if (self.info.docStatus >= 24 || self.info.docStatus >= 23 || self.annotationType === AnnotationType.SIGNATURE) {
                 toolbarInstance = toolbarInstance.concat(barcodeButton);
@@ -192,6 +216,14 @@ module.exports = function (app) {
                 toolbarInstance.push(openForApprovalButton);
             }
             return toolbarInstance;
+        }
+
+        function _checkForDocumentAllowedSignatures(docClass, permission) {
+            if (permission) {
+                return self.info.isAttachment && attachedBook && attachedBook.getInfo().documentClass === docClass && employeeService.hasPermissionTo(permission)
+            } else {
+                return self.info.isAttachment && attachedBook && attachedBook.getInfo().documentClass === docClass && _hasAnyApprovePermission();
+            }
         }
 
         /**
@@ -1127,9 +1159,10 @@ module.exports = function (app) {
                 // PSPDFKit.Options.IGNORE_DOCUMENT_PERMISSIONS = true;
                 PSPDFKit.load({
                     baseUrl: (location.protocol + '//' + location.host + '/' + (configurationService.APP_CONTEXT ? configurationService.APP_CONTEXT + '/' : '')),
-                    container: $element.find('#pdf-viewer')[0],
+                    container: !!instantJSON ? null : $element.find('#pdf-viewer')[0],
                     document: self.pdfData,
                     instantJSON: instantJSON,
+                    headless: !!instantJSON,
                     isEditableAnnotation: self.userCanEditAnnotation,
                     toolbarItems: makeToolbarItems(function () {
                         return self.currentInstance;
