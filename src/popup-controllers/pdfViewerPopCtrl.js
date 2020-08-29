@@ -66,6 +66,8 @@ module.exports = function (app) {
 
         self.isLaunchStep = false;
 
+        console.log('correspondence', correspondence);
+
         /**
          * @description getNext step of seqWF
          * @private
@@ -209,7 +211,7 @@ module.exports = function (app) {
             }
             // displaying open for approval Button
             if (!self.info.isAttachment &&
-                (self.info.docStatus <= 23 && !self.sequentialWF || self.info.docStatus <= 23 && self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep()) &&
+                (self.info.docStatus < 23 && !self.sequentialWF || self.info.docStatus < 23 && self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep()) &&
                 self.annotationType !== AnnotationType.SIGNATURE &&
                 !self.info.isPaper
             ) {
@@ -261,6 +263,14 @@ module.exports = function (app) {
          */
         function _isCurrentUserSignature(annotation) {
             return annotation.pdfObjectId ? false : _isSignature(annotation);
+        }
+
+        function _getRightTypeForElectronicSignature() {
+            return self.annotationType === AnnotationType.SIGNATURE ? AnnotationType.SIGNATURE : (_isElectronicAndAuthorizeByAnnotationBefore() ? AnnotationType.SIGNATURE : AnnotationType.ANNOTATION)
+        }
+
+        function _isElectronicAndAuthorizeByAnnotationBefore() {
+            return (self.info.docStatus === 23 && !self.info.isPaper && self.correspondence instanceof WorkItem && self.correspondence.generalStepElm.authorizeByAnnotation)
         }
 
         /**
@@ -408,7 +418,7 @@ module.exports = function (app) {
             }).then(function (image) {
                 return self.convertImageToBlob(image);
             }).then(function (blob) {
-                return self.createAnnotationFromBlob(blob, repeated, null, {type: self.annotationType === AnnotationType.SIGNATURE ? AnnotationType.SIGNATURE : AnnotationType.ANNOTATION});
+                return self.createAnnotationFromBlob(blob, repeated, null, {type: _getRightTypeForElectronicSignature()});
             }).then(function (annotations) {
                 var promises = [];
                 _.each(annotations, function (annotation) {
@@ -948,7 +958,7 @@ module.exports = function (app) {
         /**
          * @description handle none signature save part
          */
-        self.handleSaveNoneSignaturePart = function () {
+        self.handleSaveNoneSignaturePart = function (ignoreValidationSignature) {
             self.currentInstance.exportInstantJSON().then(function (instantJSON) {
                 delete instantJSON.pdfId;
                 instantJSON.skippedPdfObjectIds = _.difference(instantJSON.skippedPdfObjectIds, self.skippedPdfObjectIds);
@@ -960,6 +970,16 @@ module.exports = function (app) {
                         } else {
                             if (self.info.isPaper) {
                                 self.handleUpdateDocumentContent(pdfContent);
+                            } else if (_isElectronicAndAuthorizeByAnnotationBefore()) {
+                                self.isDocumentHasCurrentUserSignature()
+                                    .then(function () {
+                                        self.correspondence.handlePinCodeAndCompositeThenCompleteAuthorization(pdfContent, ignoreValidationSignature)
+                                            .then(self.handleSuccessAuthorize)
+                                            .catch(self.handleExceptions);
+                                    })
+                                    .catch(function () {
+                                        self.handleUpdateDocumentContent(pdfContent);
+                                    });
                             } else {
                                 self.handleSaveAnnotationAsAttachment(pdfContent);
                             }
@@ -977,7 +997,7 @@ module.exports = function (app) {
                 if (self.annotationType === AnnotationType.SIGNATURE) {
                     self.handleOpenForApprovalSave(ignoreValidationSignature);
                 } else {
-                    self.handleSaveNoneSignaturePart();
+                    self.handleSaveNoneSignaturePart(ignoreValidationSignature);
                 }
             }); // get document annotations
         };

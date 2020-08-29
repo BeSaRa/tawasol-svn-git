@@ -69,7 +69,7 @@ module.exports = function (app) {
          * @private
          */
         function _getImageOrOtherAnnotationType(annotation) {
-            return annotation instanceof PSPDFKit.Annotations.ImageAnnotation ? _getImageType(annotation) : AnnotationLogType[annotation.readableName + 'Annotation']
+            return annotation instanceof PSPDFKit.Annotations.ImageAnnotation ? _getImageType(annotation) : AnnotationLogType[annotation.constructor.readableName + 'Annotation']
         }
 
         /**
