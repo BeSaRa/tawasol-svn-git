@@ -17,12 +17,13 @@
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
         <div ng-if="!ctrl.sequentialWF">
-            <md-button class="md-raised md-primary"
+            <md-button ng-disabled="ctrl.disableSaveButton" class="md-raised md-primary"
                        ng-click="ctrl.saveDocumentAnnotations()">{{lang.save}}
             </md-button>
         </div>
         <div ng-if="!!ctrl.sequentialWF">
-            <md-button tooltip="{{ctrl.nextSeqStep.getTranslatedName()}}" class="md-raised md-primary"
+            <md-button ng-disabled="ctrl.disableSaveButton" tooltip="{{ctrl.nextSeqStep.getTranslatedName()}}"
+                       class="md-raised md-primary"
                        ng-click="ctrl.startNextStepValidation()">{{lang.next}}
             </md-button>
         </div>

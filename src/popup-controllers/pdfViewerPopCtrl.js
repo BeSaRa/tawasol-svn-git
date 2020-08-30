@@ -66,6 +66,8 @@ module.exports = function (app) {
 
         self.isLaunchStep = false;
 
+        self.disableSaveButton = false;
+
         console.log('correspondence', correspondence);
 
         /**
@@ -839,6 +841,7 @@ module.exports = function (app) {
          * @param result
          */
         self.handleSuccessAuthorize = function (result) {
+            self.disableSaveButton = false;
             if (result === correspondenceService.authorizeStatus.PARTIALLY_AUTHORIZED.text) {
                 self.sendAnnotationLogs();
                 toast.success(langService.get('sign_specific_success').change({name: self.correspondence.getTranslatedName()}));
@@ -869,12 +872,15 @@ module.exports = function (app) {
          * @return {boolean|*}
          */
         self.sendAnnotationLogs = function (successCallback, errorCallback) {
+            self.disableSaveButton = true;
             return annotationLogService.applyAnnotationChanges(self.oldAnnotations, self.newAnnotations, self.correspondence)
                 .then(function () {
+                    self.disableSaveButton = false;
                     if (successCallback)
                         successCallback();
                 })
                 .catch(function (error) {
+                    self.disableSaveButton = false;
                     if (errorCallback)
                         errorCallback(error);
                 });
@@ -884,6 +890,7 @@ module.exports = function (app) {
          * @param error
          */
         self.handleExceptions = function (error) {
+            self.disableSaveButton = false;
             if (error === 'PINCODE_MISSING') {
                 toast.error(langService.get('pincode_required_to_complete_authorization'));
             } else {
@@ -913,6 +920,7 @@ module.exports = function (app) {
             self.correspondence.file = pdfContent;
             attachmentService.updateAttachment(attachedBook, self.correspondence)
                 .then(function () {
+                    self.disableSaveButton = false;
                     toast.success(langService.get('save_success'));
                     dialog.hide();
                 }).catch(self.handleExceptions);
@@ -957,6 +965,7 @@ module.exports = function (app) {
         self.handleUpdateDocumentContent = function (pdfContent) {
             self.correspondence.addDocumentContentFile(pdfContent).then(function () {
                 toast.success(langService.get('save_success'));
+                self.disableSaveButton = false;
                 self.sendAnnotationLogs();
                 dialog.hide();
             }).catch(self.handleExceptions);
@@ -968,6 +977,7 @@ module.exports = function (app) {
         self.handleSaveAnnotationAsAttachment = function (pdfContent) {
             self.correspondence.addAnnotationAsAttachment(pdfContent).then(function () {
                 toast.success(langService.get('save_success'));
+                self.disableSaveButton = false;
                 dialog.hide();
             }).catch(self.handleExceptions);
         };
@@ -1008,6 +1018,10 @@ module.exports = function (app) {
          * @param ignoreValidationSignature
          */
         self.saveDocumentAnnotations = function (ignoreValidationSignature) {
+            if (self.disableSaveButton) {
+                return null;
+            }
+            self.disableSaveButton = true;
             self.getDocumentAnnotations().then(function (newAnnotations) {
                 self.newAnnotations = newAnnotations;
                 if (self.annotationType === AnnotationType.SIGNATURE) {
@@ -1054,6 +1068,7 @@ module.exports = function (app) {
          * @param error
          */
         self.handleSeqExceptions = function (error) {
+            self.disableSaveButton = false;
             toast.error(error.data.eo[langService.current + 'Name']);
             // errorCode.checkIf(error, 'SEQ_WF_INVALID_SIGNATURE_COUNT', function () {
             //
@@ -1092,6 +1107,7 @@ module.exports = function (app) {
             signatureModel = signatureModel ? signatureModel : self.correspondence.prepareSignatureModel(null, null, null);
             return self.applyNextStep(pdfContent, signatureModel)
                 .then(logAnnotations ? function (result) {
+                    self.disableSaveButton = false;
                     toast.success(langService.get('launch_success_distribution_workflow'));
                     self.sendAnnotationLogs(function () {
                         dialog.hide();
@@ -1099,6 +1115,7 @@ module.exports = function (app) {
                         toast.error('ERROR While Sending the log to Server', error);
                     });
                 } : function () {
+                    self.disableSaveButton = false;
                     toast.success(langService.get('launch_success_distribution_workflow'));
                     dialog.hide();
                 });
@@ -1107,6 +1124,10 @@ module.exports = function (app) {
          * @description start Next Step Validation to launch or advance seq workflow.
          */
         self.startNextStepValidation = function () {
+            if (self.disableSaveButton) {
+                return null;
+            }
+            self.disableSaveButton = true;
             self.getDocumentAnnotations()
                 .then(function (newAnnotations) {
                     self.newAnnotations = newAnnotations;
@@ -1132,6 +1153,7 @@ module.exports = function (app) {
                                 }
                             })
                             .catch(function () {
+                                self.disableSaveButton = false;
                                 toast.error(langService.get('provide_signature_to_proceed'));
                             });
                     } else { // else nextSeqStep.isAuthorizeAndSendStep()
