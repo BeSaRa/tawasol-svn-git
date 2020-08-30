@@ -342,7 +342,6 @@ module.exports = function (app) {
             var pageInfo = self.currentInstance.pageInfoForIndex(pageIndex);
             var attachments = [];
             var totalPages = self.currentInstance.totalPageCount;
-            debugger;
             attachments.push(self.currentInstance.createAttachment(blob));
 
             function repeatedAnnotations() {
