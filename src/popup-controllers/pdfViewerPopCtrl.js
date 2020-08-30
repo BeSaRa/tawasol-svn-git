@@ -270,7 +270,7 @@ module.exports = function (app) {
         }
 
         function _isElectronicAndAuthorizeByAnnotationBefore() {
-            return (self.info.docStatus === 23 && !self.info.isPaper && self.correspondence instanceof WorkItem && self.correspondence.generalStepElm.authorizeByAnnotation)
+            return (self.info.docStatus === 23 && !self.info.isPaper && self.correspondence instanceof WorkItem && (self.correspondence.generalStepElm.authorizeByAnnotation || (self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep())))
         }
 
         /**
@@ -745,7 +745,7 @@ module.exports = function (app) {
                 self.latestInkAnnotation = annotation;
             }
 
-            if (annotation instanceof PSPDFKit.Annotations.InkAnnotation && annotation.isSignature && annotation.customData && self.annotationType !== AnnotationType.SIGNATURE) {
+            if (annotation instanceof PSPDFKit.Annotations.InkAnnotation && annotation.isSignature && annotation.customData && self.annotationType !== AnnotationType.SIGNATURE && !_isElectronicAndAuthorizeByAnnotationBefore()) {
                 annotation = annotation.set('isSignature', false);
                 return self.currentInstance.updateAnnotation(annotation);
             }
@@ -1097,12 +1097,23 @@ module.exports = function (app) {
                     if (self.nextSeqStep.isAuthorizeAndSendStep() && !self.info.isPaper) {
                         self.isDocumentHasCurrentUserSignature()
                             .then(function () {
-                                self.getPDFContentForCurrentDocument()
-                                    .then(function (pdfContent) {
-                                        self.correspondence.handlePinCodeAndComposite().then(function (signatureModel) {
-                                            self.applyNextStepOnCorrespondence(pdfContent, signatureModel, true).catch(self.handleSeqExceptions);
-                                        }).catch(self.handleExceptions);
+                                if (self.annotationType === AnnotationType.SIGNATURE) {
+                                    self.getPDFContentForCurrentDocument()
+                                        .then(function (pdfContent) {
+                                            self.correspondence.handlePinCodeAndComposite().then(function (signatureModel) {
+                                                self.applyNextStepOnCorrespondence(pdfContent, signatureModel, true).catch(self.handleSeqExceptions);
+                                            }).catch(self.handleExceptions);
+                                        });
+                                } else {
+                                    self.currentInstance.exportInstantJSON().then(function (instantJSON) {
+                                        delete instantJSON.pdfId;
+                                        PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON).then(function (pdfContent) {
+                                            self.correspondence.handlePinCodeAndComposite().then(function (signatureModel) {
+                                                self.applyNextStepOnCorrespondence(pdfContent, signatureModel, true).catch(self.handleSeqExceptions);
+                                            }).catch(self.handleExceptions);
+                                        });
                                     });
+                                }
                             })
                             .catch(function () {
                                 toast.error(langService.get('provide_signature_to_proceed'));
