@@ -168,7 +168,9 @@ module.exports = function (app) {
                 title: "print without annotations",
                 icon: "./assets/images/print-without-annotation.svg",
                 disabled: !(employeeService.hasPermissionTo('PRINT_DOCUMENT')),
-                onPress: self.printWithOutAnnotations
+                onPress: function (e) {
+                    self.printWithOutAnnotations(e, true);
+                }
             };
             var approveButton = {
                 type: "custom",
@@ -190,10 +192,15 @@ module.exports = function (app) {
                 return item.type !== 'print';
             });
             toolbarInstance.splice(26, 0, {
-                type: 'print',
-                disabled: !(employeeService.hasPermissionTo('PRINT_DOCUMENT'))
+                type: 'custom',
+                id: 'print',
+                icon: './assets/images/print.svg',
+                disabled: !(employeeService.hasPermissionTo('PRINT_DOCUMENT')),
+                onPress: function (e) {
+                    self.printWithOutAnnotations(e, false);
+                }
             });
-            
+
             if (_checkForDocumentAllowedSignatures('internal', 'ELECTRONIC_SIGNATURE_MEMO')) {
                 _addButtonToToolbar(toolbarInstance, approveButton)
             } else if (_checkForDocumentAllowedSignatures('outgoing', 'ELECTRONIC_SIGNATURE')) {
@@ -213,6 +220,7 @@ module.exports = function (app) {
 
             // displaying barcode button
             if (self.info.docStatus >= 24 || self.info.docStatus >= 23 || self.annotationType === AnnotationType.SIGNATURE) {
+                barcodeButton.disabled = !(employeeService.hasPermissionTo('PRINT_BARCODE'));
                 toolbarInstance = toolbarInstance.concat(barcodeButton);
             }
             // displaying open for approval Button
@@ -625,13 +633,15 @@ module.exports = function (app) {
         /**
          * @description print pdf document without any annotations.
          * @param $event
+         * @param noPrintValue
          */
-        self.printWithOutAnnotations = function ($event) {
+        self.printWithOutAnnotations = function ($event, noPrintValue) {
+            debugger;
             var updatedAnnotations = [];
             self.getDocumentAnnotations()
                 .then(function (annotations) {
                     annotations.map(function (annotation) {
-                        annotation = annotation.set('noPrint', true);
+                        annotation = annotation.set('noPrint', noPrintValue);
                         updatedAnnotations.push(self.currentInstance.updateAnnotation(annotation));
                     });
                     $q.all(updatedAnnotations)
