@@ -30,6 +30,7 @@ module.exports = function (app) {
                     controller: 'scannerCtrl',
                     controllerAs: 'ctrl',
                     targetEvent: $event || false,
+                    escapeToCancel: false,
                     locals: {
                         loadSameScanner: loadSameScanner || false,
                         fileToEdit: false
