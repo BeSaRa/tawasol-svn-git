@@ -342,7 +342,7 @@ module.exports = function (app) {
             var pageInfo = self.currentInstance.pageInfoForIndex(pageIndex);
             var attachments = [];
             var totalPages = self.currentInstance.totalPageCount;
-
+            debugger;
             attachments.push(self.currentInstance.createAttachment(blob));
 
             function repeatedAnnotations() {
@@ -356,7 +356,7 @@ module.exports = function (app) {
                     _.map(attachmentIds, function (attachmentId, index) {
                         imageAnnotations.push(new PSPDFKit.Annotations.ImageAnnotation({
                             imageAttachmentId: attachmentId,
-                            pageIndex: index,
+                            pageIndex: index === 0 ? pageIndex : index,
                             contentType: 'image/png',
                             customData: {
                                 additionalData: additionalData,
