@@ -17,6 +17,7 @@ md-input-container:not(.cms-default) {
   input:not(.md-datepicker-input),
   md-select,
   textarea,
+  .textarea-bootstrap,
   md-datepicker {
     min-height: 36px !important;
     font-size: 14px;
@@ -59,12 +60,12 @@ md-input-container:not(.cms-default) {
     }
   }
 
-  textarea {
+  textarea:not(.textarea-bootstrap ) {
     max-height: 100px !important;
   }
 
   &.md-input-focused {
-    input, textarea {
+    input, textarea, .textarea-bootstrap {
       border-width: 1px !important;
     }
   }
@@ -73,6 +74,7 @@ md-input-container:not(.cms-default) {
     input:not(.md-datepicker-input),
     md-select,
     textarea,
+    .textarea-bootstrap,
     md-datepicker {
       border-color: #dc3545;
       border-width: 1px !important;
