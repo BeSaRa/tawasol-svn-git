@@ -167,6 +167,7 @@ module.exports = function (app) {
                 id: "print-without-annotations",
                 title: "print without annotations",
                 icon: "./assets/images/print-without-annotation.svg",
+                disabled: !(employeeService.hasPermissionTo('PRINT_DOCUMENT')),
                 onPress: self.printWithOutAnnotations
             };
             var approveButton = {
@@ -185,9 +186,14 @@ module.exports = function (app) {
                     dialog.hide(AnnotationType.SIGNATURE);
                 }
             };
-
-            var toolbarInstance = defaultToolbar.concat([printWithoutAnnotationButton, customStampsButton, exportButton]);
-
+            var toolbarInstance = _.filter(defaultToolbar.concat([printWithoutAnnotationButton, customStampsButton, exportButton]), function (item) {
+                return item.type !== 'print';
+            });
+            toolbarInstance.splice(26, 0, {
+                type: 'print',
+                disabled: !(employeeService.hasPermissionTo('PRINT_DOCUMENT'))
+            });
+            
             if (_checkForDocumentAllowedSignatures('internal', 'ELECTRONIC_SIGNATURE_MEMO')) {
                 _addButtonToToolbar(toolbarInstance, approveButton)
             } else if (_checkForDocumentAllowedSignatures('outgoing', 'ELECTRONIC_SIGNATURE')) {
