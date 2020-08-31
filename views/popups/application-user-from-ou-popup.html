@@ -433,6 +433,7 @@
                                 </div>
                                 <div layout="row">
                                     <md-switch flex ng-model="ctrl.applicationUser.otpEnabled"
+                                               ng-disabled="!ctrl.rootEntity.returnRootEntity().rootEntity.otpEnabled"
                                                aria-label="{{lang.otp}}">
                                         <label>{{lang.otp}} :
                                             {{ctrl.applicationUser.getTranslatedYesNo('otpEnabled')}}</label>
