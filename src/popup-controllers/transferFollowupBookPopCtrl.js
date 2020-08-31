@@ -205,7 +205,7 @@ module.exports = function (app) {
         };
 
         self.isValidForm = function (form) {
-            return (form.$valid && self.selectedFolder && !self.inProgress);
+            return (form.$valid && !self.inProgress);
         };
 
         self.hasCustomReason = function (item) {
