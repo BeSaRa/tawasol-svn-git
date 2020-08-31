@@ -42,11 +42,17 @@ module.exports = function (app) {
          * @param $event
          */
         self.preventSearchKeyDown = function ($event) {
-            if ($event){
+            if ($event) {
                 var code = $event.which || $event.keyCode;
                 if (code !== 38 && code !== 40)
                     $event.stopPropagation();
             }
         };
+
+        self.$onInit = function () {
+            if (self.reasonText) {
+                self.reason = angular.copy(self.reasonText);
+            }
+        }
     });
 };

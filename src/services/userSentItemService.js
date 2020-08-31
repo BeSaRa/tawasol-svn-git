@@ -140,9 +140,11 @@ module.exports = function (app) {
              * @description  open reason dialog
              * @param dialogTitle
              * @param $event
+             * @param saveButtonKey
+             * @param reasonText
              * @returns {promise|*}
              */
-            self.showReasonDialog = function (dialogTitle, $event) {
+            self.showReasonDialog = function (dialogTitle, $event, saveButtonKey, reasonText) {
                 return dialog
                     .showDialog({
                         templateUrl: cmsTemplate.getPopup('reason'),
@@ -151,15 +153,13 @@ module.exports = function (app) {
                         bindToController: true,
                         targetEvent: $event,
                         locals: {
-                            title: dialogTitle
+                            title: dialogTitle,
+                            saveButtonKey: saveButtonKey,
+                            reasonText: reasonText || ''
                         },
                         resolve: {
                             comments: function (userCommentService) {
                                 'ngInject';
-                                /*return userCommentService.getUserComments()
-                                    .then(function (result) {
-                                        return _.filter(result, 'status');
-                                    });*/
                                 return userCommentService.loadUserCommentsForDistribution();
                             }
                         }
