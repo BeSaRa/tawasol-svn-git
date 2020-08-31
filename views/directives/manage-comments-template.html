@@ -52,8 +52,9 @@
                             <div layout="row">
                                 <md-input-container flex>
                                     <label for="description">{{lang.comments_description}}</label>
-                                    <textarea required maxlength="500" minlength="5" rows="3" name="description"
-                                              id="description"
+                                    <textarea style="min-height: 150px !important;" overlay-scroll-bar-directive
+                                              required maxlength="500" rows="7" minlength="5" name="description"
+                                              id="description" class="textarea-bootstrap"
                                               ng-model="ctrl.documentComment.description"></textarea>
                                     <div ng-messages="ctrl.documentCommentForm.description.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>

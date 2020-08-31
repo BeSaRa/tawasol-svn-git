@@ -3,7 +3,7 @@
            aria-label="{{ctrl.dialogTitle}}">
     <popup-toolbar-directive header-text="{{ctrl.dialogTitle}} - {{ctrl.record.getTranslatedName()}}"
                              close-callback="ctrl.closeLaunchPopup"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive flex>
+    <md-dialog-content overlay-scroll-bar-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="distWorkflowItem_form" layout="column">
                 <div layout="row">
@@ -207,7 +207,8 @@
                 <div layout="row">
                     <md-input-container flex>
                         <label for="comments"> {{lang.type_your_comment}}</label>
-                        <textarea rows="5" id="comments" name="comments" class="cms-comment"
+                        <textarea style="min-height: 150px !important;" overlay-scroll-bar-directive
+                                  id="comments" name="comments" rows="7" class="cms-comment textarea-bootstrap"
                                   ng-model="ctrl.distWorkflowItem.comments"
                                   maxlength="2000"
                                   md-maxlength="2000"
