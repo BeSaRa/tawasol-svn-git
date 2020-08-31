@@ -1198,7 +1198,7 @@ module.exports = function (app) {
                     organizationGroups: self.organizationGroupsCopy,
                     fromPredefined: false,
                     item: self.correspondence,
-                    isWorkItem: self.correspondence.isWorkItem(),
+                    isWorkItem: angular.isArray(self.correspondence) ? false : self.correspondence.isWorkItem(),
                     hiddenForwardSenderInfo: self.isHiddenForwardSenderInfo()
                 }
             })

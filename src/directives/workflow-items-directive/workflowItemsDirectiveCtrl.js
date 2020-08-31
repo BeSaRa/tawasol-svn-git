@@ -170,7 +170,7 @@ module.exports = function (app) {
                     organizationGroups: self.organizationGroups,
                     fromPredefined: self.fromPredefined,
                     item: self.item,
-                    isWorkItem: self.item.isWorkItem(),
+                    isWorkItem: angular.isArray(self.item) ? false : self.item.isWorkItem(),
                     hiddenForwardSenderInfo: self.hiddenForwardSenderInfo
                 }
             })

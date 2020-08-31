@@ -29,7 +29,7 @@ module.exports = function (app) {
         self.forwardSenderActionAndCommentBulk = false;
 
         $timeout(function () {
-            self.isWorkItem = self.item.isWorkItem();
+            self.isWorkItem = angular.isArray(self.item) ? false : self.item.isWorkItem();
         });
 
         self.grid = {
