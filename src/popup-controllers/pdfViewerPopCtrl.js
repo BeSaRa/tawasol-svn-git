@@ -31,6 +31,7 @@ module.exports = function (app) {
                                                  sequentialWF,
                                                  sequentialWorkflowService,
                                                  WorkItem,
+                                                 operations,
                                                  cmsTemplate) {
         'ngInject';
         var self = this;
@@ -57,6 +58,11 @@ module.exports = function (app) {
         self.latestInkAnnotation = null;
         // the skipped pdf Object , will use it later
         self.skippedPdfObjectIds = [];
+        // all document operations
+        self.documentOperations = [];
+
+        self.baseUrl = (location.protocol + '//' + location.host + '/' + (configurationService.APP_CONTEXT ? configurationService.APP_CONTEXT + '/' : ''));
+
         // document information
         self.info = self.correspondence.getInfo();
 
@@ -824,11 +830,13 @@ module.exports = function (app) {
          * @description remove all event listeners and unload the PDFViewer
          */
         self.disposable = function () {
-            self.currentInstance.removeEventListener("annotations.willChange", self.handleAnnotationChanges);
-            self.currentInstance.removeEventListener("inkSignatures.create", self.handleCreateInkSignatureAnnotation);
-            self.currentInstance.removeEventListener("inkSignatures.delete", self.handleDeleteInkSignatureAnnotation);
-            self.currentInstance.removeEventListener("annotations.create", self.handleCreateAnnotations);
-            self.currentInstance.removeEventListener("annotations.willChange", self.handleDeleteAnnotations);
+            if (self.currentInstance) {
+                self.currentInstance.removeEventListener("annotations.willChange", self.handleAnnotationChanges);
+                self.currentInstance.removeEventListener("inkSignatures.create", self.handleCreateInkSignatureAnnotation);
+                self.currentInstance.removeEventListener("inkSignatures.delete", self.handleDeleteInkSignatureAnnotation);
+                self.currentInstance.removeEventListener("annotations.create", self.handleCreateAnnotations);
+                self.currentInstance.removeEventListener("annotations.willChange", self.handleDeleteAnnotations);
+            }
             try {
                 PSPDFKit.unload($element.find('#pdf-viewer')[0]);
             } catch (e) {
@@ -987,7 +995,7 @@ module.exports = function (app) {
             self.currentInstance.exportInstantJSON().then(function (instantJSON) {
                 delete instantJSON.pdfId;
                 instantJSON.skippedPdfObjectIds = _.difference(instantJSON.skippedPdfObjectIds, self.skippedPdfObjectIds);
-                PDFService.applyAnnotationsOnPDFDocument(self.correspondence, AnnotationType.ANNOTATION, instantJSON)
+                PDFService.applyAnnotationsOnPDFDocument(self.correspondence, AnnotationType.ANNOTATION, instantJSON, self.documentOperations)
                     .then(function (pdfContent) {
                         self.skippedPdfObjectIds = self.skippedPdfObjectIds.concat(instantJSON.skippedPdfObjectIds);
                         if (self.correspondence instanceof Attachment) {
@@ -1143,7 +1151,7 @@ module.exports = function (app) {
                                 } else {
                                     self.currentInstance.exportInstantJSON().then(function (instantJSON) {
                                         delete instantJSON.pdfId;
-                                        PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON).then(function (pdfContent) {
+                                        PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON, self.documentOperations).then(function (pdfContent) {
                                             self.correspondence.handlePinCodeAndComposite().then(function (signatureModel) {
                                                 self.applyNextStepOnCorrespondence(pdfContent, signatureModel, true).catch(self.handleSeqExceptions);
                                             }).catch(self.handleExceptions);
@@ -1162,7 +1170,7 @@ module.exports = function (app) {
                         }
                         self.currentInstance.exportInstantJSON().then(function (instantJSON) {
                             delete instantJSON.pdfId;
-                            PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON).then(function (pdfContent) {
+                            PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON, self.documentOperations).then(function (pdfContent) {
                                 self.applyNextStepOnCorrespondence(pdfContent, null, true).catch(self.handleSeqExceptions);
                             });
                         });
@@ -1217,6 +1225,39 @@ module.exports = function (app) {
                 var annotation = event.annotation;
                 console.log('Focused Annotation', annotation);
             });
+            self.currentInstance.addEventListener("document.change", (operations) => {
+                self.documentOperations = self.documentOperations.concat(operations);
+            });
+        };
+
+        self.loadInstantJSON = async function () {
+            var documentWithOperationsBuffer = null, instance;
+            instance = await PSPDFKit.load({
+                baseUrl: self.baseUrl,
+                document: self.pdfData,
+                headless: true,
+                instantJSON: operations.length ? null : instantJSON,
+                licenseKey: self.licenseKey
+            });
+
+            if (operations.length) {
+                documentWithOperationsBuffer = await instance.exportPDFWithOperations(operations);
+                instance = await PSPDFKit.load({
+                    baseUrl: self.baseUrl,
+                    document: documentWithOperationsBuffer,
+                    headless: true,
+                    instantJSON: instantJSON,
+                    licenseKey: self.licenseKey
+                });
+            }
+
+            instance.exportPDF({flatten: flatten})
+                .then(function (buffer) {
+                    var pdfContent = new Blob([buffer], {type: "application/pdf"});
+                    $timeout(function () {
+                        dialog.hide(pdfContent);
+                    }, 1000);
+                });
         };
         /**
          * @description viewer initialization
@@ -1224,13 +1265,14 @@ module.exports = function (app) {
         self.$onInit = function () {
             _getNextStepFromSeqWF();
             $timeout(function () {
+                if (instantJSON) {
+                    return self.loadInstantJSON();
+                }
                 // PSPDFKit.Options.IGNORE_DOCUMENT_PERMISSIONS = true;
                 PSPDFKit.load({
-                    baseUrl: (location.protocol + '//' + location.host + '/' + (configurationService.APP_CONTEXT ? configurationService.APP_CONTEXT + '/' : '')),
-                    container: !!instantJSON ? null : $element.find('#pdf-viewer')[0],
+                    baseUrl: self.baseUrl,
+                    container: $element.find('#pdf-viewer')[0],
                     document: self.pdfData,
-                    instantJSON: instantJSON,
-                    headless: !!instantJSON,
                     isEditableAnnotation: self.userCanEditAnnotation,
                     toolbarItems: makeToolbarItems(function () {
                         return self.currentInstance;
@@ -1239,23 +1281,13 @@ module.exports = function (app) {
                     licenseKey: self.licenseKey
                 }).then(function (instance) {
                     self.currentInstance = instance;
-                    if (instantJSON) {
-                        self.currentInstance.exportPDF({flatten: flatten})
-                            .then(function (buffer) {
-                                var pdfContent = new Blob([buffer], {type: "application/pdf"});
-                                $timeout(function () {
-                                    dialog.hide(pdfContent);
-                                }, 1000);
-                            });
-                    } else {
-                        // set current annotations for loaded document
-                        self.getDocumentAnnotations().then(function (annotations) {
-                            self.oldAnnotations = annotations;
-                        });
-                        self.canRepeatAnnotations = self.isAbleToRepeatAnnotations();
-                        self.currentInstance.setAnnotationCreatorName(employeeService.getEmployee().domainName);
-                        self.registerEventListeners();
-                    }
+                    // set current annotations for loaded document
+                    self.getDocumentAnnotations().then(function (annotations) {
+                        self.oldAnnotations = annotations;
+                    });
+                    self.canRepeatAnnotations = self.isAbleToRepeatAnnotations();
+                    self.currentInstance.setAnnotationCreatorName(employeeService.getEmployee().domainName);
+                    self.registerEventListeners();
                 });
             });
         };

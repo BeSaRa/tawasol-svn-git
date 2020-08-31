@@ -28,7 +28,8 @@ module.exports = function (app) {
                     instantJSON: false,
                     attachedBook: attachedBook,
                     flatten: false,
-                    sequentialWF: sequentialWF
+                    sequentialWF: sequentialWF,
+                    operations: false
                 }
             })
         };
@@ -38,10 +39,11 @@ module.exports = function (app) {
          * @param correspondence
          * @param annotationType
          * @param instantJSON
+         * @param operations
          * @param flatten
          * @returns {promise}
          */
-        self.openHiddenPDFViewer = function (pdfData, correspondence, annotationType, instantJSON, flatten) {
+        self.openHiddenPDFViewer = function (pdfData, correspondence, annotationType, instantJSON, operations, flatten) {
             if (!annotationType)
                 annotationType = AnnotationType.ANNOTATION;
             return dialog.showDialog({
@@ -55,7 +57,8 @@ module.exports = function (app) {
                     instantJSON: instantJSON ? instantJSON : false,
                     attachedBook: false,
                     flatten: flatten,
-                    sequentialWF: false
+                    sequentialWF: false,
+                    operations: operations
                 }
             })
         };
@@ -64,16 +67,17 @@ module.exports = function (app) {
          * @param correspondence
          * @param annotationType
          * @param instantJSON
+         * @param operations
          * @param flatten
          * @returns {*}
          */
-        self.applyAnnotationsOnPDFDocument = function (correspondence, annotationType, instantJSON, flatten) {
+        self.applyAnnotationsOnPDFDocument = function (correspondence, annotationType, instantJSON, operations, flatten) {
             return downloadService.downloadContentWithOutWaterMark(correspondence, annotationType)
                 .then(function (blob) {
                     var fr = new FileReader();
                     return $q(function (resolve) {
                         fr.onloadend = function () {
-                            return self.openHiddenPDFViewer(fr.result, correspondence, annotationType, instantJSON, flatten).then(resolve);
+                            return self.openHiddenPDFViewer(fr.result, correspondence, annotationType, instantJSON, operations, flatten).then(resolve);
                         };
                         fr.readAsArrayBuffer(blob);
                     });

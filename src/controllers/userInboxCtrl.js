@@ -1540,7 +1540,7 @@ module.exports = function (app) {
                 sticky: true,
                 stickyIndex: 1,
                 checkShow: function (action, model) {
-                    return rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION);
+                    return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION);
                 }
             },
             // Add To

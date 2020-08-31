@@ -894,7 +894,7 @@ module.exports = function (app) {
                 callback: self.annotateDocument,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION);
+                    return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION);
                 }
             },
             // Launch Distribution Workflow

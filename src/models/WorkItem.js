@@ -1227,6 +1227,21 @@ module.exports = function (app) {
                 });
             };
 
+            WorkItem.prototype.userCanAnnotate = function () {
+                var info = this.getInfo();
+                if (!info.isPaper) {
+                    return employeeService.hasPermissionTo('MANAGE_ATTACHMENTS');
+                } else if (info.isPaper && info.documentClass === 'outgoing') {
+                    return employeeService.hasPermissionTo('EDIT_OUTGOING_PAPER');
+                } else if (info.isPaper && info.documentClass === 'internal') {
+                    return employeeService.hasPermissionTo('EDIT_INTERNAL_CONTENT');
+                } else if (info.isPaper && info.documentClass === 'incoming') {
+                    return employeeService.hasPermissionTo('EDIT_INCOMING’S_CONTENT');
+                }
+                console.log('user cannot Annotate', info);
+                return false;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('WorkItem', 'init', this);
