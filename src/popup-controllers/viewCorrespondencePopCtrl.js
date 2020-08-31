@@ -25,7 +25,8 @@ module.exports = function (app) {
                                                           $sce,
                                                           generator,
                                                           rootEntity,
-                                                          $filter) {
+                                                          $filter,
+                                                          manageLaunchWorkflowService) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewCorrespondencePopCtrl';
@@ -36,6 +37,8 @@ module.exports = function (app) {
         self.mainDocument = true;
         self.secondURL = null;
         self.loadingIndicatorService = loadingIndicatorService;
+        self.manageLaunchWorkflowService = manageLaunchWorkflowService;
+        self.selectedDistWFItem = null;
 
         self.stickyActions = [];
 
@@ -687,20 +690,26 @@ module.exports = function (app) {
          * @param $event
          */
         self.callbackViewerAction = function (action, $event) {
-            var defer = $q.defer();
-            defer.promise.then(function () {
-                dialog.cancel();
-            });
-            var authorizeKeys = ['grid_action_electronic_approve_and_send', 'grid_action_electronic_approve'],
-                additionalData;
-            if (self.editMode && authorizeKeys.indexOf(action.text) > -1) {
-                additionalData = {preApproveAction: self.saveCorrespondenceChanges};
-            }
-            if (action.hasOwnProperty('params') && action.params) {
-                action.callback((self.workItem || self.correspondence), action.params, $event, defer, additionalData);
-            } else {
-                action.callback((self.workItem || self.correspondence), $event, defer, additionalData);
-            }
+            manageLaunchWorkflowService.clearLaunchData()
+                .then(function () {
+                    var defer = $q.defer();
+                    defer.promise.then(function () {
+                        dialog.cancel();
+                    });
+                    var authorizeKeys = ['grid_action_electronic_approve_and_send', 'grid_action_electronic_approve'],
+                        additionalData;
+                    if (self.editMode && authorizeKeys.indexOf(action.text) > -1) {
+                        additionalData = {preApproveAction: self.saveCorrespondenceChanges};
+                    }
+                    var record = (self.workItem || self.correspondence);
+                    record.gridAction = action;
+
+                    if (action.hasOwnProperty('params') && action.params) {
+                        action.callback(record, action.params, $event, defer, additionalData);
+                    } else {
+                        action.callback(record, $event, defer, additionalData);
+                    }
+                });
         };
 
         /**
@@ -760,6 +769,7 @@ module.exports = function (app) {
                         icon: 'arrange-send-backward',
                         text: 'grid_action_destinations',
                         callback: self.viewCorrespondenceSites,
+                        actionFrom: gridService.gridActionOptions.location.sticky,
                         //permissionKey: "MANAGE_DESTINATIONS",
                         class: "action-green",
                         checkShow: function (action, model) {
@@ -782,10 +792,15 @@ module.exports = function (app) {
             }
 
             self.stickyActions = _.filter(self.stickyActions, function (action) {
-                return self.isShowViewerAction(action);
+                if (!self.isShowViewerAction(action)) {
+                    return false;
+                }
+                // change the action location to popup to make it similar with actions directive in popup
+                action.actionFrom = gridService.gridActionOptions.location.popup;
+                return true;
             });
             self.stickyActions = $filter('orderBy')(self.stickyActions, 'stickyIndex');
-            self.stickyActionsChunk = _.chunk(self.stickyActions, 5);
+            self.stickyActionsChunk = _.chunk(self.stickyActions, 6);
         };
 
 
@@ -800,10 +815,44 @@ module.exports = function (app) {
             return true;
         };
 
+        /**
+         * @description Checks if manage launch comments can be show or not
+         * @returns {boolean}
+         */
+        self.canShowManageLaunchComments = function () {
+            return !!manageLaunchWorkflowService.isValidLaunchData();
+        };
+
+        /**
+         * @description Opens the minimized launch popup
+         * @param $event
+         */
+        self.maximizeLaunchDialog = function ($event) {
+            $event.preventDefault();
+            var launchData = angular.copy(manageLaunchWorkflowService.getLaunchData());
+            if (!launchData) {
+                return;
+            }
+
+            manageLaunchWorkflowService.clearLaunchData()
+                .then(function () {
+                    self.selectedDistWFItem = null;
+                    var record = (self.workItem || self.correspondence);
+                    launchData.selectedItems = _.map(launchData.selectedItems, function (item) {
+                        item.skipPredefinedActionTypecast = true;
+                        return item;
+                    });
+
+                    record.launchWorkFlowFromPredefinedAction($event, 'forward', launchData.defaultTab, launchData.isDeptIncoming, launchData.isDeptSent, launchData.selectedItems)
+                        .then(function () {
+                            dialog.hide();
+                        })
+                });
+        };
 
         self.correspondenceSitesChanged = function (event) {
             self.document_properties.$dirty = true;
-        }
+        };
 
     });
 };

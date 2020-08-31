@@ -18,6 +18,13 @@
         <span flex></span>
         <!--<md-progress-circular md-mode="indeterminate"
                               ng-if="ctrl.loadingIndicatorService.loading"></md-progress-circular>-->
+
+        <md-button ng-if="ctrl.canMinimize && ctrl.selectedWorkflowItems.length"
+                   tooltip="{{lang.minimize}}" class="md-icon-button"
+                   ng-disabled="!ctrl.selectedWorkflowItems.length"
+                   ng-click="ctrl.minimizeLaunchDialog($event)">
+            <md-icon md-svg-icon="arrow-expand"></md-icon>
+        </md-button>
         <md-button ng-click="ctrl.toggleWorkflowFullScreen()" class="md-icon-button">
             <md-icon md-svg-icon="{{ctrl.fullScreen ? 'fullscreen-exit': 'fullscreen'}}"></md-icon>
         </md-button>

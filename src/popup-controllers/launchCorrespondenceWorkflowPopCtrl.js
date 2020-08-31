@@ -32,6 +32,7 @@ module.exports = function (app) {
                                                                     dialog,
                                                                     correspondence,
                                                                     isDeptIncoming,
+                                                                    isDeptSent,
                                                                     Information,
                                                                     fromSimplePopup,
                                                                     errorCode,
@@ -40,7 +41,8 @@ module.exports = function (app) {
                                                                     predefinedActionMembers,
                                                                     fromQuickSend,
                                                                     rootEntity,
-                                                                    SentItemDepartmentInbox) {
+                                                                    SentItemDepartmentInbox,
+                                                                    manageLaunchWorkflowService) {
         'ngInject';
         var self = this;
         self.controllerName = 'launchCorrespondenceWorkflowPopCtrl';
@@ -49,6 +51,7 @@ module.exports = function (app) {
         var currentOUEscalationProcess = employeeService.getEmployee().userOrganization.escalationProcess;
         self.disableSend = false;
         self.rootEntity = rootEntity;
+        self.canMinimize = false;
 
         /**
          * get multi info in case the correspondence array.
@@ -1547,12 +1550,18 @@ module.exports = function (app) {
             self.fromQuickSend = fromQuickSend;
             if (predefinedActionMembers && predefinedActionMembers.length) {
                 self.selectedWorkflowItems = [];
-                predefinedActionService.typeCastMembersToDistributionWFItems(predefinedActionMembers, true, true)
-                    .then(function (result) {
-                        self.selectedWorkflowItems = result;
-                    });
+                // skipPredefinedActionTypecast is set when minimize launch and then maximize
+                if (predefinedActionMembers[0].skipPredefinedActionTypecast) {
+                    self.selectedWorkflowItems = angular.copy(predefinedActionMembers);
+                } else {
+                    predefinedActionService.typeCastMembersToDistributionWFItems(predefinedActionMembers, true, true)
+                        .then(function (result) {
+                            self.selectedWorkflowItems = result;
+                        });
+                }
             }
-        })
+            _setCanMinimize();
+        });
 
 
         /**
@@ -1561,6 +1570,32 @@ module.exports = function (app) {
         self.isHiddenForwardSenderInfo = function () {
             return self.replyOn ||
                 (self.correspondence.hasOwnProperty('hideForwardSenderInfo') && self.correspondence.hideForwardSenderInfo)
+        };
+
+        function _setCanMinimize() {
+            if (self.actionKey !== 'forward' || self.multi || !self.correspondence.hasOwnProperty('gridAction')) {
+                self.canMinimize = false;
+            } else {
+                self.canMinimize = (self.correspondence.gridAction.actionFrom === gridService.gridActionOptions.location.popup);
+            }
+        }
+
+        /**
+         * @description Minimizes the launch dialog
+         * @param $event
+         */
+        self.minimizeLaunchDialog = function ($event) {
+            var launchData = {
+                record: self.correspondence,
+                selectedItems: angular.copy(self.selectedWorkflowItems),
+                defaultTab: self.selectedTab,
+                isDeptIncoming: isDeptIncoming,
+                isDeptSent: isDeptSent
+            };
+            manageLaunchWorkflowService.setLaunchData(launchData)
+                .then(function (data) {
+                    dialog.cancel('MINIMIZE');
+                });
         };
 
     });

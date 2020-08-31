@@ -7,7 +7,8 @@ module.exports = function (app) {
                                                                       _,
                                                                       $timeout,
                                                                       gridService,
-                                                                      correspondenceService) {
+                                                                      correspondenceService,
+                                                                      manageLaunchWorkflowService) {
         'ngInject';
         var self = this;
         self.controllerName = 'correspondenceViewActionDirectiveCtrl';
@@ -20,26 +21,33 @@ module.exports = function (app) {
          * @param $event
          */
         self.runActionCallback = function (action, workItem, correspondence, $event) {
-            var defer = $q.defer();
-            defer.promise.then(function () {
-                if (workItem) {
-                    try {
-                        correspondenceService.unlockWorkItem(workItem, true, $event)
-                    } catch (e) {
+            manageLaunchWorkflowService.clearLaunchData()
+                .then(function () {
+                    var defer = $q.defer();
+                    defer.promise.then(function () {
+                        if (workItem) {
+                            try {
+                                correspondenceService.unlockWorkItem(workItem, true, $event)
+                            } catch (e) {
+                            }
+                        }
+                        dialog.cancel();
+                    });
+                    var record = self.g2gItemCopy ? self.g2gItemCopy : (workItem || correspondence),
+                        authorizeKeys = ['grid_action_electronic_approve_and_send', 'grid_action_electronic_approve'],
+                        additionalData;
+                    if (self.editMode && authorizeKeys.indexOf(action.text) > -1) {
+                        additionalData = {preApproveAction: self.saveCorrespondenceChanges};
                     }
-                }
-                dialog.cancel();
-            });
-            var record = self.g2gItemCopy ? self.g2gItemCopy : (workItem || correspondence),
-                authorizeKeys = ['grid_action_electronic_approve_and_send', 'grid_action_electronic_approve'],
-                additionalData;
-            if (self.editMode && authorizeKeys.indexOf(action.text) > -1) {
-                additionalData = {preApproveAction: self.saveCorrespondenceChanges};
-            }
-            if (action.hasOwnProperty('params') && action.params) {
-                return action.callback(record, action.params, $event, defer, additionalData);
-            }
-            return action.callback(record, $event, defer, additionalData);
+
+                    record.gridAction = action;
+
+                    if (action.hasOwnProperty('params') && action.params) {
+                        return action.callback(record, action.params, $event, defer, additionalData);
+                    }
+                    return action.callback(record, $event, defer, additionalData);
+
+                });
         };
 
 
@@ -52,7 +60,7 @@ module.exports = function (app) {
         self.checkDisplayAction = function (action, workItem, correspondence) {
             var actionCopy = angular.copy(action);
             actionCopy.actionFrom = gridService.gridActionOptions.location.popup;
-            return actionCopy.checkShow(actionCopy, (workItem || correspondence), {g2gItem : self.g2gItemCopy});
+            return actionCopy.checkShow(actionCopy, (workItem || correspondence), {g2gItem: self.g2gItemCopy});
         };
         /**
          * @description hide this action from view correspondence.

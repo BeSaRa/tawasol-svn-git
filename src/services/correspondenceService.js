@@ -2145,7 +2145,7 @@ module.exports = function (app) {
             });
         };
 
-        function _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, fromSimplePopup, predefinedActionMembers) {
+        function _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming,isDeptSent, fromSimplePopup, predefinedActionMembers) {
             var multi = angular.isArray(correspondence) && correspondence.length > 1;
             action = action || 'forward';
             var errorMessage = [];
@@ -2162,6 +2162,7 @@ module.exports = function (app) {
                         actionKey: action,
                         errorMessage: errorMessage,
                         isDeptIncoming: isDeptIncoming,
+                        isDeptSent: isDeptSent,
                         fromSimplePopup: fromSimplePopup,
                         predefinedActionMembers: predefinedActionMembers,
                         fromQuickSend: (predefinedActionMembers && predefinedActionMembers.length > 0)
@@ -2185,11 +2186,6 @@ module.exports = function (app) {
                         },
                         comments: function (userCommentService) {
                             'ngInject';
-                            /*return userCommentService
-                                .getUserComments()
-                                .then(function (result) {
-                                    return _.filter(result, 'status');
-                                });*/
                             return userCommentService.loadUserCommentsForDistribution();
                         },
                         workflowActions: function (workflowActionService) {
@@ -2263,14 +2259,14 @@ module.exports = function (app) {
                             return managerService
                                 .manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event)
                                 .then(function (result) {
-                                    return result.hasSite() ? _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, fromSimplePopup, predefinedActionMembers) : null;
+                                    return result.hasSite() ? _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers) : null;
                                 })
                         })
                 } else {
-                    return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, fromSimplePopup, predefinedActionMembers);
+                    return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers);
                 }
             }
-            return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, fromSimplePopup, predefinedActionMembers);
+            return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers);
 
         };
 

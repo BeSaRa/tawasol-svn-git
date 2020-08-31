@@ -898,13 +898,15 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Deletes all the indicators from the model
+         * @description Deletes all the properties from the model which ends with given string
          * @param record
+         * @param propertyEndsWith
          */
-        self.deleteIndicators = function (record) {
+        self.deletePropertiesFromRecord = function (record, propertyEndsWith) {
             for (var property in record) {
-                if (property.endsWith('Indicator'))
+                if (_.endsWith(property, propertyEndsWith)) {
                     delete record[property];
+                }
             }
         };
 
@@ -1011,6 +1013,6 @@ module.exports = function (app) {
                 extension = '.' + extension;
             }
             return extension;
-        }
+        };
     })
 };

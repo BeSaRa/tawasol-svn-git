@@ -289,6 +289,55 @@
                                 </li>
                             </ul>
                         </li>
+                        <li class="document-properties linked launch-comments"
+                            ng-if="ctrl.canShowManageLaunchComments()">
+                            <ul class="work-item-properties">
+                                <li class="section-title">
+                                    <div layout="row" layout-align="start center">
+                                        <span class="manage-span" flex>{{lang.get('comments')}}</span>
+                                        <md-button class="md-icon-button collapse-button"
+                                                   aria-label="{{lang.open}}"
+                                                   ng-click="ctrl.maximizeLaunchDialog($event)"
+                                                   tooltip="{{lang.open}}"
+                                                   tooltip-direction="{{lang.current === 'ar' ? 'left': 'right'}}">
+                                            <md-icon md-svg-icon="open-in-new"></md-icon>
+                                        </md-button>
+                                    </div>
+                                </li>
+                                <li layout-align="start center">
+                                    <form name="commentForm">
+                                        <div layout="column">
+                                            <md-input-container flex>
+                                                <label for="wfItem">{{lang.selected_users_departments}}</label>
+                                                <md-select name="wfItem" id="wfItem"
+                                                           ng-model="ctrl.selectedDistWFItem">
+                                                    <md-option ng-value="null">{{lang.none}}</md-option>
+                                                    <md-option
+                                                            ng-repeat="item in ctrl.manageLaunchWorkflowService.launchData.selectedItems track by $index"
+                                                            ng-value="item">{{item.getTranslatedName()}}
+                                                    </md-option>
+                                                </md-select>
+                                            </md-input-container>
+                                            <md-input-container flex ng-if="ctrl.selectedDistWFItem">
+                                                <label for="comments"> {{lang.type_your_comment}}</label>
+                                                <textarea rows="5" id="comments" name="comments" class="cms-comment"
+                                                          ng-disabled="!ctrl.selectedDistWFItem"
+                                                          ng-model="ctrl.selectedDistWFItem.comments"
+                                                          maxlength="2000"
+                                                          md-maxlength="2000"
+                                                          ng-required="ctrl.selectedDistWFItem.isSecureAction"></textarea>
+                                                <div ng-messages="commentForm.comments.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                    <div ng-message="maxlength">
+                                                        {{lang.max_length.change({length:2000})}}
+                                                    </div>
+                                                </div>
+                                            </md-input-container>
+                                        </div>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </md-sidenav>
