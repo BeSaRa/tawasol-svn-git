@@ -162,6 +162,7 @@ module.exports = function (app) {
                 id: "custom-stamps",
                 title: "custom stamps",
                 icon: "./assets/images/custom-stamps.svg",
+                disabled: !(employeeService.hasPermissionTo('ADD_STAMP')),
                 onPress: self.openCustomStampsDialog
             };
             var barcodeButton = {
@@ -197,9 +198,11 @@ module.exports = function (app) {
                     dialog.hide(AnnotationType.SIGNATURE);
                 }
             };
+            // remove default print from toolbar
             var toolbarInstance = _.filter(defaultToolbar.concat([printWithoutAnnotationButton, customStampsButton, exportButton]), function (item) {
                 return item.type !== 'print';
             });
+            // add custom normal print function
             toolbarInstance.splice(26, 0, {
                 type: 'custom',
                 id: 'print',
@@ -209,6 +212,15 @@ module.exports = function (app) {
                     self.printWithOutAnnotations(e, false);
                 }
             });
+            console.log('Toolbar', toolbarInstance);
+            // disable/enable stamps button
+            toolbarInstance = _.map(toolbarInstance, function (item) {
+                if (item.type === 'stamp') {
+                    item.disabled = !(employeeService.hasPermissionTo('ADD_STAMP'));
+                }
+                return item;
+            });
+
 
             if (_checkForDocumentAllowedSignatures('internal', 'ELECTRONIC_SIGNATURE_MEMO')) {
                 _addButtonToToolbar(toolbarInstance, approveButton)
