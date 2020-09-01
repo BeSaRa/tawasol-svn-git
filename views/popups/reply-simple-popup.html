@@ -1,8 +1,19 @@
 <md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            aria-label="{{ctrl.dialogTitle}}">
-    <popup-toolbar-directive header-text="{{ctrl.dialogTitle}} - {{ctrl.record.getTranslatedName()}}"
-                             close-callback="ctrl.closeLaunchPopup"></popup-toolbar-directive>
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <span md-truncate
+                  class="dialog-title-span">{{ctrl.dialogTitle}} - {{ctrl.record.getTranslatedName()}}</span>
+            <span flex></span>
+            <md-button ng-if="ctrl.canMinimize"
+                       ng-click="ctrl.minimizeLaunchDialog($event)"
+                       class="md-icon-button">
+                <md-icon md-svg-icon="arrow-expand"></md-icon>
+            </md-button>
+            <cms-close-dialog-directive when-close="ctrl.closeLaunchPopup"></cms-close-dialog-directive>
+        </div>
+    </md-toolbar>
     <md-dialog-content overlay-scroll-bar-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="distWorkflowItem_form" layout="column">

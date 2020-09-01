@@ -4,13 +4,22 @@ module.exports = function (app) {
         var self = this;
         self.serviceName = 'manageLaunchWorkflowService';
 
+        self.workflowType = {
+            forward: 'forward',
+            reply: 'reply',
+            simpleReply: 'simpleReply'
+        };
+
         function _initLaunchData() {
             self.launchData = {
                 record: null,
                 selectedItems: [],
                 defaultTab: null,
                 isDeptIncoming: false,
-                isDeptSent: false
+                isDeptSent: false,
+                wfType: null,
+                selectedReplyTo: null,
+                selectedManagers: []
             };
         }
 
@@ -29,9 +38,12 @@ module.exports = function (app) {
                 .then(function () {
                     self.launchData.record = data.record;
                     self.launchData.selectedItems = data.selectedItems;
-                    self.launchData.defaultTab = data.defaultTab;
-                    self.launchData.isDeptIncoming = data.isDeptIncoming;
-                    self.launchData.isDeptSent = data.isDeptSent;
+                    self.launchData.defaultTab = data.defaultTab || null;
+                    self.launchData.isDeptIncoming = data.isDeptIncoming || false;
+                    self.launchData.isDeptSent = data.isDeptSent || false;
+                    self.launchData.wfType = data.wfType;
+                    self.launchData.selectedReplyTo = data.selectedReplyTo || null;
+                    self.launchData.selectedManagers = data.selectedManagers || [];
                     return $q.resolve(true);
                 })
         };
@@ -41,7 +53,7 @@ module.exports = function (app) {
          * @returns {*|boolean}
          */
         self.isValidLaunchData = function () {
-            return self.launchData.record && self.getLaunchSelectedItems().length > 0 && self.launchData.defaultTab;
+            return self.launchData.record && self.getLaunchSelectedItems().length > 0 && self.launchData.wfType;
         };
 
         /**

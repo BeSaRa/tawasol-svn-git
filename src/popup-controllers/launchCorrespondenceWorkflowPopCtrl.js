@@ -224,12 +224,13 @@ module.exports = function (app) {
         };
 
         if (replyOn) {
+            var replyUsers = [];
             if (fromSimplePopup) {
-                self.users = [fromSimplePopup];
+                replyUsers = angular.isArray(fromSimplePopup) ? fromSimplePopup : [fromSimplePopup];
             } else {
-                self.users = _mapWFUser([replyOn]);
+                replyUsers = _mapWFUser([replyOn]);
             }
-            _addUserReply(self.users);
+            _addUserReply(replyUsers);
             self.textButton = 'reply';
         }
 
@@ -1543,6 +1544,7 @@ module.exports = function (app) {
         };
 
         $timeout(function () {
+            manageLaunchWorkflowService.clearLaunchData();
             self.canSendToMultiple = true;
             if (!self.multi) {
                 self.canSendToMultiple = !correspondence.hasActiveSeqWF();
@@ -1573,7 +1575,7 @@ module.exports = function (app) {
         };
 
         function _setCanMinimize() {
-            if (self.actionKey !== 'forward' || self.multi || !self.correspondence.hasOwnProperty('gridAction')) {
+            if (self.multi || !self.correspondence.hasOwnProperty('gridAction')) {
                 self.canMinimize = false;
             } else {
                 self.canMinimize = (self.correspondence.gridAction.actionFrom === gridService.gridActionOptions.location.popup);
@@ -1590,7 +1592,8 @@ module.exports = function (app) {
                 selectedItems: angular.copy(self.selectedWorkflowItems),
                 defaultTab: self.selectedTab,
                 isDeptIncoming: isDeptIncoming,
-                isDeptSent: isDeptSent
+                isDeptSent: isDeptSent,
+                wfType: manageLaunchWorkflowService.workflowType[(replyOn ? 'reply' : 'forward')]
             };
             manageLaunchWorkflowService.setLaunchData(launchData)
                 .then(function (data) {

@@ -2145,7 +2145,7 @@ module.exports = function (app) {
             });
         };
 
-        function _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming,isDeptSent, fromSimplePopup, predefinedActionMembers) {
+        function _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers) {
             var multi = angular.isArray(correspondence) && correspondence.length > 1;
             action = action || 'forward';
             var errorMessage = [];
@@ -2304,8 +2304,11 @@ module.exports = function (app) {
                             'ngInject';
                             return workflowActionService.loadCurrentUserWorkflowActions()
                         },
-                        replyOn: function (distributionWFService) {
+                        replyOn: function (distributionWFService, manageLaunchWorkflowService) {
                             'ngInject';
+                            if (manageLaunchWorkflowService.isValidLaunchData()){
+                                return manageLaunchWorkflowService.getLaunchSelectedItems()[0];
+                            }
                             return distributionWFService
                                 .loadSenderUserForWorkItem(record);
 

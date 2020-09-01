@@ -834,20 +834,30 @@ module.exports = function (app) {
                 return;
             }
 
-            manageLaunchWorkflowService.clearLaunchData()
-                .then(function () {
-                    self.selectedDistWFItem = null;
-                    var record = (self.workItem || self.correspondence);
-                    launchData.selectedItems = _.map(launchData.selectedItems, function (item) {
-                        item.skipPredefinedActionTypecast = true;
-                        return item;
-                    });
+            self.selectedDistWFItem = null;
+            var record = (self.workItem || self.correspondence);
 
-                    record.launchWorkFlowFromPredefinedAction($event, 'forward', launchData.defaultTab, launchData.isDeptIncoming, launchData.isDeptSent, launchData.selectedItems)
-                        .then(function () {
-                            dialog.hide();
-                        })
+            if (launchData.wfType === manageLaunchWorkflowService.workflowType.simpleReply) {
+                record.replySimple($event, 'reply')
+                    .then(function () {
+                        dialog.hide();
+                    });
+            } else if (launchData.wfType === manageLaunchWorkflowService.workflowType.reply) {
+                record.launchWorkFlow($event, 'reply', null, null, launchData.selectedItems)
+                    .then(function () {
+                        dialog.hide();
+                    });
+            } else if (launchData.wfType === manageLaunchWorkflowService.workflowType.forward) {
+                launchData.selectedItems = _.map(launchData.selectedItems, function (item) {
+                    item.skipPredefinedActionTypecast = true;
+                    return item;
                 });
+
+                record.launchWorkFlowFromPredefinedAction($event, 'forward', launchData.defaultTab, launchData.isDeptIncoming, launchData.isDeptSent, launchData.selectedItems)
+                    .then(function () {
+                        dialog.hide();
+                    })
+            }
         };
 
         self.correspondenceSitesChanged = function (event) {

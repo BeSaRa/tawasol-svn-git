@@ -22,7 +22,9 @@ module.exports = function (app) {
                                                    lookupService,
                                                    userCommentService,
                                                    DistributionOUWFItem,
-                                                   defaultReplyToIdentifier) {
+                                                   defaultReplyToIdentifier,
+                                                   gridService,
+                                                   manageLaunchWorkflowService) {
         'ngInject';
         var self = this;
         self.controllerName = 'replySimplePopCtrl';
@@ -36,6 +38,8 @@ module.exports = function (app) {
         self.workflowActions = workflowActions;
         // the distWorkflowItem
         self.distWorkflowItem = angular.copy(replyOn);
+        self.launchData = null;
+        self.canMinimize = false;
 
         self.replyToText = replyOn['ou' + self.currentLangUCFirst + 'Name'] + ' - ' + replyOn.getTranslatedName();
         // current date minimum date for the due date.
@@ -84,22 +88,6 @@ module.exports = function (app) {
             }
         ];
 
-        var _setDefaultReplyTo = function () {
-            if (defaultReplyToIdentifier) {
-                var selectedReplyTo = _.find(self.replyToOptions, function (replyToOption) {
-                    return replyToOption.identifier === defaultReplyToIdentifier;
-                });
-                if (selectedReplyTo) {
-                    self.selectedReplyTo = selectedReplyTo.id;
-                    self.onChangeReplyTo();
-                } else {
-                    self.selectedReplyTo = 1;
-                }
-            } else {
-                self.selectedReplyTo = 1;
-            }
-        };
-
         self.actionSearchText = '';
         self.commentSearchText = '';
 
@@ -135,7 +123,11 @@ module.exports = function (app) {
             if (_getApprovedStatus()) {
                 self.selectedManagers = -1;
             } else {
-                self.selectedManagers = [];
+                if (self.launchData) {
+                    self.selectedManagers = self.launchData.selectedManagers;
+                } else {
+                    self.selectedManagers = [];
+                }
             }
 
             if (self.selectedReplyTo === 1) {
@@ -150,7 +142,22 @@ module.exports = function (app) {
                 self.replyToText = '';
             }
         };
-        _setDefaultReplyTo();
+
+        var _setDefaultReplyTo = function () {
+            if (defaultReplyToIdentifier) {
+                var selectedReplyTo = _.find(self.replyToOptions, function (replyToOption) {
+                    return replyToOption.identifier === defaultReplyToIdentifier;
+                });
+                if (selectedReplyTo) {
+                    self.selectedReplyTo = selectedReplyTo.id;
+                    self.onChangeReplyTo();
+                } else {
+                    self.selectedReplyTo = 1;
+                }
+            } else {
+                self.selectedReplyTo = 1;
+            }
+        };
 
         /**
          * @description find matched comment if not edited.
@@ -283,7 +290,7 @@ module.exports = function (app) {
             user.sendRelatedDocs = sendRelatedDocs;
 
             _setDistWorkflowItem(user, self.distWorkflowItem);
-
+            dialog.cancel('ADVANCE_LAUNCH');
             return record.launchWorkFlow($event, 'reply', null, null, user)
                 .then(function () {
                     toast.success(langService.get('launch_success_distribution_workflow'));
@@ -500,12 +507,53 @@ module.exports = function (app) {
             });
         }
 
+        self.minimizeLaunchDialog = function ($event) {
+            var launchData = {
+                record: self.record,
+                selectedItems: angular.copy([self.distWorkflowItem]),
+                defaultTab: null,
+                isDeptIncoming: false,
+                isDeptSent: false,
+                wfType: manageLaunchWorkflowService.workflowType.simpleReply,
+                selectedReplyTo: self.selectedReplyTo,
+                selectedManagers: self.selectedManagers
+            };
+            manageLaunchWorkflowService.setLaunchData(launchData)
+                .then(function (data) {
+                    dialog.cancel('MINIMIZE');
+                });
+        };
+
 
         /**
          * @description close the dialog.
          */
         self.closeLaunchPopup = function () {
             dialog.cancel();
+        };
+
+        function _setCanMinimize() {
+            if (!self.record.hasOwnProperty('gridAction')) {
+                self.canMinimize = false;
+            } else {
+                self.canMinimize = (self.record.gridAction.actionFrom === gridService.gridActionOptions.location.popup);
+            }
+        }
+
+        self.$onInit = function () {
+            _setCanMinimize();
+            if (manageLaunchWorkflowService.isValidLaunchData()) {
+                self.launchData = angular.copy(manageLaunchWorkflowService.getLaunchData());
+                if (self.launchData) {
+                    manageLaunchWorkflowService.clearLaunchData()
+                        .then(function () {
+                            self.selectedReplyTo = self.launchData.selectedReplyTo;
+                            self.onChangeReplyTo();
+                        });
+                }
+            } else {
+                _setDefaultReplyTo();
+            }
         };
 
 
