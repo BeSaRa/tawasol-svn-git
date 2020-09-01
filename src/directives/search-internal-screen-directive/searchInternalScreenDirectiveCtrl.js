@@ -2102,7 +2102,7 @@ module.exports = function (app) {
          */
         self.checkFieldPropertyValue = function (fieldName, property) {
             fieldName = fieldName.toLowerCase();
-            return self.configurations[fieldName][property];
+            return self.configurations[fieldName] && self.configurations[fieldName][property];
         };
         /**
          * @description to check status value for given field in property configurations.
