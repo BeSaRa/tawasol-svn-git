@@ -72,7 +72,8 @@ module.exports = function (app) {
             }
         };
         // toggle first time by checking if slow connection enabled by user as default setting and set Url accordingly
-        self.toggleSlowConnectionMode();
+        //self.toggleSlowConnectionMode();
+        _getOriginalMainDocContent();
 
         /**
          * @description toggle fullScreen dialog
