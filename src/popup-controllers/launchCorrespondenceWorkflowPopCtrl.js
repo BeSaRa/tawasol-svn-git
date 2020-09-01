@@ -753,7 +753,7 @@ module.exports = function (app) {
                 }
                 return item;
             });
-            self.selectedWorkflowItems = self.selectedWorkflowItems.concat(users);
+            self.selectedWorkflowItems = self.selectedWorkflowItems.concat(angular.copy(users));
         }
 
         /**
