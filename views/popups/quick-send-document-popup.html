@@ -1,7 +1,19 @@
 <md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            aria-label="{{lang.quick_send}}">
-    <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{ctrl.headerText}}"></popup-toolbar-directive>
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <span md-truncate
+                  class="dialog-title-span">{{ctrl.headerText}}</span>
+            <span flex></span>
+            <md-button ng-if="ctrl.canMinimize && ctrl.includedMembers.length > 0"
+                       ng-click="ctrl.minimizeLaunchDialog($event)"
+                       tooltip="{{lang.minimize}}" class="md-icon-button">
+                <md-icon md-svg-icon="arrow-expand"></md-icon>
+            </md-button>
+            <cms-close-dialog-directive when-close="ctrl.closePopup"></cms-close-dialog-directive>
+        </div>
+    </md-toolbar>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <div layout="column">

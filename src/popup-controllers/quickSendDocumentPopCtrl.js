@@ -18,7 +18,9 @@ module.exports = function (app) {
                                                          tableGeneratorService,
                                                          moment,
                                                          rootEntity,
-                                                         SentItemDepartmentInbox) {
+                                                         SentItemDepartmentInbox,
+                                                         gridService,
+                                                         manageLaunchWorkflowService) {
         'ngInject';
         var self = this;
         self.controllerName = 'quickSendDocumentPopCtrl';
@@ -30,9 +32,12 @@ module.exports = function (app) {
         self.headerText = langService.get('quick_send') + ' : ' + self.record.getInfo().title;
 
         self.selectedPredefinedAction = null;
+        self.canMinimize = false;
 
         self.includedMembers = [];
         self.excludedMembers = [];
+
+        self.launchData = null;
 
         function _checkPermission(permission) {
             return employeeService.hasPermissionTo(permission);
@@ -55,7 +60,7 @@ module.exports = function (app) {
             return (member.isGroupMailMember() && !self.record.isPrivateSecurityLevel());
         }
 
-        self.onChangePredefinedAction = function ($event) {
+        self.onChangePredefinedAction = function ($event, isMaximizePopup) {
             self.includedMembers = [];
             self.excludedMembers = [];
             var outOfOfficeUsers = [];
@@ -65,7 +70,11 @@ module.exports = function (app) {
                     .then(function (result) {
                         _.map(result.members, function (member) {
                             if (_isValidUser(member) || _isValidOrganization(member) || _isValidGroupMail(member)) {
-                                self.includedMembers.push(member);
+                                if (isMaximizePopup) {
+                                    self.includedMembers = self.launchData.selectedItems;
+                                } else {
+                                    self.includedMembers.push(member);
+                                }
                                 if (member.isUserOutOfOffice()) {
                                     outOfOfficeUsers.push(member);
                                 }
@@ -225,10 +234,41 @@ module.exports = function (app) {
                 })
         };
 
-
         self.canLaunchSeqWF = function () {
             return employeeService.hasPermissionTo('LAUNCH_SEQ_WF') && rootEntity.hasPSPDFViewer()
                 && !self.record.hasActiveSeqWF() && !(self.record instanceof SentItemDepartmentInbox);
+        };
+
+        function _setCanMinimize() {
+            if (!self.record.hasOwnProperty('gridAction')) {
+                self.canMinimize = false;
+            } else {
+                self.canMinimize = (self.record.gridAction.actionFrom === gridService.gridActionOptions.location.popup);
+            }
+        }
+
+        /**
+         * @description Minimizes the launch dialog
+         * @param $event
+         */
+        self.minimizeLaunchDialog = function ($event) {
+            var selectedItems = _.map(self.includedMembers, function (item) {
+                item.comments = item.userComment;
+                return item;
+            });
+            var launchData = {
+                record: self.record,
+                selectedItems: angular.copy(selectedItems),
+                defaultTab: null,
+                isDeptIncoming: isDeptIncoming,
+                isDeptSent: isDeptSent,
+                wfType: manageLaunchWorkflowService.workflowType.quickSend,
+                selectedPredefinedAction: self.selectedPredefinedAction
+            };
+            manageLaunchWorkflowService.setLaunchData(launchData)
+                .then(function (data) {
+                    dialog.cancel('MINIMIZE');
+                });
         };
 
         /**
@@ -248,6 +288,21 @@ module.exports = function (app) {
 
         function _filterWFDepartmentsGroup(item) {
             return item.gridName === 'OUGroup';
+        }
+
+        self.$onInit = function () {
+            if (manageLaunchWorkflowService.isValidLaunchData()) {
+                self.launchData = manageLaunchWorkflowService.getLaunchData();
+                if (self.launchData) {
+                    self.launchData.selectedItems = _.map(self.launchData.selectedItems, function (item) {
+                        item.userComment = item.comments;
+                        return item;
+                    });
+                    self.selectedPredefinedAction = self.launchData.selectedPredefinedAction;
+                    self.onChangePredefinedAction(null, true);
+                }
+            }
+            _setCanMinimize();
         }
     });
 };

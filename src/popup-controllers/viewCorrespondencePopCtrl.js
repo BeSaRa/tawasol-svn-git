@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                           $element,
                                                           $rootScope,
                                                           toast,
+                                                          $scope,
                                                           langService,
                                                           $timeout,
                                                           configurationService,
@@ -283,6 +284,7 @@ module.exports = function (app) {
         };
 
         $timeout(function () {
+            manageLaunchWorkflowService.clearLaunchData();
             self.detailsReady = true;
             self.model = angular.copy(self.correspondence);
             // set action to review/user-inbox/search will enable edit of security level
@@ -855,6 +857,11 @@ module.exports = function (app) {
 
                 record.launchWorkFlowFromPredefinedAction($event, 'forward', launchData.defaultTab, launchData.isDeptIncoming, launchData.isDeptSent, launchData.selectedItems)
                     .then(function () {
+                        dialog.hide();
+                    })
+            } else if (launchData.wfType === manageLaunchWorkflowService.workflowType.quickSend) {
+                record.quickSendLaunchWorkflow($event, 'favorites', null, launchData.isDeptIncoming)
+                    .then(function (result) {
                         dialog.hide();
                     })
             }

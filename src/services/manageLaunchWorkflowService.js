@@ -6,6 +6,7 @@ module.exports = function (app) {
 
         self.workflowType = {
             forward: 'forward',
+            quickSend: 'quickSend',
             reply: 'reply',
             simpleReply: 'simpleReply'
         };
@@ -19,7 +20,8 @@ module.exports = function (app) {
                 isDeptSent: false,
                 wfType: null,
                 selectedReplyTo: null,
-                selectedManagers: []
+                selectedManagers: [],
+                selectedPredefinedAction: null
             };
         }
 
@@ -44,6 +46,7 @@ module.exports = function (app) {
                     self.launchData.wfType = data.wfType;
                     self.launchData.selectedReplyTo = data.selectedReplyTo || null;
                     self.launchData.selectedManagers = data.selectedManagers || [];
+                    self.launchData.selectedPredefinedAction = data.selectedPredefinedAction || null;
                     return $q.resolve(true);
                 })
         };
