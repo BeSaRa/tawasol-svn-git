@@ -845,20 +845,15 @@ module.exports = function (app) {
                         dialog.hide();
                     });
             } else if (launchData.wfType === manageLaunchWorkflowService.workflowType.reply) {
-                record.launchWorkFlow($event, 'reply', null, null, launchData.selectedItems)
+                record.launchWorkFlow($event, 'reply', null, null)
                     .then(function () {
                         dialog.hide();
                     });
             } else if (launchData.wfType === manageLaunchWorkflowService.workflowType.forward) {
-                launchData.selectedItems = _.map(launchData.selectedItems, function (item) {
-                    item.skipPredefinedActionTypecast = true;
-                    return item;
-                });
-
-                record.launchWorkFlowFromPredefinedAction($event, 'forward', launchData.defaultTab, launchData.isDeptIncoming, launchData.isDeptSent, launchData.selectedItems)
+                record.launchWorkFlow($event, 'forward', launchData.defaultTab, launchData.isDeptIncoming)
                     .then(function () {
                         dialog.hide();
-                    })
+                    });
             } else if (launchData.wfType === manageLaunchWorkflowService.workflowType.quickSend) {
                 record.quickSendLaunchWorkflow($event, 'favorites', null, launchData.isDeptIncoming)
                     .then(function (result) {

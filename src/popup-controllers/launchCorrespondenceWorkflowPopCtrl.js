@@ -1544,7 +1544,7 @@ module.exports = function (app) {
         };
 
         $timeout(function () {
-            manageLaunchWorkflowService.clearLaunchData();
+            _setCanMinimize();
             self.canSendToMultiple = true;
             if (!self.multi) {
                 self.canSendToMultiple = !correspondence.hasActiveSeqWF();
@@ -1552,17 +1552,16 @@ module.exports = function (app) {
             self.fromQuickSend = fromQuickSend;
             if (predefinedActionMembers && predefinedActionMembers.length) {
                 self.selectedWorkflowItems = [];
-                // skipPredefinedActionTypecast is set when minimize launch and then maximize
-                if (predefinedActionMembers[0].skipPredefinedActionTypecast) {
-                    self.selectedWorkflowItems = angular.copy(predefinedActionMembers);
-                } else {
-                    predefinedActionService.typeCastMembersToDistributionWFItems(predefinedActionMembers, true, true)
-                        .then(function (result) {
-                            self.selectedWorkflowItems = result;
-                        });
-                }
+                predefinedActionService.typeCastMembersToDistributionWFItems(predefinedActionMembers, true, true)
+                    .then(function (result) {
+                        self.selectedWorkflowItems = result;
+                    });
             }
-            _setCanMinimize();
+
+            if (manageLaunchWorkflowService.isValidLaunchData()) {
+                self.selectedWorkflowItems = manageLaunchWorkflowService.getLaunchSelectedItems();
+            }
+            manageLaunchWorkflowService.clearLaunchData();
         });
 
 
