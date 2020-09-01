@@ -1,6 +1,6 @@
 module.exports = function (app) {
     app.constant('AnnotationType', {
-        NON_EXISTING: 0,
+        UPDATE_CONTENT: 0,
         ANNOTATION: 1,
         BARCODE: 2,
         SIGNATURE: 3,

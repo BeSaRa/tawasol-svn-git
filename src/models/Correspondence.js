@@ -402,6 +402,10 @@ module.exports = function (app) {
                 return correspondenceService.saveDocumentContentFile(this, content);
             };
 
+            Correspondence.prototype.updateDocumentContentByAnnotation = function (content, annotationType) {
+                return correspondenceService.updateContentByAnnotation(this, content, annotationType);
+            };
+
             Correspondence.prototype.saveDocumentEntities = function (entity, index) {
                 if (entity && index) {
                     this.linkedEntities[index] = entity;

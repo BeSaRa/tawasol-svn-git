@@ -76,6 +76,27 @@ module.exports = function (app) {
 
         console.log('correspondence', correspondence);
 
+        self.readyToExportExcludedAnnotationList = [
+            "annotate",
+            "ink",
+            "highlighter",
+            "text-highlighter",
+            "ink-eraser",
+            "ink-signature",
+            "image",
+            "note",
+            "text",
+            "line",
+            "arrow",
+            "rectangle",
+            "ellipse",
+            "polyline",
+            "polygon",
+            "document-editor",
+            "approve",
+            "barcode",
+        ];
+
         /**
          * @description getNext step of seqWF
          * @private
@@ -111,6 +132,10 @@ module.exports = function (app) {
             toolbarInstance.push(button);
         }
 
+        function _itemInExcludedList(item) {
+            return (self.readyToExportExcludedAnnotationList.indexOf(item) !== -1)
+        }
+
         /**
          * @description create custom buttons and attache it to  viewer toolbar.
          * @param getInstance
@@ -129,31 +154,7 @@ module.exports = function (app) {
                 title: "Export",
                 icon: "./assets/images/download.svg",
                 onPress: function () {
-                    getInstance()
-                        .exportPDF()
-                        .then(buffer => {
-                            var supportsDownloadAttribute = HTMLAnchorElement.prototype.hasOwnProperty(
-                                "download"
-                            );
-                            var blob = new Blob([buffer], {type: "application/pdf"});
-                            if (navigator.msSaveOrOpenBlob) {
-                                navigator.msSaveOrOpenBlob(blob, "download.pdf");
-                                callback();
-                            } else if (!supportsDownloadAttribute) {
-                                var reader = new FileReader();
-                                reader.onloadend = () => {
-                                    var dataUrl = reader.result;
-                                    downloadPdf(dataUrl);
-                                    callback();
-                                };
-                                reader.readAsDataURL(blob);
-                            } else {
-                                var objectUrl = window.URL.createObjectURL(blob);
-                                downloadPdf(objectUrl);
-                                window.URL.revokeObjectURL(objectUrl);
-                                callback();
-                            }
-                        });
+                    self.exportDocument(getInstance, callback);
                 }
             };
             var customStampsButton = {
@@ -239,6 +240,13 @@ module.exports = function (app) {
             ) {
                 toolbarInstance.push(openForApprovalButton);
             }
+
+            if (self.info.docStatus === 24) {
+                toolbarInstance = toolbarInstance.filter(item => {
+                    return item.type === 'custom' ? !_itemInExcludedList(item.id) : !_itemInExcludedList(item.type);
+                });
+            }
+
             return toolbarInstance;
         }
 
@@ -468,6 +476,34 @@ module.exports = function (app) {
             }).then(function (annotations) {
                 annotations.length === 1 ? self.selectAnnotation(annotations[0]) : null;
             });
+        };
+
+        self.exportDocument = function (getInstance, callback) {
+            getInstance()
+                .exportPDF()
+                .then(buffer => {
+                    var supportsDownloadAttribute = HTMLAnchorElement.prototype.hasOwnProperty(
+                        "download"
+                    );
+                    var blob = new Blob([buffer], {type: "application/pdf"});
+                    if (navigator.msSaveOrOpenBlob) {
+                        navigator.msSaveOrOpenBlob(blob, "download.pdf");
+                        callback();
+                    } else if (!supportsDownloadAttribute) {
+                        var reader = new FileReader();
+                        reader.onloadend = () => {
+                            var dataUrl = reader.result;
+                            downloadPdf(dataUrl);
+                            callback();
+                        };
+                        reader.readAsDataURL(blob);
+                    } else {
+                        var objectUrl = window.URL.createObjectURL(blob);
+                        downloadPdf(objectUrl);
+                        window.URL.revokeObjectURL(objectUrl);
+                        callback();
+                    }
+                });
         };
         /**
          * @description open custom stamps dialog to select stamp to add it to the PDF Document
@@ -968,9 +1004,10 @@ module.exports = function (app) {
         /**
          * @description handle update document content
          * @param pdfContent
+         * @param annotationType
          */
-        self.handleUpdateDocumentContent = function (pdfContent) {
-            self.correspondence.addDocumentContentFile(pdfContent).then(function () {
+        self.handleUpdateDocumentContent = function (pdfContent, annotationType) {
+            self.correspondence.updateDocumentContentByAnnotation(pdfContent, annotationType).then(function () {
                 toast.success(langService.get('save_success'));
                 self.disableSaveButton = false;
                 self.sendAnnotationLogs();
@@ -1014,7 +1051,8 @@ module.exports = function (app) {
                                         self.handleUpdateDocumentContent(pdfContent);
                                     });
                             } else {
-                                self.handleSaveAnnotationAsAttachment(pdfContent);
+                                // for electronic document in ready to export
+                                self.info.docStatus === 24 ? self.handleUpdateDocumentContent(pdfContent, AnnotationType.STAMP) : self.handleSaveAnnotationAsAttachment(pdfContent);
                             }
                         }
                     });
@@ -1031,6 +1069,12 @@ module.exports = function (app) {
             self.disableSaveButton = true;
             self.getDocumentAnnotations().then(function (newAnnotations) {
                 self.newAnnotations = newAnnotations;
+                var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations);
+                if (!hasChanges.length) {
+                    dialog.infoMessage(langService.get('there_is_no_changes_to_save'));
+                    return;
+                }
+
                 if (self.annotationType === AnnotationType.SIGNATURE) {
                     self.handleOpenForApprovalSave(ignoreValidationSignature);
                 } else {
@@ -1165,7 +1209,7 @@ module.exports = function (app) {
                             });
                     } else { // else nextSeqStep.isAuthorizeAndSendStep()
                         var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations);
-                        if (!hasChanges) {
+                        if (!hasChanges.length) {
                             return self.applyNextStepOnCorrespondence(null).catch(self.handleSeqExceptions);
                         }
                         self.currentInstance.exportInstantJSON().then(function (instantJSON) {

@@ -833,6 +833,35 @@ module.exports = function (app) {
                     });
             }
         };
+        /**
+         * @description update content for annotated document
+         * @param correspondence
+         * @param content
+         * @param annotationType
+         * @return {*}
+         */
+        self.updateContentByAnnotation = function (correspondence, content, annotationType) {
+            if (!annotationType) {
+                annotationType = 0;
+            }
+            var form = new FormData();
+            form.append('content', content ? content : correspondence.contentFile);
+            form.append('annotationType', annotationType);
+            return $http.post(_createUrlSchema(correspondence.vsId, correspondence.docClassName, 'annotation/content'), form, {
+                headers: {
+                    'Content-Type': undefined
+                }
+            })
+                .then(function (result) {
+                    return result.data.rs;
+                }).catch(function (error) {
+                    if (errorCode.checkIf(error, 'ERROR_UPLOAD_FILE') === true) {
+                        dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
+                        return $q.reject(error);
+                    }
+                    return $q.reject(self.getTranslatedError(error));
+                });
+        };
 
         /**
          * @description to get the book by id.
@@ -2306,7 +2335,7 @@ module.exports = function (app) {
                         },
                         replyOn: function (distributionWFService, manageLaunchWorkflowService) {
                             'ngInject';
-                            if (manageLaunchWorkflowService.isValidLaunchData()){
+                            if (manageLaunchWorkflowService.isValidLaunchData()) {
                                 return manageLaunchWorkflowService.getLaunchSelectedItems()[0];
                             }
                             return distributionWFService

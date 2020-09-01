@@ -122,7 +122,7 @@ module.exports = function (app) {
          */
         self.isShowSlowConnectionVisible = function () {
             return rootEntity.getGlobalSettings().isSlowConnectionMode() && !employeeService.getEmployee().isSlowConnectionMode() &&
-                employeeService.hasPermissionTo('DOWNLOAD_MAIN_DOCUMENT') && employeeService.hasPermissionTo('PRINT_DOCUMENT');
+                employeeService.hasPermissionTo('DOWNLOAD_MAIN_DOCUMENT') && employeeService.hasPermissionTo('PRINT_DOCUMENT') && self.correspondence;
         };
 
         self.isOfficeOnlineViewer = function (url) {
@@ -134,11 +134,11 @@ module.exports = function (app) {
         };
 
         self.displayMainIframeViewer = function () {
-            return (self.isTheMainDocumentInView() && !self.psPDFViewerEnabled) || self.isTheMainDocumentInView() && self.psPDFViewerEnabled && self.isOfficeOnlineViewer(self.viewURL);
+            return (self.isTheMainDocumentInView() && !self.psPDFViewerEnabled) || (self.isTheMainDocumentInView() && self.psPDFViewerEnabled && self.isOfficeOnlineViewer(self.viewURL)) && self.correspondence;
         };
 
         self.displayMainPSPDFViewer = function () {
-            return self.isTheMainDocumentInView() && self.psPDFViewerEnabled && !self.isOfficeOnlineViewer(self.viewURL);
+            return self.isTheMainDocumentInView() && self.psPDFViewerEnabled && !self.isOfficeOnlineViewer(self.viewURL) && self.correspondence;
         };
 
         self.displaySecondIframeViewer = function () {

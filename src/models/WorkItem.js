@@ -1106,6 +1106,14 @@ module.exports = function (app) {
                 return correspondenceService.saveDocumentContentFile(correspondence, content);
             };
 
+            WorkItem.prototype.updateDocumentContentByAnnotation = function (content, annotationType) {
+                if (!content)
+                    throw Error('Need To Pass the Content for this work Item');
+
+                var correspondence = this.convertToCorrespondence();
+                return correspondenceService.updateContentByAnnotation(correspondence, content, annotationType);
+            };
+
             WorkItem.prototype.openForAnnotation = function () {
                 return correspondenceService.annotateCorrespondence(this);
             };
