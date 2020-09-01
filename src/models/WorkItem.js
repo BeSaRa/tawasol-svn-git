@@ -1228,9 +1228,15 @@ module.exports = function (app) {
             };
 
             WorkItem.prototype.userCanAnnotate = function () {
-                var info = this.getInfo();
+                var info = this.getInfo(), self = this;
                 if (!info.isPaper) {
-                    return employeeService.hasPermissionTo('MANAGE_ATTACHMENTS');
+                    if (info.docStatus === 23 && self.generalStepElm.authorizeByAnnotation && info.documentClass === 'outgoing') {
+                        return employeeService.hasPermissionTo('EDIT_OUTGOING_CONTENT');
+                    } else if (info.docStatus === 23 && self.generalStepElm.authorizeByAnnotation && info.documentClass === 'internal') {
+                        return employeeService.hasPermissionTo('EDIT_INTERNAL_CONTENT');
+                    } else {
+                        return employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')
+                    }
                 } else if (info.isPaper && info.documentClass === 'outgoing') {
                     return employeeService.hasPermissionTo('EDIT_OUTGOING_PAPER');
                 } else if (info.isPaper && info.documentClass === 'internal') {
@@ -1238,7 +1244,6 @@ module.exports = function (app) {
                 } else if (info.isPaper && info.documentClass === 'incoming') {
                     return employeeService.hasPermissionTo('EDIT_INCOMING’S_CONTENT');
                 }
-                console.log('user cannot Annotate', info);
                 return false;
             };
 
