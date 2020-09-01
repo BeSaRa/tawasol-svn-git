@@ -778,10 +778,40 @@ module.exports = function (app) {
         };
 
         self.exportApplicationUsers = function () {
-            return $http.get(urlService.applicationUsers + '/export/excel')
+            var defer = $q.defer(),
+                urlTypeMap = {
+                    pdf: {
+                        url: urlService.applicationUsers + '/export/pdf',
+                        type: 'pdf',
+                        text: 'PDF',
+                        id: 1
+                    },
+                    excel: {
+                        url: urlService.applicationUsers + '/export/excel',
+                        type: 'excel',
+                        text: 'EXCEL',
+                        id: 2
+                    }
+                };
+
+            dialog.confirmThreeButtonMessage(langService.get('select_file_type_to_print_download'), '', urlTypeMap.pdf.text, urlTypeMap.excel.text, null, null, false)
                 .then(function (result) {
-                    return result.data.rs;
+                    if (result.button === urlTypeMap.pdf.id) {
+                        defer.resolve(urlTypeMap.pdf);
+                    } else if (result.button === urlTypeMap.excel.id) {
+                        defer.resolve(urlTypeMap.excel);
+                    }
                 });
+
+            return defer.promise.then(function (exportOption) {
+                var errorMessage = langService.get('error_export_to_file').change({format: (exportOption.type === 'excel' ? 'EXCEL' : 'PDF')});
+                return $http.get(exportOption.url)
+                    .then(function (result) {
+                        return result.data.rs;
+                    }).catch(function () {
+                        toast.error(errorMessage);
+                    });
+            });
         };
 
         /**
