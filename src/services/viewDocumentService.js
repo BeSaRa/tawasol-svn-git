@@ -841,18 +841,21 @@ module.exports = function (app) {
                     type: 'correspondence'
                 });
 
-                return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))
-                    .then(function (result) {
-                        var documentClass = result.data.rs.metaData.classDescription;
-                        result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
-                        return result.data.rs;
-                    }).catch(function (error) {
-                        if (errorCode.checkIf(error, 'DOCUMENT_HAS_BEEN_DELETED') === true) {
-                            dialog.errorMessage(langService.get('document_has_been_deleted'));
-                            return $q.reject('documentDeleted');
-                        }
-                        return $q.reject(error);
-                    })
+                return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'), {
+                    params: {
+                        'as-admin': true
+                    }
+                }).then(function (result) {
+                    var documentClass = result.data.rs.metaData.classDescription;
+                    result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
+                    return result.data.rs;
+                }).catch(function (error) {
+                    if (errorCode.checkIf(error, 'DOCUMENT_HAS_BEEN_DELETED') === true) {
+                        dialog.errorMessage(langService.get('document_has_been_deleted'));
+                        return $q.reject('documentDeleted');
+                    }
+                    return $q.reject(error);
+                })
                     .then(function (result) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
                         if (result.content.hasOwnProperty('editURL') && result.content.editURL) {
