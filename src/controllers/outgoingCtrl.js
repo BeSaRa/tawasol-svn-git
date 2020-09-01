@@ -303,7 +303,7 @@ module.exports = function (app) {
             }
         };
 
-        function _launchAfterSave(){
+        function _launchAfterSave() {
             if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist))) {
                 dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
                     .then(function () {
@@ -315,8 +315,12 @@ module.exports = function (app) {
         self.saveAndAnnotateDocument = function ($event) {
             self.saveCorrespondence(false, true).then(function () {
                 self.outgoing.openForAnnotation()
-                    .then(function(){
-                        _launchAfterSave();
+                    .then(function (result) {
+                        if (result !== 'DOCUMENT_LAUNCHED_ALREADY'){
+                            _launchAfterSave();
+                        } else {
+                            self.resetAddCorrespondence();
+                        }
                     });
             });
         };

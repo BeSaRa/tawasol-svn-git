@@ -337,8 +337,12 @@ module.exports = function (app) {
         self.saveAndAnnotateDocument = function ($event) {
             self.saveCorrespondence(false, true).then(function () {
                 self.outgoing.openForAnnotation()
-                    .then(function(){
-                        _launchAfterSave();
+                    .then(function(result){
+                        if (result !== 'DOCUMENT_LAUNCHED_ALREADY') {
+                            _launchAfterSave();
+                        }else {
+                            self.resetAddCorrespondence();
+                        }
                     });
             });
         };

@@ -892,7 +892,9 @@ module.exports = function (app) {
                     .confirmMessage(langService.get('book_needs_more_signatures_launch_to_user').change({name: self.correspondence.getTranslatedName()}))
                     .then(function () {
                         return self.correspondence.launchWorkFlow(null, 'forward', 'favorites')
-                            .then(dialog.hide)
+                            .then(function () {
+                                dialog.hide('DOCUMENT_LAUNCHED_ALREADY')
+                            })
                             .catch(self.handleExceptions);
                     }).catch(dialog.hide);
             } else if (result === correspondenceService.authorizeStatus.SAME_USER_AUTHORIZED.text) {
