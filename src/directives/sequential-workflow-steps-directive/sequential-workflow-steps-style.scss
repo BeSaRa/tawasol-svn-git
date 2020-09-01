@@ -2,7 +2,7 @@
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
-  background-color: red;
+  background-color: #db4343;
   font-size: 12px;
   line-height: 12px;
   margin-bottom: 5px;
@@ -39,26 +39,6 @@
   .step-item {
     margin: 0 2.5px;
     cursor: pointer;
-
-    &.step-valid {
-      background-color: green;
-    }
-
-    &.step-invalid {
-      background-color: red;
-    }
-
-    &.step-future {
-      background-color: green !important;
-    }
-
-    &.step-current {
-      background-color: #3598DC !important;
-    }
-
-    &.step-past {
-      background-color: red !important;
-    }
   }
 }
 
@@ -72,7 +52,7 @@
   }
 
   &.step-future {
-    background-color: green !important;
+    background-color: #9b9090 !important;
   }
 
   &.step-current {
@@ -80,7 +60,7 @@
   }
 
   &.step-past {
-    background-color: red !important;
+    background-color: green !important;
   }
 }
 
