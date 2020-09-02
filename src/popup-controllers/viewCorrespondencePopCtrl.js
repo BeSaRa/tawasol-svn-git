@@ -39,7 +39,6 @@ module.exports = function (app) {
         self.secondURL = null;
         self.loadingIndicatorService = loadingIndicatorService;
         self.manageLaunchWorkflowService = manageLaunchWorkflowService;
-        self.selectedDistWFItem = null;
 
         self.stickyActions = [];
 
@@ -836,7 +835,6 @@ module.exports = function (app) {
                 return;
             }
 
-            self.selectedDistWFItem = null;
             var record = (self.workItem || self.correspondence);
 
             if (launchData.wfType === manageLaunchWorkflowService.workflowType.simpleReply) {

@@ -294,12 +294,15 @@ module.exports = function (app) {
             if (manageLaunchWorkflowService.isValidLaunchData()) {
                 self.launchData = manageLaunchWorkflowService.getLaunchData();
                 if (self.launchData) {
-                    self.launchData.selectedItems = _.map(self.launchData.selectedItems, function (item) {
-                        item.userComment = item.comments;
-                        return item;
-                    });
-                    self.selectedPredefinedAction = self.launchData.selectedPredefinedAction;
-                    self.onChangePredefinedAction(null, true);
+                    manageLaunchWorkflowService.clearLaunchData()
+                        .then(function () {
+                            self.launchData.selectedItems = _.map(self.launchData.selectedItems, function (item) {
+                                item.userComment = item.comments;
+                                return item;
+                            });
+                            self.selectedPredefinedAction = self.launchData.selectedPredefinedAction;
+                            self.onChangePredefinedAction(null, true);
+                        })
                 }
             }
             _setCanMinimize();

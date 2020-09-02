@@ -15,6 +15,7 @@ module.exports = function (app) {
             self.launchData = {
                 record: null,
                 selectedItems: [],
+                selectedDistWFItem: null,
                 defaultTab: null,
                 isDeptIncoming: false,
                 isDeptSent: false,
@@ -40,6 +41,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.launchData.record = data.record;
                     self.launchData.selectedItems = data.selectedItems;
+                    self.launchData.selectedDistWFItem = data.selectedDistWFItem || null;
                     self.launchData.defaultTab = data.defaultTab || null;
                     self.launchData.isDeptIncoming = data.isDeptIncoming || false;
                     self.launchData.isDeptSent = data.isDeptSent || false;

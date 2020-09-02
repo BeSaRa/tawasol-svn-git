@@ -310,7 +310,7 @@
                                             <md-input-container flex>
                                                 <label for="wfItem">{{lang.select}}</label>
                                                 <md-select name="wfItem" id="wfItem"
-                                                           ng-model="ctrl.selectedDistWFItem">
+                                                           ng-model="ctrl.manageLaunchWorkflowService.launchData.selectedDistWFItem">
                                                     <md-option ng-value="null">{{lang.none}}</md-option>
                                                     <md-option
                                                             ng-repeat="item in ctrl.manageLaunchWorkflowService.launchData.selectedItems track by $index"
@@ -318,14 +318,14 @@
                                                     </md-option>
                                                 </md-select>
                                             </md-input-container>
-                                            <md-input-container flex ng-if="ctrl.selectedDistWFItem">
+                                            <md-input-container flex ng-if="ctrl.manageLaunchWorkflowService.launchData.selectedDistWFItem">
                                                 <label for="comments"> {{lang.type_your_comment}}</label>
                                                 <textarea rows="5" id="comments" name="comments" class="cms-comment"
-                                                          ng-disabled="!ctrl.selectedDistWFItem"
-                                                          ng-model="ctrl.selectedDistWFItem.comments"
+                                                          ng-disabled="!ctrl.manageLaunchWorkflowService.launchData.selectedDistWFItem"
+                                                          ng-model="ctrl.manageLaunchWorkflowService.launchData.selectedDistWFItem.comments"
                                                           maxlength="2000"
                                                           md-maxlength="2000"
-                                                          ng-required="ctrl.selectedDistWFItem.isSecureAction"></textarea>
+                                                          ng-required="ctrl.manageLaunchWorkflowService.launchData.selectedDistWFItem.isSecureAction"></textarea>
                                                 <div ng-messages="commentForm.comments.$error">
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                     <div ng-message="maxlength">
