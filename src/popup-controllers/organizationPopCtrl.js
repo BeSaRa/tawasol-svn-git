@@ -1471,12 +1471,12 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeDocumentStamp = function (documentStamp, $event) {
-            /*documentStampService
+            documentStampService
                 .controllerMethod
                 .documentStampDelete(documentStamp, $event)
                 .then(function () {
                     self.reloadDocumentStamps(self.documentStampGrid.page);
-                });*/
+                });
         };
 
 

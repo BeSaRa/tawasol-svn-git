@@ -173,13 +173,12 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeDocumentStamp = function (documentStamp, $event) {
-            return false;
-            /*documentStampService
+            documentStampService
                 .controllerMethod
                 .documentStampDelete(documentStamp, $event)
                 .then(function () {
                     self.reloadDocumentStamps(self.grid.page);
-                });*/
+                });
         };
 
         /**
