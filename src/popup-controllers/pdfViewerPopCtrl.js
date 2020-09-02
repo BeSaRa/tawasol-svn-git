@@ -975,6 +975,7 @@ module.exports = function (app) {
          */
         self.handleSaveAttachment = function (pdfContent) {
             self.correspondence.file = pdfContent;
+            self.correspondence.sourceType = 1;
             attachmentService.updateAttachment(attachedBook, self.correspondence)
                 .then(function () {
                     self.disableSaveButton = false;
@@ -1084,7 +1085,7 @@ module.exports = function (app) {
             self.getDocumentAnnotations().then(function (newAnnotations) {
                 self.newAnnotations = newAnnotations;
                 var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations);
-                if (!hasChanges.length) {
+                if (!hasChanges.length && !self.documentOperations.length) {
                     dialog.infoMessage(langService.get('there_is_no_changes_to_save'));
                     return;
                 }
