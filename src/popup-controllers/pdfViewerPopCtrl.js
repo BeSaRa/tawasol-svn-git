@@ -493,7 +493,11 @@ module.exports = function (app) {
                 annotations.length === 1 ? self.selectAnnotation(annotations[0]) : null;
             });
         };
-
+        /**
+         * @description download document
+         * @param getInstance
+         * @param callback
+         */
         self.exportDocument = function (getInstance, callback) {
             getInstance()
                 .exportPDF()
@@ -1217,7 +1221,7 @@ module.exports = function (app) {
                                 } else {
                                     self.currentInstance.exportInstantJSON().then(function (instantJSON) {
                                         delete instantJSON.pdfId;
-                                        PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON, self.documentOperations).then(function (pdfContent) {
+                                        PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON, self.documentOperations , _getFlattenStatus()).then(function (pdfContent) {
                                             self.correspondence.handlePinCodeAndComposite().then(function (signatureModel) {
                                                 self.applyNextStepOnCorrespondence(pdfContent, signatureModel, true).catch(self.handleSeqExceptions);
                                             }).catch(self.handleExceptions);
