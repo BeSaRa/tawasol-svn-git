@@ -254,6 +254,8 @@ module.exports = function (app) {
                 self.annotationType !== AnnotationType.SIGNATURE &&
                 !self.info.isPaper
             ) {
+                var permission = self.info.documentClass === 'outgoing' ? 'ELECTRONIC_SIGNATURE' : 'ELECTRONIC_SIGNATURE_MEMO';
+                openForApprovalButton.disabled = !employeeService.hasPermissionTo(permission);
                 toolbarInstance.push(openForApprovalButton);
             }
 
@@ -1221,7 +1223,7 @@ module.exports = function (app) {
                                 } else {
                                     self.currentInstance.exportInstantJSON().then(function (instantJSON) {
                                         delete instantJSON.pdfId;
-                                        PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON, self.documentOperations , _getFlattenStatus()).then(function (pdfContent) {
+                                        PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON, self.documentOperations, _getFlattenStatus()).then(function (pdfContent) {
                                             self.correspondence.handlePinCodeAndComposite().then(function (signatureModel) {
                                                 self.applyNextStepOnCorrespondence(pdfContent, signatureModel, true).catch(self.handleSeqExceptions);
                                             }).catch(self.handleExceptions);
