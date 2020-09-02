@@ -51,6 +51,10 @@ module.exports = function (app) {
                 return this.digitalCertificateEnabled;
             };
 
+            Settings.prototype.isStampModuleEnabled = function () {
+                return this.stampModuleEnabled;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Settings', 'init', this);

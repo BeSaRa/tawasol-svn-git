@@ -2256,7 +2256,7 @@ module.exports = function (app) {
             if (tabName === 'departmentUsers') {
                 return self.organization.hasRegistry;
             } else if (tabName === 'documentStamps') {
-                return employeeService.hasPermissionTo('MANAGE_STAMPS');
+                return rootEntity.getGlobalSettings().isStampModuleEnabled && employeeService.hasPermissionTo('MANAGE_STAMPS');
             } else if (tabName === 'private_registry_ou') {
                 return self.model.isPrivateRegistry;
             } else {

@@ -71,6 +71,7 @@ module.exports = function (app) {
                     mappedToCentralArchive: result.mappedToCentralArchive,
                     subAdminOuList: result.subAdminOuList
                 });
+                employee.setRootEntityService(rootEntity);
                 if (result.isAdminUser) {
                     employee.setPermissions(result.permissions); // set permissions
                     return self;
@@ -83,6 +84,8 @@ module.exports = function (app) {
                 employee.isAdmin = result.isAdminUser;
                 employee.mappedToCentralArchive = result.mappedToCentralArchive;
                 employee.subAdminOuList = result.subAdminOuList;
+
+                employee.setRootEntityService(rootEntity);
             }
             // set globalSetting for root entity
             if (result.hasOwnProperty('globalSetting') && result.globalSetting)

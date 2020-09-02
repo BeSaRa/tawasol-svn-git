@@ -9,7 +9,7 @@ module.exports = function (app) {
                                       OUApplicationUser) {
         'ngInject';
         return function Employee(model) {
-            var self = this, organizationService, Organization, workflowActionService, applicationUserService, $http;
+            var self = this, organizationService, Organization, workflowActionService, applicationUserService, $http, rootEntity;
             self.arFullName = null;
             self.deadlineEmailNotify = null;
             self.deadlineEmailPriority = null;
@@ -96,6 +96,17 @@ module.exports = function (app) {
             Employee.prototype.setApplicationUSerService = function (service) {
                 applicationUserService = service;
                 return this;
+            };
+            /**
+             * @description set rootEntity service.
+             * @param entity
+             */
+            self.setRootEntityService = function (entity) {
+                rootEntity = entity;
+                return this;
+            };
+            Employee.prototype.getRootEntity = function () {
+                return rootEntity;
             };
 
             Employee.prototype.setWorkflowActionService = function (service) {
