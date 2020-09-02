@@ -23,6 +23,7 @@ module.exports = function (app) {
         UnknownAnnotation: 20,
         WidgetAnnotation: 21,
         TawasolSignature: 22,
-        TawasolStamp: 23
+        TawasolStamp: 23,
+        TawasolBarcode: 24
     });
 };

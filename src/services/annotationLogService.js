@@ -31,6 +31,8 @@ module.exports = function (app) {
                 return AnnotationLogType.TawasolSignature;
             } else if (annotation.customData.additionalData.type === AnnotationType.STAMP) {
                 return AnnotationLogType.TawasolStamp;
+            } else if (annotation.customData.additionalData.type === AnnotationType.BARCODE){
+                return AnnotationLogType.TawasolBarcode;
             }
         }
 
