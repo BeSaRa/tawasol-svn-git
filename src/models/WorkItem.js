@@ -1212,7 +1212,7 @@ module.exports = function (app) {
                     docSubject: langService.get('attached_annotation'),
                     documentTitle: langService.get('attached_annotation'),
                     securityLevel: info.securityLevel,
-                    priorityLevel: info.priorityLevel,
+                    priorityLevel: 1,
                     attachmentType: 0,
                     updateActionStatus: 0
                 });
