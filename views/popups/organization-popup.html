@@ -11,8 +11,8 @@
             <form name="org_form" novalidate autocomplete="off">
                 <md-tabs md-dynamic-height md-selected="ctrl.selectedTabIndex">
                     <!-- Basic Info-->
-                    <md-tab label="{{lang.basic_info}}" ng-if="ctrl.showTab('basic')"
-                            ng-click="ctrl.setCurrentTab('basic')">
+                    <md-tab ng-if="ctrl.showTab('basic')"
+                            label="{{lang.basic_info}}" ng-click="ctrl.setCurrentTab('basic')">
                         <md-content class="md-padding">
                             <div layout="column">
                                 <div ng-if="!ctrl.rootMode && !ctrl.editMode" layout="row">
@@ -431,8 +431,8 @@
                         </md-content>
                     </md-tab>
                     <!-- Security Settings -->
-                    <md-tab label="{{lang.security_settings}}" ng-if="ctrl.showTab('security_settings')"
-                            ng-click="ctrl.setCurrentTab('security_settings')">
+                    <md-tab ng-if="ctrl.showTab('security_settings')"
+                            label="{{lang.security_settings}}" ng-click="ctrl.setCurrentTab('security_settings')">
                         <md-content class="md-padding">
                             <div layout="column">
                                 <div layout="row">
@@ -482,8 +482,8 @@
                         </md-content>
                     </md-tab>
                     <!-- Workflow Settings -->
-                    <md-tab label="{{lang.workflow_settings}}" ng-if="ctrl.showTab('workflow_settings')"
-                            ng-click="ctrl.setCurrentTab('workflow_settings')">
+                    <md-tab ng-if="ctrl.showTab('workflow_settings')"
+                            label="{{lang.workflow_settings}}" ng-click="ctrl.setCurrentTab('workflow_settings')">
                         <md-content class="md-padding">
                             <div layout="column">
                                 <div layout="row">
@@ -545,7 +545,8 @@
                                                 </md-input-container>
                                             </div>
                                         </fieldset>
-                                        <fieldset ng-if="ctrl.organization.hasRegistry || ctrl.organization.centralArchive">
+                                        <fieldset
+                                                ng-if="ctrl.organization.hasRegistry || ctrl.organization.centralArchive">
                                             <legend class="md-accent">{{lang.sla}}</legend>
                                             <div layout="column">
                                                 <div ng-repeat="priority in ctrl.priorityLevels"
@@ -561,8 +562,12 @@
                                                                id="{{priority.lookupKey}}">
                                                         <div ng-messages="org_form[priority.lookupKey].$error">
                                                             <div ng-message="number">{{lang.numberonly}}</div>
-                                                            <div ng-message="min">{{lang.min_number.change({number:0})}}</div>
-                                                            <div ng-message="max">{{lang.max_number.change({number:1000})}}</div>
+                                                            <div ng-message="min">
+                                                                {{lang.min_number.change({number:0})}}
+                                                            </div>
+                                                            <div ng-message="max">
+                                                                {{lang.max_number.change({number:1000})}}
+                                                            </div>
                                                         </div>
                                                     </md-input-container>
                                                 </div>
@@ -769,8 +774,8 @@
                         </md-content>
                     </md-tab>
                     <!-- Children -->
-                    <md-tab label="{{lang.childs}}" ng-if="ctrl.editMode && ctrl.showTab('children')"
-                            ng-click="ctrl.setCurrentTab('children')">
+                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('children')"
+                            label="{{lang.childs}}" ng-click="ctrl.setCurrentTab('children')">
                         <md-content class="md-padding">
                             <div layout="column">
                                 <div layout="row" class="p20-0">
@@ -857,7 +862,7 @@
                         </md-content>
                     </md-tab>
                     <!-- Serials  -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('serials') && ctrl.employeeService.hasPermissionTo('MANAGE_REFERENCE_NUMBER_PLANS')"
+                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('serials')"
                             label="{{lang.menu_item_serials}}" ng-click="ctrl.setCurrentTab('serials')">
                         <md-content class="md-padding">
                             <div layout="column">
@@ -944,7 +949,7 @@
                         </md-content>
                     </md-tab>
                     <!-- Classifications -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('classifications')"
+                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('classifications')"
                             label="{{lang.classifications}}" ng-click="ctrl.setCurrentTab('classifications')">
                         <md-content class="md-padding">
                             <div layout="column">
@@ -1145,7 +1150,7 @@
                         </md-content>
                     </md-tab>
                     <!-- Correspondence Sites -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('correspondence_sites')"
+                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('correspondence_sites')"
                             label="{{lang.correspondence_sites}}" ng-click="ctrl.setCurrentTab('correspondence_sites')">
                         <md-content class="md-padding">
                             <div layout="column">
@@ -1549,8 +1554,8 @@
                         </md-content>
                     </md-tab>
                     <!-- Organization Users -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('users')" label="{{lang.organization_users}}"
-                            ng-click="ctrl.setCurrentTab('users')">
+                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('users')"
+                            label="{{lang.organization_users}}" ng-click="ctrl.setCurrentTab('users')">
                         <md-content class="md-padding">
                             <div layout="column">
                                 <div layout="row" class="p20-0">

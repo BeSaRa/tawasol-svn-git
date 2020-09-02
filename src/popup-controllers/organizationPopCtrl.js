@@ -2237,13 +2237,38 @@ module.exports = function (app) {
             });
         };
 
+        function _getAvailableTabs() {
+            return _.filter(self.tabsToShow, function (tab) {
+                return self.showTab(tab);
+            });
+        }
+
+        function _getTabIndex(tabName) {
+            return _.findIndex(_getAvailableTabs(), function (tab) {
+                return tab.toLowerCase() === tabName.toLowerCase();
+            })
+        }
+
         self.showTab = function (tabName) {
-            if (tabName === 'departmentUsers') {
-                return self.tabsToShow.indexOf(tabName) > -1 && self.organization.hasRegistry;
-            } else if (tabName === 'documentStamps'){
-                return self.tabsToShow.indexOf(tabName) > -1 && employeeService.hasPermissionTo('MANAGE_STAMPS');
+            if (self.tabsToShow.indexOf(tabName) === -1) {
+                return false;
             }
-            return self.tabsToShow.indexOf(tabName) > -1;
+            if (tabName === 'departmentUsers') {
+                return self.organization.hasRegistry;
+            } else if (tabName === 'documentStamps') {
+                return employeeService.hasPermissionTo('MANAGE_STAMPS');
+            } else if (tabName === 'private_registry_ou') {
+                return self.model.isPrivateRegistry;
+            } else {
+                if (tabName === 'serials' || tabName === 'classifications' || tabName === 'correspondence_sites') {
+                    if (!self.model.hasRegistry){
+                        return false;
+                    }
+                    if(tabName === 'serials') {
+                        return employeeService.hasPermissionTo('MANAGE_REFERENCE_NUMBER_PLANS');
+                    }
+                }
+            }
         };
 
         function _setDefaultSelectedTab() {
@@ -2256,9 +2281,7 @@ module.exports = function (app) {
             } else {
                 self.selectedTab = 'basic';
             }
-            self.selectedTabIndex = _.findIndex(self.tabsToShow, function (tab) {
-                return tab === self.selectedTab;
-            })
+            self.selectedTabIndex = _getTabIndex(self.selectedTab);
         }
 
         self.selectedTab = 'basic';
