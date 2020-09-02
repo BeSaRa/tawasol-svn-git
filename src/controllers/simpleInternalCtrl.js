@@ -268,7 +268,10 @@ module.exports = function (app) {
                     .then(function (result) {
                         if (result !== 'DOCUMENT_LAUNCHED_ALREADY') {
                             _launchAfterSave();
-                        }else {
+                            if (result.hasOwnProperty('type') && result.type === 'ATTACHMENT') {
+                                self.internal.attachments.push(result.attachment);
+                            }
+                        } else {
                             self.resetAddCorrespondence();
                         }
                     });
@@ -817,8 +820,8 @@ module.exports = function (app) {
                 '                                                    frameborder="0"></iframe>';
 
 
-                if (!angular.element('#document-viewer').length)
-                    angular.element('#iframe-inject-area').append($compile(iframe)($scope));
+            if (!angular.element('#document-viewer').length)
+                angular.element('#iframe-inject-area').append($compile(iframe)($scope));
         }
     });
 };

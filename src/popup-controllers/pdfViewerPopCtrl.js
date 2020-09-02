@@ -1034,10 +1034,13 @@ module.exports = function (app) {
          * @param pdfContent
          */
         self.handleSaveAnnotationAsAttachment = function (pdfContent) {
-            self.correspondence.addAnnotationAsAttachment(pdfContent).then(function () {
+            self.correspondence.addAnnotationAsAttachment(pdfContent).then(function (attachment) {
                 toast.success(langService.get('save_success'));
                 self.disableSaveButton = false;
-                dialog.hide();
+                dialog.hide({
+                    type: 'ATTACHMENT',
+                    attachment: attachment
+                });
             }).catch(self.handleExceptions);
         };
         /**

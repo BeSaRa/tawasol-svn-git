@@ -283,6 +283,9 @@ module.exports = function (app) {
                     .then(function (result) {
                         if (result !== 'DOCUMENT_LAUNCHED_ALREADY') {
                             _launchAfterSave();
+                            if (result.hasOwnProperty('type') && result.type === 'ATTACHMENT') {
+                                self.internal.attachments.push(result.attachment);
+                            }
                         }else {
                             self.resetAddCorrespondence();
                         }
