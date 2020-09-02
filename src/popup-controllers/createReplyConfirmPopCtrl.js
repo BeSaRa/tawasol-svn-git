@@ -92,9 +92,9 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.isCreateReplyDisabled = function () {
-            var disabled = self.addMethod === null;
+            var disabled = (self.addMethod === null);
             if (self.isSpecificVersion) {
-                disabled = disabled || !self.selectedVersions || !self.selectedVersions.length;
+                disabled = disabled || !self.selectedVersions || !self.selectedVersions.length || !self.selectedVersions[0].hasContent();
             }
             return disabled;
         };

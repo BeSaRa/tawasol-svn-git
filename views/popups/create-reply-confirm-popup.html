@@ -113,6 +113,7 @@
                                 </thead>
                                 <tbody md-body>
                                 <tr md-select="item" md-row
+                                    ng-disabled="!item.hasContent()"
                                     ng-class="item.isCurrentVersion() ? 'current-version': ''"
                                     ng-repeat="item in ctrl.versions | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)  track by $index">
                                     <td md-cell class="indicator-td">
