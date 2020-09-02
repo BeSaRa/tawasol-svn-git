@@ -27,9 +27,12 @@ module.exports = function (app) {
         self.defaultWorkflowItemsSettings = new DistributionWFItem();
         self.sendRelatedDocsBulk = false;
         self.forwardSenderActionAndCommentBulk = false;
+        self.isWorkItem = false;
 
         $timeout(function () {
-            self.isWorkItem = angular.isArray(self.item) ? false : self.item.isWorkItem();
+            if (self.item) {
+                self.isWorkItem = angular.isArray(self.item) ? false : self.item.isWorkItem();
+            }
         });
 
         self.grid = {
