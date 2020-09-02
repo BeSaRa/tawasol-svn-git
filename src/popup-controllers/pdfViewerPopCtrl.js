@@ -97,6 +97,10 @@ module.exports = function (app) {
             "barcode",
         ];
 
+        function _getFlattenStatus() {
+            return (self.info && !self.info.isAttachment && !self.info.isPaper && self.info.signaturesCount === 1);
+        }
+
         /**
          * @description getNext step of seqWF
          * @private
@@ -1050,7 +1054,7 @@ module.exports = function (app) {
             self.currentInstance.exportInstantJSON().then(function (instantJSON) {
                 delete instantJSON.pdfId;
                 instantJSON.skippedPdfObjectIds = _.difference(instantJSON.skippedPdfObjectIds, self.skippedPdfObjectIds);
-                PDFService.applyAnnotationsOnPDFDocument(self.correspondence, AnnotationType.ANNOTATION, instantJSON, self.documentOperations)
+                PDFService.applyAnnotationsOnPDFDocument(self.correspondence, AnnotationType.ANNOTATION, instantJSON, self.documentOperations, _getFlattenStatus())
                     .then(function (pdfContent) {
                         self.skippedPdfObjectIds = self.skippedPdfObjectIds.concat(instantJSON.skippedPdfObjectIds);
                         if (self.correspondence instanceof Attachment) {
@@ -1128,7 +1132,7 @@ module.exports = function (app) {
          * @return {Promise<Blob>}
          */
         self.getPDFContentForCurrentDocument = function (flatten) {
-            return self.currentInstance.exportPDF({flatten: typeof flatten === 'undefined' ? self.info.signaturesCount === 1 : flatten}).then(function (buffer) {
+            return self.currentInstance.exportPDF({flatten: typeof flatten === 'undefined' ? _getFlattenStatus() : flatten}).then(function (buffer) {
                 return new Blob([buffer], {type: 'application/pdf'});
             });
         };
