@@ -314,11 +314,12 @@ module.exports = function (app) {
         }
 
         function _getRightTypeForElectronicSignature() {
-            return self.annotationType === AnnotationType.SIGNATURE ? AnnotationType.SIGNATURE : (_isElectronicAndAuthorizeByAnnotationBefore() ? AnnotationType.SIGNATURE : AnnotationType.ANNOTATION)
+            return self.annotationType === AnnotationType.SIGNATURE ? AnnotationType.SIGNATURE : (_isElectronicAndAuthorizeByAnnotationBefore() && self.correspondence instanceof WorkItem ? AnnotationType.SIGNATURE : AnnotationType.ANNOTATION)
         }
 
         function _isElectronicAndAuthorizeByAnnotationBefore() {
-            return (self.info.docStatus === 23 && !self.info.isPaper && self.correspondence instanceof WorkItem && (self.correspondence.generalStepElm.authorizeByAnnotation || (self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep())))
+            // return (self.info.docStatus === 23 && !self.info.isPaper && (self.correspondence.getAuthorizeByAnnotationStatus() || (self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep())))
+            return self.info.docStatus === 23 && !self.info.isPaper && self.correspondence.getAuthorizeByAnnotationStatus();
         }
 
         /**
@@ -826,8 +827,8 @@ module.exports = function (app) {
                 self.latestInkAnnotation = annotation;
             }
 
-            if (annotation instanceof PSPDFKit.Annotations.InkAnnotation && annotation.isSignature && annotation.customData && self.annotationType !== AnnotationType.SIGNATURE && !_isElectronicAndAuthorizeByAnnotationBefore()) {
-                annotation = annotation.set('isSignature', false);
+            if (annotation instanceof PSPDFKit.Annotations.InkAnnotation && annotation.isSignature && annotation.customData) {
+                annotation = annotation.set('isSignature', _getRightTypeForElectronicSignature() !== 1);
                 return self.currentInstance.updateAnnotation(annotation);
             }
         };

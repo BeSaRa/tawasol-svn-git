@@ -1045,7 +1045,7 @@ module.exports = function (app) {
                     .setValidateMultiSignature(!ignoreValidateMultiSignature);
             };
 
-            Correspondence.prototype.authorizeByAnnotation = function (signatureModel, content) {
+            Correspondence.prototype.authorizeDocumentByAnnotation = function (signatureModel, content) {
                 return correspondenceService.authorizeCorrespondenceByAnnotation(this, signatureModel, content);
             };
 
@@ -1105,7 +1105,7 @@ module.exports = function (app) {
                         .then(self.displayCompositeMessage.bind(self))
                         .then(function (info) {
                             var signatureModel = self.prepareSignatureModel(info.pinCode, info.composite, ignoreValidationSignature);
-                            return info.pinCode === 'PINCODE_MISSING' ? reject(info.pinCode) : resolve(self.authorizeByAnnotation(signatureModel, content));
+                            return info.pinCode === 'PINCODE_MISSING' ? reject(info.pinCode) : resolve(self.authorizeDocumentByAnnotation(signatureModel, content));
                         })
                         .catch(reject);
                 });
@@ -1155,7 +1155,9 @@ module.exports = function (app) {
                 console.log('user cannot Annotate', info);
                 return false;
             };
-
+            Correspondence.prototype.getAuthorizeByAnnotationStatus = function () {
+                return this.authorizeByAnnotation;
+            };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

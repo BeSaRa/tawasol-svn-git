@@ -1136,7 +1136,7 @@ module.exports = function (app) {
                     .setValidateMultiSignature(!ignoreValidateMultiSignature);
             };
 
-            WorkItem.prototype.authorizeByAnnotation = function (signatureModel, content) {
+            WorkItem.prototype.authorizeDocumentByAnnotation = function (signatureModel, content) {
                 return correspondenceService.authorizeCorrespondenceByAnnotation(this, signatureModel, content);
             };
 
@@ -1200,7 +1200,7 @@ module.exports = function (app) {
                         .then(self.displayCompositeMessage.bind(self))
                         .then(function (info) {
                             var signatureModel = self.prepareSignatureModel(info.pinCode, info.composite, ignoreValidationSignature);
-                            return info.pinCode === 'PINCODE_MISSING' ? reject(info.pinCode) : resolve(self.authorizeByAnnotation(signatureModel, content));
+                            return info.pinCode === 'PINCODE_MISSING' ? reject(info.pinCode) : resolve(self.authorizeDocumentByAnnotation(signatureModel, content));
                         })
                         .catch(reject);
                 });
@@ -1253,6 +1253,10 @@ module.exports = function (app) {
                     return employeeService.hasPermissionTo('EDIT_INCOMING’S_CONTENT');
                 }
                 return false;
+            };
+
+            WorkItem.prototype.getAuthorizeByAnnotationStatus = function () {
+                return this.generalStepElm.authorizeByAnnotation;
             };
 
             // don't remove CMSModelInterceptor from last line
