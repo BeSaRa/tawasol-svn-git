@@ -234,7 +234,7 @@ module.exports = function (app) {
                 _addButtonToToolbar(toolbarInstance, approveButton)
             } else if (self.info.documentClass === 'outgoing' && employeeService.hasPermissionTo('ELECTRONIC_SIGNATURE')) {
                 _addButtonToToolbar(toolbarInstance, approveButton)
-            } else if (self.documentClass === 'internal' && employeeService.hasPermissionTo('ELECTRONIC_SIGNATURE_MEMO')) {
+            } else if (self.info.documentClass === 'internal' && employeeService.hasPermissionTo('ELECTRONIC_SIGNATURE_MEMO')) {
                 _addButtonToToolbar(toolbarInstance, approveButton)
             } else {
                 toolbarInstance = toolbarInstance.filter(function (toolbarItem) {
