@@ -2221,6 +2221,7 @@ module.exports = function (app) {
                                 && !info.isPaper
                                 && model.checkElectronicSignaturePermission()
                                 && model.needApprove()
+                                && model.hasSingleSignature()
                                 && !model.isPrivateSecurityLevel();
                         }
                     },
