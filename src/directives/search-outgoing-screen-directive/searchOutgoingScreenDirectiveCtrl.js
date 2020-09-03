@@ -36,6 +36,7 @@ module.exports = function (app) {
                                                                   rootEntity,
                                                                   reviewOutgoingService,
                                                                   printService,
+                                                                  ouApplicationUserService,
                                                                   configurationService) {
         'ngInject';
         var self = this;
@@ -290,6 +291,21 @@ module.exports = function (app) {
                 .setCorrespondenceSiteType(_getTypeByLookupKey(siteView.correspondenceSiteTypeId));
         }
 
+        /**
+         * @description Updates the approvers and creators list
+         * @private
+         */
+        function _updateApproversAndCreatorsList() {
+            ouApplicationUserService
+                .searchByCriteria({
+                    regOu: self.searchCriteria.registryOU
+                })
+                .then(function (result) {
+                    self.approversList = result;
+                    self.creatorsList = result;
+                });
+        }
+
         self.cleanSearchCriteriaForms = function () {
             self.searchCriteria = _createNewSearchCriteria();
             self.searchCriteriaModel = angular.copy(self.searchCriteria);
@@ -368,8 +384,13 @@ module.exports = function (app) {
          * @description fire after change registryOU to reload sub organizations for selected reg ou.
          */
         self.onRegistrySelectedChange = function () {
-            if (!self.searchCriteria.registryOU)
+            self.searchCriteria.approvers = null;
+            self.searchCriteria.creatorId = null;
+            if (!self.searchCriteria.registryOU) {
+                self.approversList = [];
+                self.creatorsList = [];
                 return;
+            }
             // load children organizations by selected regOUId
             organizationService
                 .loadChildrenOrganizations(self.searchCriteria.registryOU)
@@ -383,6 +404,8 @@ module.exports = function (app) {
                     }
                     self.organizations = organizations;
                 });
+
+            _updateApproversAndCreatorsList();
         };
         /**
          * @description fir after site type changed to reload main sites related to selected site type.
@@ -2204,6 +2227,9 @@ module.exports = function (app) {
             _.map(self.propertyConfigurations, function (property) {
                 self.configurations[property.symbolicName.toLowerCase()] = property;
             });
+
+            self.approversList = angular.copy(self.approvers);
+            self.creatorsList = angular.copy(self.creators);
         };
 
     });

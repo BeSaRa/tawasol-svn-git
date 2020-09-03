@@ -664,7 +664,7 @@
                                     <md-option
                                             md-highlight-text="ctrl.creatorsSearchText" md-highlight-flags="i"
                                             ng-value="creator"
-                                            ng-repeat="creator in ctrl.creators|translatedNameFilter:ctrl.creatorsSearchText:'getAppUserAndOuTranslate'">
+                                            ng-repeat="creator in ctrl.creatorsList | translatedNameFilter:ctrl.creatorsSearchText:'getAppUserAndOuTranslate'">
                                         {{creator.getAppUserAndOuTranslate()}}
                                     </md-option>
                                 </md-select>
