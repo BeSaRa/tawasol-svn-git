@@ -2220,7 +2220,8 @@ module.exports = function (app) {
                             return info.documentClass === 'outgoing' && !model.isBroadcasted()
                                 && !info.isPaper
                                 && model.checkElectronicSignaturePermission()
-                                && model.needApprove();
+                                && model.needApprove()
+                                && !model.isPrivateSecurityLevel();
                         }
                     },
                     // Digital Signature
