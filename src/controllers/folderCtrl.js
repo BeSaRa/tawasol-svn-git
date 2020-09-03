@@ -649,6 +649,19 @@ module.exports = function (app) {
         };
 
         /**
+         * @description conditional approve for the document
+         * @param userInbox
+         * @param $event
+         * @param defer
+         */
+        self.conditionalApprove = function (workItem, $event, defer) {
+            workItem.applyConditionalApprove($event, defer)
+                .then(function () {
+                    new ResolveDefer(defer);
+                    self.reloadFolders(self.grid.page);
+                })
+        };
+        /**
          * @description Sign e-Signature
          * @param workItem
          * @param $event
@@ -1656,6 +1669,23 @@ module.exports = function (app) {
                              */
                             var info = model.getInfo();
                             return !model.isBroadcasted()
+                                && !info.isPaper
+                                && model.checkElectronicSignaturePermission()
+                                && model.needApprove();
+                        }
+                    },
+                    // Conditional Approve
+                    {
+                        type: 'action',
+                        icon: 'clock-start',
+                        text: 'grid_action_conditional_approve',
+                        callback: self.conditionalApprove,
+                        class: "action-green",
+                        sticky: true,
+                        stickyIndex: 8,
+                        checkShow: function (action, model) {
+                            var info = model.getInfo();
+                            return info.documentClass === 'outgoing' && !model.isBroadcasted()
                                 && !info.isPaper
                                 && model.checkElectronicSignaturePermission()
                                 && model.needApprove();

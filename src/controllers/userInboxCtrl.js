@@ -2206,11 +2206,11 @@ module.exports = function (app) {
                                 && model.needApprove();
                         }
                     },
-                    // e-Signature
+                    // Conditional Approve
                     {
                         type: 'action',
                         icon: 'clock-start',
-                        text: 'grid_action_conditional_approve',//e_signature
+                        text: 'grid_action_conditional_approve',
                         callback: self.conditionalApprove,
                         class: "action-green",
                         sticky: true,
