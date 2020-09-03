@@ -31,8 +31,7 @@ module.exports = function (app) {
         self.isValidModel = function (form) {
             form = form || self.conditionalApproveForm;
             return form.$valid
-                && (!!self.model.exportDate && generator.getTimeStampFromDate(self.model.exportDate) >= generator.getTimeStampFromDate(self.minDate))
-                && (!!self.model.comments);
+                && (!!self.model.exportDate && generator.getTimeStampFromDate(self.model.exportDate) >= generator.getTimeStampFromDate(self.minDate));
         };
 
         /**
