@@ -815,7 +815,13 @@ module.exports = function (app) {
                         permissionKey: 'VIEW_DOCUMENT',
                         showInView: false,
                         checkShow: function (action, model) {
-                            var info = model.getInfo();
+                            var info = model.getInfo(), isAllowed = true;
+                            if (model.isCorrespondenceApprovedBefore()) {
+                                isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
+                            }
+                            if (!isAllowed) {
+                                return false;
+                            }
                             return info.needToApprove();
                         }
                     }

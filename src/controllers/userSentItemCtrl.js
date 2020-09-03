@@ -716,7 +716,7 @@ module.exports = function (app) {
                         icon: 'monitor',
                         text: 'grid_action_view_in_desktop',
                         shortcut: false,
-                        hide: false,
+                        hide: true, // hidden because "isApprovedBefore" is missing. can't check according to global settings
                         callback: self.viewInDeskTop,
                         class: "action-green",
                         permissionKey: 'VIEW_DOCUMENT',
