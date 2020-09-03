@@ -702,7 +702,6 @@ module.exports = function (app) {
          * @param noPrintValue
          */
         self.printWithOutAnnotations = function ($event, noPrintValue) {
-            debugger;
             var updatedAnnotations = [];
             self.getDocumentAnnotations()
                 .then(function (annotations) {
