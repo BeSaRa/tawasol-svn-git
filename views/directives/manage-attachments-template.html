@@ -234,6 +234,7 @@
                                 <md-icon md-svg-icon="book-open-variant"></md-icon>
                             </md-button>
                             <md-button class="md-icon-button" title="{{lang.download}}"
+                                       ng-if="ctrl.vsId"
                                        ng-click="ctrl.downloadAttachment(attachment, $event)">
                                 <md-icon md-svg-icon="download"></md-icon>
                             </md-button>
