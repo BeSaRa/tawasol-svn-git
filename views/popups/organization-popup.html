@@ -1351,7 +1351,7 @@
                         </md-content>
                     </md-tab>
                     <!-- OU Private Registry List -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.model.isPrivateRegistry"
+                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('private_registry_ou')"
                             label="{{lang.ou_private_list_mapping}}"
                             ng-click="ctrl.setCurrentTab('private_registry_ou')">
                         <md-content class="md-padding">
