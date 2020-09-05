@@ -2268,6 +2268,7 @@ module.exports = function (app) {
                         return employeeService.hasPermissionTo('MANAGE_REFERENCE_NUMBER_PLANS');
                     }
                 }
+                return true;
             }
         };
 
