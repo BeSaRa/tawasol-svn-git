@@ -254,7 +254,7 @@ module.exports = function (app) {
 
 
             // displaying barcode button
-            if (self.info.docStatus >= 24 || self.info.docStatus >= 23 || self.annotationType === AnnotationType.SIGNATURE || (!self.info.isAttachment && self.info.isPaper)) {
+            if (self.info.docStatus >= 24 || (!self.info.isAttachment && self.info.docStatus >= 23 && self.correspondence.getAuthorizeByAnnotationStatus()) || self.annotationType === AnnotationType.SIGNATURE || (!self.info.isAttachment && self.info.isPaper)) {
                 barcodeButton.disabled = !(employeeService.hasPermissionTo('PRINT_BARCODE'));
                 toolbarInstance = toolbarInstance.concat(barcodeButton);
             }
