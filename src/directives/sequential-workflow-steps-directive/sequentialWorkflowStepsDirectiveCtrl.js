@@ -129,7 +129,8 @@ module.exports = function (app) {
             var stepTypeIcon = angular.element('<md-icon />', {
                 'md-svg-icon': "{{item.getStepIcon()}}",
                 'class': 'indicator-size',
-                'tooltip': "{{item.getStepIconTooltip()}}"
+                'tooltip': "{{item.getStepIconTooltip()}}",
+                'ng-click': "ctrl.editStep(item, $event)"
             });
 
             var titleAndIconContainer = angular.element('<div layout="row"/>');
