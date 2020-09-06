@@ -59,13 +59,13 @@
                             <div layout="column">
                                 <div layout="row">
                                     <md-button
-                                            ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, false)"
+                                            ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, 'save', false)"
                                             ng-click="ctrl.saveCorrespondence()" class="md-raised"
                                             ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
                                         {{lang.incoming_save}}
                                     </md-button>
                                     <md-button
-                                            ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, false)"
+                                            ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, 'saveAndPrintBarcode', false)"
                                             ng-click="ctrl.saveCorrespondenceAndPrintBarcode()" class="md-raised">
                                         {{lang.incoming_save_print_barcode}}
                                     </md-button>
@@ -73,7 +73,7 @@
                                 <div layout="row">
                                     <md-button
                                             ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)"
-                                            ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, true)"
+                                            ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, 'saveAndInsert', true)"
                                             ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised"
                                             ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
                                         {{lang.save_and_insert}}

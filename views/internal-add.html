@@ -17,7 +17,7 @@
                     <div layout="row">
                         <div>
                             <md-button ng-click="ctrl.saveCorrespondence()"
-                                       ng-disabled="!ctrl.isSaveValid(false)"
+                                       ng-disabled="!ctrl.isSaveValid('save', false)"
                                        class="md-raised"
                                        ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
                                 {{lang.internal_save}}
@@ -25,19 +25,19 @@
                         </div>
                         <div ng-if="ctrl.internal.addMethod">
                             <md-button ng-click="ctrl.saveCorrespondenceAndPrintBarcode()"
-                                       ng-disabled="!ctrl.isSaveValid(false)"
+                                       ng-disabled="!ctrl.isSaveValid('saveAndPrintBarcode', false)"
                                        class="md-raised">
                                 {{lang.internal_save_print_barcode}}
                             </md-button>
                         </div>
                         <div ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)">
-                            <md-button ng-disabled="!ctrl.isSaveValid(true)"
+                            <md-button ng-disabled="!ctrl.isSaveValid('saveAndInsert', true)"
                                        ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised">
                                 {{lang.save_and_insert}}
                             </md-button>
                         </div>
                         <div ng-if="!ctrl.internal.addMethod">
-                            <md-button ng-disabled="!ctrl.isSaveValid(true)"
+                            <md-button ng-disabled="!ctrl.isSaveValid('saveAsDraft', true)"
                                        ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
                                 {{lang.internal_save_draft}}
                             </md-button>
@@ -221,7 +221,7 @@
                     <div layout="row">
                         <div>
                             <md-button ng-click="ctrl.saveCorrespondence()"
-                                       ng-disabled="!ctrl.isSaveValid(false)"
+                                       ng-disabled="!ctrl.isSaveValid('save', false)"
                                        class="md-raised"
                                        ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
                                 {{lang.internal_save}}
@@ -229,19 +229,19 @@
                         </div>
                         <div ng-if="ctrl.internal.addMethod">
                             <md-button ng-click="ctrl.saveCorrespondenceAndPrintBarcode()"
-                                       ng-disabled="!ctrl.isSaveValid(false)"
+                                       ng-disabled="!ctrl.isSaveValid('saveAndPrintBarcode', false)"
                                        class="md-raised">
                                 {{lang.internal_save_print_barcode}}
                             </md-button>
                         </div>
                         <div ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)">
-                            <md-button ng-disabled="!ctrl.isSaveValid(true)"
+                            <md-button ng-disabled="!ctrl.isSaveValid('saveAndInsert', true)"
                                        ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised">
                                 {{lang.save_and_insert}}
                             </md-button>
                         </div>
                         <div ng-if="!ctrl.internal.addMethod">
-                            <md-button ng-disabled="!ctrl.isSaveValid(true)"
+                            <md-button ng-disabled="!ctrl.isSaveValid('saveAsDraft', true)"
                                        ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
                                 {{lang.internal_save_draft}}
                             </md-button>

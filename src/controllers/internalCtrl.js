@@ -286,7 +286,7 @@ module.exports = function (app) {
                             if (result.hasOwnProperty('type') && result.type === 'ATTACHMENT') {
                                 self.internal.attachments.push(result.attachment);
                             }
-                        }else {
+                        } else {
                             self.resetAddCorrespondence();
                         }
                     });
@@ -733,12 +733,16 @@ module.exports = function (app) {
 
         /**
          * @description Checks if data is valid to save
+         * @param actionType
          * @param contentRequired
          * pass true, if content is always required for save
          * @returns {boolean}
          */
-        self.isSaveValid = function (contentRequired) {
+        self.isSaveValid = function (actionType, contentRequired) {
             if (!self.document_properties || self.document_properties.$invalid || self.saveInProgress) {
+                return false;
+            }
+            if (actionType && actionType.toLower() === 'saveandinsert' && !self.internal.userCanAnnotate()) {
                 return false;
             }
             var isValid = true;

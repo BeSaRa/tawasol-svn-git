@@ -16,26 +16,26 @@
                 <div class="page-padding">
                     <div layout="row">
                         <div>
-                            <md-button ng-disabled="!ctrl.isSaveValid(false)"
+                            <md-button ng-disabled="!ctrl.isSaveValid('save', false)"
                                        ng-click="ctrl.saveCorrespondence()" class="md-raised"
                                        ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
                                 {{lang.outgoing_save}}
                             </md-button>
                         </div>
                         <div ng-if="ctrl.outgoing.addMethod">
-                            <md-button ng-disabled="!ctrl.isSaveValid(false)"
+                            <md-button ng-disabled="!ctrl.isSaveValid('saveAndPrintBarcode', false)"
                                        ng-click="ctrl.saveCorrespondenceAndPrintBarcode()" class="md-raised">
                                 {{lang.outgoing_save_print_barcode}}
                             </md-button>
                         </div>
                         <div ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)">
-                            <md-button ng-disabled="!ctrl.isSaveValid(true)"
+                            <md-button ng-disabled="!ctrl.isSaveValid('saveAndInsert', true)"
                                        ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised">
                                 {{lang.save_and_insert}}
                             </md-button>
                         </div>
                         <div ng-if="(!ctrl.outgoing.addMethod && ctrl.duplicateVersion) || (!ctrl.outgoing.addMethod && !ctrl.editContent)">
-                            <md-button ng-disabled="!ctrl.isSaveValid(true)"
+                            <md-button ng-disabled="!ctrl.isSaveValid('saveAsDraft', true)"
                                        ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
                                 {{lang.outgoing_save_draft}}
                             </md-button>
@@ -247,26 +247,26 @@
                     </accordion-directive>
                     <div layout="row">
                         <div>
-                            <md-button ng-disabled="!ctrl.isSaveValid(false)"
+                            <md-button ng-disabled="!ctrl.isSaveValid('save', false)"
                                        ng-click="ctrl.saveCorrespondence()" class="md-raised"
                                        ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
                                 {{lang.outgoing_save}}
                             </md-button>
                         </div>
                         <div ng-if="ctrl.outgoing.addMethod">
-                            <md-button ng-disabled="!ctrl.isSaveValid(false)"
+                            <md-button ng-disabled="!ctrl.isSaveValid('saveAndPrintBarcode', false)"
                                        ng-click="ctrl.saveCorrespondenceAndPrintBarcode()" class="md-raised">
                                 {{lang.outgoing_save_print_barcode}}
                             </md-button>
                         </div>
                         <div ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)">
-                            <md-button ng-disabled="!ctrl.isSaveValid(true)"
+                            <md-button ng-disabled="!ctrl.isSaveValid('saveAndInsert', true)"
                                        ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised">
                                 {{lang.save_and_insert}}
                             </md-button>
                         </div>
                         <div ng-if="(!ctrl.outgoing.addMethod && ctrl.duplicateVersion) || (!ctrl.outgoing.addMethod && !ctrl.editContent)">
-                            <md-button ng-disabled="!ctrl.isSaveValid(true)"
+                            <md-button ng-disabled="!ctrl.isSaveValid('saveAsDraft', true)"
                                        ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
                                 {{lang.outgoing_save_draft}}
                             </md-button>

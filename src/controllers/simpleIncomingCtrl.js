@@ -710,12 +710,16 @@ module.exports = function (app) {
         /**
          * @description Checks if data is valid to save
          * @param form
+         * @param actionType
          * @param contentRequired
          * pass true, if content is always required for save
          * @returns {boolean}
          */
-        self.isSaveValid = function (form, contentRequired) {
+        self.isSaveValid = function (form, actionType, contentRequired) {
             if (!form || form.$invalid || self.saveInProgress || !self.incoming.site || !_isValidSubSite()) {
+                return false;
+            }
+            if (actionType && actionType.toLower() === 'saveandinsert' && !self.incoming.userCanAnnotate()) {
                 return false;
             }
             var isValid = true;

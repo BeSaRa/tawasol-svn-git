@@ -37,20 +37,21 @@
                             <div class="mb10" layout="column">
                                 <div layout="row">
                                     <md-button ng-click="ctrl.saveCorrespondence()"
-                                               ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, false)"
+                                               ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, 'save', false)"
                                                class="md-raised"
                                                ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
                                         {{lang.internal_save}}
                                     </md-button>
                                     <md-button ng-click="ctrl.saveCorrespondenceAndPrintBarcode()"
-                                               ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, false)"
+                                               ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, 'saveAndPrintBarcode', false)"
                                                class="md-raised"
                                                ng-if="ctrl.internal.addMethod">
                                         {{lang.internal_save_print_barcode}}
                                     </md-button>
                                     <div ng-if="!ctrl.internal.addMethod">
-                                        <md-button ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, true)"
-                                                   ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
+                                        <md-button
+                                                ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, 'saveAsDraft', true)"
+                                                ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
                                             {{lang.internal_save_draft}}
                                         </md-button>
                                     </div>
@@ -58,7 +59,7 @@
                                 <div layout="row">
                                     <md-button
                                             ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)"
-                                            ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, true)"
+                                            ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, 'saveAndInsert', true)"
                                             ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised"
                                             ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
                                         {{lang.save_and_insert}}
