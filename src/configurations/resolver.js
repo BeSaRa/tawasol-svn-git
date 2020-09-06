@@ -131,7 +131,7 @@ module.exports = function (app) {
                     }
                     return defer.promise.then(function (organizations) {
                         return _.filter(organizations, function (ou) {
-                            return ou.hasRegistry;
+                            return !!ou.status && ou.hasRegistry;
                         });
                     });
                 }

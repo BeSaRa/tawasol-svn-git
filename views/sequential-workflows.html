@@ -28,7 +28,7 @@
                                placeholder="{{lang.search}}"
                                class="select-header-input">
                     </md-select-header>
-                    <md-option ng-value="organization.id"
+                    <md-option ng-value="organization.id" ng-if="organization.status"
                                ng-repeat="organization in ctrl.organizations |translatedNameFilter: ctrl.ouSearchText">
                         <span
                                 md-highlight-text="ctrl.ouSearchText"

@@ -58,7 +58,7 @@
                                 </md-select-header>
                                 <md-option
                                         ng-repeat="organization in ctrl.organizations | translatedNameFilter: ctrl.ouSearchText"
-                                        ng-value="organization.id">
+                                        ng-if="organization.status" ng-value="organization.id">
                                         <span
                                                 md-highlight-text="ctrl.ouSearchText"
                                                 md-highlight-flags="i">{{organization.getTranslatedName()}}</span>

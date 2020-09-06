@@ -252,7 +252,7 @@ module.exports = function (app) {
                                 return organizationService.loadOrganizations(true, true)
                                     .then(function (result) {
                                         return _.filter(result, function (ou) {
-                                            return ou.hasRegistry;
+                                            return !!ou.status && ou.hasRegistry;
                                         })
                                     });
                             },
