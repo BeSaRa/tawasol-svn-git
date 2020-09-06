@@ -324,7 +324,7 @@ module.exports = function (app) {
         }
 
         function _getRightTypeForElectronicSignature() {
-            return self.annotationType === AnnotationType.SIGNATURE ? AnnotationType.SIGNATURE : (_isElectronicAndAuthorizeByAnnotationBefore() && self.correspondence instanceof WorkItem ? AnnotationType.SIGNATURE : AnnotationType.ANNOTATION)
+            return (self.annotationType === AnnotationType.SIGNATURE || (self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep())) ? AnnotationType.SIGNATURE : (_isElectronicAndAuthorizeByAnnotationBefore() && self.correspondence instanceof WorkItem ? AnnotationType.SIGNATURE : AnnotationType.ANNOTATION)
         }
 
         function _isElectronicAndAuthorizeByAnnotationBefore() {
@@ -1220,7 +1220,7 @@ module.exports = function (app) {
             self.getDocumentAnnotations()
                 .then(function (newAnnotations) {
                     self.newAnnotations = newAnnotations;
-                    if (self.nextSeqStep.isAuthorizeAndSendStep() && !self.info.isPaper) {
+                    if (self.nextSeqStep.isAuthorizeAndSendStep()) {
                         self.isDocumentHasCurrentUserSignature()
                             .then(function () {
                                 if (self.annotationType === AnnotationType.SIGNATURE) {
