@@ -575,7 +575,7 @@
             {{lang.sequential_workflow}}
         </md-button>
         <md-button class="md-raised md-primary"
-                   ng-if="!ctrl.multi && ctrl.actionKey === 'forward' && !ctrl.fromQuickSend"
+                   ng-if="!ctrl.multi && ctrl.actionKey === 'forward' && !ctrl.fromQuickSend && ctrl.canSendToMultiple"
                    ng-click="ctrl.quickSendCorrespondenceWorkFlow($event)"
                    ng-disabled="ctrl.disableSend">
             {{lang.quick_send}}
