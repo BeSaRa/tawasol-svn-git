@@ -12,6 +12,8 @@ module.exports = function (app) {
 
         self.instance = null;
 
+        self.licenseKey = rootEntity.returnRootEntity().rootEntity.psPDFLicenseKey;
+
         self.destroyInstance = function () {
             try {
                 PSPDFKit.unload('#' + self.container.id)
@@ -31,7 +33,7 @@ module.exports = function (app) {
                 baseUrl: (location.protocol + '//' + location.host + '/' + (configurationService.APP_CONTEXT ? configurationService.APP_CONTEXT + '/' : '')),
                 container: self.container,
                 document: typeof self.docUrl === 'object' ? self.docUrl.$$unwrapTrustedValue() : self.docUrl,
-                licenseKey: rootEntity.returnRootEntity().rootEntity.psPDFLicenseKey,
+                licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
                 initialViewState: initialViewState
             }).then(function (instance) {
                 self.instance = instance;
