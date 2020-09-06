@@ -2182,6 +2182,10 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: function (action, model) {
                             var employee = employeeService.getEmployee();
+                            if (model.getAuthorizeByAnnotationStatus()) {
+                                return false;
+                            }
+
                             if (!employee.hasPermissionTo('ELECTRONIC_SIGNATURE') || !employee.hasPermissionTo('OPEN_DEPARTMENT’S_READY_TO_EXPORT_QUEUE'))
                                 return false;
 
@@ -2206,6 +2210,9 @@ module.exports = function (app) {
                         stickyIndex: 6,
                         checkShow: function (action, model) {
                             var info = model.getInfo();
+                            if (model.getAuthorizeByAnnotationStatus()) {
+                                return false;
+                            }
                             return !model.isBroadcasted()
                                 && !info.isPaper
                                 && model.checkElectronicSignaturePermission()
@@ -2223,6 +2230,9 @@ module.exports = function (app) {
                         stickyIndex: 8,
                         checkShow: function (action, model) {
                             var info = model.getInfo();
+                            if (model.getAuthorizeByAnnotationStatus()) {
+                                return false;
+                            }
                             return info.documentClass === 'outgoing' && !model.isBroadcasted()
                                 && !info.isPaper
                                 && model.checkElectronicSignaturePermission()
@@ -2242,6 +2252,9 @@ module.exports = function (app) {
                         hide: true,
                         checkShow: function (action, model) {
                             var info = model.getInfo();
+                            if (model.getAuthorizeByAnnotationStatus()) {
+                                return false;
+                            }
                             return !model.isBroadcasted()
                                 && !info.isPaper
                                 && (info.documentClass !== 'incoming')
@@ -2259,6 +2272,9 @@ module.exports = function (app) {
                         stickyIndex: 7,
                         checkShow: function (action, model) {
                             var info = model.getInfo();
+                            if (model.getAuthorizeByAnnotationStatus()) {
+                                return false;
+                            }
                             return !model.isBroadcasted()
                                 && !info.isPaper
                                 && model.checkElectronicSignaturePermission()
