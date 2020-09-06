@@ -118,7 +118,7 @@ module.exports = function (app) {
             }) || null;
         };
 
-        var properties = angular.copy(lookupService.getPropertyConfigurations('outgoing'));
+        var properties = angular.copy(lookupService.getPropertyConfigurations('incoming'));
         var followupStatusConfiguration = _findPropertyConfiguration('FollowupStatus');
         var isNeedReplyFromConfiguration = followupStatusConfiguration ? followupStatusConfiguration.isMandatory : false;
 
