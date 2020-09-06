@@ -76,6 +76,8 @@ module.exports = function (app) {
 
         console.log('correspondence', correspondence);
 
+        self.isStampEnabled = rootEntity.getGlobalSettings().stampModuleEnabled;
+
         self.readyToExportExcludedAnnotationList = [
             "annotate",
             "ink",
@@ -203,9 +205,17 @@ module.exports = function (app) {
                 }
             };
             // remove default print from toolbar
-            var toolbarInstance = _.filter(defaultToolbar.concat([printWithoutAnnotationButton, customStampsButton, exportButton]), function (item) {
+            var toolbarInstance = _.filter(defaultToolbar.concat([printWithoutAnnotationButton, exportButton]), function (item) {
                 return item.type !== 'print';
             });
+
+            if (self.isStampEnabled) {
+                toolbarInstance.push(customStampsButton);
+            } else {
+                toolbarInstance = _.filter(toolbarInstance, function (item) {
+                    return item.type !== 'stamp';
+                });
+            }
             // add custom normal print function
             toolbarInstance.splice(26, 0, {
                 type: 'custom',
