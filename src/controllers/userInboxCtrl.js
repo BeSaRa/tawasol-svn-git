@@ -667,7 +667,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.forward = function (userInbox, $event, defer) {
-            userInbox.launchWorkFlow($event, 'forward', 'favorites')
+            userInbox.launchWorkFlow($event, userInbox.hasActiveSeqWF() ? 'launch' : 'forward', 'favorites')
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {
@@ -1661,6 +1661,9 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'share',
                 text: 'grid_action_forward',
+                textCallback: function (model) {
+                    return !model.hasActiveSeqWF() ? 'grid_action_forward' : 'grid_action_launch_distribution_workflow';
+                },
                 shortcut: true,
                 callback: self.forward,
                 sticky: true,

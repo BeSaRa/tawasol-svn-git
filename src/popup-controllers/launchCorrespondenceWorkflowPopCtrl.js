@@ -1438,7 +1438,7 @@ module.exports = function (app) {
                     self.distributionWF.setReceivedRegOUs(_.filter(collection, _filterWFRegDepartments));
                     self.distributionWF.setWfGroups(_.filter(collection, _filterWFGroups));
 
-                    distributionWFService.startLaunchWorkflow(self.distributionWF, self.correspondence)
+                    distributionWFService.startLaunchWorkflow(self.distributionWF, self.correspondence , self.actionKey)
                         .then(function () {
                             toast.success(langService.get('launch_success_distribution_workflow'));
                             dialog.hide();

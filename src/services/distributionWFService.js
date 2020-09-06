@@ -325,15 +325,16 @@ module.exports = function (app) {
          * @description start launch distribution workflow.
          * @param distributionWF
          * @param correspondence
+         * @param action
          */
-        self.startLaunchWorkflow = function (distributionWF, correspondence) {
+        self.startLaunchWorkflow = function (distributionWF, correspondence , action) {
             if (angular.isArray(correspondence))
                 return self.startLaunchWorkflowBulk(distributionWF, correspondence);
             var info = correspondence.getInfo(),
                 workItemUrl = [urlService.correspondenceWF, info.documentClass, info.vsId, 'forward', info.wobNumber],
                 correspondenceUrl = [urlService.correspondenceWF, info.documentClass, 'vsid', info.vsId];
             return $http
-                .post(info.isWorkItem() ? workItemUrl.join('/') : correspondenceUrl.join('/'), generator.interceptSendInstance('DistributionWF', distributionWF))
+                .post(info.isWorkItem() && action !== 'launch' ? workItemUrl.join('/') : correspondenceUrl.join('/'), generator.interceptSendInstance('DistributionWF', distributionWF))
                 .then(function (result) {
                     _emptyDistributionWFData();
                     return result.data.rs;
