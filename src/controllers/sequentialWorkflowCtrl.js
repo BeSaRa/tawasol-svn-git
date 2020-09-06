@@ -88,6 +88,9 @@ module.exports = function (app) {
          */
         self.reloadSequentialWorkflows = function (pageNumber) {
             if (!self.selectedOrganization) {
+                self.sequentialWorkflows = [];
+                self.sequentialWorkflowsCopy = angular.copy(self.sequentialWorkflows);
+                self.selectedSequentialWorkflows = [];
                 return null;
             }
             var defer = $q.defer();
@@ -105,6 +108,9 @@ module.exports = function (app) {
                 })
         };
 
+        self.regOuChanged = function ($event) {
+            self.reloadSequentialWorkflows();
+        };
 
         /**
          * @description Contains methods for CRUD operations for sequential workflows
@@ -121,7 +127,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.openAddSequentialWorkflowDialog = function ($event) {
-            if (!employeeService.hasPermissionTo('ADD_SEQ_WF')){
+            if (!employeeService.hasPermissionTo('ADD_SEQ_WF')) {
                 return;
             }
             if (!self.selectedOrganization) {
@@ -148,7 +154,7 @@ module.exports = function (app) {
          * @param {SequentialWF} sequentialWorkflow
          */
         self.openEditSequentialWorkflowDialog = function (sequentialWorkflow, $event) {
-            if (!employeeService.hasPermissionTo('ADD_SEQ_WF')){
+            if (!employeeService.hasPermissionTo('ADD_SEQ_WF')) {
                 return;
             }
             sequentialWorkflowService
@@ -168,7 +174,7 @@ module.exports = function (app) {
          * @param {SequentialWF} sequentialWorkflow
          */
         self.openCopyDialog = function (sequentialWorkflow, $event) {
-            if (!employeeService.hasPermissionTo('ADD_SEQ_WF')){
+            if (!employeeService.hasPermissionTo('ADD_SEQ_WF')) {
                 return;
             }
             if (!self.selectedOrganization) {
@@ -191,7 +197,7 @@ module.exports = function (app) {
          * @param sequentialWorkflow
          */
         self.changeStatusSequentialWorkflow = function (sequentialWorkflow) {
-            if (!employeeService.hasPermissionTo('ADD_SEQ_WF')){
+            if (!employeeService.hasPermissionTo('ADD_SEQ_WF')) {
                 return;
             }
             if (!self.isActionAllowed(sequentialWorkflow)) {
@@ -213,7 +219,7 @@ module.exports = function (app) {
          * @param status
          */
         self.changeStatusBulkSequentialWorkflows = function (status) {
-            if (!employeeService.hasPermissionTo('ADD_SEQ_WF')){
+            if (!employeeService.hasPermissionTo('ADD_SEQ_WF')) {
                 return;
             }
             if (!self.isBulkActionAllowed()) {
@@ -234,7 +240,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeSequentialWorkflow = function (sequentialWorkflow, $event) {
-            if (!employeeService.hasPermissionTo('ADD_SEQ_WF')){
+            if (!employeeService.hasPermissionTo('ADD_SEQ_WF')) {
                 return;
             }
             if (!self.isActionAllowed(sequentialWorkflow)) {
@@ -253,7 +259,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeBulkSequentialWorkflows = function ($event) {
-            if (!employeeService.hasPermissionTo('ADD_SEQ_WF')){
+            if (!employeeService.hasPermissionTo('ADD_SEQ_WF')) {
                 return;
             }
             if (!self.isBulkActionAllowed()) {
