@@ -12,11 +12,13 @@
                         <md-input-container flex>
                             <label for="arName">{{lang.arabic_name}}</label>
                             <input name="arName" id="arName" required minlength="4"
+                                   custom-validate-directive="A1NS"
                                    ng-disabled="ctrl.viewOnly"
                                    ng-model="ctrl.step.arName" maxlength="80">
                             <div ng-messages="sequentialWorkflowStepForm.arName.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                                 <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="A1NS">{{lang.one_arabic_number_space}}</div>
                                 <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
                             </div>
                         </md-input-container>
@@ -24,11 +26,13 @@
                         <md-input-container flex>
                             <label for="enName">{{lang.english_name}}</label>
                             <input name="enName" id="enName" required minlength="4"
+                                   custom-validate-directive="E1NS"
                                    ng-disabled="ctrl.viewOnly"
                                    ng-model="ctrl.step.enName" maxlength="80">
                             <div ng-messages="sequentialWorkflowStepForm.enName.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                                 <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
                                 <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
                             </div>
                         </md-input-container>
