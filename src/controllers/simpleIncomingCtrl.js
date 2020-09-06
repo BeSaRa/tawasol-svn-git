@@ -708,19 +708,35 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Checks if form is invalid
+         * @description Checks if data is valid to save
          * @param form
-         * @returns {boolean|boolean}
+         * @param contentRequired
+         * pass true, if content is always required for save
+         * @returns {boolean}
          */
-        self.isInValidForm = function (form) {
-            if (!form) {
-                return true;
+        self.isSaveValid = function (form, contentRequired) {
+            if (!form || form.$invalid || self.saveInProgress || !self.incoming.site || !_isValidSubSite()) {
+                return false;
+            }
+            var isValid = true;
+            // contentRequired is true if (save and insert), then content must be added
+            if (contentRequired) {
+                isValid = (self.documentInformation || self.incoming.contentFile);
             }
 
-            return form.$invalid
-                || self.saveInProgress || !self.incoming.site || !_isValidSubSite()
-                || ((self.documentInformationExist || (self.contentFileExist && self.contentFileSizeExist))
-                    && !(self.documentInformation || self.incoming.contentFile))
+            if (!isValid) {
+                return false;
+            }
+
+            if (!self.incoming.vsId) {
+                return isValid;
+            } else {
+                // if content is added once, check if it is still added
+                if (_hasContent()) {
+                    isValid = self.documentInformation || self.incoming.contentFile;
+                }
+                return isValid;
+            }
         };
 
     });

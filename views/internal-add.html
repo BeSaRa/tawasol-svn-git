@@ -17,7 +17,7 @@
                     <div layout="row">
                         <div>
                             <md-button ng-click="ctrl.saveCorrespondence()"
-                                       ng-disabled="ctrl.saveInProgress || ctrl.document_properties.$invalid || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.internal.contentFile))"
+                                       ng-disabled="!ctrl.isSaveValid(false)"
                                        class="md-raised"
                                        ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
                                 {{lang.internal_save}}
@@ -25,34 +25,32 @@
                         </div>
                         <div ng-if="ctrl.internal.addMethod">
                             <md-button ng-click="ctrl.saveCorrespondenceAndPrintBarcode()"
-                                       ng-disabled="ctrl.saveInProgress || ctrl.document_properties.$invalid || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.internal.contentFile))"
+                                       ng-disabled="!ctrl.isSaveValid(false)"
                                        class="md-raised">
                                 {{lang.internal_save_print_barcode}}
                             </md-button>
                         </div>
                         <div ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)">
-                            <md-button ng-disabled="ctrl.saveInProgress || ctrl.document_properties.$invalid || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.internal.contentFile))"
+                            <md-button ng-disabled="!ctrl.isSaveValid(true)"
                                        ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised">
                                 {{lang.save_and_insert}}
                             </md-button>
                         </div>
                         <div ng-if="!ctrl.internal.addMethod">
-                            <md-button ng-disabled="ctrl.saveInProgress || ctrl.document_properties.$invalid
-                                            || !(ctrl.documentInformation || ctrl.internal.contentFile)"
+                            <md-button ng-disabled="!ctrl.isSaveValid(true)"
                                        ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
                                 {{lang.internal_save_draft}}
                             </md-button>
                         </div>
                         <div>
                             <md-button ng-disabled="ctrl.saveInProgress"
-                                       ng-click="ctrl.confirmResetAddCorrespondence($event)"
-                                       class="md-raised">
+                                       ng-click="ctrl.confirmResetAddCorrespondence($event)" class="md-raised">
                                 {{lang.internal_new}}
                             </md-button>
                         </div>
                         <div>
-                            <md-button ng-disabled="ctrl.saveInProgress" ng-click="ctrl.cancelAddCorrespondence($event)"
-                                       class="md-raised">
+                            <md-button ng-disabled="ctrl.saveInProgress"
+                                       ng-click="ctrl.cancelAddCorrespondence($event)" class="md-raised">
                                 {{lang.internal_cancel}}
                             </md-button>
                         </div>
@@ -223,37 +221,40 @@
                     <div layout="row">
                         <div>
                             <md-button ng-click="ctrl.saveCorrespondence()"
-                                       ng-disabled="ctrl.saveInProgress || ctrl.document_properties.$invalid || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.internal.contentFile))"
+                                       ng-disabled="!ctrl.isSaveValid(false)"
                                        class="md-raised"
                                        ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
-                                <!--|| (ctrl.documentInformation || ctrl.internal.contentFile)-->
                                 {{lang.internal_save}}
                             </md-button>
                         </div>
                         <div ng-if="ctrl.internal.addMethod">
                             <md-button ng-click="ctrl.saveCorrespondenceAndPrintBarcode()"
-                                       ng-disabled="ctrl.saveInProgress || ctrl.document_properties.$invalid || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.internal.contentFile))"
+                                       ng-disabled="!ctrl.isSaveValid(false)"
                                        class="md-raised">
                                 {{lang.internal_save_print_barcode}}
                             </md-button>
                         </div>
+                        <div ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)">
+                            <md-button ng-disabled="!ctrl.isSaveValid(true)"
+                                       ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised">
+                                {{lang.save_and_insert}}
+                            </md-button>
+                        </div>
                         <div ng-if="!ctrl.internal.addMethod">
-                            <md-button ng-disabled="ctrl.saveInProgress || ctrl.document_properties.$invalid
-                                            || !(ctrl.documentInformation || ctrl.internal.contentFile)"
+                            <md-button ng-disabled="!ctrl.isSaveValid(true)"
                                        ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
                                 {{lang.internal_save_draft}}
                             </md-button>
                         </div>
                         <div>
                             <md-button ng-disabled="ctrl.saveInProgress"
-                                       ng-click="ctrl.confirmResetAddCorrespondence($event)"
-                                       class="md-raised">
+                                       ng-click="ctrl.confirmResetAddCorrespondence($event)" class="md-raised">
                                 {{lang.internal_new}}
                             </md-button>
                         </div>
                         <div>
-                            <md-button ng-disabled="ctrl.saveInProgress" ng-click="ctrl.cancelAddCorrespondence($event)"
-                                       class="md-raised">
+                            <md-button ng-disabled="ctrl.saveInProgress"
+                                       ng-click="ctrl.cancelAddCorrespondence($event)" class="md-raised">
                                 {{lang.internal_cancel}}
                             </md-button>
                         </div>

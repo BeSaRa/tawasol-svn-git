@@ -59,13 +59,13 @@
                             <div layout="column">
                                 <div layout="row">
                                     <md-button
-                                            ng-disabled="ctrl.isInValidForm(ctrl.document_properties)"
+                                            ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, false)"
                                             ng-click="ctrl.saveCorrespondence()" class="md-raised"
                                             ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
                                         {{lang.incoming_save}}
                                     </md-button>
                                     <md-button
-                                            ng-disabled="ctrl.isInValidForm(ctrl.document_properties)"
+                                            ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, false)"
                                             ng-click="ctrl.saveCorrespondenceAndPrintBarcode()" class="md-raised">
                                         {{lang.incoming_save_print_barcode}}
                                     </md-button>
@@ -73,24 +73,26 @@
                                 <div layout="row">
                                     <md-button
                                             ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)"
-                                            ng-disabled="ctrl.isInValidForm(ctrl.document_properties)"
+                                            ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, true)"
                                             ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised"
                                             ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
                                         {{lang.save_and_insert}}
                                     </md-button>
-                                    <md-button ng-click="ctrl.confirmResetAddCorrespondence($event)" class="md-raised">
+                                    <md-button ng-disabled="ctrl.saveInProgress"
+                                               ng-click="ctrl.confirmResetAddCorrespondence($event)" class="md-raised">
                                         {{lang.incoming_new}}
                                     </md-button>
-                                    <md-button ng-click="ctrl.cancelAddCorrespondence($event)" class="md-raised">
+                                    <md-button ng-disabled="ctrl.saveInProgress"
+                                               ng-click="ctrl.cancelAddCorrespondence($event)" class="md-raised">
                                         {{lang.incoming_cancel}}
                                     </md-button>
                                 </div>
-                                <div layout="row">
-                                    <div ng-if="ctrl.incoming.hasVsId() && ctrl.requestCompleted">
+                                <div layout="row" ng-if="ctrl.incoming.hasVsId() && ctrl.requestCompleted">
+                                    <div>
                                         <md-input-container class="mt5">
                                             <label for="documentAction">{{lang.document_action}}</label>
                                             <md-select name="documentAction" id="documentAction"
-                                                       ng-disabled="!ctrl.isActionsAvailable"
+                                                       ng-disabled="!ctrl.isActionsAvailable || ctrl.saveInProgress"
                                                        ng-model="ctrl.documentAction">
                                                 <md-option ng-value="action" class="{{action.class}}"
                                                            ng-if="action.checkShow(action, ctrl.incoming, $index)"
@@ -100,8 +102,9 @@
                                             </md-select>
                                         </md-input-container>
                                     </div>
-                                    <div ng-if="ctrl.incoming.hasVsId() && ctrl.requestCompleted">
-                                        <md-button class="md-raised" ng-disabled="!ctrl.documentAction"
+                                    <div>
+                                        <md-button class="md-raised"
+                                                   ng-disabled="!ctrl.documentAction || ctrl.saveInProgress"
                                                    ng-click="ctrl.performDocumentAction($event)">{{lang.action_submit}}
                                         </md-button>
                                     </div>

@@ -316,7 +316,7 @@ module.exports = function (app) {
             self.saveCorrespondence(false, true).then(function () {
                 self.outgoing.openForAnnotation()
                     .then(function (result) {
-                        if (result !== 'DOCUMENT_LAUNCHED_ALREADY'){
+                        if (result !== 'DOCUMENT_LAUNCHED_ALREADY') {
                             _launchAfterSave();
                             if (result.hasOwnProperty('type') && result.type === 'ATTACHMENT') {
                                 self.outgoing.attachments.push(result.attachment);
@@ -931,6 +931,37 @@ module.exports = function (app) {
 
         self.isDocumentTypeSwitchDisabled = function () {
             return !!self.outgoing.vsId || self.duplicateVersion || !self.employeeService.hasPermissionTo('OUTGOING_PAPER') || self.employee.isBacklogMode();
+        };
+
+        /**
+         * @description Checks if data is valid to save
+         * @param contentRequired
+         * pass true, if content is always required for save
+         * @returns {boolean}
+         */
+        self.isSaveValid = function (contentRequired) {
+            if (!self.document_properties || self.document_properties.$invalid || self.saveInProgress || !self.outgoing.sitesInfoTo.length) {
+                return false;
+            }
+            var isValid = true;
+            // contentRequired is true if (save and insert) or (save as draft), then content must be added
+            if (contentRequired) {
+                isValid = (self.documentInformation || self.outgoing.contentFile);
+            }
+
+            if (!isValid) {
+                return false;
+            }
+
+            if (!self.outgoing.vsId) {
+                return isValid;
+            } else {
+                // if content is added once, check if it is still added
+                if (_hasContent()) {
+                    isValid = self.documentInformation || self.outgoing.contentFile;
+                }
+                return isValid;
+            }
         };
 
         self.$onInit = function () {

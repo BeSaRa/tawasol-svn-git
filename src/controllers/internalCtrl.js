@@ -732,6 +732,37 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Checks if data is valid to save
+         * @param contentRequired
+         * pass true, if content is always required for save
+         * @returns {boolean}
+         */
+        self.isSaveValid = function (contentRequired) {
+            if (!self.document_properties || self.document_properties.$invalid || self.saveInProgress) {
+                return false;
+            }
+            var isValid = true;
+            // contentRequired is true if (save and insert) or (save as draft), then content must be added
+            if (contentRequired) {
+                isValid = (self.documentInformation || self.internal.contentFile);
+            }
+
+            if (!isValid) {
+                return false;
+            }
+
+            if (!self.internal.vsId) {
+                return isValid;
+            } else {
+                // if content is added once, check if it is still added
+                if (_hasContent()) {
+                    isValid = self.documentInformation || self.internal.contentFile;
+                }
+                return isValid;
+            }
+        };
+
+        /**
          * @description Redirects the user to landing-page
          * @param $event
          */

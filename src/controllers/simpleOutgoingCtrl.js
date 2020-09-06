@@ -184,7 +184,7 @@ module.exports = function (app) {
 
         self.saveCorrespondence = function (status, ignoreLaunch) {
             self.saveInProgress = true;
-           // loadingIndicatorService.loading = true;
+            // loadingIndicatorService.loading = true;
             if (status && !self.documentInformation) {
                 toast.error(langService.get('cannot_save_as_draft_without_content'));
                 self.saveInProgress = false;
@@ -317,7 +317,7 @@ module.exports = function (app) {
                 self.saveInProgress = false;
                 toast.success(langService.get(successKey));
 
-                if (ignoreLaunch){
+                if (ignoreLaunch) {
                     return;
                 }
                 _launchAfterSave();
@@ -325,7 +325,7 @@ module.exports = function (app) {
             }
         };
 
-        function _launchAfterSave(){
+        function _launchAfterSave() {
             if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist))) {
                 dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
                     .then(function () {
@@ -337,13 +337,13 @@ module.exports = function (app) {
         self.saveAndAnnotateDocument = function ($event) {
             self.saveCorrespondence(false, true).then(function () {
                 self.outgoing.openForAnnotation()
-                    .then(function(result){
+                    .then(function (result) {
                         if (result !== 'DOCUMENT_LAUNCHED_ALREADY') {
                             _launchAfterSave();
                             if (result.hasOwnProperty('type') && result.type === 'ATTACHMENT') {
                                 self.outgoing.attachments.push(result.attachment);
                             }
-                        }else {
+                        } else {
                             self.resetAddCorrespondence();
                         }
                     });
@@ -987,19 +987,35 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Checks if form is invalid
+         * @description Checks if data is valid to save
          * @param form
-         * @returns {boolean|boolean}
+         * @param contentRequired
+         * pass true, if content is always required for save
+         * @returns {boolean}
          */
-        self.isInValidForm = function (form) {
-            if (!form) {
-                return true;
+        self.isSaveValid = function (form, contentRequired) {
+            if (!form || form.$invalid || self.saveInProgress || !self.outgoing.sitesInfoTo.length || !_isValidFirstSubSite()) {
+                return false;
+            }
+            var isValid = true;
+            // contentRequired is true if (save and insert) or (save as draft), then content must be added
+            if (contentRequired) {
+                isValid = (self.documentInformation || self.outgoing.contentFile);
             }
 
-            return form.$invalid
-                || self.saveInProgress || !self.outgoing.sitesInfoTo.length || !_isValidFirstSubSite()
-                || ((self.documentInformationExist || (self.contentFileExist && self.contentFileSizeExist))
-                    && !(self.documentInformation || self.outgoing.contentFile));
+            if (!isValid) {
+                return false;
+            }
+
+            if (!self.outgoing.vsId) {
+                return isValid;
+            } else {
+                // if content is added once, check if it is still added
+                if (_hasContent()) {
+                    isValid = self.documentInformation || self.outgoing.contentFile;
+                }
+                return isValid;
+            }
         };
 
         self.$onInit = function () {
@@ -1016,8 +1032,8 @@ module.exports = function (app) {
                 '                                                    frameborder="0"></iframe>';
 
 
-                if (!angular.element('#document-viewer').length)
-                    angular.element('#iframe-inject-area').append($compile(iframe)($scope));
+            if (!angular.element('#document-viewer').length)
+                angular.element('#iframe-inject-area').append($compile(iframe)($scope));
 
         }
 

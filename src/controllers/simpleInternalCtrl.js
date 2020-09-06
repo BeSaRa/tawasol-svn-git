@@ -633,7 +633,7 @@ module.exports = function (app) {
                 permissionKey: "ELECTRONIC_SIGNATURE_MEMO",
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    isVisible = !model.hasActiveSeqWF() && gridService.checkToShowAction(action) && !info.isPaper && _hasContent() && !model.isPrivateSecurityLevel() && !model.isInternalPersonal(); //Don't show if its paper outgoing
+                    isVisible = !model.hasActiveSeqWF() && gridService.checkToShowAction(action) && !info.isPaper && _hasContent() && !model.isPrivateSecurityLevel() && !model.isInternalPersonal(); //Don't show if its paper internal
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -810,6 +810,38 @@ module.exports = function (app) {
             return form.$invalid
                 || self.saveInProgress || ((self.documentInformationExist
                     || (self.contentFileExist && self.contentFileSizeExist)) && !(self.documentInformation || self.internal.contentFile))
+        };
+
+        /**
+         * @description Checks if data is valid to save
+         * @param form
+         * @param contentRequired
+         * pass true, if content is always required for save
+         * @returns {boolean}
+         */
+        self.isSaveValid = function (form, contentRequired) {
+            if (!form || form.$invalid || self.saveInProgress) {
+                return false;
+            }
+            var isValid = true;
+            // contentRequired is true if (save and insert) or (save as draft), then content must be added
+            if (contentRequired) {
+                isValid = (self.documentInformation || self.internal.contentFile);
+            }
+
+            if (!isValid) {
+                return false;
+            }
+
+            if (!self.internal.vsId) {
+                return isValid;
+            } else {
+                // if content is added once, check if it is still added
+                if (_hasContent()) {
+                    isValid = self.documentInformation || self.internal.contentFile;
+                }
+                return isValid;
+            }
         };
 
         self.injectIframe = function () {

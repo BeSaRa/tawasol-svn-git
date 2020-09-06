@@ -37,46 +37,48 @@
                             <div class="mb10" layout="column">
                                 <div layout="row">
                                     <md-button ng-click="ctrl.saveCorrespondence()"
-                                               ng-disabled="ctrl.isInValidForm(ctrl.document_properties)"
+                                               ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, false)"
                                                class="md-raised"
                                                ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
                                         {{lang.internal_save}}
                                     </md-button>
                                     <md-button ng-click="ctrl.saveCorrespondenceAndPrintBarcode()"
-                                               ng-disabled="ctrl.isInValidForm(ctrl.document_properties)"
+                                               ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, false)"
                                                class="md-raised"
                                                ng-if="ctrl.internal.addMethod">
                                         {{lang.internal_save_print_barcode}}
                                     </md-button>
                                     <div ng-if="!ctrl.internal.addMethod">
-                                        <md-button ng-disabled="ctrl.document_properties.$invalid || ctrl.saveInProgress
-                                            || !(ctrl.documentInformation || ctrl.internal.contentFile)"
+                                        <md-button ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, true)"
                                                    ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
                                             {{lang.internal_save_draft}}
                                         </md-button>
                                     </div>
                                 </div>
                                 <div layout="row">
-                                    <md-button ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)"
-                                               ng-disabled="ctrl.isInValidForm(ctrl.document_properties)"
-                                               ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised"
-                                               ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
+                                    <md-button
+                                            ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)"
+                                            ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, true)"
+                                            ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised"
+                                            ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
                                         {{lang.save_and_insert}}
                                     </md-button>
-                                    <md-button ng-click="ctrl.confirmResetAddCorrespondence($event)" class="md-raised">
+                                    <md-button ng-disabled="ctrl.saveInProgress"
+                                               ng-click="ctrl.confirmResetAddCorrespondence($event)" class="md-raised">
                                         {{lang.internal_new}}
                                     </md-button>
-                                    <md-button ng-click="ctrl.cancelAddCorrespondence($event)" class="md-raised">
+                                    <md-button ng-disabled="ctrl.saveInProgress"
+                                               ng-click="ctrl.cancelAddCorrespondence($event)" class="md-raised">
                                         {{lang.internal_cancel}}
                                     </md-button>
                                 </div>
                             </div>
-                            <div layout="row">
-                                <div ng-if="ctrl.internal.hasVsId() && ctrl.requestCompleted">
+                            <div layout="row" ng-if="ctrl.internal.hasVsId() && ctrl.requestCompleted">
+                                <div>
                                     <md-input-container class="mt5">
                                         <label for="documentAction">{{lang.document_action}}</label>
                                         <md-select name="documentAction" id="documentAction"
-                                                   ng-disabled="!ctrl.isActionsAvailable"
+                                                   ng-disabled="!ctrl.isActionsAvailable || ctrl.saveInProgress"
                                                    ng-model="ctrl.documentAction">
                                             <md-option ng-value="action" class="{{action.class}}"
                                                        ng-if="action.checkShow(action, ctrl.internal, $index)"
@@ -86,8 +88,9 @@
                                         </md-select>
                                     </md-input-container>
                                 </div>
-                                <div ng-if="ctrl.internal.hasVsId() && ctrl.requestCompleted">
-                                    <md-button class="md-raised" ng-disabled="!ctrl.documentAction"
+                                <div>
+                                    <md-button class="md-raised"
+                                               ng-disabled="!ctrl.documentAction || ctrl.saveInProgress"
                                                ng-click="ctrl.performDocumentAction($event)">{{lang.action_submit}}
                                     </md-button>
                                 </div>
@@ -138,7 +141,8 @@
 
                                             <span flex></span>
                                             <!-- Attachments -->
-                                            <div class="icon-relative" ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')">
+                                            <div class="icon-relative"
+                                                 ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')">
                                                 <md-button tooltip="{{lang.attachments}}"
                                                            class="md-raised md-icon-button"
                                                            ng-click="ctrl.manageAttachments($event)">
@@ -147,7 +151,8 @@
                                                 <span class="counter blue">{{ctrl.internal.attachments.length}}</span>
                                             </div>
                                             <!-- Linked Docs -->
-                                            <div class="icon-relative" ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_DOCUMENTS')">
+                                            <div class="icon-relative"
+                                                 ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_DOCUMENTS')">
                                                 <md-button tooltip="{{lang.linked_documents}}"
                                                            class="md-raised md-icon-button"
                                                            ng-click="ctrl.manageLinkedDocuments($event)">
@@ -156,7 +161,8 @@
                                                 <span class="counter blue">{{ctrl.internal.linkedDocs ? ctrl.internal.linkedDocs.length : 0}}</span>
                                             </div>
                                             <!-- Linked Entities -->
-                                            <div class="icon-relative" ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_ENTITIES')">
+                                            <div class="icon-relative"
+                                                 ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_ENTITIES')">
                                                 <md-button tooltip="{{lang.linked_entities}}"
                                                            class="md-raised md-icon-button"
                                                            ng-click="ctrl.manageLinkedEntities($event)">
