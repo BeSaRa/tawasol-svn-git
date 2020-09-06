@@ -20,6 +20,7 @@ module.exports = function (app) {
             FOLLOWUP_BOOK_FILTER_START_BEFORE_VALUE: 30,
             ANNOTATE_DOCUMENT_PERMISSION: '',
             APP_CONTEXT: 'ui',
+            PSPDF_LICENSE_KEY : false
         };
         var configurationServiceProvider = provider;
         /**

@@ -1309,7 +1309,7 @@ module.exports = function (app) {
                 document: self.pdfData,
                 headless: true,
                 instantJSON: operations.length ? null : instantJSON,
-                licenseKey: self.licenseKey
+                licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey
             });
 
             if (operations.length) {
@@ -1350,7 +1350,7 @@ module.exports = function (app) {
                         return self.currentInstance;
                     }),
                     populateInkSignatures: self.populateInkSignatures,
-                    licenseKey: self.licenseKey
+                    licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey
                 }).then(function (instance) {
                     self.currentInstance = instance;
                     // set current annotations for loaded document
