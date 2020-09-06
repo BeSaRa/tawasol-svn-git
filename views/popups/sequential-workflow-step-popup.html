@@ -42,7 +42,7 @@
                         <md-input-container flex>
                             <label for="organization">{{lang.organization_unit}}</label>
                             <md-select id="organization" name="organization"
-                                       ng-disabled="ctrl.viewOnly"
+                                       ng-disabled="ctrl.viewOnly || ctrl.record.isInternalSeqWF()"
                                        ng-required="ctrl.isUserRequired"
                                        ng-change="ctrl.getAppUsersForOU(false, $event)"
                                        aria-label="{{lang.organization_unit}}"

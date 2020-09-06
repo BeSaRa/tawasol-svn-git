@@ -39,6 +39,17 @@ module.exports = function (app) {
         }
 
         /**
+         * @description Set the selected regOu from main page to step
+         * @private
+         */
+        function _setCurrentRegOu() {
+            // if internal seqWF, set organization to selected regOu and disable it as wf will be inside organization only
+            if (self.record.isInternalSeqWF()) {
+                self.step.toOUID = self.record.regOUId;
+            }
+        }
+
+        /**
          * @description Set the step values and close dialog
          * @param $event
          */
@@ -52,6 +63,7 @@ module.exports = function (app) {
                 return;
             }
             _resetReadonlyFields();
+            _setCurrentRegOu();
             dialog.hide(self.step);
         };
 
@@ -129,7 +141,8 @@ module.exports = function (app) {
         self.$onInit = function () {
             $timeout(function () {
                 self.form = $scope.sequentialWorkflowStepForm || null;
-                self.recordCopy = angular.copy(self.record);
+                _setCurrentRegOu();
+                //self.recordCopy = angular.copy(self.record);
                 self.stepCopy = angular.copy(self.step);
 
                 self.isUserRequired = self.step.checkUserRequired(self.record);
