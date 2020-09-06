@@ -123,19 +123,7 @@
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
-                        <!-- Item Order -->
-                        <md-input-container flex>
-                            <label for="itemOrder">{{lang.item_order}}</label>
-                            <input name="itemOrder" id="itemOrder" required
-                                   custom-validate-directive="number"
-                                   ng-disabled="true"
-                                   ng-readonly="true"
-                                   ng-model="ctrl.step.itemOrder">
-                            <div ng-messages="sequentialWorkflowStepForm.itemOrder.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
-                                <div ng-message="number">{{lang.numberonly}}</div>
-                            </div>
-                        </md-input-container>
+                        <md-input-container flex></md-input-container>
                     </div>
                     <div layout="row">
                         <div flex class="p020">
