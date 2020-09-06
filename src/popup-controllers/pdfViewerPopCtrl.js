@@ -1077,7 +1077,7 @@ module.exports = function (app) {
                             self.handleSaveAttachment(pdfContent);
                         } else {
                             if (self.info.isPaper) {
-                                self.handleUpdateDocumentContent(pdfContent);
+                                self.info.docStatus === 25 ? self.handleSaveAnnotationAsAttachment(pdfContent) : self.handleUpdateDocumentContent(pdfContent);
                             } else if (_isElectronicAndAuthorizeByAnnotationBefore()) {
                                 self.isDocumentHasCurrentUserSignature()
                                     .then(function () {
