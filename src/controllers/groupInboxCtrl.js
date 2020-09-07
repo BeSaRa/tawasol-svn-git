@@ -1503,7 +1503,15 @@ module.exports = function (app) {
                 text: 'grid_action_download',
                 shortcut: false,
                 checkShow: function (action, model) {
-                    return gridService.checkToShowMainMenuBySubMenu(action, model);
+                    var isAllowed = true;
+                    if (model.hasActiveSeqWF()) {
+                        return false;
+                    }
+                    if (model.isCorrespondenceApprovedBefore()) {
+                        isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
+                    }
+
+                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
