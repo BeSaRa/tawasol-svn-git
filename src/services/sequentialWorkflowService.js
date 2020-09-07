@@ -469,6 +469,8 @@ module.exports = function (app) {
                     }
                 }).then(function (result) {
                     return result.data.rs;
+                }).catch(function (error) {
+                    return errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
                 });
         };
 
@@ -499,6 +501,8 @@ module.exports = function (app) {
                     }
                 }).then(function (result) {
                     return result.data.rs;
+                }).catch(function (error) {
+                    return errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
                 });
         };
         /**
