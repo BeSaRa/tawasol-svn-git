@@ -277,7 +277,7 @@ module.exports = function (app) {
                 return;
             }
 
-
+            draftInternal.recordGridName = gridService.grids.internal.draft;
             draftInternal.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadDraftInternals(self.grid.page)
@@ -299,6 +299,8 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
+
+            record.recordGridName = gridService.grids.internal.draft;
             record.quickSendLaunchWorkflow($event, 'favorites')
                 .then(function () {
                     self.reloadDraftInternals(self.grid.page)

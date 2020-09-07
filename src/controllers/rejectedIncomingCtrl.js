@@ -293,6 +293,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
             }
+            rejectedIncoming.recordGridName = gridService.grids.incoming.rejected;
             rejectedIncoming.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadRejectedIncomings(self.grid.page)
@@ -314,6 +315,8 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
+
+            record.recordGridName = gridService.grids.incoming.rejected;
             record.quickSendLaunchWorkflow($event, 'favorites')
                 .then(function () {
                     self.reloadRejectedIncomings(self.grid.page)

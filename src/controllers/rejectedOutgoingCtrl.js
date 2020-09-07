@@ -280,6 +280,7 @@ module.exports = function (app) {
                 return;
             }
 
+            rejectedOutgoing.recordGridName = gridService.grids.outgoing.rejected;
             rejectedOutgoing.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadRejectedOutgoings(self.grid.page)
@@ -301,6 +302,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
             }
+            record.recordGridName = gridService.grids.outgoing.rejected;
             record.quickSendLaunchWorkflow($event, 'favorites')
                 .then(function () {
                     self.reloadRejectedOutgoings(self.grid.page)

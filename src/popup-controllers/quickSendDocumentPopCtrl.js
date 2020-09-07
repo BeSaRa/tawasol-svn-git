@@ -237,7 +237,13 @@ module.exports = function (app) {
         };
 
         self.canLaunchSeqWF = function () {
-            if (self.record.recordGridName && self.record.recordGridName === gridService.grids.department.returned) {
+            if (self.record.recordGridName &&
+                (self.record.recordGridName === gridService.grids.department.returned
+                    || self.record.recordGridName === gridService.grids.outgoing.rejected
+                    || self.record.recordGridName === gridService.grids.incoming.rejected
+                    || self.record.recordGridName === gridService.grids.internal.rejected
+                    || self.record.recordGridName === gridService.grids.outgoing.draft
+                    || self.record.recordGridName === gridService.grids.internal.draft)) {
                 return false;
             }
             return employeeService.hasPermissionTo('LAUNCH_SEQ_WF') && rootEntity.hasPSPDFViewer()

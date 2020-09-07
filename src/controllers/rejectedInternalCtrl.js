@@ -264,6 +264,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
             }
+            rejectedInternal.recordGridName = gridService.grids.internal.rejected;
             rejectedInternal.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadRejectedInternals(self.grid.page)
@@ -285,6 +286,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
+            record.recordGridName = gridService.grids.internal.rejected;
             record.quickSendLaunchWorkflow($event, 'favorites')
                 .then(function () {
                     self.reloadRejectedInternals(self.grid.page)
