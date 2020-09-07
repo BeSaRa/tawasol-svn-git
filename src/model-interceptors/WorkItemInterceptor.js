@@ -77,6 +77,7 @@ module.exports = function (app) {
             delete model.conditionalApproveIndicator;
             delete model.conditionalApproveExportDate;
             delete model.conditionalApproveComment;
+            delete model.recordGridName;
             return model;
         });
 

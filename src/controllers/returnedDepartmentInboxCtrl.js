@@ -58,6 +58,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            name: gridService.grids.department.returned,
             progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.department.returned) || 5, // default limit
             page: 1, // first page
@@ -220,7 +221,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-         //   console.log('subscribe for returned department inbox : ', workItem)
+            //   console.log('subscribe for returned department inbox : ', workItem)
         };
 
         /**
@@ -272,6 +273,7 @@ module.exports = function (app) {
             // but it need in DW popup to create URL, records will always come from Outgoing export
             workItem.generalStepElm.workFlowName = "Outgoing";
             workItem.hideForwardSenderInfo = true;
+            workItem.recordGridName = gridService.grids.department.returned;
             dialog.confirmMessage(langService.get("confirm_launch_workflow")).then(function () {
                 workItem.launchWorkFlow($event, 'forward', 'favorites')
                     .then(function () {
@@ -296,6 +298,7 @@ module.exports = function (app) {
                 return;
             }
             workItem.generalStepElm.workFlowName = "Outgoing";
+            workItem.recordGridName = gridService.grids.department.returned;
             dialog.confirmMessage(langService.get("confirm_launch_workflow")).then(function () {
                 workItem.quickSendLaunchWorkflow($event, 'favorites')
                     .then(function () {
@@ -359,7 +362,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(returnedDepartmentInbox, null));
                 return;
             }
-         //   console.log('manageTasksReturnedDepartmentInbox', returnedDepartmentInbox);
+            //   console.log('manageTasksReturnedDepartmentInbox', returnedDepartmentInbox);
         };
 
         /**
@@ -501,7 +504,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(returnedDepartmentInbox, null));
                 return;
             }
-          //  console.log('sendSMS : ', returnedDepartmentInbox);
+            //  console.log('sendSMS : ', returnedDepartmentInbox);
         };
 
         /**

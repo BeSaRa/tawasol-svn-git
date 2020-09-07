@@ -235,6 +235,9 @@ module.exports = function (app) {
         };
 
         self.canLaunchSeqWF = function () {
+            if (self.record.recordGridName && self.record.recordGridName === gridService.grids.department.returned) {
+                return false;
+            }
             return employeeService.hasPermissionTo('LAUNCH_SEQ_WF') && rootEntity.hasPSPDFViewer()
                 && !self.record.isCorrespondenceApprovedBefore()
                 && !self.record.hasActiveSeqWF() && !(self.record instanceof SentItemDepartmentInbox);

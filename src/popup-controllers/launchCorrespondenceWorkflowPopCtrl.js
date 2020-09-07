@@ -1517,6 +1517,9 @@ module.exports = function (app) {
         };
 
         self.canLaunchSeqWF = function () {
+            if (correspondence.recordGridName && correspondence.recordGridName === gridService.grids.department.returned) {
+                return false;
+            }
             return !self.multi && (self.actionKey === 'forward' || self.actionKey === 'launch')
                 && employeeService.hasPermissionTo('LAUNCH_SEQ_WF')
                 && rootEntity.hasPSPDFViewer() && !correspondence.hasActiveSeqWF()
