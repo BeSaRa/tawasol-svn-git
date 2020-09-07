@@ -14,9 +14,9 @@ module.exports = function (app) {
                 subject: 'docSubject',
                 document_number: 'refDocNumber',
                 label_document_type: function () {
-                    if (this.docTypeInfo && this.docTypeInfo.hasOwnProperty('id') && this.docTypeInfo.id){
+                    if (this.docTypeInfo && this.docTypeInfo.hasOwnProperty('id') && this.docTypeInfo.id) {
                         return this.docTypeInfo.getTranslatedName();
-                    } else if (this.docType && this.docType.hasOwnProperty('id') && this.docType.id){
+                    } else if (this.docType && this.docType.hasOwnProperty('id') && this.docType.id) {
                         return this.docType.getTranslatedName();
                     }
                     return '';
@@ -34,13 +34,13 @@ module.exports = function (app) {
                 correspondence_sites: function () {
                     return this.getTranslatedCorrespondenceSiteInfo();
                 },
-                security_level:function () {
+                security_level: function () {
                     return this.securityLevel.getTranslatedName();
                 },
-                deleted_by:function () {
+                deleted_by: function () {
                     return this.lastModifierInfo.getTranslatedName();
                 },
-                deleted_on:'lastModified',
+                deleted_on: 'lastModified',
                 number_of_days: 'numberOfDays'
             };
             Correspondence.call(this);
@@ -144,6 +144,10 @@ module.exports = function (app) {
             Incoming.prototype.openSendFaxDialog = function ($event) {
                 correspondenceService = this.getCorrespondenceService();
                 return correspondenceService.openSendFaxDialog(this, $event);
+            };
+
+            Incoming.prototype.isCompositeSites = function () {
+                return false;
             };
 
             // don't remove CMSModelInterceptor from last line

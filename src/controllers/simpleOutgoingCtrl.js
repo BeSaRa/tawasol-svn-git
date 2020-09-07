@@ -690,7 +690,7 @@ module.exports = function (app) {
                 checkShow: function (action, model, index) {
                     isVisible = gridService.checkToShowAction(action) && _hasContent() && self.hasPSPDFViewer && !model.hasActiveSeqWF() && !model.isCorrespondenceApprovedBefore();
                     self.setDropdownAvailability(index, isVisible);
-                    return isVisible;
+                    return isVisible && !model.isCompositeSites();
                 }
             },
             // Send To Review
