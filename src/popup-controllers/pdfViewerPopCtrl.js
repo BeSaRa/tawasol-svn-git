@@ -783,8 +783,15 @@ module.exports = function (app) {
             }
 
             if (annotation instanceof PSPDFKit.Annotations.InkAnnotation && annotation.isSignature && annotation.customData) {
-                annotation = annotation.set('isSignature', _getRightTypeForElectronicSignature() !== 1);
-                return self.currentInstance.updateAnnotation(annotation);
+                var customData = angular.copy(annotation.customData);
+                delete customData.repeaterHandler;
+                delete customData.repeatedAnnotation;
+                delete customData.id;
+
+                var updatedAnnotation = annotation
+                    .set('isSignature', _getRightTypeForElectronicSignature() !== 1)
+                    .set('customData', customData);
+                return self.currentInstance.updateAnnotation(updatedAnnotation);
             }
         };
         /**
@@ -1271,7 +1278,7 @@ module.exports = function (app) {
                             continue;
                         }
                         var customDuplicatedData = angular.extend({}, customData ? customData : {}, {
-                            id: customData.id ? customData.id : id,
+                            id: customData && customData.id ? customData.id : id,
                             parentId: parentId
                         });
 
