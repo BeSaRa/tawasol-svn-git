@@ -594,16 +594,6 @@ module.exports = function (app) {
                 return;
             }
 
-            if (info.hasActiveSeqWF && info.docStatus < 24 && self.psPDFViewerEnabled) {
-                return workItem.openSequentialDocument()
-                    .then(function () {
-                        self.reloadFollowupEmployeeInboxes(self.grid.page);
-                    })
-                    .catch(function () {
-                        self.reloadFollowupEmployeeInboxes(self.grid.page);
-                    });
-            }
-
             workItem
                 .viewNewProxyDocument(self.gridActions, 'proxyMail', $event)
                 .then(function () {
