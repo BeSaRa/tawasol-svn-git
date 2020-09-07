@@ -931,6 +931,8 @@ module.exports = function (app) {
                 icon: 'download',
                 text: 'grid_action_download',
                 shortcut: false,
+                showInViewOnly: true,
+                showInView: true,
                 checkShow: function (action, model) {
                     var isAllowed = true;
                     if (model.hasActiveSeqWF()) {
