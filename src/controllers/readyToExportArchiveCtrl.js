@@ -1135,7 +1135,7 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                    return true;
+                    return employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && !model.hasActiveSeqWF()
                 }
             },
             // Export and add to icn archive
