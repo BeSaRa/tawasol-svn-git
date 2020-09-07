@@ -1481,6 +1481,9 @@ module.exports = function (app) {
                         showInView: false,
                         checkShow: function (action, model) {
                             var info = model.getInfo(), isAllowed = true;
+                            if (model.hasActiveSeqWF()) {
+                                return false;
+                            }
                             if (model.isCorrespondenceApprovedBefore()) {
                                 isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
                             }
@@ -2291,6 +2294,9 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: function (action, model) {
                             var info = model.getInfo(), isAllowed = true;
+                            if (model.hasActiveSeqWF()) {
+                                return false;
+                            }
                             // if already approved once and not allowed to edit partial approved in global settings, return false
                             if (model.isCorrespondenceApprovedBefore()) {
                                 isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
@@ -2338,6 +2344,9 @@ module.exports = function (app) {
                         showInView: false,
                         checkShow: function (action, model) {
                             var info = model.getInfo(), isAllowed = true;
+                            if (model.hasActiveSeqWF()) {
+                                return false;
+                            }
                             if (model.isCorrespondenceApprovedBefore()) {
                                 isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
                             }
