@@ -56,6 +56,7 @@
                                            placeholder="{{lang.search}}"
                                            class="select-header-input">
                                 </md-select-header>
+                                <md-option ng-value="null">{{lang.none}}</md-option>
                                 <md-option
                                         ng-repeat="organization in ctrl.organizations | translatedNameFilter: ctrl.ouSearchText"
                                         ng-if="organization.status" ng-value="organization.id">
@@ -74,7 +75,7 @@
                             <md-select name="applicationUser" id="applicationUser"
                                        ng-change="ctrl.onChangeUser()"
                                        ng-required="ctrl.isUserRequired"
-                                       ng-disabled="ctrl.viewOnly"
+                                       ng-disabled="ctrl.viewOnly || !ctrl.step.toOUID"
                                        aria-label="{{lang.select_user}}"
                                        ng-model="ctrl.step.userIdAndOuId"
                                        ng-model-options="{trackBy: '$value'}"
@@ -86,6 +87,7 @@
                                            placeholder="{{lang.search}}"
                                            class="select-header-input">
                                 </md-select-header>
+                                <md-option ng-value="null">{{lang.none}}</md-option>
                                 <md-option ng-value="user.userIdAndOuId" ng-if="user.status"
                                            ng-repeat="user in ctrl.ouApplicationUsers | translatedNameFilter: ctrl.appUserSearchText:'getAppUserAndOuTranslate'">
                                        <span md-highlight-text="ctrl.appUserSearchText"
@@ -103,7 +105,7 @@
                             <label for="workflowAction">{{lang.workflow_action}}</label>
                             <md-select name="workflowAction" id="workflowAction"
                                        ng-model="ctrl.step.actionId"
-                                       ng-disabled="ctrl.viewOnly"
+                                       ng-disabled="ctrl.viewOnly || !ctrl.step.userIdAndOuId"
                                        ng-required="ctrl.step.userIdAndOuId"
                                        ng-model-options="{trackBy:'$value'}"
                                        aria-label="{{lang.workflow_action}}"
@@ -131,13 +133,13 @@
                     </div>
                     <div layout="row">
                         <div flex class="p020">
-                            <md-checkbox ng-disabled="ctrl.viewOnly"
+                            <md-checkbox ng-disabled="ctrl.viewOnly || !ctrl.step.userIdAndOuId"
                                          ng-model="ctrl.step.sendSMS">
                                 {{lang.sms_workflow_notification}}
                             </md-checkbox>
                         </div>
                         <div flex class="p020">
-                            <md-checkbox ng-disabled="ctrl.viewOnly"
+                            <md-checkbox ng-disabled="ctrl.viewOnly || !ctrl.step.userIdAndOuId"
                                          ng-model="ctrl.step.sendEmail">
                                 {{lang.email_workflow_notification}}
                             </md-checkbox>
@@ -148,7 +150,7 @@
                             <label for="comment">{{lang.select_comment}}</label>
                             <md-select id="comment" name="comment" ng-change="ctrl.onCommentChange()"
                                        ng-model="ctrl.comment"
-                                       ng-disabled="ctrl.viewOnly"
+                                       ng-disabled="ctrl.viewOnly || !ctrl.step.userIdAndOuId"
                                        ng-model-options="{trackBy:'$value.id'}"
                                        md-on-close="ctrl.clearSearchText('comment')"
                                        data-md-container-class="select-header-container sticky-search-bar">
@@ -172,7 +174,7 @@
                             <label for="comments"> {{lang.type_your_comment}}</label>
                             <textarea rows="5" id="comments" name="comments" class="cms-comment"
                                       ng-model="ctrl.step.userComment"
-                                      ng-disabled="ctrl.viewOnly"
+                                      ng-disabled="ctrl.viewOnly || !ctrl.step.userIdAndOuId"
                                       maxlength="2000" md-maxlength="2000"></textarea>
                             <div ng-messages="sequentialWorkflowStepForm.comments.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>

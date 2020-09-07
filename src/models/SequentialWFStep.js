@@ -114,7 +114,10 @@ module.exports = function (app) {
                 if (!isValid) {
                     return false;
                 }
-                return !this.isLastStep(sequentialWF) ? !!(this.userIdAndOuId) : true;
+                if (!this.isLastStep(sequentialWF)) {
+                    return !!(this.userIdAndOuId && generator.validRequired(generator.getNormalizedValue(this.actionId, 'id')));
+                }
+                return true;
             };
 
             SequentialWFStep.prototype.isLastStep = function (sequentialWF) {

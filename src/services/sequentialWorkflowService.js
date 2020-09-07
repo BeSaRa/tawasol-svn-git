@@ -234,6 +234,13 @@ module.exports = function (app) {
              * @param $event
              */
             sequentialWorkflowStepEdit: function (sequentialWorkflow, sequentialWorkflowStep, viewOnly, $event) {
+                var step = angular.copy(sequentialWorkflowStep);
+
+                // if new step and seqWF is internal, set organization to selected regOu as WF will be inside organization only
+                if (!sequentialWorkflowStep.id && sequentialWorkflow.isInternalSeqWF()) {
+                    step.toOUID = sequentialWorkflow.regOUId;
+                }
+
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -243,7 +250,7 @@ module.exports = function (app) {
                         bindToController: true,
                         locals: {
                             record: angular.copy(sequentialWorkflow),
-                            step: angular.copy(sequentialWorkflowStep),
+                            step: step,
                             viewOnly: viewOnly
                         },
                         resolve: {
@@ -263,6 +270,20 @@ module.exports = function (app) {
                             comments: function (userCommentService) {
                                 'ngInject';
                                 return userCommentService.loadUserCommentsForDistribution();
+                            },
+                            ouApplicationUsers: function (ouApplicationUserService) {
+                                'ngInject';
+                                if (!step.toOUID) {
+                                    return [];
+                                }
+                                return ouApplicationUserService
+                                    .searchByCriteria({regOu: generator.getNormalizedValue(step.toOUID, 'id')})
+                                    .then(function (result) {
+                                        return _.map(result, function (item) {
+                                            item.userIdAndOuId = item.getUserIdAndOuIdCombination();
+                                            return item;
+                                        });
+                                    });
                             }
                         }
                     });

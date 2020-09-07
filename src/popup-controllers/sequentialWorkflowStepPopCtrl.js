@@ -16,7 +16,6 @@ module.exports = function (app) {
         self.appUserSearchText = '';
         self.actionSearchText = '';
         self.commentSearchText = '';
-        self.ouApplicationUsers = [];
         self.comment = null;
 
         self.isValidForm = function (form, setTouched) {
@@ -38,15 +37,12 @@ module.exports = function (app) {
             }
         }
 
-        /**
-         * @description Set the selected regOu from main page to step
-         * @private
-         */
-        function _setCurrentRegOu() {
-            // if internal seqWF, set organization to selected regOu and disable it as wf will be inside organization only
-            if (self.record.isInternalSeqWF()) {
-                self.step.toOUID = self.record.regOUId;
-            }
+        function _resetUserData() {
+            self.step.actionId = null;
+            self.step.sendSMS = false;
+            self.step.sendEmail = false;
+            self.comment = null;
+            self.step.userComment = null;
         }
 
         /**
@@ -63,10 +59,11 @@ module.exports = function (app) {
                 return;
             }
             _resetReadonlyFields();
-            _setCurrentRegOu();
+            if (!self.step.userIdAndOuId) {
+                _resetUserData();
+            }
             dialog.hide(self.step);
         };
-
 
         self.resetModel = function (form) {
             generator.resetFields(self.step, self.stepCopy);
@@ -88,12 +85,15 @@ module.exports = function (app) {
          * @description Get the Application Users for the selected Organization
          */
         self.getAppUsersForOU = function (skipResetUser, $event) {
+            self.ouApplicationUsers = [];
+
             if (!skipResetUser) {
-                self.step.toUserId = null;
+                self.step.userIdAndOuId = null;
+                _resetUserData();
             }
             if (!self.step.toOUID) {
-                self.ouApplicationUsers = [];
-                self.step.toUserId = null;
+                self.step.userIdAndOuId = null;
+                _resetUserData();
                 return;
             }
             return ouApplicationUserService
@@ -102,6 +102,12 @@ module.exports = function (app) {
                     self.ouApplicationUsers = _setUserIdAndOUIdCombination(result);
                     return result;
                 });
+        };
+
+        self.onChangeUser = function () {
+            if (!self.step.userIdAndOuId) {
+                _resetUserData();
+            }
         };
 
         /**
@@ -141,15 +147,12 @@ module.exports = function (app) {
         self.$onInit = function () {
             $timeout(function () {
                 self.form = $scope.sequentialWorkflowStepForm || null;
-                _setCurrentRegOu();
-                //self.recordCopy = angular.copy(self.record);
-                self.stepCopy = angular.copy(self.step);
-
-                self.isUserRequired = self.step.checkUserRequired(self.record);
-
-                if (self.stepCopy.toOUID) {
-                    self.getAppUsersForOU(true, null);
+                // if internal seqWF, disable organization as wf will be inside organization only
+                if (self.record.isInternalSeqWF()) {
+                    readonlyFields.push('toOUID');
                 }
+                self.stepCopy = angular.copy(self.step);
+                self.isUserRequired = self.step.checkUserRequired(self.record);
             });
         };
 
