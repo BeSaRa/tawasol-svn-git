@@ -1517,9 +1517,10 @@ module.exports = function (app) {
         };
 
         self.canLaunchSeqWF = function () {
-            return !self.multi && self.actionKey === 'forward'
+            return !self.multi && (self.actionKey === 'forward' || self.actionKey === 'launch')
                 && employeeService.hasPermissionTo('LAUNCH_SEQ_WF')
                 && rootEntity.hasPSPDFViewer() && !correspondence.hasActiveSeqWF()
+                && !correspondence.isCorrespondenceApprovedBefore()
                 && !(correspondence instanceof SentItemDepartmentInbox);
         };
 

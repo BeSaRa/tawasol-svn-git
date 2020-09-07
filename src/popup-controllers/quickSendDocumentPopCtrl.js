@@ -224,7 +224,7 @@ module.exports = function (app) {
         };
 
         self.openSequentialWorkFlowPopup = function ($event) {
-            if (!employeeService.hasPermissionTo('LAUNCH_SEQ_WF') || self.record.hasActiveSeqWF() || !rootEntity.hasPSPDFViewer()) {
+            if (!employeeService.hasPermissionTo('LAUNCH_SEQ_WF') || self.record.hasActiveSeqWF() || !rootEntity.hasPSPDFViewer() || self.record.isCorrespondenceApprovedBefore()) {
                 return false;
             }
             dialog.cancel();
@@ -236,6 +236,7 @@ module.exports = function (app) {
 
         self.canLaunchSeqWF = function () {
             return employeeService.hasPermissionTo('LAUNCH_SEQ_WF') && rootEntity.hasPSPDFViewer()
+                && !self.record.isCorrespondenceApprovedBefore()
                 && !self.record.hasActiveSeqWF() && !(self.record instanceof SentItemDepartmentInbox);
         };
 
