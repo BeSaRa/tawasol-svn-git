@@ -1499,7 +1499,7 @@ module.exports = function (app) {
          */
         self.quickSendCorrespondenceWorkFlow = function ($event) {
             dialog.cancel();
-            self.correspondence.quickSendLaunchWorkflow($event, 'favorites', null, isDeptIncoming)
+            self.correspondence.quickSendLaunchWorkflow($event, 'favorites', null, isDeptIncoming, isDeptSent, true)
                 .then(function (result) {
                     dialog.hide();
                 })

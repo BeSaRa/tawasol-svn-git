@@ -595,9 +595,9 @@ module.exports = function (app) {
             Correspondence.prototype.launchWorkFlowFromPredefinedAction = function ($event, action, tab, isDeptIncoming, isDeptSent, actionMembers) {
                 return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming, isDeptSent, false, actionMembers);
             };
-            Correspondence.prototype.quickSendLaunchWorkflow = function ($event, tab, action, isDeptIncoming, isDeptSent) {
+            Correspondence.prototype.quickSendLaunchWorkflow = function ($event, tab, action, isDeptIncoming, isDeptSent, fromLaunchPopup) {
                 action = action || 'forward';
-                return correspondenceService.openQuickSendDialog(this, tab, action, isDeptIncoming, isDeptSent, $event);
+                return correspondenceService.openQuickSendDialog(this, tab, action, isDeptIncoming, isDeptSent, fromLaunchPopup, $event);
             };
             Correspondence.prototype.openLaunchSequentialWorkflowDialog = function ($event) {
                 return correspondenceService.openLaunchSeqWFDialog(this, $event);

@@ -183,9 +183,9 @@ module.exports = function (app) {
             SentItemDepartmentInbox.prototype.launchWorkFlowFromPredefinedAction = function ($event, action, tab, actionMembers) {
                 return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, false, true, false, actionMembers);
             };
-            SentItemDepartmentInbox.prototype.quickSendLaunchWorkflow = function ($event, tab, action) {
+            SentItemDepartmentInbox.prototype.quickSendLaunchWorkflow = function ($event, tab, action, isDeptIncoming, isDeptSent, fromLaunchPopup) {
                 action = action || 'forward';
-                return correspondenceService.openQuickSendDialog(this, tab, action, false, true, $event);
+                return correspondenceService.openQuickSendDialog(this, tab, action, false, true, fromLaunchPopup, $event);
             };
 
 

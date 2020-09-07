@@ -18,6 +18,7 @@ module.exports = function (app) {
                                                          tableGeneratorService,
                                                          moment,
                                                          rootEntity,
+                                                         fromLaunchPopup,
                                                          SentItemDepartmentInbox,
                                                          gridService,
                                                          manageLaunchWorkflowService) {
@@ -30,6 +31,7 @@ module.exports = function (app) {
         self.predefinedActions = predefinedActions;
         self.rootEntity = rootEntity;
         self.headerText = langService.get('quick_send') + ' : ' + self.record.getInfo().title;
+        self.fromLaunchPopup = fromLaunchPopup;
 
         self.selectedPredefinedAction = null;
         self.canMinimize = false;

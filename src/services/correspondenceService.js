@@ -4955,7 +4955,7 @@ module.exports = function (app) {
 
         };
 
-        self.openQuickSendDialog = function (record, defaultTab, action, isDeptIncoming, isDeptSent, $event) {
+        self.openQuickSendDialog = function (record, defaultTab, action, isDeptIncoming, isDeptSent, fromLaunchPopup, $event) {
             var normalCorrespondence = false;
             if (!isDeptSent) {
                 normalCorrespondence = angular.isArray(record) ? !record[0].isWorkItem() : !record.isWorkItem();
@@ -4971,17 +4971,17 @@ module.exports = function (app) {
                             return managerService
                                 .manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event)
                                 .then(function (result) {
-                                    return result.hasSite() ? _quickSendDialog(record, defaultTab, action, isDeptIncoming, isDeptSent, $event) : null;
+                                    return result.hasSite() ? _quickSendDialog(record, defaultTab, action, isDeptIncoming, isDeptSent, fromLaunchPopup, $event) : null;
                                 })
                         })
                 } else {
-                    return _quickSendDialog(record, defaultTab, action, isDeptIncoming, isDeptSent, $event);
+                    return _quickSendDialog(record, defaultTab, action, isDeptIncoming, isDeptSent, fromLaunchPopup, $event);
                 }
             }
-            return _quickSendDialog(record, defaultTab, action, isDeptIncoming, isDeptSent, $event);
+            return _quickSendDialog(record, defaultTab, action, isDeptIncoming, isDeptSent, fromLaunchPopup, $event);
         };
 
-        function _quickSendDialog(record, defaultTab, action, isDeptIncoming, isDeptSent, $event) {
+        function _quickSendDialog(record, defaultTab, action, isDeptIncoming, isDeptSent, fromLaunchPopup, $event) {
             return dialog
                 .showDialog({
                     templateUrl: cmsTemplate.getPopup('quick-send-document'),
@@ -4993,7 +4993,8 @@ module.exports = function (app) {
                         defaultTab: defaultTab,
                         action: action,
                         isDeptIncoming: isDeptIncoming,
-                        isDeptSent: isDeptSent
+                        isDeptSent: isDeptSent,
+                        fromLaunchPopup: fromLaunchPopup || false
                     },
                     resolve: {
                         predefinedActions: function (predefinedActionService) {

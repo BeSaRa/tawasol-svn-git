@@ -143,7 +143,9 @@
         <md-button class="md-raised md-primary" ng-disabled="quickSendForm.$invalid || !ctrl.isValidMembers()"
                    ng-click="ctrl.quickSend()">{{lang.send}}
         </md-button>
-        <md-button class="md-raised md-primary" ng-disabled="!ctrl.isValidMembers()"
+        <md-button class="md-raised md-primary"
+                   ng-if="!ctrl.fromLaunchPopup"
+                   ng-disabled="!ctrl.isValidMembers()"
                    ng-click="ctrl.advanceLaunch($event)">{{lang.more_details}}
         </md-button>
         <md-button class="md-raised md-primary"
