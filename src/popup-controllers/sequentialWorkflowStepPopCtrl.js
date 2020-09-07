@@ -77,9 +77,9 @@ module.exports = function (app) {
             }
         };
 
-        function _setUserAndOUIdCombination(ouApplicationUsers) {
+        function _setUserIdAndOUIdCombination(ouApplicationUsers) {
             return _.map(ouApplicationUsers, function (item) {
-                item.userAndOuId = generator.getNormalizedValue(item.applicationUser, 'id') + '-' + generator.getNormalizedValue(item.ouid, 'id');
+                item.userIdAndOuId = item.getUserIdAndOuIdCombination();
                 return item;
             });
         }
@@ -99,7 +99,7 @@ module.exports = function (app) {
             return ouApplicationUserService
                 .searchByCriteria({regOu: generator.getNormalizedValue(self.step.toOUID, 'id')})
                 .then(function (result) {
-                    self.ouApplicationUsers = _setUserAndOUIdCombination(result);
+                    self.ouApplicationUsers = _setUserIdAndOUIdCombination(result);
                     return result;
                 });
         };

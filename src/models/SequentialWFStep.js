@@ -13,7 +13,7 @@ module.exports = function (app) {
             self.enName = null;
             self.stepType = null;
             self.toUserId = null;
-            self.toOUID = null;
+            self.toOUID = null; // selected regOu
             self.actionId = null;
             self.sLADueDay = null;
             self.actionType = null;
@@ -22,8 +22,9 @@ module.exports = function (app) {
             self.userComment = null;
             self.itemOrder = null;
             self.sequentialWFId = null;
+            self.uiOuId = null; // contains the ouId from selected user(ouAppUser).
 
-            self.userAndOuId = null; // combination of user and ouId. To be deleted before sending
+            self.userIdAndOuId = null; // combination of user and ouId. To be deleted before sending
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -103,7 +104,7 @@ module.exports = function (app) {
             };
 
             SequentialWFStep.prototype.isSendDocumentStepValid = function () {
-                return !!this.arName && !!this.enName && generator.validRequired(this.itemOrder) && (this.userAndOuId)
+                return !!this.arName && !!this.enName && generator.validRequired(this.itemOrder) && (this.userIdAndOuId)
                     && generator.validRequired(generator.getNormalizedValue(this.actionId, 'id'));
             };
 
@@ -113,7 +114,7 @@ module.exports = function (app) {
                 if (!isValid) {
                     return false;
                 }
-                return !this.isLastStep(sequentialWF) ? !!(this.userAndOuId) : true;
+                return !this.isLastStep(sequentialWF) ? !!(this.userIdAndOuId) : true;
             };
 
             SequentialWFStep.prototype.isLastStep = function (sequentialWF) {
@@ -154,15 +155,21 @@ module.exports = function (app) {
                 //return this.id >= correspondenceRecord.getSeqWFNextStepId();
                 return this.id > correspondenceRecord.getSeqWFNextStepId();
             };
-            SequentialWFStep.prototype.getUserAndOuCombination = function () {
-                if (this.toUserId && this.toOUID) {
-                    return generator.getNormalizedValue(this.toUserId, 'id') + '-' + generator.getNormalizedValue(this.toOUID, 'id');
+            SequentialWFStep.prototype.getUserIdAndOuIdCombination = function () {
+                if (this.toUserId && this.uiOuId) {
+                    return generator.getNormalizedValue(this.toUserId, 'id') + '-' + generator.getNormalizedValue(this.uiOuId, 'id');
                 }
                 return '';
             };
-            SequentialWFStep.prototype.getUserFromUserAndOUCombination = function () {
-                if (this.userAndOuId) {
-                    return this.userAndOuId.split('-')[0];
+            SequentialWFStep.prototype.getUserIdFromCombination = function () {
+                if (this.userIdAndOuId) {
+                    return this.userIdAndOuId.split('-')[0];
+                }
+                return null;
+            };
+            SequentialWFStep.prototype.getOuIdFromCombination = function () {
+                if (this.userIdAndOuId) {
+                    return this.userIdAndOuId.split('-')[1];
                 }
                 return null;
             };

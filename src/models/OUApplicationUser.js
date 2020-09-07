@@ -225,6 +225,10 @@ module.exports = function (app) {
                 return this.applicationUser.email;
             };
 
+            OUApplicationUser.prototype.getUserIdAndOuIdCombination = function () {
+                return this.getApplicationUserId() + '-' + this.getOuId();
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('OUApplicationUser', 'init', this);
