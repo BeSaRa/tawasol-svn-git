@@ -98,6 +98,9 @@ module.exports = function (app) {
                     case 'sequentialWF':
                         self.legendIndicators.push(indicator.getSequentialWFIndicator());
                         break;
+                    case 'conditionalApprove':
+                        self.legendIndicators.push(indicator.getConditionalApproveIndicator(true));
+                        break;
                 }
             });
         };
