@@ -86,7 +86,7 @@
                                            placeholder="{{lang.search}}"
                                            class="select-header-input">
                                 </md-select-header>
-                                <md-option ng-value="user.userAndOuId"
+                                <md-option ng-value="user.userAndOuId" ng-if="user.status"
                                            ng-repeat="user in ctrl.ouApplicationUsers | translatedNameFilter: ctrl.appUserSearchText:'getAppUserAndOuTranslate'">
                                        <span md-highlight-text="ctrl.appUserSearchText"
                                              md-highlight-flags="i">{{user.getAppUserAndOuTranslate()}}</span>
