@@ -1291,7 +1291,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.addSelectedUserWithIgnoreToGrid = function (selectedUser, $event) {
-            if (!self.canSendToMultiple) {
+            if (!self.canSendToMultiple && self.selectedWorkflowItems.length > 0) {
                 dialog
                     .confirmMessage(langService.get('user_will_replaced_by_new_selection'))
                     .then(function () {
@@ -1312,7 +1312,7 @@ module.exports = function (app) {
         self.addSelectedUserToGrid = function (selectedUser, $event) {
             // just to filter the users before add.
             var users = _getUsersNotExists([selectedUser]);
-            if (!self.canSendToMultiple) {
+            if (!self.canSendToMultiple && self.selectedWorkflowItems.length > 0) {
                 dialog
                     .confirmMessage(langService.get('user_will_replaced_by_new_selection'))
                     .then(function () {
@@ -1438,7 +1438,7 @@ module.exports = function (app) {
                     self.distributionWF.setReceivedRegOUs(_.filter(collection, _filterWFRegDepartments));
                     self.distributionWF.setWfGroups(_.filter(collection, _filterWFGroups));
 
-                    distributionWFService.startLaunchWorkflow(self.distributionWF, self.correspondence , self.actionKey)
+                    distributionWFService.startLaunchWorkflow(self.distributionWF, self.correspondence, self.actionKey)
                         .then(function () {
                             toast.success(langService.get('launch_success_distribution_workflow'));
                             dialog.hide();
