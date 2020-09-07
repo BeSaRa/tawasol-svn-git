@@ -457,11 +457,16 @@ module.exports = function (app) {
          * @param signatureModel
          * @param content
          * @param launch
+         * @param terminateAllWFS
          * @return {*}
          */
-        self.launchSeqWFCorrespondence = function (correspondence, signatureModel, content, launch) {
+        self.launchSeqWFCorrespondence = function (correspondence, signatureModel, content, launch, terminateAllWFS) {
             var info = correspondence.getInfo();
             var form = new FormData();
+
+            if (terminateAllWFS) {
+                signatureModel.terminateAllWFS = true;
+            }
             form.append('entity', JSON.stringify(signatureModel));
             if (content) {
                 form.append('content', content);

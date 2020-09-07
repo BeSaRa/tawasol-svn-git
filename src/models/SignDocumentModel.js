@@ -12,7 +12,7 @@ module.exports = function (app) {
             self.comments = null;
             self.validateMultiSignature = true;
             self.seqWFId = null;
-
+            self.terminateAllWFS = false;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];

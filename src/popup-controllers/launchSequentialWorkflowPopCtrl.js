@@ -50,9 +50,10 @@ module.exports = function (app) {
         /**
          * @description Launches the sequential workflow
          * @param $event
+         * @param terminateAllWFS
          * @returns {boolean}
          */
-        self.launchSeqWF = function ($event) {
+        self.launchSeqWF = function ($event, terminateAllWFS) {
             if (!self.isValidForm()) {
                 return false;
             }
@@ -71,8 +72,14 @@ module.exports = function (app) {
                 var signatureModel = self.record.prepareSignatureModel(null, null, null);
                 signatureModel.setSeqWFId(self.selectedSeqWF.id);
                 console.log('signatureModel FORM Launch SEQ', signatureModel);
-                sequentialWorkflowService.launchSeqWFCorrespondence(self.record, signatureModel, null, true)
+                sequentialWorkflowService.launchSeqWFCorrespondence(self.record, signatureModel, null, true, terminateAllWFS)
                     .then(function (result) {
+                        if (result === 'ERROR_MULTI_USER') {
+                            return dialog.confirmMessage(langService.get('workflow_in_multi_user_inbox'))
+                                .then(function () {
+                                    self.launchSeqWF($event, true);
+                                })
+                        }
                         $rootScope.$emit('SEQ_LAUNCH_SUCCESS');
                         toast.success(langService.get('launch_success_distribution_workflow'));
                         dialog.hide(true);

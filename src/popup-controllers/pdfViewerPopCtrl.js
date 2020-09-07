@@ -1121,9 +1121,10 @@ module.exports = function (app) {
          * @param content
          * @param signatureModel
          * @param ignoreValidateMultiSignature
+         * @param terminateAllWFS
          * @return {*}
          */
-        self.applyNextStep = function (content, signatureModel, ignoreValidateMultiSignature) {
+        self.applyNextStep = function (content, signatureModel, ignoreValidateMultiSignature, terminateAllWFS) {
             signatureModel.setValidateMultiSignature(!ignoreValidateMultiSignature);
             signatureModel.setSeqWFId(self.sequentialWF.id);
             return sequentialWorkflowService
@@ -1133,7 +1134,14 @@ module.exports = function (app) {
                         return dialog
                             .confirmMessage(langService.get('confirm_authorize_same_user').change({user: employeeService.getEmployee().getTranslatedName()}))
                             .then(function () {
-                                return self.applyNextStep(content, signatureModel, true);
+                                return self.applyNextStep(content, signatureModel, true, terminateAllWFS);
+                            });
+                    }
+
+                    if (result === 'ERROR_MULTI_USER') {
+                        return dialog.confirmMessage(langService.get('workflow_in_multi_user_inbox'))
+                            .then(function () {
+                                return self.applyNextStep(content, signatureModel, ignoreValidateMultiSignature, true)
                             });
                     }
                     return result;
