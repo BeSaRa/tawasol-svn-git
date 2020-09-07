@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.controller('incomingCtrl', function (Incoming,
+                                             $rootScope,
                                              // classifications,
                                              $state,
                                              $q,
@@ -730,6 +731,10 @@ module.exports = function (app) {
             date.setDate(date.getDate() + (days || 0));
             return date;
         }
+
+        $rootScope.$on('SEQ_LAUNCH_SUCCESS', function () {
+            self.resetAddCorrespondence();
+        });
 
     });
 };

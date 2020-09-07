@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.controller('launchSequentialWorkflowPopCtrl', function (_,
                                                                 toast,
+                                                                $rootScope,
                                                                 generator,
                                                                 dialog,
                                                                 $scope,
@@ -58,7 +59,10 @@ module.exports = function (app) {
 
             if (self.selectedSeqWF.steps[0].isAuthorizeAndSendStep()) {
                 self.record.openSequentialDocument(AnnotationType.SIGNATURE, self.selectedSeqWF)
-                    .then(dialog.hide)
+                    .then(function () {
+                        $rootScope.$emit('SEQ_LAUNCH_SUCCESS');
+                        dialog.hide();
+                    })
                     .catch(function (error) {
                         console.log('ERROR  FORM LAUNCH', error);
                     });
@@ -69,6 +73,7 @@ module.exports = function (app) {
                 console.log('signatureModel FORM Launch SEQ', signatureModel);
                 sequentialWorkflowService.launchSeqWFCorrespondence(self.record, signatureModel, null, true)
                     .then(function (result) {
+                        $rootScope.$emit('SEQ_LAUNCH_SUCCESS');
                         toast.success(langService.get('launch_success_distribution_workflow'));
                         dialog.hide(true);
                     });

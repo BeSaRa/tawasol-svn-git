@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.controller('outgoingCtrl', function (Outgoing,
+                                             $rootScope,
                                              $state,
                                              $stateParams,
                                              outgoingService,
@@ -973,5 +974,9 @@ module.exports = function (app) {
                 self.checkChangeOutgoingType();
             }
         };
+
+        $rootScope.$on('SEQ_LAUNCH_SUCCESS', function () {
+            self.resetAddCorrespondence();
+        });
     });
 };

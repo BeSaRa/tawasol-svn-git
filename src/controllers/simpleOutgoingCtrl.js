@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.controller('simpleOutgoingCtrl', function (Outgoing,
+                                                   $rootScope,
                                                    $state,
                                                    $stateParams,
                                                    $compile,
@@ -1039,7 +1040,11 @@ module.exports = function (app) {
             if (!angular.element('#document-viewer').length)
                 angular.element('#iframe-inject-area').append($compile(iframe)($scope));
 
-        }
+        };
+
+        $rootScope.$on('SEQ_LAUNCH_SUCCESS', function () {
+            self.resetAddCorrespondence();
+        });
 
     });
 };

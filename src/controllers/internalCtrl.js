@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.controller('internalCtrl', function (Internal,
+                                             $rootScope,
                                              // classifications,
                                              $state,
                                              $q,
@@ -782,7 +783,11 @@ module.exports = function (app) {
 
         self.isDocumentTypeSwitchDisabled = function () {
             return !!self.internal.vsId || self.duplicateVersion || !self.employeeService.hasPermissionTo('INTERNAL_PAPER') || self.employee.isBacklogMode();
-        }
+        };
+
+        $rootScope.$on('SEQ_LAUNCH_SUCCESS', function () {
+            self.resetAddCorrespondence();
+        });
 
     });
 };
