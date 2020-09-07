@@ -96,9 +96,13 @@ module.exports = function (app) {
          * @description Load all organizations structure
          * @returns {*}
          */
-        self.loadAllOrganizationsStructure = function () {
+        self.loadAllOrganizationsStructure = function (skipSetValue) {
             var url = urlService.organizations + '/structure';
             return $http.get(url).then(function (result) {
+                if (skipSetValue) {
+                    var ous = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
+                    return generator.interceptReceivedCollection('Organization', ous);
+                }
                 self.allOrganizationsStructure = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
                 self.allOrganizationsStructure = generator.interceptReceivedCollection('Organization', self.allOrganizationsStructure);
                 return self.allOrganizationsStructure;

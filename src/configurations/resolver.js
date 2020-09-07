@@ -113,21 +113,25 @@ module.exports = function (app) {
                 organizations: function (organizationService, employeeService, ouApplicationUserService, $q, _) {
                     'ngInject';
                     var defer = $q.defer();
-                    if (employeeService.isSuperAdminUser()) {
-                        organizationService.loadOrganizations(true)
-                            .then(function (result) {
-                                defer.resolve(result);
-                            });
-                    } else if (employeeService.isSubAdminInCurrentOu()) {
-                        organizationService.loadOrganizations()
+                    if (employeeService.isSuperAdminUser() || employeeService.isSubAdminInCurrentOu()) {
+                        organizationService.loadAllOrganizationsStructure(true)
                             .then(function (result) {
                                 defer.resolve(result);
                             });
                     } else {
-                        ouApplicationUserService.getOUApplicationUsersByUserId(employeeService.getEmployee().id)
-                            .then(function (result) {
-                                defer.resolve(_.map(result, 'ouid'));
+                        var ouList = angular.copy(employeeService.getEmployee().getExtraFields().ouList),
+                            regOuIndex = _.findIndex(ouList, function (item) {
+                                return item.id === employeeService.getEmployee().getRegistryOUID();
                             });
+                        if (regOuIndex === -1) {
+                            employeeService.getEmployee().getRegistryOrganization()
+                                .then(function (result) {
+                                    ouList.push(result);
+                                    defer.resolve(ouList);
+                                })
+                        } else {
+                            defer.resolve(ouList);
+                        }
                     }
                     return defer.promise.then(function (organizations) {
                         return _.filter(organizations, function (ou) {
