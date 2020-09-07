@@ -2619,24 +2619,70 @@ module.exports = function (app) {
          */
         self.terminateBulkWorkItem = function (workItems, $event, ignoreMessage) {
             // if the selected workItem has just one record.
-            if (workItems.length === 1)
+            if (workItems.length === 1) {
                 return self.terminateWorkItem(workItems[0], $event);
-            return self
-                .showReasonBulkDialog('terminate_reason', workItems, $event)
-                .then(function (workItems) {
-                    var items = _.map(workItems, function (workItem) {
-                        return {
-                            first: workItem.getWobNumber(),
-                            second: workItem.reason
-                        };
-                    });
-                    var wfName = 'outgoing';
-                    return $http
-                        .put((urlService.userInboxActions + "/" + wfName.toLowerCase() + "/terminate/bulk"), items)
+            }
+
+            var selectedItems = angular.copy(workItems),
+                defer = $q.defer(),
+                recordsInSeqWF = _.filter(selectedItems, function (item) {
+                    return item.hasActiveSeqWF();
+                }),
+                recordsNotInSeqWF = _.filter(selectedItems, function (item) {
+                    return !item.hasActiveSeqWF();
+                });
+
+            if (recordsInSeqWF.length === 0) {
+                defer.resolve(selectedItems);
+            } else {
+                if (recordsInSeqWF.length === selectedItems.length) {
+                    dialog.confirmMessage(langService.get('confirm_terminate_seq_wf'))
+                        .then(function () {
+                            defer.resolve(recordsInSeqWF);
+                        })
+                } else {
+                    var buttonsMap = {
+                        terminate: {
+                            id: 1,
+                            key: 'terminate',
+                            langKey: 'terminate'
+                        },
+                        skipAndTerminate: {
+                            id: 2,
+                            key: 'skipAndTerminate',
+                            langKey: 'skip_and_terminate'
+                        }
+                    };
+
+                    dialog.confirmThreeButtonMessage(langService.get('confirm_terminate_selected_some_seq_wf'), '', langService.get(buttonsMap.terminate.langKey), langService.get(buttonsMap.skipAndTerminate.langKey), false, null, false)
                         .then(function (result) {
-                            return _bulkMessages(result, workItems, ignoreMessage, 'failed_terminate_selected', 'selected_terminate_success', 'following_records_failed_to_terminate');
+                            if (result.button === buttonsMap.skipAndTerminate.id) {
+                                defer.resolve(recordsNotInSeqWF);
+                            } else if (result.button === buttonsMap.terminate.id) {
+                                defer.resolve(selectedItems);
+                            }
                         });
-                })
+                }
+            }
+
+            return defer.promise.then(function (itemsToTerminate) {
+                return self
+                    .showReasonBulkDialog('terminate_reason', itemsToTerminate, $event)
+                    .then(function (workItems) {
+                        var items = _.map(workItems, function (workItem) {
+                            return {
+                                first: workItem.getWobNumber(),
+                                second: workItem.reason
+                            };
+                        });
+                        var wfName = 'outgoing';
+                        return $http
+                            .put((urlService.userInboxActions + "/" + wfName.toLowerCase() + "/terminate/bulk"), items)
+                            .then(function (result) {
+                                return _bulkMessages(result, itemsToTerminate, ignoreMessage, 'failed_terminate_selected', 'selected_terminate_success', 'following_records_failed_to_terminate');
+                            });
+                    })
+            });
         };
 
 
