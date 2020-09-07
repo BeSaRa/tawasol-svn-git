@@ -1592,7 +1592,7 @@ module.exports = function (app) {
                 defaultTab: self.selectedTab,
                 isDeptIncoming: isDeptIncoming,
                 isDeptSent: isDeptSent,
-                wfType: replyOn ? manageLaunchWorkflowService.workflowType.reply : manageLaunchWorkflowService.workflowType.forward
+                wfType: manageLaunchWorkflowService.workflowType[actionKey]
             };
             manageLaunchWorkflowService.setLaunchData(launchData)
                 .then(function (data) {

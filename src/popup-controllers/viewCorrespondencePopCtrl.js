@@ -847,8 +847,8 @@ module.exports = function (app) {
                     .then(function () {
                         dialog.hide();
                     });
-            } else if (launchData.wfType === manageLaunchWorkflowService.workflowType.forward) {
-                record.launchWorkFlow($event, 'forward', launchData.defaultTab, launchData.isDeptIncoming)
+            } else if (launchData.wfType === manageLaunchWorkflowService.workflowType.forward || launchData.wfType === manageLaunchWorkflowService.workflowType.launch) {
+                record.launchWorkFlow($event, launchData.wfType, launchData.defaultTab, launchData.isDeptIncoming)
                     .then(function () {
                         dialog.hide();
                     });

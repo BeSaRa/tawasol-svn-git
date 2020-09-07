@@ -6,6 +6,7 @@ module.exports = function (app) {
 
         self.workflowType = {
             forward: 'forward',
+            launch: 'launch',
             quickSend: 'quickSend',
             reply: 'reply',
             simpleReply: 'simpleReply'
