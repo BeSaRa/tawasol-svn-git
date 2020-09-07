@@ -719,7 +719,7 @@ module.exports = function (app) {
             if (!form || form.$invalid || self.saveInProgress || !self.incoming.site || !_isValidSubSite()) {
                 return false;
             }
-            if (actionType && actionType.toLower() === 'saveandinsert' && !self.incoming.userCanAnnotate()) {
+            if (actionType && actionType.toLowerCase() === 'saveandinsert' && !self.incoming.userCanAnnotate()) {
                 return false;
             }
             var isValid = true;

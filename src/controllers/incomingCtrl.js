@@ -688,7 +688,7 @@ module.exports = function (app) {
             if (!self.document_properties || self.document_properties.$invalid || self.saveInProgress || !self.incoming.site) {
                 return false;
             }
-            if (actionType && actionType.toLower() === 'saveandinsert' && !self.incoming.userCanAnnotate()) {
+            if (actionType && actionType.toLowerCase() === 'saveandinsert' && !self.incoming.userCanAnnotate()) {
                 return false;
             }
             var isValid = true;

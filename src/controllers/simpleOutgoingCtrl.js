@@ -998,7 +998,7 @@ module.exports = function (app) {
             if (!form || form.$invalid || self.saveInProgress || !self.outgoing.sitesInfoTo.length || !_isValidFirstSubSite()) {
                 return false;
             }
-            if (actionType && actionType.toLower() === 'saveandinsert' && !self.outgoing.userCanAnnotate()) {
+            if (actionType && actionType.toLowerCase() === 'saveandinsert' && !self.outgoing.userCanAnnotate()) {
                 return false;
             }
             var isValid = true;

@@ -742,7 +742,7 @@ module.exports = function (app) {
             if (!self.document_properties || self.document_properties.$invalid || self.saveInProgress) {
                 return false;
             }
-            if (actionType && actionType.toLower() === 'saveandinsert' && !self.internal.userCanAnnotate()) {
+            if (actionType && actionType.toLowerCase() === 'saveandinsert' && !self.internal.userCanAnnotate()) {
                 return false;
             }
             var isValid = true;
