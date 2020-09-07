@@ -462,10 +462,7 @@ module.exports = function (app) {
             correspondenceService
                 .terminateBulkWorkItem(self.selectedUserInboxes, $event)
                 .then(function () {
-                    self.reloadUserInboxes(self.grid.page)
-                        .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                        });
+                    self.reloadUserInboxes(self.grid.page);
                 });
         };
 
@@ -502,10 +499,7 @@ module.exports = function (app) {
             return correspondenceService
                 .launchCorrespondenceWorkflow(selectedItems, $event, 'forward', 'favorites')
                 .then(function () {
-                    self.reloadUserInboxes(self.grid.page)
-                        .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                        });
+                    self.reloadUserInboxes(self.grid.page);
                 });
         }
 
@@ -671,7 +665,6 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });
@@ -688,7 +681,6 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 })
@@ -705,7 +697,6 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 })
@@ -723,7 +714,6 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });
@@ -740,7 +730,6 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 }).catch(function (error) {
@@ -805,8 +794,6 @@ module.exports = function (app) {
         self.exportWorkItem = function (userInbox, $event) {
             userInbox.exportWorkItem($event, true)
                 .then(function () {
-                    counterService.loadCounters();
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.reloadUserInboxes(self.grid.page);
                 })
                 .catch(function (error) {
@@ -1157,11 +1144,7 @@ module.exports = function (app) {
                             });
                     }
 
-                    self.reloadUserInboxes(self.grid.page)
-                        .then(function () {
-                            counterService.loadCounters();
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                        });
+                    self.reloadUserInboxes(self.grid.page);
                 }).catch(function (error) {
                 if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                     dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
@@ -1197,11 +1180,7 @@ module.exports = function (app) {
             managerService
                 .manageDocumentProperties(info.vsId, info.documentClass, info.title, $event)
                 .finally(function (e) {
-                    self.reloadUserInboxes(self.grid.page)
-                        .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                        });
-
+                    self.reloadUserInboxes(self.grid.page);
                 });
         };
 

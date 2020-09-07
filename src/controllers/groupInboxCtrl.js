@@ -205,10 +205,7 @@ module.exports = function (app) {
             return correspondenceService
                 .launchCorrespondenceWorkflow(selectedItems, $event, 'forward', 'favorites')
                 .then(function () {
-                    self.reloadGroupInbox(self.grid.page)
-                        .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                        });
+                    self.reloadGroupInbox(self.grid.page);
                 });
         }
 
@@ -274,7 +271,6 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadGroupInbox(self.grid.page)
                         .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });
@@ -295,7 +291,6 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadGroupInbox(self.grid.page)
                         .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 })
@@ -312,19 +307,10 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-            /*workItem.launchWorkFlow($event, 'reply', 'favorites')
-                .then(function () {
-                    self.reloadGroupInbox(self.grid.page)
-                        .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                            new ResolveDefer(defer);
-                        });
-                });*/
             workItem.replySimple($event, 'reply')
                 .then(function () {
                     self.reloadGroupInbox(self.grid.page)
                         .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });
@@ -332,7 +318,7 @@ module.exports = function (app) {
 
         /**
          * @description Launch distribution workflow with sequential workflow
-         * @param record
+         * @param workItem
          * @param $event
          * @param defer
          */
@@ -341,7 +327,6 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadGroupInbox(self.grid.page)
                         .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 })
