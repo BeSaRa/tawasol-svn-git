@@ -1951,7 +1951,9 @@ module.exports = function (app) {
 
 
         self.checkIfForwardBulkAvailable = function () {
-            return true;
+            return _.every(self.selectedWorkItems, function (item) {
+                return !item.hasActiveSeqWF();
+            });
         };
 
 
