@@ -4,9 +4,6 @@
             header-text="{{lang.signatures_options}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
-            <md-switch ng-disabled="!ctrl.repeatAble" ng-model="ctrl.repeatOption">
-                <span>{{lang.repeat_for_each_page}} : {{ ctrl.repeatOption ? lang.get('yes') : lang.get('no')}}</span>
-            </md-switch>
             <div class="custom-stamp-image-container" ng-repeat="row in ctrl.rows track by $index">
                 <img ng-class="{selected: ctrl.isSelectedSignature(signature)}"
                      ng-click="ctrl.setSelectedSignature(signature)"

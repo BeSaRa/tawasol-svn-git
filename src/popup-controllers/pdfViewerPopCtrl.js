@@ -78,6 +78,10 @@ module.exports = function (app) {
 
         self.isStampEnabled = rootEntity.getGlobalSettings().stampModuleEnabled;
 
+        self.excludedRepeatedAnnotations = [
+            'Note'
+        ];
+
         self.readyToExportExcludedAnnotationList = [
             "annotate",
             "ink",
@@ -386,27 +390,17 @@ module.exports = function (app) {
             var attachments = [];
             var totalPages = self.currentInstance.totalPageCount;
             attachments.push(self.currentInstance.createAttachment(blob));
-
-            function repeatedAnnotations() {
-                return repeated && self.currentInstance.totalPageCount > 1;
-            }
-
             return $q(function (resolve, reject) {
                 var imageAnnotations = [];
                 $q.all(attachments).then(function (attachmentIds) {
-                    attachmentIds = repeatedAnnotations() ? _.fill(new Array(totalPages), attachmentIds[0]) : attachmentIds;
                     _.map(attachmentIds, function (attachmentId, index) {
                         imageAnnotations.push(new PSPDFKit.Annotations.ImageAnnotation({
                             imageAttachmentId: attachmentId,
-                            pageIndex: index === 0 ? pageIndex : index,
+                            pageIndex: pageIndex,
                             contentType: 'image/png',
                             customData: {
                                 additionalData: additionalData,
-                                id: uuidv4(),
-                                pageIndex: index,
-                                attachmentId: attachmentId,
-                                repeaterHandler: repeatedAnnotations() && pageIndex === index,
-                                repeatedAnnotation: []
+                                id: uuidv4()
                             },
                             boundingBox: new PSPDFKit.Geometry.Rect({
                                 left: (pageInfo.width / 2) - (size ? (size.width / 2) : 50),
@@ -416,21 +410,6 @@ module.exports = function (app) {
                             })
                         }));
                     });
-
-                    if (repeatedAnnotations()) {
-                        imageAnnotations[pageIndex] = imageAnnotations[pageIndex].set('customData',
-                            angular.extend(
-                                imageAnnotations[pageIndex].customData,
-                                {
-                                    repeatedAnnotation: _.map(_.filter(imageAnnotations, function (annotation) {
-                                        return !annotation.customData.repeaterHandler;
-                                    }), function (annotation) {
-                                        return annotation.customData.id;
-                                    })
-                                }
-                            )
-                        );
-                    }
                     resolve(imageAnnotations);
                 });
             });
@@ -602,50 +581,11 @@ module.exports = function (app) {
          */
         self.openBarcodeDialog = function ($event) {
             var info = self.correspondence.getInfo();
-            if (self.currentInstance.totalPageCount > 1) {
-                dialog.showDialog({
-                    templateUrl: cmsTemplate.getPopup('barcode-annotation'),
-                    controller: function (_, $sce, barcode, repeatAble) {
-                        'ngInject';
-                        var ctrl = this;
-                        ctrl.barcodeURL = window.URL.createObjectURL(barcode);
-                        ctrl.repeatAble = repeatAble;
-                        ctrl.repeatOption = false;
-                        /**
-                         * @description add stamp and close the Stamps dialog.
-                         */
-                        ctrl.addBarcode = function () {
-                            self.addBarcodeAnnotationToPDF(barcode, ctrl.repeatOption, {width: 300, height: 150})
-                                .then(function () {
-                                    dialog.hide();
-                                });
-                        };
-                        /**
-                         * @description close Stamps dialog.
-                         */
-                        ctrl.closePopup = function () {
-                            dialog.cancel();
-                        }
-                    },
-                    controllerAs: 'ctrl',
-                    locals: {
-                        repeatAble: self.canRepeatAnnotations
-                    },
-                    resolve: {
-                        barcode: function (documentStampService) {
-                            'ngInject';
-                            return documentStampService
-                                .loadAnnotationContent(info.vsId, AnnotationType.BARCODE, info.docClassId);
-                        }
-                    }
+            documentStampService
+                .loadAnnotationContent(info.vsId, AnnotationType.BARCODE, info.docClassId)
+                .then(function (blob) {
+                    self.addBarcodeAnnotationToPDF(blob, false, {width: 300, height: 150});
                 });
-            } else {
-                documentStampService
-                    .loadAnnotationContent(info.vsId, AnnotationType.BARCODE, info.docClassId)
-                    .then(function (blob) {
-                        self.addBarcodeAnnotationToPDF(blob, false, {width: 300, height: 150});
-                    });
-            }
         };
         /**
          * @description open signature dialog to select signature to add it to the PDF Document
@@ -780,6 +720,12 @@ module.exports = function (app) {
                                 width: boundingBox.width,
                                 height: boundingBox.height
                             }));
+
+                            if (annotationItem instanceof PSPDFKit.Annotations.InkAnnotation) {
+                                annotationItem = annotationItem
+                                    .set('lines', annotation.lines)
+                                    .set('lineWidth', annotation.lineWidth);
+                            }
                             return self.currentInstance.updateAnnotation(annotationItem);
                         }
                     });
@@ -1292,6 +1238,116 @@ module.exports = function (app) {
                     });
                 });
         };
+
+        self.annotationTooltipCallback = function (annotation) {
+
+            function _isRepeaterRoot(annotation) {
+                return annotation.customData && annotation.customData.repeaterHandler;
+            }
+
+            function _isRepeaterChild(annotation) {
+                return annotation.customData && annotation.customData.parentId;
+            }
+
+            if (self.excludedRepeatedAnnotations.indexOf(annotation.constructor.readableName) !== -1) {
+                return [];
+            }
+
+            var tooltipItems = [], replicationButton = {
+                type: "custom",
+                title: "Replicate",
+                id: "tooltip-Replication-annotation",
+                className: "TooltipItem-Replication",
+                onPress: function () {
+                    var currentPageIndex = annotation.pageIndex, boundingBox = annotation.boundingBox,
+                        totalPages = self.currentInstance.totalPageCount, duplicated = [],
+                        customData = annotation.customData, updatedAnnotation = null, parentId = null;
+
+                    for (var i = 0; i < totalPages; i++) {
+                        var id = uuidv4(), currentDuplicated = null;
+
+                        if (i === currentPageIndex) {
+                            parentId = id;
+                            continue;
+                        }
+                        var customDuplicatedData = angular.extend({}, customData ? customData : {}, {
+                            id: customData.id ? customData.id : id,
+                            parentId: parentId
+                        });
+
+                        currentDuplicated = annotation
+                            .set('id', null)
+                            .set('pageIndex', i)
+                            .set('customData', customDuplicatedData)
+                            .set('boundingBox', boundingBox);
+
+
+                        duplicated.push(currentDuplicated);
+
+                        self.currentInstance.createAnnotation(currentDuplicated);
+                    }
+
+                    updatedAnnotation = annotation.set('customData', angular.extend(customData ? customData : {}, {
+                        repeaterHandler: true,
+                        id: parentId,
+                        repeatedAnnotation: _.map(duplicated, function (item) {
+                            return item.customData.id;
+                        })
+                    }));
+                    self.currentInstance.updateAnnotation(updatedAnnotation);
+
+                }
+            }, unlinkButton = {
+                type: "custom",
+                title: "Unlink Replication",
+                id: "tooltip-Unlink-Replication-annotation",
+                className: "TooltipItem-Unlink-Replication",
+                onPress: function () {
+                    var updatedAnnotation = null, customData = angular.extend(annotation.customData),
+                        updatedCustomData = angular.copy(customData);
+                    self.getDocumentAnnotations().then(function (annotations) {
+                        if (_isRepeaterRoot(annotation)) {
+                            delete updatedCustomData.repeaterHandler;
+                            delete updatedCustomData.repeatedAnnotation;
+                            updatedAnnotation = annotation.set('customData', updatedCustomData);
+
+                            annotations.forEach(function (annotation) {
+                                var customAnnotationData = angular.extend(annotation.customData);
+                                delete customAnnotationData.parentId;
+                                var updatedAnnotation = annotation.set('customData', customAnnotationData);
+                                self.currentInstance.updateAnnotation(updatedAnnotation);
+                            });
+
+                            self.currentInstance.updateAnnotation(updatedAnnotation);
+                        } else {
+                            delete updatedCustomData.parentId;
+                            var parentAnnotation = _.find(annotations, function (annotation) {
+                                return annotation.customData && annotation.customData.id === customData.parentId;
+                            });
+                            parentAnnotation.customData.repeatedAnnotation.splice(parentAnnotation.customData.repeatedAnnotation.indexOf(annotation.customData.id), 1);
+                            if (!parentAnnotation.customData.repeatedAnnotation.length) {
+                                delete parentAnnotation.customData.repeaterHandler;
+                                delete parentAnnotation.customData.repeatedAnnotation;
+                            }
+                            updatedAnnotation = annotation.set('customData', updatedCustomData);
+                            self.currentInstance.updateAnnotation(updatedAnnotation);
+                            self.currentInstance.updateAnnotation(parentAnnotationUpdate);
+                        }
+                    });
+
+                }
+            };
+
+            if (self.canRepeatAnnotations && !_isRepeaterChild(annotation) && !_isRepeaterRoot(annotation)) {
+                tooltipItems.push(replicationButton);
+            }
+
+            if (annotation.customData && (_isRepeaterChild(annotation) || _isRepeaterRoot(annotation))) {
+                tooltipItems.push(unlinkButton);
+            }
+
+            return tooltipItems;
+        };
         /**
          * @description to register all event listener that we need during annotate the document.
          */
@@ -1360,7 +1416,8 @@ module.exports = function (app) {
                         return self.currentInstance;
                     }),
                     populateInkSignatures: self.populateInkSignatures,
-                    licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey
+                    licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
+                    annotationTooltipCallback: self.annotationTooltipCallback
                 }).then(function (instance) {
                     self.currentInstance = instance;
                     // set current annotations for loaded document
