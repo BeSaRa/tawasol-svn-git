@@ -1254,7 +1254,7 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                    return !model.exportViaArchive() && employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW');
+                    return !model.exportViaArchive() && employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && !model.hasActiveSeqWF();
                 }
             },
             // Export and add to icn archive
