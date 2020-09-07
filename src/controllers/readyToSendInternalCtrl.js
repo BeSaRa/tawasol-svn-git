@@ -20,6 +20,7 @@ module.exports = function (app) {
                                                         correspondenceService,
                                                         ResolveDefer,
                                                         mailNotificationService,
+                                                        rootEntity,
                                                         gridService) {
         'ngInject';
         var self = this;
@@ -245,6 +246,23 @@ module.exports = function (app) {
                 return;
             }
             record.quickSendLaunchWorkflow($event, 'favorites')
+                .then(function () {
+                    self.reloadReadyToSendInternals(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        });
+                })
+        };
+
+        /**
+         * @description Launch distribution workflow with sequential workflow
+         * @param record
+         * @param $event
+         * @param defer
+         */
+        self.launchSequentialWorkflow = function (record, $event, defer) {
+            record.openLaunchSequentialWorkflowDialog($event)
                 .then(function () {
                     self.reloadReadyToSendInternals(self.grid.page)
                         .then(function () {
@@ -762,6 +780,18 @@ module.exports = function (app) {
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model) {
                     return !model.hasActiveSeqWF();
+                }
+            },
+            // Launch Sequential Workflow
+            {
+                type: 'action',
+                icon: gridService.gridIcons.actions.sequentialWF,
+                text: 'grid_action_launch_sequential_workflow',
+                callback: self.launchSequentialWorkflow,
+                class: "action-green",
+                permissionKey: 'LAUNCH_SEQ_WF',
+                checkShow: function (action, model) {
+                    return rootEntity.hasPSPDFViewer() && !model.hasActiveSeqWF() && !model.isCorrespondenceApprovedBefore();
                 }
             },
             // Archive
