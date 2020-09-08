@@ -13,7 +13,7 @@ module.exports = function (app) {
             self.enName = null;
             self.stepType = null;
             self.toUserId = null;
-            self.toOUID = null; // selected regOu
+            self.toOUID = null;// contains the ouId from selected user(ouAppUser)
             self.actionId = null;
             self.sLADueDay = null;
             self.actionType = null;
@@ -22,7 +22,7 @@ module.exports = function (app) {
             self.userComment = null;
             self.itemOrder = null;
             self.sequentialWFId = null;
-            self.uiOuId = null; // contains the ouId from selected user(ouAppUser).
+            self.uiOuId = null;  // selected regOu.
 
             self.userIdAndOuId = null; // combination of user and ouId. To be deleted before sending
 
@@ -159,8 +159,8 @@ module.exports = function (app) {
                 return this.id > correspondenceRecord.getSeqWFNextStepId();
             };
             SequentialWFStep.prototype.getUserIdAndOuIdCombination = function () {
-                if (this.toUserId && this.uiOuId) {
-                    return generator.getNormalizedValue(this.toUserId, 'id') + '-' + generator.getNormalizedValue(this.uiOuId, 'id');
+                if (this.toUserId && this.toOUID) {
+                    return generator.getNormalizedValue(this.toUserId, 'id') + '-' + generator.getNormalizedValue(this.toOUID, 'id');
                 }
                 return '';
             };

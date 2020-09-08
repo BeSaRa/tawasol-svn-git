@@ -91,13 +91,13 @@ module.exports = function (app) {
                 self.step.userIdAndOuId = null;
                 _resetUserData();
             }
-            if (!self.step.toOUID) {
+            if (!self.step.uiOuId) {
                 self.step.userIdAndOuId = null;
                 _resetUserData();
                 return;
             }
             return ouApplicationUserService
-                .searchByCriteria({regOu: generator.getNormalizedValue(self.step.toOUID, 'id')})
+                .searchByCriteria({regOu: generator.getNormalizedValue(self.step.uiOuId, 'id')})
                 .then(function (result) {
                     self.ouApplicationUsers = _setUserIdAndOUIdCombination(result);
                     return result;
@@ -149,7 +149,7 @@ module.exports = function (app) {
                 self.form = $scope.sequentialWorkflowStepForm || null;
                 // if internal seqWF, disable organization as wf will be inside organization only
                 if (self.record.isInternalSeqWF()) {
-                    readonlyFields.push('toOUID');
+                    readonlyFields.push('uiOuId');
                 }
                 self.stepCopy = angular.copy(self.step);
                 self.isUserRequired = self.step.checkUserRequired(self.record);

@@ -238,7 +238,7 @@ module.exports = function (app) {
 
                 // if new step and seqWF is internal, set organization to selected regOu as WF will be inside organization only
                 if (!sequentialWorkflowStep.id && sequentialWorkflow.isInternalSeqWF()) {
-                    step.toOUID = sequentialWorkflow.regOUId;
+                    step.uiOuId = sequentialWorkflow.regOUId;
                 }
 
                 return dialog
@@ -273,11 +273,11 @@ module.exports = function (app) {
                             },
                             ouApplicationUsers: function (ouApplicationUserService) {
                                 'ngInject';
-                                if (!step.toOUID) {
+                                if (!step.uiOuId) {
                                     return [];
                                 }
                                 return ouApplicationUserService
-                                    .searchByCriteria({regOu: generator.getNormalizedValue(step.toOUID, 'id')})
+                                    .searchByCriteria({regOu: generator.getNormalizedValue(step.uiOuId, 'id')})
                                     .then(function (result) {
                                         return _.map(result, function (item) {
                                             item.userIdAndOuId = item.getUserIdAndOuIdCombination();

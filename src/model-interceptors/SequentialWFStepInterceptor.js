@@ -14,8 +14,8 @@ module.exports = function (app) {
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             // model.toUserId = generator.getNormalizedValue(model.toUserId, 'id');
             model.toUserId = model.getUserIdFromCombination();
-            model.uiOuId = model.getOuIdFromCombination();
-            model.toOUID = generator.getNormalizedValue(model.toOUID, 'id');
+            model.toOUID = model.getOuIdFromCombination();
+            model.uiOuId = generator.getNormalizedValue(model.uiOuId, 'id');
             model.actionId = generator.getNormalizedValue(model.actionId, 'id');
 
             model.sendSMS = model.sendSMS || false;

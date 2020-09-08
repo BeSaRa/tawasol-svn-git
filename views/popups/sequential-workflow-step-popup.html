@@ -46,7 +46,7 @@
                                        ng-required="ctrl.isUserRequired"
                                        ng-change="ctrl.getAppUsersForOU(false, $event)"
                                        aria-label="{{lang.organization_unit}}"
-                                       ng-model="ctrl.step.toOUID"
+                                       ng-model="ctrl.step.uiOuId"
                                        md-on-close="ctrl.clearSearchText('ou')"
                                        ng-model-options="{trackBy: '$value'}"
                                        data-md-container-class="select-header-container sticky-search-bar">
@@ -75,7 +75,7 @@
                             <md-select name="applicationUser" id="applicationUser"
                                        ng-change="ctrl.onChangeUser()"
                                        ng-required="ctrl.isUserRequired"
-                                       ng-disabled="ctrl.viewOnly || !ctrl.step.toOUID"
+                                       ng-disabled="ctrl.viewOnly || !ctrl.step.uiOuId"
                                        aria-label="{{lang.select_user}}"
                                        ng-model="ctrl.step.userIdAndOuId"
                                        ng-model-options="{trackBy: '$value'}"
