@@ -1063,6 +1063,7 @@ module.exports = function (app) {
                 var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations);
                 if (!hasChanges.length && !self.documentOperations.length) {
                     dialog.infoMessage(langService.get('there_is_no_changes_to_save'));
+                    self.disableSaveButton = false;
                     return;
                 }
 
