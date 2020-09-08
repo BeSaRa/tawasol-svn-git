@@ -153,10 +153,13 @@ module.exports = function (app) {
                 }
 
                 if (model.proxyUser) {
-                    var proxyUser = model.proxyUser.hasOwnProperty('id') ? model.proxyUser.id : model.proxyUser;
-                    model.proxyUser = _.find(applicationUsers, function (applicationUser) {
-                        return applicationUser.id === proxyUser;
-                    });
+                    if (!model.proxyUser.hasOwnProperty('id')) {
+                        model.proxyUser = new ApplicationUser({
+                            id: model.proxyUser
+                        })
+                    } else {
+                        model.proxyUser = new ApplicationUser(model.proxyUser);
+                    }
                     if (typeof model.proxyAuthorityLevels !== "object") {
                         model.proxyAuthorityLevels = generator.getSelectedCollectionFromResult(securityLevels, model.proxyAuthorityLevels, 'lookupKey');
                     }
