@@ -384,7 +384,7 @@
                                     </md-switch>
                                     <md-switch flex ng-model="ctrl.applicationUser.otpEnabled"
                                                aria-label="{{lang.otp}}"
-                                               ng-disabled="!rootEntity.returnRootEntity().rootEntity.otpEnabled">
+                                               ng-disabled="!ctrl.rootEntity.returnRootEntity().rootEntity.otpEnabled">
                                         <label>{{lang.otp}} :
                                             {{ctrl.applicationUser.getTranslatedYesNo('otpEnabled')}}</label>
                                     </md-switch>
