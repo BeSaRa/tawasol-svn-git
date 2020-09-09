@@ -250,6 +250,8 @@ module.exports = function (app) {
                 _addButtonToToolbar(toolbarInstance, approveButton)
             } else if (self.info.documentClass === 'internal' && employeeService.hasPermissionTo('ELECTRONIC_SIGNATURE_MEMO')) {
                 _addButtonToToolbar(toolbarInstance, approveButton)
+            } else  if (self.info.documentClass === 'incoming' && employeeService.getEmployee().hasAnyPermissions(['ELECTRONIC_SIGNATURE','ELECTRONIC_SIGNATURE_MEMO'])) {
+                _addButtonToToolbar(toolbarInstance, approveButton);
             } else {
                 toolbarInstance = toolbarInstance.filter(function (toolbarItem) {
                     return toolbarItem.type !== 'ink-signature';
