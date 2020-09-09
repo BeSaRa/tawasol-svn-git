@@ -76,7 +76,7 @@ module.exports = function (app) {
                 SEQ_WF_INVALID_DIST_USERS: 3059,
                 SEQ_WF_INVALID_SIGNATURE_COUNT: 3060,
                 SEQ_WF_WF_USER_INVALID: 3061,
-                SEQ_WF_DELETE_FAILED: 3062,
+                SEQ_WF_DELETE_FAILED: 2019,
                 SEQ_WF_FORWARD_FAILED: 3063,
                 SEQ_WF_CONTENT_UPDATE_FAILED: 3064,
             },
@@ -112,7 +112,7 @@ module.exports = function (app) {
                 3044: 'g2g_recall_failed',
                 3049: 'duplicate_followup_book',
                 2060: 'cannot_export_too_many_attachments_or_linked_documents',
-                3062: 'error_delete_seq_wf_active_wf',
+                2019: 'error_delete_seq_wf_active_wf',
                 3055: 'error_recall_book'
             };
 
