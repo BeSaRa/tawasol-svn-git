@@ -87,7 +87,7 @@
                                 </md-button>
                             </div>
                             <vertical-menu-workflow-item-directive
-                                    display="ctrl.selectedWorkflowItems.length"
+                                    display="ctrl.selectedWorkflowItems.length && ctrl.multiSelect"
                                     callback="ctrl.runAddSelectedUsersToGrid"
                                     display-button="false"
                                     item="ctrl.selectedWorkflowItems"
