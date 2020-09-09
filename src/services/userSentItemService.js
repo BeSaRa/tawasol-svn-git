@@ -215,7 +215,7 @@ module.exports = function (app) {
                                 dialog.errorMessage(langService.get('cannot_call_non_existing_book'));
                             });
                             errorCode.checkIf(error, 'SEQ_WF_RECALL_WF', function () {
-                                dialog.errorMessage(langService.get('error_recall_book'));
+                                dialog.errorMessage(generator.getTranslatedError(error));
                             });
                             errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
                                 dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: sentItem.getInfo().wobNumber}));
