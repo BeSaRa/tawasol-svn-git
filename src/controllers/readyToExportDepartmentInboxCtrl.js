@@ -333,27 +333,38 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-
-            workItem
-                .exportWorkItem($event, true)
-                .then(function () {
-                    return workItem.addToIcnArchiveDialog($event)
-                        .then(function () {
-                            self.reloadReadyToExports(self.grid.page);
-                            new ResolveDefer(defer);
-                        }).catch(function (error) {
-                            if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
-                                dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: workItem.getInfo().wobNumber}));
-                                return false;
-                            }
-                            self.reloadReadyToExports(self.grid.page);
-                            new ResolveDefer(defer);
-                        });
-                })
-                .catch(function (error) {
-                    if (error && error !== 'close')
-                        toast.error(langService.get('export_failed'));
-                });
+            var exportDefer = $q.defer();
+            if (workItem.hasDueDate() && !workItem.isDueDatePassed()) {
+                dialog
+                    .confirmMessage(langService.get('conditional_approve_warning').change({date: workItem.getConditionalApproveExportDate()}))
+                    .then(function () {
+                        exportDefer.resolve(true);
+                    });
+            } else {
+                exportDefer.resolve(true);
+            }
+            return exportDefer.promise.then(function () {
+                return workItem
+                    .exportWorkItem($event, true)
+                    .then(function () {
+                        return workItem.addToIcnArchiveDialog($event)
+                            .then(function () {
+                                self.reloadReadyToExports(self.grid.page);
+                                new ResolveDefer(defer);
+                            }).catch(function (error) {
+                                if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                                    dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: workItem.getInfo().wobNumber}));
+                                    return false;
+                                }
+                                self.reloadReadyToExports(self.grid.page);
+                                new ResolveDefer(defer);
+                            });
+                    })
+                    .catch(function (error) {
+                        if (error && error !== 'close')
+                            toast.error(langService.get('export_failed'));
+                    });
+            });
         };
 
         /**
