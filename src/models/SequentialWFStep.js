@@ -148,7 +148,7 @@ module.exports = function (app) {
 
             SequentialWFStep.prototype.isPastSeqWFStep = function (correspondenceRecord) {
                 //return this.id < correspondenceRecord.getSeqWFCurrentStepId();
-                return this.id === correspondenceRecord.getSeqWFCurrentStepId();
+                return this.id <= correspondenceRecord.getSeqWFCurrentStepId();
             };
             SequentialWFStep.prototype.isCurrentSeqWFStep = function (correspondenceRecord) {
                 //return this.id === correspondenceRecord.getSeqWFCurrentStepId();
