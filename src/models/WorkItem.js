@@ -1118,14 +1118,18 @@ module.exports = function (app) {
                 return correspondenceService.annotateCorrespondence(this);
             };
 
-            WorkItem.prototype.openSequentialDocument = function (annotationType, seqWF) {
+            WorkItem.prototype.openSequentialDocument = function (annotationType, seqWF, $event) {
                 var self = this;
-                if (seqWF) {
-                    return correspondenceService.annotateCorrespondence(self, typeof annotationType !== 'undefined' ? annotationType : null, null, seqWF);
-                }
-                return sequentialWorkflowService.loadSequentialWorkflowById(self.getSeqWFId()).then(function (seqWF) {
-                    return correspondenceService.annotateCorrespondence(self, typeof annotationType !== 'undefined' ? annotationType : null, null, seqWF);
-                });
+
+                return viewDocumentService.viewUserInboxDocument(self, [], 'userInbox', null, true)
+                    .then(function (generalStepElementView) {
+                        if (seqWF) {
+                            return correspondenceService.annotateCorrespondence(self, typeof annotationType !== 'undefined' ? annotationType : null, null, seqWF);
+                        }
+                        return sequentialWorkflowService.loadSequentialWorkflowById(self.getSeqWFId()).then(function (seqWF) {
+                            return correspondenceService.annotateCorrespondence(self, typeof annotationType !== 'undefined' ? annotationType : null, null, seqWF);
+                        });
+                    });
             };
 
             WorkItem.prototype.prepareSignatureModel = function (pinCode, isComposite, ignoreValidateMultiSignature) {

@@ -5067,7 +5067,7 @@ module.exports = function (app) {
 
         };
 
-        self.annotateCorrespondence = function (correspondence, annotationType, attachedBook, sequentialWF) {
+        self.annotateCorrespondence = function (correspondence, annotationType, attachedBook, sequentialWF, generalStepElementView) {
             var info = correspondence.getInfo();
             return downloadService
                 .downloadContentWithWaterMark(correspondence, annotationType)
@@ -5075,13 +5075,13 @@ module.exports = function (app) {
                     var fr = new FileReader();
                     return $q(function (resolve, reject) {
                         fr.onloadend = function () {
-                            resolve(PDFService.openPDFViewer(fr.result, correspondence, annotationType, attachedBook, sequentialWF));
+                            resolve(PDFService.openPDFViewer(fr.result, correspondence, annotationType, attachedBook, sequentialWF, generalStepElementView));
                         };
                         fr.readAsArrayBuffer(blob);
                     });
                 }).then(function (result) {
                     if (result === AnnotationType.SIGNATURE) {
-                        return self.annotateCorrespondence(correspondence, AnnotationType.SIGNATURE, attachedBook, sequentialWF);
+                        return self.annotateCorrespondence(correspondence, AnnotationType.SIGNATURE, attachedBook, sequentialWF, generalStepElementView);
                     }
                     return result;
                 });
