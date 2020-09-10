@@ -554,19 +554,25 @@ module.exports = function (app) {
          * @return {Array}
          */
         self.checkRequiredFields = function (model) {
-            var required = model.getRequiredFields(), result = [];
+            var required = angular.copy(model.getRequiredFields()), result = [], isAllSlaRequiredValid = false;
             if (!model.hasRegistry) {
                 required.splice(required.indexOf('correspondenceTypeId'), 1);
             }
             // if no registry and no central archive, sla is not required
             if (!model.hasRegistry && !model.centralArchive) {
                 required.splice(required.indexOf('sla'), 1);
+            } else {
+                isAllSlaRequiredValid = _.every(self.priorityLevels, function (priority) {
+                    var sla = self.organization.sla ? self.organization.sla[priority.lookupKey] : null;
+                    return generator.validRequired(sla);
+                });
             }
 
             _.map(required, function (property) {
-                if (!generator.validRequired(model[property]))
+                if (!generator.validRequired(model[property]) || (!isAllSlaRequiredValid && property === 'sla'))
                     result.push(property);
             });
+
             return result;
         };
 
