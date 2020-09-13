@@ -1530,7 +1530,9 @@ module.exports = function (app) {
                 && employeeService.hasPermissionTo('LAUNCH_SEQ_WF')
                 && rootEntity.hasPSPDFViewer() && !correspondence.hasActiveSeqWF()
                 && !correspondence.isCorrespondenceApprovedBefore()
-                && !(correspondence instanceof SentItemDepartmentInbox);
+                && !(correspondence instanceof SentItemDepartmentInbox)
+                && (correspondence.isWorkItem() && !correspondence.isComposite() ||
+                    !correspondence.isWorkItem() && !correspondence.isCompositeSites());
         };
 
         /**

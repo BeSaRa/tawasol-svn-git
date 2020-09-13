@@ -248,7 +248,9 @@ module.exports = function (app) {
             }
             return employeeService.hasPermissionTo('LAUNCH_SEQ_WF') && rootEntity.hasPSPDFViewer()
                 && !self.record.isCorrespondenceApprovedBefore()
-                && !self.record.hasActiveSeqWF() && !(self.record instanceof SentItemDepartmentInbox);
+                && !self.record.hasActiveSeqWF() && !(self.record instanceof SentItemDepartmentInbox)
+                && (self.record.isWorkItem() && !self.record.isComposite() ||
+                    !self.record.isWorkItem() && !self.record.isCompositeSites());
         };
 
         function _setCanMinimize() {
