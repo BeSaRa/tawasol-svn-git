@@ -1531,8 +1531,8 @@ module.exports = function (app) {
                 && rootEntity.hasPSPDFViewer() && !correspondence.hasActiveSeqWF()
                 && !correspondence.isCorrespondenceApprovedBefore()
                 && !(correspondence instanceof SentItemDepartmentInbox)
-                && (correspondence.isWorkItem() && !correspondence.isComposite() ||
-                    !correspondence.isWorkItem() && !correspondence.isCompositeSites());
+                && ((correspondence.isWorkItem() && !correspondence.isComposite()) ||
+                    (!correspondence.isWorkItem() && !correspondence.isCompositeSites()));
         };
 
         /**
