@@ -320,7 +320,7 @@ module.exports = function (app) {
                         if (result !== 'DOCUMENT_LAUNCHED_ALREADY') {
                             self.outgoing.updateDocumentVersion();
                             _launchAfterSave();
-                            if (result.hasOwnProperty('type') && result.type === 'ATTACHMENT') {
+                            if (result && result.hasOwnProperty('type') && result.type === 'ATTACHMENT') {
                                 self.outgoing.attachments.push(result.attachment);
                             }
                         } else {

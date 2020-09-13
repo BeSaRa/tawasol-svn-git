@@ -285,7 +285,7 @@ module.exports = function (app) {
                         if (result !== 'DOCUMENT_LAUNCHED_ALREADY') {
                             self.internal.updateDocumentVersion();
                             _launchAfterSave();
-                            if (result.hasOwnProperty('type') && result.type === 'ATTACHMENT') {
+                            if (result && result.hasOwnProperty('type') && result.type === 'ATTACHMENT') {
                                 self.internal.attachments.push(result.attachment);
                             }
                         } else {
