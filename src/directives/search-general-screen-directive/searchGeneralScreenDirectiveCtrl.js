@@ -1543,7 +1543,7 @@ module.exports = function (app) {
                         icon: 'monitor',
                         text: 'grid_action_view_in_desktop',
                         shortcut: false,
-                        hide: false,
+                        hide: true,
                         callback: self.viewInDeskTop,
                         class: "action-green",
                         permissionKey: 'VIEW_DOCUMENT',
@@ -1701,8 +1701,9 @@ module.exports = function (app) {
                 callback: self.launchSequentialWorkflow,
                 class: "action-green",
                 permissionKey: 'LAUNCH_SEQ_WF',
+                hide: true,
                 checkShow: function (action, model) {
-                    return rootEntity.hasPSPDFViewer() && !model.hasActiveSeqWF() && !model.isCorrespondenceApprovedBefore() && !model.isCompositeSites();
+                    return rootEntity.hasPSPDFViewer() && !model.hasActiveSeqWF() && !model.isCorrespondenceApprovedBefore();
                 }
             },
             // Subscribe
@@ -1914,6 +1915,7 @@ module.exports = function (app) {
                 icon: 'download',
                 text: 'grid_action_download',
                 shortcut: false,
+                hide: true,
                 checkShow: function (action, model) {
                     var isAllowed = true;
                     if (model.hasActiveSeqWF()) {
@@ -2149,6 +2151,7 @@ module.exports = function (app) {
                         },
                         callback: self.editContent,
                         class: "action-green",
+                        hide: true,
                         checkShow: function (action, model) {
                             var info = model.getInfo(), isAllowed = true;
                             if (model.hasActiveSeqWF()) {
