@@ -34,7 +34,7 @@
                             <div layout="row" layout-align="start center">
                                 <span class="manage-span" flex>{{lang.get('attachments')}}</span>
                                 <md-button class="md-icon-button collapse-button"
-                                           ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS') && ctrl.showManagePopups()"
+                                           ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')"
                                            aria-label="{{lang.grid_action_attachments}}"
                                            ng-click="ctrl.manageAttachments($event)"
                                            tooltip="{{lang.grid_action_attachments}}"
