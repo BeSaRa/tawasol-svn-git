@@ -43,6 +43,7 @@ module.exports = function (app) {
         self.saveBanner = true;
         self.saveLogo = true;
         self.fileTypes = fileTypes;
+        self.hasPSPDFViewer = rootEntity.hasPSPDFViewer();
 
         var filterExcludedFileTypes = ["xlsx", "docx", "doc", "pptx"];
         self.excludedFileTypes = _.filter(self.fileTypes, function (fileType) {
