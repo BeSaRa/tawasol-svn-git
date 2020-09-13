@@ -190,6 +190,10 @@ module.exports = function (app) {
                 return this.seqWFId;
             };
 
+            Correspondence.prototype.getSeqWFNextStepId = function(){
+                return this.seqWFNextStepId;
+            };
+
             /**
              * @description Checks if correspondence already has any active sequential workflow
              * @returns {boolean}

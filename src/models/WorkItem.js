@@ -411,7 +411,7 @@ module.exports = function (app) {
              * @returns {boolean}
              */
             WorkItem.prototype.hasActiveSeqWF = function () {
-                return !!this.getSeqWFId();
+                return !!this.getSeqWFId() && !!this.getSeqWFNextStepId();
             };
             WorkItem.prototype.getSeqWFCurrentStepId = function () {
                 return this.generalStepElm.seqWFCurStepId;

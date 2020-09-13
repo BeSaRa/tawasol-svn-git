@@ -138,12 +138,16 @@ module.exports = function (app) {
                 return this.generalStepElm.seqWFId;
             };
 
+            GeneralStepElementView.prototype.getSeqWFNextStepId = function(){
+                return this.generalStepElm.seqWFNextStepId;
+            };
+
             /**
              * @description Checks if correspondence already has any active sequential workflow
              * @returns {boolean}
              */
             GeneralStepElementView.prototype.hasActiveSeqWF = function () {
-                return !!this.getSeqWFId();
+                return !!this.getSeqWFId() && !!this.getSeqWFNextStepId();
             };
 
             /**
