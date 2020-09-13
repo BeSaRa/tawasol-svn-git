@@ -52,6 +52,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            name: gridService.grids.centralArchive.sentItem,
             progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.centralArchive.sentItem) || 5, // default limit
             page: 1, // first page
@@ -68,16 +69,16 @@ module.exports = function (app) {
                 serial: 'docFullSerial',
                 subject: 'docSubject',
                 type: 'typeOriginalCopy',
-                sender: function(record){
+                sender: function (record) {
                     return self.getSortingKey('sentByIdInfo', 'SenderInfo');
                 },
                 mainSiteFrom: function (record) {
                     return self.getSortingKey('mainSiteFromIdInfo', 'CorrespondenceSite')
                 },
-                mainSiteTo: function(record){
+                mainSiteTo: function (record) {
                     return self.getSortingKey('mainSiteToIdInfo', 'CorrespondenceSite')
                 },
-                subSiteFrom: function(record){
+                subSiteFrom: function (record) {
                     return self.getSortingKey('subSiteFromIdInfo', 'CorrespondenceSite')
                 },
                 subSiteTo: function (record) {
@@ -183,6 +184,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.launchNewDistributionWorkflow = function (centralArchiveItem, $event, defer) {
+            centralArchiveItem.recordGridName = gridService.grids.centralArchive.sentItem;
             centralArchiveItem.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadSentItemCentralArchives(self.grid.page)
@@ -201,6 +203,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.quickSend = function (record, $event, defer) {
+            record.recordGridName = gridService.grids.centralArchive.sentItem;
             record.quickSendLaunchWorkflow($event, 'favorites')
                 .then(function () {
                     self.reloadSentItemCentralArchives(self.grid.page)
@@ -284,7 +287,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTasks = function (centralArchiveItem, $event) {
-          //  console.log('manage tasks : ', centralArchiveItem)
+            //  console.log('manage tasks : ', centralArchiveItem)
         };
 
         /**
@@ -343,7 +346,7 @@ module.exports = function (app) {
          * @param centralArchiveItem
          * @param $event
          */
-        self.downloadSelected = function(centralArchiveItem,$event){
+        self.downloadSelected = function (centralArchiveItem, $event) {
             downloadService.openSelectedDownloadDialog(centralArchiveItem, $event);
         };
 
@@ -381,7 +384,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendSMS = function (centralArchiveItem, $event) {
-           // console.log('Send sms : ', centralArchiveItem);
+            // console.log('Send sms : ', centralArchiveItem);
         };
 
         /**
@@ -390,7 +393,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendMainDocumentFax = function (centralArchiveItem, $event) {
-          //  console.log('send main document fax : ', centralArchiveItem);
+            //  console.log('send main document fax : ', centralArchiveItem);
         };
 
         /**
@@ -581,7 +584,7 @@ module.exports = function (app) {
                         checkShow: function (action, model) {
                             return true;
                         },
-                        gridName: 'department-sent-items'
+                        gridName: gridService.grids.centralArchive.sentItem
                     }
                 ],
                 class: "action-green",
@@ -896,7 +899,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'message',
-                        text:'selective_document',
+                        text: 'selective_document',
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         callback: self.downloadSelected,
                         class: "action-green",

@@ -1519,11 +1519,14 @@ module.exports = function (app) {
         self.canLaunchSeqWF = function () {
             if (correspondence.recordGridName &&
                 (correspondence.recordGridName === gridService.grids.department.returned
+                    || correspondence.recordGridName === gridService.grids.department.sentItem
+                    || correspondence.recordGridName === gridService.grids.centralArchive.sentItem
                     || correspondence.recordGridName === gridService.grids.outgoing.rejected
                     || correspondence.recordGridName === gridService.grids.incoming.rejected
                     || correspondence.recordGridName === gridService.grids.internal.rejected
                     || correspondence.recordGridName === gridService.grids.outgoing.draft
-                    || correspondence.recordGridName === gridService.grids.internal.draft)) {
+                    || correspondence.recordGridName === gridService.grids.internal.draft
+                )) {
                 return false;
             }
             return !self.multi && (self.actionKey === 'forward' || self.actionKey === 'launch')

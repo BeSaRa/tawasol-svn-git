@@ -28,6 +28,7 @@ module.exports = function (app) {
             delete model.securityLevelIndicator;
             delete model.mainSiteSubSiteString;   // added in model when binding main-site-sub-site directive value in grid
             delete model.actionType_vts;
+            delete model.recordGridName;
             return model;
         });
 

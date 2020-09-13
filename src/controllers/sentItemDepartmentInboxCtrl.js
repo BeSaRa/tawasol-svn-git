@@ -55,6 +55,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            name: gridService.grids.department.sentItem,
             progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.department.sentItem) || 5, // default limit
             page: 1, // first page
@@ -241,6 +242,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.launchNewDistributionWorkflow = function (sentItemDepartmentInbox, $event, defer) {
+            sentItemDepartmentInbox.recordGridName = gridService.grids.department.sentItem;
             sentItemDepartmentInbox.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadSentItemDepartmentInboxes(self.grid.page)
@@ -259,6 +261,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.quickSend = function (record, $event, defer) {
+            record.recordGridName = gridService.grids.department.sentItem;
             record.quickSendLaunchWorkflow($event, 'favorites')
                 .then(function () {
                     self.reloadSentItemDepartmentInboxes(self.grid.page)
@@ -647,7 +650,7 @@ module.exports = function (app) {
                         checkShow: function (action, model) {
                             return true;
                         },
-                        gridName: 'department-sent-items'
+                        gridName: gridService.grids.department.sentItem
                     }
                 ],
                 class: "action-green",

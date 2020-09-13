@@ -50,6 +50,7 @@ module.exports = function (app) {
             delete model.docClassName;
             delete model.originalCopyIndicator;
             delete model.numberOfDays;
+            delete model.recordGridName;
 
             return model;
         });

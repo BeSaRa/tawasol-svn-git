@@ -171,6 +171,7 @@ module.exports = function (app) {
 
             delete model.defaultModeIfEditing;
             delete model.numberOfDays;
+            delete model.recordGridName;
             return model;
         });
 
