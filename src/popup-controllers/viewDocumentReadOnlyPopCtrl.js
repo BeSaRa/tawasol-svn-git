@@ -23,6 +23,8 @@ module.exports = function (app) {
 
         self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
 
+        self.hideSlowModeToggleButton = false;
+
         /**
          * @description Checks if toggle slow connection is enabled for entity from global settings and for user from preferences to switch views
          * @returns {*|boolean}
@@ -32,7 +34,7 @@ module.exports = function (app) {
                 return false;
             }
             return rootEntity.getGlobalSettings().isSlowConnectionMode() && !employeeService.getEmployee().isSlowConnectionMode() &&
-                employeeService.hasPermissionTo('DOWNLOAD_MAIN_DOCUMENT') && employeeService.hasPermissionTo('PRINT_DOCUMENT');
+                employeeService.hasPermissionTo('DOWNLOAD_MAIN_DOCUMENT') && employeeService.hasPermissionTo('PRINT_DOCUMENT') && !self.hideSlowModeToggleButton;
         };
 
         var _getOriginalMainDocContent = function () {
@@ -71,9 +73,9 @@ module.exports = function (app) {
                 _getOriginalMainDocContent();
             }
         };
-        // toggle first time by checking if slow connection enabled by user as default setting and set Url accordingly
-        //self.toggleSlowConnectionMode();
         _getOriginalMainDocContent();
+        // toggle first time by checking if slow connection enabled by user as default setting and set Url accordingly
+        self.toggleSlowConnectionMode();
 
         /**
          * @description toggle fullScreen dialog
@@ -96,6 +98,10 @@ module.exports = function (app) {
         self.isOfficeOnlineViewer = function (url) {
             return url && url.$$unwrapTrustedValue().indexOf('.aspx') !== -1;
         };
+
+        self.$onInit = function () {
+            self.hideSlowModeToggleButton = self.psPDFViewerEnabled && self.document && self.document.mimeType === 'application/pdf';
+        }
 
     });
 };

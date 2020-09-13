@@ -38,6 +38,8 @@ module.exports = function (app) {
 
         self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
 
+        self.hideSlowModeToggleButton = false;
+
         var _getMainDocContentByVsId = function (vsId) {
             vsId = vsId || self.model.getInfo().vsId;
             downloadService.getMainDocumentContentAsPDF(vsId)
@@ -75,6 +77,7 @@ module.exports = function (app) {
                 _getOriginalMainDocContent();
             }
         }
+
         // set the slowConnectionMode when popup opens
         _resetViewModeToggle(true);
 
@@ -95,7 +98,7 @@ module.exports = function (app) {
          */
         self.isShowSlowConnectionVisible = function () {
             return rootEntity.getGlobalSettings().isSlowConnectionMode() && !employeeService.getEmployee().isSlowConnectionMode() &&
-                employeeService.hasPermissionTo('DOWNLOAD_MAIN_DOCUMENT') && employeeService.hasPermissionTo('PRINT_DOCUMENT');
+                employeeService.hasPermissionTo('DOWNLOAD_MAIN_DOCUMENT') && employeeService.hasPermissionTo('PRINT_DOCUMENT') && !self.hideSlowModeToggleButton;
         };
 
         /**
@@ -165,6 +168,10 @@ module.exports = function (app) {
         self.isOfficeOnlineViewer = function (url) {
             return url && url.$$unwrapTrustedValue().indexOf('.aspx') !== -1;
         };
+
+        self.$onInit = function () {
+            self.hideSlowModeToggleButton = self.psPDFViewerEnabled && self.correspondence && self.correspondence.mimeType === 'application/pdf';
+        }
 
 
     });

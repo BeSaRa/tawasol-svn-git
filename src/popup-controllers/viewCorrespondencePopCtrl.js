@@ -48,6 +48,8 @@ module.exports = function (app) {
 
         self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
 
+        self.hideSlowModeToggleButton = false;
+
         self.excludedManagePopupsFromGrids = [
             // 'departmentIncoming',
             'g2gIncoming',
@@ -122,7 +124,7 @@ module.exports = function (app) {
          */
         self.isShowSlowConnectionVisible = function () {
             return rootEntity.getGlobalSettings().isSlowConnectionMode() && !employeeService.getEmployee().isSlowConnectionMode() &&
-                employeeService.hasPermissionTo('DOWNLOAD_MAIN_DOCUMENT') && employeeService.hasPermissionTo('PRINT_DOCUMENT') && self.correspondence;
+                employeeService.hasPermissionTo('DOWNLOAD_MAIN_DOCUMENT') && employeeService.hasPermissionTo('PRINT_DOCUMENT') && self.correspondence && !self.hideSlowModeToggleButton;
         };
 
         self.isOfficeOnlineViewer = function (url) {
@@ -863,6 +865,10 @@ module.exports = function (app) {
         self.correspondenceSitesChanged = function (event) {
             self.document_properties.$dirty = true;
         };
+
+        self.$onInit = function () {
+            self.hideSlowModeToggleButton = self.psPDFViewerEnabled && self.correspondence && self.correspondence.mimeType === 'application/pdf';
+        }
 
     });
 };
