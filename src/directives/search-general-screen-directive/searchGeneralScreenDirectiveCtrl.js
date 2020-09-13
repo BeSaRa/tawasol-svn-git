@@ -1754,6 +1754,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.annotateDocument,
                 class: "action-green",
+                hide: true,
                 checkShow: function (action, model) {
                     return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION);
                 }
