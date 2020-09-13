@@ -3,6 +3,11 @@
         <div flex layout-align="center center" layout="row">
             <md-progress-circular ng-show="ctrl.loadingIndicatorService.loading" md-mode="indeterminate"
                                   md-diameter="30"></md-progress-circular>
+            <correspondence-view-action-directive ng-if="ctrl.generalStepElementView.actions.length"
+                                                  actions="ctrl.generalStepElementView.actions"
+                                                  work-item="ctrl.correspondence"
+                                                  correspondence="ctrl.generalStepElementView.correspondence"
+                                                  g2g-item-copy="ctrl.g2gItemCopy"></correspondence-view-action-directive>
             <span flex md-truncate class="font-bold text-center">{{::ctrl.correspondence.getTranslatedName()}}</span>
             <md-button ng-if="ctrl.correspondence" ng-click="ctrl.closeDialog()"
                        class="md-icon-button">
@@ -12,6 +17,10 @@
     </div>
     <md-dialog-content layout="column" flex scroll-directive>
         <div layout="row" layout-fill flex>
+            <viewer-sidebar-directive ng-if="ctrl.generalStepElementView"
+                                      actions="ctrl.generalStepElementView.actions"
+                                      work-item="ctrl.correspondence"
+                                      correspondence="ctrl.generalStepElementView.correspondence"></viewer-sidebar-directive>
             <div id="pdf-viewer" layout="column" class="relative" flex></div>
         </div>
     </md-dialog-content>

@@ -32,6 +32,7 @@ module.exports = function (app) {
                                                  sequentialWorkflowService,
                                                  WorkItem,
                                                  operations,
+                                                 generalStepElementView,
                                                  cmsTemplate) {
         'ngInject';
         var self = this;
@@ -102,6 +103,8 @@ module.exports = function (app) {
             "approve",
             "barcode",
         ];
+
+        self.generalStepElementView = generalStepElementView;
 
         function _getFlattenStatus() {
             return (self.info && !self.info.isAttachment && !self.info.isPaper && self.info.signaturesCount === 1);
@@ -209,7 +212,7 @@ module.exports = function (app) {
                 }
             };
             // remove default print from toolbar
-            var toolbarInstance = _.filter(defaultToolbar.concat([printWithoutAnnotationButton, exportButton]), function (item) {
+            var toolbarInstance = _.filter(defaultToolbar.concat([printWithoutAnnotationButton]), function (item) {
                 return item.type !== 'print';
             });
 
@@ -250,11 +253,16 @@ module.exports = function (app) {
                 _addButtonToToolbar(toolbarInstance, approveButton)
             } else if (self.info.documentClass === 'internal' && employeeService.hasPermissionTo('ELECTRONIC_SIGNATURE_MEMO')) {
                 _addButtonToToolbar(toolbarInstance, approveButton)
-            } else  if (self.info.documentClass === 'incoming' && employeeService.getEmployee().hasAnyPermissions(['ELECTRONIC_SIGNATURE','ELECTRONIC_SIGNATURE_MEMO'])) {
+            } else if (self.info.documentClass === 'incoming' && employeeService.getEmployee().hasAnyPermissions(['ELECTRONIC_SIGNATURE', 'ELECTRONIC_SIGNATURE_MEMO'])) {
                 _addButtonToToolbar(toolbarInstance, approveButton);
             } else {
-                toolbarInstance = toolbarInstance.filter(function (toolbarItem) {
-                    return toolbarItem.type !== 'ink-signature';
+                approveButton.disabled = true;
+                _addButtonToToolbar(toolbarInstance, approveButton);
+                toolbarInstance = toolbarInstance.map(function (toolbarItem) {
+                    if (toolbarItem.type === 'ink-signature') {
+                        toolbarItem.disabled = true;
+                    }
+                    return toolbarItem;
                 });
             }
 
@@ -1001,7 +1009,7 @@ module.exports = function (app) {
                 toast.success(langService.get('save_success'));
                 self.disableSaveButton = false;
                 self.sendAnnotationLogs();
-                dialog.hide();
+                dialog.hide(true);
             }).catch(self.handleExceptions);
         };
         /**

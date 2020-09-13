@@ -1118,16 +1118,16 @@ module.exports = function (app) {
                 return correspondenceService.annotateCorrespondence(this);
             };
 
-            WorkItem.prototype.openSequentialDocument = function (annotationType, seqWF, $event) {
+            WorkItem.prototype.openSequentialDocument = function (annotationType, seqWF, actions) {
                 var self = this;
-
-                return viewDocumentService.viewUserInboxDocument(self, [], 'userInbox', null, true)
+                return viewDocumentService.viewUserInboxDocument(self, actions, 'userInbox', null, true)
                     .then(function (generalStepElementView) {
+                        generalStepElementView.actions = actions;
                         if (seqWF) {
-                            return correspondenceService.annotateCorrespondence(self, typeof annotationType !== 'undefined' ? annotationType : null, null, seqWF);
+                            return correspondenceService.annotateCorrespondence(self, typeof annotationType !== 'undefined' ? annotationType : null, null, seqWF, generalStepElementView);
                         }
                         return sequentialWorkflowService.loadSequentialWorkflowById(self.getSeqWFId()).then(function (seqWF) {
-                            return correspondenceService.annotateCorrespondence(self, typeof annotationType !== 'undefined' ? annotationType : null, null, seqWF);
+                            return correspondenceService.annotateCorrespondence(self, typeof annotationType !== 'undefined' ? annotationType : null, null, seqWF, generalStepElementView);
                         });
                     });
             };

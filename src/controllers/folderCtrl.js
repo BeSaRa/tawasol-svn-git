@@ -429,7 +429,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.subscribe = function (workItem, $event) {
-           // console.log('subscribe', workItem);
+            // console.log('subscribe', workItem);
         };
 
         /**
@@ -553,7 +553,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.viewDirectLinkedDocuments = function (workItem, $event) {
-          //  console.log('viewDirectLinkedDocuments : ', workItem);
+            //  console.log('viewDirectLinkedDocuments : ', workItem);
         };
 
         /**
@@ -562,7 +562,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.viewCompleteLinkedDocuments = function (workItem, $event) {
-           // console.log('viewCompleteLinkedDocuments : ', workItem);
+            // console.log('viewCompleteLinkedDocuments : ', workItem);
         };
 
         /**
@@ -706,7 +706,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.signDigitalSignature = function (workItem, $event, defer) {
-          //  console.log('signDigitalSignature : ', workItem);
+            //  console.log('signDigitalSignature : ', workItem);
         };
 
         /**
@@ -800,7 +800,7 @@ module.exports = function (app) {
             }
 
             if (info.hasActiveSeqWF && info.docStatus < 24 && self.psPDFViewerEnabled) {
-                return workItem.openSequentialDocument()
+                return workItem.openSequentialDocument(null, null, self.gridActions)
                     .then(function () {
                         self.reloadFolders(self.grid.page);
                     })
@@ -1671,7 +1671,7 @@ module.exports = function (app) {
                 text: 'grid_action_approve',//signature
                 shortcut: false,
                 checkShow: function (action, model) {
-                    if (model.hasActiveSeqWF()){
+                    if (model.hasActiveSeqWF()) {
                         return false;
                     }
                     return gridService.checkToShowMainMenuBySubMenu(action, model);

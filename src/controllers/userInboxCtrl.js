@@ -1267,7 +1267,7 @@ module.exports = function (app) {
             }
 
             if (info.hasActiveSeqWF && info.docStatus < 24 && self.psPDFViewerEnabled) {
-                return workItem.openSequentialDocument()
+                return workItem.openSequentialDocument(null, null, self.gridActions)
                     .then(function () {
                         self.reloadUserInboxes(self.grid.page);
                     })
@@ -2205,6 +2205,9 @@ module.exports = function (app) {
                         stickyIndex: 6,
                         checkShow: function (action, model) {
                             var info = model.getInfo();
+                            if (model.hasActiveSeqWF()) {
+                                return false;
+                            }
                             if (model.getAuthorizeByAnnotationStatus()) {
                                 return false;
                             }
@@ -2225,6 +2228,9 @@ module.exports = function (app) {
                         stickyIndex: 8,
                         checkShow: function (action, model) {
                             var info = model.getInfo();
+                            if (model.hasActiveSeqWF()) {
+                                return false;
+                            }
                             if (model.getAuthorizeByAnnotationStatus()) {
                                 return false;
                             }
@@ -2247,6 +2253,9 @@ module.exports = function (app) {
                         hide: true,
                         checkShow: function (action, model) {
                             var info = model.getInfo();
+                            if (model.hasActiveSeqWF()) {
+                                return false;
+                            }
                             if (model.getAuthorizeByAnnotationStatus()) {
                                 return false;
                             }
@@ -2267,6 +2276,9 @@ module.exports = function (app) {
                         stickyIndex: 7,
                         checkShow: function (action, model) {
                             var info = model.getInfo();
+                            if (model.hasActiveSeqWF()) {
+                                return false;
+                            }
                             if (model.getAuthorizeByAnnotationStatus()) {
                                 return false;
                             }

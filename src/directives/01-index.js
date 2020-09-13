@@ -122,4 +122,5 @@ module.exports = function (app) {
     require('./organization-chart-d3-directive/01-index')(app);
     require('./pspdf-viewer-directive/01-index')(app);
     require('./sequential-workflow-steps-directive/01-index')(app);
+    require('./viewer-sidebar-directive/01-index')(app);
 };
