@@ -300,6 +300,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.incoming.openForAnnotation()
                         .then(function () {
+                            self.incoming.updateDocumentVersion();
                             _launchAfterSave();
                         });
                 })
@@ -311,6 +312,7 @@ module.exports = function (app) {
                                     .then(function () {
                                         self.incoming.openForAnnotation()
                                             .then(function () {
+                                                self.incoming.updateDocumentVersion();
                                                 _launchAfterSave();
                                             });
                                     })

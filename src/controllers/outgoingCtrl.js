@@ -318,6 +318,7 @@ module.exports = function (app) {
                 self.outgoing.openForAnnotation()
                     .then(function (result) {
                         if (result !== 'DOCUMENT_LAUNCHED_ALREADY') {
+                            self.outgoing.updateDocumentVersion();
                             _launchAfterSave();
                             if (result.hasOwnProperty('type') && result.type === 'ATTACHMENT') {
                                 self.outgoing.attachments.push(result.attachment);

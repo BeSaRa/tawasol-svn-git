@@ -218,6 +218,7 @@ module.exports = function (app) {
         var saveCorrespondenceFinished = function (status, ignoreLaunch) {
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             counterService.loadCounters();
+            self.incoming.updateDocumentVersion();
             if (status) {
                 toast.success(langService.get('save_success'));
             } else {
@@ -259,6 +260,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.incoming.openForAnnotation()
                         .then(function () {
+                            self.incoming.updateDocumentVersion();
                             _launchAfterSave();
                         });
                 })
@@ -270,6 +272,7 @@ module.exports = function (app) {
                                     .then(function () {
                                         self.incoming.openForAnnotation()
                                             .then(function () {
+                                                self.incoming.updateDocumentVersion();
                                                 _launchAfterSave();
                                             });
                                     })
