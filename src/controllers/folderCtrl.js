@@ -1104,7 +1104,7 @@ module.exports = function (app) {
                 class: "action-green",
                 sticky: true,
                 checkShow: function (action, model) {
-                    return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION);
+                    return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION) && !model.isTerminatedSEQ();
                 }
             },
             // Move To Folder
@@ -1701,6 +1701,10 @@ module.exports = function (app) {
                             /*If document is unapproved or partially approved, show the button. If fully approved, hide the button.
                              docStatus = 24 is approved
                              */
+                            if (model.getAuthorizeByAnnotationStatus() || model.isTerminatedSEQ()) {
+                                return false;
+                            }
+
                             var info = model.getInfo();
                             return !model.isBroadcasted()
                                 && !info.isPaper
@@ -1719,6 +1723,13 @@ module.exports = function (app) {
                         stickyIndex: 8,
                         checkShow: function (action, model) {
                             var info = model.getInfo();
+                            if (model.hasActiveSeqWF() || model.isTerminatedSEQ()) {
+                                return false;
+                            }
+                            if (model.getAuthorizeByAnnotationStatus()) {
+                                return false;
+                            }
+
                             return info.documentClass === 'outgoing' && !model.isBroadcasted()
                                 && !info.isPaper
                                 && model.checkElectronicSignaturePermission()
@@ -1738,6 +1749,12 @@ module.exports = function (app) {
                         permissionKey: "DIGITAL_SIGNATURE",
                         hide: true,
                         checkShow: function (action, model) {
+                            if (model.hasActiveSeqWF() || model.isTerminatedSEQ()) {
+                                return false;
+                            }
+                            if (model.getAuthorizeByAnnotationStatus()) {
+                                return false;
+                            }
                             return true;
                         }
                     }

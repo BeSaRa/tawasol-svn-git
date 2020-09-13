@@ -1530,7 +1530,7 @@ module.exports = function (app) {
                 sticky: true,
                 stickyIndex: 1,
                 checkShow: function (action, model) {
-                    return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION);
+                    return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION) && !model.isTerminatedSEQ();
                 }
             },
             // Add To
@@ -1681,7 +1681,8 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_SEQ_WF',
                 checkShow: function (action, model) {
-                    return rootEntity.hasPSPDFViewer() && !model.hasActiveSeqWF() && !model.isCorrespondenceApprovedBefore() && !model.isComposite();
+                    var info = model.getInfo();
+                    return rootEntity.hasPSPDFViewer() && !model.hasActiveSeqWF() && !model.isCorrespondenceApprovedBefore() && !model.isComposite() && model.isNotPaperAndNotTerminatedSEQ();
                 }
             },
             // Broadcast
@@ -2155,7 +2156,7 @@ module.exports = function (app) {
                 icon: 'check-decagram',
                 text: 'grid_action_approve',//signature
                 checkShow: function (action, model) {
-                    if (model.hasActiveSeqWF()) {
+                    if (model.hasActiveSeqWF() || model.isTerminatedSEQ()) {
                         return false;
                     }
                     return gridService.checkToShowMainMenuBySubMenu(action, model);
@@ -2177,6 +2178,9 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: function (action, model) {
                             var employee = employeeService.getEmployee();
+                            if (model.hasActiveSeqWF() || model.isTerminatedSEQ()) {
+                                return false;
+                            }
                             if (model.getAuthorizeByAnnotationStatus()) {
                                 return false;
                             }
@@ -2205,7 +2209,7 @@ module.exports = function (app) {
                         stickyIndex: 6,
                         checkShow: function (action, model) {
                             var info = model.getInfo();
-                            if (model.hasActiveSeqWF()) {
+                            if (model.hasActiveSeqWF() || model.isTerminatedSEQ()) {
                                 return false;
                             }
                             if (model.getAuthorizeByAnnotationStatus()) {
@@ -2228,7 +2232,7 @@ module.exports = function (app) {
                         stickyIndex: 8,
                         checkShow: function (action, model) {
                             var info = model.getInfo();
-                            if (model.hasActiveSeqWF()) {
+                            if (model.hasActiveSeqWF() || model.isTerminatedSEQ()) {
                                 return false;
                             }
                             if (model.getAuthorizeByAnnotationStatus()) {
@@ -2253,7 +2257,7 @@ module.exports = function (app) {
                         hide: true,
                         checkShow: function (action, model) {
                             var info = model.getInfo();
-                            if (model.hasActiveSeqWF()) {
+                            if (model.hasActiveSeqWF() || model.isTerminatedSEQ()) {
                                 return false;
                             }
                             if (model.getAuthorizeByAnnotationStatus()) {
@@ -2276,7 +2280,7 @@ module.exports = function (app) {
                         stickyIndex: 7,
                         checkShow: function (action, model) {
                             var info = model.getInfo();
-                            if (model.hasActiveSeqWF()) {
+                            if (model.hasActiveSeqWF() || model.isTerminatedSEQ()) {
                                 return false;
                             }
                             if (model.getAuthorizeByAnnotationStatus()) {

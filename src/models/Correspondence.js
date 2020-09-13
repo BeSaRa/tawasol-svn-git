@@ -1163,6 +1163,16 @@ module.exports = function (app) {
                 return this.authorizeByAnnotation;
             };
 
+            Correspondence.prototype.isTerminatedSEQ = function () {
+                var info = this.getInfo();
+                return info.docStatus === 21;
+            };
+
+            Correspondence.prototype.isNotPaperAndNotTerminatedSEQ = function () {
+                var info = this.getInfo();
+                return !info.isPaper && info.docStatus !== 21;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Correspondence', 'init', this);
