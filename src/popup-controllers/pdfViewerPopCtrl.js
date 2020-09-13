@@ -289,6 +289,10 @@ module.exports = function (app) {
                 });
             }
 
+            if (_isElectronicAndAuthorizeByAnnotationBefore() && !rootEntity.getGlobalSettings().allowEditAfterFirstApprove) {
+                toolbarInstance = toolbarInstance.filter(item => item.type !== 'document-editor');
+            }
+
             return toolbarInstance;
         }
 
