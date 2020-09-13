@@ -283,7 +283,7 @@ module.exports = function (app) {
                 toolbarInstance.push(openForApprovalButton);
             }
 
-            if (self.info.docStatus === 24) {
+            if (self.info.docStatus === 24 && self.info.documentClass === 'outgoing') {
                 toolbarInstance = toolbarInstance.filter(item => {
                     return item.type === 'custom' ? !_itemInExcludedList(item.id) : !_itemInExcludedList(item.type);
                 });
@@ -1053,7 +1053,7 @@ module.exports = function (app) {
                                     });
                             } else {
                                 // for electronic document in ready to export
-                                self.info.docStatus === 24 ? self.handleUpdateDocumentContent(pdfContent, AnnotationType.STAMP) : self.handleSaveAnnotationAsAttachment(pdfContent);
+                                self.info.docStatus === 24 && self.info.documentClass === 'outgoing' ? self.handleUpdateDocumentContent(pdfContent, AnnotationType.STAMP) : self.handleSaveAnnotationAsAttachment(pdfContent);
                             }
                         }
                     });
