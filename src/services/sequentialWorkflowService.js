@@ -234,59 +234,96 @@ module.exports = function (app) {
              * @param $event
              */
             sequentialWorkflowStepEdit: function (sequentialWorkflow, sequentialWorkflowStep, viewOnly, $event) {
-                var step = angular.copy(sequentialWorkflowStep);
+                var step = angular.copy(sequentialWorkflowStep),
+                    defer = $q.defer();
 
                 // if new step and seqWF is internal, set organization to selected regOu as WF will be inside organization only
                 if (!sequentialWorkflowStep.id && sequentialWorkflow.isInternalSeqWF()) {
                     step.uiOuId = sequentialWorkflow.regOUId;
                 }
 
-                return dialog
-                    .showDialog({
-                        targetEvent: $event,
-                        templateUrl: cmsTemplate.getPopup('sequential-workflow-step'),
-                        controller: 'sequentialWorkflowStepPopCtrl',
-                        controllerAs: 'ctrl',
-                        bindToController: true,
-                        locals: {
-                            record: angular.copy(sequentialWorkflow),
-                            step: step,
-                            viewOnly: viewOnly
-                        },
-                        resolve: {
-                            organizations: function (organizationService) {
-                                'ngInject';
-                                return organizationService.loadOrganizations(true, true)
-                                    .then(function (result) {
-                                        return _.filter(result, function (ou) {
-                                            return !!ou.status && ou.hasRegistry;
-                                        })
-                                    });
+                // if not view only, proceed
+                // otherwise, load seqWF by id and use it as record and use step from it
+                if (!viewOnly) {
+                    defer.resolve(sequentialWorkflow);
+                } else {
+                    self.loadSequentialWorkflowById(sequentialWorkflow)
+                        .then(function (result) {
+                            step = _.find(result.stepRows, function (item) {
+                                return generator.getNormalizedValue(item, 'id') === generator.getNormalizedValue(step, 'id');
+                            });
+                            defer.resolve(result);
+                        });
+                }
+
+                return defer.promise.then(function (seqWF) {
+                    return dialog
+                        .showDialog({
+                            targetEvent: $event,
+                            templateUrl: cmsTemplate.getPopup('sequential-workflow-step'),
+                            controller: 'sequentialWorkflowStepPopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            locals: {
+                                record: seqWF,
+                                step: step,
+                                viewOnly: viewOnly
                             },
-                            workflowActions: function (workflowActionService) {
-                                'ngInject';
-                                return workflowActionService.loadCurrentUserWorkflowActions();
-                            },
-                            comments: function (userCommentService) {
-                                'ngInject';
-                                return userCommentService.loadUserCommentsForDistribution();
-                            },
-                            ouApplicationUsers: function (ouApplicationUserService) {
-                                'ngInject';
-                                if (!step.uiOuId) {
-                                    return [];
-                                }
-                                return ouApplicationUserService
-                                    .searchByCriteria({regOu: generator.getNormalizedValue(step.uiOuId, 'id')})
-                                    .then(function (result) {
-                                        return _.map(result, function (item) {
-                                            item.userIdAndOuId = item.getUserIdAndOuIdCombination();
-                                            return item;
+                            resolve: {
+                                organizations: function (organizationService) {
+                                    'ngInject';
+                                    return organizationService.loadOrganizations(true, true)
+                                        .then(function (result) {
+                                            return _.filter(result, function (ou) {
+                                                return !!ou.status && ou.hasRegistry;
+                                            })
                                         });
-                                    });
+                                },
+                                workflowActions: function (workflowActionService, WorkflowAction) {
+                                    'ngInject';
+                                    return workflowActionService.loadCurrentUserWorkflowActions()
+                                        .then(function (result) {
+                                            // if not viewOnly, return normally all actions
+                                            // otherwise, push the missing wfAction from actionInfo (if actionInfo is missing, return normally all actions)
+                                            if (!viewOnly || !step.actionInfo || !step.actionInfo.id) {
+                                                return result;
+                                            }
+                                            var index = _.findIndex(result, function (item) {
+                                                return generator.getNormalizedValue(item, 'id') === generator.getNormalizedValue(step, 'actionId');
+                                            });
+                                            if (index === -1) {
+                                                result.push(new WorkflowAction({
+                                                    arName: step.actionInfo.arName,
+                                                    enName: step.actionInfo.enName,
+                                                    id: step.actionInfo.id
+                                                }))
+                                            }
+                                            return result;
+                                        });
+                                },
+                                comments: function (userCommentService) {
+                                    'ngInject';
+                                    return userCommentService.loadUserCommentsForDistribution();
+                                },
+                                ouApplicationUsers: function (ouApplicationUserService) {
+                                    'ngInject';
+                                    if (!step.uiOuId) {
+                                        return [];
+                                    }
+                                    return ouApplicationUserService
+                                        .searchByCriteria({regOu: generator.getNormalizedValue(step.uiOuId, 'id')})
+                                        .then(function (result) {
+                                            return _.map(result, function (item) {
+                                                item.userIdAndOuId = item.getUserIdAndOuIdCombination();
+                                                return item;
+                                            });
+                                        });
+                                }
                             }
-                        }
-                    });
+                        });
+                });
+
+
             },
 
         };
