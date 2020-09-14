@@ -8,7 +8,7 @@
             <span ng-if="ctrl.service.userSubscriptions.length > 0" ng-click="ctrl.openSubscriptionMenu($mdMenu)"
                   class="counter blue">{{ctrl.service.userSubscriptions.length}}</span>
         </div>
-        <md-menu-content class="toolbar-menu-content">
+        <md-menu-content class="toolbar-menu-content" md-menu-default-scroll>
             <div scroll-directive class="notify-list-wrapper">
                 <ul>
                     <li ng-repeat="item in ctrl.service.userSubscriptions track by $index" layout="row">

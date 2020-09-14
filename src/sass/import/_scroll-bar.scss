@@ -1,5 +1,5 @@
-// Dropdown and menu scroll(similar to perfect scrollbar)
-md-select-menu, .md-open-menu-container, .md-virtual-repeat-container, .context-menu {
+// Dropdown, menu scroll and virtual repeat(similar to perfect scrollbar)
+md-select-menu, .md-open-menu-container, .md-virtual-repeat-container {
   /* width */
   ::-webkit-scrollbar {
     width: 6px;
@@ -21,5 +21,59 @@ md-select-menu, .md-open-menu-container, .md-virtual-repeat-container, .context-
   ::-webkit-scrollbar-thumb:hover {
     width: 11px;
     background: #999;
+  }
+}
+
+.md-open-menu-container:not(.menu-default-scroll) {
+  max-height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  /* width */
+  &::-webkit-scrollbar {
+    width: 6px;
+    background: #FFFFFF;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    border-radius: 11px;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: #aaa;
+    border-radius: 6px;
+    width: 6px;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #999;
+  }
+}
+
+// firefox
+.md-open-menu-container {
+  scrollbar-color: #aaa white;
+  scrollbar-width: thin;
+
+  md-menu-content {
+    scrollbar-color: #aaa white;
+    scrollbar-width: thin;
+  }
+}
+
+md-select-menu {
+  md-content {
+    scrollbar-color: #aaa white;
+    scrollbar-width: thin;
+  }
+}
+
+.md-virtual-repeat-container {
+  .md-virtual-repeat-scroller {
+    scrollbar-color: #aaa white;
+    scrollbar-width: thin;
   }
 }

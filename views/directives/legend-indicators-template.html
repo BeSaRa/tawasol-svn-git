@@ -16,10 +16,6 @@
             <md-menu-content width="3">
                 <md-menu-item ng-repeat="indicator in ctrl.legendIndicators"
                               ng-if="$index >= ctrl.visibleCount && indicator.legendText()">
-                    <!--<md-icon class="{{indicator.class}}"
-                             md-svg-icon="{{indicator.icon}}">
-                    </md-icon>
-                    <span>{{indicator.legendText()}}</span>-->
                     <md-button aria-label="Legend" md-prevent-menu-close>
                         <div layout="row" flex>
                             <md-icon class="{{indicator.class}}"

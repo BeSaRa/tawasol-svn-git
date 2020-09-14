@@ -8,7 +8,7 @@
             <span ng-if="ctrl.mailService.unreadNotificationsCount > 0" ng-click="ctrl.openNotificationMenu($mdMenu)"
                   class="counter blue">{{ctrl.mailService.unreadNotificationsCount}}</span>
         </div>
-        <md-menu-content class="toolbar-menu-content">
+        <md-menu-content class="toolbar-menu-content" md-menu-default-scroll>
             <div scroll-directive class="notify-list-wrapper">
                 <ul>
                     <li ng-repeat="item in ctrl.mailService.notifications track by $index" layout="row">

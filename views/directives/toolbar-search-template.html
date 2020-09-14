@@ -22,7 +22,7 @@
         <md-button aria-label="search-menu" class="md-icon-button" ng-click="search.openMenu($mdMenu, $event)">
             <md-icon md-menu-origin md-svg-icon="dots-vertical"></md-icon>
         </md-button>
-        <md-menu-content width="4">
+        <md-menu-content width="4" md-menu-default-scroll>
             <md-menu-item ng-if="item.checkShow(item)" ng-repeat="item in search.availableSearchCriteria">
                 <md-button ng-click="search.setSelectedKey(item)">
                     {{ lang.get(item.value) }}
