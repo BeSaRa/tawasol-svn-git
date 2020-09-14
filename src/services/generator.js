@@ -381,7 +381,7 @@ module.exports = function (app) {
                 return;
             }
 
-            field.$setValidity('required', (typeof field.$modelValue !== 'undefined' && field.$modelValue !== null));
+            field.$setValidity('required', (typeof field.$modelValue !== 'undefined' && field.$modelValue !== null && field.$valid));
             if (setTouched) {
                 field.$setTouched();
             }
