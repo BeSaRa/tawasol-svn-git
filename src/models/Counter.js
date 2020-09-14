@@ -26,7 +26,10 @@ module.exports = function (app) {
                     'menu_item_outgoing_deleted',
                     'menu_item_incoming_deleted',
                     'menu_item_internal_deleted',
-                    'menu_item_my_followup'
+                    'menu_item_my_followup',
+                    'menu_item_g2g',
+                    'menu_item_government_inbox',
+                    'menu_item_government_returned_mail'
                 ],
                 maps = {
                     menu_item_outgoing: [
