@@ -546,6 +546,7 @@ module.exports = function (app) {
                     ctrl.selectedStamp = null;
                     ctrl.repeatAble = repeatAble;
                     ctrl.repeatOption = false;
+                    ctrl.inprogress = false;
                     /**
                      * @description to check if the given stamp selected or not.
                      * @param stamp
@@ -565,6 +566,10 @@ module.exports = function (app) {
                      * @description add stamp and close the Stamps dialog.
                      */
                     ctrl.addStamp = function () {
+                        if (self.inprogress) {
+                            return;
+                        }
+                        self.inprogress = true;
                         self.addStampAnnotationToPDF(ctrl.selectedStamp.contentElementUrl, ctrl.repeatOption)
                             .then(function () {
                                 dialog.hide();
@@ -616,6 +621,7 @@ module.exports = function (app) {
                     ctrl.selectedSignature = null;
                     ctrl.repeatAble = repeatAble;
                     ctrl.repeatOption = false;
+                    ctrl.inprogress = false;
                     /**
                      * @description to check if the given stamp selected or not.
                      * @param signature
@@ -635,6 +641,10 @@ module.exports = function (app) {
                      * @description add signature and close the Signatures dialog.
                      */
                     ctrl.addSignature = function () {
+                        if (ctrl.inprogress) {
+                            return;
+                        }
+                        ctrl.inprogress = true;
                         self.addSignatureAnnotationToPDF(ctrl.selectedSignature.contentElementUrl, ctrl.repeatOption)
                             .then(function () {
                                 dialog.hide();
