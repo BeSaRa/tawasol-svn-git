@@ -171,6 +171,23 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Manage Attachments from sticky actions
+         * @param $event
+         */
+        self.manageAttachments = function ($event) {
+            if (!employeeService.hasPermissionTo("MANAGE_ATTACHMENTS")) {
+                return;
+            }
+            self.correspondence.manageDocumentAttachments($event)
+                .then(function (attachments) {
+                    self.correspondence.attachments = angular.copy(attachments);
+                })
+                .catch(function (attachments) {
+                    self.correspondence.attachments = angular.copy(attachments);
+                });
+        };
+
+        /**
          * @description Manage Linked Docs from sticky actions
          * @param $event
          */
