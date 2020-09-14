@@ -3464,6 +3464,9 @@ module.exports = function (app) {
                                                     errorCode.checkIf(error, 'PIN_CODE_NOT_MATCH', function () {
                                                         dialog.errorMessage(langService.get('pincode_not_match'))
                                                     });
+                                                    errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
+                                                        dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
+                                                    });
                                                     return $q.resolve(error);
                                                 });
                                         }
@@ -3488,6 +3491,9 @@ module.exports = function (app) {
                             });
                             errorCode.checkIf(error, 'PIN_CODE_NOT_MATCH', function () {
                                 dialog.errorMessage(langService.get('pincode_not_match'))
+                            });
+                            errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
+                                dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                             });
                             return $q.reject(error);
                         })
