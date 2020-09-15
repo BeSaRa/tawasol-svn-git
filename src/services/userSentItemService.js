@@ -218,7 +218,7 @@ module.exports = function (app) {
                                 dialog.errorMessage(generator.getTranslatedError(error));
                             });
                             errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
-                                dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: sentItem.getInfo().wobNumber}));
+                                dialog.errorMessage(langService.get('cannot_call_non_existing_book'));
                             });
                             return false;
                         });
