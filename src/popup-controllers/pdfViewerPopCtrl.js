@@ -75,6 +75,8 @@ module.exports = function (app) {
 
         self.disableSaveButton = false;
 
+        self.unlinkInProgress = false;
+
         console.log('correspondence', correspondence);
 
         self.isStampEnabled = rootEntity.getGlobalSettings().stampModuleEnabled;
@@ -685,7 +687,7 @@ module.exports = function (app) {
                     });
                     $q.all(updatedAnnotations)
                         .then(function () {
-                            self.currentInstance.print();
+                            self.currentInstance.print(PSPDFKit.PrintMode.EXPORT_PDF);
                         });
                 })
         };
@@ -993,6 +995,7 @@ module.exports = function (app) {
                         .catch(self.handleExceptions);
                 });
             }).catch(function () {
+                self.disableSaveButton = false;
                 toast.error(langService.get('provide_signature_to_proceed'));
             });
         };
@@ -1343,8 +1346,14 @@ module.exports = function (app) {
                 id: "tooltip-Unlink-Replication-annotation",
                 className: "TooltipItem-Unlink-Replication",
                 onPress: function () {
+
+                    if (self.unlinkInProgress) {
+                        return null;
+                    }
+
                     var updatedAnnotation = null, customData = angular.extend(annotation.customData),
                         updatedCustomData = angular.copy(customData);
+                    self.unlinkInProgress = true;
                     self.getDocumentAnnotations().then(function (annotations) {
                         if (_isRepeaterRoot(annotation)) {
                             delete updatedCustomData.repeaterHandler;
@@ -1373,6 +1382,8 @@ module.exports = function (app) {
                             self.currentInstance.updateAnnotation(updatedAnnotation);
                             self.currentInstance.updateAnnotation(parentAnnotationUpdate);
                         }
+
+                        self.unlinkInProgress = false;
                     });
 
                 }
