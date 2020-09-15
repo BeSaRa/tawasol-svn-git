@@ -116,6 +116,10 @@ module.exports = function (app) {
                 return typeof this.docClassID !== 'undefined' && this.docClassID !== null;
             };
 
+            SequentialWF.prototype.getLastStepId = function () {
+                return this.steps && this.steps[this.steps.length - 1].id;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('SequentialWF', 'init', this);

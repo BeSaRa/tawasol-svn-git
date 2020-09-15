@@ -109,7 +109,8 @@ module.exports = function (app) {
         self.generalStepElementView = generalStepElementView;
 
         function _getFlattenStatus() {
-            return (self.info && !self.info.isAttachment && !self.info.isPaper && self.info.signaturesCount === 1);
+            console.log('Document flatten Flag', !!(self.sequentialWF && self.sequentialWF.getLastStepId() === self.nextSeqStep.id));
+            return !!(self.sequentialWF && self.sequentialWF.getLastStepId() === self.nextSeqStep.id) || (self.info && !self.info.isAttachment && !self.info.isPaper && self.info.signaturesCount === 1);
         }
 
         /**
@@ -815,7 +816,7 @@ module.exports = function (app) {
                 delete customData.id;
 
                 var updatedAnnotation = annotation
-                    .set('isSignature', _getRightTypeForElectronicSignature() !== 1)
+                    // .set('isSignature', _getRightTypeForElectronicSignature() !== 1)
                     .set('customData', customData);
                 return self.currentInstance.updateAnnotation(updatedAnnotation);
             }
@@ -1241,7 +1242,7 @@ module.exports = function (app) {
                         }
                         self.currentInstance.exportInstantJSON().then(function (instantJSON) {
                             delete instantJSON.pdfId;
-                            PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON, self.documentOperations).then(function (pdfContent) {
+                            PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON, self.documentOperations, _getFlattenStatus()).then(function (pdfContent) {
                                 self.applyNextStepOnCorrespondence(pdfContent, null, true).catch(self.handleSeqExceptions);
                             });
                         });
