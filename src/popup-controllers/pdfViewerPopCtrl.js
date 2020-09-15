@@ -689,7 +689,7 @@ module.exports = function (app) {
                     });
                     $q.all(updatedAnnotations)
                         .then(function () {
-                            self.currentInstance.print(PSPDFKit.PrintMode.EXPORT_PDF);
+                            self.currentInstance.print(noPrintValue ? PSPDFKit.PrintMode.DOM : PSPDFKit.PrintMode.EXPORT_PDF);
                         });
                 })
         };
@@ -1361,14 +1361,6 @@ module.exports = function (app) {
                             delete updatedCustomData.repeaterHandler;
                             delete updatedCustomData.repeatedAnnotation;
                             updatedAnnotation = annotation.set('customData', updatedCustomData);
-
-                            annotations.forEach(function (annotation) {
-                                var customAnnotationData = angular.extend(annotation.customData);
-                                delete customAnnotationData.parentId;
-                                var updatedAnnotation = annotation.set('customData', customAnnotationData);
-                                self.currentInstance.updateAnnotation(updatedAnnotation);
-                            });
-
                             self.currentInstance.updateAnnotation(updatedAnnotation);
                         } else {
                             delete updatedCustomData.parentId;
