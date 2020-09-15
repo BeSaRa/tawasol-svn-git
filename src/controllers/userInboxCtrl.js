@@ -1682,7 +1682,7 @@ module.exports = function (app) {
                 permissionKey: 'LAUNCH_SEQ_WF',
                 checkShow: function (action, model) {
                     var info = model.getInfo();
-                    return rootEntity.hasPSPDFViewer() && !model.hasActiveSeqWF() && !model.isCorrespondenceApprovedBefore() && !model.isComposite() && model.isNotPaperAndNotTerminatedSEQ();
+                    return rootEntity.hasPSPDFViewer() && !model.hasActiveSeqWF() && !model.isCorrespondenceApprovedBefore() && !model.isComposite() && !model.isTerminatedSEQ();
                 }
             },
             // Broadcast
