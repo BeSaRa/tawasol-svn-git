@@ -1238,7 +1238,7 @@ module.exports = function (app) {
                             });
                     } else { // else nextSeqStep.isAuthorizeAndSendStep()
                         var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations);
-                        if (!hasChanges.length) {
+                        if (!hasChanges.length && !self.documentOperations.length) {
                             return self.applyNextStepOnCorrespondence(null).catch(self.handleSeqExceptions);
                         }
                         self.currentInstance.exportInstantJSON().then(function (instantJSON) {
@@ -1376,7 +1376,6 @@ module.exports = function (app) {
                             self.currentInstance.updateAnnotation(updatedAnnotation);
                             self.currentInstance.updateAnnotation(parentAnnotationUpdate);
                         }
-
                         self.unlinkInProgress = false;
                     });
 
