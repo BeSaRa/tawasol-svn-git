@@ -1158,7 +1158,7 @@ module.exports = function (app) {
             signatureModel.setValidateMultiSignature(!ignoreValidateMultiSignature);
             signatureModel.setSeqWFId(self.sequentialWF.id);
             return sequentialWorkflowService
-                .launchSeqWFCorrespondence(self.correspondence, signatureModel, content, self.isLaunchStep)
+                .launchSeqWFCorrespondence(self.correspondence, signatureModel, content, self.isLaunchStep, terminateAllWFS)
                 .then(function (result) {
                     if (result === correspondenceService.authorizeStatus.SAME_USER_AUTHORIZED.text) {
                         return dialog
