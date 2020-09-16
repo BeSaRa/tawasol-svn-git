@@ -106,7 +106,7 @@ module.exports = function (app) {
             "polygon",
             "document-editor",
             "approve",
-            "barcode",
+            // "barcode",
         ];
 
         self.generalStepElementView = generalStepElementView;
