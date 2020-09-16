@@ -1338,19 +1338,19 @@ module.exports = function (app) {
                 onPress: function () {
                     var currentPageIndex = annotation.pageIndex, boundingBox = annotation.boundingBox,
                         totalPages = self.currentInstance.totalPageCount, duplicated = [],
-                        customData = annotation.customData, updatedAnnotation = null, parentId = null;
+                        customData = angular.copy(annotation.customData) || {}, updatedAnnotation = null,
+                        parentId = uuidv4();
 
                     for (var i = 0; i < totalPages; i++) {
                         var id = uuidv4(), currentDuplicated = null;
-
                         if (i === currentPageIndex) {
-                            parentId = id;
                             continue;
                         }
-                        var customDuplicatedData = angular.extend({}, customData ? customData : {}, {
-                            id: customData && customData.id ? customData.id : id,
+                        var customDuplicatedData = {
+                            ...customData,
+                            id: id,
                             parentId: parentId
-                        });
+                        };
 
                         currentDuplicated = annotation
                             .set('id', null)
@@ -1358,19 +1358,18 @@ module.exports = function (app) {
                             .set('customData', customDuplicatedData)
                             .set('boundingBox', boundingBox);
 
-
                         duplicated.push(currentDuplicated);
-
                         self.currentInstance.createAnnotation(currentDuplicated);
                     }
 
-                    updatedAnnotation = annotation.set('customData', angular.extend(customData ? customData : {}, {
+                    updatedAnnotation = annotation.set('customData', {
+                        ...customData,
                         repeaterHandler: true,
                         id: parentId,
                         repeatedAnnotation: _.map(duplicated, function (item) {
                             return item.customData.id;
                         })
-                    }));
+                    });
                     self.currentInstance.updateAnnotation(updatedAnnotation);
 
                 }
@@ -1393,6 +1392,14 @@ module.exports = function (app) {
                             delete updatedCustomData.repeaterHandler;
                             delete updatedCustomData.repeatedAnnotation;
                             updatedAnnotation = annotation.set('customData', updatedCustomData);
+                            annotations.forEach(function (annotation) {
+                                var customAnnotationData = annotation.customData;
+                                if (customAnnotationData) {
+                                    delete customAnnotationData.parentId;
+                                }
+                                var updatedAnnotation = annotation.set('customData', customAnnotationData);
+                                self.currentInstance.updateAnnotation(updatedAnnotation);
+                            });
                             self.currentInstance.updateAnnotation(updatedAnnotation);
                         } else {
                             delete updatedCustomData.parentId;
