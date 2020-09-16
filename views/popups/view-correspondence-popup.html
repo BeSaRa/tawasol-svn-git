@@ -211,15 +211,18 @@
                         ng-src="{{ctrl.viewURL}}" flex
                         class="iframe-main-document"
                         frameborder="0"></iframe>
+
                 <pspdf-viewer-directive doc-url="ctrl.viewURL"
                                         ng-if="ctrl.displayMainPSPDFViewer()"
                                         id="pdfViewer" class="iframe-main-document" flex></pspdf-viewer-directive>
 
-                <iframe id="iframe-main-document" ng-if="(ctrl.correspondence && ctrl.editMode)"
+                <iframe id="iframe-main-document"
+                        ng-if="(ctrl.correspondence && ctrl.editMode) || (!ctrl.correspondence && ctrl.editMode)"
                         ng-src="{{ctrl.content.editURL}}" flex
                         class="iframe-main-document"
                         frameborder="0"></iframe>
-                <iframe id="iframe-main-document" ng-if="!ctrl.correspondence"
+
+                <iframe id="iframe-main-document" ng-if="(!ctrl.correspondence && !ctrl.editMode)"
                         ng-src="{{ctrl.viewURL}}" flex
                         class="iframe-main-document"
                         frameborder="0"></iframe>

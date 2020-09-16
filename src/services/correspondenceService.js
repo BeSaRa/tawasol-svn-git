@@ -1982,7 +1982,8 @@ module.exports = function (app) {
                 locals: {
                     correspondence: false,
                     content: information,
-                    popupNumber: generator.getPopupNumber()
+                    popupNumber: generator.getPopupNumber(),
+                    editMode: true
                 }
             });
         };

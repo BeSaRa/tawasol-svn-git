@@ -42,7 +42,6 @@ module.exports = function (app) {
 
         self.stickyActions = [];
 
-        self.editMode = false;
         self.info = null;
         self.editContentFrom = null;
 
