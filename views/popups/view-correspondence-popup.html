@@ -215,8 +215,12 @@
                                         ng-if="ctrl.displayMainPSPDFViewer()"
                                         id="pdfViewer" class="iframe-main-document" flex></pspdf-viewer-directive>
 
-                <iframe id="iframe-main-document" ng-if="!ctrl.correspondence || (ctrl.correspondence && ctrl.editMode)"
+                <iframe id="iframe-main-document" ng-if="(ctrl.correspondence && ctrl.editMode)"
                         ng-src="{{ctrl.content.editURL}}" flex
+                        class="iframe-main-document"
+                        frameborder="0"></iframe>
+                <iframe id="iframe-main-document" ng-if="!ctrl.correspondence"
+                        ng-src="{{ctrl.viewURL}}" flex
                         class="iframe-main-document"
                         frameborder="0"></iframe>
             </div>
