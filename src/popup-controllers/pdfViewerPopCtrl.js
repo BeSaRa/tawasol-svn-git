@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                  $element,
                                                  uuidv4,
                                                  PDFService,
+                                                 PDFViewer,
                                                  errorCode,
                                                  loadingIndicatorService,
                                                  configurationService,
@@ -76,6 +77,8 @@ module.exports = function (app) {
         self.disableSaveButton = false;
 
         self.unlinkInProgress = false;
+
+        self.savedPdfContent = null;
 
         console.log('correspondence', correspondence);
 
@@ -909,10 +912,19 @@ module.exports = function (app) {
                     .then(function () {
                         return self.correspondence.launchWorkFlow(null, 'forward', 'favorites')
                             .then(function () {
-                                dialog.hide('DOCUMENT_LAUNCHED_ALREADY')
+                                dialog.hide({
+                                    content: self.savedPdfContent,
+                                    action: PDFViewer.DOCUMENT_LAUNCHED_ALREADY
+                                });
                             })
                             .catch(self.handleExceptions);
-                    }).catch(dialog.hide);
+                    })
+                    .catch(function () {
+                        dialog.hide({
+                            content: self.savedPdfContent,
+                            action: PDFViewer.CANCEL_LAUNCH
+                        });
+                    });
             } else if (result === correspondenceService.authorizeStatus.SAME_USER_AUTHORIZED.text) {
                 dialog
                     .confirmMessage(langService.get('confirm_authorize_same_user').change({user: employeeService.getEmployee().getTranslatedName()}))
@@ -921,11 +933,13 @@ module.exports = function (app) {
                     });
             } else {
                 self.sendAnnotationLogs(function () {
-                    dialog.hide();
+                    dialog.hide({
+                        content: self.savedPdfContent,
+                        action: PDFViewer.JUST_AUTHORIZE
+                    });
                 }, function (error) {
                     console.log('error', error);
                 });
-
             }
         };
         /**
@@ -984,7 +998,11 @@ module.exports = function (app) {
                 .then(function () {
                     self.disableSaveButton = false;
                     toast.success(langService.get('save_success'));
-                    dialog.hide();
+                    dialog.hide({
+                        content: self.savedPdfContent,
+                        type: 'ATTACHMENT',
+                        action: PDFViewer.UPDATE_ATTACHMENT
+                    });
                 }).catch(self.handleExceptions);
         };
         /**
@@ -994,6 +1012,7 @@ module.exports = function (app) {
         self.handleOpenForApprovalSave = function (ignoreValidationSignature) {
             self.isDocumentHasCurrentUserSignature().then(function () {
                 self.getPDFContentForCurrentDocument().then(function (pdfContent) {
+                    self.savedPdfContent = pdfContent;
                     self.correspondence
                         .handlePinCodeAndCompositeThenCompleteAuthorization(pdfContent, ignoreValidationSignature)
                         .then(self.handleSuccessAuthorize)
@@ -1031,7 +1050,10 @@ module.exports = function (app) {
                 toast.success(langService.get('save_success'));
                 self.disableSaveButton = false;
                 self.sendAnnotationLogs();
-                dialog.hide(true);
+                dialog.hide({
+                    content: self.savedPdfContent,
+                    action: PDFViewer.UPDATE_DOCUMENT_CONTENT
+                });
             }).catch(self.handleExceptions);
         };
         /**
@@ -1043,8 +1065,9 @@ module.exports = function (app) {
                 toast.success(langService.get('save_success'));
                 self.disableSaveButton = false;
                 dialog.hide({
+                    content: self.savedPdfContent,
                     type: 'ATTACHMENT',
-                    attachment: attachment
+                    action: PDFViewer.ADD_ATTACHMENT
                 });
             }).catch(self.handleExceptions);
         };
@@ -1058,6 +1081,7 @@ module.exports = function (app) {
                 var hasMySignature = await self.isDocumentHasCurrentUserSignature().catch(result => result);
                 PDFService.applyAnnotationsOnPDFDocument(self.correspondence, AnnotationType.ANNOTATION, instantJSON, self.documentOperations, _getFlattenStatus(hasMySignature))
                     .then(function (pdfContent) {
+                        self.savedPdfContent = pdfContent;
                         self.skippedPdfObjectIds = self.skippedPdfObjectIds.concat(instantJSON.skippedPdfObjectIds);
                         if (self.correspondence instanceof Attachment) {
                             self.handleSaveAttachment(pdfContent);
@@ -1192,14 +1216,20 @@ module.exports = function (app) {
                     self.disableSaveButton = false;
                     toast.success(langService.get('launch_success_distribution_workflow'));
                     self.sendAnnotationLogs(function () {
-                        dialog.hide();
+                        dialog.hide({
+                            content: self.savedPdfContent,
+                            action: PDFViewer.SEQ_LAUNCHED
+                        });
                     }, function (error) {
                         toast.error('ERROR While Sending the log to Server', error);
                     });
                 } : function () {
                     self.disableSaveButton = false;
                     toast.success(langService.get('launch_success_distribution_workflow'));
-                    dialog.hide();
+                    dialog.hide({
+                        content: self.savedPdfContent,
+                        action: PDFViewer.SEQ_LAUNCHED
+                    });
                 });
         };
         /**

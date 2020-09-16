@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.controller('simpleOutgoingCtrl', function (Outgoing,
+                                                   PDFViewer,
                                                    $rootScope,
                                                    $state,
                                                    $stateParams,
@@ -339,11 +340,16 @@ module.exports = function (app) {
             self.saveCorrespondence(false, true).then(function () {
                 self.outgoing.openForAnnotation()
                     .then(function (result) {
-                        if (result !== 'DOCUMENT_LAUNCHED_ALREADY') {
+                        if (result && result.action && result.action === PDFViewer.ADD_ATTACHMENT) {
+                            self.outgoing.attachments.push(result.content);
                             self.outgoing.updateDocumentVersion();
-                            _launchAfterSave();
-                            if (result && result.hasOwnProperty('type') && result.type === 'ATTACHMENT') {
-                                self.outgoing.attachments.push(result.attachment);
+                        } else if (result && result.action && (result.action === PDFViewer.CANCEL_LAUNCH || result.action === PDFViewer.UPDATE_DOCUMENT_CONTENT)) {
+                            self.outgoing.updateDocumentVersion();
+                            if (self.outgoing.addMethod) {
+                                self.outgoing.contentFile = result.content;
+                            }
+                            if (result.action !== PDFViewer.CANCEL_LAUNCH) {
+                                _launchAfterSave();
                             }
                         } else {
                             self.resetAddCorrespondence();

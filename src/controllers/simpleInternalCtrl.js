@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.controller('simpleInternalCtrl', function (Internal,
+                                                   PDFViewer,
                                                    $rootScope,
                                                    // classifications,
                                                    $state,
@@ -267,11 +268,16 @@ module.exports = function (app) {
             self.saveCorrespondence(false, true).then(function () {
                 self.internal.openForAnnotation()
                     .then(function (result) {
-                        if (result !== 'DOCUMENT_LAUNCHED_ALREADY') {
+                        if (result && result.action && result.action === PDFViewer.ADD_ATTACHMENT) {
+                            self.internal.attachments.push(result.content);
                             self.internal.updateDocumentVersion();
-                            _launchAfterSave();
-                            if (result && result.hasOwnProperty('type') && result.type === 'ATTACHMENT') {
-                                self.internal.attachments.push(result.attachment);
+                        } else if (result && result.action && (result.action === PDFViewer.CANCEL_LAUNCH || result.action === PDFViewer.UPDATE_DOCUMENT_CONTENT)) {
+                            self.internal.updateDocumentVersion();
+                            if (self.internal.addMethod) {
+                                self.internal.contentFile = result.content;
+                            }
+                            if (result.action !== PDFViewer.CANCEL_LAUNCH) {
+                                _launchAfterSave();
                             }
                         } else {
                             self.resetAddCorrespondence();

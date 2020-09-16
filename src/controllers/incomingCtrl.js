@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.controller('incomingCtrl', function (Incoming,
+                                             PDFViewer,
                                              $rootScope,
                                              // classifications,
                                              $state,
@@ -299,9 +300,21 @@ module.exports = function (app) {
             self.saveCorrespondence(null, false, true)
                 .then(function () {
                     self.incoming.openForAnnotation()
-                        .then(function () {
-                            self.incoming.updateDocumentVersion();
-                            _launchAfterSave();
+                        .then(function (result) {
+                            if (result && result.action && result.action === PDFViewer.ADD_ATTACHMENT) {
+                                self.incoming.attachments.push(result.content);
+                                self.incoming.updateDocumentVersion();
+                            } else if (result && result.action && (result.action === PDFViewer.CANCEL_LAUNCH || result.action === PDFViewer.UPDATE_DOCUMENT_CONTENT)) {
+                                self.incoming.updateDocumentVersion();
+                                if (self.incoming.addMethod) {
+                                    self.incoming.contentFile = result.content;
+                                }
+                                if (result.action !== PDFViewer.CANCEL_LAUNCH) {
+                                    _launchAfterSave();
+                                }
+                            } else {
+                                self.resetAddCorrespondence();
+                            }
                         });
                 })
                 .catch(function (error) {
