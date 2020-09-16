@@ -978,6 +978,7 @@ module.exports = function (app) {
                 return ouApplicationUserService
                     .updateOUApplicationUser(ouApplicationUser)
                     .then(function () {
+                        self.applicationUser.outOfOffice = ouApplicationUser.applicationUser.outOfOffice;
 
                         if (employeeService.isCurrentOUApplicationUser(ouApplicationUser)) {
                             employeeService.setCurrentOUApplicationUser(ouApplicationUser);
