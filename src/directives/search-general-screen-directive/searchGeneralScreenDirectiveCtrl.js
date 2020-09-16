@@ -799,6 +799,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            name: gridService.grids.search.general,
             progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.search.general) || 5, // default limit
             page: 1, // first page
@@ -912,7 +913,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-
+            correspondence.recordGridName = gridService.grids.search.general;
             // run launch for any incoming document or other documents not in the inbox
             if (correspondence.hasDocumentClass('incoming') || correspondence.docStatus !== 22) {
                 promise = correspondence.launchWorkFlow($event, null, 'favorites');

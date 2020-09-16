@@ -1526,6 +1526,7 @@ module.exports = function (app) {
                     || correspondence.recordGridName === gridService.grids.internal.rejected
                     || correspondence.recordGridName === gridService.grids.outgoing.draft
                     || correspondence.recordGridName === gridService.grids.internal.draft
+                    || correspondence.recordGridName === gridService.grids.search.general
                 )) {
                 return false;
             }

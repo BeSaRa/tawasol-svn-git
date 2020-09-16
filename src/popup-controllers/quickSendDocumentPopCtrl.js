@@ -246,6 +246,7 @@ module.exports = function (app) {
                     || self.record.recordGridName === gridService.grids.internal.rejected
                     || self.record.recordGridName === gridService.grids.outgoing.draft
                     || self.record.recordGridName === gridService.grids.internal.draft
+                    || self.record.recordGridName === gridService.grids.search.general
                 )) {
                 return false;
             }

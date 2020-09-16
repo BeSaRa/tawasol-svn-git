@@ -73,6 +73,7 @@ module.exports = function (app) {
             delete model.dueDateStatusIndicator;
             delete model.docClassIndicator;
             delete model.cbrEnabled;
+            delete model.recordGridName;
 
             /*If Document has vsId(update document), we will not remove the content file.
             If document don't has vsId(new document), we will remove the content file, so it doesn't affect the save request model */

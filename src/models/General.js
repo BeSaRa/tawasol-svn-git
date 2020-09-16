@@ -51,6 +51,9 @@ module.exports = function (app) {
             General.prototype.getExportedData = function () {
                 return exportData;
             };
+            General.prototype.isCompositeSites = function () {
+                return false; // general model doesn't contain isComposite property
+            };
 
             General.prototype.launchWorkFlowAndCheckApprovedInternal = function ($event, action, tab) {
                 correspondenceService = this.getCorrespondenceService();
