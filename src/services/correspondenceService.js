@@ -1970,9 +1970,10 @@ module.exports = function (app) {
         /**
          * to use it just inside edit after approved.
          * @param information
+         * @param justView
          * @returns {promise|*}
          */
-        self.openCorrespondenceEditor = function (information) {
+        self.openCorrespondenceEditor = function (information , justView) {
             return dialog.showDialog({
                 templateUrl: cmsTemplate.getPopup('view-correspondence'),
                 controller: 'viewCorrespondencePopCtrl',
@@ -1983,7 +1984,7 @@ module.exports = function (app) {
                     correspondence: false,
                     content: information,
                     popupNumber: generator.getPopupNumber(),
-                    editMode: true
+                    editMode: !justView
                 }
             });
         };

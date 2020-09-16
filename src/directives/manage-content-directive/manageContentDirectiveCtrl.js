@@ -365,7 +365,7 @@ module.exports = function (app) {
             self.trusted = true;
 
             if (justView) {
-                return self.editInOfficeOnlineAfterApprove();
+                return self.editInOfficeOnlineAfterApprove(justView);
             }
 
             if (employeeService.getEmployee().defaultEditMode === correspondenceService.documentEditModes.desktop) {
@@ -440,9 +440,9 @@ module.exports = function (app) {
                 });
         };
 
-        self.editInOfficeOnlineAfterApprove = function () {
+        self.editInOfficeOnlineAfterApprove = function (justView) {
             return correspondenceService
-                .openCorrespondenceEditor(self.documentInformation)
+                .openCorrespondenceEditor(self.documentInformation , justView)
                 .then(function (information) {
                     self.documentInformation = information;
                 });
