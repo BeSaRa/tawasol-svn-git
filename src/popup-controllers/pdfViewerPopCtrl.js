@@ -108,9 +108,12 @@ module.exports = function (app) {
 
         self.generalStepElementView = generalStepElementView;
 
-        function _getFlattenStatus() {
-            console.log('Document flatten Flag', !!(self.sequentialWF && self.sequentialWF.getLastStepId() === self.nextSeqStep.id));
-            return !!(self.sequentialWF && self.sequentialWF.getLastStepId() === self.nextSeqStep.id) || (self.info && !self.info.isAttachment && !self.info.isPaper && self.info.signaturesCount === 1);
+        function _getFlattenStatus(hasMySignature) {
+            if (typeof hasMySignature === 'undefined') {
+                return !!(self.sequentialWF && self.sequentialWF.getLastStepId() === self.nextSeqStep.id) || (self.info && !self.info.isAttachment && !self.info.isPaper && self.info.signaturesCount === 1);
+            } else {
+                return !!(self.sequentialWF && self.sequentialWF.getLastStepId() === self.nextSeqStep.id) || (self.info && !self.info.isAttachment && !self.info.isPaper && self.info.signaturesCount === 1 && hasMySignature);
+            }
         }
 
         /**
@@ -1049,10 +1052,11 @@ module.exports = function (app) {
          * @description handle none signature save part
          */
         self.handleSaveNoneSignaturePart = function (ignoreValidationSignature) {
-            self.currentInstance.exportInstantJSON().then(function (instantJSON) {
+            self.currentInstance.exportInstantJSON().then(async function (instantJSON) {
                 delete instantJSON.pdfId;
                 instantJSON.skippedPdfObjectIds = _.difference(instantJSON.skippedPdfObjectIds, self.skippedPdfObjectIds);
-                PDFService.applyAnnotationsOnPDFDocument(self.correspondence, AnnotationType.ANNOTATION, instantJSON, self.documentOperations, _getFlattenStatus())
+                var hasMySignature = await self.isDocumentHasCurrentUserSignature().catch(result => result);
+                PDFService.applyAnnotationsOnPDFDocument(self.correspondence, AnnotationType.ANNOTATION, instantJSON, self.documentOperations, _getFlattenStatus(hasMySignature))
                     .then(function (pdfContent) {
                         self.skippedPdfObjectIds = self.skippedPdfObjectIds.concat(instantJSON.skippedPdfObjectIds);
                         if (self.correspondence instanceof Attachment) {
@@ -1061,15 +1065,13 @@ module.exports = function (app) {
                             if (self.info.isPaper) {
                                 self.info.docStatus === 25 ? self.handleSaveAnnotationAsAttachment(pdfContent) : self.handleUpdateDocumentContent(pdfContent);
                             } else if (_isElectronicAndAuthorizeByAnnotationBefore()) {
-                                self.isDocumentHasCurrentUserSignature()
-                                    .then(function () {
-                                        self.correspondence.handlePinCodeAndCompositeThenCompleteAuthorization(pdfContent, ignoreValidationSignature)
-                                            .then(self.handleSuccessAuthorize)
-                                            .catch(self.handleExceptions);
-                                    })
-                                    .catch(function () {
-                                        self.handleUpdateDocumentContent(pdfContent);
-                                    });
+                                if (hasMySignature) {
+                                    self.correspondence.handlePinCodeAndCompositeThenCompleteAuthorization(pdfContent, ignoreValidationSignature)
+                                        .then(self.handleSuccessAuthorize)
+                                        .catch(self.handleExceptions);
+                                } else {
+                                    self.handleUpdateDocumentContent(pdfContent);
+                                }
                             } else {
                                 // for electronic document in ready to export
                                 self.info.docStatus === 24 && self.info.documentClass === 'outgoing' ? self.handleUpdateDocumentContent(pdfContent, AnnotationType.STAMP) : self.handleSaveAnnotationAsAttachment(pdfContent);
