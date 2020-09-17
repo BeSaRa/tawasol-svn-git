@@ -20,7 +20,8 @@ module.exports = function (app) {
             FOLLOWUP_BOOK_FILTER_START_BEFORE_VALUE: 30,
             ANNOTATE_DOCUMENT_PERMISSION: '',
             APP_CONTEXT: 'ui',
-            PSPDF_LICENSE_KEY : false
+            PSPDF_LICENSE_KEY: false,
+            REPLICATION_EXCLUDED_LIST: ['Note', 'Highlight', 'Squiggle', 'StrikeOut', 'Underline', 'Redaction']
         };
         var configurationServiceProvider = provider;
         /**

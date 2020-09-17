@@ -84,9 +84,7 @@ module.exports = function (app) {
 
         self.isStampEnabled = rootEntity.getGlobalSettings().stampModuleEnabled;
 
-        self.excludedRepeatedAnnotations = [
-            'Note'
-        ];
+        self.excludedRepeatedAnnotations = configurationService.REPLICATION_EXCLUDED_LIST;
 
         self.readyToExportExcludedAnnotationList = [
             "annotate",
@@ -739,7 +737,9 @@ module.exports = function (app) {
             var eventListenerList = [
                 PSPDFKit.AnnotationsWillChangeReason.DELETE_END,
                 PSPDFKit.AnnotationsWillChangeReason.MOVE_END,
-                PSPDFKit.AnnotationsWillChangeReason.RESIZE_END
+                PSPDFKit.AnnotationsWillChangeReason.RESIZE_END,
+                PSPDFKit.AnnotationsWillChangeReason.PROPERTY_CHANGE,
+                PSPDFKit.AnnotationsWillChangeReason.TEXT_EDIT_END,
             ];
             if (eventListenerList.indexOf(event.reason) !== -1 && annotation.customData && annotation.customData.repeaterHandler && annotation.customData.repeatedAnnotation) {
                 self.getDocumentAnnotations().then(function (annotations) {
@@ -759,6 +759,13 @@ module.exports = function (app) {
                                 annotationItem = annotationItem
                                     .set('lines', annotation.lines)
                                     .set('lineWidth', annotation.lineWidth);
+                            }
+
+                            if (annotationItem instanceof PSPDFKit.Annotations.TextAnnotation) {
+                                annotationItem = annotationItem.set('font', annotation.font)
+                                    .set('fontColor', annotation.fontColor)
+                                    .set('fontSize', annotation.fontSize)
+                                    .set('text', annotation.text)
                             }
                             return self.currentInstance.updateAnnotation(annotationItem);
                         }
@@ -1293,7 +1300,7 @@ module.exports = function (app) {
             if (annotation instanceof PSPDFKit.Annotations.InkAnnotation && annotation.isSignature && annotation.creatorName !== employee.domainName) {
                 returnValue = false;
                 // for image signature
-            } else if (annotation instanceof PSPDFKit.Annotations.ImageAnnotation && annotation.customData && annotation.customData.additionalData.type === AnnotationType.SIGNATURE && annotation.creatorName !== employee.domainName) {
+            } else if (annotation instanceof PSPDFKit.Annotations.ImageAnnotation && annotation.customData && annotation.customData.additionalData && annotation.customData.additionalData.type === AnnotationType.SIGNATURE && annotation.creatorName !== employee.domainName) {
                 returnValue = false;
             }
             return returnValue;
