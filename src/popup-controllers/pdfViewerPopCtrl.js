@@ -300,6 +300,8 @@ module.exports = function (app) {
                 toolbarInstance = toolbarInstance.filter(item => item.type !== 'document-editor');
             }
 
+            toolbarInstance = toolbarInstance.filter(item => item.type !== 'ink-eraser');
+
             return toolbarInstance;
         }
 
@@ -819,6 +821,7 @@ module.exports = function (app) {
          */
         self.handleCreateAnnotations = function (annotations) {
             var annotation = annotations.first();
+            console.log('annotation', annotation);
             if (annotation instanceof PSPDFKit.Annotations.InkAnnotation && annotation.isSignature && !annotation.customData) {
                 self.latestInkAnnotation = annotation;
             }
