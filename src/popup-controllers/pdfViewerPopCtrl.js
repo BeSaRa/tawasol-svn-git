@@ -769,6 +769,22 @@ module.exports = function (app) {
                                     .set('fontSize', annotation.fontSize)
                                     .set('text', annotation.text)
                             }
+
+                            if (annotationItem instanceof PSPDFKit.Annotations.LineAnnotation) {
+                                annotationItem = annotationItem.set('endPoint', annotation.endPoint)
+                                    .set('startPoint', annotation.startPoint)
+                                    .set('strokeColor', annotation.strokeColor)
+                                    .set('strokeWidth', annotation.strokeWidth)
+                                    .set('strokeDashArray', annotation.strokeDashArray)
+                                    .set('lineCaps', annotation.lineCaps);
+                            }
+
+                            if (annotationItem instanceof PSPDFKit.Annotations.PolylineAnnotation || annotationItem instanceof PSPDFKit.Annotations.PolygonAnnotation) {
+                                annotationItem = annotationItem.set('points', annotation.points)
+                                    .set('strokeColor', annotation.strokeColor)
+                                    .set('strokeDashArray', annotation.strokeDashArray);
+                            }
+
                             return self.currentInstance.updateAnnotation(annotationItem);
                         }
                     });
@@ -858,6 +874,7 @@ module.exports = function (app) {
             if (event.reason === reason &&
                 annotation instanceof PSPDFKit.Annotations.ImageAnnotation &&
                 annotation.customData &&
+                annotation.customData.additionalData &&
                 annotation.customData.additionalData.type === AnnotationType.SIGNATURE &&
                 !!(annotation.pdfObjectId)
             ) {
@@ -1371,16 +1388,17 @@ module.exports = function (app) {
                         duplicated.push(currentDuplicated);
                         self.currentInstance.createAnnotation(currentDuplicated);
                     }
-
-                    updatedAnnotation = annotation.set('customData', {
-                        ...customData,
-                        repeaterHandler: true,
-                        id: parentId,
-                        repeatedAnnotation: _.map(duplicated, function (item) {
-                            return item.customData.id;
-                        })
+                    $q.all(duplicated).then(function () {
+                        updatedAnnotation = annotation.set('customData', {
+                            ...customData,
+                            repeaterHandler: true,
+                            id: parentId,
+                            repeatedAnnotation: _.map(duplicated, function (item) {
+                                return item.customData.id;
+                            })
+                        });
+                        self.currentInstance.updateAnnotation(updatedAnnotation);
                     });
-                    self.currentInstance.updateAnnotation(updatedAnnotation);
 
                 }
             }, unlinkButton = {
@@ -1395,7 +1413,7 @@ module.exports = function (app) {
                     }
 
                     var updatedAnnotation = null, customData = angular.extend(annotation.customData),
-                        updatedCustomData = angular.copy(customData);
+                        updatedCustomData = angular.copy(customData), updatedAnnotationsList = [];
                     self.unlinkInProgress = true;
                     self.getDocumentAnnotations().then(function (annotations) {
                         if (_isRepeaterRoot(annotation)) {
@@ -1408,14 +1426,16 @@ module.exports = function (app) {
                                     delete customAnnotationData.parentId;
                                 }
                                 var updatedAnnotation = annotation.set('customData', customAnnotationData);
+                                updatedAnnotationsList.push(self.currentInstance.updateAnnotation(updatedAnnotation));
+                            });
+                            $q.all(updatedAnnotationsList).then(function () {
                                 self.currentInstance.updateAnnotation(updatedAnnotation);
                             });
-                            self.currentInstance.updateAnnotation(updatedAnnotation);
                         } else {
-                            delete updatedCustomData.parentId;
                             var parentAnnotation = _.find(annotations, function (annotation) {
                                 return annotation.customData && annotation.customData.id === customData.parentId;
                             });
+                            delete updatedCustomData.parentId;
                             parentAnnotation.customData.repeatedAnnotation.splice(parentAnnotation.customData.repeatedAnnotation.indexOf(annotation.customData.id), 1);
                             if (!parentAnnotation.customData.repeatedAnnotation.length) {
                                 delete parentAnnotation.customData.repeaterHandler;
@@ -1423,7 +1443,7 @@ module.exports = function (app) {
                             }
                             updatedAnnotation = annotation.set('customData', updatedCustomData);
                             self.currentInstance.updateAnnotation(updatedAnnotation);
-                            self.currentInstance.updateAnnotation(parentAnnotationUpdate);
+                            self.currentInstance.updateAnnotation(parentAnnotation);
                         }
                         self.unlinkInProgress = false;
                     });
