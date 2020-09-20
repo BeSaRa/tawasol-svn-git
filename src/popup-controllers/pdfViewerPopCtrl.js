@@ -837,7 +837,6 @@ module.exports = function (app) {
          */
         self.handleCreateAnnotations = function (annotations) {
             var annotation = annotations.first();
-            console.log('annotation', annotation);
             if (annotation instanceof PSPDFKit.Annotations.InkAnnotation && annotation.isSignature && !annotation.customData) {
                 self.latestInkAnnotation = annotation;
             }
