@@ -59,6 +59,11 @@ module.exports = function (app) {
 
         self.viewURL = '';
 
+
+        self.isOfficeOnlineViewer = function (url) {
+            return url && url.$$unwrapTrustedValue().indexOf('.aspx') !== -1;
+        };
+
         var _getMainDocContentByVsId = function (vsId) {
             vsId = vsId || self.info.vsId;
             downloadService.getMainDocumentContentAsPDF(vsId)
@@ -109,7 +114,7 @@ module.exports = function (app) {
                 if (self.slowConnectionEnabled) {
                     _getMainDocContentByViewUrl();
                 } else {
-                    _getOriginalMainDocContent();
+                    self.isOfficeOnlineViewer(self.content.viewURL) ? _getOriginalMainDocContent() : _getMainDocContentByViewUrl();
                 }
             }
         }
@@ -124,10 +129,6 @@ module.exports = function (app) {
         self.isShowSlowConnectionVisible = function () {
             return rootEntity.getGlobalSettings().isSlowConnectionMode() && !employeeService.getEmployee().isSlowConnectionMode() &&
                 employeeService.hasPermissionTo('DOWNLOAD_MAIN_DOCUMENT') && employeeService.hasPermissionTo('PRINT_DOCUMENT') && self.correspondence && !self.hideSlowModeToggleButton;
-        };
-
-        self.isOfficeOnlineViewer = function (url) {
-            return url && url.$$unwrapTrustedValue().indexOf('.aspx') !== -1;
         };
 
         self.isTheMainDocumentInView = function () {
