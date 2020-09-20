@@ -576,10 +576,10 @@ module.exports = function (app) {
                      * @description add stamp and close the Stamps dialog.
                      */
                     ctrl.addStamp = function () {
-                        if (self.inprogress) {
+                        if (ctrl.inprogress) {
                             return;
                         }
-                        self.inprogress = true;
+                        ctrl.inprogress = true;
                         self.addStampAnnotationToPDF(ctrl.selectedStamp.contentElementUrl, ctrl.repeatOption)
                             .then(function () {
                                 dialog.hide();
