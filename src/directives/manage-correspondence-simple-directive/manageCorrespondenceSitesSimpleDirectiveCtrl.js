@@ -179,10 +179,14 @@ module.exports = function (app) {
                             self.subSites.push(_subSite);
                         }
                         self.selectedSubSite = _subSite;
-                        self.changeSubCorrespondence(self.selectedSubSite);
+                        if (self.simpleSearch) {
+                            self.changeSubCorrespondence(self.selectedSubSite);
+                        } else {
+                            self.subSiteChanged();
+                        }
+                        self.correspondence.sitesToList = oldSites;
                     });
 
-                    self.correspondence.sitesToList = oldSites;
                 });
             }
         });
@@ -285,6 +289,11 @@ module.exports = function (app) {
             if (!ignoreEmptySelectedMain) {
                 self.selectedMainSite = null;
             }
+            self.mainSites = [];
+            self.mainSitesCopy = angular.copy(self.mainSites);
+            self.subSites = [];
+            self.subSitesCopy = angular.copy(self.subSites);
+            self.subSiteSearchText = '';
             self.selectedSubSite = null;
 
             if (self.selectedSiteType) {
@@ -295,22 +304,17 @@ module.exports = function (app) {
                 }).then(function (result) {
                     self.mainSites = result;
                     self.mainSitesCopy = angular.copy(self.mainSites);
-                    self.subSites = [];
-                    self.subSitesCopy = [];
                     //load sub sites if create reply
-                    if ($stateParams.action === 'reply') {
+                    /*if ($stateParams.action === 'reply') {
                         self.getSubSites(true);
-                    }
+                    }*/
 
-                    _selectDefaultMainSiteAndGetSubSites();
+                    if ($stateParams.action !== 'reply') {
+                        _selectDefaultMainSiteAndGetSubSites();
+                    }
                     return self.mainSites;
                 });
             } else {
-                self.mainSites = [];
-                self.mainSitesCopy = angular.copy(self.mainSites);
-                self.subSites = [];
-                self.subSitesCopy = angular.copy(self.subSites);
-                self.subSiteSearchText = '';
                 return $q.when(true);
             }
         };
@@ -322,11 +326,13 @@ module.exports = function (app) {
         self.getSubSites = function ($event) {
             if (!$event)
                 return;
+
+            self.subSites = [];
+            self.subSitesCopy = [];
+            self.selectedSubSite = null;
+            self.subSiteSearchText = '';
+
             if (!self.selectedMainSite || typeof self.selectedMainSite === 'string') {
-                self.subSites = [];
-                self.subSitesCopy = [];
-                self.selectedSubSite = null;
-                self.subSiteSearchText = '';
                 return;
             }
             return correspondenceViewService.correspondenceSiteSearch('sub', {
@@ -337,7 +343,8 @@ module.exports = function (app) {
             }).then(function (result) {
 
                 self.subSitesCopy = angular.copy(_.map(result, _mapSubSites));
-                self.subSites = _.filter(_.map(result, _mapSubSites), _filterSubSites);
+                self.subSites = angular.copy(self.subSitesCopy);
+                //self.subSites = _.filter(_.map(result, _mapSubSites), _filterSubSites);
                 self.selectedSubSite = null;
 
                 if (self.subSites.length === 1) {
