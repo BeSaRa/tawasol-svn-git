@@ -2320,7 +2320,7 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: function (action, model) {
                             var info = model.getInfo(), isAllowed = true;
-                            if (model.hasActiveSeqWF()) {
+                            if (model.hasActiveSeqWF() && model.isCorrespondenceApprovedBefore()) {
                                 return false;
                             }
                             // if already approved once and not allowed to edit partial approved in global settings, return false
@@ -2370,7 +2370,7 @@ module.exports = function (app) {
                         showInView: false,
                         checkShow: function (action, model) {
                             var info = model.getInfo(), isAllowed = true;
-                            if (model.hasActiveSeqWF()) {
+                            if (model.hasActiveSeqWF() && model.isCorrespondenceApprovedBefore()) {
                                 return false;
                             }
                             if (model.isCorrespondenceApprovedBefore()) {
