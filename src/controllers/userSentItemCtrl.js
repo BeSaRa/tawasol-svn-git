@@ -722,16 +722,7 @@ module.exports = function (app) {
                         permissionKey: 'VIEW_DOCUMENT',
                         showInView: false,
                         checkShow: function (action, model) {
-                            var info = model.getInfo(), isAllowed = true;
-                            if (model.hasActiveSeqWF()) {
-                                return false;
-                            }
-                            if (model.isCorrespondenceApprovedBefore()) {
-                                isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
-                            }
-                            if (!isAllowed) {
-                                return false;
-                            }
+                            var info = model.getInfo();
                             return info.needToApprove();
                         }
                     }

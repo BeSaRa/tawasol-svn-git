@@ -272,7 +272,11 @@ module.exports = function (app) {
             if (typeof permissionName === 'function') {
                 permissionName = permissionName(self.info.isPaper);
             }
-            return self.employeeService.hasPermissionTo(permissionName) && self.pageName !== 'g2gReturned';
+            return self.employeeService.hasPermissionTo(permissionName)
+                && self.pageName !== 'g2gReturned'
+                && !self.correspondence.viewVersion
+                && !self.correspondence.hasActiveSeqWF()
+                && self.info.needToApprove();
         };
 
         self.isEditContentDisabled = function () {
