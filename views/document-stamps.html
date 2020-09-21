@@ -6,6 +6,7 @@
             <span>{{lang.menu_item_document_stamps}}</span>
             <md-button ng-click="ctrl.openAddDocumentStampDialog($event)"
                        class="md-icon-button"
+                       ng-if="ctrl.isAllowAdd()"
                        tooltip="{{lang.add}}">
                 <md-icon md-svg-icon="plus"></md-icon>
             </md-button>

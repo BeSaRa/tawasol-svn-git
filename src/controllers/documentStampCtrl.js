@@ -236,6 +236,10 @@ module.exports = function (app) {
             return true;
         };
 
+        self.isAllowAdd = function () {
+            return employeeService.isSuperAdminUser() || employeeService.isSubAdminInCurrentOu();
+        };
+
         /**
          * @description Clears the searchText for the given field
          * @param fieldType
