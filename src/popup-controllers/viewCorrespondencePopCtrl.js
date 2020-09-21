@@ -127,8 +127,10 @@ module.exports = function (app) {
          * @returns {*|boolean}
          */
         self.isShowSlowConnectionVisible = function () {
-            return rootEntity.getGlobalSettings().isSlowConnectionMode() && !employeeService.getEmployee().isSlowConnectionMode() &&
-                employeeService.hasPermissionTo('DOWNLOAD_MAIN_DOCUMENT') && employeeService.hasPermissionTo('PRINT_DOCUMENT') && self.correspondence && !self.hideSlowModeToggleButton;
+            return rootEntity.getGlobalSettings() && rootEntity.getGlobalSettings().isSlowConnectionMode()
+                && !employeeService.getEmployee().isSlowConnectionMode()
+                && employeeService.hasPermissionTo('DOWNLOAD_MAIN_DOCUMENT') && employeeService.hasPermissionTo('PRINT_DOCUMENT')
+                && self.correspondence && !self.hideSlowModeToggleButton;
         };
 
         self.isTheMainDocumentInView = function () {

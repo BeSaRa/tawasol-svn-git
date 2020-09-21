@@ -33,8 +33,10 @@ module.exports = function (app) {
             if (self.typeOfDoc === 'otp-doc') {
                 return false;
             }
-            return rootEntity.getGlobalSettings().isSlowConnectionMode() && !employeeService.getEmployee().isSlowConnectionMode() &&
-                employeeService.hasPermissionTo('DOWNLOAD_MAIN_DOCUMENT') && employeeService.hasPermissionTo('PRINT_DOCUMENT') && !self.hideSlowModeToggleButton;
+            return rootEntity.getGlobalSettings() && rootEntity.getGlobalSettings().isSlowConnectionMode()
+                && !employeeService.getEmployee().isSlowConnectionMode()
+                && employeeService.hasPermissionTo('DOWNLOAD_MAIN_DOCUMENT') && employeeService.hasPermissionTo('PRINT_DOCUMENT')
+                && !self.hideSlowModeToggleButton;
         };
 
         var _getOriginalMainDocContent = function () {
