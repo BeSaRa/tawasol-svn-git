@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('approvedInternalCtrl', function (lookupService,
                                                      approvedInternalService,
                                                      approvedInternals,
+                                                     configurationService,
                                                      counterService,
                                                      correspondenceStorageService,
                                                      $q,
@@ -219,6 +220,25 @@ module.exports = function (app) {
         };
 
         /**
+         * @description annotate document
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.annotateDocument = function (workItem, $event, defer) {
+            workItem.openForAnnotation()
+                .then(function () {
+                    self.reloadApprovedInternals(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
+                })
+                .catch(function () {
+                    self.reloadApprovedInternals(self.grid.page)
+                });
+        };
+
+        /**
          * @description add an item to the favorite documents
          * @param approvedInternal
          * @param $event
@@ -268,7 +288,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                 return;
             }
-          //  console.log('getApprovedInternalLink', approvedInternal);
+            //  console.log('getApprovedInternalLink', approvedInternal);
         };
 
         /**
@@ -371,7 +391,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                 return;
             }
-          //  console.log('viewApprovedInternalDirectLinkedDocuments : ', approvedInternal);
+            //  console.log('viewApprovedInternalDirectLinkedDocuments : ', approvedInternal);
         };
 
         /**
@@ -384,7 +404,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                 return;
             }
-          //  console.log('viewApprovedInternalCompleteLinkedDocuments : ', approvedInternal);
+            //  console.log('viewApprovedInternalCompleteLinkedDocuments : ', approvedInternal);
         };
 
         /**
@@ -397,7 +417,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                 return;
             }
-           // console.log('sendApprovedInternalLinkToDocumentByEmail : ', approvedInternal);
+            // console.log('sendApprovedInternalLinkToDocumentByEmail : ', approvedInternal);
         };
 
         /**
@@ -410,7 +430,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                 return;
             }
-          //  console.log('sendApprovedInternalCompositeDocumentAsAttachment : ', approvedInternal);
+            //  console.log('sendApprovedInternalCompositeDocumentAsAttachment : ', approvedInternal);
         };
 
         /**
@@ -423,7 +443,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                 return;
             }
-         //   console.log('sendApprovedInternalCompositeDocumentAsAttachmentByEmail : ', approvedInternal);
+            //   console.log('sendApprovedInternalCompositeDocumentAsAttachmentByEmail : ', approvedInternal);
         };
 
         /**
@@ -436,7 +456,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                 return;
             }
-          //  console.log('sendApprovedInternalMainDocumentFax : ', approvedInternal);
+            //  console.log('sendApprovedInternalMainDocumentFax : ', approvedInternal);
         };
 
         /**
@@ -466,7 +486,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                 return;
             }
-          //  console.log('sendApprovedInternalMainDocumentAsAttachment : ', approvedInternal);
+            //  console.log('sendApprovedInternalMainDocumentAsAttachment : ', approvedInternal);
         };
 
         /**
@@ -479,7 +499,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                 return;
             }
-          //  console.log('sendApprovedInternalLink : ', approvedInternal);
+            //  console.log('sendApprovedInternalLink : ', approvedInternal);
         };
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
             /*var isEditAllowed = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
@@ -887,6 +907,20 @@ module.exports = function (app) {
                 },
                 checkShow: function (action, model) {
                     return true;
+                }
+            },
+            // Annotate Document
+            {
+                type: 'action',
+                icon: 'draw',
+                text: 'grid_action_annotate_document',
+                shortcut: true,
+                callback: self.annotateDocument,
+                class: "action-green",
+                sticky: true,
+                stickyIndex: 1,
+                checkShow: function (action, model) {
+                    return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION) && !model.isTerminatedSEQ();
                 }
             },
             // Add To

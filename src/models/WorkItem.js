@@ -1250,6 +1250,8 @@ module.exports = function (app) {
                         return employeeService.hasPermissionTo('EDIT_INTERNAL_CONTENT');
                     } else if (info.docStatus === 24 && info.documentClass === 'outgoing') {
                         return employeeService.hasPermissionTo('EDIT_OUTGOING_CONTENT');
+                    } else if (info.docStatus === 24 && info.documentClass === 'internal') {
+                        return employeeService.hasPermissionTo('EDIT_INTERNAL_CONTENT');
                     } else {
                         return employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')
                     }

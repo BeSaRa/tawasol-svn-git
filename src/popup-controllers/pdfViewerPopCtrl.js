@@ -1123,8 +1123,8 @@ module.exports = function (app) {
                                     self.handleUpdateDocumentContent(pdfContent);
                                 }
                             } else {
-                                // for electronic document in ready to export
-                                self.info.docStatus === 24 && self.info.documentClass === 'outgoing' ? self.handleUpdateDocumentContent(pdfContent, AnnotationType.STAMP) : self.handleSaveAnnotationAsAttachment(pdfContent);
+                                // for electronic document in ready to export or internal in approved queue.
+                                (self.info.docStatus === 24 && (self.info.documentClass === 'outgoing' || self.info.documentClass === 'internal')) ? self.handleUpdateDocumentContent(pdfContent, AnnotationType.STAMP) : self.handleSaveAnnotationAsAttachment(pdfContent);
                             }
                         }
                     });

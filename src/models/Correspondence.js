@@ -1148,8 +1148,10 @@ module.exports = function (app) {
             Correspondence.prototype.userCanAnnotate = function () {
                 var info = this.getInfo();
                 if (!info.isPaper || info.docStatus === 25) {
-                    if (info.documentClass === 'outgoing' && info.docStatus === 24) {
+                    if ((info.documentClass === 'outgoing' && info.docStatus === 24)) {
                         return employeeService.hasPermissionTo('EDIT_OUTGOING_CONTENT');
+                    } else if (info.documentClass === 'internal' && info.docStatus === 24) {
+                        return employeeService.hasPermissionTo('EDIT_INTERNAL_CONTENT');
                     } else {
                         return employeeService.hasPermissionTo('MANAGE_ATTACHMENTS');
                     }
