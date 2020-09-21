@@ -442,7 +442,7 @@ module.exports = function (app) {
 
         self.editInOfficeOnlineAfterApprove = function (justView) {
             return correspondenceService
-                .openCorrespondenceEditor(self.documentInformation , justView)
+                .openCorrespondenceEditor(self.documentInformation, justView)
                 .then(function (information) {
                     self.documentInformation = information;
                 });
@@ -520,6 +520,11 @@ module.exports = function (app) {
                     self.templateOrFileName = self.document.getTranslatedName();
                     return self.simpleViewUrl;
                 });
+        };
+
+        self.$onInit = function () {
+            console.log('self.editContent && !self.receiveDocument && self.documentInformation && !self.document.addMethod');
+            console.log(self.editContent, !self.receiveDocument, self.documentInformation, !self.document.addMethod);
         }
     });
 };
