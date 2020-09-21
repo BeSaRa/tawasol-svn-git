@@ -304,6 +304,7 @@ module.exports = function (app) {
                             if (result && result.action && result.action === PDFViewer.ADD_ATTACHMENT) {
                                 self.incoming.attachments.push(result.content);
                                 self.incoming.updateDocumentVersion();
+                                _launchAfterSave();
                             } else if (result && result.action && (result.action === PDFViewer.CANCEL_LAUNCH || result.action === PDFViewer.UPDATE_DOCUMENT_CONTENT)) {
                                 self.incoming.updateDocumentVersion();
                                 if (self.incoming.addMethod) {

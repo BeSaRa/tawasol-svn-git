@@ -290,7 +290,7 @@ module.exports = function (app) {
                 toolbarInstance.push(openForApprovalButton);
             }
 
-            if (self.info.docStatus === 24 && self.info.documentClass === 'outgoing') {
+            if (self.info.docStatus === 24 && (self.info.documentClass === 'outgoing' || self.info.documentClass === 'internal')) {
                 toolbarInstance = toolbarInstance.filter(item => {
                     return item.type === 'custom' ? !_itemInExcludedList(item.id) : !_itemInExcludedList(item.type);
                 });

@@ -190,7 +190,7 @@ module.exports = function (app) {
                 return this.seqWFId;
             };
 
-            Correspondence.prototype.getSeqWFNextStepId = function(){
+            Correspondence.prototype.getSeqWFNextStepId = function () {
                 return this.seqWFNextStepId;
             };
 
@@ -1147,8 +1147,12 @@ module.exports = function (app) {
 
             Correspondence.prototype.userCanAnnotate = function () {
                 var info = this.getInfo();
-                if (!info.isPaper) {
-                    return employeeService.hasPermissionTo('MANAGE_ATTACHMENTS');
+                if (!info.isPaper || info.docStatus === 25) {
+                    if (info.documentClass === 'outgoing' && info.docStatus === 24) {
+                        return employeeService.hasPermissionTo('EDIT_OUTGOING_CONTENT');
+                    } else {
+                        return employeeService.hasPermissionTo('MANAGE_ATTACHMENTS');
+                    }
                 } else if (info.isPaper && info.documentClass === 'outgoing') {
                     return employeeService.hasPermissionTo('EDIT_OUTGOING_PAPER');
                 } else if (info.isPaper && info.documentClass === 'internal') {
