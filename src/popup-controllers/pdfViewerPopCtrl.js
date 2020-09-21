@@ -296,7 +296,7 @@ module.exports = function (app) {
                 });
             }
 
-            if (_isElectronicAndAuthorizeByAnnotationBefore() && !rootEntity.getGlobalSettings().allowEditAfterFirstApprove) {
+            if ((_isElectronicAndAuthorizeByAnnotationBefore() && !rootEntity.getGlobalSettings().allowEditAfterFirstApprove) || self.annotationType === AnnotationType.SIGNATURE) {
                 toolbarInstance = toolbarInstance.filter(item => item.type !== 'document-editor');
             }
 
