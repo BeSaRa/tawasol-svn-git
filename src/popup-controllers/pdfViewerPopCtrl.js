@@ -959,6 +959,7 @@ module.exports = function (app) {
                     });
             } else {
                 self.sendAnnotationLogs(function () {
+                    toast.success(langService.get('sign_specific_success').change({name: self.correspondence.getTranslatedName()}));
                     dialog.hide({
                         content: self.savedPdfContent,
                         action: PDFViewer.JUST_AUTHORIZE
