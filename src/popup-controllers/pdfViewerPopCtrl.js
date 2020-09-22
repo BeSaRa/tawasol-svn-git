@@ -351,8 +351,7 @@ module.exports = function (app) {
         }
 
         function _getRightTypeForElectronicSignature() {
-            return AnnotationType.SIGNATURE;
-            // return (self.annotationType === AnnotationType.SIGNATURE || (self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep())) ? AnnotationType.SIGNATURE : (_isElectronicAndAuthorizeByAnnotationBefore() && self.correspondence instanceof WorkItem ? AnnotationType.SIGNATURE : AnnotationType.ANNOTATION)
+            return (self.annotationType === AnnotationType.SIGNATURE || (self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep())) ? AnnotationType.SIGNATURE : (_isElectronicAndAuthorizeByAnnotationBefore() && self.correspondence instanceof WorkItem ? AnnotationType.SIGNATURE : AnnotationType.ANNOTATION)
         }
 
         function _isElectronicAndAuthorizeByAnnotationBefore() {
@@ -1086,11 +1085,16 @@ module.exports = function (app) {
         /**
          * @description save annotations as attachments
          * @param pdfContent
+         * @param callback
          */
-        self.handleSaveAnnotationAsAttachment = function (pdfContent) {
+        self.handleSaveAnnotationAsAttachment = function (pdfContent, callback) {
             self.correspondence.addAnnotationAsAttachment(pdfContent).then(function (attachment) {
                 toast.success(langService.get('save_success'));
                 self.disableSaveButton = false;
+                if(callback){
+                    callback();
+                    return;
+                }
                 dialog.hide({
                     content: self.savedPdfContent,
                     type: 'ATTACHMENT',
@@ -1303,7 +1307,13 @@ module.exports = function (app) {
                         self.currentInstance.exportInstantJSON().then(function (instantJSON) {
                             delete instantJSON.pdfId;
                             PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON, self.documentOperations, _getFlattenStatus()).then(function (pdfContent) {
-                                self.applyNextStepOnCorrespondence(pdfContent, null, true).catch(self.handleSeqExceptions);
+                                if (self.info.isPaper || _isElectronicAndAuthorizeByAnnotationBefore()) {
+                                    self.applyNextStepOnCorrespondence(pdfContent, null, true).catch(self.handleSeqExceptions);
+                                } else {
+                                    self.handleSaveAnnotationAsAttachment(pdfContent , function () {
+                                        return self.applyNextStepOnCorrespondence(null).catch(self.handleSeqExceptions);
+                                    });
+                                }
                             });
                         });
                     } // end nextSeqStep.isAuthorizeAndSendStep()
@@ -1543,7 +1553,7 @@ module.exports = function (app) {
                     licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
                     annotationTooltipCallback: self.annotationTooltipCallback
                 }).then(function (instance) {
-                    self.currentInstance = instance;
+                    window.instance = self.currentInstance = instance;
                     // set current annotations for loaded document
                     self.getDocumentAnnotations().then(function (annotations) {
                         self.oldAnnotations = annotations;
