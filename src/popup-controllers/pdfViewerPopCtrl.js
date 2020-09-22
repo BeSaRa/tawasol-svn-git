@@ -1376,11 +1376,18 @@ module.exports = function (app) {
                 title: "Replicate",
                 id: "tooltip-Replication-annotation",
                 className: "TooltipItem-Replication",
-                onPress: function () {
+                onPress: async function () {
                     var currentPageIndex = annotation.pageIndex, boundingBox = annotation.boundingBox,
                         totalPages = self.currentInstance.totalPageCount, duplicated = [],
                         customData = angular.copy(annotation.customData) || {}, updatedAnnotation = null,
                         parentId = uuidv4();
+
+                    var isImageAnnotation = annotation instanceof PSPDFKit.Annotations.ImageAnnotation;
+                    if (isImageAnnotation) {
+                        var attachmentId = annotation.imageAttachmentId;
+                        var blob = await self.currentInstance.getAttachment(attachmentId);
+                        var newAttachmentId = await self.currentInstance.createAttachment(blob);
+                    }
 
                     for (var i = 0; i < totalPages; i++) {
                         var id = uuidv4(), currentDuplicated = null;
@@ -1393,21 +1400,31 @@ module.exports = function (app) {
                             parentId: parentId
                         };
 
-                        currentDuplicated = annotation
-                            .set('id', null)
-                            .set('pageIndex', i)
-                            .set('customData', customDuplicatedData)
-                            .set('boundingBox', boundingBox);
+                        if (isImageAnnotation) {
+                            currentDuplicated = new PSPDFKit.Annotations.ImageAnnotation({
+                                pageIndex: i,
+                                customData: customDuplicatedData,
+                                boundingBox: boundingBox,
+                                imageAttachmentId: newAttachmentId,
+                                contentType: annotation.contentType
+                            });
+                        } else {
+                            currentDuplicated = annotation
+                                .set('id', null)
+                                .set('pdfObjectId', null)
+                                .set('pageIndex', i)
+                                .set('customData', customDuplicatedData)
+                                .set('boundingBox', boundingBox);
+                        }
 
-                        duplicated.push(currentDuplicated);
-                        self.currentInstance.createAnnotation(currentDuplicated);
+                        duplicated.push(self.currentInstance.createAnnotation(currentDuplicated));
                     }
-                    $q.all(duplicated).then(function () {
+                    $q.all(duplicated).then(function (annotations) {
                         updatedAnnotation = annotation.set('customData', {
                             ...customData,
                             repeaterHandler: true,
                             id: parentId,
-                            repeatedAnnotation: _.map(duplicated, function (item) {
+                            repeatedAnnotation: _.map(annotations, function (item) {
                                 return item.customData.id;
                             })
                         });
@@ -1477,7 +1494,6 @@ module.exports = function (app) {
         };
 
         self.handleAfterPrint = function () {
-            console.log('!! HERER !!');
             self.getDocumentAnnotations()
                 .then(function (annotations) {
                     annotations.forEach(function (annotation) {
