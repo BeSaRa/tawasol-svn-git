@@ -689,12 +689,15 @@ module.exports = function (app) {
             self.getDocumentAnnotations()
                 .then(function (annotations) {
                     annotations.map(function (annotation) {
-                        annotation = annotation.set('noPrint', noPrintValue);
-                        updatedAnnotations.push(self.currentInstance.updateAnnotation(annotation));
+                        annotation = annotation.set('noView', noPrintValue);
+                        updatedAnnotations.push(self.currentInstance.update(annotation));
                     });
                     $q.all(updatedAnnotations)
                         .then(function () {
-                            self.currentInstance.print(noPrintValue ? PSPDFKit.PrintMode.DOM : PSPDFKit.PrintMode.EXPORT_PDF);
+                            self.currentInstance.save().then(function () {
+                                self.currentInstance.print(PSPDFKit.PrintMode.EXPORT_PDF);
+                                self.handleAfterPrint();
+                            });
                         });
                 })
         };
@@ -916,6 +919,7 @@ module.exports = function (app) {
                 self.currentInstance.removeEventListener("inkSignatures.delete", self.handleDeleteInkSignatureAnnotation);
                 self.currentInstance.removeEventListener("annotations.create", self.handleCreateAnnotations);
                 self.currentInstance.removeEventListener("annotations.willChange", self.handleDeleteAnnotations);
+                window.removeEventListener('afterprint', self.handleAfterPrint);
             }
             try {
                 PSPDFKit.unload($element.find('#pdf-viewer')[0]);
@@ -1091,7 +1095,7 @@ module.exports = function (app) {
             self.correspondence.addAnnotationAsAttachment(pdfContent).then(function (attachment) {
                 toast.success(langService.get('save_success'));
                 self.disableSaveButton = false;
-                if(callback){
+                if (callback) {
                     callback();
                     return;
                 }
@@ -1310,7 +1314,7 @@ module.exports = function (app) {
                                 if (self.info.isPaper || _isElectronicAndAuthorizeByAnnotationBefore()) {
                                     self.applyNextStepOnCorrespondence(pdfContent, null, true).catch(self.handleSeqExceptions);
                                 } else {
-                                    self.handleSaveAnnotationAsAttachment(pdfContent , function () {
+                                    self.handleSaveAnnotationAsAttachment(pdfContent, function () {
                                         return self.applyNextStepOnCorrespondence(null).catch(self.handleSeqExceptions);
                                     });
                                 }
@@ -1471,6 +1475,16 @@ module.exports = function (app) {
 
             return tooltipItems;
         };
+
+        self.handleAfterPrint = function () {
+            console.log('!! HERER !!');
+            self.getDocumentAnnotations()
+                .then(function (annotations) {
+                    annotations.forEach(function (annotation) {
+                        self.currentInstance.updateAnnotation(annotation.set('noView', false))
+                    });
+                });
+        };
         /**
          * @description to register all event listener that we need during annotate the document.
          */
@@ -1553,7 +1567,7 @@ module.exports = function (app) {
                     licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
                     annotationTooltipCallback: self.annotationTooltipCallback
                 }).then(function (instance) {
-                    window.instance = self.currentInstance = instance;
+                    self.currentInstance = instance;
                     // set current annotations for loaded document
                     self.getDocumentAnnotations().then(function (annotations) {
                         self.oldAnnotations = annotations;

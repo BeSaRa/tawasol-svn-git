@@ -32,6 +32,7 @@ module.exports = function (app) {
             PSPDFKit.load({
                 baseUrl: (location.protocol + '//' + location.host + '/' + (configurationService.APP_CONTEXT ? configurationService.APP_CONTEXT + '/' : '')),
                 container: self.container,
+                printMode: PSPDFKit.PrintMode.EXPORT_PDF,
                 document: typeof self.docUrl === 'object' ? self.docUrl.$$unwrapTrustedValue() : self.docUrl,
                 licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
                 initialViewState: initialViewState
