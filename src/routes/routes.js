@@ -443,29 +443,54 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_application_users',
                 resolve: {
-                    jobTitles: function (jobTitleService) {
+                    viewLookups: function (applicationUserService) {
                         'ngInject';
-                        return jobTitleService.loadJobTitles();
+                        return applicationUserService.loadViewLookups();
                     },
-                    ranks: function (rankService) {
+                    jobTitles: function (viewLookups) {
                         'ngInject';
-                        return rankService.loadRanks();
+                        if (!viewLookups || !viewLookups.jobTitleList || !viewLookups.jobTitleList.length) {
+                            return [];
+                        }
+                        return viewLookups.jobTitleList;
                     },
-                    themes: function (themeService) {
+                    ranks: function (viewLookups) {
                         'ngInject';
-                        return themeService.loadThemes();
+                        if (!viewLookups || !viewLookups.rankList || !viewLookups.rankList.length) {
+                            return [];
+                        }
+                        return viewLookups.rankList;
+                    },
+                    themes: function (viewLookups) {
+                        'ngInject';
+                        if (!viewLookups || !viewLookups.themeList || !viewLookups.themeList.length) {
+                            return [];
+                        }
+                        return viewLookups.themeList;
+                    },
+                    roles: function (viewLookups) {
+                        'ngInject';
+                        if (!viewLookups || !viewLookups.customRoleList || !viewLookups.customRoleList.length) {
+                            return [];
+                        }
+                        return viewLookups.customRoleList;
+                    },
+                    permissions: function (viewLookups, roleService) {
+                        'ngInject';
+                        if (!viewLookups || !viewLookups.permissionList || !viewLookups.permissionList.length) {
+                            return [];
+                        }
+                        return roleService.getPermissionByGroup(viewLookups.permissionList);
                     },
                     organizations: function (organizationService) {
                         'ngInject';
-                        return organizationService.loadOrganizations();
+                        //return organizationService.loadOrganizations();
+                        return organizationService.loadAllOrganizationsStructureAsAdminResult();
                     },
                     classifications: function (classificationService) {
                         'ngInject';
-                        return classificationService.loadClassifications();
-                    },
-                    roles: function (roleService, applicationUsers) {
-                        'ngInject';
-                        return roleService.loadRoles();
+                        //return classificationService.loadClassifications();
+                        return []; // classification view permission is disabled. so, no need to load
                     },
                     userClassificationViewPermissions: function (userClassificationViewPermissionService, classifications) {
                         'ngInject';
@@ -474,11 +499,8 @@ module.exports = function (app) {
                     },
                     applicationUsers: function (applicationUserService, jobTitles, ranks, themes, organizations, classifications, permissions, userClassificationViewPermissions) {
                         'ngInject';
-                        return applicationUserService.loadApplicationUsers(true);
-                    },
-                    permissions: function (roleService) {
-                        'ngInject';
-                        return roleService.getPermissionByGroup();
+                        //return applicationUserService.loadApplicationUsers(true);
+                        return applicationUserService.loadApplicationUsersView();
                     },
                     applicationUsersCount: function (applicationUserService) {
                         'ngInject';

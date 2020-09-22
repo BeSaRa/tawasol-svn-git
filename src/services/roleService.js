@@ -115,31 +115,33 @@ module.exports = function (app) {
          */
         self.getPermissions = function () {
             return $http.get(urlService.rolePermissions).then(function (result) {
-                /*self.permissionsList = [];
-                 angular.forEach(result.data.rs, function (value, key) {
-                 self.permissionsList.push({
-                 "permissionId": value.id,
-                 "arName": value.arName,
-                 "enName": value.enName,
-                 "description": value.description
-                 });
-                 });
-
-                 self.permissionsList = generator.generateCollection(result.data.rs, Permission, self._sharedMethods);
-                 return self.permissionsList;*/
                 return generator.generateCollection(result.data.rs, Permission, self._sharedMethods);
             })
         };
 
-        self.getPermissionByGroup = function () {
+        /**
+         * @description Groups the permissions according to permission group
+         * @param permissionsList
+         * List of permissions to be grouped. If not passed, permissions will be loaded from server
+         * @returns {*}
+         */
+        self.getPermissionByGroup = function (permissionsList) {
             self.permissionsByGroup = [];
-            var permissionByGroup = [];
-            return self.getPermissions().then(function (result) {
+            var permissionByGroup = [], defer = $q.defer();
+
+            if (permissionsList && permissionsList.length) {
+                defer.resolve(permissionsList);
+            } else {
+                self.getPermissions().then(function (result) {
+                    defer.resolve(result);
+                });
+            }
+            return defer.promise.then(function (permissions) {
                 var permissionByGroupEN = {};
                 var permissionByGroupAR = {};
                 var groups = lookupService.returnLookups(lookupService.permissionGroup);
                 for (var i = 0; i < groups.length; i++) {
-                    var getPermissionsForGroup = _.filter(result, function (permission) {
+                    var getPermissionsForGroup = _.filter(permissions, function (permission) {
                         return permission.groupId === groups[i].lookupKey;
                     });
                     if (getPermissionsForGroup.length > 0) {
@@ -156,8 +158,6 @@ module.exports = function (app) {
                 return permissionByGroup;
             });
         };
-
-        //self.getPermissions();
 
         /**
          * @description Check if record with same name exists. Returns true if exists

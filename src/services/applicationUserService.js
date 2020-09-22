@@ -12,6 +12,8 @@ module.exports = function (app) {
                                                     cmsTemplate,
                                                     employeeService,
                                                     userClassificationViewPermissionService,
+                                                    ApplicationUserLookup,
+                                                    ApplicationUserView,
                                                     userSubscriptionService) {
         'ngInject';
         var self = this;
@@ -37,6 +39,26 @@ module.exports = function (app) {
          */
         self.getApplicationUsers = function (limited) {
             return self.applicationUsers.length ? $q.when(self.applicationUsers) : self.loadApplicationUsers(limited);
+        };
+
+        /**
+         * @description Loads application users for grid view
+         * @returns {*}
+         */
+        self.loadApplicationUsersView = function () {
+            return $http.get(urlService.applicationUsers + '/view').then(function (result) {
+                return generator.interceptReceivedCollection('ApplicationUserView', generator.generateCollection(result.data.rs, ApplicationUserView, self._sharedMethods));
+            });
+        };
+
+        self.applicationUserViewSearch = function (criteria) {
+            return $http.get(urlService.applicationUsers + '/view/criteria', {
+                params: {
+                    criteria: criteria
+                }
+            }).then(function (result) {
+                return generator.interceptReceivedCollection('ApplicationUserView', generator.generateCollection(result.data.rs, ApplicationUserView, self._sharedMethods));
+            })
         };
 
         /**
@@ -100,7 +122,7 @@ module.exports = function (app) {
                     return Number(userClassificationViewPermission.userId) === Number(applicationUser.id);
                 });
 
-                applicationUser = generator.interceptReceivedInstance('ApplicationUser', applicationUser);
+                //applicationUser = generator.interceptReceivedInstance('ApplicationUser', applicationUser);
 
                 return dialog
                     .showDialog({
@@ -110,7 +132,6 @@ module.exports = function (app) {
                         controllerAs: 'ctrl',
                         locals: {
                             editMode: true,
-                            applicationUser: applicationUser,
                             applicationUsers: self.applicationUsers,
                             jobTitles: jobTitles,
                             ranks: ranks,
@@ -122,6 +143,10 @@ module.exports = function (app) {
                             permissions: permissions
                         },
                         resolve: {
+                            applicationUser: function () {
+                                'ngInject';
+                                return self.loadApplicationUserById(applicationUser);
+                            },
                             ouApplicationUsers: function (ouApplicationUserService) {
                                 'ngInject';
                                 return ouApplicationUserService.loadOUApplicationUsersByUserId(applicationUser.id);
@@ -812,6 +837,14 @@ module.exports = function (app) {
                         toast.error(errorMessage);
                     });
             });
+        };
+
+        self.loadViewLookups = function () {
+            return $http.get(urlService.applicationUsers + '/view/lookup')
+                .then(function (result) {
+                    result.data.rs = generator.generateInstance(result.data.rs, ApplicationUserLookup);
+                    return generator.interceptReceivedInstance('ApplicationUserLookup', result.data.rs);
+                });
         };
 
         /**

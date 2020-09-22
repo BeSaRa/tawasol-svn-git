@@ -76,6 +76,7 @@ module.exports = function (app) {
                                                    FollowupBookCriteria,
                                                    FollowupAction,
                                                    encryptionService,
+                                                   AdminResultRelation,
                                                    TawasolStamp,
                                                    TawasolDocument) {
         'ngInject';
@@ -101,6 +102,8 @@ module.exports = function (app) {
         util.inherits(FollowupBookCriteria, FollowupBook);
         // tawasol stamp
         util.inherits(TawasolStamp, TawasolDocument);
+        // admin result relation
+        util.inherits(AdminResultRelation, Information);
 
 
         /**

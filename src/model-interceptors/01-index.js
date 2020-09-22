@@ -124,4 +124,5 @@ module.exports = function (app) {
     require('./SequentialWFStepInterceptor')(app);
     require('./ActionLogViewInterceptor')(app);
     require('./ActionLogInterceptor')(app);
+    require('./ApplicationUserLookupInterceptor')(app);
 };

@@ -196,5 +196,8 @@ module.exports = function (app) {
     require('./InkSignature')(app);
     require('./ActionLog')(app);
     require('./ActionLogView')(app);
+    require('./AdminResultRelation')(app);
+    require('./ApplicationUserLookup')(app);
+    require('./ApplicationUserView')(app);
 
 };

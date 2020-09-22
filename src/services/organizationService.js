@@ -14,7 +14,8 @@ module.exports = function (app) {
                                                  lookupService,
                                                  PropertyConfiguration,
                                                  OUPrivateRegistry,
-                                                 employeeService) {
+                                                 employeeService,
+                                                 AdminResultRelation) {
         'ngInject';
         var self = this;
         self.serviceName = 'organizationService';
@@ -108,6 +109,20 @@ module.exports = function (app) {
                 return self.allOrganizationsStructure;
             });
         };
+
+
+        /**
+         * @description Load all organizations structure as admin result
+         * @returns {*}
+         */
+        self.loadAllOrganizationsStructureAsAdminResult = function () {
+            var url = urlService.organizations + '/structure/lookup';
+            return $http.get(url).then(function (result) {
+                var ous = generator.generateCollection(result.data.rs, AdminResultRelation, self._sharedMethods);
+                return generator.interceptReceivedCollection('AdminResultRelation', ous);
+            });
+        };
+
         /**
          * load selcted organization with hierarchy
          * @param selectedOrganization
@@ -445,7 +460,7 @@ module.exports = function (app) {
                     }
                     return children;
                 }).catch(function (reason) {
-                  //  console.log(reason);
+                    //  console.log(reason);
                 });
         };
         /**
@@ -470,7 +485,7 @@ module.exports = function (app) {
                     }
                     return children;
                 }).catch(function (reason) {
-                  //  console.log(reason);
+                    //  console.log(reason);
                 });
         };
 
@@ -625,7 +640,7 @@ module.exports = function (app) {
                             return documentTemplateService
                                 .loadDocumentTemplates(organization.id, null, (!organization.hasRegistry ? organization.id : null));
                         },
-                        documentStamps: function(documentStampService){
+                        documentStamps: function (documentStampService) {
                             'ngInject';
                             return documentStampService.loadDocumentStamps(generator.getNormalizedValue(organization, 'id'));
                         },
