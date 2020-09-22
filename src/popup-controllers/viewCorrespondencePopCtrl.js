@@ -284,7 +284,7 @@ module.exports = function (app) {
         self.isEditContentDisabled = function () {
             if (self.editMode) {
                 return true;
-            } else if (!self.correspondence.isCorrespondenceApprovedBefore() || self.correspondence.hasActiveSeqWF()) {
+            } else if (!self.correspondence.isCorrespondenceApprovedBefore()) {
                 return false;
             }
             return !rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
