@@ -207,23 +207,7 @@ module.exports = function (app) {
                 return dialog
                     .confirmMessage(langService.get('confirm_delete_selected_multiple'), null, null, $event || null)
                     .then(function () {
-                        return self.deleteBulkSequentialWorkflows(sequentialWorkflows)
-                            .then(function (result) {
-                                var response = false;
-                                if (result.length === sequentialWorkflows.length) {
-                                    toast.error(langService.get("failed_delete_selected"));
-                                    response = false;
-                                } else if (result.length) {
-                                    generator.generateFailedBulkActionRecords('delete_success_except_following', _.map(result, function (item) {
-                                        return item.getNames();
-                                    }));
-                                    response = true;
-                                } else {
-                                    toast.success(langService.get("delete_success"));
-                                    response = true;
-                                }
-                                return response;
-                            });
+                        return self.deleteBulkSequentialWorkflows(sequentialWorkflows);
                     });
             },
             /**
@@ -418,7 +402,7 @@ module.exports = function (app) {
         self.deleteSequentialWorkflow = function (sequentialWorkflow) {
             return $http.delete(urlService.sequentialWorkflow + '/' + generator.getNormalizedValue(sequentialWorkflow, 'id'))
                 .catch(function (error) {
-                    return errorCode.showErrorDialog(error);
+                    return errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
                 });
         };
 
@@ -437,15 +421,7 @@ module.exports = function (app) {
                 url: urlService.sequentialWorkflow + '/bulk',
                 data: bulkIds
             }).then(function (result) {
-                result = result.data.rs;
-                var failedRecords = [];
-                _.map(result, function (value, key) {
-                    if (!value)
-                        failedRecords.push(key);
-                });
-                return _.filter(sequentialWorkflows, function (item) {
-                    return (failedRecords.indexOf(item.id) > -1);
-                });
+                return generator.getBulkActionResponse(result, sequentialWorkflows, false, 'failed_delete_selected', 'delete_success', 'delete_success_except_following');
             });
         };
 

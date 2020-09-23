@@ -269,10 +269,7 @@ module.exports = function (app) {
                 .controllerMethod
                 .sequentialWorkflowDeleteBulk(self.selectedSequentialWorkflows, $event)
                 .then(function () {
-                    self.reloadSequentialWorkflows(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get("delete_success"));
-                        });
+                    self.reloadSequentialWorkflows(self.grid.page);
                 });
         };
 
