@@ -847,7 +847,6 @@ module.exports = function (app) {
                 var customData = angular.copy(annotation.customData);
                 delete customData.repeaterHandler;
                 delete customData.repeatedAnnotation;
-                delete customData.id;
 
                 var updatedAnnotation = annotation
                     // .set('isSignature', _getRightTypeForElectronicSignature() !== 1)
