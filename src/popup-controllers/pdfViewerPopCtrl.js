@@ -86,6 +86,8 @@ module.exports = function (app) {
 
         self.excludedRepeatedAnnotations = configurationService.REPLICATION_EXCLUDED_LIST;
 
+        self.needOpenForApproval = false;
+
         self.readyToExportExcludedAnnotationList = [
             "annotate",
             "ink",
@@ -287,6 +289,7 @@ module.exports = function (app) {
             ) {
                 var permission = self.info.documentClass === 'outgoing' ? 'ELECTRONIC_SIGNATURE' : 'ELECTRONIC_SIGNATURE_MEMO';
                 openForApprovalButton.disabled = !employeeService.hasPermissionTo(permission);
+                self.needOpenForApproval = true;
                 toolbarInstance.push(openForApprovalButton);
             }
 
@@ -351,7 +354,7 @@ module.exports = function (app) {
         }
 
         function _getRightTypeForElectronicSignature() {
-            return (self.annotationType === AnnotationType.SIGNATURE || (self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep())) ? AnnotationType.SIGNATURE : (_isElectronicAndAuthorizeByAnnotationBefore() && self.correspondence instanceof WorkItem ? AnnotationType.SIGNATURE : AnnotationType.ANNOTATION)
+            return (self.annotationType === AnnotationType.SIGNATURE || (self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep() && !self.needOpenForApproval)) ? AnnotationType.SIGNATURE : (_isElectronicAndAuthorizeByAnnotationBefore() && self.correspondence instanceof WorkItem ? AnnotationType.SIGNATURE : AnnotationType.ANNOTATION)
         }
 
         function _isElectronicAndAuthorizeByAnnotationBefore() {
@@ -849,7 +852,7 @@ module.exports = function (app) {
                 delete customData.repeatedAnnotation;
 
                 var updatedAnnotation = annotation
-                    // .set('isSignature', _getRightTypeForElectronicSignature() !== 1)
+                    .set('isSignature', _getRightTypeForElectronicSignature() !== 1)
                     .set('customData', customData);
                 return self.currentInstance.updateAnnotation(updatedAnnotation);
             }
@@ -1049,7 +1052,7 @@ module.exports = function (app) {
                 });
             }).catch(function () {
                 self.disableSaveButton = false;
-                toast.error(langService.get('provide_signature_to_proceed'));
+                toast.error(langService.get(self.needOpenForApproval ? 'you_missed_open_for_appoval' : 'provide_signature_to_proceed'));
             });
         };
         /**
@@ -1300,7 +1303,7 @@ module.exports = function (app) {
                             })
                             .catch(function () {
                                 self.disableSaveButton = false;
-                                toast.error(langService.get('provide_signature_to_proceed'));
+                                toast.error(langService.get(self.needOpenForApproval ? 'you_missed_open_for_appoval': 'provide_signature_to_proceed'));
                             });
                     } else { // else nextSeqStep.isAuthorizeAndSendStep()
                         var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations);
