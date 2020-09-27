@@ -1027,11 +1027,11 @@ module.exports = function (app) {
             self.correspondence.file = pdfContent;
             self.correspondence.sourceType = 1;
             attachmentService.updateAttachment(attachedBook, self.correspondence)
-                .then(function () {
+                .then(function (attachment) {
                     self.disableSaveButton = false;
                     toast.success(langService.get('save_success'));
                     dialog.hide({
-                        content: self.savedPdfContent,
+                        content: attachment,
                         type: 'ATTACHMENT',
                         action: PDFViewer.UPDATE_ATTACHMENT
                     });
@@ -1102,7 +1102,7 @@ module.exports = function (app) {
                     return;
                 }
                 dialog.hide({
-                    content: self.savedPdfContent,
+                    content: attachment,
                     type: 'ATTACHMENT',
                     action: PDFViewer.ADD_ATTACHMENT
                 });
