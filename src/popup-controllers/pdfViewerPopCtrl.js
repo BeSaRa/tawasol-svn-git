@@ -1527,7 +1527,7 @@ module.exports = function (app) {
                         var saveAsButton = _.find(buttons, function (btn) {
                             return btn.innerText === 'Save As…'
                         });
-                        saveAsButton && saveAsButton.parentNode.removeChild(saveAsButton);
+                        saveAsButton && (saveAsButton.style.display = 'none');
                     }, 500);
                 });
         };
