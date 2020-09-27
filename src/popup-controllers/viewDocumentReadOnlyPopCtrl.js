@@ -34,7 +34,7 @@ module.exports = function (app) {
                 return false;
             }
             return rootEntity.getGlobalSettings() && rootEntity.getGlobalSettings().isSlowConnectionMode()
-                && !employeeService.getEmployee().isSlowConnectionMode()
+                && employeeService.getEmployee() && !employeeService.getEmployee().isSlowConnectionMode()
                 && employeeService.hasPermissionTo('DOWNLOAD_MAIN_DOCUMENT') && employeeService.hasPermissionTo('PRINT_DOCUMENT')
                 && !self.hideSlowModeToggleButton;
         };
