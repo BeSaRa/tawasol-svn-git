@@ -309,9 +309,10 @@ module.exports = function (app) {
                         self.getSubSites(true);
                     }*/
 
-                    if ($stateParams.action !== 'reply') {
+                    /*if ($stateParams.action !== 'reply') {
                         _selectDefaultMainSiteAndGetSubSites();
-                    }
+                    }*/
+                    _selectDefaultMainSiteAndGetSubSites();
                     return self.mainSites;
                 });
             } else {
