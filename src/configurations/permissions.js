@@ -54,7 +54,8 @@ module.exports = function (app) {
                 return employee.isSuperAdmin && !employee.isAdmin;
             })
             .addMenuPermissions('menu_item_sequential_workflows', function (employee) {
-                return employee.hasPermissionTo('ADD_SEQ_WF');
+                var rootEntity = employee.getRootEntity();
+                return rootEntity.hasPSPDFViewer() && employee.hasPermissionTo('ADD_SEQ_WF');
             })
             .end()
             // department inbox
