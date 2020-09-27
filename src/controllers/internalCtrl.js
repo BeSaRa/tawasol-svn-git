@@ -518,6 +518,11 @@ module.exports = function (app) {
         var _hasContent = function () {
             return (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
         };
+
+        var _hasSingleSignature = function (document) {
+            return document.signaturesCount && document.signaturesCount === 1;
+        };
+
         self.visibilityArray = [];
         self.isActionsAvailable = false;
 
@@ -586,19 +591,6 @@ module.exports = function (app) {
                     return isVisible;
                 }
             },
-            // Approve and send
-            {
-                text: langService.get('grid_action_electronic_approve_and_send'),
-                callback: self.signESignatureAndSend,
-                class: "action-green",
-                permissionKey: ['ELECTRONIC_SIGNATURE_MEMO', 'LAUNCH_DISTRIBUTION_WORKFLOW'],
-                checkShow: function (action, model, index) {
-                    var info = model.getInfo();
-                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && _hasContent();
-                    self.setDropdownAvailability(index, isVisible);
-                    return isVisible;
-                }
-            },
             // Send To Review
             {
                 text: langService.get('content_action_send_to_review'),
@@ -657,7 +649,20 @@ module.exports = function (app) {
                 permissionKey: "ELECTRONIC_SIGNATURE_MEMO",
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    isVisible = !model.hasActiveSeqWF() && gridService.checkToShowAction(action) && !info.isPaper && _hasContent() && !model.isPrivateSecurityLevel() && !model.isInternalPersonal(); //Don't show if its paper internal
+                    isVisible = !model.hasActiveSeqWF() && gridService.checkToShowAction(action) && !info.isPaper && _hasContent() && _hasSingleSignature(model) && !model.isPrivateSecurityLevel() && !model.isInternalPersonal(); //Don't show if its paper internal
+                    self.setDropdownAvailability(index, isVisible);
+                    return isVisible;
+                }
+            },
+            // Approve and send
+            {
+                text: langService.get('grid_action_electronic_approve_and_send'),
+                callback: self.signESignatureAndSend,
+                class: "action-green",
+                permissionKey: ['ELECTRONIC_SIGNATURE_MEMO', 'LAUNCH_DISTRIBUTION_WORKFLOW'],
+                checkShow: function (action, model, index) {
+                    var info = model.getInfo();
+                    isVisible = !model.hasActiveSeqWF() && gridService.checkToShowAction(action) && !info.isPaper && _hasContent()&& _hasSingleSignature(model)  && !model.isPrivateSecurityLevel() && !model.isInternalPersonal(); //Don't show if its paper internal
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
