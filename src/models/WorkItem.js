@@ -1211,10 +1211,10 @@ module.exports = function (app) {
             };
 
             WorkItem.prototype.addAnnotationAsAttachment = function (content) {
-                var info = this.getInfo();
+                var self = this, info = self.getInfo();
                 var attachment = new Attachment({
-                    docSubject: langService.get('attached_annotation'),
-                    documentTitle: langService.get('attached_annotation'),
+                    docSubject: langService.get('attached_annotation') + ' - ' + (self.generalStepElm.attachementsNO + 1),
+                    documentTitle: langService.get('attached_annotation') + ' - ' + (self.generalStepElm.attachementsNO + 1),
                     securityLevel: info.securityLevel,
                     priorityLevel: 1,
                     attachmentType: 0,
