@@ -404,7 +404,8 @@
                                             {{ctrl.applicationUser.getTranslatedYesNo('otpEnabled')}}</label>
                                     </md-switch>
                                     <md-switch flex ng-model="ctrl.applicationUser.isMSTeamsEnabled"
-                                               aria-label="{{lang.teams_integration}}">
+                                               aria-label="{{lang.teams_integration}}"
+                                               ng-disabled="!ctrl.rootEntity.returnRootEntity().rootEntity.isMSTeamsEnabled">
                                         <label>{{lang.teams_integration}} :
                                             {{ctrl.applicationUser.getTranslatedMSTeamsStatus()}}</label>
                                     </md-switch>
