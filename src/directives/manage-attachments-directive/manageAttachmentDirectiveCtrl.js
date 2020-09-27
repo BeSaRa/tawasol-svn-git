@@ -72,7 +72,7 @@ module.exports = function (app) {
         };
         // get inherit Security for attachment from GlobalSettings
         self.inheritSecurity = rootEntity.getGlobalSettings().attachmentInheritSecurity;
-
+        self.hasPSPDFViewer = rootEntity.hasPSPDFViewer();
 
         function _createAttachmentFile(file) {
             var securityLevel = self.document.securityLevel;
