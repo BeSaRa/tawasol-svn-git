@@ -447,32 +447,36 @@ module.exports = function (app) {
                         'ngInject';
                         return applicationUserService.loadViewLookups();
                     },
-                    jobTitles: function (viewLookups) {
+                    jobTitles: function (viewLookups, jobTitleService) {
                         'ngInject';
                         if (!viewLookups || !viewLookups.jobTitleList || !viewLookups.jobTitleList.length) {
                             return [];
                         }
+                        jobTitleService.jobTitles = viewLookups.jobTitleList;
                         return viewLookups.jobTitleList;
                     },
-                    ranks: function (viewLookups) {
+                    ranks: function (viewLookups, rankService) {
                         'ngInject';
                         if (!viewLookups || !viewLookups.rankList || !viewLookups.rankList.length) {
                             return [];
                         }
+                        rankService.ranks = viewLookups.rankList;
                         return viewLookups.rankList;
                     },
-                    themes: function (viewLookups) {
+                    themes: function (viewLookups, themeService) {
                         'ngInject';
                         if (!viewLookups || !viewLookups.themeList || !viewLookups.themeList.length) {
                             return [];
                         }
+                        themeService.themes = viewLookups.themeList;
                         return viewLookups.themeList;
                     },
-                    roles: function (viewLookups) {
+                    roles: function (viewLookups, roleService) {
                         'ngInject';
                         if (!viewLookups || !viewLookups.customRoleList || !viewLookups.customRoleList.length) {
                             return [];
                         }
+                        roleService.roles = viewLookups.customRoleList;
                         return viewLookups.customRoleList;
                     },
                     permissions: function (viewLookups, roleService) {
