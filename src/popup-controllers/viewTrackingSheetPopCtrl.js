@@ -26,6 +26,7 @@ module.exports = function (app) {
                                                          viewTrackingSheetService,
                                                          gridService,
                                                          employeeService,
+                                                         rootEntity,
                                                          $q) {
         'ngInject';
         var self = this;
@@ -445,6 +446,8 @@ module.exports = function (app) {
                     || parentGridName === gridService.grids.search.outgoingIncoming
                     || parentGridName === gridService.grids.search.quick
                     || parentGridName === gridService.grids.others.linkedDoc)
+            } else if (tabName === 'view_tracking_sheet_annotation_logs'){
+                return rootEntity.hasPSPDFViewer();
             }
             return (self.tabsToShow.indexOf(tabName) > -1);
         };

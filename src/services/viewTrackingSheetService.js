@@ -24,6 +24,7 @@ module.exports = function (app) {
                                                       downloadService,
                                                       employeeService,
                                                       gridService,
+                                                      rootEntity,
                                                       errorCode) {
             'ngInject';
             var self = this;
@@ -255,7 +256,7 @@ module.exports = function (app) {
                             params: ['view_tracking_sheet_annotation_logs', 'grid', parentGridName],
                             class: "action-green",
                             checkShow: function (action, model) {
-                                return true;
+                                return rootEntity.hasPSPDFViewer();
                             }
                         }
                     ];
