@@ -496,6 +496,7 @@
                                 <!-- Stamp Module Enabled -->
                                 <md-input-container flex>
                                     <md-switch flex ng-model="ctrl.globalSetting.stampModuleEnabled"
+                                               ng-disabled="!ctrl.hasPSPDFViewer"
                                                aria-label="{{lang.enable_stamp_module}} ">
                                         <span>{{lang.enable_stamp_module}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('stampModuleEnabled')}}
                                     </md-switch>

@@ -77,14 +77,15 @@ module.exports = function (app) {
         self.correspondenceSiteTypes = correspondenceSiteTypeService.correspondenceSiteTypes;
         // ldap providers for entity
         self.entityLDAPProviders = entityLDAPProviders;
+        self.globalSettings = rootEntity.getGlobalSettings();
         //get escalation process of global settings
-        self.entityEscalationProcess = rootEntity.getGlobalSettings().escalationProcess;
+        self.entityEscalationProcess = self.globalSettings.escalationProcess;
         // get permissions
         self.permissions = roleService.permissionsByGroup;
         // set copy of current organization if editMode true.
         self.organization = !self.editMode ? new Organization({
-            wfsecurity: lookupService.getLookupByLookupKey(lookupService.workflowSecurity, rootEntity.getGlobalSettings().wfsecurity),
-            securitySchema: lookupService.getLookupByLookupKey(lookupService.securitySchema, rootEntity.getGlobalSettings().securitySchema),
+            wfsecurity: lookupService.getLookupByLookupKey(lookupService.workflowSecurity, self.globalSettings.wfsecurity),
+            securitySchema: lookupService.getLookupByLookupKey(lookupService.securitySchema, self.globalSettings.securitySchema),
             ldapCode: self.entityLDAPProviders.length === 1 ? self.entityLDAPProviders[0].ldapCode : null,
             escalationProcess: (self.entityEscalationProcess !== null) ? lookupService.getLookupByLookupKey(lookupService.escalationProcess, self.entityEscalationProcess) : null
         }) : angular.copy(organization);
@@ -2262,7 +2263,7 @@ module.exports = function (app) {
             if (tabName === 'departmentUsers') {
                 return self.organization.hasRegistry;
             } else if (tabName === 'documentStamps') {
-                return rootEntity.getGlobalSettings().isStampModuleEnabled && employeeService.hasPermissionTo('MANAGE_STAMPS');
+                return rootEntity && rootEntity.hasPSPDFViewer() && self.globalSettings.isStampModuleEnabled && employeeService.hasPermissionTo('MANAGE_STAMPS');
             } else if (tabName === 'private_registry_ou') {
                 return self.model.isPrivateRegistry;
             } else {

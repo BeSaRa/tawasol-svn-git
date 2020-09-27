@@ -14,8 +14,9 @@ module.exports = function (app) {
             .addMenuPermissions('menu_item_private_announcements', ['MANAGE_PRIVATE_ANNOUNCEMENTS'])
             .addMenuPermissions('menu_item_manage_roles', ['MANAGE_CUSTOM_ROLES'])
             .addMenuPermissions('menu_item_document_stamps', function (employee) {
-                var globalSettings = employee.getRootEntity() && employee.getRootEntity().getGlobalSettings();
-                if (!globalSettings) {
+                var rootEntity = employee.getRootEntity(),
+                    globalSettings = rootEntity && rootEntity.getGlobalSettings();
+                if (!rootEntity || !rootEntity.hasPSPDFViewer() || !globalSettings) {
                     return false;
                 }
                 return globalSettings.isStampModuleEnabled() && employee.hasPermissionTo('MANAGE_STAMPS');
