@@ -1542,7 +1542,10 @@ module.exports = function (app) {
             }, 500);
         };
 
-
+        /**
+         * @description load Instant Json to apply the Annotations on the document
+         * @return {Promise<void>}
+         */
         self.loadInstantJSON = async function () {
             var documentWithOperationsBuffer = null, instance;
             instance = await PSPDFKit.load({
