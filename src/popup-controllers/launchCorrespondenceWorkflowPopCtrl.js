@@ -1563,7 +1563,7 @@ module.exports = function (app) {
             _setCanMinimize();
             self.canSendToMultiple = true;
             if (!self.multi) {
-                self.canSendToMultiple = !correspondence.hasActiveSeqWF();
+                self.canSendToMultiple = !correspondence.hasActiveSeqWF() || (correspondence.hasActiveSeqWF() && self.info.docStatus >= 24);
             }
             self.fromQuickSend = fromQuickSend;
             if (predefinedActionMembers && predefinedActionMembers.length) {
