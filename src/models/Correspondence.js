@@ -1171,7 +1171,7 @@ module.exports = function (app) {
 
             Correspondence.prototype.isTerminatedSEQ = function () {
                 var info = this.getInfo();
-                return info.docStatus === 21;
+                return info.docStatus === 21 && this.hasActiveSeqWF();
             };
 
             Correspondence.prototype.isNotPaperAndNotTerminatedSEQ = function () {
