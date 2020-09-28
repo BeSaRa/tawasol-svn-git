@@ -1755,14 +1755,9 @@ module.exports = function (app) {
                 sticky: true,
                 permissionKey: 'SEND_TO_READY_TO_EXPORT_QUEUE',
                 checkShow: function (action, model) {
-                    //addMethod = 0 (Electronic/Digital) - hide the export button
-                    //addMethod = 1 (Paper) - show the export button
                     var info = model.getInfo();
-                    // If internal book, no export is allowed
-                    // If incoming book, no addMethod will be available. So check workFlowName(if incoming) and show export button
-                    return info.isPaper && info.documentClass === 'outgoing' && !model.isBroadcasted() && (info.docStatus <= 22) && !model.isPrivateSecurityLevel();
-                    // (model.generalStepElm.addMethod && model.generalStepElm.workFlowName.toLowerCase() !== 'internal')
-                    // || model.generalStepElm.workFlowName.toLowerCase() === 'incoming';
+                    return info.isPaper && info.documentClass === 'outgoing' && !model.isBroadcasted() && (info.docStatus <= 22) && !model.isPrivateSecurityLevel()
+                        && !model.hasActiveSeqWF();
                 }
             },
             // Export
@@ -1781,7 +1776,8 @@ module.exports = function (app) {
                     return gridService.checkToShowAction(action)
                         && info.docStatus === 24
                         && info.documentClass === 'outgoing'
-                        && !model.isPrivateSecurityLevel();
+                        && !model.isPrivateSecurityLevel()
+                        && !model.hasActiveSeqWF();
                 }
             },
             // add task

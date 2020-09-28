@@ -468,7 +468,7 @@ module.exports = function (app) {
                 class: "action-red",
                 hide: true,
                 checkShow: function (action, model) {
-                    return true;
+                    return  !model.hasActiveSeqWF();
                 }
             },
             // View Tracking Sheet

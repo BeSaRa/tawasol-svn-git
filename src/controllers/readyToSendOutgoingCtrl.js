@@ -745,7 +745,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'SEND_TO_READY_TO_EXPORT_QUEUE',
                 checkShow: function (action, model) {
-                    return model.addMethod && model.hasContent();
+                    return model.addMethod && model.hasContent() && !model.hasActiveSeqWF();
                 }
             },
             // Launch Distribution Workflow

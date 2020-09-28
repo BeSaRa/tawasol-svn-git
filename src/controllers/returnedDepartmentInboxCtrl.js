@@ -1347,7 +1347,7 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: function (action, model) {
                             var info = model.getInfo();
-                            return info.isPaper && employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER");
+                            return info.isPaper && employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") && !model.hasActiveSeqWF();
                         }
                     },
                     // Properties

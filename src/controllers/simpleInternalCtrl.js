@@ -545,7 +545,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model, index) {
-                    isVisible = gridService.checkToShowAction(action) && _hasContent();
+                    isVisible = gridService.checkToShowAction(action) && _hasContent() && !model.hasActiveSeqWF();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -621,7 +621,7 @@ module.exports = function (app) {
                 hide: true,
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    isVisible = gridService.checkToShowAction(action) && info.isPaper && !model.isPrivateSecurityLevel(); //Don't show if its electronic internal
+                    isVisible = gridService.checkToShowAction(action) && info.isPaper && !model.isPrivateSecurityLevel() && !model.hasActiveSeqWF(); //Don't show if its electronic internal
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }

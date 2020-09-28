@@ -661,7 +661,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model, index) {
-                    isVisible = gridService.checkToShowAction(action) && _hasContent();
+                    isVisible = gridService.checkToShowAction(action) && _hasContent() && !model.hasActiveSeqWF();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -715,33 +715,6 @@ module.exports = function (app) {
                     return isVisible;
                 }
             },
-            // Export
-            {
-                text: langService.get('content_action_export'),
-                callback: self.docActionExportDocument,
-                class: "action-green",
-                permissionKey: "OPEN_DEPARTMENT’S_READY_TO_EXPORT_QUEUE",
-                checkShow: function (action, model, index) {
-                    var info = model.getInfo();
-                    isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !!info.isPaper && _hasContent() && !_hasExternalOrG2GSite(model); //Don't show if its electronic outgoing
-                    self.setDropdownAvailability(index, isVisible);
-                    return isVisible;
-                }
-            },
-            // Send to ready to export
-            {
-                text: langService.get('grid_action_send_to_ready_to_export'),
-                callback: self.docActionSendToReadyToExport,
-                class: "action-green",
-                permissionKey: 'SEND_TO_READY_TO_EXPORT_QUEUE',
-                checkShow: function (action, model, index) {
-                    // paper, not private security level, has content
-                    var info = model.getInfo();
-                    isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && info.isPaper && _hasContent();
-                    self.setDropdownAvailability(index, isVisible);
-                    return isVisible;
-                }
-            },
             // Link To Document By Email
             {
                 text: langService.get('grid_action_link_to_document_by_email'),
@@ -756,6 +729,33 @@ module.exports = function (app) {
                     return isVisible;
                 }
             },
+            // Export
+            {
+                text: langService.get('content_action_export'),
+                callback: self.docActionExportDocument,
+                class: "action-green",
+                permissionKey: "OPEN_DEPARTMENT’S_READY_TO_EXPORT_QUEUE",
+                checkShow: function (action, model, index) {
+                    var info = model.getInfo();
+                    isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !!info.isPaper && _hasContent() && !_hasExternalOrG2GSite(model) && !model.hasActiveSeqWF(); //Don't show if its electronic outgoing
+                    self.setDropdownAvailability(index, isVisible);
+                    return isVisible;
+                }
+            },
+            // Send to ready to export
+            {
+                text: langService.get('grid_action_send_to_ready_to_export'),
+                callback: self.docActionSendToReadyToExport,
+                class: "action-green",
+                permissionKey: 'SEND_TO_READY_TO_EXPORT_QUEUE',
+                checkShow: function (action, model, index) {
+                    // paper, not private security level, has content
+                    var info = model.getInfo();
+                    isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && info.isPaper && _hasContent() && !model.hasActiveSeqWF();
+                    self.setDropdownAvailability(index, isVisible);
+                    return isVisible;
+                }
+            },
             // Export and send
             {
                 text: langService.get('grid_action_export_and_send'),
@@ -764,7 +764,7 @@ module.exports = function (app) {
                 permissionKey: ['LAUNCH_DISTRIBUTION_WORKFLOW', 'OPEN_DEPARTMENT’S_READY_TO_EXPORT_QUEUE'],
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !!info.isPaper && _hasContent() && (!_hasExternalOrG2GSite(model) || (_hasExternalOrG2GSite(model) && !employeeService.isCurrentOuLinkedToArchive())); //Don't show if its electronic outgoing
+                    isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !!info.isPaper && _hasContent() && (!_hasExternalOrG2GSite(model) || (_hasExternalOrG2GSite(model) && !employeeService.isCurrentOuLinkedToArchive())) && !model.hasActiveSeqWF(); //Don't show if its electronic outgoing
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -779,7 +779,7 @@ module.exports = function (app) {
                     // paper, not private security level, has content, (has external or g2g site), in central archive
                     var info = model.getInfo();
                     isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel()
-                        && info.isPaper && _hasContent() && _hasExternalOrG2GSite(model) && employeeService.getEmployee().inCentralArchive();
+                        && info.isPaper && _hasContent() && _hasExternalOrG2GSite(model) && employeeService.getEmployee().inCentralArchive() && !model.hasActiveSeqWF();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
