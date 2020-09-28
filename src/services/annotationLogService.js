@@ -8,6 +8,8 @@ module.exports = function (app) {
 
         self.newAnnotations = {};
 
+        self.documentOperations = [];
+
         /**
          * @description get annotation Ink number
          * @param annotation
@@ -31,7 +33,7 @@ module.exports = function (app) {
                 return AnnotationLogType.TawasolSignature;
             } else if (annotation.customData.additionalData.type === AnnotationType.STAMP) {
                 return AnnotationLogType.TawasolStamp;
-            } else if (annotation.customData.additionalData.type === AnnotationType.BARCODE){
+            } else if (annotation.customData.additionalData.type === AnnotationType.BARCODE) {
                 return AnnotationLogType.TawasolBarcode;
             }
         }
@@ -129,6 +131,21 @@ module.exports = function (app) {
         }
 
         /**
+         * @description map the document operations to be ready to send to the server.
+         * @param documentOperations
+         * @return {Array}
+         * @private
+         */
+        function _mapDocumentOperations(documentOperations) {
+            return _.map(documentOperations, (operation) => {
+                return {
+                    annotationType: AnnotationLogType[operation.type],
+                    actionItemType: ActionItemOperation.EDIT
+                }
+            });
+        }
+
+        /**
          * @description get Created Annotations
          * @param oldAnnotations
          * @param newAnnotations
@@ -167,23 +184,25 @@ module.exports = function (app) {
             });
         };
 
-        self.getAnnotationsChanges = function (oldAnnotations, newAnnotations) {
+        self.getAnnotationsChanges = function (oldAnnotations, newAnnotations, documentOperations) {
             self.oldAnnotations = _createObjectFromCollection(oldAnnotations, 'id');
             self.newAnnotations = _createObjectFromCollection(newAnnotations, 'id');
+            self.documentOperations = documentOperations;
             var createdAnnotations = self.getCreatedAnnotations(oldAnnotations, newAnnotations);
             var deletedAnnotations = self.getDeletedAnnotations(oldAnnotations, newAnnotations);
             var updatedAnnotations = self.getUpdatedAnnotations(oldAnnotations, newAnnotations);
-            return _generateAnnotationsList([].concat(createdAnnotations, deletedAnnotations, updatedAnnotations));
+            return _generateAnnotationsList([].concat(createdAnnotations, deletedAnnotations, updatedAnnotations)).concat(_mapDocumentOperations(self.documentOperations));
         };
         /**
          * @description get all operation that happens to the Annotations for teh document
          * @param oldAnnotations
          * @param newAnnotations
          * @param correspondence
+         * @param documentOperations
          * @return {Promise<boolean>}
          */
-        self.applyAnnotationChanges = function (oldAnnotations, newAnnotations, correspondence) {
-            var annotationLogs = self.getAnnotationsChanges(oldAnnotations, newAnnotations);
+        self.applyAnnotationChanges = function (oldAnnotations, newAnnotations, correspondence, documentOperations) {
+            var annotationLogs = self.getAnnotationsChanges(oldAnnotations, newAnnotations, documentOperations);
             return self.sendDifferenceAnnotations(annotationLogs, correspondence);
         };
         /**

@@ -24,6 +24,12 @@ module.exports = function (app) {
         WidgetAnnotation: 21,
         TawasolSignature: 22,
         TawasolStamp: 23,
-        TawasolBarcode: 24
+        TawasolBarcode: 24,
+        addPage: 25,
+        duplicatePages: 26,
+        movePages : 27,
+        rotatePages : 28,
+        removePages : 29,
+        importDocument : 30
     });
 };
