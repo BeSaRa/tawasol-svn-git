@@ -980,7 +980,7 @@ module.exports = function (app) {
          */
         self.sendAnnotationLogs = function (successCallback, errorCallback) {
             self.disableSaveButton = true;
-            return annotationLogService.applyAnnotationChanges(self.oldAnnotations, self.newAnnotations, self.correspondence , self.documentOperations)
+            return annotationLogService.applyAnnotationChanges(self.oldAnnotations, self.newAnnotations, self.correspondence, self.documentOperations)
                 .then(function () {
                     self.disableSaveButton = false;
                     if (successCallback)
@@ -1152,7 +1152,7 @@ module.exports = function (app) {
             self.disableSaveButton = true;
             self.getDocumentAnnotations().then(function (newAnnotations) {
                 self.newAnnotations = newAnnotations;
-                var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations , self.documentOperations);
+                var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations, self.documentOperations);
                 if (!hasChanges.length) {
                     dialog.infoMessage(langService.get('there_is_no_changes_to_save'));
                     self.disableSaveButton = false;
@@ -1306,7 +1306,7 @@ module.exports = function (app) {
                                 toast.error(langService.get(self.needOpenForApproval ? 'you_missed_open_for_appoval' : 'provide_signature_to_proceed'));
                             });
                     } else { // else nextSeqStep.isAuthorizeAndSendStep()
-                        var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations , self.documentOperations);
+                        var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations, self.documentOperations);
                         if (!hasChanges.length) {
                             return self.applyNextStepOnCorrespondence(null).catch(self.handleSeqExceptions);
                         }

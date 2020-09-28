@@ -138,7 +138,7 @@ module.exports = function (app) {
         };
 
         self.displayMainIframeViewer = function () {
-            return (self.isTheMainDocumentInView() && !self.psPDFViewerEnabled) || (self.isTheMainDocumentInView() && self.psPDFViewerEnabled && self.isOfficeOnlineViewer(self.viewURL)) && self.correspondence;
+            return ((self.isTheMainDocumentInView() && !self.psPDFViewerEnabled) || (self.isTheMainDocumentInView() && self.psPDFViewerEnabled && self.isOfficeOnlineViewer(self.viewURL))) && self.correspondence;
         };
 
         self.displayMainPSPDFViewer = function () {
