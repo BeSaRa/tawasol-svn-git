@@ -939,7 +939,8 @@ module.exports = function (app) {
                 callback: self.broadcast,
                 class: 'action-green',
                 checkShow: function (action, model) {
-                    return (model.addMethod || model.approvers !== null) && (model.getSecurityLevelLookup().lookupKey !== 4);
+                    return (model.addMethod || model.approvers !== null) && (model.getSecurityLevelLookup().lookupKey !== 4)
+                        && !model.hasActiveSeqWF();
                 }
             },
             // Duplicate

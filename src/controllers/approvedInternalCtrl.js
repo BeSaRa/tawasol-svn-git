@@ -1078,7 +1078,8 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                    return !model.isBroadcasted() && (model.getSecurityLevelLookup().lookupKey !== 4);
+                    return !model.isBroadcasted() && (model.getSecurityLevelLookup().lookupKey !== 4)
+                        && !model.hasActiveSeqWF();
                 }
             },
             // Edit After Approve (Only electronic)

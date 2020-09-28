@@ -1238,7 +1238,8 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     return (!model.needApprove() || model.hasDocumentClass('incoming'))
                         && !model.isBroadcasted()
-                        && (model.getSecurityLevelLookup().lookupKey !== 4);
+                        && (model.getSecurityLevelLookup().lookupKey !== 4)
+                        && !model.hasActiveSeqWF();
                 }
             },
             // Duplicate

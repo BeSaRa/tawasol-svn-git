@@ -961,7 +961,7 @@ module.exports = function (app) {
                 permissionKey: 'BROADCAST_DOCUMENT',
                 callback: self.broadcast,
                 checkShow: function (action, model) {
-                    return (model.getSecurityLevelLookup().lookupKey !== 4);
+                    return (model.getSecurityLevelLookup().lookupKey !== 4) && !model.hasActiveSeqWF();
                 }
             },
             // Print Barcode
