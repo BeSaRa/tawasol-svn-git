@@ -1303,7 +1303,7 @@ module.exports = function (app) {
                             })
                             .catch(function () {
                                 self.disableSaveButton = false;
-                                toast.error(langService.get(self.needOpenForApproval ? 'you_missed_open_for_appoval': 'provide_signature_to_proceed'));
+                                toast.error(langService.get(self.needOpenForApproval ? 'you_missed_open_for_appoval' : 'provide_signature_to_proceed'));
                             });
                     } else { // else nextSeqStep.isAuthorizeAndSendStep()
                         var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations);
@@ -1521,18 +1521,27 @@ module.exports = function (app) {
             self.currentInstance.addEventListener("document.change", (operations) => {
                 self.documentOperations = self.documentOperations.concat(operations);
             });
-            self.currentInstance.contentDocument
-                .querySelector(".PSPDFKit-Toolbar-Button-Document-Editor")
-                .addEventListener("click", () => {
-                    $timeout(function () {
-                        var buttons = self.currentInstance.contentDocument.querySelectorAll('button');
-                        var saveAsButton = _.find(buttons, function (btn) {
-                            return btn.innerText === 'Save As…'
-                        });
-                        saveAsButton && (saveAsButton.style.display = 'none');
-                    }, 500);
-                });
+            var editorElement = self.currentInstance.contentDocument
+                .querySelector(".PSPDFKit-Toolbar-Button-Document-Editor");
+
+            if (!editorElement)
+                return;
+
+            editorElement.addEventListener("click", self.handleEditorClick);
         };
+        /**
+         * @description handle remove save as button from document editor.
+         */
+        self.handleEditorClick = function () {
+            $timeout(function () {
+                var buttons = self.currentInstance.contentDocument.querySelectorAll('button');
+                var saveAsButton = _.find(buttons, function (btn) {
+                    return btn.innerText === 'Save As…'
+                });
+                saveAsButton && (saveAsButton.style.display = 'none');
+            }, 500);
+        };
+
 
         self.loadInstantJSON = async function () {
             var documentWithOperationsBuffer = null, instance;
