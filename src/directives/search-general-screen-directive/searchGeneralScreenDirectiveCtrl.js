@@ -1704,7 +1704,7 @@ module.exports = function (app) {
                 permissionKey: 'LAUNCH_SEQ_WF',
                 hide: true,
                 checkShow: function (action, model) {
-                    return rootEntity.hasPSPDFViewer() && !model.hasActiveSeqWF() && !model.isCorrespondenceApprovedBefore();
+                    return rootEntity.hasPSPDFViewer() && !model.hasActiveSeqWF() && !model.isCorrespondenceApprovedBefore() && !model.isBroadcasted();
                 }
             },
             // Subscribe
