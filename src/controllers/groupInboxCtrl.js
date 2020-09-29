@@ -81,7 +81,10 @@ module.exports = function (app) {
                 sender: function (record) {
                     return self.getSortingKey('senderInfo', 'SenderInfo');
                 },
-                dueDate: 'generalStepElm.dueDate'
+                corrSite: function (record) {
+                    return self.getSortingKey('mainSiteSubSiteString', 'Information');
+                },
+                //dueDate: 'generalStepElm.dueDate'
             },
             searchText: '',
             searchCallback: function (grid) {
