@@ -320,8 +320,9 @@ module.exports = function (app) {
          * @param filter
          * @param $index
          * @param order
+         * @param searchText
          */
-        self.selectFilter = function (filter, $index, order) {
+        self.selectFilter = function (filter, $index, order, searchText) {
             var selectedWorkItemsWobNums = [];
             $timeout(function () {
                 self.selectedTab = ($index + self.fixedTabsCount);
@@ -359,6 +360,10 @@ module.exports = function (app) {
                     if (order) {
                         self.filterGrid[self.selectedFilter.index].order = order;
                         self.getSortedDataForFilter(order);
+                    }
+                    if (searchText){
+                        self.filterGrid[self.selectedFilter.index].searchText = searchText;
+                        self.filterGrid[self.selectedFilter.index].searchCallback(self.filterGrid[self.selectedFilter.index]);
                     }
                 });
             }
@@ -420,7 +425,8 @@ module.exports = function (app) {
             if (self.selectedFilter) {
                 self.filterGrid[self.selectedFilter.index].progress = defer.promise;
                 var selectedFilterSortOrder = angular.copy(self.filterGrid[self.selectedFilter.index].order);
-                self.selectFilter(self.selectedFilter.filter, self.selectedFilter.index, selectedFilterSortOrder);
+                var selectedFilterSearchText = angular.copy(self.filterGrid[self.selectedFilter.index].searchText);
+                self.selectFilter(self.selectedFilter.filter, self.selectedFilter.index, selectedFilterSortOrder, selectedFilterSearchText);
                 return;
             }
 
@@ -449,6 +455,8 @@ module.exports = function (app) {
                     }
                     self.getSortedDataForInbox();
                     self.getSortedDataForStarred();
+                    self.grid.searchCallback();
+                    self.starredGrid.searchCallback();
                     return result;
                 });
         };
