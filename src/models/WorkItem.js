@@ -344,7 +344,7 @@ module.exports = function (app) {
             };
 
             WorkItem.prototype.isConditionalApproved = function () {
-                return !!this.generalStepElm.dueDate;
+                return !this.getInfo().isPaper && !!this.generalStepElm.dueDate;
             };
 
             WorkItem.prototype.getConditionalApproveExportDate = function () {
