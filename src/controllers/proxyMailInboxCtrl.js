@@ -627,19 +627,22 @@ module.exports = function (app) {
                             return result === correspondenceService.authorizeStatus.INTERNAL_PERSONAL.text;
                         })
                         .then(function () {
-                            self.reloadProxyMailInboxes(self.grid.page)
-                                .then(function () {
-                                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                                });
+                            self.reloadProxyMailInboxes(self.grid.page);
                         })
                         .catch(function () {
-                            self.reloadProxyMailInboxes(self.grid.page)
-                                .then(function () {
-                                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                                });
+                            self.reloadProxyMailInboxes(self.grid.page);
                         });
 
-                });
+                }).catch(function (error) {
+                if (error && error === 'PARTIAL_AUTHORIZE_LAUNCH_CANCELLED') {
+                    self.reloadProxyMailInboxes();
+                    return $q.reject(false);
+                }
+                if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                    dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: workItem.getInfo().wobNumber}));
+                    return $q.reject(false);
+                }
+            });
         };
 
         /**

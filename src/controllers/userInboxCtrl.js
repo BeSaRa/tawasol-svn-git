@@ -361,7 +361,7 @@ module.exports = function (app) {
                         self.filterGrid[self.selectedFilter.index].order = order;
                         self.getSortedDataForFilter(order);
                     }
-                    if (searchText){
+                    if (searchText) {
                         self.filterGrid[self.selectedFilter.index].searchText = searchText;
                         self.filterGrid[self.selectedFilter.index].searchCallback(self.filterGrid[self.selectedFilter.index]);
                     }
@@ -1083,6 +1083,10 @@ module.exports = function (app) {
                             self.reloadUserInboxes(self.grid.page);
                         });
                 }).catch(function (error) {
+                    if (error && error === 'PARTIAL_AUTHORIZE_LAUNCH_CANCELLED') {
+                        self.reloadUserInboxes();
+                        return $q.reject(false);
+                    }
                     if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                         dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
                         return $q.reject(false);
