@@ -634,7 +634,10 @@ module.exports = function (app) {
                 permissionKey: "ELECTRONIC_SIGNATURE_MEMO",
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    isVisible = !model.hasActiveSeqWF() && gridService.checkToShowAction(action) && !info.isPaper && _hasContent()&& _hasSingleSignature(model)  && !model.isPrivateSecurityLevel() && !model.isInternalPersonal(); //Don't show if its paper internal
+                    isVisible = !model.hasActiveSeqWF() && gridService.checkToShowAction(action)
+                        && !info.isPaper && _hasContent() && _hasSingleSignature(model)
+                        //&& !model.isPrivateSecurityLevel()
+                        && !model.isInternalPersonal();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -647,7 +650,10 @@ module.exports = function (app) {
                 permissionKey: ['ELECTRONIC_SIGNATURE_MEMO', 'LAUNCH_DISTRIBUTION_WORKFLOW'],
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    isVisible = !model.hasActiveSeqWF() && gridService.checkToShowAction(action) && !info.isPaper && _hasContent()&& _hasSingleSignature(model)  && !model.isPrivateSecurityLevel() && !model.isInternalPersonal(); //Don't show if its paper internal
+                    isVisible = !model.hasActiveSeqWF() && gridService.checkToShowAction(action)
+                        && !info.isPaper && _hasContent() && _hasSingleSignature(model)
+                        //&& !model.isPrivateSecurityLevel()
+                        && !model.isInternalPersonal();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
