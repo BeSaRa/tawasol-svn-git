@@ -1122,7 +1122,13 @@ module.exports = function (app) {
             };
 
             WorkItem.prototype.openForAnnotation = function () {
-                return correspondenceService.annotateCorrespondence(this);
+                var self = this;
+                return viewDocumentService.viewUserInboxDocument(self, [], 'userInbox', null, true)
+                    .then(function (generalStepElementView) {
+                        // just to set the seqWFId from the real correspondence
+                        self.generalStepElm.seqWFId = generalStepElementView.correspondence.seqWFId;
+                        return correspondenceService.annotateCorrespondence(self);
+                    });
             };
 
             WorkItem.prototype.openSequentialDocument = function (annotationType, seqWF, actions) {

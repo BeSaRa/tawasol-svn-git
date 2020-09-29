@@ -113,9 +113,9 @@ module.exports = function (app) {
 
         function _getFlattenStatus(hasMySignature) {
             if (typeof hasMySignature === 'undefined') {
-                return !!(self.sequentialWF && self.sequentialWF.getLastStepId() === self.nextSeqStep.id) || (self.info && !self.info.isAttachment && !self.info.isPaper && self.info.signaturesCount === 1);
+                return !!(self.sequentialWF && self.sequentialWF.getLastStepId() === self.nextSeqStep.id) || (self.info && !self.info.isAttachment && !self.info.isPaper && self.info.signaturesCount === 1 && !self.correspondence.getSeqWFId());
             } else {
-                return !!(self.sequentialWF && self.sequentialWF.getLastStepId() === self.nextSeqStep.id) || (self.info && !self.info.isAttachment && !self.info.isPaper && self.info.signaturesCount === 1 && hasMySignature);
+                return !!(self.sequentialWF && self.sequentialWF.getLastStepId() === self.nextSeqStep.id) || (self.info && !self.info.isAttachment && !self.info.isPaper && self.info.signaturesCount === 1 && !self.correspondence.getSeqWFId() && hasMySignature);
             }
         }
 
@@ -354,7 +354,7 @@ module.exports = function (app) {
         }
 
         function _getRightTypeForElectronicSignature() {
-            return (self.annotationType === AnnotationType.SIGNATURE || (self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep() && !self.needOpenForApproval)) ? AnnotationType.SIGNATURE : (_isElectronicAndAuthorizeByAnnotationBefore() && self.correspondence instanceof WorkItem ? AnnotationType.SIGNATURE : AnnotationType.ANNOTATION)
+            return (self.annotationType === AnnotationType.SIGNATURE || (self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep() && !self.needOpenForApproval)) ? AnnotationType.SIGNATURE : (_isElectronicAndAuthorizeByAnnotationBefore() && self.correspondence instanceof WorkItem && !self.correspondence.getSeqWFId() ? AnnotationType.SIGNATURE : AnnotationType.ANNOTATION)
         }
 
         function _isElectronicAndAuthorizeByAnnotationBefore() {
@@ -1125,7 +1125,7 @@ module.exports = function (app) {
                         } else {
                             if (self.info.isPaper) {
                                 self.info.docStatus === 25 ? self.handleSaveAnnotationAsAttachment(pdfContent) : self.handleUpdateDocumentContent(pdfContent);
-                            } else if (_isElectronicAndAuthorizeByAnnotationBefore()) {
+                            } else if (_isElectronicAndAuthorizeByAnnotationBefore() && !self.correspondence.getSeqWFId()) {
                                 if (hasMySignature) {
                                     self.correspondence.handlePinCodeAndCompositeThenCompleteAuthorization(pdfContent, ignoreValidationSignature)
                                         .then(self.handleSuccessAuthorize)
