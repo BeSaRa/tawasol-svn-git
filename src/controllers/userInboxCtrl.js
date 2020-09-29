@@ -1382,7 +1382,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.annotateDocument = function (workItem, $event, defer) {
-            workItem.openForAnnotation()
+            workItem.openForAnnotation(true)
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {

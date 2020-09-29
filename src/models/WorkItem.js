@@ -723,7 +723,7 @@ module.exports = function (app) {
                     .then(function (result) {
                         new ResolveDefer(defer);
 
-                        if (sendAfterApprove){
+                        if (sendAfterApprove) {
                             return result;
                         }
                         if (result === correspondenceService.authorizeStatus.PARTIALLY_AUTHORIZED.text) {
@@ -1121,8 +1121,11 @@ module.exports = function (app) {
                 return correspondenceService.updateContentByAnnotation(correspondence, content, annotationType);
             };
 
-            WorkItem.prototype.openForAnnotation = function () {
+            WorkItem.prototype.openForAnnotation = function (inboxItem) {
                 var self = this;
+                if (!inboxItem) {
+                    return correspondenceService.annotateCorrespondence(self);
+                }
                 return viewDocumentService.viewUserInboxDocument(self, [], 'userInbox', null, true)
                     .then(function (generalStepElementView) {
                         // just to set the seqWFId from the real correspondence
