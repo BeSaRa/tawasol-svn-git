@@ -79,6 +79,9 @@ module.exports = function (app) {
                 subSite: function(record){
                     return self.getSortingKey('subSite', 'Site');
                 },
+                creator: function(record){
+                    return self.getSortingKey('creatorInfo', 'Information');
+                },
                 createdOn: 'createdOn'
             },
             searchText: '',

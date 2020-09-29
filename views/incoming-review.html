@@ -90,6 +90,10 @@
                                             <span>{{lang.sub_site}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedReviewIncomings.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('creatorInfo', 'Information')}}">
+                                            <span>{{lang.creator}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedReviewIncomings.length" md-column
                                             md-order-by="createdOn">
                                             <span>{{lang.created_on}}</span>
                                         </th>
@@ -128,6 +132,7 @@
                                         <td md-cell>{{reviewIncoming.securityLevel.getTranslatedName()}}</td>
                                         <td md-cell>{{reviewIncoming.site.getTranslatedParentName()}}</td>
                                         <td md-cell>{{reviewIncoming.site.getTranslatedName()}}</td>
+                                        <td md-cell>{{reviewIncoming.creatorInfo.getTranslatedName()}}</td>
                                         <td md-cell>{{reviewIncoming.createdOn}}</td>
                                         <td md-cell ng-if="ctrl.selectedReviewIncomings.length < 2">
                                             <div layout-align="start center" ng-if="!ctrl.selectedReviewIncomings.length
