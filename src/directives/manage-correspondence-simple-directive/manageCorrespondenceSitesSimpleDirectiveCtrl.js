@@ -234,6 +234,7 @@ module.exports = function (app) {
         function _mapSubSites(siteView) {
             return (new Site())
                 .mapFromSiteView(siteView)
+                .setFaxNumber(siteView.faxNumber)
                 .setFollowupStatus(self.isFollowupStatusMandatory ? followupStatusNeedReply : followupStatusWithoutReply)
                 .setFollowupDate(self.isFollowupStatusMandatory ? new Date(defaultNeedReplyFollowupDate) : null)
                 .setCorrespondenceSiteType(_getTypeByLookupKey(siteView.correspondenceSiteTypeId));
