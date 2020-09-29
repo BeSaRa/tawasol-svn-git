@@ -139,8 +139,8 @@ module.exports = function (app) {
             if (model.followUpFrom || model.followUpTo) {
                 var date = {
                     followupDates: {
-                        first: generator.getTimeStampFromDate(model.followUpFrom),
-                        second: generator.getTimeStampFromDate(model.followUpTo)
+                        first: Date.UTC(model.followUpFrom.getFullYear() ,model.followUpFrom.getMonth(), model.followUpFrom.getDate()),
+                        second: Date.UTC(model.followUpTo.getFullYear() ,model.followUpTo.getMonth(), model.followUpTo.getDate(),23, 59, 59, 999)
                     }
                 };
                 // if user select siteInfoTo
