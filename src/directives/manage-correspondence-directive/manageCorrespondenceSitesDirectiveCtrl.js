@@ -1173,19 +1173,27 @@ module.exports = function (app) {
 
 
         var _selectDefaultMainSiteAndGetSubSites = function () {
-            if (self.selectedSiteTypeSimple && self.selectedSiteTypeSimple.lookupKey === 1) {
-                self.selectedMainSiteSimple = _.find(self.mainSites, function (site) {
-                    return site.id === 10000000;
-                });
+            if (self.selectedSiteTypeSimple && self.mainSites && self.mainSites.length > 0) {
+                if (configurationService.SELECT_MAIN_SITE_IF_ONLY_ONE && self.mainSites.length === 1){
+                    self.selectedMainSiteSimple = self.mainSites[0];
+                } else if (self.selectedSiteTypeSimple.lookupKey === 1) {
+                    self.selectedMainSiteSimple = _.find(self.mainSites, function (site) {
+                        return site.id === 10000000;
+                    });
+                }
                 self.selectedMainSiteSimple ? self.onMainSiteChangeSimple() : null;
             }
         };
 
         var _selectDefaultMainSiteAndGetSubSitesAdvanced = function () {
-            if (self.selectedSiteTypeAdvanced && self.selectedSiteTypeAdvanced.lookupKey === 1) {
-                self.selectedMainSiteAdvanced = _.find(self.mainSites, function (site) {
-                    return site.id === 10000000;
-                });
+            if (self.selectedSiteTypeAdvanced && self.mainSites && self.mainSites.length > 0) {
+                if (configurationService.SELECT_MAIN_SITE_IF_ONLY_ONE && self.mainSites.length === 1){
+                    self.selectedMainSiteAdvanced = self.mainSites[0];
+                } else if (self.selectedSiteTypeAdvanced.lookupKey === 1) {
+                    self.selectedMainSiteAdvanced = _.find(self.mainSites, function (site) {
+                        return site.id === 10000000;
+                    });
+                }
                 self.selectedMainSiteAdvanced ? self.onMainSiteChangeAdvanced() : null;
             }
         };

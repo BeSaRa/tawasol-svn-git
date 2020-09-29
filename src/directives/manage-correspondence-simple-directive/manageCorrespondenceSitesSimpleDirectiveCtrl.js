@@ -18,6 +18,7 @@ module.exports = function (app) {
                                                                              generator,
                                                                              SiteView,
                                                                              rootEntity,
+                                                                             configurationService,
                                                                              employeeService) {
         'ngInject';
         var self = this;
@@ -313,7 +314,7 @@ module.exports = function (app) {
                     /*if ($stateParams.action !== 'reply') {
                         _selectDefaultMainSiteAndGetSubSites();
                     }*/
-                    _selectDefaultMainSiteAndGetSubSites();
+                    _selectDefaultMainSiteAndGetSubSites(!ignoreEmptySelectedMain);
                     return self.mainSites;
                 });
             } else {
@@ -549,13 +550,21 @@ module.exports = function (app) {
             });
         };
 
-        var _selectDefaultMainSiteAndGetSubSites = function () {
-            if (self.selectedSiteType && self.selectedSiteType.lookupKey === 1) {
-                self.selectedMainSite = _.find(self.mainSites, function (site) {
-                    return site.id === 10000000;
-                });
+        var _selectDefaultMainSiteAndGetSubSites = function (ignoreResetMainSite) {
+            if (ignoreResetMainSite && self.selectedMainSite) {
                 self.selectedMainSite ? self.getSubSites(true) : null;
+                return;
             }
+            if (self.selectedSiteType && self.mainSites && self.mainSites.length > 0) {
+                if (configurationService.SELECT_MAIN_SITE_IF_ONLY_ONE && self.mainSites.length === 1) {
+                    self.selectedMainSite = self.mainSites[0];
+                } else if (self.selectedSiteType.lookupKey === 1) {
+                    self.selectedMainSite = _.find(self.mainSites, function (site) {
+                        return site.id === 10000000;
+                    });
+                }
+            }
+            self.selectedMainSite ? self.getSubSites(true) : null;
         };
 
         /**

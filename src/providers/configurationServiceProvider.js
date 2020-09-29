@@ -21,7 +21,8 @@ module.exports = function (app) {
             ANNOTATE_DOCUMENT_PERMISSION: '',
             APP_CONTEXT: 'ui',
             PSPDF_LICENSE_KEY: false,
-            REPLICATION_EXCLUDED_LIST: ['Note', 'Highlight', 'Squiggle', 'StrikeOut', 'Underline', 'Redaction']
+            REPLICATION_EXCLUDED_LIST: ['Note', 'Highlight', 'Squiggle', 'StrikeOut', 'Underline', 'Redaction'],
+            SELECT_MAIN_SITE_IF_ONLY_ONE: true
         };
         var configurationServiceProvider = provider;
         /**
