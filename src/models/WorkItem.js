@@ -983,6 +983,10 @@ module.exports = function (app) {
             WorkItem.prototype.createReply = function ($event, isSpecificVersion) {
                 var docClass = this.getInfo().documentClass,
                     record = angular.copy(this);
+                if (record.getSeqWFId()) {
+                    delete record.generalStepElm.workObjectNumber
+                }
+
                 if (docClass === 'incoming' || docClass === 'internal') {
                     return dialog.showDialog({
                         $event: $event || null,
