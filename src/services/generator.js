@@ -397,7 +397,7 @@ module.exports = function (app) {
             if (typeof value === 'undefined' || value === null || !hasOwnPropertyName) {
                 return value;
             }
-            return value.hasOwnProperty(hasOwnPropertyName) ? self.getNestedPropertyValue(value, hasOwnPropertyName) : value;
+            return self.getNestedPropertyValue(value, hasOwnPropertyName);
         };
 
         /**
