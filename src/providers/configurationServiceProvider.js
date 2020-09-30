@@ -21,6 +21,7 @@ module.exports = function (app) {
             ANNOTATE_DOCUMENT_PERMISSION: '',
             APP_CONTEXT: 'ui',
             PSPDF_LICENSE_KEY: false,
+            // PSPDF_LICENSE_KEY: 'S_5u8iQ-OhOsT7ZqKwy0fo0oX4tCg935ILEFDW1wGNtmVVQc8WbCo3GQxa4re9f1LyMdRQiNMc_DEp_pOurQZIBDsk67Vf4oBNJ-w8wKGYyDTBGe0u6InMe2zky4S3GXvO5rmmKPTObkerfi7y1GHKb5kguP02eynRtmXe596YpF6ZpcUaMZXUwoqgDDn9FuzRgcRGKRvtEBtGgKnKQKuDoLqBDp9GXAAUSLVR1xnsXXx1dnogCLQbGp_6MeEomXCf9EX8YJNx9tk06MOUzp1DYbl5q0LNGRE6fcgA11wpsA0Z-s0Vx7ampbopBR39pCcRQKDWkUOyMeQbW9-QZJWfs5YkmejVZJXv8m29B7YFAyVA5-7ejGH5yrsNZjA-UYI1giNZbMG1Y5La3wAn6Ll_uhc9KSP-spuBKViuBbGNX7Bg2O66fi9_jvSmM34DVe',
             REPLICATION_EXCLUDED_LIST: ['Note', 'Highlight', 'Squiggle', 'StrikeOut', 'Underline', 'Redaction'],
             SELECT_MAIN_SITE_IF_ONLY_ONE: true
         };
