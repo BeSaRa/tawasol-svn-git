@@ -394,7 +394,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.getNormalizedValue = function (value, hasOwnPropertyName) {
-            if (typeof value === 'undefined' || value === null || !hasOwnPropertyName) {
+            if (typeof value === 'undefined' || typeof value !== 'object' || value === null || !hasOwnPropertyName) {
                 return value;
             }
             return self.getNestedPropertyValue(value, hasOwnPropertyName);
