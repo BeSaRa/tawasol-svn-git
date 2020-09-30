@@ -421,7 +421,7 @@ module.exports = function (app) {
                 url: urlService.sequentialWorkflow + '/bulk',
                 data: bulkIds
             }).then(function (result) {
-                return generator.getBulkActionResponse(result, sequentialWorkflows, false, 'failed_delete_selected', 'delete_success', 'delete_success_except_following');
+                return generator.getBulkActionResponse(result, sequentialWorkflows, false, 'failed_delete_selected', 'delete_success', 'delete_success_except_following', 'id');
             });
         };
 

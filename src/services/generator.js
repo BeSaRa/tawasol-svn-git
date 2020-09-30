@@ -575,6 +575,40 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the list of items which failed in bulk action
+         * @param itemsList
+         * @param resultCollection
+         * @param bulkPropertyKey
+         * @returns {[]}
+         * @private
+         */
+        function _getFailedItems(itemsList, resultCollection, bulkPropertyKey) {
+            var failureCollection = [], currentIndex = 0;
+
+            if (!bulkPropertyKey) {
+                _.map(resultCollection, function (value) {
+                    if (!value)
+                        failureCollection.push(itemsList[currentIndex]);
+                    currentIndex++;
+                });
+            } else {
+                _.map(resultCollection, function (value, key) {
+                    if (!value) {
+                        var failedItem = _.find(itemsList, function (item) {
+                            var itemValueByProperty = self.getNormalizedValue(item, bulkPropertyKey);
+                            if (!itemValueByProperty) {
+                                return false;
+                            }
+                            return itemValueByProperty.toString() === key.toString();
+                        });
+                        failureCollection.push(failedItem);
+                    }
+                });
+            }
+            return failureCollection;
+        }
+
+        /**
          * @description Shows the response of bulk action.
          * @param  {Array.<*>} resultCollection
          * @param {Array.<*>} selectedItems
@@ -584,28 +618,26 @@ module.exports = function (app) {
          * @param {string} failureSomeMessage
          * @returns {*}
          */
-        self.getBulkActionResponse = function (resultCollection, selectedItems, ignoreMessage, errorMessage, successMessage, failureSomeMessage) {
-            resultCollection = resultCollection.hasOwnProperty('data') ? resultCollection.data.rs : resultCollection;
-            var failureCollection = [];
-            var currentIndex = 0;
-            _.map(resultCollection, function (value) {
-                if (!value)
-                    failureCollection.push(selectedItems[currentIndex]);
-                currentIndex++;
-            });
+        self.getBulkActionResponse = function (resultCollection, selectedItems, ignoreMessage, errorMessage, successMessage, failureSomeMessage, bulkPropertyKey) {
+            if (ignoreMessage) {
+                return selectedItems;
+            }
 
-            if (!ignoreMessage) {
+            resultCollection = resultCollection.hasOwnProperty('data') ? resultCollection.data.rs : resultCollection;
+
+            var failureCollection = _getFailedItems(selectedItems, resultCollection, bulkPropertyKey);
+
+            if (failureCollection.length === 0) {
+                toast.success(langService.get(successMessage));
+            } else {
                 if (failureCollection.length === selectedItems.length) {
                     toast.error(langService.get(errorMessage));
-                } else if (failureCollection.length) {
+                } else {
                     self.generateFailedBulkActionRecords(failureSomeMessage, _.map(failureCollection, function (item) {
                         return item.getTranslatedName();
                     }));
-                } else {
-                    toast.success(langService.get(successMessage));
                 }
             }
-            return selectedItems;
         };
 
         /**
