@@ -283,7 +283,7 @@ module.exports = function (app) {
             }
             // displaying open for approval Button
             if (!self.info.isAttachment &&
-                (self.info.docStatus < 23 && !self.sequentialWF && !self.correspondence.hasActiveSeqWF() || self.info.docStatus < 23 && self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep()) &&
+                (self.info.docStatus < 23 && !self.sequentialWF && !self.correspondence.getSeqWFId() || self.info.docStatus < 23 && self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep()) &&
                 self.annotationType !== AnnotationType.SIGNATURE &&
                 !self.info.isPaper
             ) {
