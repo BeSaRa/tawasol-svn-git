@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('pdfViewerPopCtrl', function (dialog,
                                                  $scope,
                                                  $element,
+                                                 moment,
                                                  uuidv4,
                                                  PDFService,
                                                  PDFViewer,
@@ -220,8 +221,15 @@ module.exports = function (app) {
                     dialog.hide(AnnotationType.SIGNATURE);
                 }
             };
+            var usernameDateButton = {
+                type: "custom",
+                id: "username-date",
+                title: "user name and date ",
+                icon: "./assets/images/username-date.svg",
+                onPress: self.addUserNameAndDateToDocument
+            };
             // remove default print from toolbar
-            var toolbarInstance = _.filter(defaultToolbar.concat([printWithoutAnnotationButton]), function (item) {
+            var toolbarInstance = _.filter(defaultToolbar.concat([usernameDateButton, printWithoutAnnotationButton]), function (item) {
                 return item.type !== 'print';
             });
 
@@ -362,13 +370,43 @@ module.exports = function (app) {
             return self.info.docStatus === 23 && !self.info.isPaper && self.correspondence.getAuthorizeByAnnotationStatus();
         }
 
+        self.addUserNameAndDateToDocument = async function () {
+            var date = moment().format('YYYY-MM-DD');
+            var pageInfo = self.currentInstance.pageInfoForIndex(self.currentInstance.viewState.currentPageIndex);
+            var usernameAnnotation = new PSPDFKit.Annotations.TextAnnotation({
+                text: employeeService.getEmployee().getTranslatedName() + '\r\n' + date.toString(),
+                pageIndex: self.currentInstance.viewState.currentPageIndex,
+                boundingBox: new PSPDFKit.Geometry.Rect({
+                    left: 10,
+                    top: 20,
+                    width: 100,
+                    height: 20
+                }),
+                fontSize: 15,
+                horizontalAlign: 'center',
+                isFitting: true
+            });
+            usernameAnnotation = self.currentInstance.calculateFittingTextAnnotationBoundingBox(usernameAnnotation);
+
+            usernameAnnotation = usernameAnnotation.set('boundingBox', new PSPDFKit.Geometry.Rect({
+                left: (pageInfo.width / 2) - usernameAnnotation.boundingBox.width,
+                top: (pageInfo.height / 2) - usernameAnnotation.boundingBox.height,
+                width: usernameAnnotation.boundingBox.width,
+                height: usernameAnnotation.boundingBox.height,
+            }));
+
+            self.currentInstance.createAnnotation(usernameAnnotation).then(annotation => {
+                self.selectAnnotation(annotation);
+            });
+        };
+
         /**
          * @description select given annotation
          * @param annotation
          */
         self.selectAnnotation = function (annotation) {
             self.currentInstance
-                .setEditingAnnotation(annotation, false);
+                .setSelectedAnnotation(annotation);
         };
         /**
          * @description convert url to image object
