@@ -208,7 +208,7 @@
                     <div layout="row">
                         <span ng-if="!userInbox.senderInfo.msTeamsChatURL" flex>{{userInbox.senderInfo.getTranslatedName()}}</span>
                         <a target="_blank" href="{{userInbox.senderInfo.msTeamsChatURL}}"
-                           ng-if="userInbox.senderInfo.msTeamsChatURL"
+                           ng-if="userInbox.senderInfo.msTeamsChatURL && ctrl.employeeService.getEmployee().isMSTeamsEnabled"
                            flex>{{userInbox.senderInfo.getTranslatedName()}}</a>
                         <grid-indicator-directive record="userInbox"
                                                   indicator-type="comments"
