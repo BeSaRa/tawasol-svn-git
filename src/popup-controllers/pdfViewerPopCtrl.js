@@ -370,8 +370,12 @@ module.exports = function (app) {
             return self.info.docStatus === 23 && !self.info.isPaper && self.correspondence.getAuthorizeByAnnotationStatus();
         }
 
+        /**
+         * @description add username and date to the document
+         * @return {Promise<void>}
+         */
         self.addUserNameAndDateToDocument = async function () {
-            var date = moment().format('YYYY-MM-DD');
+            var date = moment().format('DD-MM-YYYY');
             var pageInfo = self.currentInstance.pageInfoForIndex(self.currentInstance.viewState.currentPageIndex);
             var usernameAnnotation = new PSPDFKit.Annotations.TextAnnotation({
                 text: employeeService.getEmployee().getTranslatedName() + '\r\n' + date.toString(),
