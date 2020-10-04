@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('pdfViewerPopCtrl', function (dialog,
                                                  $scope,
                                                  $element,
+                                                 $cookies,
                                                  moment,
                                                  uuidv4,
                                                  PDFService,
@@ -111,6 +112,10 @@ module.exports = function (app) {
         ];
 
         self.generalStepElementView = generalStepElementView;
+        // used to store value of attache user name and date toggle
+        var cookieKey = employeeService.getEmployee().domainName + '_' + 'attach_username_date';
+
+        self.attacheUsernameAndDateToSignature = false;
 
         function _getFlattenStatus(hasMySignature) {
             if (typeof hasMySignature === 'undefined') {
@@ -370,11 +375,19 @@ module.exports = function (app) {
             return self.info.docStatus === 23 && !self.info.isPaper && self.correspondence.getAuthorizeByAnnotationStatus();
         }
 
+        self.onAttachToggleChange = function () {
+            var date = (new Date());
+            date.setFullYear(date.getFullYear() + 1);
+            $cookies.put(cookieKey, self.attacheUsernameAndDateToSignature, {
+                expires: date
+            });
+        };
+
         /**
          * @description add username and date to the document
          * @return {Promise<void>}
          */
-        self.addUserNameAndDateToDocument = async function () {
+        self.addUserNameAndDateToDocument = async function (event, annotation) {
             var date = moment().format('DD-MM-YYYY');
             var pageInfo = self.currentInstance.pageInfoForIndex(self.currentInstance.viewState.currentPageIndex);
             var usernameAnnotation = new PSPDFKit.Annotations.TextAnnotation({
@@ -388,12 +401,15 @@ module.exports = function (app) {
                 }),
                 fontSize: 15,
                 horizontalAlign: 'center',
-                isFitting: true
+                isFitting: true,
+                customData: {
+                    additionalData: {type: _getRightTypeForElectronicSignature()}
+                }
             });
             usernameAnnotation = self.currentInstance.calculateFittingTextAnnotationBoundingBox(usernameAnnotation);
 
             usernameAnnotation = usernameAnnotation.set('boundingBox', new PSPDFKit.Geometry.Rect({
-                left: (pageInfo.width / 2) - usernameAnnotation.boundingBox.width,
+                left: annotation ? (annotation.boundingBox.left + annotation.boundingBox.width) : (pageInfo.width / 2) - usernameAnnotation.boundingBox.width,
                 top: (pageInfo.height / 2) - usernameAnnotation.boundingBox.height,
                 width: usernameAnnotation.boundingBox.width,
                 height: usernameAnnotation.boundingBox.height,
@@ -532,6 +548,9 @@ module.exports = function (app) {
                 return $q.all(promises)
             }).then(function (annotations) {
                 annotations.length === 1 ? self.selectAnnotation(annotations[0]) : null;
+                if (self.attacheUsernameAndDateToSignature) {
+                    return self.addUserNameAndDateToDocument(null, annotations[0]);
+                }
             });
         };
         /**
@@ -896,6 +915,9 @@ module.exports = function (app) {
                 var updatedAnnotation = annotation
                     .set('isSignature', _getRightTypeForElectronicSignature() !== 1)
                     .set('customData', customData);
+                if (self.attacheUsernameAndDateToSignature) {
+                    self.addUserNameAndDateToDocument(null, updatedAnnotation);
+                }
                 return self.currentInstance.updateAnnotation(updatedAnnotation);
             }
         };
@@ -1622,6 +1644,8 @@ module.exports = function (app) {
          */
         self.$onInit = function () {
             _getNextStepFromSeqWF();
+            self.attacheUsernameAndDateToSignature = $cookies.get(cookieKey) ? JSON.parse($cookies.get(cookieKey)) : false;
+            self.onAttachToggleChange();
             $timeout(function () {
                 if (instantJSON) {
                     return self.loadInstantJSON();
