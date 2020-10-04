@@ -125,7 +125,7 @@ module.exports = function (app) {
             }
 
             return defaultNeedReplyFollowupDate;
-        }
+        };
 
         /**
          * @description Finds the property configuration by symbolic name
@@ -297,7 +297,6 @@ module.exports = function (app) {
             self.subSitesCopy = angular.copy(self.subSites);
             self.subSiteSearchText = '';
             self.selectedSubSite = null;
-
             if (self.selectedSiteType) {
                 return correspondenceViewService.correspondenceSiteSearch('main', {
                     type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
@@ -306,15 +305,9 @@ module.exports = function (app) {
                 }).then(function (result) {
                     self.mainSites = result;
                     self.mainSitesCopy = angular.copy(self.mainSites);
-                    //load sub sites if create reply
-                    /*if ($stateParams.action === 'reply') {
-                        self.getSubSites(true);
-                    }*/
-
-                    /*if ($stateParams.action !== 'reply') {
-                        _selectDefaultMainSiteAndGetSubSites();
-                    }*/
-                    _selectDefaultMainSiteAndGetSubSites(!ignoreEmptySelectedMain);
+                    if (!ignoreEmptySelectedMain) {
+                        _selectDefaultMainSiteAndGetSubSites(!ignoreEmptySelectedMain);
+                    }
                     return self.mainSites;
                 });
             } else {
@@ -347,7 +340,6 @@ module.exports = function (app) {
 
                 self.subSitesCopy = angular.copy(_.map(result, _mapSubSites));
                 self.subSites = angular.copy(self.subSitesCopy);
-                //self.subSites = _.filter(_.map(result, _mapSubSites), _filterSubSites);
                 self.selectedSubSite = null;
 
                 if (self.subSites.length === 1) {
@@ -668,6 +660,7 @@ module.exports = function (app) {
         };
 
         self.subSiteChanged = function () {
+            console.log(' FROM HERE ');
             if (self.selectedSubSite && typeof self.selectedSubSite !== 'string') {
                 self.selectedMainSite = new SiteView({
                     arName: self.selectedSubSite.mainArSiteText,
@@ -823,6 +816,12 @@ module.exports = function (app) {
                         _checkFollowupStatusMandatory();
                     });
             });
-        }
+        };
+
+        $scope.$watch(function () {
+            return self.selectedSubSite
+        }, function (newVal, oldVal) {
+            console.log('newVal', newVal);
+        })
     });
 };

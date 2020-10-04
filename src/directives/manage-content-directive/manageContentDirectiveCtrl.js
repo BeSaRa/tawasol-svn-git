@@ -521,10 +521,5 @@ module.exports = function (app) {
                     return self.simpleViewUrl;
                 });
         };
-
-        self.$onInit = function () {
-            console.log('self.editContent && !self.receiveDocument && self.documentInformation && !self.document.addMethod');
-            console.log(self.editContent, !self.receiveDocument, self.documentInformation, !self.document.addMethod);
-        }
     });
 };
