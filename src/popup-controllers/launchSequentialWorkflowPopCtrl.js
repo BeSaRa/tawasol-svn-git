@@ -11,16 +11,53 @@ module.exports = function (app) {
                                                                 record,
                                                                 sequentialWorkflows,
                                                                 sequentialWorkflowService,
-                                                                attachmentService) {
+                                                                rootEntity,
+                                                                employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'launchSequentialWorkflowPopCtrl';
         self.form = null;
         self.record = record;
         self.sequentialWorkflows = sequentialWorkflows;
+        self.canAddSeqWF = rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo('ADD_SEQ_WF');
 
         self.selectedSeqWF = null;
         self.seqWFSearchText = '';
+
+        self.reloadSequentialWorkflows = function () {
+            return sequentialWorkflowService
+                .loadSequentialWorkflowsByRegOuDocClassActive(employeeService.getEmployee().getRegistryOUID(), record.getInfo().docClassId)
+                .then(function (result) {
+                    return self.sequentialWorkflows = result;
+                });
+        };
+
+        /**
+         * @description Opens dialog for add new sequential workflow
+         * @param $event
+         */
+        self.openAddSequentialWorkflowDialog = function ($event) {
+            if (!self.canAddSeqWF) {
+                return;
+            }
+
+            sequentialWorkflowService
+                .controllerMethod
+                .sequentialWorkflowAdd(employeeService.getEmployee().getRegistryOUID(), self.record.getInfo().docClassId, $event)
+                .then(function (result) {
+                    self.reloadSequentialWorkflows()
+                        .then(function () {
+                            toast.success(langService.get('add_success').change({name: result.getNames()}));
+                            self.selectedSeqWF = _.find(self.sequentialWorkflows, function (item) {
+                                return item.id === result.id && item.status;
+                            });
+                            self.onChangeSequentialWorkflow();
+                        })
+                })
+                .catch(function () {
+                    //self.reloadSequentialWorkflows(self.grid.page);
+                });
+        };
 
         /**
          * @description Handles the change of sequential workflow

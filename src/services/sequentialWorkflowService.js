@@ -92,9 +92,10 @@ module.exports = function (app) {
             /**
              * @description Opens popup to add new sequential workflow
              * @param regOuId
+             * @param docClassId
              * @param $event
              */
-            sequentialWorkflowAdd: function (regOuId, $event) {
+            sequentialWorkflowAdd: function (regOuId, docClassId, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -108,7 +109,8 @@ module.exports = function (app) {
                                 regOUId: regOuId ? generator.getNormalizedValue(regOuId, 'id') : null,
                                 creatorId: employeeService.getEmployee().id,
                                 creatorOUId: employeeService.getEmployee().getOUID()
-                            })
+                            }),
+                            defaultDocClass: (generator.validRequired(docClassId) ? docClassId : null)
                         }
                     });
             },
@@ -140,7 +142,8 @@ module.exports = function (app) {
                         locals: {
                             editMode: false,
                             viewOnly: false,
-                            sequentialWorkflow: newSequentialWF
+                            sequentialWorkflow: newSequentialWF,
+                            defaultDocClass: null
                         }
                     });
             },
@@ -159,7 +162,8 @@ module.exports = function (app) {
                         locals: {
                             editMode: true,
                             viewOnly: false,
-                            sequentialWorkflow: angular.copy(sequentialWorkflow)
+                            sequentialWorkflow: angular.copy(sequentialWorkflow),
+                            defaultDocClass: null
                         }
                     });
             },
@@ -178,7 +182,8 @@ module.exports = function (app) {
                         locals: {
                             editMode: true,
                             viewOnly: true,
-                            sequentialWorkflow: angular.copy(sequentialWorkflow)
+                            sequentialWorkflow: angular.copy(sequentialWorkflow),
+                            defaultDocClass: null
                         }
                     });
             },
@@ -306,8 +311,6 @@ module.exports = function (app) {
                             }
                         });
                 });
-
-
             },
 
         };
@@ -321,6 +324,7 @@ module.exports = function (app) {
             return $http
                 .post(urlService.sequentialWorkflow, generator.interceptSendInstance('SequentialWF', sequentialWorkflow))
                 .then(function (result) {
+                    sequentialWorkflow.id = result.data.rs;
                     return sequentialWorkflow;
                 })
                 .catch(function (error) {

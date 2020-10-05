@@ -30,6 +30,12 @@
                                             md-highlight-flags="i">{{option.getTranslatedName()}}</span>
                                 </md-option>
                             </md-select>
+                            <md-button ng-if="ctrl.canAddSeqWF"
+                                       ng-click="ctrl.openAddSequentialWorkflowDialog($event)"
+                                       class="md-icon-button cms-select-overlay-button"
+                                       tooltip="{{lang.add_new_sequential_workflow}}">
+                                <md-icon md-svg-icon="plus"></md-icon>
+                            </md-button>
                             <div ng-messages="launchSequentialWFForm.seqWF.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>

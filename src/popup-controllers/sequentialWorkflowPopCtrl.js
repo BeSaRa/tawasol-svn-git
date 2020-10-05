@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                           langService,
                                                           editMode,
                                                           viewOnly,
+                                                          defaultDocClass,
                                                           sequentialWorkflow,
                                                           sequentialWorkflowService) {
             'ngInject';
@@ -28,6 +29,8 @@ module.exports = function (app) {
             self.sequentialWorkflow = sequentialWorkflow;
             self.model = angular.copy(self.sequentialWorkflow);
             self.selectedDocClass = self.model.docClassID;
+
+            self.defaultDocClass = defaultDocClass;
 
             self.documentClasses = lookupService.returnLookups(lookupService.documentClass);
 
@@ -76,13 +79,24 @@ module.exports = function (app) {
              */
 
             self.hasValue = function (value) {
-                return typeof value !== 'undefined' && value !== null;
+                return typeof value !== 'undefined' && value !== null && value !== '';
             };
+
+            /**
+             * @description Sets the doc type as incoming and clear steps
+             * @private
+             */
+            function _setIncomingDocType() {
+                self.sequentialWorkflow.docClassID = angular.copy(self.selectedDocClass);
+                self.sequentialWorkflow.steps = [];
+                self.sequentialWorkflow.stepRows = [];
+                _setRedrawSteps();
+            }
 
             /**
              * @description Handles the change of document type to manage steps
              */
-            self.handleDocTypeChange = function () {
+            self.handleDocTypeChange = function (ignoreMessage) {
                 if (self.viewOnly || self.model.id) {
                     self.selectedDocClass = angular.copy(self.sequentialWorkflow.docClassID);
                     return;
@@ -92,12 +106,13 @@ module.exports = function (app) {
                 if (!self.hasValue(self.sequentialWorkflow.docClassID) || !_isIncomingSeqWF(self.selectedDocClass)) {
                     self.sequentialWorkflow.docClassID = angular.copy(self.selectedDocClass);
                 } else {
+                    if (ignoreMessage) {
+                        _setIncomingDocType();
+                        return;
+                    }
                     dialog.confirmMessage(langService.get('confirm_seq_wf_class_change'))
                         .then(function () {
-                            self.sequentialWorkflow.docClassID = angular.copy(self.selectedDocClass);
-                            self.sequentialWorkflow.steps = [];
-                            self.sequentialWorkflow.stepRows = [];
-                            _setRedrawSteps();
+                            _setIncomingDocType();
                         })
                         .catch(function (error) {
                             self.selectedDocClass = angular.copy(self.sequentialWorkflow.docClassID);
@@ -174,6 +189,13 @@ module.exports = function (app) {
             self.$onInit = function () {
                 $timeout(function () {
                     self.form = $scope.sequentialWorkflowForm || null;
+                    // if add seqWF and default document class exists, set it to seqWF and model and handle change of docClass
+                    if (!self.editMode && generator.validRequired(defaultDocClass)) {
+                        self.selectedDocClass = defaultDocClass;
+                        self.sequentialWorkflow.docClassID = defaultDocClass;
+                        self.model = angular.copy(self.sequentialWorkflow);
+                        self.handleDocTypeChange(true);
+                    }
                 });
             };
         }

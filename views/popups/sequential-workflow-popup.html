@@ -44,7 +44,7 @@
                         <md-input-container flex>
                             <label for="docClass">{{lang.label_document_type}}</label>
                             <md-select id="docClass" name="docClass" required
-                                       ng-disabled="ctrl.viewOnly || ctrl.editMode"
+                                       ng-disabled="ctrl.viewOnly || ctrl.editMode || ctrl.hasValue(ctrl.defaultDocClass)"
                                        ng-change="ctrl.handleDocTypeChange()"
                                        ng-model="ctrl.selectedDocClass">
                                 <md-option ng-repeat="type in ctrl.documentClasses track by $index"
@@ -58,7 +58,7 @@
                         </md-input-container>
                         <div flex class="p020">
                             <md-switch flex ng-model="ctrl.sequentialWorkflow.status"
-                                       ng-disabled="ctrl.viewOnly"
+                                       ng-disabled="ctrl.viewOnly || ctrl.hasValue(ctrl.defaultDocClass)"
                                        aria-label="{{lang.status}}">
                                 <label>{{lang.status}} :
                                     {{ctrl.sequentialWorkflow.getTranslatedStatus()}}</label>

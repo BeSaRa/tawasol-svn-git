@@ -136,7 +136,7 @@ module.exports = function (app) {
             }
             sequentialWorkflowService
                 .controllerMethod
-                .sequentialWorkflowAdd(self.selectedOrganization, $event)
+                .sequentialWorkflowAdd(self.selectedOrganization, null, $event)
                 .then(function (result) {
                     self.reloadSequentialWorkflows(self.grid.page)
                         .then(function () {
