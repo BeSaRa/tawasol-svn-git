@@ -89,7 +89,7 @@ module.exports = function (app) {
          * @private
          */
         function _checkProxyDate(ouApplicationUser) {
-            if (ouApplicationUser.proxyEndDate && ouApplicationUser.proxyEndDate.valueOf() < (new Date()).valueOf()) {
+            if (ouApplicationUser.proxyEndDate && new Date(ouApplicationUser.proxyEndDate).valueOf() < (new Date()).valueOf()) {
                 self.applicationUser.outOfOffice = false;
                 self.selectedProxyUser = null;
                 ouApplicationUser.emptyOutOfOffice();
