@@ -6,31 +6,19 @@
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="outOfOfficeSettingsForm" autocomplete="off">
-                <fieldset flex>
-                    <legend class="md-accent">
-                        <!-- Determine Associate -->
-                        <md-switch flex ng-model="ctrl.isOutOfOffice"
-                                   ng-change="ctrl.changeOutOfOffice(outOfOfficeSettingsForm)"
-                                   aria-label="{{lang.out_of_office_toggle_button}}">
-                            <label>{{ctrl.isOutOfOffice ? (lang.out_of_office_settings + ' : ' +
-                                lang.active) : (lang.out_of_office_settings + ' : ' + lang.inactive)
-                                }}</label>
-                        </md-switch>
-                    </legend>
+                <div flex>
                     <div class="full-width-fieldset">
                         <div layout="row">
                             <!-- Out Of Office -->
                             <md-switch flex ng-model="ctrl.applicationUser.outOfOffice"
-                                       ng-disabled="!ctrl.isOutOfOffice"
-                                       aria-label="{{lang.out_of_office_toggle_button}}">
+                                       aria-label="{{lang.out_of_office_toggle_button}}"
+                                       ng-change="ctrl.onOutOfOfficeChanged($event)">
                                 <label>{{ctrl.ouApplicationUser.getOutOffOfficeTranslatedStatus(ctrl.applicationUser.outOfOffice)}}</label>
                             </md-switch>
                         </div>
                         <div layout="row">
                             <!-- User On Behalf / Proxy User -->
                             <md-autocomplete flex md-input-name="proxyUser" md-input-id="proxyUser"
-                                             ng-required="ctrl.isOutOfOffice"
-                                             ng-disabled="!ctrl.isOutOfOffice"
                                              md-clear-button="true"
                                              md-no-cache="true"
                                              md-selected-item="ctrl.selectedProxyUser"
@@ -59,8 +47,8 @@
                             <md-input-container flex>
                                 <label for="proxyAuthorityLevels">{{lang.authority_level}}</label>
                                 <md-select multiple name="proxyAuthorityLevels"
-                                           ng-required="ctrl.isOutOfOffice && ctrl.filteredSecurityLevels.length"
-                                           ng-disabled="!ctrl.isOutOfOffice || !ctrl.filteredSecurityLevels.length"
+                                           ng-required="ctrl.filteredSecurityLevels.length"
+                                           ng-disabled="!ctrl.filteredSecurityLevels.length"
                                            id="proxyAuthorityLevels"
                                            ng-model="ctrl.ouApplicationUser.proxyAuthorityLevels"
                                            ng-model-options="{trackBy: '$value.id'}">
@@ -79,14 +67,11 @@
                             <md-input-container flex class="cms-datepicker">
                                 <label for="proxyStartDate">{{lang.start_date}}</label>
                                 <md-datepicker id="proxyStartDate" name="proxyStartDate"
-                                               ng-required="ctrl.isOutOfOffice && (ctrl.applicationUser.outOfOffice || ctrl.ouApplicationUser.proxyEndDate)"
+                                               ng-required="ctrl.applicationUser.outOfOffice || ctrl.ouApplicationUser.proxyEndDate"
                                                md-min-date="ctrl.today"
                                                ng-model="ctrl.ouApplicationUser.proxyStartDate"
                                                ng-change="ctrl.getMinProxyEndDate()"
-                                               md-max-date="ctrl.calculatedMaxProxyStartDate"
-
-                                               ng-disabled="!ctrl.isOutOfOffice"
-                                ></md-datepicker>
+                                               md-max-date="ctrl.calculatedMaxProxyStartDate"></md-datepicker>
                                 <!--md-max-date="ctrl.ouApplicationUser.proxyEndDate"-->
                                 <div ng-messages="outOfOfficeSettingsForm.proxyStartDate.$error">
                                     <div ng-message="required">{{lang.field_required}}</div>
@@ -97,11 +82,11 @@
                             <md-input-container flex class="cms-datepicker">
                                 <label for="proxyEndDate">{{lang.end_date}}</label>
                                 <md-datepicker id="proxyEndDate" name="proxyEndDate"
-                                               ng-required="ctrl.isOutOfOffice && (ctrl.applicationUser.outOfOffice || ctrl.ouApplicationUser.proxyStartDate)"
+                                               ng-required="ctrl.applicationUser.outOfOffice || ctrl.ouApplicationUser.proxyStartDate"
                                                ng-model="ctrl.ouApplicationUser.proxyEndDate"
                                                md-min-date="ctrl.calculatedMinProxyEndDate"
                                                ng-change="ctrl.getMaxProxyStartDate()"
-                                               ng-disabled="!ctrl.isOutOfOffice || !ctrl.ouApplicationUser.proxyStartDate"
+                                               ng-disabled="!ctrl.ouApplicationUser.proxyStartDate"
                                 ></md-datepicker>
                                 <!--md-min-date="ctrl.ouApplicationUser.proxyStartDate"-->
                                 <div ng-messages="outOfOfficeSettingsForm.proxyEndDate.$error">
@@ -112,8 +97,7 @@
                         <div layout="row">
                             <!-- View Proxy Message -->
                             <md-switch flex ng-model="ctrl.ouApplicationUser.viewProxyMessage"
-                                       aria-label="{{lang.view_message_to_sender}}"
-                                       ng-disabled="!ctrl.isOutOfOffice">
+                                       aria-label="{{lang.view_message_to_sender}}">
                                 <label>{{lang.view_message_to_sender}} :
                                     {{ctrl.ouApplicationUser.getTranslatedViewMessageToSender()}}</label>
                             </md-switch>
@@ -123,8 +107,7 @@
                                 <textarea ng-model="ctrl.ouApplicationUser.proxyMessage"
                                           name="proxyMessage" id="proxyMessage" minlength="4"
                                           maxlength="265" required
-                                          ng-required="ctrl.ouApplicationUser.viewProxyMessage"
-                                          ng-disabled="!ctrl.isOutOfOffice">
+                                          ng-required="ctrl.ouApplicationUser.viewProxyMessage">
                                             </textarea>
                                 <div ng-messages="outOfOfficeSettingsForm.proxyMessage.$error">
                                     <div ng-message="required">{{lang.field_required}}</div>
@@ -135,7 +118,7 @@
                             </md-input-container>
                         </div>
                     </div>
-                </fieldset>
+                </div>
             </form>
         </div>
     </md-dialog-content>

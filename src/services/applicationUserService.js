@@ -242,7 +242,7 @@ module.exports = function (app) {
                         resolve: {
                             ouApplicationUsers: function (ouApplicationUserService) {
                                 'ngInject';
-                                return ouApplicationUserService.getOUApplicationUsersByUserId(applicationUser.id);
+                                return ouApplicationUserService.loadOUApplicationUsersByUserId(applicationUser.id);
                             },
                             ouViewPermissions: function (ouApplicationUserService) {
                                 'ngInject';

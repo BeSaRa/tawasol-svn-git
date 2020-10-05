@@ -147,7 +147,6 @@ module.exports = function (app) {
          */
         function _checkProxyDate(ouApplicationUser) {
             if (ouApplicationUser.proxyEndDate && ouApplicationUser.proxyEndDate.valueOf() < (new Date()).valueOf()) {
-                self.isOutOfOffice = false;
                 self.applicationUser.outOfOffice = false;
                 self.selectedProxyUser = null;
                 ouApplicationUser.emptyOutOfOffice();
@@ -487,118 +486,13 @@ module.exports = function (app) {
                 });
         };
 
-
-        /**
-         * @description Describes if user is out of office
-         * @type {boolean}
-         */
-        self.isOutOfOffice = self.ouApplicationUser.proxyUser !== null;
-
         _checkProxyDate(self.ouApplicationUser);
-
-        /**
-         * @description Returns out of office value as Yes/No instead of true/false
-         * @returns {*}
-         */
-        self.getTranslatedOutOfOfficeYesNo = function () {
-            return self.isOutOfOffice ? langService.get('yes') : langService.get('no');
-        };
-
 
         /**
          * @description Saves the ou application user data when not out of office
          * @param form
          */
-        self.changeOutOfOffice = function (form) {
-            var defer = $q.defer();
-            if (!self.isOutOfOffice) {
-                if (self.ouApplicationUserCopy.proxyUser) {
-                    self.ouApplicationUser.proxyUser = null;
-                    self.selectedProxyUser = null;
-                    self.ouApplicationUser.proxyOUId = null;
-                    self.ouApplicationUser.proxyStartDate = null;
-                    self.ouApplicationUser.proxyEndDate = null;
-                    self.ouApplicationUser.proxyAuthorityLevels = null;
-                    self.ouApplicationUser.viewProxyMessage = false;
-                    self.ouApplicationUser.proxyMessage = null;
-                    ouApplicationUserService
-                        .updateOUApplicationUser(self.ouApplicationUser)
-                        .then(function (result) {
-                            employeeService.setCurrentOUApplicationUser(result);
-                            self.ouApplicationUserCopy = angular.copy(result);
-                            toast.success(langService.get('out_of_office_success'));
-                            defer.resolve(true);
-                        });
-                }
-            } else {
-                if (self.usersWhoSetYouAsProxy && self.usersWhoSetYouAsProxy.length) {
-                    var scope = $rootScope.$new(), templateDefer = $q.defer(),
-                        templateUrl = cmsTemplate.getPopup('delegated-by-users-message'),
-                        html = $templateCache.get(templateUrl);
 
-                    if (!html) {
-                        $templateRequest(templateUrl).then(function (template) {
-                            html = template;
-                            templateDefer.resolve(html);
-                        });
-                    } else {
-                        $timeout(function () {
-                            templateDefer.resolve(html);
-                        })
-                    }
-                    templateDefer.promise.then(function (template) {
-
-                        scope.ctrl = {
-                            outOfOfficeUsers: self.usersWhoSetYouAsProxy
-                        };
-                        LangWatcher(scope);
-                        template = $compile(angular.element(template))(scope);
-
-                        $timeout(function () {
-                            dialog.confirmMessage(template[0].innerHTML)
-                                .then(function (result) {
-                                    dialog
-                                        .showDialog({
-                                            targetEvent: null,
-                                            templateUrl: cmsTemplate.getPopup('update-manager-proxy'),
-                                            controller: 'updateManagerProxyPopCtrl',
-                                            controllerAs: 'ctrl',
-                                            locals: {
-                                                currentUser: self.ouApplicationUser,
-                                                availableProxies: availableProxies
-                                            },
-                                            resolve: {
-                                                usersWhoSetProxy: function (ouApplicationUserService) {
-                                                    'ngInject';
-                                                    return ouApplicationUserService.getUsersWhoSetYouAsProxy(self.applicationUser);
-                                                }
-                                            }
-                                        })
-                                        .then(function (result) {
-                                            form.$setUntouched();
-                                            defer.resolve(true);
-                                        }).catch(function (error) {
-                                        self.isOutOfOffice = !self.isOutOfOffice;
-                                    })
-
-                                })
-                                .catch(function () {
-                                    self.isOutOfOffice = !self.isOutOfOffice;
-                                });
-                        });
-                    });
-
-                } else {
-                    form.$setUntouched();
-                    defer.resolve(true);
-                }
-            }
-            defer.promise.then(function (response) {
-                if (!self.isOutOfOffice)
-                    self.applicationUser.outOfOffice = false;
-                employeeService.setCurrentEmployee(self.applicationUser);
-            });
-        };
 
         self.getSelectedDelegatedUserText = function () {
             if (!self.selectedProxyUser) {
@@ -661,8 +555,12 @@ module.exports = function (app) {
         };
 
         self.checkRequiredFieldsOutOfOffice = function (model) {
-            var required = self.requiredFieldsOutOfOffice, result = [];
+            var required = angular.copy(self.requiredFieldsOutOfOffice), result = [];
             if (!self.applicationUser.outOfOffice) {
+                if (!self.ouApplicationUser.proxyUser) {
+                    required.splice(required.indexOf('proxyUser'), 1);
+                    required.splice(required.indexOf('proxyAuthorityLevels'), 1);
+                }
                 if (!self.ouApplicationUser.proxyStartDate && !self.ouApplicationUser.proxyEndDate) {
                     required = _.filter(required, function (property) {
                         return property !== 'proxyStartDate' && property !== 'proxyEndDate';
@@ -688,6 +586,16 @@ module.exports = function (app) {
                 result.push(property);
             return result;
         };
+
+        // reset start/end dates for proxy when disable out office
+        self.onOutOfOfficeChanged = function ($event) {
+            if (!self.applicationUser.outOfOffice) {
+                self.ouApplicationUser.proxyStartDate = null;
+                self.calculatedMaxProxyStartDate = null;
+                self.ouApplicationUser.proxyEndDate = null;
+                self.calculatedMinProxyEndDate = null;
+            }
+        }
 
         /**
          * @description Save the Application User out of office settings in the ouApplicationUser model
@@ -716,14 +624,26 @@ module.exports = function (app) {
                 .validate()
                 .then(function () {
                     self.ouApplicationUser.applicationUser = self.applicationUser;
-                    ouApplicationUserService
-                        .updateProxyUser(self.ouApplicationUser)
-                        .then(function (result) {
-                            employeeService.setCurrentOUApplicationUser(result);
-                            self.ouApplicationUserCopy = angular.copy(result);
-                            employeeService.setCurrentEmployee(self.applicationUser);
-                            toast.success(langService.get('out_of_office_success'));
-                        });
+                    if (self.applicationUser.outOfOffice) {
+                        ouApplicationUserService
+                            .updateProxyUser(self.ouApplicationUser)
+                            .then(function (result) {
+                                employeeService.setCurrentOUApplicationUser(result);
+                                self.ouApplicationUserCopy = angular.copy(result);
+                                employeeService.setCurrentEmployee(self.applicationUser);
+                                toast.success(langService.get('out_of_office_success'));
+                            });
+                    } else {
+                        // terminate service
+                        ouApplicationUserService
+                            .terminateProxyUser(self.ouApplicationUser)
+                            .then(function () {
+                                employeeService.setCurrentOUApplicationUser(self.ouApplicationUser);
+                                self.ouApplicationUserCopy = angular.copy(self.ouApplicationUser);
+                                employeeService.setCurrentEmployee(self.applicationUser);
+                                toast.success(langService.get('out_of_office_success'));
+                            });
+                    }
                 })
                 .catch(function (result) {
                     console.log(result);

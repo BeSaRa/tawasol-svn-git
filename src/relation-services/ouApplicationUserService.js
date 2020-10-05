@@ -419,6 +419,19 @@ module.exports = function (app) {
                 });
         };
         /**
+         * @description terminate proxy user for given ouApplicationUser
+         * @param ouApplicationUser
+         * @returns {*}
+         */
+        self.terminateProxyUser = function (ouApplicationUser) {
+            const ouApplicationUserId = ouApplicationUser instanceof OUApplicationUser ? ouApplicationUser.id : ouApplicationUser;
+            return $http
+                .delete(urlService.ouApplicationUsers + '/proxy/' + ouApplicationUserId)
+                .then(function () {
+                    return generator.generateInstance(ouApplicationUser, OUApplicationUser, self._sharedMethods);
+                });
+        };
+        /**
          * @description delete given ouApplicationUser.
          * @param ouApplicationUser
          * @param $event

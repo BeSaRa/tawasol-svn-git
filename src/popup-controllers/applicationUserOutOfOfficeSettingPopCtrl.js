@@ -90,7 +90,6 @@ module.exports = function (app) {
          */
         function _checkProxyDate(ouApplicationUser) {
             if (ouApplicationUser.proxyEndDate && ouApplicationUser.proxyEndDate.valueOf() < (new Date()).valueOf()) {
-                self.isOutOfOffice = false;
                 self.applicationUser.outOfOffice = false;
                 self.selectedProxyUser = null;
                 ouApplicationUser.emptyOutOfOffice();
@@ -99,11 +98,6 @@ module.exports = function (app) {
 
         _checkProxyDate(self.ouApplicationUser);
 
-        /**
-         * @description Describes if user is out of office
-         * @type {boolean}
-         */
-        self.isOutOfOffice = self.ouApplicationUser.proxyUser != null;
 
         /**
          * @description to check if the security level included for selected proxyUser.
@@ -114,17 +108,13 @@ module.exports = function (app) {
             return self.selectedProxyUser && !!(self.selectedProxyUser.securityLevels & securityLevel.lookupKey);
         };
 
-        /**
-         * @description Returns out of office value as Yes/No instead of true/false
-         * @returns {*}
-         */
-        self.getTranslatedOutOfOfficeYesNo = function () {
-            return self.isOutOfOffice ? langService.get('yes') : langService.get('no');
-        };
-
         self.checkRequiredFieldsAppUserOutOfOffice = function (model) {
-            var required = self.requiredFields, result = [];
+            var required = angular.copy(self.requiredFields), result = [];
             if (!self.applicationUser.outOfOffice) {
+                if (!self.ouApplicationUser.proxyUser) {
+                    required.splice(required.indexOf('proxyUser'), 1);
+                    required.splice(required.indexOf('proxyAuthorityLevels'), 1);
+                }
                 if (!self.ouApplicationUser.proxyStartDate && !self.ouApplicationUser.proxyEndDate) {
                     required = _.filter(required, function (property) {
                         return property !== 'proxyStartDate' && property !== 'proxyEndDate';
@@ -192,6 +182,9 @@ module.exports = function (app) {
             self.ouApplicationUser.proxyStartDate = null;
             self.ouApplicationUser.proxyEndDate = null;
             self.filteredSecurityLevels = _.filter(self.securityLevels, self.isSecurityLevelInclude);
+            if (!proxyUser) {
+                self.ouApplicationUser.proxyUser = null;
+            }
         };
 
 
@@ -207,82 +200,15 @@ module.exports = function (app) {
             return langService.current === 'ar' ? errorObj.arName : errorObj.enName;
         };
 
-        /**
-         * @description Saves the ou application user data when not out of office
-         * @param form
-         */
-        self.changeOutOfOffice = function (form) {
-            if (!self.isOutOfOffice) {
-                if (self.model.proxyUser) {
-                    self.ouApplicationUser.proxyUser = null;
-                    self.selectedProxyUser = null;
-                    self.ouApplicationUser.proxyStartDate = null;
-                    self.ouApplicationUser.proxyEndDate = null;
-                    self.ouApplicationUser.proxyAuthorityLevels = null;
-                    self.ouApplicationUser.viewProxyMessage = false;
-                    self.ouApplicationUser.proxyMessage = null;
-                }
-            } else {
-                if (usersWhoSetYouAsProxy && usersWhoSetYouAsProxy.length) {
-
-                    var scope = $rootScope.$new(), templateDefer = $q.defer(),
-                        templateUrl = cmsTemplate.getPopup('delegated-by-users-message'),
-                        html = $templateCache.get(templateUrl);
-
-                    if (!html) {
-                        $templateRequest(templateUrl).then(function (template) {
-                            html = template;
-                            templateDefer.resolve(html);
-                        });
-                    } else {
-                        $timeout(function () {
-                            templateDefer.resolve(html);
-                        })
-                    }
-                    templateDefer.promise.then(function (template) {
-                        scope.ctrl = {
-                            outOfOfficeUsers: usersWhoSetYouAsProxy
-                        };
-                        LangWatcher(scope);
-                        template = $compile(angular.element(template))(scope);
-                        $timeout(function () {
-                            dialog.confirmMessage(template[0].innerHTML)
-                                .then(function (result) {
-                                    dialog
-                                        .showDialog({
-                                            targetEvent: null,
-                                            templateUrl: cmsTemplate.getPopup('update-manager-proxy'),
-                                            controller: 'updateManagerProxyPopCtrl',
-                                            controllerAs: 'ctrl',
-                                            locals: {
-                                                currentUser: self.ouApplicationUser,
-                                                availableProxies: availableProxies
-                                            },
-                                            resolve: {
-                                                usersWhoSetProxy: function (ouApplicationUserService) {
-                                                    'ngInject';
-                                                    return ouApplicationUserService.getUsersWhoSetYouAsProxy(self.applicationUser)
-                                                }
-                                            }
-                                        })
-                                        .then(function (result) {
-                                            form.$setUntouched();
-                                        }).catch(function (error) {
-                                        self.isOutOfOffice = !self.isOutOfOffice;
-                                    })
-                                })
-                                .catch(function () {
-                                    self.isOutOfOffice = !self.isOutOfOffice;
-                                });
-                        })
-                    });
-
-                } else
-                    form.$setUntouched();
+        // reset start/end dates for proxy when disable out office
+        self.onOutOfOfficeChanged = function ($event) {
+            if (!self.applicationUser.outOfOffice) {
+                self.ouApplicationUser.proxyStartDate = null;
+                self.calculatedMaxProxyStartDate = null;
+                self.ouApplicationUser.proxyEndDate = null;
+                self.calculatedMinProxyEndDate = null;
             }
-            if (!self.isOutOfOffice)
-                self.ouApplicationUser.applicationUser.outOfOffice = false;
-        };
+        }
 
         /**
          * @description Add the Application User out of office settings in the ouApplicationUser model
@@ -290,38 +216,51 @@ module.exports = function (app) {
         self.saveOutOfOfficeSettings = function () {
             self.ouApplicationUser.proxyUser = self.selectedProxyUser;
 
-            if (!self.isOutOfOffice) {
-                dialog.hide(self.ouApplicationUser);
-            } else {
-                validationService
-                    .createValidation('ADD_OUT_OF_OFFICE_SETTINGS')
-                    .addStep('check_required', true, self.checkRequiredFieldsAppUserOutOfOffice, self.ouApplicationUser, function (result) {
-                        return !result.length;
-                    })
-                    .notifyFailure(function (step, result) {
-                        var labels = _.map(result, function (label) {
-                            return self.validateLabels[label];
-                        });
-                        generator.generateErrorFields('check_this_fields', labels);
-                    })
-                    .addStep('check_message_required', true, self.checkRequiredOutOfOfficeMessage, self.ouApplicationUser, function (result) {
-                        return !result.length;
-                    })
-                    .notifyFailure(function (step, result) {
-                        var labels = ['out_of_office_message'];
-                        generator.generateErrorFields('check_this_fields', labels);
-                    })
-                    .validate()
-                    .then(function () {
-                        self.ouApplicationUser.applicationUser = self.applicationUser;
-                        dialog.hide(self.ouApplicationUser);
-                    })
-                    .catch(function (error) {
-                        if (errorCode.checkIf(error, 'OPERATION_NOT_SUPPORTED') === true) {
-                            dialog.errorMessage(self.getTranslatedError(error));
-                        }
+
+            validationService
+                .createValidation('ADD_OUT_OF_OFFICE_SETTINGS')
+                .addStep('check_required', true, self.checkRequiredFieldsAppUserOutOfOffice, self.ouApplicationUser, function (result) {
+                    return !result.length;
+                })
+                .notifyFailure(function (step, result) {
+                    var labels = _.map(result, function (label) {
+                        return self.validateLabels[label];
                     });
-            }
+                    generator.generateErrorFields('check_this_fields', labels);
+                })
+                .addStep('check_message_required', true, self.checkRequiredOutOfOfficeMessage, self.ouApplicationUser, function (result) {
+                    return !result.length;
+                })
+                .notifyFailure(function (step, result) {
+                    var labels = ['out_of_office_message'];
+                    generator.generateErrorFields('check_this_fields', labels);
+                })
+                .validate()
+                .then(function () {
+                    self.ouApplicationUser.applicationUser = self.applicationUser;
+                    if (self.applicationUser.outOfOffice) {
+                        ouApplicationUserService
+                            .updateProxyUser(self.ouApplicationUser)
+                            .then(function (result) {
+                                toast.success(langService.get('out_of_office_success'));
+                                dialog.hide(result);
+                            });
+                    } else {
+                        // terminate service
+                        ouApplicationUserService
+                            .terminateProxyUser(self.ouApplicationUser)
+                            .then(function () {
+                                toast.success(langService.get('out_of_office_success'));
+                                dialog.hide(self.ouApplicationUser);
+                            });
+                    }
+                })
+                .catch(function (error) {
+                    if (errorCode.checkIf(error, 'OPERATION_NOT_SUPPORTED') === true) {
+                        dialog.errorMessage(self.getTranslatedError(error));
+                    }
+                });
+
         };
 
         /**
@@ -339,7 +278,7 @@ module.exports = function (app) {
         self.currentUser = function (proxyUser) {
             return proxyUser.applicationUser.id === ouApplicationUser.applicationUser.id;
         };
-        
+
         self.$onInit = function () {
             self.filteredSecurityLevels = _.filter(self.securityLevels, self.isSecurityLevelInclude);
         }
