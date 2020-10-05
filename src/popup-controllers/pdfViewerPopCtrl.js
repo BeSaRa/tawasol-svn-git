@@ -387,7 +387,7 @@ module.exports = function (app) {
          * @description add username and date to the document
          * @return {Promise<void>}
          */
-        self.addUserNameAndDateToDocument = async function (event, annotation) {
+        self.addUserNameAndDateToDocument = async function (event, buttonId, annotation) {
             var date = moment().format('DD-MM-YYYY');
             var pageInfo = self.currentInstance.pageInfoForIndex(self.currentInstance.viewState.currentPageIndex);
             var usernameAnnotation = new PSPDFKit.Annotations.TextAnnotation({
@@ -549,7 +549,7 @@ module.exports = function (app) {
             }).then(function (annotations) {
                 annotations.length === 1 ? self.selectAnnotation(annotations[0]) : null;
                 if (self.attacheUsernameAndDateToSignature) {
-                    return self.addUserNameAndDateToDocument(null, annotations[0]);
+                    return self.addUserNameAndDateToDocument(null, null, annotations[0]);
                 }
             });
         };
@@ -916,7 +916,7 @@ module.exports = function (app) {
                     .set('isSignature', _getRightTypeForElectronicSignature() !== 1)
                     .set('customData', customData);
                 if (self.attacheUsernameAndDateToSignature) {
-                    self.addUserNameAndDateToDocument(null, updatedAnnotation);
+                    self.addUserNameAndDateToDocument(null, null, updatedAnnotation);
                 }
                 return self.currentInstance.updateAnnotation(updatedAnnotation);
             }
