@@ -53,7 +53,8 @@ module.exports = function (app) {
                                                       organizationService,
                                                       predefinedActions,
                                                       predefinedActionService,
-                                                      AppUserCertificate) {
+                                                      AppUserCertificate,
+                                                      errorCode) {
         'ngInject';
         var self = this;
         self.controllerName = 'userPreferencePopCtrl';
@@ -719,7 +720,11 @@ module.exports = function (app) {
                                 self.ouApplicationUserCopy = angular.copy(result);
                                 employeeService.setCurrentEmployee(self.applicationUser);
                                 toast.success(langService.get('out_of_office_success'));
-                            });
+                            }).catch(function (error) {
+                            if (errorCode.checkIf(error, 'OPERATION_NOT_SUPPORTED') === true) {
+                                dialog.errorMessage(langService.get('delegating_someone_out_of_office'));
+                            }
+                        });
                     }
                 })
                 .catch(function (result) {
