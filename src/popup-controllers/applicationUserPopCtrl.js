@@ -968,11 +968,12 @@ module.exports = function (app) {
             if (!ouApplicationUser.id) {
                 return false;
             }
+
             return ouApplicationUserService
                 .updateOUApplicationUser(ouApplicationUser)
                 .then(function () {
                     toast.success(langService.get('edited_successfully'));
-                    self.applicationUser.outOfOffice = ouApplicationUser.applicationUser.outOfOffice;
+                    // self.applicationUser.outOfOffice = ouApplicationUser.applicationUser.outOfOffice;
 
                     if (employeeService.isCurrentOUApplicationUser(ouApplicationUser)) {
                         employeeService.setCurrentOUApplicationUser(ouApplicationUser);
