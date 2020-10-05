@@ -1315,7 +1315,7 @@ module.exports = function (app) {
             return self.applyNextStep(pdfContent, signatureModel)
                 .then(logAnnotations ? function (result) {
                     self.disableSaveButton = false;
-                    toast.success(langService.get('launch_success_distribution_workflow'));
+                    toast.success(langService.get('launch_sequential_workflow_success'));
                     self.sendAnnotationLogs(function () {
                         dialog.hide({
                             content: self.savedPdfContent,
@@ -1326,7 +1326,7 @@ module.exports = function (app) {
                     });
                 } : function () {
                     self.disableSaveButton = false;
-                    toast.success(langService.get('launch_success_distribution_workflow'));
+                    toast.success(langService.get('launch_sequential_workflow_success'));
                     dialog.hide({
                         content: self.savedPdfContent,
                         action: PDFViewer.SEQ_LAUNCHED

@@ -118,7 +118,7 @@ module.exports = function (app) {
                                 })
                         }
                         $rootScope.$emit('SEQ_LAUNCH_SUCCESS');
-                        toast.success(langService.get('launch_success_distribution_workflow'));
+                        toast.success(langService.get('launch_sequential_workflow_success'));
                         dialog.hide(true);
                     });
             }
