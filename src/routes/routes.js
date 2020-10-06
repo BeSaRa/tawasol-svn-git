@@ -443,65 +443,7 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_application_users',
                 resolve: {
-                    viewLookups: function (applicationUserService) {
-                        'ngInject';
-                        return applicationUserService.loadViewLookups();
-                    },
-                    jobTitles: function (viewLookups, jobTitleService) {
-                        'ngInject';
-                        if (!viewLookups || !viewLookups.jobTitleList || !viewLookups.jobTitleList.length) {
-                            return [];
-                        }
-                        jobTitleService.jobTitles = viewLookups.jobTitleList;
-                        return viewLookups.jobTitleList;
-                    },
-                    ranks: function (viewLookups, rankService) {
-                        'ngInject';
-                        if (!viewLookups || !viewLookups.rankList || !viewLookups.rankList.length) {
-                            return [];
-                        }
-                        rankService.ranks = viewLookups.rankList;
-                        return viewLookups.rankList;
-                    },
-                    themes: function (viewLookups, themeService) {
-                        'ngInject';
-                        if (!viewLookups || !viewLookups.themeList || !viewLookups.themeList.length) {
-                            return [];
-                        }
-                        themeService.themes = viewLookups.themeList;
-                        return viewLookups.themeList;
-                    },
-                    roles: function (viewLookups, roleService) {
-                        'ngInject';
-                        if (!viewLookups || !viewLookups.customRoleList || !viewLookups.customRoleList.length) {
-                            return [];
-                        }
-                        roleService.roles = viewLookups.customRoleList;
-                        return viewLookups.customRoleList;
-                    },
-                    permissions: function (viewLookups, roleService) {
-                        'ngInject';
-                        if (!viewLookups || !viewLookups.permissionList || !viewLookups.permissionList.length) {
-                            return [];
-                        }
-                        return roleService.getPermissionByGroup(viewLookups.permissionList);
-                    },
-                    organizations: function (organizationService) {
-                        'ngInject';
-                        //return organizationService.loadOrganizations();
-                        return organizationService.loadAllOrganizationsStructureAsAdminResult();
-                    },
-                    classifications: function (classificationService) {
-                        'ngInject';
-                        //return classificationService.loadClassifications();
-                        return []; // classification view permission is disabled. so, no need to load
-                    },
-                    userClassificationViewPermissions: function (userClassificationViewPermissionService, classifications) {
-                        'ngInject';
-                        // return userClassificationViewPermissionService.loadUserClassificationViewPermissions();
-                        return [];
-                    },
-                    applicationUsers: function (applicationUserService, jobTitles, ranks, themes, organizations, classifications, permissions, userClassificationViewPermissions) {
+                    applicationUsers: function (applicationUserService) {
                         'ngInject';
                         //return applicationUserService.loadApplicationUsers(true);
                         return applicationUserService.loadApplicationUsersView();
@@ -509,6 +451,19 @@ module.exports = function (app) {
                     applicationUsersCount: function (applicationUserService) {
                         'ngInject';
                         return applicationUserService.totalApplicationUsersCount();
+                    },
+                    //Load the jobTitles, ranks, themes, roles, permissions to use in application user popup
+                    viewLookups: function (applicationUserService, jobTitleService, rankService, roleService, themeService) {
+                        'ngInject';
+                        return applicationUserService.loadViewLookups()
+                            .then(function (result) {
+                                jobTitleService.jobTitles = result.jobTitleList;
+                                rankService.ranks = result.rankList;
+                                themeService.themes = result.themeList;
+                                roleService.roles = result.customRoleList;
+                                roleService.permissionListFromAppUserView = result.permissionList;
+                                return result;
+                            });
                     }
                 }
             })

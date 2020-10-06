@@ -14,6 +14,7 @@ module.exports = function (app) {
                                                     userClassificationViewPermissionService,
                                                     ApplicationUserLookup,
                                                     ApplicationUserView,
+                                                    organizationService,
                                                     userSubscriptionService) {
         'ngInject';
         var self = this;
@@ -67,17 +68,9 @@ module.exports = function (app) {
         self.controllerMethod = {
             /**
              * @description Opens popup to add new application user
-             * @param jobTitles
-             * @param ranks
-             * @param organizations
-             * @param classifications
-             * @param themes
-             * @param roles
-             * @param permissions
-             * @param userClassificationViewPermissions
              * @param $event
              */
-            applicationUserAdd: function (jobTitles, ranks, organizations, classifications, themes, roles, permissions, userClassificationViewPermissions, $event) {
+            applicationUserAdd: function ($event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -88,42 +81,23 @@ module.exports = function (app) {
                             editMode: false,
                             applicationUser: new ApplicationUser(),
                             applicationUsers: self.applicationUsers,
-                            jobTitles: jobTitles,
-                            ranks: ranks,
-                            organizations: organizations,
-                            classifications: classifications,
-                            themes: themes,
-                            userClassificationViewPermissions: userClassificationViewPermissions,
-                            roles: roles,
-                            permissions: permissions,
                             ouApplicationUsers: [],
                             ouViewPermissions: []
+                        },
+                        resolve: {
+                            organizations: function (organizationService) {
+                                'ngInject';
+                                return organizationService.loadOrganizations();
+                            }
                         }
                     });
             },
             /**
              * @description Opens popup to edit application user
              * @param applicationUser
-             * @param jobTitles
-             * @param ranks
-             * @param organizations
-             * @param classifications
-             * @param themes
-             * @param roles
-             * @param permissions
-             * @param userClassificationViewPermissions
              * @param $event
              */
-            applicationUserEdit: function (applicationUser, jobTitles, ranks, organizations, classifications, themes, roles, permissions, userClassificationViewPermissions, $event) {
-                var id = applicationUser.hasOwnProperty('id') ? applicationUser.id : applicationUser;
-                userClassificationViewPermissions = userClassificationViewPermissionService.getUserClassificationViewPermissionsByUserId(id);
-
-                var userClassificationViewPermissionsByUserId = _.filter(userClassificationViewPermissions, function (userClassificationViewPermission) {
-                    return Number(userClassificationViewPermission.userId) === Number(applicationUser.id);
-                });
-
-                //applicationUser = generator.interceptReceivedInstance('ApplicationUser', applicationUser);
-
+            applicationUserEdit: function (applicationUser, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -132,15 +106,7 @@ module.exports = function (app) {
                         controllerAs: 'ctrl',
                         locals: {
                             editMode: true,
-                            applicationUsers: self.applicationUsers,
-                            jobTitles: jobTitles,
-                            ranks: ranks,
-                            organizations: organizations,
-                            classifications: classifications,
-                            themes: themes,
-                            userClassificationViewPermissions: userClassificationViewPermissionsByUserId,
-                            roles: roles,
-                            permissions: permissions
+                            applicationUsers: self.applicationUsers
                         },
                         resolve: {
                             applicationUser: function () {
@@ -154,6 +120,10 @@ module.exports = function (app) {
                             ouViewPermissions: function (ouApplicationUserService) {
                                 'ngInject';
                                 return ouApplicationUserService.getOUsViewPermissionForUser(applicationUser.id);
+                            },
+                            organizations: function (organizationService) {
+                                'ngInject';
+                                return organizationService.loadOrganizations();
                             }
                         }
                     });
@@ -161,19 +131,11 @@ module.exports = function (app) {
 
             /**
              * @description Opens popup to add new application user
-             * @param jobTitles
-             * @param ranks
-             * @param organizations
-             * @param classifications
-             * @param themes
-             * @param roles
-             * @param permissions
-             * @param userClassificationViewPermissions
-             * @param organization
+             * @param currentOrganization
              * @param $event
              */
-            applicationUserFromOuAdd: function (jobTitles, ranks, organizations, classifications, themes, roles, permissions, userClassificationViewPermissions, organization, $event) {
-                var ouId = organization.hasOwnProperty('id') ? organization.id : organization;
+            applicationUserFromOuAdd: function (currentOrganization, $event) {
+                var ouId = currentOrganization.hasOwnProperty('id') ? currentOrganization.id : currentOrganization;
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -184,41 +146,21 @@ module.exports = function (app) {
                             editMode: false,
                             applicationUser: !!ouId ? new ApplicationUser({defaultOUID: ouId}) : new ApplicationUser(),
                             applicationUsers: self.applicationUsers,
-                            jobTitles: jobTitles,
-                            ranks: ranks,
-                            organizations: organizations,
-                            classifications: classifications,
-                            themes: themes,
-                            userClassificationViewPermissions: userClassificationViewPermissions,
-                            roles: roles,
-                            permissions: permissions,
+                            organizations: organizationService.allOrganizationsStructure,
                             ouApplicationUsers: [],
                             ouViewPermissions: [],
-                            currentOrganization: organization
+                            currentOrganization: currentOrganization
                         }
                     });
             },
             /**
              * @description Opens popup to edit application user
              * @param applicationUser
-             * @param jobTitles
-             * @param ranks
-             * @param organizations
-             * @param classifications
-             * @param themes
-             * @param roles
-             * @param permissions
-             * @param userClassificationViewPermissions
-             * @param organization
+             * @param currentOrganization
              * @param $event
              */
-            applicationUserFromOuEdit: function (applicationUser, jobTitles, ranks, organizations, classifications, themes, roles, permissions, userClassificationViewPermissions, organization, $event) {
+            applicationUserFromOuEdit: function (applicationUser, currentOrganization, $event) {
                 applicationUser = generator.interceptReceivedInstance('ApplicationUser', applicationUser);
-                //var ouId = organization.hasOwnProperty('id') ? organization.id : organization;
-                var userClassificationViewPermissionsByUserId = _.filter(userClassificationViewPermissions, function (userClassificationViewPermission) {
-                    return Number(userClassificationViewPermission.userId) === Number(applicationUser.id);
-                });
-
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -229,15 +171,8 @@ module.exports = function (app) {
                             editMode: true,
                             applicationUser: applicationUser,
                             applicationUsers: self.applicationUsers,
-                            jobTitles: jobTitles,
-                            ranks: ranks,
-                            organizations: organizations,
-                            classifications: classifications,
-                            themes: themes,
-                            userClassificationViewPermissions: userClassificationViewPermissionsByUserId,
-                            roles: roles,
-                            permissions: permissions,
-                            currentOrganization: organization
+                            organizations: organizationService.allOrganizationsStructure,
+                            currentOrganization: currentOrganization
                         },
                         resolve: {
                             ouApplicationUsers: function (ouApplicationUserService) {
@@ -248,16 +183,6 @@ module.exports = function (app) {
                                 'ngInject';
                                 return ouApplicationUserService.getOUsViewPermissionForUser(applicationUser.id);
                             }
-                            /* // by BeSaRa to resolve the signature if found
-                             signature: function (applicationUserSignatureService, $q) {
-                                 'ngInject';
-                                 /!*if (applicationUser.hasOwnProperty('signature') && applicationUser.signature.length)
-                                     return $q.when(applicationUser.signature);*!/
-
-                                 return applicationUserSignatureService.loadApplicationUserSignatures(applicationUser.id).then(function (result) {
-                                     applicationUser.signature = result;
-                                 });
-                             }*/
                         }
                     });
             },

@@ -17,6 +17,7 @@ module.exports = function (app) {
 
         self.roles = [];
         self.permissionsList = [];
+        self.permissionListFromAppUserView = [];
 
         /**
          * @description load roles from server.
@@ -123,18 +124,24 @@ module.exports = function (app) {
          * @description Groups the permissions according to permission group
          * @param permissionsList
          * List of permissions to be grouped. If not passed, permissions will be loaded from server
+         * @param useAppUserViewPermissionList
+         * If true, permissions will be used from permissionList property
          * @returns {*}
          */
-        self.getPermissionByGroup = function (permissionsList) {
+        self.getPermissionByGroup = function (permissionsList, useAppUserViewPermissionList) {
             self.permissionsByGroup = [];
             var permissionByGroup = [], defer = $q.defer();
 
             if (permissionsList && permissionsList.length) {
                 defer.resolve(permissionsList);
             } else {
-                self.getPermissions().then(function (result) {
-                    defer.resolve(result);
-                });
+                if (useAppUserViewPermissionList) {
+                    defer.resolve(self.permissionListFromAppUserView);
+                } else {
+                    self.getPermissions().then(function (result) {
+                        defer.resolve(result);
+                    });
+                }
             }
             return defer.promise.then(function (permissions) {
                 var permissionByGroupEN = {};
@@ -247,7 +254,6 @@ module.exports = function (app) {
                             editMode: false,
                             role: new Role(),
                             permissions: permissionsList
-                            // permissions: self.permissionsList
                         }
                     })
             },
@@ -263,7 +269,6 @@ module.exports = function (app) {
                             role: role,
                             roles: self.roles,
                             permissions: permissionsList
-                            // permissions: self.permissionsList
                         }
                     }).then(function () {
 

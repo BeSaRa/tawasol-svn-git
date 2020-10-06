@@ -12,20 +12,13 @@ module.exports = function (app) {
                                                        dialog,
                                                        langService,
                                                        applicationUser,
-                                                       jobTitles,
-                                                       ranks,
                                                        rankService,
                                                        organizations,
-                                                       classifications,
                                                        lookupService,
                                                        userClassificationViewPermissionService,
                                                        UserClassificationViewPermission,
                                                        OUViewPermission,
                                                        ouViewPermissions,
-                                                       themes,
-                                                       // userClassificationViewPermissions,
-                                                       roles,
-                                                       permissions,
                                                        OUApplicationUser,
                                                        ouApplicationUsers,
                                                        cmsTemplate,
@@ -181,10 +174,12 @@ module.exports = function (app) {
 
         self.genders = lookupService.returnLookups(lookupService.gender);
         self.languages = lookupService.returnLookups(lookupService.language);
-        self.jobTitles = jobTitles;
-        self.ranks = ranks;
-        self.themes = themes;
-        self.roles = roles;
+
+        self.jobTitles = jobTitleService.jobTitles;
+        self.ranks = rankService.ranks;
+        self.themes = themeService.themes;
+        self.roles = roleService.roles;
+
         self.organizations = organizations;
         self.organizationsCopy = _sortRegOusSections(angular.copy(self.organizations), true);
 
@@ -235,8 +230,8 @@ module.exports = function (app) {
             }]);
         }
 
-        self.classifications = classifications;
-        self.permissions = permissions;
+        self.classifications = [];
+        self.permissions = [];
         self.viewInboxAsOptions = [
             {
                 key: 'view_magazine',
@@ -1004,10 +999,13 @@ module.exports = function (app) {
                             controllerAs: 'ctrl',
                             locals: {
                                 ouApplicationUser: ouApplicationUser,
-                                permissions: permissions,
                                 userOuPermissions: userOuPermissions
                             },
                             resolve: {
+                                permissions: function (roleService) {
+                                    'ngInject';
+                                    return roleService.getPermissionByGroup(null, true);
+                                },
                                 dynamicMenuItems: function (dynamicMenuItemService, UserMenuItem) {
                                     'ngInject';
                                     return dynamicMenuItemService.loadPrivateDynamicMenuItems()
@@ -1149,8 +1147,11 @@ module.exports = function (app) {
                 .controllerMethod
                 .jobTitleAdd($event)
                 .then(function (result) {
-                    self.applicationUser.jobTitle = result;
-                    self.jobTitles.unshift(result);
+                    jobTitleService.loadJobTitles()
+                        .then(function () {
+                            self.applicationUser.jobTitle = result;
+                            self.jobTitles.unshift(result);
+                        });
                 });
         };
 
@@ -1163,8 +1164,11 @@ module.exports = function (app) {
                 .controllerMethod
                 .rankAdd($event)
                 .then(function (result) {
-                    self.applicationUser.rank = result;
-                    self.ranks.unshift(result);
+                    rankService.loadRanks()
+                        .then(function () {
+                            self.applicationUser.rank = result;
+                            self.ranks.unshift(result);
+                        });
                 });
         };
 
@@ -1177,8 +1181,11 @@ module.exports = function (app) {
                 .controllerMethod
                 .themeAdd($event)
                 .then(function (result) {
-                    self.applicationUser.defaultThemeID = result;
-                    self.themes.unshift(result);
+                    themeService.loadThemes()
+                        .then(function () {
+                            self.applicationUser.defaultThemeID = result;
+                            self.themes.unshift(result);
+                        })
                 });
         };
 

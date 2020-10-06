@@ -166,10 +166,6 @@ module.exports = function (app) {
                     'ngInject';
                     return applicationUserService.loadApplicationUsers();
                 },
-                customRoles: function (roleService) {
-                    'ngInject';
-                    return roleService.loadRoles();
-                },
                 correspondenceSiteTypes: function (correspondenceSiteTypeService) {
                     'ngInject';
                     return correspondenceSiteTypeService.loadCorrespondenceSiteTypes();
@@ -178,22 +174,6 @@ module.exports = function (app) {
                     'ngInject';
                     return organizationService.loadAllOrganizationsStructure();
                 },
-                jobTitles: function (jobTitleService) {
-                    'ngInject';
-                    return jobTitleService.loadJobTitles();
-                },
-                ranks: function (rankService) {
-                    'ngInject';
-                    return rankService.loadRanks();
-                },
-                themes: function (themeService) {
-                    'ngInject';
-                    return themeService.loadThemes();
-                },
-                permissions: function (roleService) {
-                    'ngInject';
-                    return roleService.getPermissionByGroup();
-                },
                 globalCorrespondenceSitesForG2GId: function (correspondenceViewService) {
                     'ngInject';
                     return correspondenceViewService.getGlobalCorrespondenceSitesForG2GId();
@@ -201,6 +181,19 @@ module.exports = function (app) {
                 globalCorrespondenceSitesForInternalG2GId: function (correspondenceViewService) {
                     'ngInject';
                     return correspondenceViewService.getGlobalCorrespondenceSitesForInternalG2GId();
+                },
+                //Load the jobTitles, ranks, themes, roles, permissions to use in application user popup
+                viewLookups: function (applicationUserService, jobTitleService, rankService, roleService, themeService) {
+                    'ngInject';
+                    return applicationUserService.loadViewLookups()
+                        .then(function (result) {
+                            jobTitleService.jobTitles = result.jobTitleList;
+                            rankService.ranks = result.rankList;
+                            themeService.themes = result.themeList;
+                            roleService.roles = result.customRoleList;
+                            roleService.permissionListFromAppUserView = result.permissionList;
+                            return result;
+                        });
                 }
             })
             .bulkResolveToState('app.outgoing.add', {

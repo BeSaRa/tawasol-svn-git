@@ -1697,10 +1697,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.openAddApplicationUserDialog = function ($event) {
-            //var ouId = self.organization.hasOwnProperty('id') ? self.organization.id : self.organization;
             applicationUserService
                 .controllerMethod
-                .applicationUserFromOuAdd(self.jobTitles, self.ranks, organizations, classifications, self.themes, self.roles, self.permissions, null, self.organization, $event)
+                .applicationUserFromOuAdd(self.organization, $event)
                 .then(function () {
                     self.reloadOuApplicationUsers(self.appUserGrid.page);
                     self.reloadDepartmentUsers(self.departmentUsersGrid.page);
@@ -1742,7 +1741,7 @@ module.exports = function (app) {
             //     .then(function () {
             applicationUserService
                 .controllerMethod
-                .applicationUserFromOuEdit(applicationUser, self.jobTitles, self.ranks, organizations, classifications, self.themes, self.roles, self.permissions, [], organization, $event)
+                .applicationUserFromOuEdit(applicationUser, organization, $event)
                 .then(function () {
                     self.reloadOuApplicationUsers(self.appUserGrid.page);
                     self.reloadDepartmentUsers(self.departmentUsersGrid.page);

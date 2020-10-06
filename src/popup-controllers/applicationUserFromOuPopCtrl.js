@@ -11,20 +11,13 @@ module.exports = function (app) {
                                                              dialog,
                                                              langService,
                                                              applicationUser,
-                                                             jobTitles,
-                                                             ranks,
                                                              rankService,
                                                              organizations,
-                                                             classifications,
                                                              lookupService,
                                                              userClassificationViewPermissionService,
                                                              UserClassificationViewPermission,
                                                              OUViewPermission,
                                                              ouViewPermissions,
-                                                             themes,
-                                                             userClassificationViewPermissions,
-                                                             roles,
-                                                             permissions,
                                                              OUApplicationUser,
                                                              ouApplicationUsers,
                                                              cmsTemplate,
@@ -52,9 +45,6 @@ module.exports = function (app) {
         self.employeeService = employeeService;
         self.globalSetting = rootEntity.returnRootEntity().settings;
         self.applicationUser = angular.copy(applicationUser);
-        if (!editMode) {
-            self.applicationUser.searchAmountLimit = angular.copy(self.globalSetting.searchAmount);
-        }
 
         self.maxRowCount = angular.copy(self.globalSetting.searchAmountLimit);
         self.model = angular.copy(applicationUser);
@@ -184,14 +174,20 @@ module.exports = function (app) {
 
         self.genders = lookupService.returnLookups(lookupService.gender);
         self.languages = lookupService.returnLookups(lookupService.language);
-        self.jobTitles = jobTitles;
-        self.ranks = ranks;
-        self.themes = themes;
-        self.roles = roles;
+        self.jobTitles = jobTitleService.jobTitles;
+        self.ranks = rankService.ranks;
+        self.themes = themeService.themes;
+        self.roles = roleService.roles;
         self.organizations = organizations;
         self.organizationsCopy = _sortRegOusSections(angular.copy(self.organizations), true);
-        self.classifications = classifications;
-        self.permissions = permissions;
+        self.classifications = [];
+        self.permissions = [];
+
+        if (!editMode) {
+            self.applicationUser.searchAmountLimit = angular.copy(self.globalSetting.searchAmount);
+            self.applicationUser.defaultThemeID = self.globalSetting.theme && self.globalSetting.theme.hasOwnProperty('id') ? self.globalSetting.theme.id : self.globalSetting.theme;
+            self.applicationUser.jobTitle = self.jobTitles && self.jobTitles.length ? self.jobTitles[0].lookupKey : null;
+        }
 
         function _sortRegOusSections(organizations, appendRegOUSection) {
             // filter all regOU (has registry)
@@ -281,7 +277,7 @@ module.exports = function (app) {
          * @description List of user classification view permissions
          * @type {*}
          */
-        self.classificationViewPermissions = userClassificationViewPermissions;
+        self.classificationViewPermissions = [];
 
         /**
          * @description Filter already added classification to skip it in dropdown.
@@ -834,9 +830,9 @@ module.exports = function (app) {
                         .then(function (result) {
                             self.ouApplicationUser.ouid = self.currentOrganization;
                             self.ouApplicationUser.applicationUser = result;
-                            self.classificationViewPermissions = _.filter(userClassificationViewPermissions, function (userClassificationViewPermission) {
+                            /*self.classificationViewPermissions = _.filter(userClassificationViewPermissions, function (userClassificationViewPermission) {
                                 return Number(userClassificationViewPermission.userId) === Number(self.applicationUser.id);
-                            });
+                            });*/
                             self.cancelClassificationViewPermissionFromCtrl();
 
                             self.addOUApplicationUserFromCtrl().then(function () {
@@ -1004,8 +1000,11 @@ module.exports = function (app) {
                 .controllerMethod
                 .jobTitleAdd($event)
                 .then(function (result) {
-                    self.applicationUser.jobTitle = result;
-                    self.jobTitles.unshift(result);
+                    jobTitleService.loadJobTitles()
+                        .then(function () {
+                            self.applicationUser.jobTitle = result;
+                            self.jobTitles.unshift(result);
+                        });
                 });
         };
 
@@ -1018,8 +1017,11 @@ module.exports = function (app) {
                 .controllerMethod
                 .rankAdd($event)
                 .then(function (result) {
-                    self.applicationUser.rank = result;
-                    self.ranks.unshift(result);
+                    rankService.loadRanks()
+                        .then(function () {
+                            self.applicationUser.rank = result;
+                            self.ranks.unshift(result);
+                        });
                 });
         };
 
@@ -1032,8 +1034,11 @@ module.exports = function (app) {
                 .controllerMethod
                 .themeAdd($event)
                 .then(function (result) {
-                    self.applicationUser.defaultThemeID = result;
-                    self.theme.unshift(result);
+                    themeService.loadThemes()
+                        .then(function () {
+                            self.applicationUser.defaultThemeID = result;
+                            self.themes.unshift(result);
+                        })
                 });
         };
 
@@ -1054,10 +1059,13 @@ module.exports = function (app) {
                             controllerAs: 'ctrl',
                             locals: {
                                 ouApplicationUser: ouApplicationUser,
-                                permissions: permissions,
                                 userOuPermissions: userOuPermissions
                             },
                             resolve: {
+                                permissions: function(roleService){
+                                    'ngInject';
+                                    return roleService.getPermissionByGroup(null, true);
+                                },
                                 dynamicMenuItems: function (dynamicMenuItemService, UserMenuItem) {
                                     'ngInject';
                                     return dynamicMenuItemService.loadPrivateDynamicMenuItems()
