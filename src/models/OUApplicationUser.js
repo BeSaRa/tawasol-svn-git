@@ -92,6 +92,8 @@ module.exports = function (app) {
                     return this.ouInfo.id;
                 } else if (this.ouid) {
                     return this.ouid.hasOwnProperty('id') ? this.ouid.id : this.ouid;
+                }else if (this.ouId) {
+                    return this.ouId.hasOwnProperty('id') ? this.ouId.id : this.ouId;
                 }
                 return null;
             };

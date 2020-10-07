@@ -431,8 +431,8 @@
                         </md-content>
                     </md-tab>
                     <!-- Security Settings -->
-                    <md-tab ng-if="ctrl.showTab('security_settings')"
-                            label="{{lang.security_settings}}" ng-click="ctrl.setCurrentTab('security_settings')">
+                    <md-tab ng-if="ctrl.showTab('securitySettings')"
+                            label="{{lang.security_settings}}" ng-click="ctrl.setCurrentTab('securitySettings')">
                         <md-content class="md-padding">
                             <div layout="column">
                                 <div layout="row">
@@ -482,8 +482,8 @@
                         </md-content>
                     </md-tab>
                     <!-- Workflow Settings -->
-                    <md-tab ng-if="ctrl.showTab('workflow_settings')"
-                            label="{{lang.workflow_settings}}" ng-click="ctrl.setCurrentTab('workflow_settings')">
+                    <md-tab ng-if="ctrl.showTab('workflowSettings')"
+                            label="{{lang.workflow_settings}}" ng-click="ctrl.setCurrentTab('workflowSettings')">
                         <md-content class="md-padding">
                             <div layout="column">
                                 <div layout="row">
@@ -555,6 +555,7 @@
                                                     </div>
                                                     <md-input-container flex>
                                                         <input ng-model="ctrl.organization.sla[priority.lookupKey]"
+                                                               aria-label="SLA {{priority.getTranslatedName()}}"
                                                                custom-validate-directive="number"
                                                                name="{{ priority.lookupKey }}"
                                                                min="1" max="999"
@@ -579,8 +580,8 @@
                         </md-content>
                     </md-tab>
                     <!-- Document Templates -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('document_templates')"
-                            label="{{lang.document_templates}}" ng-click="ctrl.setCurrentTab('document_templates')">
+                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('documentTemplates')"
+                            label="{{lang.document_templates}}" ng-click="ctrl.setCurrentTab('documentTemplates')">
                         <md-content class="md-padding">
                             <div layout="column">
                                 <div layout="row" class="p20-0">
@@ -1150,8 +1151,8 @@
                         </md-content>
                     </md-tab>
                     <!-- Correspondence Sites -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('correspondence_sites')"
-                            label="{{lang.correspondence_sites}}" ng-click="ctrl.setCurrentTab('correspondence_sites')">
+                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('correspondenceSites')"
+                            label="{{lang.correspondence_sites}}" ng-click="ctrl.setCurrentTab('correspondenceSites')">
                         <md-content class="md-padding">
                             <div layout="column">
                                 <div ng-if="!ctrl.correspondenceSiteEditMode" layout="row" class="p20-0">
@@ -1351,9 +1352,9 @@
                         </md-content>
                     </md-tab>
                     <!-- OU Private Registry List -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('private_registry_ou')"
+                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('privateRegistryOU')"
                             label="{{lang.ou_private_list_mapping}}"
-                            ng-click="ctrl.setCurrentTab('private_registry_ou')">
+                            ng-click="ctrl.setCurrentTab('privateRegistryOU')">
                         <md-content class="md-padding">
                             <div layout="column">
                                 <div layout="row" class="p20-0">
@@ -1440,8 +1441,8 @@
                         </md-content>
                     </md-tab>
                     <!-- Property Configuration -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('property_config')"
-                            label="{{lang.property_configuration}}" ng-click="ctrl.setCurrentTab('property_config')">
+                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('propertyConfiguration')"
+                            label="{{lang.property_configuration}}" ng-click="ctrl.setCurrentTab('propertyConfiguration')">
                         <md-content class="md-padding">
                             <div layout="column">
                                 <!-- Dropdown and buttons -->

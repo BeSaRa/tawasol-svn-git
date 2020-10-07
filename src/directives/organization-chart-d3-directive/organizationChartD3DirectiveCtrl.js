@@ -80,7 +80,7 @@ module.exports = function (app) {
         }
 
         function _prepareOrganizations() {
-            var organizations = angular.copy(organizationService.allOrganizationsStructure).map(function (item) {
+            var organizations = angular.copy(organizationService.allOrganizationsStructureView).map(function (item) {
                 item.parent = item.parent ? item.parent : -1;
                 return item;
             });

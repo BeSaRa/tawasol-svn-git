@@ -146,21 +146,31 @@ module.exports = function (app) {
                             editMode: false,
                             applicationUser: !!ouId ? new ApplicationUser({defaultOUID: ouId}) : new ApplicationUser(),
                             applicationUsers: self.applicationUsers,
-                            organizations: organizationService.allOrganizationsStructure,
                             ouApplicationUsers: [],
                             ouViewPermissions: [],
                             currentOrganization: currentOrganization
+                        },
+                        resolve: {
+                            organizations: function (organizationService) {
+                                'ngInject';
+                                return organizationService.getAllOrganizationsStructure();
+                            }
                         }
                     });
             },
             /**
              * @description Opens popup to edit application user
-             * @param applicationUser
-             * @param currentOrganization
+             * @param ouApplicationUser
              * @param $event
              */
-            applicationUserFromOuEdit: function (applicationUser, currentOrganization, $event) {
+            applicationUserFromOuEdit: function (ouApplicationUser, $event, ) {
+                var currentOrganization = _.find(organizationService.allOrganizationsStructure, function (ou) {
+                    return ou.id === ouApplicationUser.getOuId();
+                });
+                var applicationUser = ouApplicationUser.applicationUser;
+                applicationUser = (applicationUser instanceof ApplicationUser) ? applicationUser : new ApplicationUser(applicationUser);
                 applicationUser = generator.interceptReceivedInstance('ApplicationUser', applicationUser);
+
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -171,10 +181,13 @@ module.exports = function (app) {
                             editMode: true,
                             applicationUser: applicationUser,
                             applicationUsers: self.applicationUsers,
-                            organizations: organizationService.allOrganizationsStructure,
                             currentOrganization: currentOrganization
                         },
                         resolve: {
+                            organizations: function (organizationService) {
+                                'ngInject';
+                                return organizationService.getAllOrganizationsStructure();
+                            },
                             ouApplicationUsers: function (ouApplicationUserService) {
                                 'ngInject';
                                 return ouApplicationUserService.loadOUApplicationUsersByUserId(applicationUser.id);

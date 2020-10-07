@@ -153,34 +153,9 @@ module.exports = function (app) {
                     'ngInject';
                     return lookupService.getLookups(lookupService.securitySchema);
                 },
-                referencePlanNumbers: function (referencePlanNumberService) {
+                organizations: function(organizationService){
                     'ngInject';
-                    return referencePlanNumberService.getReferencePlanNumbers();
-                    // return [];
-                },
-                organizationTypes: function (organizationTypeService) {
-                    'ngInject';
-                    return organizationTypeService.getOrganizationTypes();
-                },
-                applicationUsers: function (applicationUserService) {
-                    'ngInject';
-                    return applicationUserService.loadApplicationUsers();
-                },
-                correspondenceSiteTypes: function (correspondenceSiteTypeService) {
-                    'ngInject';
-                    return correspondenceSiteTypeService.loadCorrespondenceSiteTypes();
-                },
-                organizations: function (organizationService, correspondenceSiteTypes, applicationUsers, organizationTypes, referencePlanNumbers, escalationProcess) {
-                    'ngInject';
-                    return organizationService.loadAllOrganizationsStructure();
-                },
-                globalCorrespondenceSitesForG2GId: function (correspondenceViewService) {
-                    'ngInject';
-                    return correspondenceViewService.getGlobalCorrespondenceSitesForG2GId();
-                },
-                globalCorrespondenceSitesForInternalG2GId: function (correspondenceViewService) {
-                    'ngInject';
-                    return correspondenceViewService.getGlobalCorrespondenceSitesForInternalG2GId();
+                    return organizationService.loadAllOrganizationsStructureView();
                 },
                 //Load the jobTitles, ranks, themes, roles, permissions to use in application user popup
                 viewLookups: function (applicationUserService, jobTitleService, rankService, roleService, themeService) {

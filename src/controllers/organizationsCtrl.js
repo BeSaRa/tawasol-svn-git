@@ -65,6 +65,8 @@ module.exports = function (app) {
             self.selectedTabIndex = _getTabIndex(self.selectedTabName);
         };
 
+
+
         function _checkOrganizationsNeedSync(organizations) {
             return _.some(organizations, function (org) {
                 return !org.isFnSynched;
@@ -72,7 +74,7 @@ module.exports = function (app) {
         }
 
 
-        self.reloadOrganizations = function (ignoreLoadOrganizations) {
+        /*self.reloadOrganizations = function (ignoreLoadOrganizations) {
             return referencePlanNumberService
                 .loadReferencePlanNumbers()
                 .then(function () {
@@ -87,16 +89,18 @@ module.exports = function (app) {
                             return result;
                         });
                 })
-        };
+        };*/
 
-        self.selectOrganizationToAdd = function () {
-            return dialog
-                .showDialog({
-                    controller: function () {
-
-                    },
-                    templateUrl: cmsTemplate.getPopup('select-organization')
-                })
+        self.reloadOrganizations = function () {
+            return organizationService
+                .loadAllOrganizationsStructureView()
+                .then(function (result) {
+                    self.needSync = _checkOrganizationsNeedSync(result);
+                    self.organizationsList = angular.copy(result);
+                    self.resetViewCallback();
+                    $scope.$broadcast('organizations-loaded');
+                    return result;
+                });
         };
 
         self.exportOrganizations = function () {
@@ -116,31 +120,9 @@ module.exports = function (app) {
                 });
         };
 
-        self.selectedItemChange = function (selected) {
-            if (selected) {
-                self.reloadOrganizations(true).then(function () {
-                    organizationService.loadHierarchy(selected).then(function (result) {
-                        organizationChartService.createHierarchy(result, selected);
-                        self.selectedFilter = self.organizationChartService.rootOrganizations;
-                    });
-                });
-            } else {
-                self.reloadOrganizations(false);
-            }
-        };
-
-        self.querySearch = function (searchText) {
-            if (!searchText)
-                return organizationService.allOrganizationsStructure;
-            searchText = searchText.toLowerCase();
-            return _.filter(organizationService.allOrganizationsStructure, function (item) {
-                return item.arName.toLowerCase().indexOf(searchText) !== -1 || item.enName.toLowerCase().indexOf(searchText) !== -1
-            });
-        };
-
         self.syncOrganizations = function () {
             organizationService.syncFNOrganizations().then(function () {
-                self.reloadOrganizations(false).then(function () {
+                self.reloadOrganizations().then(function () {
                     toast.success(langService.get('organizations_synced_done'));
                 });
             }).catch(function (error) {

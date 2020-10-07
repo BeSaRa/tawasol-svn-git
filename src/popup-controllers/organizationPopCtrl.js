@@ -1,7 +1,6 @@
 module.exports = function (app) {
     app.controller('organizationPopCtrl', function ($scope,
                                                     configurationService,
-                                                    serials,
                                                     printService,
                                                     dialog,
                                                     generator,
@@ -15,22 +14,14 @@ module.exports = function (app) {
                                                     OUClassification,
                                                     OUCorrespondenceSite,
                                                     Organization,
-                                                    children,
                                                     defaultTab,
                                                     organizationService,
                                                     organizationTypeService,
                                                     referencePlanNumberService,
                                                     validationService,
                                                     applicationUserService,
-                                                    ouClassifications,
-                                                    ouCorrespondenceSites,
-                                                    classifications,
                                                     classificationService,
-                                                    correspondenceSites,
                                                     organization,
-                                                    organizations,
-                                                    documentTemplates,
-                                                    documentStamps,
                                                     ReferencePlanItemStartSerial,
                                                     documentTemplateService,
                                                     documentStampService,
@@ -44,9 +35,7 @@ module.exports = function (app) {
                                                     rankService,
                                                     themeService,
                                                     roleService,
-                                                    unAssignedUsers,
                                                     rootEntity,
-                                                    ouAssignedUsers,
                                                     correspondenceSiteTypeService,
                                                     OUApplicationUser,
                                                     ouApplicationUserService,
@@ -55,10 +44,11 @@ module.exports = function (app) {
                                                     cmsTemplate,
                                                     employeeService,
                                                     correspondenceViewService,
+                                                    ouClassificationService,
+                                                    ouCorrespondenceSiteService,
                                                     gridService,
                                                     entityLDAPProviders,
-                                                    distributionLists,
-                                                    departmentUsers) {
+                                                    distributionLists) {
         'ngInject';
 
         var self = this;
@@ -136,19 +126,19 @@ module.exports = function (app) {
         // all escalation process
         self.escalationProcess = lookupService.returnLookups(lookupService.escalationProcess);
         // all children for current organization.
-        self.organizationChildren = children;
+        self.organizationChildren = [];
         self.organizationChildrenCopy = angular.copy(self.organizationChildren);
 
-        self.ouClassifications = ouClassifications;
+        self.ouClassifications = [];
         self.ouClassificationsCopy = angular.copy(self.ouClassifications);
 
-        self.ouCorrespondenceSites = ouCorrespondenceSites;
+        self.ouCorrespondenceSites = [];
         self.ouCorrespondenceSitesCopy = angular.copy(self.ouCorrespondenceSites);
 
-        self.documentTemplates = documentTemplates;
+        self.documentTemplates = [];
         self.documentTemplatesCopy = angular.copy(self.documentTemplates);
 
-        self.documentStamps = documentStamps;
+        self.documentStamps = [];
         self.documentStampsCopy = angular.copy(self.documentStamps);
 
         self.unAssignedUserSearchText = '';
@@ -161,7 +151,7 @@ module.exports = function (app) {
         self.ouDistributionListsCopy = angular.copy(self.ouDistributionLists);
         self.selectedOUDistributionLists = [];
 
-        self.serials = serials;
+        self.serials = [];
         self.selectedSerialYear = (new Date()).getFullYear();
         self.serialYears = _.range(configurationService.SEARCH_YEARS, ((new Date()).getFullYear() + 1));
         self.selectedSerialOrganizations = [];
@@ -249,7 +239,7 @@ module.exports = function (app) {
 
         self.selectedOUClassifications = [];
 
-        self.classifications = classifications;
+        self.classifications = [];
 
         self.selectedOUClassification = new OUClassification({ouid: organization.id});
 
@@ -258,7 +248,7 @@ module.exports = function (app) {
 
         self.selectedOUCorrespondenceSites = [];
 
-        self.correspondenceSites = correspondenceSites;
+        self.correspondenceSites = [];
 
         self.selectedOUCorrespondenceSite = new OUCorrespondenceSite({ouid: organization.id});
 
@@ -372,10 +362,10 @@ module.exports = function (app) {
 
 
         self.showSaveButton = function () {
-            return !(self.selectedTab === 'property_config'
-                || self.selectedTab === 'document_templates'
+            return !(self.selectedTab === 'propertyConfiguration'
+                || self.selectedTab === 'documentTemplates'
                 || self.selectedTab === 'documentStamps'
-                || self.selectedTab === 'correspondence_sites'
+                || self.selectedTab === 'correspondenceSites'
                 || self.selectedTab === 'classifications'
                 || self.selectedTab === 'users'
                 || self.selectedTab === 'departmentUsers'
@@ -403,8 +393,11 @@ module.exports = function (app) {
                 .controllerMethod
                 .organizationTypeAdd($event)
                 .then(function (result) {
-                    self.organization.outype = result;
-                    self.organizationTypes.unshift(result);
+                    organizationTypeService.loadOrganizationTypes()
+                        .then(function(){
+                            self.organization.outype = result;
+                            self.organizationTypes.unshift(result);
+                        });
                 })
         };
         // TODO: need to add reference plan number from here.
@@ -791,6 +784,26 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Reload Children grid
+         * @param pageNumber
+         * @returns {*}
+         */
+        self.reloadChildren = function (pageNumber) {
+            var defer = $q.defer();
+            self.childrenGrid.progress = defer.promise;
+            return organizationService.loadOrganizationChildren(self.organization, false)
+                .then(function (result) {
+                    self.organizationChildren = result;
+                    self.organizationChildrenCopy = angular.copy(self.organizationChildren);
+                    defer.resolve(true);
+                    if (pageNumber)
+                        self.childrenGrid.page = pageNumber;
+                    self.childrenGrid.searchCallback();
+                    return result;
+                });
+        };
+
+        /**
          * @description Clears the searchText for the given field
          * @param fieldType
          */
@@ -808,13 +821,6 @@ module.exports = function (app) {
                 if (code !== 38 && code !== 40)
                     $event.stopPropagation();
             }
-        };
-
-        /**
-         * @description to close the current dialog and send the current model to catch block.
-         */
-        self.closeOrganizationDialog = function () {
-            dialog.cancel(self.model);
         };
 
         self.changeOrganizationStatus = function (organization) {
@@ -1015,17 +1021,17 @@ module.exports = function (app) {
                 return ouClassification.classification;
             }), 'id');
 
-            var classifications = _.filter(self.classifications, function (classification) {
+            var availableClassifications = _.filter(self.classifications, function (classification) {
                 return excluded.indexOf(classification.id) === -1 && classification.status && !classification.isGlobal;
             });
 
-            if (!classifications.length) {
+            if (!availableClassifications.length) {
                 dialog.infoMessage(langService.get('no_records_to_add').change({name: langService.get('classification')}));
                 return;
             }
 
             self.organization
-                .assignClassifications(classifications)
+                .assignClassifications(availableClassifications)
                 .then(function (ouClassifications) {
                     self.ouClassifications = self.ouClassifications.concat(ouClassifications);
                     self.ouClassificationsCopy = angular.copy(self.ouClassifications);
@@ -1047,6 +1053,48 @@ module.exports = function (app) {
                     self.ouClassificationsCopy = angular.copy(self.ouClassifications);
                 })
         };
+
+        function _getClassifications() {
+            return classificationService.getClassifications()
+                .then(function (classificationsResult) {
+                    return self.classifications = classificationsResult;
+                });
+        }
+
+        self.reloadOUClassifications = function (pageNumber) {
+            if (!self.model.hasRegistry) {
+                return null;
+            }
+
+            var classificationsDefer = $q.defer();
+            if (self.tabsData.classifications.loaded) {
+                classificationsDefer.resolve(true);
+            } else {
+                _getClassifications().then(function () {
+                    classificationsDefer.resolve(true);
+                })
+            }
+
+            return classificationsDefer.promise.then(function () {
+                var defer = $q.defer();
+                self.grid.classifications.progress = defer.promise;
+                return ouClassificationService
+                    .loadOUClassificationsByOuId(self.organization)
+                    .then(function (result) {
+                        self.ouClassifications = result;
+                        self.ouClassificationsCopy = angular.copy(self.ouClassifications);
+                        self.selectedOUClassifications = [];
+                        self.selectedOUClassification = null;
+                        defer.resolve(true);
+                        if (pageNumber)
+                            self.grid.classifications.page = pageNumber;
+                        self.getSortedDataClassifications();
+                        self.grid.classifications.searchCallback();
+                        return result;
+                    });
+            });
+        };
+
 
         /****** correspondence Site section ********/
 
@@ -1190,17 +1238,17 @@ module.exports = function (app) {
                 return ouCorrespondenceSites.correspondenceSite;
             }), 'id');
 
-            var correspondenceSites = _.filter(self.correspondenceSites, function (correspondenceSite) {
+            var availableCorrespondenceSites = _.filter(self.correspondenceSites, function (correspondenceSite) {
                 return excluded.indexOf(correspondenceSite.id) === -1 && correspondenceSite.status && !correspondenceSite.isGlobal;
             });
 
-            if (!correspondenceSites.length) {
+            if (!availableCorrespondenceSites.length) {
                 dialog.infoMessage(langService.get('no_records_to_add').change({name: langService.get('correspondence_site')}));
                 return;
             }
 
             self.organization
-                .assignCorrespondenceSites(correspondenceSites)
+                .assignCorrespondenceSites(availableCorrespondenceSites)
                 .then(function (ouCorrespondenceSites) {
                     self.ouCorrespondenceSites = self.ouCorrespondenceSites.concat(ouCorrespondenceSites);
                     self.ouCorrespondenceSitesCopy = angular.copy(self.ouCorrespondenceSites);
@@ -1248,6 +1296,47 @@ module.exports = function (app) {
                     self.ouCorrespondenceSitesCopy = angular.copy(self.ouCorrespondenceSites);
                 })
 
+        };
+
+        function _getCorrespondenceSites() {
+            return correspondenceSiteService.loadCorrespondenceSitesWithLimit(100)
+                .then(function (corrSitesResult) {
+                    return self.correspondenceSites = corrSitesResult;
+                });
+        }
+
+        self.reloadOUCorrespondenceSites = function (pageNumber) {
+            if (!self.model.hasRegistry) {
+                return null;
+            }
+
+            var corrSitesDefer = $q.defer();
+            if (self.tabsData.correspondenceSites.loaded) {
+                corrSitesDefer.resolve(true);
+            } else {
+                _getCorrespondenceSites().then(function () {
+                    corrSitesDefer.resolve(true);
+                })
+            }
+
+            return corrSitesDefer.promise.then(function () {
+                var defer = $q.defer();
+                self.grid.correspondenceSites.progress = defer.promise;
+                return ouCorrespondenceSiteService
+                    .loadOUCorrespondenceSitesByOuId(self.organization)
+                    .then(function (result) {
+                        self.ouCorrespondenceSites = result;
+                        self.ouCorrespondenceSitesCopy = angular.copy(self.ouCorrespondenceSites);
+                        self.selectedOUCorrespondenceSites = [];
+                        self.selectedOUCorrespondenceSite = null;
+                        defer.resolve(true);
+                        if (pageNumber)
+                            self.grid.correspondenceSites.page = pageNumber;
+                        self.getSortedDataCorrespondenceSites();
+                        self.grid.correspondenceSites.searchCallback();
+                        return result;
+                    });
+            });
         };
 
         /**
@@ -1617,9 +1706,9 @@ module.exports = function (app) {
          */
         self.selectedOUApplicationUsers = [];
 
-        self.ouAssignedUsers = ouAssignedUsers;
+        self.ouAssignedUsers = [];
         self.ouAssignedUsersCopy = angular.copy(self.ouAssignedUsers);
-        self.unAssignedUsers = unAssignedUsers;
+        self.unAssignedUsers = [];
         self.selectedUnassignedUser = null;
 
         /**
@@ -1670,24 +1759,24 @@ module.exports = function (app) {
             self.appUserGrid.progress = defer.promise;
 
 
-            ouApplicationUserService
+            return ouApplicationUserService
                 .loadUnassignedOUApplicationUsers(organization.id)
                 .then(function (result) {
                     self.unAssignedUsers = result;
-                });
 
-
-            ouApplicationUserService
-                .loadRelatedOUApplicationUsers(organization.id)
-                .then(function (result) {
-                    self.ouAssignedUsers = result;
-                    self.ouAssignedUsersCopy = angular.copy(self.ouAssignedUsers);
-                    self.selectedOUApplicationUsers = [];
-                    defer.resolve(true);
-                    if (pageNumber)
-                        self.appUserGrid.page = pageNumber;
-                    self.getSortedDataAppUser();
-                    self.appUserGrid.searchCallback();
+                    return ouApplicationUserService
+                        .loadRelatedOUApplicationUsers(organization.id)
+                        .then(function (result) {
+                            self.ouAssignedUsers = result;
+                            self.ouAssignedUsersCopy = angular.copy(self.ouAssignedUsers);
+                            self.selectedOUApplicationUsers = [];
+                            defer.resolve(true);
+                            if (pageNumber)
+                                self.appUserGrid.page = pageNumber;
+                            self.getSortedDataAppUser();
+                            self.appUserGrid.searchCallback();
+                            return result;
+                        });
                 });
         };
 
@@ -1719,14 +1808,6 @@ module.exports = function (app) {
             if (!(ouApplicationUser instanceof OUApplicationUser)) {
                 return;
             }
-            var organization = ouApplicationUser.ouid || ouApplicationUser.ouId;
-            if (!organization instanceof Organization && typeof organization === 'number') {
-                organization = _.find(organizationService.allOrganizationsStructure, function (ou) {
-                    return ou.id === organization;
-                })
-            }
-            var applicationUser = ouApplicationUser.applicationUser;
-            applicationUser = (applicationUser instanceof ApplicationUser) ? applicationUser : new ApplicationUser(applicationUser);
 
             // validationService
             //     .createValidation('LOAD_USER_CLASSIFICATION_VIEW_PERMISSIONS')
@@ -1741,7 +1822,7 @@ module.exports = function (app) {
             //     .then(function () {
             applicationUserService
                 .controllerMethod
-                .applicationUserFromOuEdit(applicationUser, organization, $event)
+                .applicationUserFromOuEdit(ouApplicationUser, $event)
                 .then(function () {
                     self.reloadOuApplicationUsers(self.appUserGrid.page);
                     self.reloadDepartmentUsers(self.departmentUsersGrid.page);
@@ -1751,7 +1832,7 @@ module.exports = function (app) {
             //
             // });
         };
-        //console.log('self.organization.centralArchiveUnitId', self.organization.centralArchiveUnitId, self.organization.registryParentId);
+
         /**
          * @description Open the popup to assign/add the selected unassigned user to organization
          * @param $event
@@ -1776,6 +1857,10 @@ module.exports = function (app) {
                     self.ouAssignedUsers.unshift(ouApplicationUser);
                     self.departmentUsers.unshift(ouApplicationUser);
                     self.userAdded = !self.userAdded;
+                    self.selectedUnassignedUser = null;
+                })
+                .catch(function(error){
+                    self.selectedUnassignedUser = null;
                 });
         };
 
@@ -1819,7 +1904,7 @@ module.exports = function (app) {
         };
 
 
-        self.departmentUsers = departmentUsers;
+        self.departmentUsers = [];
         self.departmentUsersCopy = angular.copy(self.departmentUsers);
         self.selectedDepartmentUsers = [];
 
@@ -1869,26 +1954,31 @@ module.exports = function (app) {
          * @return {*|Promise<U>}
          */
         self.reloadDepartmentUsers = function (pageNumber) {
+            if (!self.model.hasRegistry) {
+                return null;
+            }
+
             var defer = $q.defer();
             self.departmentUsersGrid.progress = defer.promise;
 
-            ouApplicationUserService
+            return ouApplicationUserService
                 .loadUnassignedOUApplicationUsers(organization.id)
                 .then(function (result) {
                     self.unAssignedUsers = result;
-                });
 
-            ouApplicationUserService
-                .loadOuApplicationUserByRegOu(organization.id)
-                .then(function (result) {
-                    self.departmentUsers = result;
-                    self.departmentUsersCopy = angular.copy(self.departmentUsers);
-                    self.selectedDepartmentUsers = [];
-                    defer.resolve(true);
-                    if (pageNumber)
-                        self.departmentUsersGrid.page = pageNumber;
-                    self.getSortedDataDepartmentUser();
-                    self.departmentUsersGrid.searchCallback();
+                    return ouApplicationUserService
+                        .loadOuApplicationUserByRegOu(organization.id)
+                        .then(function (result) {
+                            self.departmentUsers = result;
+                            self.departmentUsersCopy = angular.copy(self.departmentUsers);
+                            self.selectedDepartmentUsers = [];
+                            defer.resolve(true);
+                            if (pageNumber)
+                                self.departmentUsersGrid.page = pageNumber;
+                            self.getSortedDataDepartmentUser();
+                            self.departmentUsersGrid.searchCallback();
+                            return result;
+                        });
                 });
         };
 
@@ -2189,14 +2279,14 @@ module.exports = function (app) {
         };
 
         self.reloadSerials = function () {
-            if (!self.selectedSerialYear) {
+            if (!self.selectedSerialYear || !self.model.hasRegistry) {
                 return null;
             }
 
-            referencePlanNumberService
+            return referencePlanNumberService
                 .loadSerials(self.selectedSerialYear, [self.organization.id])
                 .then(function (result) {
-                    self.serials = result;
+                    return self.serials = result;
                 });
         };
         /**
@@ -2206,71 +2296,84 @@ module.exports = function (app) {
             printService.printData(self.serials, Object.keys(self.serials[0].getExportedData()), langService.get('menu_item_serials') + ' : ' + self.selectedSerialYear);
         };
 
-
-        self.tabsToShow = [
-            'basic',
-            'security_settings',
-            'workflow_settings',
-            'document_templates',
-            'documentStamps',
-            'children',
-            'serials',
-            'classifications',
-            'correspondence_sites',
-            'private_registry_ou',
-            'property_config',
-            'users',
-            'departmentUsers'
-        ];
+        self.tabsData = {
+            'basic': {show: true, loaded: true},
+            'securitySettings': {show: true, loaded: true},
+            'workflowSettings': {show: true, loaded: true},
+            'documentTemplates': {show: true, loaded: false, callback: self.reloadDocumentTemplates},
+            'documentStamps': {show: true, loaded: false, callback: self.reloadDocumentStamps},
+            'children': {show: true, loaded: false, callback: self.reloadChildren},
+            'serials': {show: true, loaded: false, callback: self.reloadSerials},
+            'classifications': {show: true, loaded: false, callback: self.reloadOUClassifications},
+            'correspondenceSites': {show: true, loaded: false, callback: self.reloadOUCorrespondenceSites},
+            'privateRegistryOU': {show: true, loaded: false, callback: self.reloadPrivateRegOU},
+            'propertyConfiguration': {show: true, loaded: false},
+            'users': {show: true, loaded: false, callback: self.reloadOuApplicationUsers},
+            'departmentUsers': {show: true, loaded: false, callback: self.reloadDepartmentUsers}
+        };
 
         self.setCurrentTab = function (tabName) {
+            if (tabName === 'basic' || tabName === 'securitySettings' || tabName === 'workflowSettings') {
+                self.selectedTab = tabName;
+                self.selectedTabIndex = _getTabIndex(self.selectedTab);
+                return;
+            }
             var defer = $q.defer();
-            if (tabName === 'private_registry_ou') {
-                self.reloadPrivateRegOU(self.privateRegOUGrid.page)
-                    .then(function () {
-                        defer.resolve(tabName);
-                    });
-            } else if (tabName === 'distribution_lists') {
-                self.reloadOUDistributionList(self.ouDistributionListGrid.page)
-                    .then(function () {
-                        defer.resolve(tabName);
-                    });
-            } else {
+
+            if (self.tabsData[tabName].loaded) {
                 defer.resolve(tabName);
+            } else {
+                if (!self.tabsData[tabName].callback) {
+                    defer.resolve(tabName);
+                } else {
+                    self.tabsData[tabName].callback()
+                        .then(function (result) {
+                            defer.resolve(tabName);
+                        });
+                }
             }
             return defer.promise.then(function (tab) {
                 self.selectedTab = tab;
+                self.selectedTabIndex = _getTabIndex(self.selectedTab);
+                self.tabsData[tab].loaded = true;
             });
         };
 
         function _getAvailableTabs() {
-            return _.filter(self.tabsToShow, function (tab) {
-                return self.showTab(tab);
+            var availableTabs = {};
+            _.map(self.tabsData, function (item, key) {
+                if (self.showTab(key)) {
+                    availableTabs[key] = item;
+                }
             });
+            return availableTabs;
         }
 
         function _getTabIndex(tabName) {
-            return _.findIndex(_getAvailableTabs(), function (tab) {
-                return tab.toLowerCase() === tabName.toLowerCase();
-            })
+            var index = -1,
+                tabFound = _.find(_getAvailableTabs(), function (tab, key) {
+                    index++;
+                    return key.toLowerCase() === tabName.toLowerCase();
+                });
+            return index;
         }
 
         self.showTab = function (tabName) {
-            if (self.tabsToShow.indexOf(tabName) === -1) {
+            if (!self.tabsData.hasOwnProperty(tabName) || !self.tabsData[tabName].show) {
                 return false;
             }
             if (tabName === 'departmentUsers') {
                 return self.organization.hasRegistry;
             } else if (tabName === 'documentStamps') {
                 return rootEntity.hasPSPDFViewer() && self.globalSettings.isStampModuleEnabled() && employeeService.hasPermissionTo('MANAGE_STAMPS');
-            } else if (tabName === 'private_registry_ou') {
+            } else if (tabName === 'privateRegistryOU') {
                 return self.model.isPrivateRegistry;
             } else {
-                if (tabName === 'serials' || tabName === 'classifications' || tabName === 'correspondence_sites') {
-                    if (!self.model.hasRegistry){
+                if (tabName === 'serials' || tabName === 'classifications' || tabName === 'correspondenceSites') {
+                    if (!self.model.hasRegistry) {
                         return false;
                     }
-                    if(tabName === 'serials') {
+                    if (tabName === 'serials') {
                         return employeeService.hasPermissionTo('MANAGE_REFERENCE_NUMBER_PLANS');
                     }
                 }
@@ -2279,20 +2382,23 @@ module.exports = function (app) {
         };
 
         function _setDefaultSelectedTab() {
-            if (defaultTab) {
-                if (self.showTab(defaultTab)) {
-                    self.selectedTab = defaultTab;
-                } else {
-                    self.selectedTab = 'basic';
-                }
-            } else {
-                self.selectedTab = 'basic';
+            var activeTab = 'basic';
+            if (defaultTab && self.showTab(defaultTab)) {
+                activeTab = defaultTab;
             }
-            self.selectedTabIndex = _getTabIndex(self.selectedTab);
+            self.setCurrentTab(activeTab);
         }
 
         self.selectedTab = 'basic';
         self.selectedTabIndex = 0;
         _setDefaultSelectedTab();
+
+
+        /**
+         * @description to close the current dialog and send the current model to catch block.
+         */
+        self.closeOrganizationDialog = function () {
+            dialog.cancel(self.model);
+        };
     });
 };

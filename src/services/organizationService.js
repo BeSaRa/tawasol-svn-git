@@ -15,13 +15,14 @@ module.exports = function (app) {
                                                  PropertyConfiguration,
                                                  OUPrivateRegistry,
                                                  employeeService,
-                                                 AdminResultRelation) {
+                                                 OrganizationUnitView) {
         'ngInject';
         var self = this;
         self.serviceName = 'organizationService';
 
         self.organizations = [];
         self.allOrganizationsStructure = [];
+        self.allOrganizationsStructureView = [];
 
         self.rootOrganization = {};
         self.childrenOrganizations = {};
@@ -115,11 +116,27 @@ module.exports = function (app) {
          * @description Load all organizations structure as admin result
          * @returns {*}
          */
-        self.loadAllOrganizationsStructureAsAdminResult = function () {
+        self.loadAllOrganizationsStructureView = function (skipSetValue) {
             var url = urlService.organizations + '/structure/lookup';
             return $http.get(url).then(function (result) {
-                var ous = generator.generateCollection(result.data.rs, AdminResultRelation, self._sharedMethods);
-                return generator.interceptReceivedCollection('AdminResultRelation', ous);
+                if (skipSetValue) {
+                    var ous = generator.generateCollection(result.data.rs, OrganizationUnitView);
+                    return generator.interceptReceivedCollection('OrganizationUnitView', ous);
+                }
+                self.allOrganizationsStructureView = generator.generateCollection(result.data.rs, OrganizationUnitView);
+                self.allOrganizationsStructureView = generator.interceptReceivedCollection('OrganizationUnitView', self.allOrganizationsStructureView);
+                return self.allOrganizationsStructureView;
+            });
+        };
+
+        self.getOrganizationViewById = function (organizationId) {
+            if (!organizationId)
+                return;
+
+            var id = organizationId.hasOwnProperty('id') ? organizationId.id : organizationId;
+
+            return _.find(self.allOrganizationsStructureView, function (organization) {
+                return Number(organization.id) === Number(id);
             });
         };
 
@@ -531,35 +548,31 @@ module.exports = function (app) {
                     targetEvent: $event,
                     controller: 'organizationPopCtrl',
                     controllerAs: 'ctrl',
-                    escapeToClose: false, // TODO: check if need as business
+                    escapeToClose: false,
                     locals: {
                         rootMode: organization.hasOwnProperty('identifier'),
                         editMode: false,
                         organization: organization,
-                        children: [],
-                        ouClassifications: [],
-                        ouCorrespondenceSites: [],
                         allPropertyConfigurations: [],
-                        unAssignedUsers: [],
-                        ouAssignedUsers: [],
-                        organizations: self.allOrganizationsStructure,
-                        defaultTab: 'basic',
-                        serials: [],
-                        documentStamps: []
+                        defaultTab: 'basic'
                     },
                     resolve: {
-                        classifications: function (classificationService) {
+                        oneTimeLoads: function (correspondenceViewService, organizationTypeService, correspondenceSiteTypeService, referencePlanNumberService, applicationUserService) {
                             'ngInject';
-                            return classificationService.getClassifications();
+                            return $q.all([
+                                organizationTypeService.getOrganizationTypes(),
+                                correspondenceSiteTypeService.getCorrespondenceSiteTypes(),
+                                referencePlanNumberService.getReferencePlanNumbers(),
+                                correspondenceViewService.getGlobalCorrespondenceSitesForG2GId(),
+                                correspondenceViewService.getGlobalCorrespondenceSitesForInternalG2GId(),
+                                applicationUserService.getApplicationUsers()
+                            ]).then(function (result) {
+                                return true;
+                            });
                         },
-                        correspondenceSites: function (correspondenceSiteService) {
+                        organizations: function () {
                             'ngInject';
-                            return correspondenceSiteService.loadCorrespondenceSitesWithLimit(100);
-                        },
-                        documentTemplates: function (documentTemplateService) {
-                            'ngInject';
-                            // return documentTemplateService.loadDocumentTemplates(organization.id);
-                            return [];
+                            return self.getAllOrganizationsStructure();
                         },
                         entityLDAPProviders: function (entityService, rootEntity) {
                             'ngInject';
@@ -567,13 +580,6 @@ module.exports = function (app) {
                                 .then(function (result) {
                                     return result.ldapProviders;
                                 });
-                        },
-                        departmentUsers: function (ouApplicationUserService) {
-                            'ngInject';
-                            if (!organization.hasRegistry) {
-                                return [];
-                            }
-                            return ouApplicationUserService.loadOuApplicationUserByRegOu(organization.id);
                         },
                         distributionLists: function (distributionListService) {
                             'ngInject';
@@ -590,59 +596,49 @@ module.exports = function (app) {
              * @return {promise}
              */
             organizationEdit: function (organization, $event, defaultTab) {
+                var ouDefer = $q.defer();
                 return dialog.showDialog({
                     templateUrl: cmsTemplate.getPopup('organization'),
                     targetEvent: $event,
                     controller: 'organizationPopCtrl',
                     controllerAs: 'ctrl',
-                    escapeToClose: false, // TODO: check if need as business
+                    escapeToClose: false,
                     locals: {
                         rootMode: (!organization.parent || organization.parent === -1),
                         editMode: true,
-                        // organization: organization,
-                        organizations: self.allOrganizationsStructure,
                         defaultTab: defaultTab || 'basic'
                     },
                     resolve: {
+                        oneTimeLoads: function (correspondenceViewService, organizationTypeService, correspondenceSiteTypeService, referencePlanNumberService, applicationUserService) {
+                            'ngInject';
+                            return $q.all([
+                                organizationTypeService.getOrganizationTypes(),
+                                correspondenceSiteTypeService.getCorrespondenceSiteTypes(),
+                                referencePlanNumberService.getReferencePlanNumbers(),
+                                correspondenceViewService.getGlobalCorrespondenceSitesForG2GId(),
+                                correspondenceViewService.getGlobalCorrespondenceSitesForInternalG2GId(),
+                                applicationUserService.getApplicationUsers()
+                            ]).then(function (result) {
+                                ouDefer.resolve(true);
+                                return true;
+                            });
+                        },
+                        organizations: function () {
+                            'ngInject';
+                            return self.getAllOrganizationsStructure();
+                        },
                         organization: function (organizationService) {
                             'ngInject';
-                            return organizationService.loadOrganizationById(organization.id)
-                                .then(function (item) {
-                                    item.referencePlanItemStartSerialList = _.filter(item.referencePlanItemStartSerialList, 'referencePlanItemId');
-                                    if (item.referenceNumberPlanId) {
-                                        item.referenceNumberPlanId.referencePlanItemStartSerialList = angular.copy(item.referencePlanItemStartSerialList);
-                                    }
-                                    return item;
-                                });
-                        },
-                        children: function () {
-                            'ngInject';
-                            return self.loadOrganizationChildren(organization, false);
-                        },
-                        ouClassifications: function (ouClassificationService) {
-                            'ngInject';
-                            return organization.hasRegistry ? ouClassificationService.loadOUClassificationsByOuId(organization) : [];
-                        },
-                        classifications: function (classificationService) {
-                            'ngInject';
-                            return classificationService.getClassifications();
-                        },
-                        ouCorrespondenceSites: function (ouCorrespondenceSiteService) {
-                            'ngInject';
-                            return organization.hasRegistry ? ouCorrespondenceSiteService.loadOUCorrespondenceSitesByOuId(organization) : [];
-                        },
-                        correspondenceSites: function (correspondenceSiteService) {
-                            'ngInject';
-                            return correspondenceSiteService.loadCorrespondenceSitesWithLimit(100);
-                        },
-                        documentTemplates: function (documentTemplateService) {
-                            'ngInject';
-                            return documentTemplateService
-                                .loadDocumentTemplates(organization.id, null, (!organization.hasRegistry ? organization.id : null));
-                        },
-                        documentStamps: function (documentStampService) {
-                            'ngInject';
-                            return documentStampService.loadDocumentStamps(generator.getNormalizedValue(organization, 'id'));
+                            return ouDefer.promise.then(function () {
+                                return organizationService.loadOrganizationById(organization.id)
+                                    .then(function (item) {
+                                        item.referencePlanItemStartSerialList = _.filter(item.referencePlanItemStartSerialList, 'referencePlanItemId');
+                                        if (item.referenceNumberPlanId) {
+                                            item.referenceNumberPlanId.referencePlanItemStartSerialList = angular.copy(item.referencePlanItemStartSerialList);
+                                        }
+                                        return item;
+                                    });
+                            });
                         },
                         allPropertyConfigurations: function (propertyConfigurationService, $q) {
                             'ngInject';
@@ -673,15 +669,6 @@ module.exports = function (app) {
                                     'internal': result[2]
                                 };
                             });
-
-                        },
-                        unAssignedUsers: function (ouApplicationUserService) {
-                            'ngInject';
-                            return ouApplicationUserService.loadUnassignedOUApplicationUsers(organization.id);
-                        },
-                        ouAssignedUsers: function (ouApplicationUserService) {
-                            'ngInject';
-                            return ouApplicationUserService.loadRelatedOUApplicationUsers(organization.id);
                         },
                         entityLDAPProviders: function (entityService, rootEntity) {
                             'ngInject';
@@ -690,20 +677,9 @@ module.exports = function (app) {
                                     return result.ldapProviders;
                                 });
                         },
-                        departmentUsers: function (ouApplicationUserService) {
-                            'ngInject';
-                            if (!organization.hasRegistry) {
-                                return [];
-                            }
-                            return ouApplicationUserService.loadOuApplicationUserByRegOu(organization.id);
-                        },
                         distributionLists: function (distributionListService) {
                             'ngInject';
                             return distributionListService.getDistributionLists();
-                        },
-                        serials: function (referencePlanNumberService) {
-                            'ngInject';
-                            return organization.hasRegistry ? referencePlanNumberService.loadSerials((new Date()).getFullYear(), [organization.id]) : [];
                         }
                     }
                 });

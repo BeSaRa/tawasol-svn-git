@@ -199,5 +199,6 @@ module.exports = function (app) {
     require('./AdminResultRelation')(app);
     require('./ApplicationUserLookup')(app);
     require('./ApplicationUserView')(app);
+    require('./OrganizationUnitView')(app);
 
 };

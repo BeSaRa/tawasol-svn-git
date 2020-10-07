@@ -33,32 +33,6 @@ module.exports = function (app) {
 
         self.selectedOrganizations = [];
 
-        self.grid = {
-            progress: null,
-            limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.organization) || 5, // default limit
-            page: 1, // first page
-            order: '', // default sorting order
-            limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.organization, self.organizationsList),
-            pagingCallback: function (page, limit) {
-                gridService.setGridPagingLimitByGridName(gridService.grids.administration.organization, limit);
-            },
-            searchColumns: {
-                arabicName: 'arName',
-                englishName: 'enName',
-                parent: function (record) {
-                    return self.getSortingKey('parentOrReportingToInfo', 'Organization');
-                }
-            },
-            searchText: '',
-            searchCallback: function (grid) {
-                self.organizationsList = gridService.searchGridData(self.grid, self.organizationsListCopy);
-            },
-            columnSearchCriteria: angular.copy(columnSearchCriteria),
-            columnSearchCallback: function () {
-                self.organizationsList = _searchByColumns();
-            }
-        };
-
         self.hasRegistryOptions = [
             {id: null, key: 'all', value: null},
             {id: 1, key: 'yes', value: true},
@@ -109,11 +83,11 @@ module.exports = function (app) {
             self.organizationsList = $filter('orderBy')(self.organizationsList, self.grid.order);
         };
 
-        self.reloadOrganizations = function (ignoreLoadOrganizations, pageNumber) {
+        self.reloadOrganizations = function (pageNumber) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
 
-            self.reloadCallback(ignoreLoadOrganizations || false)
+            self.reloadCallback()
                 .then(function (result) {
                     self.organizationsList = _filterManageable(result);
                     self.organizationsListCopy = angular.copy(self.organizationsList);
@@ -140,10 +114,9 @@ module.exports = function (app) {
                 .controllerMethod
                 .organizationAdd(organization, $event)
                 .finally(function () {
-                    self.reloadOrganizations(false);
+                    self.reloadOrganizations();
                 })
                 .catch(function () {
-                    self.reloadOrganizations(false);
                 });
         };
 
@@ -157,10 +130,10 @@ module.exports = function (app) {
                 .controllerMethod
                 .organizationEdit(organization, $event)
                 .then(function () {
-                    self.reloadOrganizations(false);
+                    self.reloadOrganizations();
                 })
                 .catch(function () {
-                    self.reloadOrganizations(false);
+                    self.reloadOrganizations();
                 })
         };
 
@@ -206,10 +179,10 @@ module.exports = function (app) {
                 .controllerMethod
                 .organizationEdit(organization, $event, 'children')
                 .then(function () {
-                    self.reloadOrganizations(false);
+                    self.reloadOrganizations();
                 })
                 .catch(function () {
-                    self.reloadOrganizations(false);
+                    self.reloadOrganizations();
                 })
         };
 
@@ -266,11 +239,13 @@ module.exports = function (app) {
 
         self.resetViewGrid = function () {
             // set grid defaults and clear search
-            self.grid.order = '';
-            self.grid.page = 1;
-            self.grid.columnSearchCriteria = angular.copy(columnSearchCriteria);
-            self.grid.columnSearchCallback();
-            self.getSortedData();
+            if (self.grid) {
+                self.grid.order = '';
+                self.grid.page = 1;
+                self.grid.columnSearchCriteria = angular.copy(columnSearchCriteria);
+                self.grid.columnSearchCallback();
+                self.getSortedData();
+            }
         };
 
         /**
@@ -283,9 +258,38 @@ module.exports = function (app) {
             return _.filter(angular.copy(organizations), 'manageable');
         };
 
+        function _initGrid() {
+            self.grid = {
+                progress: null,
+                limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.organization) || 5, // default limit
+                page: 1, // first page
+                order: '', // default sorting order
+                limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.organization, self.organizationsList),
+                pagingCallback: function (page, limit) {
+                    gridService.setGridPagingLimitByGridName(gridService.grids.administration.organization, limit);
+                },
+                searchColumns: {
+                    arabicName: 'arName',
+                    englishName: 'enName',
+                    parent: function (record) {
+                        return self.getSortingKey('parentOrReportingToInfo', 'Organization');
+                    }
+                },
+                searchText: '',
+                searchCallback: function (grid) {
+                    self.organizationsList = gridService.searchGridData(self.grid, self.organizationsListCopy);
+                },
+                columnSearchCriteria: angular.copy(columnSearchCriteria),
+                columnSearchCallback: function () {
+                    self.organizationsList = _searchByColumns();
+                }
+            };
+        }
+
         self.$onInit = function () {
             self.organizationsList = _filterManageable(self.organizationsList);
             self.organizationsListCopy = angular.copy(self.organizationsList);
+            _initGrid();
             _getAllParentIds();
         };
 

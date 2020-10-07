@@ -98,15 +98,39 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Load the global correspondence sites.
+         * Used in organization structure for binding g2g Id(Code).
+         */
+        self.loadGlobalCorrespondenceSitesForG2GId = function () {
+            return $http.get(urlService.correspondenceViews + '/g2g-codes')
+                .then(function (result) {
+                    self.globalCorrespondenceSitesForG2GId = generator.generateCollection(result.data.rs, SiteView);
+                    self.globalCorrespondenceSitesForG2GId = generator.interceptReceivedCollection('SiteView', self.globalCorrespondenceSitesForG2GId);
+                    return self.globalCorrespondenceSitesForG2GId;
+                })
+                .catch(function (error) {
+                    return [];
+                });
+        };
+
+        /**
          * @description Get the global correspondence sites.
          * Used in organization structure for binding g2g Id(Code).
          */
         self.getGlobalCorrespondenceSitesForG2GId = function () {
-            $http.get(urlService.correspondenceViews + '/g2g-codes')
+            return self.globalCorrespondenceSitesForG2GId.length ? $q.when(self.globalCorrespondenceSitesForG2GId) : self.loadGlobalCorrespondenceSitesForG2GId();
+        };
+
+        /**
+         * @description Load the global correspondence sites.
+         * Used in organization structure for binding internal g2g Id(Code).
+         */
+        self.loadGlobalCorrespondenceSitesForInternalG2GId = function () {
+            return $http.get(urlService.correspondenceViews + '/internal-g2g-codes')
                 .then(function (result) {
-                    result = generator.generateCollection(result.data.rs, SiteView);
-                    self.globalCorrespondenceSitesForG2GId = generator.interceptReceivedCollection('SiteView', result);
-                    return result;
+                    self.globalCorrespondenceSitesForInternalG2GId = generator.generateCollection(result.data.rs, SiteView);
+                    self.globalCorrespondenceSitesForInternalG2GId = generator.interceptReceivedCollection('SiteView', self.globalCorrespondenceSitesForInternalG2GId);
+                    return self.globalCorrespondenceSitesForInternalG2GId;
                 })
                 .catch(function (error) {
                     return [];
@@ -118,15 +142,7 @@ module.exports = function (app) {
          * Used in organization structure for binding internal g2g Id(Code).
          */
         self.getGlobalCorrespondenceSitesForInternalG2GId = function () {
-            $http.get(urlService.correspondenceViews + '/internal-g2g-codes')
-                .then(function (result) {
-                    result = generator.generateCollection(result.data.rs, SiteView);
-                    self.globalCorrespondenceSitesForInternalG2GId = generator.interceptReceivedCollection('SiteView', result);
-                    return result;
-                })
-                .catch(function (error) {
-                    return [];
-                });
-        }
+            return self.globalCorrespondenceSitesForInternalG2GId.length ? $q.when(self.globalCorrespondenceSitesForInternalG2GId) : self.loadGlobalCorrespondenceSitesForInternalG2GId();
+        };
     });
 };
