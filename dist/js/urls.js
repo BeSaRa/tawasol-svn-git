@@ -204,6 +204,7 @@
                 .addToAllWithBase('prepareFollowUp', 'cms-entity/user/user-followup-book/prepare-followup/vsid/:vsId/doc-class/:classKey')
                 .addToAllWithBase('documentStamp', 'cms-entity/admin/tawasol-stamp')
                 .addToAllWithBase('sequentialWorkflow', 'cms-entity/admin/seq-wf')
+                .addToAllWithBase('sequentialWorkflowBackStep', 'cms-entity/correspondence/wf/:documentClass/seq-wf/back-ward')
                 .addToAllWithBase('annotationContent', 'cms-entity/correspondence/common/annotation-content')
                 .addToAllWithBase('openForApproval', 'cms-entity/correspondence/:documentClass/open-for-approval/vsid/:vsId')
                 .addToAllWithBase('authorizeDocumentByAnnotation', 'cms-entity/correspondence/:documentClass/annotation/authorize')

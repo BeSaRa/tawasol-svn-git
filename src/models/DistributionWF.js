@@ -19,7 +19,7 @@ module.exports = function (app) {
             self.userWfGroups = [];
             self.receivedOUs = [];
             self.receivedRegOUs = [];
-
+            self.isSeqWFLaunch = false;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
@@ -60,6 +60,11 @@ module.exports = function (app) {
             };
             DistributionWF.prototype.setReceivedRegOUs = function (receivedRegOUs) {
                 this.receivedRegOUs = receivedRegOUs;
+                return this;
+            };
+
+            DistributionWF.prototype.setIsSeqWFLaunch = function (isSeqWFLaunch) {
+                this.isSeqWFLaunch = isSeqWFLaunch;
                 return this;
             };
             // don't remove CMSModelInterceptor from last line

@@ -200,5 +200,6 @@ module.exports = function (app) {
     require('./ApplicationUserLookup')(app);
     require('./ApplicationUserView')(app);
     require('./OrganizationUnitView')(app);
+    require('./BackStepOptions')(app);
 
 };

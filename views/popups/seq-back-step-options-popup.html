@@ -1,0 +1,74 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{::lang.back_step_options}}">
+    <popup-toolbar-directive
+            header-text="{{::lang.back_step_options}}"></popup-toolbar-directive>
+    <md-dialog-content overlay-scroll-bar-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="stepBackForm" autocomplete="off">
+                <div layout="column">
+                    <div layout="row">
+                        <md-switch flex ng-model="ctrl.model.sendSMS">
+                            <label>{{lang.sms_workflow_notification}}</label>
+                        </md-switch>
+                        <md-switch flex ng-model="ctrl.model.sendEmail">
+                            <label>{{lang.email_workflow_notification}}</label>
+                        </md-switch>
+                    </div>
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="actionId">{{lang.action}}</label>
+                            <md-select id="actionId" name="actionId" required ng-model="ctrl.model.actionId">
+                                <md-option ng-repeat="action in ctrl.actions" ng-value="action.id">
+                                    {{action.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="stepBackForm.actionId.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>{{lang.sla_due_date}}</label>
+                            <input ng-model="ctrl.model.sLADueDay">
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="commentList">{{lang.select_comment}}</label>
+                            <md-select id="commentList" name="commentList" ng-change="ctrl.onSelectedCommentChange()"
+                                       ng-model="ctrl.selectedComment">
+                                <md-option ng-repeat="comment in ctrl.comments" ng-value="comment">
+                                    {{comment.shortComment}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="comment">{{lang.type_your_comment}}</label>
+                            <textarea style="min-height: 150px !important;" overlay-scroll-bar-directive
+                                      maxlength="2000"
+                                      required
+                                      md-maxlength="2000"
+                                      id="comment" name="comment" rows="5" class="cms-comment textarea-bootstrap"
+                                      ng-model="ctrl.model.userComment"></textarea>
+                            <div ng-messages="stepBackForm.comment.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:2000})}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary"
+                   ng-disabled="stepBackForm.$invalid" ng-click="ctrl.performBackStep()">
+            {{lang.save}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

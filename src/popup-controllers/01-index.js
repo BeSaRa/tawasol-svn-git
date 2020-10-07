@@ -155,4 +155,5 @@ module.exports = function (app) {
     require('./sequentialWorkflowStepPopCtrl')(app);
     require('./launchSequentialWorkflowPopCtrl')(app);
     require('./pdfViewerPopCtrl')(app);
+    require('./seqBackStepPopCtrl')(app);
 };

@@ -6,6 +6,12 @@ module.exports = function (app) {
         UPDATE_DOCUMENT_CONTENT: 'UPDATE_DOCUMENT_CONTENT',
         UPDATE_ATTACHMENT: 'UPDATE_ATTACHMENT',
         ADD_ATTACHMENT: 'ADD_ATTACHMENT',
-        SEQ_LAUNCHED: 'SEQ_LAUNCHED'
+        SEQ_LAUNCHED: 'SEQ_LAUNCHED',
+        DEFAULT_INSTANT_JSON: {
+            format: "https://pspdfkit.com/instant-json/v1",
+            skippedPdfObjectIds: [],
+            annotations: [],
+            formFieldValues: []
+        }
     });
 };

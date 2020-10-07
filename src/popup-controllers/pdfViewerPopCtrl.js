@@ -36,6 +36,7 @@ module.exports = function (app) {
                                                  WorkItem,
                                                  operations,
                                                  generalStepElementView,
+                                                 downloadService,
                                                  cmsTemplate) {
         'ngInject';
         var self = this;
@@ -1388,6 +1389,39 @@ module.exports = function (app) {
                         });
                     } // end nextSeqStep.isAuthorizeAndSendStep()
                 }); //end getDocumentAnnotations
+        };
+
+        self.startBackStepValidation = function () {
+            if (self.disableSaveButton) {
+                return false;
+            }
+            $timeout(function () {
+                self.disableSaveButton = true;
+            });
+
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('seq-back-step-options'),
+                    bindToController: true,
+                    controller: 'seqBackStepPopCtrl',
+                    controllerAs: 'ctrl',
+                    resolve: {
+                        actions: function () {
+                            return employeeService.getEmployee().loadMyWorkflowActions();
+                        },
+                        comments: function (userCommentService) {
+                            'ngInject';
+                            return userCommentService.loadUserComments();
+                        }
+                    }
+                })
+                .then(function (backStepOptions) {
+                    sequentialWorkflowService.backStepSeqWFCorrespondence(self.correspondence, backStepOptions).then(function (data) {
+                        self.disableSaveButton = false;
+                    });
+                }).catch(function () {
+                    self.disableSaveButton = false;
+                });
         };
         /**
          * @description check if the current user can edit annotation or not

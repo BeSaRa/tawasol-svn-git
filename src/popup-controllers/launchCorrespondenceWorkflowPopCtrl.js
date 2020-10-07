@@ -1437,6 +1437,7 @@ module.exports = function (app) {
                     self.distributionWF.setReceivedOUs(_.filter(collection, _filterWFDepartmentsGroup));
                     self.distributionWF.setReceivedRegOUs(_.filter(collection, _filterWFRegDepartments));
                     self.distributionWF.setWfGroups(_.filter(collection, _filterWFGroups));
+                    self.distributionWF.setIsSeqWFLaunch(typeof self.correspondence.getSeqWFId !== "undefined" ? !!self.correspondence.getSeqWFId() : false);
 
                     distributionWFService.startLaunchWorkflow(self.distributionWF, self.correspondence, self.actionKey)
                         .then(function () {

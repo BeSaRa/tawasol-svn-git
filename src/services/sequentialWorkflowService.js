@@ -8,7 +8,11 @@ module.exports = function (app) {
                                                        dialog,
                                                        langService,
                                                        toast,
+                                                       PDFService,
                                                        SequentialWF,
+                                                       PDFViewer,
+                                                       AnnotationType,
+                                                       downloadService,
                                                        employeeService,
                                                        errorCode) {
         'ngInject';
@@ -521,6 +525,31 @@ module.exports = function (app) {
                 }).catch(function (error) {
                     return errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
                 });
+        };
+        /**
+         * @description preform back step for te SEQ Correspondence
+         * @param correspondence
+         * @param backStepOptions
+         * @return {*}
+         */
+        self.backStepSeqWFCorrespondence = function (correspondence, backStepOptions) {
+            var info = correspondence.getInfo();
+            return PDFService.applyAnnotationsOnPDFDocument(correspondence, AnnotationType.ANNOTATION, PDFViewer.DEFAULT_INSTANT_JSON, [])
+                .then(function (pdfContent) {
+                    var formData = new FormData();
+                    formData.append('entity', JSON.stringify({
+                        vsid: info.vsId,
+                        wobNum: info.wobNumber,
+                        validateMultiSignature: false,
+                        seqWFId: correspondence.getSeqWFId()
+                    }));
+                    formData.append('content', pdfContent);
+                    return $http.post(urlService.sequentialWorkflowBackStep.change({documentClass: info.documentClass}), formData, {
+                        headers: {
+                            'Content-Type': undefined
+                        }
+                    });
+                })
         };
         /**
          * @description create the shared method to the model.
