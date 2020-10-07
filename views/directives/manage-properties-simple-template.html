@@ -191,8 +191,9 @@
             <div layout="row">
                 <!-- Date -->
                 <md-input-container flex>
-                    <label for="docDate">{{ctrl.document.hasDocumentClass('outgoing') ? lang.document_date :
-                        lang.incoming_date }} ({{ctrl.defaultDateFormat}})</label>
+                    <label for="docDate">{{ctrl.document.hasDocumentClass('incoming') ? lang.incoming_date :
+                        lang.document_date
+                        }} ({{ctrl.defaultDateFormat}})</label>
                     <input aria-label="docDate" id="docDate"
                            tooltip="{{lang.document_date}}"
                            type="text" name="docDate"
