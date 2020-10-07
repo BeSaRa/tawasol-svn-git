@@ -1299,6 +1299,10 @@ module.exports = function (app) {
                 return !info.isPaper && info.docStatus !== 21;
             };
 
+            WorkItem.prototype.isSeqInBackStep = function () {
+                return this.generalStepElm.isSeqWFBackward;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('WorkItem', 'init', this);

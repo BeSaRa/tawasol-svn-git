@@ -1133,7 +1133,7 @@ module.exports = function (app) {
                         return _isCurrentUserSignature(annotation);
                     });
                 }).then(function (result) {
-                    result ? resolve(result) : reject(result);
+                    result ? resolve(result) : (self.correspondence instanceof WorkItem && self.correspondence.isSeqInBackStep() ? resolve(true) : reject(result));
                 });
             });
         };
@@ -1418,6 +1418,10 @@ module.exports = function (app) {
                 .then(function (backStepOptions) {
                     sequentialWorkflowService.backStepSeqWFCorrespondence(self.correspondence, backStepOptions).then(function (data) {
                         self.disableSaveButton = false;
+                        dialog.hide();
+                    }).catch(function (error) {
+                        self.disableSaveButton = false;
+                        toast.error(error.data.eo[langService.current + 'Name']);
                     });
                 }).catch(function () {
                     self.disableSaveButton = false;
