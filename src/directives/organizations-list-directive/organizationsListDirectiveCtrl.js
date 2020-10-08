@@ -117,6 +117,7 @@ module.exports = function (app) {
                     self.reloadOrganizations();
                 })
                 .catch(function () {
+                    self.reloadOrganizations();
                 });
         };
 
