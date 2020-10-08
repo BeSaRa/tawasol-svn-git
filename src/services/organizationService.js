@@ -117,8 +117,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.loadAllOrganizationsStructureView = function (skipSetValue) {
-            var url = urlService.organizations + '/structure/lookup';
-            return $http.get(url).then(function (result) {
+            return $http.get(urlService.organizations + '/structure/hierarchical').then(function (result) {
                 if (skipSetValue) {
                     var ous = generator.generateCollection(result.data.rs, OrganizationUnitView);
                     return generator.interceptReceivedCollection('OrganizationUnitView', ous);
