@@ -511,6 +511,10 @@ module.exports = function (app) {
             if (terminateAllWFS) {
                 signatureModel.terminateAllWFS = true;
             }
+            if (typeof correspondence.isSeqInBackStep !== "undefined" && correspondence.isSeqInBackStep()) {
+                signatureModel.isSeqWFBackward = true;
+            }
+
             form.append('entity', JSON.stringify(signatureModel));
             if (content) {
                 form.append('content', content);

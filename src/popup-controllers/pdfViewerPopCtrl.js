@@ -171,19 +171,15 @@ module.exports = function (app) {
          * @param callback
          * @return {*}
          */
-        function makeToolbarItems(getInstance, callback) {
+        function makeToolbarItems() {
             var defaultToolbar = angular.copy(PSPDFKit.defaultToolbarItems);
-            if (typeof callback !== "function") {
-                callback = () => {
-                };
-            }
             var exportButton = {
                 type: "custom",
                 id: "export-pdf",
                 title: "Export",
                 icon: "./assets/images/download.svg",
                 onPress: function () {
-                    self.exportDocument(getInstance, callback);
+                    self.exportDocument();
                 }
             };
             var customStampsButton = {
@@ -578,8 +574,8 @@ module.exports = function (app) {
          * @param getInstance
          * @param callback
          */
-        self.exportDocument = function (getInstance, callback) {
-            getInstance()
+        self.exportDocument = function () {
+            self.currentInstance
                 .exportPDF()
                 .then(buffer => {
                     var supportsDownloadAttribute = HTMLAnchorElement.prototype.hasOwnProperty(
@@ -588,20 +584,17 @@ module.exports = function (app) {
                     var blob = new Blob([buffer], {type: "application/pdf"});
                     if (navigator.msSaveOrOpenBlob) {
                         navigator.msSaveOrOpenBlob(blob, "download.pdf");
-                        callback();
                     } else if (!supportsDownloadAttribute) {
                         var reader = new FileReader();
                         reader.onloadend = () => {
                             var dataUrl = reader.result;
                             downloadPdf(dataUrl);
-                            callback();
                         };
                         reader.readAsDataURL(blob);
                     } else {
                         var objectUrl = window.URL.createObjectURL(blob);
                         downloadPdf(objectUrl);
                         window.URL.revokeObjectURL(objectUrl);
-                        callback();
                     }
                 });
         };
@@ -986,7 +979,6 @@ module.exports = function (app) {
                 self.currentInstance.removeEventListener("inkSignatures.delete", self.handleDeleteInkSignatureAnnotation);
                 self.currentInstance.removeEventListener("annotations.create", self.handleCreateAnnotations);
                 self.currentInstance.removeEventListener("annotations.willChange", self.handleDeleteAnnotations);
-                window.removeEventListener('afterprint', self.handleAfterPrint);
             }
             try {
                 PSPDFKit.unload($element.find('#pdf-viewer')[0]);
@@ -1623,6 +1615,7 @@ module.exports = function (app) {
             self.currentInstance.addEventListener("document.change", (operations) => {
                 self.documentOperations = self.documentOperations.concat(operations);
             });
+
             var editorElement = self.currentInstance.contentDocument
                 .querySelector(".PSPDFKit-Toolbar-Button-Document-Editor");
 
@@ -1641,7 +1634,7 @@ module.exports = function (app) {
                     return btn.innerText === 'Save As…'
                 });
                 saveAsButton && (saveAsButton.style.display = 'none');
-            }, 500);
+            }, 1000);
         };
 
         /**
@@ -1694,9 +1687,7 @@ module.exports = function (app) {
                     container: $element.find('#pdf-viewer')[0],
                     document: self.pdfData,
                     isEditableAnnotation: self.userCanEditAnnotation,
-                    toolbarItems: makeToolbarItems(function () {
-                        return self.currentInstance;
-                    }),
+                    toolbarItems: makeToolbarItems(),
                     populateInkSignatures: self.populateInkSignatures,
                     licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
                     annotationTooltipCallback: self.annotationTooltipCallback
