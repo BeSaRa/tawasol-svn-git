@@ -113,7 +113,7 @@ module.exports = function (app) {
 
 
         /**
-         * @description Load all organizations structure as admin result
+         * @description Load all organizations structure as organizationUnitView
          * @returns {*}
          */
         self.loadAllOrganizationsStructureView = function (skipSetValue) {
