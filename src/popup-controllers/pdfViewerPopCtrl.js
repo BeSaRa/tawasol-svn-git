@@ -1658,7 +1658,7 @@ module.exports = function (app) {
                     document: documentWithOperationsBuffer,
                     headless: true,
                     instantJSON: instantJSON,
-                    licenseKey: self.licenseKey
+                    licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey
                 });
             }
 
