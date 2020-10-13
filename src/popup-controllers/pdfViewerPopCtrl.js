@@ -48,7 +48,7 @@ module.exports = function (app) {
         // pdf viewer license key
         self.licenseKey = rootEntity.returnRootEntity().rootEntity.psPDFLicenseKey;
         // to user it later to display
-        self.canRepeatAnnotations = false;
+        //self.canRepeatAnnotations = false;
         // current document meta data
         self.correspondence = correspondence;
         // current annotation mode to load the document from right service and set the annotation types for all signature Annotations (ink,Imag)
@@ -651,7 +651,7 @@ module.exports = function (app) {
                 },
                 controllerAs: 'ctrl',
                 locals: {
-                    repeatAble: self.canRepeatAnnotations
+                    repeatAble: self.isAbleToRepeatAnnotations()
                 },
                 resolve: {
                     stamps: function (documentStampService) {
@@ -726,7 +726,7 @@ module.exports = function (app) {
                 },
                 controllerAs: 'ctrl',
                 locals: {
-                    repeatAble: self.canRepeatAnnotations
+                    repeatAble: self.isAbleToRepeatAnnotations()
                 },
                 resolve: {
                     signatures: function (applicationUserSignatureService) {
@@ -948,7 +948,7 @@ module.exports = function (app) {
          * @returns {boolean|*}
          */
         self.isAbleToRepeatAnnotations = function () {
-            return self.currentInstance.totalPageCount > 1 && self.isAllPageSameSize();
+            return self.currentInstance.totalPageCount > 1;// && self.isAllPageSameSize();
         };
         /**
          * @description return true if the all pages has same size.
@@ -1697,7 +1697,7 @@ module.exports = function (app) {
                     self.getDocumentAnnotations().then(function (annotations) {
                         self.oldAnnotations = annotations;
                     });
-                    self.canRepeatAnnotations = self.isAbleToRepeatAnnotations();
+                    //self.canRepeatAnnotations = self.isAbleToRepeatAnnotations();
                     self.currentInstance.setAnnotationCreatorName(employeeService.getEmployee().domainName);
                     self.registerEventListeners();
                 });
