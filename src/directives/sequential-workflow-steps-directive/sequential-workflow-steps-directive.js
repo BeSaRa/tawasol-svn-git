@@ -13,7 +13,8 @@ module.exports = function (app) {
                 redrawSteps: '=',
                 viewOnly: '=',
                 correspondence: '=',
-                isLaunchSeqWF: '='
+                isLaunchSeqWF: '=',
+                usageType: '@'
             }
         }
     })

@@ -125,7 +125,12 @@ module.exports = function (app) {
                     "}");
             }
 
-            var title = angular.element('<span class="no-style" />', {'md-truncate': ''}).html('{{ item.getTranslatedName() }}');
+
+            var titleText = '{{item.getTranslatedName()}}';
+            if (self.usageType === 'view-steps' && stepAction.getTranslatedUserAndOuName()){
+                titleText += ' ({{item.getTranslatedUserAndOuName() }})'
+            }
+            var title = angular.element('<span class="no-style" />', {'md-truncate': ''}).html(titleText);
             var stepTypeIcon = angular.element('<md-icon />', {
                 'md-svg-icon': "{{item.getStepIcon()}}",
                 'class': 'indicator-size',

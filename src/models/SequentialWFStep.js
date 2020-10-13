@@ -77,6 +77,21 @@ module.exports = function (app) {
                 return this[language + 'Name'];
             };
 
+            SequentialWFStep.prototype.getTranslatedUserName = function () {
+                return this.toUserInfo[langService.current + 'Name'];
+            };
+
+            SequentialWFStep.prototype.getTranslatedOuName = function () {
+                return this.toOUInfo[langService.current + 'Name'];
+            };
+
+            SequentialWFStep.prototype.getTranslatedUserAndOuName = function () {
+                if (!this.getTranslatedUserName()){
+                    return '';
+                }
+                return this.getTranslatedUserName() + ' - ' + this.getTranslatedOuName();
+            };
+
             SequentialWFStep.prototype.isNewStep = function () {
                 return !this.id;
             };
