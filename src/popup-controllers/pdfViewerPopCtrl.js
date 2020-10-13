@@ -1578,7 +1578,7 @@ module.exports = function (app) {
                 }
             };
 
-            if (self.canRepeatAnnotations && !_isRepeaterChild(annotation) && !_isRepeaterRoot(annotation)) {
+            if (self.isAbleToRepeatAnnotations() && !_isRepeaterChild(annotation) && !_isRepeaterRoot(annotation)) {
                 tooltipItems.push(replicationButton);
             }
 
