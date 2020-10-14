@@ -165,6 +165,11 @@ module.exports = function (app) {
                     })
             }
             self.checkCentralArchive();
+            $timeout(function () {
+                if (self.document_properties){
+                    generator.validateRequiredSelectFields(self.document_properties, true);
+                }
+            });
             return self.documentInformation = null;
         };
 
