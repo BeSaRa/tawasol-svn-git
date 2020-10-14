@@ -247,6 +247,7 @@ module.exports = function (app) {
                 type: 'custom',
                 id: 'print',
                 icon: './assets/images/print.svg',
+                title: 'Print',
                 disabled: !(employeeService.hasPermissionTo('PRINT_DOCUMENT')),
                 onPress: function (e) {
                     self.printWithOutAnnotations(e, false);
@@ -370,6 +371,23 @@ module.exports = function (app) {
         function _isElectronicAndAuthorizeByAnnotationBefore() {
             // return (self.info.docStatus === 23 && !self.info.isPaper && (self.correspondence.getAuthorizeByAnnotationStatus() || (self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep())))
             return self.info.docStatus === 23 && !self.info.isPaper && self.correspondence.getAuthorizeByAnnotationStatus();
+        }
+
+        /**
+         * @description Gets the custom data - additional data value from annotation
+         * @param annotation
+         * @param property
+         * property to get data. If not passed, additionalData will be returned
+         * @returns {null|*}
+         * @private
+         */
+        function _getCustomAdditionalData(annotation, property) {
+            if (!annotation) {
+                return null;
+            } else if (!property) {
+                return _.get(annotation, 'customData.additionalData');
+            }
+            return _.get(annotation, 'customData.additionalData.' + property);
         }
 
         self.onAttachToggleChange = function () {
@@ -748,6 +766,9 @@ module.exports = function (app) {
                 .then(function (annotations) {
                     annotations.map(function (annotation) {
                         annotation = annotation.set('noView', noPrintValue);
+                        /*if (_getCustomAdditionalData(annotation, 'type') === AnnotationType.ANNOTATION) {
+                            annotation = annotation.set('noView', noPrintValue);
+                        }*/
                         updatedAnnotations.push(self.currentInstance.update(annotation));
                     });
                     $q.all(updatedAnnotations)
@@ -989,8 +1010,9 @@ module.exports = function (app) {
         /**
          * @default handle success Authorize
          * @param result
+         * @param ignoreClosePopup
          */
-        self.handleSuccessAuthorize = function (result) {
+        self.handleSuccessAuthorize = function (result, ignoreClosePopup) {
             self.disableSaveButton = false;
             if (result === correspondenceService.authorizeStatus.PARTIALLY_AUTHORIZED.text) {
                 self.sendAnnotationLogs();
@@ -1008,6 +1030,9 @@ module.exports = function (app) {
                             .catch(self.handleExceptions);
                     })
                     .catch(function () {
+                        if (ignoreClosePopup) {
+                            return self.loadUpdatedContent(self.annotationType !== AnnotationType.SIGNATURE);
+                        }
                         dialog.hide({
                             content: self.savedPdfContent,
                             action: PDFViewer.CANCEL_LAUNCH
@@ -1017,11 +1042,14 @@ module.exports = function (app) {
                 dialog
                     .confirmMessage(langService.get('confirm_authorize_same_user').change({user: employeeService.getEmployee().getTranslatedName()}))
                     .then(function () {
-                        self.saveDocumentAnnotations(true);
+                        self.saveDocumentAnnotations(true, ignoreClosePopup);
                     });
             } else {
                 self.sendAnnotationLogs(function () {
                     toast.success(langService.get('sign_specific_success').change({name: self.correspondence.getTranslatedName()}));
+                    if (ignoreClosePopup) {
+                        return self.loadUpdatedContent(self.annotationType !== AnnotationType.SIGNATURE);
+                    }
                     dialog.hide({
                         content: self.savedPdfContent,
                         action: PDFViewer.JUST_AUTHORIZE
@@ -1079,14 +1107,18 @@ module.exports = function (app) {
         /**
          * @description handle
          * @param pdfContent
+         * @param ignoreClosePopup
          */
-        self.handleSaveAttachment = function (pdfContent) {
+        self.handleSaveAttachment = function (pdfContent, ignoreClosePopup) {
             self.correspondence.file = pdfContent;
             self.correspondence.sourceType = 1;
             attachmentService.updateAttachment(attachedBook, self.correspondence)
                 .then(function (attachment) {
                     self.disableSaveButton = false;
                     toast.success(langService.get('save_success'));
+                    if (ignoreClosePopup) {
+                        return self.loadUpdatedContent(self.annotationType !== AnnotationType.SIGNATURE);
+                    }
                     dialog.hide({
                         content: attachment,
                         type: 'ATTACHMENT',
@@ -1097,14 +1129,17 @@ module.exports = function (app) {
         /**
          * @description handle open for approval save action.
          * @param ignoreValidationSignature
+         * @param ignoreClosePopup
          */
-        self.handleOpenForApprovalSave = function (ignoreValidationSignature) {
+        self.handleOpenForApprovalSave = function (ignoreValidationSignature, ignoreClosePopup) {
             self.isDocumentHasCurrentUserSignature().then(function () {
                 self.getPDFContentForCurrentDocument().then(function (pdfContent) {
                     self.savedPdfContent = pdfContent;
                     self.correspondence
                         .handlePinCodeAndCompositeThenCompleteAuthorization(pdfContent, ignoreValidationSignature)
-                        .then(self.handleSuccessAuthorize)
+                        .then(function (result) {
+                            self.handleSuccessAuthorize(result, ignoreClosePopup)
+                        })
                         .catch(self.handleExceptions);
                 });
             }).catch(function () {
@@ -1133,12 +1168,16 @@ module.exports = function (app) {
          * @description handle update document content
          * @param pdfContent
          * @param annotationType
+         * @param ignoreClosePopup
          */
-        self.handleUpdateDocumentContent = function (pdfContent, annotationType) {
+        self.handleUpdateDocumentContent = function (pdfContent, annotationType, ignoreClosePopup) {
             self.correspondence.updateDocumentContentByAnnotation(pdfContent, annotationType).then(function () {
                 toast.success(langService.get('save_success'));
                 self.disableSaveButton = false;
                 self.sendAnnotationLogs();
+                if (ignoreClosePopup) {
+                    return self.loadUpdatedContent(self.annotationType !== AnnotationType.SIGNATURE);
+                }
                 dialog.hide({
                     content: self.savedPdfContent,
                     action: PDFViewer.UPDATE_DOCUMENT_CONTENT
@@ -1149,14 +1188,18 @@ module.exports = function (app) {
          * @description save annotations as attachments
          * @param pdfContent
          * @param callback
+         * @param ignoreClosePopup
          */
-        self.handleSaveAnnotationAsAttachment = function (pdfContent, callback) {
+        self.handleSaveAnnotationAsAttachment = function (pdfContent, callback, ignoreClosePopup) {
             self.correspondence.addAnnotationAsAttachment(pdfContent).then(function (attachment) {
                 toast.success(langService.get('save_success'));
                 self.disableSaveButton = false;
                 if (callback) {
                     callback();
                     return;
+                }
+                if (ignoreClosePopup) {
+                    return self.loadUpdatedContent(self.annotationType !== AnnotationType.SIGNATURE);
                 }
                 dialog.hide({
                     content: attachment,
@@ -1168,7 +1211,7 @@ module.exports = function (app) {
         /**
          * @description handle none signature save part
          */
-        self.handleSaveNoneSignaturePart = function (ignoreValidationSignature) {
+        self.handleSaveNoneSignaturePart = function (ignoreValidationSignature, ignoreClosePopup) {
             self.currentInstance.exportInstantJSON().then(async function (instantJSON) {
                 delete instantJSON.pdfId;
                 instantJSON.skippedPdfObjectIds = _.difference(instantJSON.skippedPdfObjectIds, self.skippedPdfObjectIds);
@@ -1178,31 +1221,62 @@ module.exports = function (app) {
                         self.savedPdfContent = pdfContent;
                         self.skippedPdfObjectIds = self.skippedPdfObjectIds.concat(instantJSON.skippedPdfObjectIds);
                         if (self.correspondence instanceof Attachment) {
-                            self.handleSaveAttachment(pdfContent);
+                            self.handleSaveAttachment(pdfContent, ignoreClosePopup);
                         } else {
                             if (self.info.isPaper) {
-                                self.info.docStatus === 25 ? self.handleSaveAnnotationAsAttachment(pdfContent) : self.handleUpdateDocumentContent(pdfContent);
+                                self.info.docStatus === 25 ? self.handleSaveAnnotationAsAttachment(pdfContent, null, ignoreClosePopup) : self.handleUpdateDocumentContent(pdfContent, null, ignoreClosePopup);
                             } else if (_isElectronicAndAuthorizeByAnnotationBefore() && !self.correspondence.getSeqWFId()) {
                                 if (hasMySignature) {
                                     self.correspondence.handlePinCodeAndCompositeThenCompleteAuthorization(pdfContent, ignoreValidationSignature)
-                                        .then(self.handleSuccessAuthorize)
+                                        .then(function (authorizeResult) {
+                                            self.handleSuccessAuthorize(authorizeResult, ignoreClosePopup);
+                                        })
                                         .catch(self.handleExceptions);
                                 } else {
-                                    self.handleUpdateDocumentContent(pdfContent);
+                                    self.handleUpdateDocumentContent(pdfContent, null, ignoreClosePopup);
                                 }
                             } else {
                                 // for electronic document in ready to export or internal in approved queue.
-                                (self.info.docStatus === 24 && (self.info.documentClass === 'outgoing' || self.info.documentClass === 'internal')) ? self.handleUpdateDocumentContent(pdfContent, AnnotationType.STAMP) : self.handleSaveAnnotationAsAttachment(pdfContent);
+                                (self.info.docStatus === 24 && (self.info.documentClass === 'outgoing' || self.info.documentClass === 'internal')) ? self.handleUpdateDocumentContent(pdfContent, AnnotationType.STAMP, ignoreClosePopup) : self.handleSaveAnnotationAsAttachment(pdfContent, null, ignoreClosePopup);
                             }
                         }
                     });
             });
         };
+
+        self.saveAndCloseDocumentAnnotations = function () {
+            self.saveDocumentAnnotations()
+        };
+
+        /*self.saveAndSendDocumentAnnotations = function () {
+            self.saveDocumentAnnotations(false, true)
+        };*/
+
+        self.saveAnnotationsNoClose = function () {
+            self.saveDocumentAnnotations(false, true);
+        };
+
+        self.loadUpdatedContent = function (withWatermark) {
+            downloadService.downloadContentWithOutWaterMark(self.correspondence, (withWatermark ? AnnotationType.ANNOTATION : AnnotationType.SIGNATURE))
+                .then(function (blob) {
+                    self.disposable();
+                    var fr = new FileReader();
+                    return $q(function (resolve) {
+                        fr.onloadend = function () {
+                            self.pdfData = fr.result;
+                            self.$onInit();
+                        };
+                        fr.readAsArrayBuffer(blob);
+                    });
+                })
+        };
+
         /**
          * @description save document annotations
          * @param ignoreValidationSignature
+         * @param ignoreClosePopup
          */
-        self.saveDocumentAnnotations = function (ignoreValidationSignature) {
+        self.saveDocumentAnnotations = function (ignoreValidationSignature, ignoreClosePopup) {
             if (self.disableSaveButton) {
                 return null;
             }
@@ -1217,9 +1291,9 @@ module.exports = function (app) {
                 }
 
                 if (self.annotationType === AnnotationType.SIGNATURE) {
-                    self.handleOpenForApprovalSave(ignoreValidationSignature);
+                    self.handleOpenForApprovalSave(ignoreValidationSignature, ignoreClosePopup); // document is already with watermark
                 } else {
-                    self.handleSaveNoneSignaturePart(ignoreValidationSignature);
+                    self.handleSaveNoneSignaturePart(ignoreValidationSignature, ignoreClosePopup);
                 }
             }); // get document annotations
         };
