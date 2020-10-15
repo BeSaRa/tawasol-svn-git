@@ -78,10 +78,16 @@ module.exports = function (app) {
             };
 
             SequentialWFStep.prototype.getTranslatedUserName = function () {
+                if (!this.toUserInfo){
+                    return '';
+                }
                 return this.toUserInfo[langService.current + 'Name'];
             };
 
             SequentialWFStep.prototype.getTranslatedOuName = function () {
+                if (!this.toOUInfo){
+                    return '';
+                }
                 return this.toOUInfo[langService.current + 'Name'];
             };
 
