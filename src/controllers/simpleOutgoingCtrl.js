@@ -189,7 +189,12 @@ module.exports = function (app) {
 
         self.requestCompleted = false;
 
-        self.saveCorrespondence = function (status, ignoreLaunch) {
+        function _isReadyToSave(actionType, isContentRequired) {
+            generator.validateRequiredSelectFields(self.document_properties, true);
+            return self.isSaveValid(self.document_properties, actionType, isContentRequired);
+        }
+
+        self.saveDocument = function(status, ignoreLaunch){
             self.saveInProgress = true;
             // loadingIndicatorService.loading = true;
             if (status && !self.documentInformation) {
@@ -287,8 +292,21 @@ module.exports = function (app) {
             });
         };
 
+        self.saveCorrespondence = function (status, ignoreLaunch) {
+            var actionType = status ? 'saveAsDraft' : 'save';
+            if (!_isReadyToSave(actionType, (actionType === 'saveAsDraft'))) {
+                toast.info(langService.get('check_required_fields'));
+                return;
+            }
+            self.saveDocument(status, ignoreLaunch);
+        };
+
         self.saveCorrespondenceAndPrintBarcode = function ($event) {
-            self.saveCorrespondence(false, true).then(function () {
+            if (!_isReadyToSave('saveAndPrintBarcode', false)) {
+                toast.info(langService.get('check_required_fields'));
+                return;
+            }
+            self.saveDocument(false, true).then(function () {
                 self.docActionPrintBarcode(self.outgoing, $event);
             })
         };
@@ -342,7 +360,11 @@ module.exports = function (app) {
         }
 
         self.saveAndAnnotateDocument = function ($event) {
-            self.saveCorrespondence(false, true).then(function () {
+            if (!_isReadyToSave('saveAndInsert', true)) {
+                toast.info(langService.get('check_required_fields'));
+                return;
+            }
+            self.saveDocument(false, true).then(function () {
                 self.outgoing.openForAnnotation()
                     .then(function (result) {
                         if (result && result.action && result.action === PDFViewer.ADD_ATTACHMENT) {
