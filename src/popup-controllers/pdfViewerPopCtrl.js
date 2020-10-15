@@ -1483,6 +1483,7 @@ module.exports = function (app) {
                 })
                 .then(function (backStepOptions) {
                     sequentialWorkflowService.backStepSeqWFCorrespondence(self.correspondence, backStepOptions).then(function (data) {
+                        toast.success(langService.get('launch_sequential_workflow_back_success'));
                         self.disableSaveButton = false;
                         dialog.hide();
                     }).catch(function (error) {
