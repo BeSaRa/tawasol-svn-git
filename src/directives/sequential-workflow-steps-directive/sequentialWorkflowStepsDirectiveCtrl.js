@@ -118,11 +118,20 @@ module.exports = function (app) {
                     "'" + self.stepLegendClassList.inValidStep.class + "' : !item.isValidStep(ctrl.seqWF)" +
                     "}");
             } else {
-                element.attr('ng-class', "{" +
+                var stepClass = '';
+                if (stepAction.isCurrentSeqWFStep(self.correspondence)){
+                    stepClass = self.stepLegendClassList.currentStep.class;
+                } else if (stepAction.isPastSeqWFStep(self.correspondence)){
+                    stepClass = self.stepLegendClassList.pastStep.class;
+                } else if (stepAction.isFutureSeqWFStep(self.correspondence)){
+                    stepClass = self.stepLegendClassList.futureStep.class;
+                }
+                element.addClass(stepClass);
+                /*element.attr('ng-class', "{" +
                     "'" + self.stepLegendClassList.pastStep.class + "' : item.isPastSeqWFStep(ctrl.correspondence), " +
                     "'" + self.stepLegendClassList.currentStep.class + "' : item.isCurrentSeqWFStep(ctrl.correspondence), " +
                     "'" + self.stepLegendClassList.futureStep.class + "' : item.isFutureSeqWFStep(ctrl.correspondence)" +
-                    "}");
+                    "}");*/
             }
 
 
