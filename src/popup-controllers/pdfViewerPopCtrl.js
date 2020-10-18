@@ -1244,10 +1244,6 @@ module.exports = function (app) {
             });
         };
 
-        self.saveAndCloseDocumentAnnotations = function () {
-            self.saveDocumentAnnotations()
-        };
-
         /*self.saveAndSendDocumentAnnotations = function () {
             self.saveDocumentAnnotations(false, true)
         };*/
