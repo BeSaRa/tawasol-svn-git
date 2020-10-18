@@ -365,7 +365,8 @@ module.exports = function (app) {
         }
 
         function _getRightTypeForElectronicSignature() {
-            return (self.annotationType === AnnotationType.SIGNATURE || (self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep() && !self.needOpenForApproval)) ? AnnotationType.SIGNATURE : (_isElectronicAndAuthorizeByAnnotationBefore() && self.correspondence instanceof WorkItem && !self.correspondence.getSeqWFId() ? AnnotationType.SIGNATURE : AnnotationType.ANNOTATION)
+            // return (self.annotationType === AnnotationType.SIGNATURE || (self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep() && !self.needOpenForApproval)) ? AnnotationType.SIGNATURE : (_isElectronicAndAuthorizeByAnnotationBefore() && self.correspondence instanceof WorkItem && !self.correspondence.getSeqWFId() ? AnnotationType.SIGNATURE : AnnotationType.ANNOTATION)
+            return self.needOpenForApproval ? AnnotationType.ANNOTATION : AnnotationType.SIGNATURE;
         }
 
         function _isElectronicAndAuthorizeByAnnotationBefore() {
