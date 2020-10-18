@@ -765,10 +765,9 @@ module.exports = function (app) {
             self.getDocumentAnnotations()
                 .then(function (annotations) {
                     annotations.map(function (annotation) {
-                        annotation = annotation.set('noView', noPrintValue);
-                        /*if (_getCustomAdditionalData(annotation, 'type') === AnnotationType.ANNOTATION) {
+                        if (!_isSignature(annotation)) {
                             annotation = annotation.set('noView', noPrintValue);
-                        }*/
+                        }
                         updatedAnnotations.push(self.currentInstance.update(annotation));
                     });
                     $q.all(updatedAnnotations)
