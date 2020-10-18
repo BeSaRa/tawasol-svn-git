@@ -545,7 +545,8 @@ module.exports = function (app) {
                         vsid: info.vsId,
                         wobNum: info.wobNumber,
                         validateMultiSignature: false,
-                        seqWFId: correspondence.getSeqWFId()
+                        seqWFId: correspondence.getSeqWFId(),
+                        backwardOptions: backStepOptions
                     }));
                     formData.append('content', pdfContent);
                     return $http.post(urlService.sequentialWorkflowBackStep.change({documentClass: info.documentClass}), formData, {
