@@ -474,6 +474,43 @@ module.exports = function (app) {
                 .getMainDocumentEmailContent($event);
         };
 
+
+        /**
+         * @description Download Main Document
+         * @param correspondence
+         * @param $event
+         */
+        self.downloadMainDocument = function (correspondence, $event) {
+            correspondence
+                .mainDocumentDownload($event);
+        };
+
+        /**
+         * @description Download Composite Document
+         * @param correspondence
+         * @param $event
+         */
+        self.downloadCompositeDocument = function (correspondence, $event) {
+            correspondence
+                .compositeDocumentDownload($event);
+        };
+
+        /**
+         * @description download selected document
+         * @param correspondence
+         * @param $event
+         */
+        self.downloadSelected = function (correspondence, $event) {
+            downloadService.openSelectedDownloadDialog(correspondence, $event);
+        };
+        /**
+         * @description merge and download
+         * @param correspondence
+         */
+        self.mergeAndDownloadFullDocument = function (correspondence) {
+            downloadService.mergeAndDownload(correspondence);
+        };
+
         /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
@@ -923,6 +960,77 @@ module.exports = function (app) {
                         class: "action-green",
                         showInView: true,
                         permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    }
+                ]
+            },
+            // Download
+            {
+                type: 'action',
+                icon: 'download',
+                text: 'grid_action_download',
+                showInView: true,
+                showInViewOnly: true,
+                checkShow: function (action, model) {
+                    var isAllowed = true;
+                    if (model.isCorrespondenceApprovedBefore() && model.getInfo().authorizeByAnnotation) {
+                        isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
+                    }
+
+                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model);
+                },
+                permissionKey: [
+                    "DOWNLOAD_MAIN_DOCUMENT",
+                    "DOWNLOAD_COMPOSITE_BOOK"
+                ],
+                checkAnyPermission: true,
+                subMenu: [
+                    // Main Document
+                    {
+                        type: 'action',
+                        icon: 'file-document',
+                        text: 'grid_action_main_document',
+                        permissionKey: "DOWNLOAD_MAIN_DOCUMENT",
+                        callback: self.downloadMainDocument,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // Composite Document
+                    {
+                        type: 'action',
+                        icon: 'file-document',
+                        text: 'grid_action_composite_document',
+                        permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
+                        callback: self.downloadCompositeDocument,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // download selected
+                    {
+                        type: 'action',
+                        icon: 'message',
+                        text: 'selective_document',
+                        permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
+                        callback: self.downloadSelected,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // merge and download
+                    {
+                        type: 'action',
+                        icon: 'message',
+                        text: 'merge_and_download',
+                        permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
+                        callback: self.mergeAndDownloadFullDocument,
+                        class: "action-green",
                         checkShow: function (action, model) {
                             return true;
                         }

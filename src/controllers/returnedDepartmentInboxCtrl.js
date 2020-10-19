@@ -1158,12 +1158,10 @@ module.exports = function (app) {
                 icon: 'download',
                 text: 'grid_action_download',
                 shortcut: false,
+                hide: true, // approveByAnnotation info not available, so, download is hidden (approved by issawi)
                 checkShow: function (action, model) {
                     var isAllowed = true;
-                    if (model.hasActiveSeqWF()) {
-                        return false;
-                    }
-                    if (model.isCorrespondenceApprovedBefore()) {
+                    if (model.isCorrespondenceApprovedBefore() && model.getInfo().authorizeByAnnotation) {
                         isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
                     }
 

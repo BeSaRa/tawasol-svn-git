@@ -493,6 +493,19 @@ module.exports = function (app) {
             return 0;
         }
 
+        function _getAuthorizeByAnnotation(correspondence) {
+            if (correspondence.hasOwnProperty('generalStepElm')) {
+                return !!correspondence.generalStepElm.authorizeByAnnotation;
+            } else if (correspondence.hasOwnProperty('stepElm')) {
+                return !!correspondence.stepElm.authorizeByAnnotation;
+            } else if (correspondence.hasOwnProperty('correspondence')) {
+                return !!correspondence.correspondence.authorizeByAnnotation;
+            }  else if (correspondence.hasOwnProperty('authorizeByAnnotation')) {
+                return !!correspondence.authorizeByAnnotation;
+            }
+            return false;
+        }
+
         /**
          * @description bulk message for any bulk actions.
          * @param result
@@ -583,7 +596,8 @@ module.exports = function (app) {
                 securityLevel: _getSecurityLevel(correspondence),
                 isAttachment: false,
                 hasActiveSeqWF: _getHasActiveSeqWF(correspondence),
-                signaturesCount: _getSignatureCount(correspondence)
+                signaturesCount: _getSignatureCount(correspondence),
+                authorizeByAnnotation: _getAuthorizeByAnnotation(correspondence)
             });
         };
         /**
@@ -1976,7 +1990,7 @@ module.exports = function (app) {
          * @param justView
          * @returns {promise|*}
          */
-        self.openCorrespondenceEditor = function (information , justView) {
+        self.openCorrespondenceEditor = function (information, justView) {
             return dialog.showDialog({
                 templateUrl: cmsTemplate.getPopup('view-correspondence'),
                 controller: 'viewCorrespondencePopCtrl',

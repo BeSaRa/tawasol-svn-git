@@ -13,6 +13,7 @@ module.exports = function (app) {
                                                      rootEntity,
                                                      _,
                                                      viewDocumentService,
+                                                     downloadService,
                                                      userFolders,
                                                      $window,
                                                      tokenService,
@@ -405,6 +406,44 @@ module.exports = function (app) {
                 return;
             }
             //  console.log('viewApprovedInternalCompleteLinkedDocuments : ', approvedInternal);
+        };
+
+
+
+        /**
+         * @description Download Main Document
+         * @param workItem
+         * @param $event
+         */
+        self.downloadMainDocument = function (workItem, $event) {
+            workItem
+                .mainDocumentDownload($event);
+        };
+
+        /**
+         * @description Download Composite Document
+         * @param workItem
+         * @param $event
+         */
+        self.downloadCompositeDocument = function (workItem, $event) {
+            workItem
+                .compositeDocumentDownload($event);
+        };
+
+        /**
+         * @description download selected document
+         * @param workItem
+         * @param $event
+         */
+        self.downloadSelected = function (workItem, $event) {
+            downloadService.openSelectedDownloadDialog(workItem, $event);
+        };
+        /**
+         * @description merge and download
+         * @param workItem
+         */
+        self.mergeAndDownloadFullDocument = function (workItem) {
+            downloadService.mergeAndDownload(workItem);
         };
 
         /**
@@ -1099,6 +1138,78 @@ module.exports = function (app) {
                     var info = model.getInfo();
                     return !info.isPaper;
                 }
+            },
+            // Download
+            {
+                type: 'action',
+                icon: 'download',
+                text: 'grid_action_download',
+                shortcut: false,
+                checkShow: function (action, model) {
+                    var isAllowed = true;
+                    if (model.isCorrespondenceApprovedBefore() && model.getInfo().authorizeByAnnotation) {
+                        isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
+                    }
+
+                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model);
+                },
+                permissionKey: [
+                    "DOWNLOAD_MAIN_DOCUMENT",
+                    "DOWNLOAD_COMPOSITE_BOOK"
+                ],
+                checkAnyPermission: true,
+                subMenu: [
+                    // Main Document
+                    {
+                        type: 'action',
+                        icon: 'file-document',
+                        text: 'grid_action_main_document',
+                        shortcut: false,
+                        permissionKey: "DOWNLOAD_MAIN_DOCUMENT",
+                        callback: self.downloadMainDocument,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // Composite Document
+                    {
+                        type: 'action',
+                        icon: 'file-document',
+                        text: 'grid_action_composite_document',
+                        permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
+                        shortcut: false,
+                        callback: self.downloadCompositeDocument,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // download selected
+                    {
+                        type: 'action',
+                        icon: 'message',
+                        text: 'selective_document',
+                        permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
+                        callback: self.downloadSelected,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // merge and download
+                    {
+                        type: 'action',
+                        icon: 'message',
+                        text: 'merge_and_download',
+                        permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
+                        callback: self.mergeAndDownloadFullDocument,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    }
+                ]
             },
             // Send
             {

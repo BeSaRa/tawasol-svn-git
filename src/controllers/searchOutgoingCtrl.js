@@ -1152,10 +1152,7 @@ module.exports = function (app) {
                 shortcut: false,
                 checkShow: function (action, model) {
                     var isAllowed = true;
-                    if (model.hasActiveSeqWF()) {
-                        return false;
-                    }
-                    if (model.isCorrespondenceApprovedBefore()) {
+                    if (model.isCorrespondenceApprovedBefore() && model.getInfo().authorizeByAnnotation) {
                         isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
                     }
 
