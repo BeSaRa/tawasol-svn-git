@@ -1528,6 +1528,8 @@ module.exports = function (app) {
                     || correspondence.recordGridName === gridService.grids.outgoing.draft
                     || correspondence.recordGridName === gridService.grids.internal.draft
                     || correspondence.recordGridName === gridService.grids.search.general
+                    || correspondence.recordGridName === gridService.grids.department.readyToExport
+                    || correspondence.recordGridName === gridService.grids.centralArchive.readyToExport
                 )) {
                 return false;
             }

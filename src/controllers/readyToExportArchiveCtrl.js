@@ -955,6 +955,26 @@ module.exports = function (app) {
             workItem.openSendFaxDialog($event);
         };
 
+        /**
+         * @description Launch distribution workflow
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.launchDistributionWorkflow = function (workItem, $event, defer) {
+            if (!workItem.hasContent()) {
+                dialog.alertMessage(langService.get("content_not_found"));
+                return;
+            }
+            workItem.recordGridName = gridService.grids.centralArchive.readyToExport;
+            workItem.launchWorkFlow($event, 'launch', 'favorites')
+                .then(function () {
+                    self.reloadReadyToExports(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
+                });
+        };
 
         /**
          * @description Array of actions that can be performed on grid
@@ -1104,6 +1124,19 @@ module.exports = function (app) {
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
+                checkShow: function (action, model) {
+                    return true;
+                }
+            },
+            //Launch Distribution Workflow
+            {
+                type: 'action',
+                icon: 'sitemap',
+                text: 'grid_action_launch_distribution_workflow',
+                shortcut: true,
+                callback: self.launchDistributionWorkflow,
+                class: "action-green",
+                permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model) {
                     return true;
                 }
