@@ -30,14 +30,14 @@
     <md-dialog-actions class="cms-dialog-actions">
         <div ng-if="!ctrl.sequentialWF">
             <md-button ng-disabled="ctrl.disableSaveButton" class="md-raised md-primary"
-                       ng-click="ctrl.saveDocumentAnnotations()">{{lang.save}}
+                       ng-click="ctrl.saveAnnotationsNoClose()">{{lang.save}}
             </md-button>
         </div>
-        <!--<div ng-if="!ctrl.sequentialWF">
+        <div ng-if="!ctrl.sequentialWF && !ctrl.isAttachmentCorrespondence">
             <md-button ng-disabled="ctrl.disableSaveButton" class="md-raised md-primary"
                        ng-click="ctrl.saveAndSendDocumentAnnotations()">{{lang.save_and_send}}
             </md-button>
-        </div>-->
+        </div>
         <div ng-if="!!ctrl.sequentialWF">
             <!--tooltip="{{ctrl.nextSeqStep.getTranslatedName()}}"-->
             <md-button ng-if="!ctrl.isLaunchStep" ng-disabled="ctrl.disableSaveButton"

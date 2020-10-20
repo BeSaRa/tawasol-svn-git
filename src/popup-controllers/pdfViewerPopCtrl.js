@@ -51,6 +51,7 @@ module.exports = function (app) {
         //self.canRepeatAnnotations = false;
         // current document meta data
         self.correspondence = correspondence;
+        self.isAttachmentCorrespondence = (self.correspondence instanceof Attachment);
         // current annotation mode to load the document from right service and set the annotation types for all signature Annotations (ink,Imag)
         self.annotationType = annotationType;
         // loading  service
@@ -784,6 +785,7 @@ module.exports = function (app) {
          * @description close pdfViewer
          */
         self.closeDialog = function () {
+            self.launchAfterSave = false;
             dialog.cancel();
         };
         /**
@@ -1037,6 +1039,9 @@ module.exports = function (app) {
                             content: self.savedPdfContent,
                             action: PDFViewer.CANCEL_LAUNCH
                         });
+                        if (self.launchAfterSave) {
+                            self.correspondence.launchWorkFlow(null, 'forward', 'favorites');
+                        }
                     });
             } else if (result === correspondenceService.authorizeStatus.SAME_USER_AUTHORIZED.text) {
                 dialog
@@ -1054,6 +1059,9 @@ module.exports = function (app) {
                         content: self.savedPdfContent,
                         action: PDFViewer.JUST_AUTHORIZE
                     });
+                    if (self.launchAfterSave) {
+                        self.correspondence.launchWorkFlow(null, 'forward', 'favorites');
+                    }
                 }, function (error) {
                     console.log('error', error);
                 });
@@ -1124,6 +1132,9 @@ module.exports = function (app) {
                         type: 'ATTACHMENT',
                         action: PDFViewer.UPDATE_ATTACHMENT
                     });
+                    if (self.launchAfterSave) {
+                        self.correspondence.launchWorkFlow(null, 'forward', 'favorites');
+                    }
                 }).catch(self.handleExceptions);
         };
         /**
@@ -1182,6 +1193,9 @@ module.exports = function (app) {
                     content: self.savedPdfContent,
                     action: PDFViewer.UPDATE_DOCUMENT_CONTENT
                 });
+                if (self.launchAfterSave) {
+                    self.correspondence.launchWorkFlow(null, 'forward', 'favorites');
+                }
             }).catch(self.handleExceptions);
         };
         /**
@@ -1206,6 +1220,9 @@ module.exports = function (app) {
                     type: 'ATTACHMENT',
                     action: PDFViewer.ADD_ATTACHMENT
                 });
+                if (self.launchAfterSave) {
+                    self.correspondence.launchWorkFlow(null, 'forward', 'favorites');
+                }
             }).catch(self.handleExceptions);
         };
         /**
@@ -1244,11 +1261,13 @@ module.exports = function (app) {
             });
         };
 
-        /*self.saveAndSendDocumentAnnotations = function () {
-            self.saveDocumentAnnotations(false, true)
-        };*/
+        self.saveAndSendDocumentAnnotations = function () {
+            self.launchAfterSave = true;
+            self.saveDocumentAnnotations(false, false)
+        };
 
         self.saveAnnotationsNoClose = function () {
+            self.launchAfterSave = false;
             self.saveDocumentAnnotations(false, true);
         };
 
@@ -1298,6 +1317,7 @@ module.exports = function (app) {
          * @return {promise}
          */
         self.displaySeqWFSteps = function () {
+            self.launchAfterSave = false;
             return dialog.showDialog({
                 templateUrl: cmsTemplate.getPopup('view-seq-wf-steps'),
                 locals: {
@@ -1400,6 +1420,7 @@ module.exports = function (app) {
          * @description start Next Step Validation to launch or advance seq workflow.
          */
         self.startNextStepValidation = function () {
+            self.launchAfterSave = false;
             if (self.disableSaveButton) {
                 return null;
             }
@@ -1454,6 +1475,7 @@ module.exports = function (app) {
         };
 
         self.startBackStepValidation = function () {
+            self.launchAfterSave = false;
             if (self.disableSaveButton) {
                 return false;
             }
