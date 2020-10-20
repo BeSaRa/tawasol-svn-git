@@ -1796,6 +1796,15 @@ module.exports = function (app) {
                 });
             });
         };
+
+        /**
+         * @description Checks if document can be sent back
+         * @returns {boolean}
+         */
+        self.checkCanSendBack = function () {
+            return !!self.sequentialWF && (typeof self.correspondence.isSeqInBackStep !== "undefined") && !self.correspondence.isSeqInBackStep();
+        };
+
         /**
          * @description watch destroy event to call disposable method
          */
