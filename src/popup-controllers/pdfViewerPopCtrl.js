@@ -1804,6 +1804,9 @@ module.exports = function (app) {
         self.checkCanSendBack = function () {
             return !!self.sequentialWF && (typeof self.correspondence.isSeqInBackStep !== "undefined") && !self.correspondence.isSeqInBackStep();
         };
+        self.checkSaveAndSend = function () {
+            return !self.sequentialWF && !self.isAttachmentCorrespondence && (typeof self.correspondence.hasActiveSeqWF !== "undefined") && !self.correspondence.hasActiveSeqWF();
+        };
 
         /**
          * @description watch destroy event to call disposable method
