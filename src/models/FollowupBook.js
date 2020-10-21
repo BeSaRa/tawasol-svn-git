@@ -5,6 +5,7 @@ module.exports = function (app) {
                                           Information,
                                           viewDocumentService,
                                           Lookup,
+                                          downloadService,
                                           generator) {
         'ngInject';
         return function FollowupBook(model) {
@@ -203,6 +204,14 @@ module.exports = function (app) {
 
             FollowupBook.prototype.editUserFollowUp = function (editMode) {
                 return followUpUserService.addCorrespondenceToEmployeeFollowUp(this, editMode);
+            };
+            FollowupBook.prototype.mainDocumentDownload = function ($event) {
+                return downloadService.controllerMethod
+                    .mainDocumentDownload(this, $event);
+            };
+            FollowupBook.prototype.compositeDocumentDownload = function ($event) {
+                return downloadService.controllerMethod
+                    .compositeDocumentDownload(this, $event);
             };
 
             // don't remove CMSModelInterceptor from last line

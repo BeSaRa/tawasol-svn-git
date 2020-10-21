@@ -18,6 +18,8 @@ module.exports = function (app) {
                                                      generator,
                                                      configurationService,
                                                      correspondenceService,
+                                                     rootEntity,
+                                                     downloadService,
                                                      ResolveDefer,
                                                      FollowupBook) {
             'ngInject';
@@ -487,6 +489,44 @@ module.exports = function (app) {
                     });
             };
 
+
+        /**
+         * @description Download Main Document
+         * @param record
+         * @param $event
+         */
+        self.downloadMainDocument = function (record, $event) {
+            record
+                .mainDocumentDownload($event);
+        };
+
+        /**
+         * @description Download Composite Document
+         * @param record
+         * @param $event
+         */
+        self.downloadCompositeDocument = function (record, $event) {
+            record
+                .compositeDocumentDownload($event);
+        };
+
+        /**
+         * @description download selected document
+         * @param record
+         * @param $event
+         */
+        self.downloadSelected = function (record, $event) {
+            downloadService.openSelectedDownloadDialog(record, $event);
+        };
+
+        /**
+         * @description merge and download
+         * @param record
+         */
+        self.mergeAndDownloadFullDocument = function (record) {
+            downloadService.mergeAndDownload(record);
+        };
+
             self.gridActions = [
                 // Document Information
                 {
@@ -630,6 +670,80 @@ module.exports = function (app) {
                     checkShow: function (action, model) {
                         return true;
                     }
+                },
+                // Download
+                {
+                    type: 'action',
+                    icon: 'download',
+                    text: 'grid_action_download',
+                    shortcut: false,
+                    showInViewOnly: true,
+                    showInView: true,
+                    checkShow: function (action, model) {
+                        var isAllowed = true;
+                        if (model.isCorrespondenceApprovedBefore() && model.getInfo().authorizeByAnnotation) {
+                            isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
+                        }
+
+                        return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model);
+                    },
+                    permissionKey: [
+                        "DOWNLOAD_MAIN_DOCUMENT",
+                        "DOWNLOAD_COMPOSITE_BOOK"
+                    ],
+                    checkAnyPermission: true,
+                    subMenu: [
+                        // Main Document
+                        {
+                            type: 'action',
+                            icon: 'file-document',
+                            text: 'grid_action_main_document',
+                            shortcut: false,
+                            permissionKey: "DOWNLOAD_MAIN_DOCUMENT",
+                            callback: self.downloadMainDocument,
+                            class: "action-green",
+                            checkShow: function (action, model) {
+                                return true;
+                            }
+                        },
+                        // Composite Document
+                        {
+                            type: 'action',
+                            icon: 'file-document',
+                            text: 'grid_action_composite_document',
+                            permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
+                            shortcut: false,
+                            callback: self.downloadCompositeDocument,
+                            class: "action-green",
+                            checkShow: function (action, model) {
+                                return true;
+                            }
+                        },
+                        // download selected
+                        {
+                            type: 'action',
+                            icon: 'message',
+                            text: 'selective_document',
+                            permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
+                            callback: self.downloadSelected,
+                            class: "action-green",
+                            checkShow: function (action, model) {
+                                return true;
+                            }
+                        },
+                        // merge and download
+                        {
+                            type: 'action',
+                            icon: 'message',
+                            text: 'merge_and_download',
+                            permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
+                            callback: self.mergeAndDownloadFullDocument,
+                            class: "action-green",
+                            checkShow: function (action, model) {
+                                return true;
+                            }
+                        }
+                    ]
                 },
                 // View Tracking Sheet
                 {

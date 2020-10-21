@@ -1158,7 +1158,7 @@ module.exports = function (app) {
                 icon: 'download',
                 text: 'grid_action_download',
                 shortcut: false,
-                hide: true, // approveByAnnotation info not available, so, download is hidden (approved by issawi)
+                showInViewOnly: true,
                 checkShow: function (action, model) {
                     var isAllowed = true;
                     if (model.isCorrespondenceApprovedBefore() && model.getInfo().authorizeByAnnotation) {
