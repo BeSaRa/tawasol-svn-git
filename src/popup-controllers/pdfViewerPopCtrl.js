@@ -1798,12 +1798,17 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Checks if document can be sent back
+         * @description Checks if back step button can be shown
          * @returns {boolean}
          */
         self.checkCanSendBack = function () {
-            return !!self.sequentialWF && (typeof self.correspondence.isSeqInBackStep !== "undefined") && !self.correspondence.isSeqInBackStep();
+            return !!self.sequentialWF && (self.generalStepElementView && typeof self.generalStepElementView.isSeqInBackStep !== "undefined") && !self.generalStepElementView.isSeqInBackStep();
         };
+
+        /**
+         * @description Checks if save and send button can be shown
+         * @returns {boolean|boolean}
+         */
         self.checkSaveAndSend = function () {
             return !self.sequentialWF && !self.isAttachmentCorrespondence && (typeof self.correspondence.hasActiveSeqWF !== "undefined") && !self.correspondence.hasActiveSeqWF();
         };

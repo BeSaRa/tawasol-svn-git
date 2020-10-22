@@ -150,6 +150,10 @@ module.exports = function (app) {
                 return !!this.getSeqWFId() && !!this.getSeqWFNextStepId();
             };
 
+            GeneralStepElementView.prototype.isSeqInBackStep = function () {
+                return this.generalStepElm.isSeqWFBackward;
+            };
+
             /**
              * @description Check if book has create reply permission
              * @param isSpecificVersion
