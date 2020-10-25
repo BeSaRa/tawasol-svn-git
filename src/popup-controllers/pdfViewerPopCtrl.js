@@ -1256,7 +1256,11 @@ module.exports = function (app) {
                                 }
                             } else {
                                 // for electronic document in ready to export or internal in approved queue.
-                                (self.info.docStatus === 24 && (self.info.documentClass === 'outgoing' || self.info.documentClass === 'internal')) ? self.handleUpdateDocumentContent(pdfContent, AnnotationType.STAMP, ignoreClosePopup) : self.handleSaveAnnotationAsAttachment(pdfContent, null, ignoreClosePopup);
+                                if (self.correspondence.getSeqWFId() && _isElectronicAndAuthorizeByAnnotationBefore()) {
+                                    self.handleUpdateDocumentContent(pdfContent, null, ignoreClosePopup);
+                                } else {
+                                    (self.info.docStatus === 24 && (self.info.documentClass === 'outgoing' || self.info.documentClass === 'internal')) ? self.handleUpdateDocumentContent(pdfContent, AnnotationType.STAMP, ignoreClosePopup) : self.handleSaveAnnotationAsAttachment(pdfContent, null, ignoreClosePopup);
+                                }
                             }
                         }
                     });
@@ -1791,6 +1795,7 @@ module.exports = function (app) {
                     annotationTooltipCallback: self.annotationTooltipCallback
                 }).then(function (instance) {
                     self.currentInstance = instance;
+                    console.log(self.currentInstance);
                     // set current annotations for loaded document
                     self.getDocumentAnnotations().then(function (annotations) {
                         self.oldAnnotations = annotations;
