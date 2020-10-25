@@ -66,6 +66,8 @@ module.exports = function (app) {
         self.skippedPdfObjectIds = [];
         // all document operations
         self.documentOperations = [];
+        // show/hide attach username and date toggle
+        self.enableAttachUsernameAndDate = true;
 
         self.baseUrl = (location.protocol + '//' + location.host + '/' + (configurationService.APP_CONTEXT ? configurationService.APP_CONTEXT + '/' : ''));
 
@@ -1768,6 +1770,9 @@ module.exports = function (app) {
          */
         self.$onInit = function () {
             _getNextStepFromSeqWF();
+            if (!self.sequentialWF && self.info.docStatus >= 24) {
+                self.enableAttachUsernameAndDate = false;
+            }
             self.attacheUsernameAndDateToSignature = $cookies.get(cookieKey) ? JSON.parse($cookies.get(cookieKey)) : false;
             self.onAttachToggleChange();
             $timeout(function () {
