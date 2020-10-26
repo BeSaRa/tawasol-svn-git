@@ -1810,8 +1810,8 @@ module.exports = function (app) {
             });
         };
 
-        function _isFromBackStep(){
-            return (self.generalStepElementView && typeof self.generalStepElementView.isSeqInBackStep !== "undefined") && !self.generalStepElementView.isSeqInBackStep();
+        function _isFromBackStep() {
+            return (self.generalStepElementView && typeof self.generalStepElementView.isSeqInBackStep !== "undefined") && self.generalStepElementView.isSeqInBackStep();
         }
 
         /**
@@ -1819,7 +1819,7 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.checkCanSendBack = function () {
-            return !!self.sequentialWF && _isFromBackStep();
+            return !!self.sequentialWF && !_isFromBackStep();
         };
 
         /**
