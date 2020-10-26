@@ -551,6 +551,7 @@ module.exports = function (app) {
             var required = angular.copy(model.getRequiredFields()), result = [], isAllSlaRequiredValid = false;
             if (!model.hasRegistry) {
                 required.splice(required.indexOf('correspondenceTypeId'), 1);
+                required.splice(required.indexOf('ldapCode'), 1);
             }
             // if no registry and no central archive, sla is not required
             if (!model.hasRegistry && !model.centralArchive) {
