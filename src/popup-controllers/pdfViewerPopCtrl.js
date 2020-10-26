@@ -1051,7 +1051,7 @@ module.exports = function (app) {
                 self.sendAnnotationLogs(function () {
                     toast.success(langService.get('sign_specific_success').change({name: self.correspondence.getTranslatedName()}));
                     if (ignoreClosePopup) {
-                        if (result === correspondenceService.authorizeStatus.FULLY_AUTHORIZED.text){
+                        if (result === correspondenceService.authorizeStatus.FULLY_AUTHORIZED.text) {
                             dialog.hide({
                                 content: self.savedPdfContent,
                                 action: PDFViewer.JUST_AUTHORIZE
@@ -1443,17 +1443,25 @@ module.exports = function (app) {
                                 if (self.annotationType === AnnotationType.SIGNATURE) {
                                     self.getPDFContentForCurrentDocument()
                                         .then(function (pdfContent) {
-                                            self.correspondence.handlePinCodeAndComposite().then(function (signatureModel) {
-                                                self.applyNextStepOnCorrespondence(pdfContent, signatureModel, true).catch(self.handleSeqExceptions);
-                                            }).catch(self.handleExceptions);
+                                            if (_isFromBackStep()) {
+                                                self.applyNextStepOnCorrespondence(pdfContent, null, true).catch(self.handleSeqExceptions);
+                                            } else {
+                                                self.correspondence.handlePinCodeAndComposite().then(function (signatureModel) {
+                                                    self.applyNextStepOnCorrespondence(pdfContent, signatureModel, true).catch(self.handleSeqExceptions);
+                                                }).catch(self.handleExceptions);
+                                            }
                                         });
                                 } else {
                                     self.currentInstance.exportInstantJSON().then(function (instantJSON) {
                                         delete instantJSON.pdfId;
                                         PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON, self.documentOperations, _getFlattenStatus()).then(function (pdfContent) {
-                                            self.correspondence.handlePinCodeAndComposite().then(function (signatureModel) {
-                                                self.applyNextStepOnCorrespondence(pdfContent, signatureModel, true).catch(self.handleSeqExceptions);
-                                            }).catch(self.handleExceptions);
+                                            if (_isFromBackStep()) {
+                                                self.applyNextStepOnCorrespondence(pdfContent, null, true).catch(self.handleSeqExceptions);
+                                            } else {
+                                                self.correspondence.handlePinCodeAndComposite().then(function (signatureModel) {
+                                                    self.applyNextStepOnCorrespondence(pdfContent, signatureModel, true).catch(self.handleSeqExceptions);
+                                                }).catch(self.handleExceptions);
+                                            }
                                         });
                                     });
                                 }
