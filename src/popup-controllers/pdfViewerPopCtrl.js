@@ -432,8 +432,9 @@ module.exports = function (app) {
                 height: usernameAnnotation.boundingBox.height,
             }));
 
-            self.currentInstance.createAnnotation(usernameAnnotation).then(annotation => {
-                self.selectAnnotation(annotation);
+            self.currentInstance.create(usernameAnnotation).then(annotations => {
+                console.log('annotations[0]', annotations[0]);
+                self.selectAnnotation(annotations[0]);
             });
         };
 
@@ -520,8 +521,8 @@ module.exports = function (app) {
          * @param annotation
          * @returns {Promise<Annotation>}
          */
-        self.addAnnotationToPDFDocument = function (annotation) {
-            return self.currentInstance.createAnnotation(annotation);
+        self.addAnnotationsToPDFDocument = function (annotation) {
+            return self.currentInstance.create(annotation);
         };
         /**
          * @description add Stamp annotation to PDF document
@@ -536,11 +537,7 @@ module.exports = function (app) {
             }).then(function (blob) {
                 return self.createAnnotationFromBlob(blob, repeated, null, {type: AnnotationType.STAMP});
             }).then(function (annotations) {
-                var promises = [];
-                _.each(annotations, function (annotation) {
-                    promises.push(self.addAnnotationToPDFDocument(annotation));
-                });
-                return $q.all(promises)
+                return self.addAnnotationsToPDFDocument(annotations);
             }).then(function (annotations) {
                 annotations.length === 1 ? self.selectAnnotation(annotations[0]) : null;
             });
@@ -558,11 +555,7 @@ module.exports = function (app) {
             }).then(function (blob) {
                 return self.createAnnotationFromBlob(blob, repeated, null, {type: _getRightTypeForElectronicSignature()});
             }).then(function (annotations) {
-                var promises = [];
-                _.each(annotations, function (annotation) {
-                    promises.push(self.addAnnotationToPDFDocument(annotation));
-                });
-                return $q.all(promises)
+                return self.addAnnotationsToPDFDocument(annotations);
             }).then(function (annotations) {
                 annotations.length === 1 ? self.selectAnnotation(annotations[0]) : null;
                 if (self.attacheUsernameAndDateToSignature) {
@@ -580,11 +573,7 @@ module.exports = function (app) {
             return $timeout(function () {
                 return self.createAnnotationFromBlob(blob, repeated, size, {type: AnnotationType.BARCODE});
             }).then(function (annotations) {
-                var promises = [];
-                _.each(annotations, function (annotation) {
-                    promises.push(self.addAnnotationToPDFDocument(annotation));
-                });
-                return $q.all(promises);
+                return self.addAnnotationsToPDFDocument(annotations);
             }).then(function (annotations) {
                 annotations.length === 1 ? self.selectAnnotation(annotations[0]) : null;
             });
@@ -811,7 +800,7 @@ module.exports = function (app) {
          * @param event
          */
         self.handleAnnotationChanges = function (event) {
-            var annotation = event.annotations.get(0), promises = [];
+            var annotation = event.annotations.get(0), updatedAnnotations = [];
             if (!annotation)
                 return;
 
@@ -829,7 +818,7 @@ module.exports = function (app) {
                     annotations.forEach(function (annotationItem) {
                         if (annotationItem.customData && annotationItem.customData.id && annotation.customData.repeatedAnnotation.indexOf(annotationItem.customData.id) !== -1) {
                             if (event.reason === PSPDFKit.AnnotationsWillChangeReason.DELETE_END) {
-                                return self.currentInstance.deleteAnnotation(annotationItem.id);
+                                return self.currentInstance.delete(annotationItem.id);
                             }
                             annotationItem = annotationItem.set('boundingBox', new PSPDFKit.Geometry.Rect({
                                 left: boundingBox.left,
@@ -866,9 +855,14 @@ module.exports = function (app) {
                                     .set('strokeDashArray', annotation.strokeDashArray);
                             }
 
-                            return self.currentInstance.updateAnnotation(annotationItem);
+                            return updatedAnnotations.push(annotationItem);
                         }
                     });
+                    if (updatedAnnotations.length) {
+                        self.currentInstance.update(updatedAnnotations).then(function (aa) {
+                            updatedAnnotations = [];
+                        });
+                    }
                 });
 
             }
@@ -1622,10 +1616,9 @@ module.exports = function (app) {
                                 .set('customData', customDuplicatedData)
                                 .set('boundingBox', boundingBox);
                         }
-
-                        duplicated.push(self.currentInstance.createAnnotation(currentDuplicated));
+                        duplicated.push(currentDuplicated);
                     }
-                    $q.all(duplicated).then(function (annotations) {
+                    self.currentInstance.create(duplicated).then(function (annotations) {
                         updatedAnnotation = annotation.set('customData', {
                             ...customData,
                             repeaterHandler: true,
@@ -1634,7 +1627,7 @@ module.exports = function (app) {
                                 return item.customData.id;
                             })
                         });
-                        self.currentInstance.updateAnnotation(updatedAnnotation);
+                        self.currentInstance.update(updatedAnnotation);
                     });
 
                 }
@@ -1663,10 +1656,10 @@ module.exports = function (app) {
                                     delete customAnnotationData.parentId;
                                 }
                                 var updatedAnnotation = annotation.set('customData', customAnnotationData);
-                                updatedAnnotationsList.push(self.currentInstance.updateAnnotation(updatedAnnotation));
+                                updatedAnnotationsList.push(updatedAnnotation);
                             });
-                            $q.all(updatedAnnotationsList).then(function () {
-                                self.currentInstance.updateAnnotation(updatedAnnotation);
+                            self.currentInstance.update(updatedAnnotationsList).then(function () {
+                                return self.currentInstance.update(updatedAnnotation);
                             });
                         } else {
                             var parentAnnotation = _.find(annotations, function (annotation) {
@@ -1679,8 +1672,7 @@ module.exports = function (app) {
                                 delete parentAnnotation.customData.repeatedAnnotation;
                             }
                             updatedAnnotation = annotation.set('customData', updatedCustomData);
-                            self.currentInstance.updateAnnotation(updatedAnnotation);
-                            self.currentInstance.updateAnnotation(parentAnnotation);
+                            self.currentInstance.update([updatedAnnotation, parentAnnotation]);
                         }
                         self.unlinkInProgress = false;
                     });
