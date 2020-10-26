@@ -170,8 +170,6 @@ module.exports = function (app) {
 
         /**
          * @description create custom buttons and attache it to  viewer toolbar.
-         * @param getInstance
-         * @param callback
          * @return {*}
          */
         function makeToolbarItems() {
@@ -593,8 +591,6 @@ module.exports = function (app) {
         };
         /**
          * @description download document
-         * @param getInstance
-         * @param callback
          */
         self.exportDocument = function () {
             self.currentInstance
@@ -1180,7 +1176,7 @@ module.exports = function (app) {
                         return _isCurrentUserSignature(annotation);
                     });
                 }).then(function (result) {
-                    result ? resolve(result) : (self.correspondence instanceof WorkItem && self.correspondence.isSeqInBackStep() ? resolve(true) : reject(result));
+                    result ? resolve(result) : (self.correspondence instanceof WorkItem && _isFromBackStep() ? resolve(true) : reject(result));
                 });
             });
         };
@@ -1814,12 +1810,16 @@ module.exports = function (app) {
             });
         };
 
+        function _isFromBackStep(){
+            return (self.generalStepElementView && typeof self.generalStepElementView.isSeqInBackStep !== "undefined") && !self.generalStepElementView.isSeqInBackStep();
+        }
+
         /**
          * @description Checks if back step button can be shown
          * @returns {boolean}
          */
         self.checkCanSendBack = function () {
-            return !!self.sequentialWF && (self.generalStepElementView && typeof self.generalStepElementView.isSeqInBackStep !== "undefined") && !self.generalStepElementView.isSeqInBackStep();
+            return !!self.sequentialWF && _isFromBackStep();
         };
 
         /**
