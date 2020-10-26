@@ -368,8 +368,8 @@ module.exports = function (app) {
         }
 
         function _getRightTypeForElectronicSignature() {
-            // return (self.annotationType === AnnotationType.SIGNATURE || (self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep() && !self.needOpenForApproval)) ? AnnotationType.SIGNATURE : (_isElectronicAndAuthorizeByAnnotationBefore() && self.correspondence instanceof WorkItem && !self.correspondence.getSeqWFId() ? AnnotationType.SIGNATURE : AnnotationType.ANNOTATION)
-            return self.needOpenForApproval ? AnnotationType.ANNOTATION : AnnotationType.SIGNATURE;
+            return (self.annotationType === AnnotationType.SIGNATURE || self.info.isPaper || (self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep() && !self.needOpenForApproval)) ? AnnotationType.SIGNATURE : (_isElectronicAndAuthorizeByAnnotationBefore() && self.correspondence instanceof WorkItem && !self.correspondence.getSeqWFId() ? AnnotationType.SIGNATURE : AnnotationType.ANNOTATION)
+            // return self.needOpenForApproval ? AnnotationType.ANNOTATION : AnnotationType.SIGNATURE;
         }
 
         function _isElectronicAndAuthorizeByAnnotationBefore() {
@@ -1055,6 +1055,13 @@ module.exports = function (app) {
                 self.sendAnnotationLogs(function () {
                     toast.success(langService.get('sign_specific_success').change({name: self.correspondence.getTranslatedName()}));
                     if (ignoreClosePopup) {
+                        if (result === correspondenceService.authorizeStatus.FULLY_AUTHORIZED.text){
+                            dialog.hide({
+                                content: self.savedPdfContent,
+                                action: PDFViewer.JUST_AUTHORIZE
+                            });
+                            return;
+                        }
                         return self.loadUpdatedContent(self.annotationType !== AnnotationType.SIGNATURE);
                     }
                     dialog.hide({
