@@ -50,9 +50,7 @@ module.exports = function (app) {
             .addMenuPermissions('menu_item_pending_g2g', function (employee) {
                 return employee.isSuperAdmin;
             })
-            .addMenuPermission('menu_item_search_viewers_log', function (employee) {
-                return employee.isSuperAdmin && !employee.isAdmin;
-            })
+            .addMenuPermissions('menu_item_search_viewers_log', ['VIEWERS_LOG'])
             .addMenuPermissions('menu_item_sequential_workflows', function (employee) {
                 var rootEntity = employee.getRootEntity();
                 return rootEntity.hasPSPDFViewer() && employee.hasPermissionTo('ADD_SEQ_WF');
