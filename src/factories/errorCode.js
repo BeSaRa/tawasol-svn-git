@@ -68,7 +68,7 @@ module.exports = function (app) {
                 PIN_CODE_NOT_MATCH: 3048,
                 DUPLICATE_BOOK_FOLLOWUP: 3049,
                 CANNOT_EXPORT_TOO_MANY_ATTACHMENTS_OR_LINKED_DOCUMENTS: 2060,
-
+                CANNOT_EXPORT_MORE_THAN_FIFTY_ATTACHMENTS_OR_LINKED_DOCUMENTS_TO_G2G: 3051,
                 SEQ_WF_RECALL_WF: 3055,
                 SEQ_WF_TRANSFER_WF: 3056,
                 SEQ_WF_LAUNCH_WF: 3057,
@@ -78,7 +78,7 @@ module.exports = function (app) {
                 SEQ_WF_WF_USER_INVALID: 3061,
                 SEQ_WF_DELETE_FAILED: 2019,
                 SEQ_WF_FORWARD_FAILED: 3063,
-                SEQ_WF_CONTENT_UPDATE_FAILED: 3064,
+                SEQ_WF_CONTENT_UPDATE_FAILED: 3064
             },
             errorLangKeys = {
                 1001: 'no_records_found',
@@ -113,7 +113,8 @@ module.exports = function (app) {
                 3049: 'duplicate_followup_book',
                 2060: 'cannot_export_too_many_attachments_or_linked_documents',
                 2019: 'error_delete_seq_wf_active_wf',
-                3055: 'error_recall_book'
+                3055: 'error_recall_book',
+                3051: 'cannot_export_more_than_fifty_attachments_or_linked_documents_to_g2g'
             };
 
         return {

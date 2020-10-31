@@ -240,6 +240,12 @@ module.exports = function (app) {
                                 .then(function () {
                                     dialog.hide(error);
                                 });
+                        } else if (errorCode.checkIf(error, 'CANNOT_EXPORT_MORE_THAN_FIFTY_ATTACHMENTS_OR_LINKED_DOCUMENTS_TO_G2G') === true) {
+                            dialog
+                                .errorMessage(self.getTranslatedError(error))
+                                .then(function () {
+                                    dialog.hide(error);
+                                });
                         }
                     });
             }
@@ -265,6 +271,12 @@ module.exports = function (app) {
                                 .then(function () {
                                     dialog.hide(error);
                                 });
+                        } else if (errorCode.checkIf(error, 'CANNOT_EXPORT_MORE_THAN_FIFTY_ATTACHMENTS_OR_LINKED_DOCUMENTS_TO_G2G') === true) {
+                            dialog
+                                .errorMessage(self.getTranslatedError(error))
+                                .then(function () {
+                                    dialog.hide(error);
+                                });
                         }
                     });
             } else {
@@ -283,6 +295,12 @@ module.exports = function (app) {
                                     dialog.hide(error)
                                 });
                         } else if (errorCode.checkIf(error, 'CANNOT_EXPORT_TOO_MANY_ATTACHMENTS_OR_LINKED_DOCUMENTS') === true) {
+                            dialog
+                                .errorMessage(self.getTranslatedError(error))
+                                .then(function () {
+                                    dialog.hide(error);
+                                });
+                        } else if (errorCode.checkIf(error, 'CANNOT_EXPORT_MORE_THAN_FIFTY_ATTACHMENTS_OR_LINKED_DOCUMENTS_TO_G2G') === true) {
                             dialog
                                 .errorMessage(self.getTranslatedError(error))
                                 .then(function () {
@@ -313,6 +331,12 @@ module.exports = function (app) {
                                 dialog.hide(error)
                             });
                     } else if (errorCode.checkIf(error, 'CANNOT_EXPORT_TOO_MANY_ATTACHMENTS_OR_LINKED_DOCUMENTS') === true) {
+                        dialog
+                            .errorMessage(self.getTranslatedError(error))
+                            .then(function () {
+                                dialog.hide(error);
+                            });
+                    } else if (errorCode.checkIf(error, 'CANNOT_EXPORT_MORE_THAN_FIFTY_ATTACHMENTS_OR_LINKED_DOCUMENTS_TO_G2G') === true) {
                         dialog
                             .errorMessage(self.getTranslatedError(error))
                             .then(function () {

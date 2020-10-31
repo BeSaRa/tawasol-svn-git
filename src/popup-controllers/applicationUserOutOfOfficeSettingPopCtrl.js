@@ -257,7 +257,10 @@ module.exports = function (app) {
                     self.ouApplicationUser.applicationUser = self.applicationUser;
                     self.checkDelegatedFromAnotherUsers().then((notDelegated) => {
                         if (notDelegated) {
-                            if (!self.applicationUser.outOfOffice &&
+                            if (!self.ouApplicationUser.proxyUser && self.ouApplicationUser.proxyUser === self.model.proxyUser) {
+                                toast.success(langService.get('out_of_office_success'));
+                                dialog.hide(self.ouApplicationUser);
+                            } else if (!self.applicationUser.outOfOffice &&
                                 !self.ouApplicationUser.proxyUser && self.ouApplicationUser.proxyUser !== self.model.proxyUser) {
                                 // terminate proxy user
                                 ouApplicationUserService

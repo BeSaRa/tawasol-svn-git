@@ -152,6 +152,13 @@ module.exports = function (app) {
                                 dialog.hide(error);
                             });
                     });
+                    errorCode.checkIf(error, 'CANNOT_EXPORT_MORE_THAN_FIFTY_ATTACHMENTS_OR_LINKED_DOCUMENTS_TO_G2G', function () {
+                        dialog
+                            .errorMessage(self.getTranslatedError(error))
+                            .then(function () {
+                                dialog.hide(error);
+                            });
+                    });
                     /*errorCode.checkIf(error, 'INVALID_DOC_STATUS_TO_EXPORT', function () {
                         dialog
                             .errorMessage(langService.get('already_exported_please_refresh'))
