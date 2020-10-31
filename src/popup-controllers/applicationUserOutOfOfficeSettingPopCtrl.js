@@ -83,6 +83,12 @@ module.exports = function (app) {
             //proxyMessage: 'out_of_office_message'
         };
 
+        function _resetOutOfOfficeIfProxyUserAndAuthorityLevelsEmpty() {
+            if (!self.ouApplicationUser.proxyUser && !self.ouApplicationUser.proxyAuthorityLevels) {
+                self.applicationUser.outOfOffice = false;
+            }
+        };
+
         /**
          * @description to check if the current user has valid proxy or not.
          * @param ouApplicationUser
@@ -97,7 +103,7 @@ module.exports = function (app) {
         }
 
         _checkProxyDate(self.ouApplicationUser);
-
+        _resetOutOfOfficeIfProxyUserAndAuthorityLevelsEmpty();
 
         /**
          * @description to check if the security level included for selected proxyUser.

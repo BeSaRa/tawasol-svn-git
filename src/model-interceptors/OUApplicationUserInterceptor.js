@@ -124,6 +124,11 @@ module.exports = function (app) {
                         return organization.id === model.ouid;
                     });
                 }
+                if (model.ouRegistryID && !model.ouRegistryID.hasOwnProperty('id')) {
+                    model.ouRegistryID = _.find(organizations, function (organization) {
+                        return organization.id === model.ouRegistryID;
+                    });
+                }
 
                 if (model.customRoleId && !model.customRoleId.hasOwnProperty('id')) {
                     var roles = roleService.roles;

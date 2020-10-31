@@ -198,6 +198,7 @@ module.exports = function (app) {
                 this.proxyEndDate = null;
                 this.proxyStartDate = null;
                 this.proxyMessage = null;
+                this.viewProxyMessage = false;
                 this.proxyOUId = null;
                 this.proxyAuthorityLevels = null;
                 return this;
@@ -219,6 +220,9 @@ module.exports = function (app) {
 
             OUApplicationUser.prototype.getManagerAndOuTranslate = function () {
                 return this.ouid.getTranslatedName() + ' - ' + this.getTranslatedApplicationUserName();
+            };
+            OUApplicationUser.prototype.getManagerAndOuRegistryTranslate = function () {
+                return this.ouRegistryID.getTranslatedName() + ' - ' + this.getTranslatedApplicationUserName();
             };
             OUApplicationUser.prototype.getMobileNumber = function () {
                 return this.applicationUser.mobile;

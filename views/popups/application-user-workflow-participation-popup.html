@@ -70,10 +70,10 @@
                                            class="select-header-input">
                                 </md-select-header>
                                 <md-option ng-repeat="manager in ctrl.managersList | translatedNameFilter:ctrl.managersSearchText:'getManagerAndOuTranslate'"
-                                        ng-value="manager.ouid.id">
+                                        ng-value="manager.ouRegistryID.id">
                                     <span md-highlight-text="ctrl.managersSearchText"
                                           md-highlight-flags="i">
-                                        {{manager.getManagerAndOuTranslate()}}
+                                        {{manager.getManagerAndOuRegistryTranslate()}}
                                     </span>
                                 </md-option>
                             </md-select>
@@ -116,10 +116,10 @@
                                            class="select-header-input">
                                 </md-select-header>
                                 <md-option ng-repeat="viceManager in ctrl.viceManagersList | translatedNameFilter:ctrl.viceManagersSearchText:'getManagerAndOuTranslate'"
-                                           ng-value="viceManager.ouid.id">
+                                           ng-value="viceManager.ouRegistryID.id">
                                     <span md-highlight-text="ctrl.viceManagersSearchText"
                                           md-highlight-flags="i">
-                                        {{viceManager.getManagerAndOuTranslate()}}
+                                        {{viceManager.getManagerAndOuRegistryTranslate()}}
                                     </span>
                                 </md-option>
                             </md-select>

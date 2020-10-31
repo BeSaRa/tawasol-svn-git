@@ -97,11 +97,11 @@ module.exports = function (app) {
             if (self.ouApplicationUser.managers && self.ouApplicationUser.managers.length) {
                 // saved manager id is the id of ou, not user
                 var selectedManagers = _.filter(self.managersList, function (manager) {
-                    return (self.ouApplicationUser.managers.indexOf(manager.ouid.hasOwnProperty('id') ? manager.ouid.id : manager.ouid)) > -1;
+                    return (self.ouApplicationUser.managers.indexOf(manager.ouRegistryID.hasOwnProperty('id') ? manager.ouRegistryID.id : manager.ouRegistryID)) > -1;
                 });
                 if (selectedManagers && selectedManagers.length) {
                     return _.map(selectedManagers, function (m) {
-                        return m.ouid.getTranslatedName();
+                        return m.ouRegistryID.getTranslatedName();
                     }).join(', ');
                 }
                 return langService.get('managers');
@@ -113,11 +113,11 @@ module.exports = function (app) {
             if (self.ouApplicationUser.viceManagers && self.ouApplicationUser.viceManagers.length) {
                 // saved viceManager id is the id of ou, not user
                 var selectedViceManagers = _.filter(self.viceManagersList, function (viceManager) {
-                    return (self.ouApplicationUser.viceManagers.indexOf(viceManager.ouid.hasOwnProperty('id') ? viceManager.ouid.id : viceManager.ouid)) > -1;
+                    return (self.ouApplicationUser.viceManagers.indexOf(viceManager.ouRegistryID.hasOwnProperty('id') ? viceManager.ouRegistryID.id : viceManager.ouRegistryID)) > -1;
                 });
                 if (selectedViceManagers && selectedViceManagers.length) {
                     return _.map(selectedViceManagers, function (vm) {
-                        return vm.ouid.getTranslatedName();
+                        return vm.ouRegistryID.getTranslatedName();
                     }).join(', ');
                 }
                 return langService.get('vice_manager');
@@ -262,10 +262,10 @@ module.exports = function (app) {
                     if (self.ouApplicationUser[dropdownMapValue.selectedProperty].length === self[dropdownMapValue.compareWith].length) {
                         self.ouApplicationUser[dropdownMapValue.selectedProperty] = null;
                     } else {
-                        self.ouApplicationUser[dropdownMapValue.selectedProperty] = angular.copy(_.map(self[dropdownMapValue.compareWith], 'ouid.id'));
+                        self.ouApplicationUser[dropdownMapValue.selectedProperty] = angular.copy(_.map(self[dropdownMapValue.compareWith], 'ouRegistryID.id'));
                     }
                 } else {
-                    self.ouApplicationUser[dropdownMapValue.selectedProperty] = angular.copy(_.map(self[dropdownMapValue.compareWith], 'ouid.id'));
+                    self.ouApplicationUser[dropdownMapValue.selectedProperty] = angular.copy(_.map(self[dropdownMapValue.compareWith], 'ouRegistryID.id'));
                 }
             }
         };

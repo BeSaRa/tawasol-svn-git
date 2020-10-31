@@ -140,6 +140,12 @@ module.exports = function (app) {
         };
         self.calculatedMinProxyEndDate = self.ouApplicationUser.proxyStartDate ? self.getMinProxyEndDate() : null;
 
+        function _resetOutOfOfficeIfProxyUserAndAuthorityLevelsEmpty() {
+            if (!self.ouApplicationUser.proxyUser && !self.ouApplicationUser.proxyAuthorityLevels) {
+                self.applicationUser.outOfOffice = false;
+            }
+        };
+        _resetOutOfOfficeIfProxyUserAndAuthorityLevelsEmpty();
 
         /**
          * @description to check if the current user has valid proxy or not.
