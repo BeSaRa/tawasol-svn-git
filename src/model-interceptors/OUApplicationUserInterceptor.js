@@ -56,7 +56,9 @@ module.exports = function (app) {
             model.viceManagers = (model.sendToViceManager) ? JSON.stringify(model.viceManagers) : "[]";
 
             if (model.proxyUser) {
-                getUnixTimeStamp(model, ["proxyStartDate", "proxyEndDate"]);
+                //   getUnixTimeStamp(model, ["proxyStartDate", "proxyEndDate"]);
+                model.proxyStartDate = model.proxyStartDate ? moment(model.proxyStartDate).startOf('day').valueOf() : model.proxyStartDate;
+                model.proxyEndDate = model.proxyEndDate ? moment(model.proxyEndDate).endOf('day').valueOf() : model.proxyEndDate;
                 model.proxyOUId = model.proxyUser instanceof ProxyUser ? model.proxyUser.organization.id : model.proxyOUId;
                 model.proxyUser = generator.interceptSendInstance('ApplicationUser', model.proxyUser instanceof ProxyUser ? model.proxyUser.applicationUser : model.proxyUser);
             }
