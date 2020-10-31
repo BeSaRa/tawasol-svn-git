@@ -157,6 +157,8 @@ module.exports = function (app) {
                 self.applicationUser.outOfOffice = false;
                 self.selectedProxyUser = null;
                 ouApplicationUser.emptyOutOfOffice();
+                self.calculatedMaxProxyStartDate = null;
+                self.calculatedMinProxyEndDate = null;
             }
         }
 
@@ -599,10 +601,8 @@ module.exports = function (app) {
 
         /**
          * @description Saves the ou application user data when not out of office
-         * @param form
          */
         self.changeOutOfOffice = function () {
-            var defer = $q.defer();
             if (!self.applicationUser.outOfOffice) {
                 // terminate proxy user
                 ouApplicationUserService
@@ -619,13 +619,9 @@ module.exports = function (app) {
 
                             employeeService.setCurrentOUApplicationUser(self.ouApplicationUser);
                         }
-                        defer.resolve(true);
+                        employeeService.setCurrentEmployee(self.applicationUser);
                     });
             }
-
-            defer.promise.then(function (response) {
-                employeeService.setCurrentEmployee(self.applicationUser);
-            });
         };
 
         /**
@@ -657,7 +653,9 @@ module.exports = function (app) {
                     self.ouApplicationUser.applicationUser = self.applicationUser;
                     self.checkDelegatedFromAnotherUsers().then((notDelegated) => {
                         if (notDelegated) {
-                            if (!self.applicationUser.outOfOffice &&
+                            if (!self.ouApplicationUser.proxyUser && self.ouApplicationUser.proxyUser === self.ouApplicationUserCopy.proxyUser) {
+                                toast.success(langService.get('out_of_office_success'));
+                            } else if (!self.applicationUser.outOfOffice &&
                                 !self.ouApplicationUser.proxyUser && self.ouApplicationUser.proxyUser !== self.ouApplicationUserCopy.proxyUser) {
                                 // terminate proxy user
                                 ouApplicationUserService

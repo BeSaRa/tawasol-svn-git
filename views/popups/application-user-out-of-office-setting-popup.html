@@ -12,7 +12,7 @@
                             <!-- Out Of Office -->
                             <md-switch flex ng-model="ctrl.applicationUser.outOfOffice"
                                        aria-label="{{lang.out_of_office_toggle_button}}"
-                                       ng-change="ctrl.changeOutOfOffice(outOfOfficeSettingsForm)">
+                                       ng-change="ctrl.changeOutOfOffice()">
                                 <label>{{ctrl.ouApplicationUser.getOutOffOfficeTranslatedStatus(ctrl.applicationUser.outOfOffice)}}</label>
                             </md-switch>
                         </div>
@@ -125,7 +125,7 @@
     <md-dialog-actions class="cms-dialog-actions">
         <md-button class="md-raised md-primary" ng-disabled="outOfOfficeSettingsForm.$invalid"
                    ng-click="ctrl.saveOutOfOfficeSettings()">
-            {{lang.add}}
+            {{lang.save}}
         </md-button>
         <md-button class="md-raised red-text" ng-click="ctrl.closeApplicationUserOutOfOfficeSettingPopupFromCtrl()">
             {{lang.close}}
