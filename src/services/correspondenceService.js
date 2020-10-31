@@ -500,7 +500,7 @@ module.exports = function (app) {
                 return !!correspondence.stepElm.authorizeByAnnotation;
             } else if (correspondence.hasOwnProperty('correspondence')) {
                 return !!correspondence.correspondence.authorizeByAnnotation;
-            }  else if (correspondence.hasOwnProperty('authorizeByAnnotation')) {
+            } else if (correspondence.hasOwnProperty('authorizeByAnnotation')) {
                 return !!correspondence.authorizeByAnnotation;
             }
             return false;
@@ -1179,6 +1179,9 @@ module.exports = function (app) {
                 })
                 .then(function (result) {
                     return result.data.rs;
+                })
+                .catch(function (error) {
+                    return errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
                 });
         };
         /**
