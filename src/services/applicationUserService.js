@@ -163,7 +163,7 @@ module.exports = function (app) {
              * @param ouApplicationUser
              * @param $event
              */
-            applicationUserFromOuEdit: function (ouApplicationUser, $event, ) {
+            applicationUserFromOuEdit: function (ouApplicationUser, $event) {
                 var currentOrganization = _.find(organizationService.allOrganizationsStructure, function (ou) {
                     return ou.id === ouApplicationUser.getOuId();
                 });

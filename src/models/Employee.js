@@ -187,6 +187,7 @@ module.exports = function (app) {
                 delete applicationUser.permissions;
                 delete applicationUser.organization;
 
+                ouApplication.ouRegistryID = ouApplication.ouRegistryID.hasOwnProperty('id') ? ouApplication.ouRegistryID.id : ouApplication.ouRegistryID;
                 this.organization = new OUApplicationUser(ouApplication);
                 this.organization.applicationUser = applicationUser;
                 return this;
