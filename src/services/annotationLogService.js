@@ -8,6 +8,10 @@ module.exports = function (app) {
 
         self.newAnnotations = {};
 
+        self.oldBookmarks = {};
+
+        self.newBookmarks = {};
+
         self.documentOperations = [];
 
         /**
@@ -131,6 +135,18 @@ module.exports = function (app) {
         }
 
         /**
+         * @description check if the bookmark updated
+         * @param id
+         * @return {boolean}
+         * @private
+         */
+        function _isUpdatedBookmark(id) {
+            var oldBookmark = self.oldBookmarks[id];
+            var newBookmark = self.newBookmarks[id];
+            return oldBookmark.name !== newBookmark.name || oldBookmark.action.pageIndex !== newBookmark.action.pageIndex;
+        }
+
+        /**
          * @description map the document operations to be ready to send to the server.
          * @param documentOperations
          * @return {Array}
@@ -183,15 +199,71 @@ module.exports = function (app) {
                 return annotation;
             });
         };
-
-        self.getAnnotationsChanges = function (oldAnnotations, newAnnotations, documentOperations) {
+        /**
+         * @description get created bookmarks
+         * @param oldBookmarks
+         * @param newBookmarks
+         * @return {Array}
+         */
+        self.getCreatedBookmarks = function (oldBookmarks, newBookmarks) {
+            return _.map(_.differenceBy(newBookmarks, oldBookmarks, 'id'), function (bookmark) {
+                return {
+                    actionItemType: ActionItemOperation.ADD,
+                    annotationType: AnnotationLogType.Bookmark
+                };
+            });
+        };
+        /**
+         * @description get deleted bookmarks
+         * @param oldBookmarks
+         * @param newBookmarks
+         */
+        self.getDeletedBookmarks = function (oldBookmarks, newBookmarks) {
+            return _.map(_.differenceBy(oldBookmarks, newBookmarks, 'id'), function (bookmark) {
+                return {
+                    actionItemType: ActionItemOperation.REMOVE,
+                    annotationType: AnnotationLogType.Bookmark
+                };
+            });
+        };
+        /**
+         * @description get updated bookmarks
+         * @param oldBookmarks
+         * @param newBookmarks
+         */
+        self.getUpdatedBookmarks = function (oldBookmarks, newBookmarks) {
+            return _.map(_.filter(_.intersectionBy(oldBookmarks, newBookmarks, 'id'), function (bookmark) {
+                return _isUpdatedBookmark(bookmark.id);
+            }), function (bookmark) {
+                return {
+                    actionItemType: ActionItemOperation.EDIT,
+                    annotationType: AnnotationLogType.Bookmark
+                };
+            });
+        };
+        /**
+         * @description return list of changes log
+         * @param oldAnnotations
+         * @param newAnnotations
+         * @param documentOperations
+         * @param oldBookmarks
+         * @param newBookmarks
+         * @return {*[]}
+         */
+        self.getAnnotationsChanges = function (oldAnnotations, newAnnotations, documentOperations, oldBookmarks, newBookmarks) {
             self.oldAnnotations = _createObjectFromCollection(oldAnnotations, 'id');
             self.newAnnotations = _createObjectFromCollection(newAnnotations, 'id');
             self.documentOperations = documentOperations;
             var createdAnnotations = self.getCreatedAnnotations(oldAnnotations, newAnnotations);
             var deletedAnnotations = self.getDeletedAnnotations(oldAnnotations, newAnnotations);
             var updatedAnnotations = self.getUpdatedAnnotations(oldAnnotations, newAnnotations);
-            return _generateAnnotationsList([].concat(createdAnnotations, deletedAnnotations, updatedAnnotations)).concat(_mapDocumentOperations(self.documentOperations));
+            self.oldBookmarks = _createObjectFromCollection(oldBookmarks, 'id');
+            self.newBookmarks = _createObjectFromCollection(newBookmarks, 'id');
+            var createdBookmarks = self.getCreatedBookmarks(oldBookmarks, newBookmarks);
+            var deletedBookmarks = self.getDeletedBookmarks(oldBookmarks, newBookmarks);
+            var updatedBookmarks = self.getUpdatedBookmarks(oldBookmarks, newBookmarks);
+            console.log('createdBookmarks, deletedBookmarks, updatedBookmarks', createdBookmarks, deletedBookmarks, updatedBookmarks);
+            return _generateAnnotationsList([].concat(createdAnnotations, deletedAnnotations, updatedAnnotations)).concat(_mapDocumentOperations(self.documentOperations), createdBookmarks, deletedBookmarks, updatedBookmarks);
         };
         /**
          * @description get all operation that happens to the Annotations for teh document
@@ -199,10 +271,12 @@ module.exports = function (app) {
          * @param newAnnotations
          * @param correspondence
          * @param documentOperations
+         * @param oldBookmarks
+         * @param newBookmarks
          * @return {Promise<boolean>}
          */
-        self.applyAnnotationChanges = function (oldAnnotations, newAnnotations, correspondence, documentOperations) {
-            var annotationLogs = self.getAnnotationsChanges(oldAnnotations, newAnnotations, documentOperations);
+        self.applyAnnotationChanges = function (oldAnnotations, newAnnotations, correspondence, documentOperations, oldBookmarks, newBookmarks) {
+            var annotationLogs = self.getAnnotationsChanges(oldAnnotations, newAnnotations, documentOperations, oldBookmarks, newBookmarks);
             return self.sendDifferenceAnnotations(annotationLogs, correspondence);
         };
         /**

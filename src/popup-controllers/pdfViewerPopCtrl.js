@@ -57,9 +57,9 @@ module.exports = function (app) {
         // loading  service
         self.loadingIndicatorService = loadingIndicatorService;
         // all document annotations after load the document
-        self.oldAnnotations = {};
+        self.oldAnnotations = [];
         // all document annotations after click on  save button
-        self.newAnnotations = {};
+        self.newAnnotations = [];
         // used to save last ink annotation from signature dialog to update it later after set the vsId
         self.latestInkAnnotation = null;
         // the skipped pdf Object , will use it later
@@ -68,6 +68,10 @@ module.exports = function (app) {
         self.documentOperations = [];
         // show/hide attach username and date toggle
         self.enableAttachUsernameAndDate = true;
+
+        self.oldBookmarks = [];
+
+        self.newBookmarks = [];
 
         self.baseUrl = (location.protocol + '//' + location.host + '/' + (configurationService.APP_CONTEXT ? configurationService.APP_CONTEXT + '/' : ''));
 
@@ -85,8 +89,6 @@ module.exports = function (app) {
         self.unlinkInProgress = false;
 
         self.savedPdfContent = null;
-
-        console.log('correspondence', correspondence);
 
         self.isStampEnabled = rootEntity.getGlobalSettings().stampModuleEnabled;
 
@@ -254,7 +256,6 @@ module.exports = function (app) {
                     self.printWithOutAnnotations(e, false);
                 }
             });
-            console.log('Toolbar', toolbarInstance);
             // disable/enable stamps button
             toolbarInstance = _.map(toolbarInstance, function (item) {
                 if (item.type === 'stamp') {
@@ -779,21 +780,38 @@ module.exports = function (app) {
          * @description get all document annotations
          * @returns {Promise<[]>}
          */
-        self.getDocumentAnnotations = function () {
+        self.getDocumentAnnotations = function (withBookmarks) {
             var pageCount = self.currentInstance.totalPageCount;
             var pagesAnnotations = [], annotations = [];
             _.map(_.range(pageCount), function (pageIndex) {
                 pagesAnnotations.push(self.currentInstance.getAnnotations(Number(pageIndex)));
             });
-            return $q.all(pagesAnnotations)
+            return $q.all(withBookmarks ? {
+                bookmarks: self.getDocumentBookmarks(),
+                annotations: $q.all(pagesAnnotations)
+            } : pagesAnnotations)
                 .then(function (pages) {
-                    _.map(pages, function (pageAnnotation) {
+                    _.map(withBookmarks ? pages.annotations : pages, function (pageAnnotation) {
                         pageAnnotation.forEach(function (annotation) {
                             annotations.push(annotation);
                         })
                     });
-                    return annotations;
+                    if (withBookmarks) {
+                        return {
+                            annotations: annotations,
+                            bookmarks: pages.bookmarks.toArray()
+                        }
+                    } else {
+                        return annotations;
+                    }
                 });
+        };
+        /**
+         * @description get all document bookmarks
+         * @return {Promise<List<Bookmark>>}
+         */
+        self.getDocumentBookmarks = async function () {
+            return self.currentInstance.getBookmarks();
         };
         /**
          * @description handle Annotations Changes
@@ -1072,7 +1090,7 @@ module.exports = function (app) {
          */
         self.sendAnnotationLogs = function (successCallback, errorCallback) {
             self.disableSaveButton = true;
-            return annotationLogService.applyAnnotationChanges(self.oldAnnotations, self.newAnnotations, self.correspondence, self.documentOperations)
+            return annotationLogService.applyAnnotationChanges(self.oldAnnotations, self.newAnnotations, self.correspondence, self.documentOperations, self.oldBookmarks, self.newBookmarks)
                 .then(function () {
                     self.disableSaveButton = false;
                     if (successCallback)
@@ -1282,7 +1300,7 @@ module.exports = function (app) {
                     return $q(function (resolve) {
                         fr.onloadend = function () {
                             self.pdfData = fr.result;
-                            self.$onInit();
+                            self.$onInit( true );
                         };
                         fr.readAsArrayBuffer(blob);
                     });
@@ -1299,15 +1317,15 @@ module.exports = function (app) {
                 return null;
             }
             self.disableSaveButton = true;
-            self.getDocumentAnnotations().then(function (newAnnotations) {
-                self.newAnnotations = newAnnotations;
-                var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations, self.documentOperations);
+            self.getDocumentAnnotations(true).then(function ({annotations, bookmarks}) {
+                self.newAnnotations = annotations;
+                self.newBookmarks = bookmarks;
+                var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations, self.documentOperations, self.oldBookmarks, self.newBookmarks);
                 if (!hasChanges.length) {
                     dialog.infoMessage(langService.get('there_is_no_changes_to_save'));
                     self.disableSaveButton = false;
                     return;
                 }
-
                 if (self.annotationType === AnnotationType.SIGNATURE) {
                     self.handleOpenForApprovalSave(ignoreValidationSignature, ignoreClosePopup); // document is already with watermark
                 } else {
@@ -1422,15 +1440,16 @@ module.exports = function (app) {
         /**
          * @description start Next Step Validation to launch or advance seq workflow.
          */
-        self.startNextStepValidation = function () {
+        self.startNextStepValidation = async function () {
             self.launchAfterSave = false;
             if (self.disableSaveButton) {
                 return null;
             }
             self.disableSaveButton = true;
-            self.getDocumentAnnotations()
-                .then(function (newAnnotations) {
-                    self.newAnnotations = newAnnotations;
+            self.getDocumentAnnotations(true)
+                .then(function ({annotations, bookmarks}) {
+                    self.newAnnotations = annotations;
+                    self.newBookmarks = bookmarks;
                     if (self.nextSeqStep.isAuthorizeAndSendStep()) {
                         self.isDocumentHasCurrentUserSignature()
                             .then(function () {
@@ -1465,7 +1484,7 @@ module.exports = function (app) {
                                 toast.error(langService.get(self.needOpenForApproval ? 'you_missed_open_for_appoval' : 'provide_signature_to_proceed'));
                             });
                     } else { // else nextSeqStep.isAuthorizeAndSendStep()
-                        var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations, self.documentOperations);
+                        var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations, self.documentOperations, self.oldBookmarks, self.newBookmarks);
                         if (!hasChanges.length) {
                             return self.applyNextStepOnCorrespondence(null).catch(self.handleSeqExceptions);
                         }
@@ -1775,7 +1794,7 @@ module.exports = function (app) {
         /**
          * @description viewer initialization
          */
-        self.$onInit = function () {
+        self.$onInit = function (manualCall) {
             _getNextStepFromSeqWF();
             if (!self.sequentialWF && self.info.docStatus >= 24) {
                 self.enableAttachUsernameAndDate = false;
@@ -1786,7 +1805,7 @@ module.exports = function (app) {
                 if (instantJSON) {
                     return self.loadInstantJSON();
                 }
-                // PSPDFKit.Options.IGNORE_DOCUMENT_PERMISSIONS = true;
+                PSPDFKit.Options.INITIAL_DESKTOP_SIDEBAR_WIDTH = 250;
                 PSPDFKit.load({
                     baseUrl: self.baseUrl,
                     container: $element.find('#pdf-viewer')[0],
@@ -1798,12 +1817,18 @@ module.exports = function (app) {
                     annotationTooltipCallback: self.annotationTooltipCallback
                 }).then(function (instance) {
                     self.currentInstance = instance;
-                    console.log(self.currentInstance);
                     // set current annotations for loaded document
                     self.getDocumentAnnotations().then(function (annotations) {
                         self.oldAnnotations = annotations;
                     });
-                    //self.canRepeatAnnotations = self.isAbleToRepeatAnnotations();
+                    self.getDocumentBookmarks().then(function (bookmarks) {
+                        self.oldBookmarks = bookmarks.toArray();
+                        if (self.oldBookmarks.length && self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep() && !manualCall) {
+                            self.currentInstance.setViewState(function (state) {
+                                return state.set('sidebarMode', PSPDFKit.SidebarMode.BOOKMARKS);
+                            });
+                        }
+                    });
                     self.currentInstance.setAnnotationCreatorName(employeeService.getEmployee().domainName);
                     self.registerEventListeners();
                 });

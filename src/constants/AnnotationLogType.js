@@ -30,6 +30,7 @@ module.exports = function (app) {
         movePages : 27,
         rotatePages : 28,
         removePages : 29,
-        importDocument : 30
+        importDocument : 30,
+        Bookmark : 31
     });
 };
