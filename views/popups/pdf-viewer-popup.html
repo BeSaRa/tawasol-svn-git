@@ -33,7 +33,6 @@
                        ng-click="ctrl.saveAnnotationsNoClose()">{{lang.save}}
             </md-button>
         </div>
-<!--        <div ng-if="!ctrl.sequentialWF && !ctrl.isAttachmentCorrespondence">-->
         <div ng-if="ctrl.checkSaveAndSend()">
             <md-button ng-disabled="ctrl.disableSaveButton" class="md-raised md-primary"
                        ng-click="ctrl.saveAndSendDocumentAnnotations()">{{lang.save_and_send}}

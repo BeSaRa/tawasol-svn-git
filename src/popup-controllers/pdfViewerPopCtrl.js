@@ -51,7 +51,6 @@ module.exports = function (app) {
         //self.canRepeatAnnotations = false;
         // current document meta data
         self.correspondence = correspondence;
-        self.isAttachmentCorrespondence = (self.correspondence instanceof Attachment);
         // current annotation mode to load the document from right service and set the annotation types for all signature Annotations (ink,Imag)
         self.annotationType = annotationType;
         // loading  service
@@ -1300,7 +1299,7 @@ module.exports = function (app) {
                     return $q(function (resolve) {
                         fr.onloadend = function () {
                             self.pdfData = fr.result;
-                            self.$onInit( true );
+                            self.$onInit();
                         };
                         fr.readAsArrayBuffer(blob);
                     });
@@ -1530,7 +1529,7 @@ module.exports = function (app) {
                     }
                 })
                 .then(function (backStepOptions) {
-                    sequentialWorkflowService.backStepSeqWFCorrespondence(self.correspondence, backStepOptions , self.currentInstance , self.documentOperations).then(function (data) {
+                    sequentialWorkflowService.backStepSeqWFCorrespondence(self.correspondence, backStepOptions, self.currentInstance, self.documentOperations).then(function (data) {
                         toast.success(langService.get('launch_sequential_workflow_back_success'));
                         self.disableSaveButton = false;
                         dialog.hide();
@@ -1794,7 +1793,7 @@ module.exports = function (app) {
         /**
          * @description viewer initialization
          */
-        self.$onInit = function (manualCall) {
+        self.$onInit = function () {
             _getNextStepFromSeqWF();
             if (!self.sequentialWF && self.info.docStatus >= 24) {
                 self.enableAttachUsernameAndDate = false;
@@ -1823,7 +1822,7 @@ module.exports = function (app) {
                     });
                     self.getDocumentBookmarks().then(function (bookmarks) {
                         self.oldBookmarks = bookmarks.toArray();
-                        if (self.oldBookmarks.length && self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep() && !manualCall) {
+                        if (self.oldBookmarks.length && ((self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep()) || self.info.isAttachment)) {
                             self.currentInstance.setViewState(function (state) {
                                 return state.set('sidebarMode', PSPDFKit.SidebarMode.BOOKMARKS);
                             });
@@ -1852,7 +1851,7 @@ module.exports = function (app) {
          * @returns {boolean|boolean}
          */
         self.checkSaveAndSend = function () {
-            return !self.sequentialWF && !self.isAttachmentCorrespondence && (typeof self.correspondence.hasActiveSeqWF !== "undefined") && !self.correspondence.hasActiveSeqWF();
+            return !self.sequentialWF && !self.info.isAttachment && (typeof self.correspondence.hasActiveSeqWF !== "undefined") && !self.correspondence.hasActiveSeqWF();
         };
 
         /**
