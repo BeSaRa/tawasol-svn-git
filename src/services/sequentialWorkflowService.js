@@ -534,11 +534,15 @@ module.exports = function (app) {
          * @description preform back step for te SEQ Correspondence
          * @param correspondence
          * @param backStepOptions
+         * @param pdfInstance
+         * @param documentOperations
          * @return {*}
          */
-        self.backStepSeqWFCorrespondence = function (correspondence, backStepOptions) {
-            var info = correspondence.getInfo();
-            return PDFService.applyAnnotationsOnPDFDocument(correspondence, AnnotationType.ANNOTATION, PDFViewer.DEFAULT_INSTANT_JSON, [])
+        self.backStepSeqWFCorrespondence = async function (correspondence, backStepOptions, pdfInstance, documentOperations) {
+            var info = correspondence.getInfo(), addAttachment = false;
+            var INSTANT_JSON = await pdfInstance.exportInstantJSON();
+            delete INSTANT_JSON.pdfId;
+            return PDFService.applyAnnotationsOnPDFDocument(correspondence, AnnotationType.ANNOTATION, INSTANT_JSON, documentOperations)
                 .then(function (pdfContent) {
                     var formData = new FormData();
                     formData.append('entity', JSON.stringify({
@@ -550,11 +554,16 @@ module.exports = function (app) {
                     }));
                     if (info.isPaper || info.docStatus >= 24) {
                         formData.append('content', pdfContent);
+                    } else {
+                        addAttachment = true;
                     }
+                    debugger
                     return $http.post(urlService.sequentialWorkflowBackStep.change({documentClass: info.documentClass}), formData, {
                         headers: {
                             'Content-Type': undefined
                         }
+                    }).then(function (result) {
+                        addAttachment ? correspondence.addAnnotationAsAttachment(pdfContent) : result;
                     });
                 })
         };
