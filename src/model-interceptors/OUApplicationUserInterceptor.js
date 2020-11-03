@@ -58,7 +58,7 @@ module.exports = function (app) {
             if (model.proxyUser) {
                 //   getUnixTimeStamp(model, ["proxyStartDate", "proxyEndDate"]);
                 model.proxyStartDate = model.proxyStartDate ? moment(model.proxyStartDate).startOf('day').valueOf() : model.proxyStartDate;
-                model.proxyEndDate = model.proxyEndDate ? moment(model.proxyEndDate).endOf('day').valueOf() : model.proxyEndDate;
+                model.proxyEndDate = model.proxyEndDate ? moment(model.proxyEndDate).endOf('day').subtract(1, 'second').valueOf() : model.proxyEndDate;
                 model.proxyOUId = model.proxyUser instanceof ProxyUser ? model.proxyUser.organization.id : model.proxyOUId;
                 model.proxyUser = generator.interceptSendInstance('ApplicationUser', model.proxyUser instanceof ProxyUser ? model.proxyUser.applicationUser : model.proxyUser);
             }
