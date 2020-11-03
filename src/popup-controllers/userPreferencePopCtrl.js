@@ -653,9 +653,7 @@ module.exports = function (app) {
                     self.ouApplicationUser.applicationUser = self.applicationUser;
                     self.checkDelegatedFromAnotherUsers().then((notDelegated) => {
                         if (notDelegated) {
-                            if (!self.ouApplicationUser.proxyUser && self.ouApplicationUser.proxyUser === self.ouApplicationUserCopy.proxyUser) {
-                                toast.success(langService.get('out_of_office_success'));
-                            } else if (!self.applicationUser.outOfOffice &&
+                            if (!self.applicationUser.outOfOffice &&
                                 !self.ouApplicationUser.proxyUser && self.ouApplicationUser.proxyUser !== self.ouApplicationUserCopy.proxyUser) {
                                 // terminate proxy user
                                 ouApplicationUserService
@@ -1631,6 +1629,10 @@ module.exports = function (app) {
             return defer.promise;
 
         }
+
+        self.checkIfEmptyProxyUserChanged = function () {
+            return !self.selectedProxyUser && self.selectedProxyUser === self.ouApplicationUserCopy.proxyUser;
+        };
 
         self.$onInit = function () {
             self.filteredSecurityLevels = _.filter(self.securityLevels, self.isSecurityLevelInclude);

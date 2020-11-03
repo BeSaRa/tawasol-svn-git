@@ -123,7 +123,8 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised md-primary" ng-disabled="outOfOfficeSettingsForm.$invalid"
+        <md-button class="md-raised md-primary"
+                   ng-disabled="outOfOfficeSettingsForm.$invalid || ctrl.checkIfEmptyProxyUserChanged()"
                    ng-click="ctrl.saveOutOfOfficeSettings()">
             {{lang.save}}
         </md-button>

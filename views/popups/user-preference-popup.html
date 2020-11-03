@@ -1426,7 +1426,8 @@
                    ng-if="ctrl.selectedTab==='general' || ctrl.selectedTab==='notificationSettings'"
                    ng-click="ctrl.editApplicationUserFromCtrl()">{{lang.save}}
         </md-button>
-        <md-button class="md-raised md-primary" ng-disabled="outOfOfficeSettingsForm.$invalid"
+        <md-button class="md-raised md-primary"
+                   ng-disabled="outOfOfficeSettingsForm.$invalid || ctrl.checkIfEmptyProxyUserChanged()"
                    ng-if="ctrl.selectedTab==='outOfOfficeSettings'"
                    ng-click="ctrl.saveOutOfOfficeSettingsFromCtrl()">{{lang.save}}
         </md-button>
