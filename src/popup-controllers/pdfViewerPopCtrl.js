@@ -1843,7 +1843,11 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.checkCanSendBack = function () {
-            return !!self.sequentialWF && !_isFromBackStep();
+            if (!self.sequentialWF) {
+                return false;
+            }
+            return self.sequentialWF.getFirstStepId() !== self.correspondence.getSeqWFCurrentStepId();
+            // return !!self.sequentialWF && !_isFromBackStep();
         };
 
         /**

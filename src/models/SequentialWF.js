@@ -120,6 +120,9 @@ module.exports = function (app) {
             SequentialWF.prototype.getLastStepId = function () {
                 return this.steps && this.steps[this.steps.length - 1].id;
             };
+            SequentialWF.prototype.getFirstStepId = function () {
+                return this.steps && this.steps[0].id;
+            };
 
             SequentialWF.prototype.isAdhocSeqWF = function () {
                 return this.isAdhoc;
