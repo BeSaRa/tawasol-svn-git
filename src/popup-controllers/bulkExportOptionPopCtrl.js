@@ -146,18 +146,10 @@ module.exports = function (app) {
                 .catch(function (error) {
                     self.disableExport = false;
                     errorCode.checkIf(error, 'CANNOT_EXPORT_TOO_MANY_ATTACHMENTS_OR_LINKED_DOCUMENTS', function () {
-                        dialog
-                            .errorMessage(self.getTranslatedError(error))
-                            .then(function () {
-                                dialog.hide(error);
-                            });
+                        dialog.errorMessage(self.getTranslatedError(error))
                     });
                     errorCode.checkIf(error, 'CANNOT_EXPORT_MORE_THAN_FIFTY_ATTACHMENTS_OR_LINKED_DOCUMENTS_TO_G2G', function () {
-                        dialog
-                            .errorMessage(self.getTranslatedError(error))
-                            .then(function () {
-                                dialog.hide(error);
-                            });
+                        dialog.errorMessage(self.getTranslatedError(error));
                     });
                     /*errorCode.checkIf(error, 'INVALID_DOC_STATUS_TO_EXPORT', function () {
                         dialog
