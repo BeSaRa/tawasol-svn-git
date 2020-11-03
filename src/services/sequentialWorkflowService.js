@@ -552,12 +552,11 @@ module.exports = function (app) {
                         seqWFId: correspondence.getSeqWFId(),
                         backwardOptions: backStepOptions
                     }));
-                    if (info.isPaper || info.docStatus >= 24) {
+                    if (info.isPaper || info.docStatus >= 23) {
                         formData.append('content', pdfContent);
                     } else {
                         addAttachment = true;
                     }
-                    debugger
                     return $http.post(urlService.sequentialWorkflowBackStep.change({documentClass: info.documentClass}), formData, {
                         headers: {
                             'Content-Type': undefined
