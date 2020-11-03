@@ -61,6 +61,11 @@
                    ng-click="ctrl.launchSeqWF($event)">
             {{lang.send}}
         </md-button>
+        <md-button class="md-raised md-primary"
+                   ng-disabled="!ctrl.isValidForm(launchSequentialWFForm)"
+                   ng-click="ctrl.launchSeqWFWithEdit($event)">
+            {{lang.send_with_edit}}
+        </md-button>
         <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">{{lang.close}}</md-button>
     </md-dialog-actions>
 </md-dialog>

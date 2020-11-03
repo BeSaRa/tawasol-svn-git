@@ -122,9 +122,10 @@ module.exports = function (app) {
              * @description Opens popup to add new sequential workflow as copy of given record
              * @param sequentialWorkflow
              * @param regOuId
+             * @param adHoc
              * @param $event
              */
-            sequentialWorkflowCopy: function (sequentialWorkflow, regOuId, $event) {
+            sequentialWorkflowCopy: function (sequentialWorkflow, regOuId, adHoc, $event) {
                 var newSequentialWF = angular.copy(sequentialWorkflow);
 
                 newSequentialWF.id = null;
@@ -135,6 +136,7 @@ module.exports = function (app) {
                     step.id = null;
                     return step;
                 });
+                newSequentialWF.isAdhoc = adHoc;
                 newSequentialWF.stepRows = angular.copy(newSequentialWF.steps);
 
                 return dialog
@@ -322,7 +324,7 @@ module.exports = function (app) {
         /**
          * @description Add new sequential workflow
          * @param sequentialWorkflow
-         * @return {Promise|DocumentTemplate}
+         * @return {Promise|SequentialWF}
          */
         self.addSequentialWorkflow = function (sequentialWorkflow) {
             return $http
@@ -339,7 +341,7 @@ module.exports = function (app) {
         /**
          * @description Update the given sequential workflow
          * @param sequentialWorkflow
-         * @return {Promise|DocumentTemplate}
+         * @return {Promise|SequentialWF}
          */
         self.updateSequentialWorkflow = function (sequentialWorkflow) {
             return $http

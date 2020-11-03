@@ -18,6 +18,7 @@ module.exports = function (app) {
             self.creatorOUId = null;
             self.regOUId = null;
             self.docClassID = null;
+            self.isAdhoc = null;
             self.steps = [];
 
             // temporary properties
@@ -118,6 +119,10 @@ module.exports = function (app) {
 
             SequentialWF.prototype.getLastStepId = function () {
                 return this.steps && this.steps[this.steps.length - 1].id;
+            };
+
+            SequentialWF.prototype.isAdhocSeqWF = function () {
+                return this.isAdhoc;
             };
 
             // don't remove CMSModelInterceptor from last line

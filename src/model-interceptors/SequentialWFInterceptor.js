@@ -17,7 +17,7 @@ module.exports = function (app) {
             model.creatorId = generator.getNormalizedValue(model.creatorId, 'id');
             model.creatorOUId = generator.getNormalizedValue(model.creatorOUId, 'id');
             model.docClassID = generator.getNormalizedValue(model.docClassID, 'lookupKey');
-
+            model.isAdhoc = model.isAdhoc || false;
             // assign stepRows to steps to send to service
             model.steps = generator.interceptSendCollection('SequentialWFStep', model.stepRows);
 

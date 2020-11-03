@@ -124,6 +124,28 @@ module.exports = function (app) {
             }
         };
 
+        /**
+         * @description Opens dialog for add new ad-hoc sequential workflow and then send
+         * @param $event
+         */
+        self.launchSeqWFWithEdit = function ($event) {
+            if (!self.canAddSeqWF || !self.selectedSeqWF) {
+                return;
+            }
+
+            sequentialWorkflowService
+                .controllerMethod
+                .sequentialWorkflowCopy(self.selectedSeqWF, self.selectedSeqWF.regOUId, true, $event)
+                .then(function (result) {
+                    toast.success(langService.get('add_success').change({name: result.getNames()}));
+                    self.selectedSeqWF = result;
+                    self.launchSeqWF($event);
+                })
+                .catch(function () {
+
+                });
+        };
+
 
         /**
          * @description Clears the searchText for the given field
