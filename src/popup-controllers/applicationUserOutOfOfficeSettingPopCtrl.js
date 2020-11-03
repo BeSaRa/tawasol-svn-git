@@ -24,7 +24,8 @@ module.exports = function (app) {
                                                                          organizationService,
                                                                          errorCode,
                                                                          ouApplicationUserService,
-                                                                         $scope) {
+                                                                         $scope,
+                                                                         moment) {
         'ngInject';
         var self = this;
         self.controllerName = 'applicationUserOutOfOfficeSettingPopCtrl';
@@ -96,7 +97,7 @@ module.exports = function (app) {
          * @private
          */
         function _checkProxyDate(ouApplicationUser) {
-            if (ouApplicationUser.proxyEndDate && new Date(ouApplicationUser.proxyEndDate).valueOf() < (new Date()).valueOf()) {
+            if (ouApplicationUser.proxyEndDate && moment(ouApplicationUser.proxyEndDate).endOf('day').valueOf() < (new Date()).valueOf()) {
                 self.applicationUser.outOfOffice = false;
                 self.selectedProxyUser = null;
                 ouApplicationUser.emptyOutOfOffice();
