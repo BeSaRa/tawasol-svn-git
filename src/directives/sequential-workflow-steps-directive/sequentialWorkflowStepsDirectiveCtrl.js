@@ -104,39 +104,34 @@ module.exports = function (app) {
                 .data('rowIndex', idx)
                 .attr('ng-dblclick', 'ctrl.editStep(item, $event)');
 
-            // if isLaunchSeqWF, first step is current, all other steps are future
-            // no self.correspondence means we are using from admin screen
+            // if usageType = 'launch', first step is current, all other steps are future
+            // (no self.correspondence or usageType = 'manage-steps') means we are using from admin screen
             // otherwise from next actions screen
-            if (self.isLaunchSeqWF) {
+            if (self.usageType === 'launch') {
                 element.attr('ng-class', "{" +
                     "'" + self.stepLegendClassList.currentStep.class + "' : " + (idx === 0) + ", " +
                     "'" + self.stepLegendClassList.futureStep.class + "' : " + (idx > 0) +
                     "}");
-            } else if (!self.correspondence) {
+            } else if (self.usageType === 'manage-steps') {
                 element.attr('ng-class', "{" +
                     "'" + self.stepLegendClassList.validStep.class + "' : item.isValidStep(ctrl.seqWF), " +
                     "'" + self.stepLegendClassList.inValidStep.class + "' : !item.isValidStep(ctrl.seqWF)" +
                     "}");
             } else {
                 var stepClass = '';
-                if (stepAction.isCurrentSeqWFStep(self.correspondence)){
+                if (stepAction.isCurrentSeqWFStep(self.correspondence)) {
                     stepClass = self.stepLegendClassList.currentStep.class;
-                } else if (stepAction.isPastSeqWFStep(self.correspondence)){
+                } else if (stepAction.isPastSeqWFStep(self.correspondence)) {
                     stepClass = self.stepLegendClassList.pastStep.class;
-                } else if (stepAction.isFutureSeqWFStep(self.correspondence)){
+                } else if (stepAction.isFutureSeqWFStep(self.correspondence)) {
                     stepClass = self.stepLegendClassList.futureStep.class;
                 }
                 element.addClass(stepClass);
-                /*element.attr('ng-class', "{" +
-                    "'" + self.stepLegendClassList.pastStep.class + "' : item.isPastSeqWFStep(ctrl.correspondence), " +
-                    "'" + self.stepLegendClassList.currentStep.class + "' : item.isCurrentSeqWFStep(ctrl.correspondence), " +
-                    "'" + self.stepLegendClassList.futureStep.class + "' : item.isFutureSeqWFStep(ctrl.correspondence)" +
-                    "}");*/
             }
 
 
             var titleText = '{{item.getTranslatedName()}}';
-            if (self.usageType === 'view-steps' && stepAction.getTranslatedUserAndOuName()){
+            if (self.usageType === 'view-steps' && stepAction.getTranslatedUserAndOuName()) {
                 titleText += ' ({{item.getTranslatedUserAndOuName() }})'
             }
             var title = angular.element('<span class="no-style" />', {'md-truncate': ''}).html(titleText);
@@ -209,13 +204,13 @@ module.exports = function (app) {
         };
 
         self.setStepLegend = function () {
-            // if isLaunchSeqWF, show current step, future step
-            // if no self.correspondence means we are using from admin screen, show valid, invalid steps
+            // if usageType = 'launch', show current step, future step
+            // (no self.correspondence or usageType = 'manage-steps') means we are using from admin screen, show valid, invalid steps
             // otherwise from next actions after launch, show past, current, future steps
-            if (self.isLaunchSeqWF) {
+            if (self.usageType === 'launch') {
                 self.stepLegendList.push(self.stepLegendClassList.currentStep);
                 self.stepLegendList.push(self.stepLegendClassList.futureStep);
-            } else if (!self.correspondence) {
+            } else if (self.usageType === 'manage-steps') {
                 self.stepLegendList.push(self.stepLegendClassList.validStep);
                 self.stepLegendList.push(self.stepLegendClassList.inValidStep);
             } else {
@@ -231,13 +226,37 @@ module.exports = function (app) {
 
         self.editStep = function (seqWFStep, $event) {
             $event.preventDefault();
-            var rowIndex = angular.element($event.target).parents('.step-item').data('rowIndex');
+            var rowIndex = angular.element($event.target).parents('.step-item').data('rowIndex'),
+                viewOnly = self.viewOnly;
+
+            if (self.usageType === 'view-steps') {
+                viewOnly = seqWFStep.id <= self.correspondence.getSeqWFCurrentStepId();
+            }
+
             sequentialWorkflowService.controllerMethod
-                .sequentialWorkflowStepEdit(self.seqWF, seqWFStep, self.viewOnly, $event)
+                .sequentialWorkflowStepEdit(self.seqWF, seqWFStep, viewOnly, $event)
                 .then(function (updatedSeqWFStep) {
                     self.seqWF.stepRows.splice(rowIndex, 1, updatedSeqWFStep);
-                    self.compileAll(self.seqWF.stepRows);
+                    if (self.usageType === 'view-steps') {
+                        _updateSequentialWorkflow()
+                            .then(function (result) {
+                                self.compileAll(self.seqWF.stepRows);
+                            });
+                    } else {
+                        self.compileAll(self.seqWF.stepRows);
+                    }
                 })
+        };
+
+        var _updateSequentialWorkflow = function () {
+            return sequentialWorkflowService.updateSequentialWorkflow(self.seqWF)
+                .then(function (result) {
+                    return sequentialWorkflowService.loadSequentialWorkflowById(self.seqWF).then(function (seqWFResult) {
+                        toast.success(langService.get('edit_success').change({name: result.getNames()}));
+                        self.seqWF = seqWFResult;
+                        return seqWFResult;
+                    });
+                });
         };
 
         function _updateStructure() {

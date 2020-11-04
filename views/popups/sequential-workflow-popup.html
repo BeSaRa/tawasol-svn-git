@@ -65,26 +65,11 @@
                             </md-switch>
                         </div>
                     </div>
-                    <!--<fieldset>
-                        <legend class="md-accent">{{lang.label_document_type}}</legend>
-                        <md-radio-group flex layout="row" name="docClassId"
-                                        ng-change="ctrl.handleDocTypeChange()"
-                                        ng-model="ctrl.selectedDocClass">
-                            <md-radio-button ng-repeat="type in ctrl.documentClasses"
-                                             ng-disabled="ctrl.viewOnly || ctrl.record.id"
-                                             ng-value="type.lookupKey" flex
-                                             aria-label="{{type.getTranslatedName()}}">
-                                {{type.getTranslatedName()}}
-                            </md-radio-button>
-                        </md-radio-group>
-                    </fieldset>-->
-
                     <sequential-workflow-steps-directive
                             usage-type="manage-steps"
                             seq-w-f="ctrl.sequentialWorkflow"
                             redraw-steps="ctrl.redrawSteps"
                             view-only="ctrl.viewOnly"
-                            is-launch-seq-w-f="false"
                     ></sequential-workflow-steps-directive>
 
                 </form>

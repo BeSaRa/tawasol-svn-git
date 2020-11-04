@@ -1341,8 +1341,13 @@ module.exports = function (app) {
             return dialog.showDialog({
                 templateUrl: cmsTemplate.getPopup('view-seq-wf-steps'),
                 locals: {
-                    correspondence: self.correspondence,
-                    sequentialWF: self.sequentialWF
+                    correspondence: self.correspondence
+                },
+                resolve: {
+                    sequentialWF: function (sequentialWorkflowService) {
+                        'ngInject';
+                        return sequentialWorkflowService.loadSequentialWorkflowById(self.sequentialWF)
+                    }
                 },
                 controllerAs: 'ctrl',
                 bindToController: true,

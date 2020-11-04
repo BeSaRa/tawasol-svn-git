@@ -260,7 +260,7 @@ module.exports = function (app) {
                             controllerAs: 'ctrl',
                             bindToController: true,
                             locals: {
-                                record: seqWF,
+                                seqWF: seqWF,
                                 step: step,
                                 viewOnly: viewOnly
                             },

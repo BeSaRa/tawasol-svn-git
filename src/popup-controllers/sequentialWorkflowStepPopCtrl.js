@@ -24,7 +24,7 @@ module.exports = function (app) {
                 return true;
             }
             generator.validateRequiredSelectFields(form, setTouched);
-            return form.$valid && self.step.isValidStep(self.record);
+            return form.$valid && self.step.isValidStep(self.seqWF);
         };
 
         /**
@@ -148,11 +148,11 @@ module.exports = function (app) {
             $timeout(function () {
                 self.form = $scope.sequentialWorkflowStepForm || null;
                 // if internal seqWF, disable organization as wf will be inside organization only
-                if (self.record.isInternalSeqWF()) {
+                if (self.seqWF.isInternalSeqWF()) {
                     readonlyFields.push('uiOuId');
                 }
                 self.stepCopy = angular.copy(self.step);
-                self.isUserRequired = self.step.checkUserRequired(self.record);
+                self.isUserRequired = self.step.checkUserRequired(self.seqWF);
             });
         };
 
