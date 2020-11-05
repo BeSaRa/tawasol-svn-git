@@ -56,6 +56,11 @@
                        ng-click="ctrl.displaySeqWFSteps()">{{lang.show_seq_steps}}
             </md-button>
         </div>
+        <div ng-if="ctrl.canResetSeqWF()">
+            <md-button class="md-raised md-primary"
+                       ng-click="ctrl.resetSeqWF()">{{lang.reset_seq_wf}}
+            </md-button>
+        </div>
         <div>
             <md-button ng-click="ctrl.closeDialog()" class="md-raised red-text">
                 {{lang.close}}

@@ -568,6 +568,22 @@ module.exports = function (app) {
                     });
                 })
         };
+
+        /**
+         * @description Resets the sequential workflow for the book and send it back to initial state
+         */
+        self.resetSeqWF = function (correspondence) {
+            var info = correspondence.getInfo(),
+                url = urlService.correspondence + '/' + info.documentClass + '/vsid/' + info.vsId + '/wob-num/' + info.wobNumber + '/authorize/reset';
+            return $http.put(url)
+                .then(function (result) {
+                    return result.data.rs;
+                })
+                .catch(function (error) {
+                    return errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
+                });
+        };
+
         /**
          * @description create the shared method to the model.
          * @type {{delete: generator.delete, update: generator.update}}

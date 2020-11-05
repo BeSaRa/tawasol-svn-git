@@ -1360,6 +1360,21 @@ module.exports = function (app) {
                 }
             })
         };
+
+        /**
+         * @description Reset the seqWF
+         */
+        self.resetSeqWF = function () {
+            dialog.confirmMessage(langService.get('confirm_continue_message'))
+                .then(function () {
+                    sequentialWorkflowService.resetSeqWF(self.correspondence)
+                        .then(function (result) {
+                            toast.success(langService.get('success_reset_seq_wf'));
+                            dialog.cancel();
+                        })
+                })
+        };
+
         /**
          * @description get PDF Content for current document with changes
          * @param flatten
@@ -1861,6 +1876,14 @@ module.exports = function (app) {
          */
         self.checkSaveAndSend = function () {
             return !self.sequentialWF && !self.info.isAttachment && (typeof self.correspondence.hasActiveSeqWF !== "undefined") && !self.correspondence.hasActiveSeqWF();
+        };
+
+        /**
+         * @description Checks if sequential workflow can be reset
+         * @returns {boolean|*}
+         */
+        self.canResetSeqWF = function(){
+            return !!self.sequentialWF && employeeService.hasPermissionTo('SEQ_WF_RESET') && self.info.documentClass.toLowerCase() !== 'incoming'
         };
 
         /**
