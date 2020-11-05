@@ -1333,6 +1333,7 @@ module.exports = function (app) {
                             result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
                         }
                         result.content.desktop = desktop;
+                        result.metaData.g2gId = g2gItem.id;
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),

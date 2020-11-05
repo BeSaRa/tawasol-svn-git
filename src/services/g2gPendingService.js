@@ -99,12 +99,16 @@ module.exports = function (app) {
                 });
         };
 
-        self.exportPendingBooks = function(g2gItems){
-            if (!angular.isArray(g2gItems)){
+        self.exportPendingBooks = function (g2gItems) {
+            if (!angular.isArray(g2gItems)) {
                 g2gItems = [g2gItems];
             }
+            var mapProperty = 'id';
+            if (g2gItems[0].hasOwnProperty('g2gId')) {
+                mapProperty = 'g2gId';
+            }
 
-            return $http.put(urlService.g2gInbox + 'export/pending', _.map(g2gItems, 'id'));
+            return $http.put(urlService.g2gInbox + 'export/pending', _.map(g2gItems, mapProperty));
         };
 
         /**

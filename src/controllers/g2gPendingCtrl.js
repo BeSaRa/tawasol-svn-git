@@ -214,12 +214,13 @@ module.exports = function (app) {
         /**
          * @description Export pending g2g items
          */
-        self.exportG2gItem = function (model, $event) {
+        self.exportG2gItem = function (model, $event, defer) {
             g2gPendingService.exportPendingBooks(model)
                 .then(function (result) {
                     self.reloadG2GPendingItems(1)
                         .then(function () {
                             toast.success(langService.get('export_success'));
+                            new ResolveDefer(defer);
                         });
                 })
         };

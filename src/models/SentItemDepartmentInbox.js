@@ -219,6 +219,7 @@ module.exports = function (app) {
              */
             SentItemDepartmentInbox.prototype.viewNewG2GPendingItem = function (actions, queueName, $event) {
                 var model = {
+                    id: this.id,
                     vsId: this.vsId,
                     docClassName: 'outgoing'
                 };
