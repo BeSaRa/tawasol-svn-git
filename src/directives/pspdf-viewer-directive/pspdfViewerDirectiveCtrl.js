@@ -16,11 +16,10 @@ module.exports = function (app) {
 
         self.destroyInstance = function () {
             try {
-                PSPDFKit.unload('#' + self.container.id)
+                PSPDFKit.unload(self.container)
             } catch (e) {
                 // mute cannot find container from PSPDFKit
             }
-
         };
 
         self.renderViewer = function () {
