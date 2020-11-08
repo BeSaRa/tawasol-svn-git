@@ -1882,8 +1882,10 @@ module.exports = function (app) {
          * @description Checks if sequential workflow can be reset
          * @returns {boolean|*}
          */
-        self.canResetSeqWF = function(){
-            return !!self.sequentialWF && employeeService.hasPermissionTo('SEQ_WF_RESET') && self.info.documentClass.toLowerCase() !== 'incoming'
+        self.canResetSeqWF = function () {
+            return !!self.sequentialWF && employeeService.hasPermissionTo('SEQ_WF_RESET')
+                && self.info.documentClass.toLowerCase() !== 'incoming'
+                && self.correspondence && (typeof self.correspondence.getSeqWFNextStepId !== "undefined") && !!self.correspondence.getSeqWFNextStepId();
         };
 
         /**
