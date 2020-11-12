@@ -21,7 +21,8 @@ module.exports = function (app) {
                                                          fromLaunchPopup,
                                                          SentItemDepartmentInbox,
                                                          gridService,
-                                                         manageLaunchWorkflowService) {
+                                                         manageLaunchWorkflowService,
+                                                         lookupService) {
         'ngInject';
         var self = this;
         self.controllerName = 'quickSendDocumentPopCtrl';
@@ -144,19 +145,23 @@ module.exports = function (app) {
          * @private
          */
         function _prepareProxyMessage(proxyUsers) {
-            var titleTemplate = angular.element('<span class="validation-title">' + langService.get('proxy_user_message') + '</span> <br/>');
-            titleTemplate.html(langService.get('proxy_user_message'));
+            if (!self.isDelegatedUsersHasDocumentSecurityLevel(proxyUsers)) {
+                return langService.get('document_doesnot_have_security_level_as_delegated_user')
+            } else {
+                var titleTemplate = angular.element('<span class="validation-title">' + langService.get('proxy_user_message') + '</span> <br/>');
+                titleTemplate.html(langService.get('proxy_user_message'));
 
-            var tableRows = _.map(proxyUsers, function (user) {
-                return [user.arName, user.enName, user.proxyInfo.arName, user.proxyInfo.enName, user.proxyInfo.proxyDomain, moment(user.proxyInfo.proxyStartDate).format('YYYY-MM-DD'), moment(user.proxyInfo.proxyEndDate).format('YYYY-MM-DD'), user.proxyInfo.proxyMessage];
-            });
+                var tableRows = _.map(proxyUsers, function (user) {
+                    return [user.arName, user.enName, user.proxyInfo.arName, user.proxyInfo.enName, user.proxyInfo.proxyDomain, moment(user.proxyInfo.proxyStartDate).format('YYYY-MM-DD'), moment(user.proxyInfo.proxyEndDate).format('YYYY-MM-DD'), user.proxyInfo.proxyMessage];
+                });
 
-            var table = tableGeneratorService.createTable([langService.get('arabic_name'), langService.get('english_name'), langService.get('proxy_arabic_name'), langService.get('proxy_english_name'), langService.get('proxy_domain'), langService.get('start_date'), langService.get('end_date'), langService.get('proxy_message')], 'error-table');
-            table.createTableRows(tableRows);
+                var table = tableGeneratorService.createTable([langService.get('arabic_name'), langService.get('english_name'), langService.get('proxy_arabic_name'), langService.get('proxy_english_name'), langService.get('proxy_domain'), langService.get('start_date'), langService.get('end_date'), langService.get('proxy_message')], 'error-table');
+                table.createTableRows(tableRows);
 
-            titleTemplate.append(table.getTable(true));
+                titleTemplate.append(table.getTable(true));
 
-            return titleTemplate.html();
+                return titleTemplate.html();
+            }
         }
 
         self.isAnyOutOfOffice = function () {
@@ -307,6 +312,15 @@ module.exports = function (app) {
 
         function _filterWFDepartmentsGroup(item) {
             return item.gridName === 'OUGroup';
+        }
+
+        self.isDelegatedUsersHasDocumentSecurityLevel = function (proxyUsers) {
+            var securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+
+            return _.some(proxyUsers, function (proxyUser) {
+                var proxyInfoSecurityLevels = generator.getSelectedCollectionFromResult(securityLevels, proxyUser.proxyInfo.securityLevels, 'lookupKey');
+                return proxyInfoSecurityLevels.indexOf(self.record.securityLevelLookup) !== -1;
+            })
         }
 
         self.$onInit = function () {
