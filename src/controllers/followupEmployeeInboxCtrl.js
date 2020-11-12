@@ -27,7 +27,8 @@ module.exports = function (app) {
                                                           $timeout,
                                                           favoriteDocumentsService,
                                                           generator,
-                                                          gridService) {
+                                                          gridService,
+                                                          sequentialWorkflowService) {
         'ngInject';
         var self = this;
 
@@ -313,6 +314,23 @@ module.exports = function (app) {
                 dialog.successMessage(langService.get('link_message').change({result: result}), null, null, null, null, true);
                 return true;
             });
+        };
+
+        /**
+         *@description reset workflow
+         * @param followupEmployeeInbox
+         * @param $event
+         */
+        self.resetWorkflow = function (followupEmployeeInbox, $event) {
+            dialog.confirmMessage(langService.get('confirm_continue_message'))
+                .then(function () {
+                    sequentialWorkflowService.resetSeqWF(followupEmployeeInbox)
+                        .then(function (result) {
+                            toast.success(langService.get('success_reset_seq_wf'));
+                            self.reloadFollowupEmployeeInboxes(self.grid.page);
+                            dialog.cancel();
+                        })
+                })
         };
 
         /**
@@ -1182,6 +1200,25 @@ module.exports = function (app) {
                 showInViewOnly: true,
                 checkShow: function (action, model) {
                     return true;
+                }
+            },
+            // Reset Workflow
+            {
+                type: 'action',
+                icon: 'playlist-remove',
+                text: 'reset_seq_wf',
+                permissionKey: "MULTI_SIGNATURE_RESET",
+                callback: self.resetWorkflow,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    if (model.hasActiveSeqWF()) {
+                        return true;
+                    }
+
+                    var info = model.getInfo();
+                    return !info.isPaper
+                        && info.documentClass !== 'incoming'
+                        && info.docStatus === 23;
                 }
             },
             // View Tracking Sheet

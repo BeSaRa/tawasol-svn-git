@@ -29,7 +29,8 @@ module.exports = function (app) {
                                                workItems,
                                                emailItem,
                                                gridService,
-                                               $timeout) {
+                                               $timeout,
+                                               sequentialWorkflowService) {
         'ngInject';
         var self = this;
         self.controllerName = 'groupInboxCtrl';
@@ -540,6 +541,23 @@ module.exports = function (app) {
         };
 
         /**
+         *@description reset workflow
+         * @param workItem
+         * @param $event
+         */
+        self.resetWorkflow = function (workItem, $event) {
+            dialog.confirmMessage(langService.get('confirm_continue_message'))
+                .then(function () {
+                    sequentialWorkflowService.resetSeqWF(workItem)
+                        .then(function (result) {
+                            toast.success(langService.get('success_reset_seq_wf'));
+                            self.reloadGroupInbox(self.grid.page);
+                            dialog.cancel();
+                        })
+                })
+        };
+
+        /**
          * @description Manage Tasks
          * @param workItem
          * @param $event
@@ -549,7 +567,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-          //  console.log('manageUserInboxTasks : ', workItem);
+            //  console.log('manageUserInboxTasks : ', workItem);
         };
 
         /**
@@ -727,7 +745,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-          //  console.log('sendMainDocumentFax : ', workItem);
+            //  console.log('sendMainDocumentFax : ', workItem);
         };
 
 
@@ -789,7 +807,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-         //   console.log('signDigitalSignature : ', workItem);
+            //   console.log('signDigitalSignature : ', workItem);
         };
 
         /**
@@ -1311,6 +1329,25 @@ module.exports = function (app) {
                     return info.isPaper && info.documentClass === 'outgoing' && (info.docStatus <= 22) && !model.hasActiveSeqWF();
                 }
             },
+            // Reset Workflow
+            {
+                type: 'action',
+                icon: 'playlist-remove',
+                text: 'reset_seq_wf',
+                permissionKey: "MULTI_SIGNATURE_RESET",
+                callback: self.resetWorkflow,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    if (model.hasActiveSeqWF()) {
+                        return true;
+                    }
+
+                    var info = model.getInfo();
+                    return !info.isPaper
+                        && info.documentClass !== 'incoming'
+                        && info.docStatus === 23;
+                }
+            },
             // View Tracking Sheet
             {
                 type: 'action',
@@ -1655,7 +1692,7 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                    if (model.hasActiveSeqWF()){
+                    if (model.hasActiveSeqWF()) {
                         return false;
                     }
                     //addMethod = 0 (Electronic/Digital) - show the button

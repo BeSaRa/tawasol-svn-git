@@ -25,7 +25,8 @@ module.exports = function (app) {
                                            rootEntity,
                                            gridService,
                                            $scope,
-                                           configurationService) {
+                                           configurationService,
+                                           sequentialWorkflowService) {
         'ngInject';
         var self = this;
         self.controllerName = 'folderCtrl';
@@ -492,6 +493,23 @@ module.exports = function (app) {
                 .catch(function (error) {
                     self.reloadFolders(self.grid.page);
                 });
+        };
+
+        /**
+         *@description reset workflow
+         * @param workItem
+         * @param $event
+         */
+        self.resetWorkflow = function (workItem, $event) {
+            dialog.confirmMessage(langService.get('confirm_continue_message'))
+                .then(function () {
+                    sequentialWorkflowService.resetSeqWF(workItem)
+                        .then(function (result) {
+                            toast.success(langService.get('success_reset_seq_wf'));
+                            self.reloadFolders(self.grid.page);
+                            dialog.cancel();
+                        })
+                })
         };
 
         /**
@@ -1334,6 +1352,25 @@ module.exports = function (app) {
                     var info = model.getInfo();
                     return info.isPaper && info.documentClass === 'outgoing' && !model.isBroadcasted() && (info.docStatus <= 22) && !model.isPrivateSecurityLevel()
                         && !model.hasActiveSeqWF();
+                }
+            },
+            // Reset Workflow
+            {
+                type: 'action',
+                icon: 'playlist-remove',
+                text: 'reset_seq_wf',
+                permissionKey: "MULTI_SIGNATURE_RESET",
+                callback: self.resetWorkflow,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    if (model.hasActiveSeqWF()) {
+                        return true;
+                    }
+
+                    var info = model.getInfo();
+                    return !info.isPaper
+                        && info.documentClass !== 'incoming'
+                        && info.docStatus === 23;
                 }
             },
             // View Tracking Sheet

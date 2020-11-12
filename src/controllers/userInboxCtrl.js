@@ -42,7 +42,8 @@ module.exports = function (app) {
                                               emailItem,
                                               gridService,
                                               WorkItem,
-                                              configurationService) {
+                                              configurationService,
+                                              sequentialWorkflowService) {
         'ngInject';
         var self = this;
         self.controllerName = 'userInboxCtrl';
@@ -879,6 +880,23 @@ module.exports = function (app) {
                 .catch(function (error) {
                     self.reloadUserInboxes(self.grid.page);
                 });
+        };
+
+        /**
+         *@description reset workflow
+         * @param userInbox
+         * @param $event
+         */
+        self.resetWorkflow = function (userInbox, $event) {
+            dialog.confirmMessage(langService.get('confirm_continue_message'))
+                .then(function () {
+                    sequentialWorkflowService.resetSeqWF(userInbox)
+                        .then(function (result) {
+                            toast.success(langService.get('success_reset_seq_wf'));
+                            self.reloadUserInboxes(self.grid.page);
+                            dialog.cancel();
+                        })
+                })
         };
 
         /**
@@ -1826,6 +1844,25 @@ module.exports = function (app) {
                         }
                     }
                     return false;
+                }
+            },
+            // Reset Workflow
+            {
+                type: 'action',
+                icon: 'playlist-remove',
+                text: 'reset_seq_wf',
+                permissionKey: "MULTI_SIGNATURE_RESET",
+                callback: self.resetWorkflow,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    if (model.hasActiveSeqWF()) {
+                        return true;
+                    }
+
+                    var info = model.getInfo();
+                    return !info.isPaper
+                        && info.documentClass !== 'incoming'
+                        && info.docStatus === 23;
                 }
             },
             // View Tracking Sheet (with sub menu)
