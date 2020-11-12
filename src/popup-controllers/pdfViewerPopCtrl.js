@@ -1883,7 +1883,7 @@ module.exports = function (app) {
          * @returns {boolean|*}
          */
         self.canResetSeqWF = function () {
-            return !!self.sequentialWF && employeeService.hasPermissionTo('SEQ_WF_RESET')
+            return !!self.sequentialWF && employeeService.hasPermissionTo('MULTI_SIGNATURE_RESET')
                 && self.info.documentClass.toLowerCase() !== 'incoming'
                 && self.correspondence && (typeof self.correspondence.getSeqWFNextStepId !== "undefined") && !!self.correspondence.getSeqWFNextStepId();
         };
