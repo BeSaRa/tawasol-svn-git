@@ -319,23 +319,6 @@ module.exports = function (app) {
         });
 
         /**
-         * @description Resets the original values if notification is enabled/disabled
-         * @param changedProperty
-         * @param resetProperties
-         * @param fields
-         */
-        self.resetNotificationsAppUser = function (changedProperty, resetProperties, fields) {
-            if (self.applicationUser[changedProperty]) {
-                generator.replaceWithOriginalValues(self.applicationUser, self.model, resetProperties);
-                for (var i = 0; i < fields.length; i++) {
-                    fields[i].$setUntouched();
-                }
-            } else {
-                generator.replaceWithOriginalValues(self.applicationUser, self.model, resetProperties, true);
-            }
-        };
-
-        /**
          * @description Get the list of Parent Organizations with registry and select default ou with registry.
          */
         self.getParentOrganizationsWithRegistry = function () {
@@ -412,42 +395,6 @@ module.exports = function (app) {
         if (!self.globalSetting.isSlowConnectionMode()) {
             self.disabledFields.push('slowConnectionMode');
         }
-
-        /**
-         * @description Changes the sms notifications to null/empty/0 when notifications are set to false or revert them when set to true
-         * @param applicationUserForm
-         * @param $event
-         */
-        self.changeSMSNotifications = function (applicationUserForm, $event) {
-            if (!self.applicationUser.subscriptionsmsNotify) {
-                self.applicationUser.newsmsEmailNotify = false;
-                self.applicationUser.deadlinesmsNotify = false;
-                self.applicationUser.reminderSmsnotify = false;
-            } else {
-                generator.replaceWithOriginalValues(self.applicationUser, self.model, ['newsmsEmailNotify', 'deadlinesmsNotify', 'reminderSmsnotify']);
-            }
-            self.resetNotificationsAppUser('newsmsEmailNotify', 'newItemSmspriority', [applicationUserForm.newItemSmspriority]);
-            self.resetNotificationsAppUser('deadlinesmsNotify', 'deadlineSmspriority', [applicationUserForm.deadlineSmspriority]);
-            self.resetNotificationsAppUser('reminderSmsnotify', ['reminderSmsPriority', 'reminderSmsdays'], [applicationUserForm.reminderSmsPriority, applicationUserForm.reminderSmsdays]);
-        };
-
-        /**
-         * @description Changes the email notifications to null/empty/0 when notifications are set to false or revert them when set to true
-         * @param applicationUserForm
-         * @param $event
-         */
-        self.changeEmailNotifications = function (applicationUserForm, $event) {
-            if (!self.applicationUser.subscriptionEmailNotify) {
-                self.applicationUser.newItemEmailNotify = false;
-                self.applicationUser.deadlineEmailNotify = false;
-                self.applicationUser.reminderEmailNotify = false;
-            } else {
-                generator.replaceWithOriginalValues(self.applicationUser, self.model, ['newItemEmailNotify', 'deadlineEmailNotify', 'reminderEmailNotify']);
-            }
-            self.resetNotificationsAppUser('newItemEmailNotify', 'newItemEmailPriority', [applicationUserForm.newItemEmailPriority]);
-            self.resetNotificationsAppUser('deadlineEmailNotify', 'deadlineEmailPriority', [applicationUserForm.deadlineEmailPriority]);
-            self.resetNotificationsAppUser('reminderEmailNotify', ['reminderEmailPriority', 'reminderEmailDays'], [applicationUserForm.reminderEmailPriority, applicationUserForm.reminderEmailDays]);
-        };
 
         /**
          * @description Checks if the ldap user exists
@@ -1187,6 +1134,82 @@ module.exports = function (app) {
                             self.themes.unshift(result);
                         })
                 });
+        };
+
+        self.notificationTypes = {
+            sms: {
+                newSMS: {key: 'newsmsEmailNotify', dependentProperties: ['newItemSmspriority']},
+                deadlineSMS: {key: 'deadlinesmsNotify', dependentProperties: ['deadlineSmspriority']},
+                reminderSMS: {
+                    key: 'reminderSmsnotify',
+                    dependentProperties: ['reminderSmsPriority', 'reminderSmsdays'],
+                    skipDefault: ['reminderSmsdays']
+                }
+            },
+            email: {
+                newEmail: {key: 'newItemEmailNotify', dependentProperties: ['newItemEmailPriority']},
+                deadlineEmail: {key: 'deadlineEmailNotify', dependentProperties: ['deadlineEmailPriority']},
+                reminderEmail: {
+                    key: 'reminderEmailNotify',
+                    dependentProperties: ['reminderEmailPriority', 'reminderEmailDays'],
+                    skipDefault: ['reminderEmailDays']
+                }
+            }
+        };
+
+        /**
+         * @description Toggles all sms notifications
+         * @param form
+         * @param $event
+         */
+        self.toggleAllSMSNotifications = function (form, $event) {
+            var isActive = !!self.applicationUser.subscriptionsmsNotify;
+
+            self.applicationUser[self.notificationTypes.sms.newSMS.key] = isActive;
+            self.applicationUser[self.notificationTypes.sms.deadlineSMS.key] = isActive;
+            self.applicationUser[self.notificationTypes.sms.reminderSMS.key] = isActive;
+
+            self.resetNotifications(form, self.notificationTypes.sms.newSMS, (isActive ? self.priorityLevels : null));
+            self.resetNotifications(form, self.notificationTypes.sms.deadlineSMS, (isActive ? self.priorityLevels : null));
+            self.resetNotifications(form, self.notificationTypes.sms.reminderSMS, (isActive ? self.priorityLevels : null));
+        };
+
+        /**
+         * @description Toggles all email notifications
+         * @param form
+         * @param $event
+         */
+        self.toggleAllEmailNotifications = function (form, $event) {
+            var isActive = !!self.applicationUser.subscriptionEmailNotify;
+
+            self.applicationUser[self.notificationTypes.email.newEmail.key] = isActive;
+            self.applicationUser[self.notificationTypes.email.deadlineEmail.key] = isActive;
+            self.applicationUser[self.notificationTypes.email.reminderEmail.key] = isActive;
+
+            self.resetNotifications(form, self.notificationTypes.email.newEmail, (isActive ? self.priorityLevels : null));
+            self.resetNotifications(form, self.notificationTypes.email.deadlineEmail, (isActive ? self.priorityLevels : null));
+            self.resetNotifications(form, self.notificationTypes.email.reminderEmail, (isActive ? self.priorityLevels : null));
+        };
+
+        /**
+         * @description Resets the values if notification is enabled/disabled
+         * @param form
+         * @param changedProperty
+         * @param defaultValue
+         */
+        self.resetNotifications = function (form, changedProperty, defaultValue) {
+            generator.replaceWithOriginalValues(self.applicationUser, self.model, changedProperty.dependentProperties, true);
+
+            if (self.applicationUser[changedProperty.key]) {
+                for (var i = 0; i < changedProperty.dependentProperties.length; i++) {
+                    if (defaultValue) {
+                        if (!changedProperty.skipDefault || changedProperty.skipDefault.indexOf(changedProperty.dependentProperties[i]) === -1) {
+                            self.applicationUser[changedProperty.dependentProperties[i]] = defaultValue;
+                        }
+                    }
+                    form[changedProperty.dependentProperties[i]].$setUntouched();
+                }
+            }
         };
 
         //

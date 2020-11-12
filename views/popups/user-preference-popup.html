@@ -291,23 +291,6 @@
                                         </div>
                                     </md-input-container>
                                 </div>
-                                <!--<div layout="row" flex>
-                                    &lt;!&ndash; Subscription SMS &ndash;&gt;
-                                    <md-switch id="subscriptionsmsNotify" name="subscriptionsmsNotify"
-                                               flex ng-model="ctrl.applicationUser.subscriptionsmsNotify"
-                                               ng-change="ctrl.changeSMSNotifications(userPreferencesForm, $event)"
-                                               aria-label="{{lang.subscription_sms}}">
-                                        <label>{{lang.subscription_sms}} :
-                                            {{ctrl.applicationUser.getTranslatedYesNo('subscriptionsmsNotify')}}</label>
-                                    </md-switch>
-                                    &lt;!&ndash; Subscription Email &ndash;&gt;
-                                    <md-switch flex ng-model="ctrl.applicationUser.subscriptionEmailNotify"
-                                               ng-change="ctrl.changeEmailNotifications($event)"
-                                               aria-label="{{lang.subscription_email}}">
-                                        <label>{{lang.subscription_email}} :
-                                            {{ctrl.applicationUser.getTranslatedYesNo('subscriptionEmailNotify')}}</label>
-                                    </md-switch>
-                                </div>-->
                                 <div layout="row">
                                     <!-- Default Viewer Language -->
                                     <md-input-container flex>
@@ -410,25 +393,24 @@
                                 <!-- SMS Notifications -->
                                 <fieldset>
                                     <legend class="md-accent">
-                                        {{lang.sms_settings}}
+                                        <md-switch id="subscriptionsmsNotify" name="subscriptionsmsNotify"
+                                                   ng-disabled="!ctrl.globalSetting.enableSMSNotification"
+                                                   flex ng-model="ctrl.applicationUser.subscriptionsmsNotify"
+                                                   ng-change="ctrl.toggleAllSMSNotifications(userPreferencesForm, $event)"
+                                                   aria-label="{{lang.subscription_sms}}">
+                                            <label>{{lang.subscription_sms}} :
+                                                {{ctrl.applicationUser.getTranslatedYesNo('subscriptionsmsNotify')}}</label>
+                                        </md-switch>
                                     </legend>
                                     <div class="full-width-fieldset">
                                         <span class="red-text" ng-if="!ctrl.globalSetting.enableSMSNotification">{{lang.setting_disabled_by_admin}}</span>
-                                        <div layout="row">
-                                            <!-- Subscription SMS Switch -->
-                                            <md-switch id="subscriptionsmsNotify" name="subscriptionsmsNotify"
-                                                       ng-disabled="!ctrl.globalSetting.enableSMSNotification"
-                                                       flex ng-model="ctrl.applicationUser.subscriptionsmsNotify"
-                                                       aria-label="{{lang.subscription_sms}}">
-                                                <label>{{lang.subscription_sms}} :
-                                                    {{ctrl.applicationUser.getTranslatedYesNo('subscriptionsmsNotify')}}</label>
-                                            </md-switch>
-                                        </div>
+                                        <!-- New Item SMS and Priority -->
                                         <div layout="row">
                                             <!-- New Item SMS -->
-                                            <md-switch flex ng-model="ctrl.applicationUser.newsmsEmailNotify"
-                                                       ng-disabled="!ctrl.globalSetting.enableSMSNotification"
-                                                       ng-change="ctrl.resetNotificationsUserPreferences('newsmsEmailNotify','newItemSmspriority',[userPreferencesForm.newItemSmspriority])"
+                                            <md-switch id="newsmsEmailNotify" name="newsmsEmailNotify"
+                                                       flex ng-model="ctrl.applicationUser.newsmsEmailNotify"
+                                                       ng-disabled="!ctrl.globalSetting.enableSMSNotification || !ctrl.applicationUser.subscriptionsmsNotify"
+                                                       ng-change="ctrl.resetNotifications(userPreferencesForm, ctrl.notificationTypes.sms.newSMS)"
                                                        aria-label="{{lang.new_item_sms}}">
                                                 <label>{{lang.new_item_sms}} :
                                                     {{ctrl.applicationUser.getTranslatedYesNo('newsmsEmailNotify')}}</label>
@@ -437,12 +419,13 @@
                                             <md-input-container flex>
                                                 <label for="newItemSmspriority">{{lang.new_item_sms_priority}}</label>
                                                 <md-select multiple ng-required="ctrl.applicationUser.newsmsEmailNotify"
-                                                           ng-disabled="!ctrl.globalSetting.enableSMSNotification || !ctrl.applicationUser.newsmsEmailNotify"
+                                                           ng-disabled="!ctrl.globalSetting.enableSMSNotification || !ctrl.applicationUser.subscriptionsmsNotify || !ctrl.applicationUser.newsmsEmailNotify"
                                                            ng-readonly="!ctrl.applicationUser.newsmsEmailNotify"
                                                            name="newItemSmspriority" id="newItemSmspriority"
+                                                           ng-model-options="{trackBy: '$value.lookupKey'}"
                                                            ng-model="ctrl.applicationUser.newItemSmspriority">
                                                     <md-option ng-value="priorityLevel"
-                                                               ng-repeat="priorityLevel in ctrl.priorityLevels track by $index">
+                                                               ng-repeat="priorityLevel in ctrl.priorityLevels">
                                                         {{priorityLevel.getTranslatedName()}}
                                                     </md-option>
                                                 </md-select>
@@ -457,9 +440,10 @@
                                         <!-- Deadline SMS and Priority -->
                                         <div layout="row">
                                             <!-- Deadline SMS -->
-                                            <md-switch flex ng-model="ctrl.applicationUser.deadlinesmsNotify"
-                                                       ng-disabled="!ctrl.globalSetting.enableSMSNotification"
-                                                       ng-change="ctrl.resetNotificationsUserPreferences('deadlinesmsNotify','deadlineSmspriority', [userPreferencesForm.deadlineSmspriority])"
+                                            <md-switch id="deadlinesmsNotify" name="deadlinesmsNotify"
+                                                       flex ng-model="ctrl.applicationUser.deadlinesmsNotify"
+                                                       ng-disabled="!ctrl.globalSetting.enableSMSNotification || !ctrl.applicationUser.subscriptionsmsNotify"
+                                                       ng-change="ctrl.resetNotifications(userPreferencesForm, ctrl.notificationTypes.sms.deadlineSMS)"
                                                        aria-label="{{lang.deadline_sms}}">
                                                 <label>{{lang.deadline_sms}} :
                                                     {{ctrl.applicationUser.getTranslatedYesNo('deadlinesmsNotify')}}</label>
@@ -468,12 +452,13 @@
                                             <md-input-container flex>
                                                 <label for="deadlineSmspriority">{{lang.deadline_sms_priority}}</label>
                                                 <md-select multiple ng-required="ctrl.applicationUser.deadlinesmsNotify"
-                                                           ng-disabled="!ctrl.globalSetting.enableSMSNotification || !ctrl.applicationUser.deadlinesmsNotify"
+                                                           ng-disabled="!ctrl.globalSetting.enableSMSNotification || !ctrl.applicationUser.subscriptionsmsNotify || !ctrl.applicationUser.deadlinesmsNotify"
                                                            ng-readonly="!ctrl.applicationUser.deadlinesmsNotify"
                                                            name="deadlineSmspriority" id="deadlineSmspriority"
+                                                           ng-model-options="{trackBy: '$value.lookupKey'}"
                                                            ng-model="ctrl.applicationUser.deadlineSmspriority">
                                                     <md-option ng-value="priorityLevel"
-                                                               ng-repeat="priorityLevel in ctrl.priorityLevels track by $index">
+                                                               ng-repeat="priorityLevel in ctrl.priorityLevels">
                                                         {{priorityLevel.getTranslatedName()}}
                                                     </md-option>
                                                 </md-select>
@@ -488,9 +473,10 @@
                                         <!-- Reminder SMS, Priority and Days -->
                                         <div layout="row">
                                             <!-- Reminder SMS -->
-                                            <md-switch flex ng-model="ctrl.applicationUser.reminderSmsnotify"
-                                                       ng-disabled="!ctrl.globalSetting.enableSMSNotification"
-                                                       ng-change="ctrl.resetNotificationsUserPreferences('reminderSmsnotify',['reminderSmsPriority', 'reminderSmsdays'], [userPreferencesForm.reminderSmsPriority, userPreferencesForm.reminderSmsdays])"
+                                            <md-switch id="reminderSmsnotify" name="reminderSmsnotify"
+                                                       flex ng-model="ctrl.applicationUser.reminderSmsnotify"
+                                                       ng-disabled="!ctrl.globalSetting.enableSMSNotification || !ctrl.applicationUser.subscriptionsmsNotify"
+                                                       ng-change="ctrl.resetNotifications(userPreferencesForm, ctrl.notificationTypes.sms.reminderSMS)"
                                                        aria-label="{{lang.reminder_sms}}">
                                                 <label>{{lang.reminder_sms}} :
                                                     {{ctrl.applicationUser.getTranslatedYesNo('reminderSmsnotify')}}</label>
@@ -502,13 +488,13 @@
                                                     <label for="reminderSmsPriority">{{lang.reminder_sms_priority}}</label>
                                                     <md-select multiple
                                                                ng-required="ctrl.applicationUser.reminderSmsnotify"
-                                                               ng-disabled="!ctrl.globalSetting.enableSMSNotification || !ctrl.applicationUser.reminderSmsnotify"
+                                                               ng-disabled="!ctrl.globalSetting.enableSMSNotification || !ctrl.applicationUser.subscriptionsmsNotify || !ctrl.applicationUser.reminderSmsnotify"
                                                                ng-readonly="!ctrl.applicationUser.reminderSmsnotify"
                                                                name="reminderSmsPriority" id="reminderSmsPriority"
+                                                               ng-model-options="{trackBy: '$value.lookupKey'}"
                                                                ng-model="ctrl.applicationUser.reminderSmsPriority">
-                                                        <!--multiple ng-model-options="{trackBy: '$value.id'}"-->
                                                         <md-option ng-value="priorityLevel"
-                                                                   ng-repeat="priorityLevel in ctrl.priorityLevels track by $index">
+                                                                   ng-repeat="priorityLevel in ctrl.priorityLevels">
                                                             {{priorityLevel.getTranslatedName()}}
                                                         </md-option>
                                                     </md-select>
@@ -524,7 +510,7 @@
                                                 <md-input-container flex>
                                                     <label for="reminderSmsdays">{{lang.reminder_sms_days}}</label>
                                                     <input ng-required="ctrl.applicationUser.reminderSmsnotify"
-                                                           ng-disabled="!ctrl.globalSetting.enableSMSNotification || !ctrl.applicationUser.reminderSmsnotify"
+                                                           ng-disabled="!ctrl.globalSetting.enableSMSNotification || !ctrl.applicationUser.subscriptionsmsNotify || !ctrl.applicationUser.reminderSmsnotify"
                                                            ng-readonly="!ctrl.applicationUser.reminderSmsnotify"
                                                            name="reminderSmsdays" id="reminderSmsdays"
                                                            ng-model="ctrl.applicationUser.reminderSmsdays" maxlength="5"
@@ -544,23 +530,24 @@
                                 <!-- Email Notifications -->
                                 <fieldset>
                                     <legend class="md-accent">
-                                        {{lang.email_settings}}
+                                        <md-switch id="subscriptionEmailNotify" name="subscriptionEmailNotify"
+                                                   flex ng-model="ctrl.applicationUser.subscriptionEmailNotify"
+                                                   ng-disabled="!ctrl.globalSetting.enableEmailNotification"
+                                                   ng-change="ctrl.toggleAllEmailNotifications(userPreferencesForm, $event)"
+                                                   aria-label="{{lang.subscription_email}}">
+                                            <label>{{lang.subscription_email}} :
+                                                {{ctrl.applicationUser.getTranslatedYesNo('subscriptionEmailNotify')}}</label>
+                                        </md-switch>
                                     </legend>
                                     <div class="full-width-fieldset">
                                         <span class="red-text" ng-if="!ctrl.globalSetting.enableEmailNotification">{{lang.setting_disabled_by_admin}}</span>
-                                        <div layout="row">
-                                            <md-switch flex ng-model="ctrl.applicationUser.subscriptionEmailNotify"
-                                                       ng-disabled="!ctrl.globalSetting.enableEmailNotification"
-                                                       aria-label="{{lang.subscription_email}}">
-                                                <label>{{lang.subscription_email}}</label>
-                                            </md-switch>
-                                        </div>
                                         <!-- New Item Email and Priority -->
                                         <div layout="row">
                                             <!-- New Item Email -->
-                                            <md-switch flex ng-model="ctrl.applicationUser.newItemEmailNotify"
-                                                       ng-disabled="!ctrl.globalSetting.enableEmailNotification"
-                                                       ng-change="ctrl.resetNotificationsUserPreferences('newItemEmailNotify','newItemEmailPriority', [userPreferencesForm.newItemEmailPriority])"
+                                            <md-switch id="newItemEmailNotify" name="newItemEmailNotify"
+                                                       flex ng-model="ctrl.applicationUser.newItemEmailNotify"
+                                                       ng-disabled="!ctrl.globalSetting.enableEmailNotification || !ctrl.applicationUser.subscriptionEmailNotify"
+                                                       ng-change="ctrl.resetNotifications(userPreferencesForm, ctrl.notificationTypes.email.newEmail)"
                                                        aria-label="{{lang.new_item_email}}">
                                                 <label>{{lang.new_item_email}} :
                                                     {{ctrl.applicationUser.getTranslatedYesNo('newItemEmailNotify')}}</label>
@@ -570,13 +557,13 @@
                                                 <label for="newItemEmailPriority">{{lang.new_item_email_priority}}</label>
                                                 <md-select multiple
                                                            ng-required="ctrl.applicationUser.newItemEmailNotify"
-                                                           ng-disabled="!ctrl.globalSetting.enableEmailNotification || !ctrl.applicationUser.newItemEmailNotify"
+                                                           ng-disabled="!ctrl.globalSetting.enableEmailNotification || !ctrl.applicationUser.subscriptionEmailNotify || !ctrl.applicationUser.newItemEmailNotify"
                                                            ng-readonly="!ctrl.applicationUser.newItemEmailNotify"
                                                            name="newItemEmailPriority" id="newItemEmailPriority"
+                                                           ng-model-options="{trackBy: '$value.lookupKey'}"
                                                            ng-model="ctrl.applicationUser.newItemEmailPriority">
-                                                    <!--multiple ng-model-options="{trackBy: '$value.id'}"-->
                                                     <md-option ng-value="priorityLevel"
-                                                               ng-repeat="priorityLevel in ctrl.priorityLevels track by $index">
+                                                               ng-repeat="priorityLevel in ctrl.priorityLevels">
                                                         {{priorityLevel.getTranslatedName()}}
                                                     </md-option>
                                                 </md-select>
@@ -591,9 +578,10 @@
                                         <!-- Deadline Email and Priority -->
                                         <div layout="row">
                                             <!-- Deadline Email -->
-                                            <md-switch flex ng-model="ctrl.applicationUser.deadlineEmailNotify"
-                                                       ng-disabled="!ctrl.globalSetting.enableEmailNotification"
-                                                       ng-change="ctrl.resetNotificationsUserPreferences('deadlineEmailNotify','deadlineEmailPriority', [userPreferencesForm.deadlineEmailPriority])"
+                                            <md-switch id="deadlineEmailNotify" name="deadlineEmailNotify"
+                                                       flex ng-model="ctrl.applicationUser.deadlineEmailNotify"
+                                                       ng-disabled="!ctrl.globalSetting.enableEmailNotification || !ctrl.applicationUser.subscriptionEmailNotify"
+                                                       ng-change="ctrl.resetNotifications(userPreferencesForm, ctrl.notificationTypes.email.deadlineEmail)"
                                                        aria-label="{{lang.deadline_email}}">
                                                 <label>{{lang.deadline_email}} :
                                                     {{ctrl.applicationUser.getTranslatedYesNo('deadlineEmailNotify')}}</label>
@@ -603,12 +591,13 @@
                                                 <label for="deadlineEmailPriority">{{lang.deadline_email_priority}}</label>
                                                 <md-select multiple
                                                            ng-required="ctrl.applicationUser.deadlineEmailNotify"
-                                                           ng-disabled="!ctrl.globalSetting.enableEmailNotification || !ctrl.applicationUser.deadlineEmailNotify"
+                                                           ng-disabled="!ctrl.globalSetting.enableEmailNotification || !ctrl.applicationUser.subscriptionEmailNotify || !ctrl.applicationUser.deadlineEmailNotify"
                                                            ng-readonly="!ctrl.applicationUser.deadlineEmailNotify"
                                                            name="deadlineEmailPriority" id="deadlineEmailPriority"
+                                                           ng-model-options="{trackBy: '$value.lookupKey'}"
                                                            ng-model="ctrl.applicationUser.deadlineEmailPriority">
                                                     <md-option ng-value="priorityLevel"
-                                                               ng-repeat="priorityLevel in ctrl.priorityLevels track by $index">
+                                                               ng-repeat="priorityLevel in ctrl.priorityLevels">
                                                         {{priorityLevel.getTranslatedName()}}
                                                     </md-option>
                                                 </md-select>
@@ -623,9 +612,10 @@
                                         <!-- Reminder Email, Priority and Days -->
                                         <div layout="row">
                                             <!-- Reminder Email -->
-                                            <md-switch flex ng-model="ctrl.applicationUser.reminderEmailNotify"
-                                                       ng-disabled="!ctrl.globalSetting.enableEmailNotification"
-                                                       ng-change="ctrl.resetNotificationsUserPreferences('reminderEmailNotify',['reminderEmailPriority', 'reminderEmailDays'], [userPreferencesForm.reminderEmailPriority, userPreferencesForm.reminderEmailDays])"
+                                            <md-switch id="reminderEmailNotify" name="reminderEmailNotify"
+                                                       flex ng-model="ctrl.applicationUser.reminderEmailNotify"
+                                                       ng-disabled="!ctrl.globalSetting.enableEmailNotification || !ctrl.applicationUser.subscriptionEmailNotify"
+                                                       ng-change="ctrl.resetNotifications(userPreferencesForm, ctrl.notificationTypes.email.reminderEmail)"
                                                        aria-label="{{lang.reminder_email}}">
                                                 <label>{{lang.reminder_email}} :
                                                     {{ctrl.applicationUser.getTranslatedYesNo('reminderEmailNotify')}}</label>
@@ -637,12 +627,13 @@
                                                     <label for="reminderEmailPriority">{{lang.reminder_email_priority}}</label>
                                                     <md-select multiple
                                                                ng-required="ctrl.applicationUser.reminderEmailNotify"
-                                                               ng-disabled="!ctrl.globalSetting.enableEmailNotification || !ctrl.applicationUser.reminderEmailNotify"
+                                                               ng-disabled="!ctrl.globalSetting.enableEmailNotification || !ctrl.applicationUser.subscriptionEmailNotify || !ctrl.applicationUser.reminderEmailNotify"
                                                                ng-readonly="!ctrl.applicationUser.reminderEmailNotify"
                                                                name="reminderEmailPriority" id="reminderEmailPriority"
+                                                               ng-model-options="{trackBy: '$value.lookupKey'}"
                                                                ng-model="ctrl.applicationUser.reminderEmailPriority">
                                                         <md-option ng-value="priorityLevel"
-                                                                   ng-repeat="priorityLevel in ctrl.priorityLevels track by $index">
+                                                                   ng-repeat="priorityLevel in ctrl.priorityLevels">
                                                             {{priorityLevel.getTranslatedName()}}
                                                         </md-option>
                                                     </md-select>
@@ -658,7 +649,7 @@
                                                 <md-input-container flex>
                                                     <label for="reminderEmailDays">{{lang.reminder_email_days}}</label>
                                                     <input ng-required="ctrl.applicationUser.reminderEmailNotify"
-                                                           ng-disabled="!ctrl.globalSetting.enableEmailNotification || !ctrl.applicationUser.reminderEmailNotify"
+                                                           ng-disabled="!ctrl.globalSetting.enableEmailNotification || !ctrl.applicationUser.subscriptionEmailNotify || !ctrl.applicationUser.reminderEmailNotify"
                                                            ng-readonly="!ctrl.applicationUser.reminderEmailNotify"
                                                            name="reminderEmailDays" id="reminderEmailDays"
                                                            ng-model="ctrl.applicationUser.reminderEmailDays"
