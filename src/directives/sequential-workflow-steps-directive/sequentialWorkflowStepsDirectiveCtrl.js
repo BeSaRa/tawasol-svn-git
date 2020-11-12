@@ -131,7 +131,7 @@ module.exports = function (app) {
 
 
             var titleText = '{{item.getTranslatedName()}}';
-            if (self.usageType === 'view-steps' && stepAction.getTranslatedUserAndOuName()) {
+            if (stepAction.getTranslatedUserAndOuName()) {
                 titleText += ' ({{item.getTranslatedUserAndOuName() }})'
             }
             var title = angular.element('<span class="no-style" />', {'md-truncate': ''}).html(titleText);
