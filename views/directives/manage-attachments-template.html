@@ -142,6 +142,16 @@
                 </md-switch>
             </div>
         </div>
+        <div ng-if="ctrl.attachment" layout="row">
+            <!-- Is Official Document -->
+            <div flex class="cms-input-container">
+                <md-switch flex ng-model="ctrl.attachment.isOfficial"
+                           aria-label="{{lang.official_document}}">
+                    <label>{{lang.official_document}} :
+                        {{ctrl.attachment.getTranslatedYesNo('isOfficial')}}</label>
+                </md-switch>
+            </div>
+        </div>
         <div ng-if="ctrl.attachment">
             <md-button ng-if="!ctrl.attachment.vsId"
                        ng-disabled="attachment_form.$invalid" ng-click="ctrl.addFileToAttachments()"
@@ -172,6 +182,8 @@
                    md-progress="ctrl.progress">
                 <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                 <tr md-row ng-class="{'text-transparent': ctrl.selectedAttachments.length}">
+                    <th md-column md-order-by="isOfficial">
+                    </th>
                     <th md-column md-order-by="docSubject">
                         <span class="color-default" ng-if="ctrl.selectedAttachments.length">{{ctrl.selectedAttachments.length}} {{lang.items_selected}} </span>
                         <span ng-if="!ctrl.selectedAttachments.length">{{lang.attachment_document_title}}</span>
@@ -216,12 +228,17 @@
                                                   indicator-type="isLinkedExportedDoc"
                                                   record-type="Attachment"></grid-indicator-directive>
                     </td>-->
+                    <td md-cell class="indicator-td">
+                        <grid-indicator-directive record="attachment"
+                                                  indicator-type="isOfficial"
+                                                  record-type="Attachment"
+                                                  ng-if="attachment.isOfficial"></grid-indicator-directive>
+                    </td>
                     <td md-cell class="subject">
                         <!-- Linked Exported Doc (attachment with refVSID) Indicator-->
                         <grid-indicator-directive record="attachment"
                                                   indicator-type="isLinkedExportedDoc"
                                                   record-type="Attachment"></grid-indicator-directive>
-                        {{attachment.getTranslatedName()}}
                     </td>
                     <td md-cell>{{attachment.attachmentType.getTranslatedName()}}</td>
                     <td md-cell>{{attachment.getSecurityLevels()}}</td>

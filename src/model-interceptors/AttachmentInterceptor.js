@@ -30,6 +30,7 @@ module.exports = function (app) {
             delete model.progress;
             delete model.isLinkedExportedDocIndicator;
             delete model.isLinkedExportedDocAttachment;
+            delete model.isOfficialIndicator;
             delete model.createReplyDisableDelete;
 
             formData.append('entity', JSON.stringify(model));
@@ -66,6 +67,7 @@ module.exports = function (app) {
                 model.priorityLevel = lookupService.getLookupByLookupKey(lookupService.attachmentPriority, 1);
             }
 
+            model.isOfficialIndicator = model.getIsOfficialIndicator();
             model.isDeletable = !!model.isDeletable;
             model.attachmentTypeInfo = new Information(model.attachmentTypeInfo);
             model.exportStatus = model.exportStatus || false;

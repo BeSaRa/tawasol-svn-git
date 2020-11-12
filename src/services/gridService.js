@@ -958,7 +958,8 @@ module.exports = function (app) {
                 conditionalApprove: 'clock-start',
                 comments: 'comment-account-outline',
                 date: 'calendar-today',
-                sequentialWF: 'view-sequential'
+                sequentialWF: 'view-sequential',
+                isOfficial: 'clipboard-check'
             }
         };
     });

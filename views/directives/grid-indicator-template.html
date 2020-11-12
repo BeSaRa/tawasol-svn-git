@@ -281,3 +281,12 @@
              tooltip="{{ctrl.langService.get(ctrl.record.hasSequentialWFIndicator.tooltip)}}"
     ></md-icon>
 </span>
+<!-- Is Official Document -->
+<span ng-if="ctrl.indicatorType === 'isOfficial'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.isOfficialIndicator}">
+    <md-icon ng-if="ctrl.record.isOfficialIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.isOfficialIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.isOfficialIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.isOfficialIndicator.tooltip)}}"
+    ></md-icon>
+</span>

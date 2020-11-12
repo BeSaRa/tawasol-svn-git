@@ -617,6 +617,22 @@ module.exports = function (app) {
             };
 
             /**
+             * @description returns is official of attachment
+             * @returns {Indicator}
+             */
+            Indicator.prototype.getIsOfficialIndicator = function () {
+                return new Indicator({
+                    class: 'indicator',
+                    text: 'official_document',
+                    icon: self.getIndicatorIcons('isOfficial'),
+                    tooltip: 'official_document',
+                    legendText: function (indicator) {
+                        return '';
+                    }
+                });
+            };
+
+            /**
              * @description Returns the difference in days and date status(passed/today/coming)
              * @param dateToCheck
              * @param iconType

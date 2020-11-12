@@ -32,6 +32,8 @@ module.exports = function (app) {
             // will removed when send to backend.
             self.file = null;
             self.progress = 0;
+            self.isAnnotation = false;
+            self.isOfficial = false;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -73,6 +75,9 @@ module.exports = function (app) {
             var indicator = new Indicator();
             Attachment.prototype.getIsLinkedExportedDocIndicator = function () {
                 return indicator.getIsLinkedExportedDocIndicator();
+            };
+            Attachment.prototype.getIsOfficialIndicator = function () {
+                return indicator.getIsOfficialIndicator();
             };
 
             Attachment.prototype.getInfo = function () {
