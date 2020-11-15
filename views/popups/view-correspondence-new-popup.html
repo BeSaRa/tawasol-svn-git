@@ -224,7 +224,7 @@
                                 </div>
                             </div>
                         </li>
-
+                        <!-- attachments -->
                         <li class="document-properties linked document-attachments">
                             <ul class="work-item-properties">
                                 <li class="section-title">
@@ -242,7 +242,38 @@
                                 </li>
                                 <li ng-class="{'selected':ctrl.checkSelected($index , 'attachments')}"
                                     layout-align="start center" layout="row"
-                                    ng-repeat="attachment in ctrl.correspondence.attachments track by $index">
+                                    ng-repeat="attachment in ctrl.correspondence.attachments track by $index"
+                                    ng-if="!attachment.isAnnotation">
+                                    <a flex href="#" ng-click="ctrl.showAttachment(attachment , $index , $event)">
+                                        {{attachment.getTranslatedName()}}
+                                    </a>
+
+                                    <grid-indicator-directive record="attachment"
+                                                              indicator-type="isLinkedExportedDoc"
+                                                              record-type="Attachment"></grid-indicator-directive>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- annotated attachments -->
+                        <li class="document-properties linked document-attachments">
+                            <ul class="work-item-properties">
+                                <li class="section-title">
+                                    <div layout="row" layout-align="start center">
+                                        <span class="manage-span" flex>{{lang.get('annotated_attachments')}}</span>
+                                        <md-button class="md-icon-button collapse-button"
+                                                   ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS') && ctrl.showManagePopups()"
+                                                   aria-label="{{lang.grid_action_attachments}}"
+                                                   ng-click="ctrl.manageAttachments($event)"
+                                                   tooltip="{{lang.annotated_attachments}}"
+                                                   tooltip-direction="{{lang.current === 'ar' ? 'left': 'right'}}">
+                                            <md-icon md-svg-icon="settings-box"></md-icon>
+                                        </md-button>
+                                    </div>
+                                </li>
+                                <li ng-class="{'selected':ctrl.checkSelected($index , 'attachments')}"
+                                    layout-align="start center" layout="row"
+                                    ng-repeat="attachment in ctrl.correspondence.attachments track by $index"
+                                    ng-if="attachment.isAnnotation">
                                     <a flex href="#" ng-click="ctrl.showAttachment(attachment , $index , $event)">
                                         {{attachment.getTranslatedName()}}
                                     </a>
@@ -318,7 +349,8 @@
                                                     </md-option>
                                                 </md-select>
                                             </md-input-container>
-                                            <md-input-container flex ng-if="ctrl.manageLaunchWorkflowService.launchData.selectedDistWFItem">
+                                            <md-input-container flex
+                                                                ng-if="ctrl.manageLaunchWorkflowService.launchData.selectedDistWFItem">
                                                 <label for="comments"> {{lang.type_your_comment}}</label>
                                                 <textarea rows="5" id="comments" name="comments" class="cms-comment"
                                                           ng-disabled="!ctrl.manageLaunchWorkflowService.launchData.selectedDistWFItem"
