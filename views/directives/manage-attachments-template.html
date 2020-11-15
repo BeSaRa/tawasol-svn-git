@@ -239,6 +239,7 @@
                         <grid-indicator-directive record="attachment"
                                                   indicator-type="isLinkedExportedDoc"
                                                   record-type="Attachment"></grid-indicator-directive>
+                        {{attachment.getTranslatedName()}}
                     </td>
                     <td md-cell>{{attachment.attachmentType.getTranslatedName()}}</td>
                     <td md-cell>{{attachment.getSecurityLevels()}}</td>
