@@ -12,6 +12,7 @@ module.exports = function (app) {
             self.comments = null;
             self.validateMultiSignature = true;
             self.seqWFId = null;
+            self.isNotifyAllPrevious = null;
             self.terminateAllWFS = false;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -81,6 +82,11 @@ module.exports = function (app) {
 
             SignDocumentModel.prototype.setSeqWFId = function (seqWFId) {
                 this.seqWFId = seqWFId;
+                return this;
+            };
+
+            SignDocumentModel.prototype.setIsNotifyAllPrevious = function (isNotifyAllPrevious) {
+                this.isNotifyAllPrevious = isNotifyAllPrevious;
                 return this;
             };
             // don't remove CMSModelInterceptor from last line

@@ -32,6 +32,16 @@ module.exports = function (app) {
                     sequentialWF: sequentialWF,
                     operations: false,
                     generalStepElementView: generalStepElementView
+                },
+                resolve: {
+                    jobTitle: function (jobTitleService, _, employeeService) {
+                        'ngInject';
+                        return jobTitleService.getJobTitles().then(function (titles) {
+                            return _.find(titles, function (title) {
+                                return title.lookupKey === employeeService.getEmployee().jobTitle;
+                            })
+                        });
+                    }
                 }
             })
         };
@@ -61,7 +71,8 @@ module.exports = function (app) {
                     flatten: flatten,
                     sequentialWF: false,
                     generalStepElementView: false,
-                    operations: operations
+                    operations: operations,
+                    jobTitle: false
                 }
             })
         };

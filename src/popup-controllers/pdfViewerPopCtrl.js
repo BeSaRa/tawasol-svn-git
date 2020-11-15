@@ -37,6 +37,7 @@ module.exports = function (app) {
                                                  operations,
                                                  generalStepElementView,
                                                  downloadService,
+                                                 jobTitle,
                                                  cmsTemplate) {
         'ngInject';
         var self = this;
@@ -95,6 +96,8 @@ module.exports = function (app) {
 
         self.needOpenForApproval = false;
 
+        self.notifyPreviousSteps = false;
+
         self.readyToExportExcludedAnnotationList = [
             "annotate",
             "ink",
@@ -128,6 +131,10 @@ module.exports = function (app) {
             } else {
                 return !!(self.sequentialWF && self.sequentialWF.getLastStepId() === self.nextSeqStep.id) || (self.info && !self.info.isAttachment && !self.info.isPaper && self.info.signaturesCount === 1 && !self.correspondence.getSeqWFId() && hasMySignature);
             }
+        }
+
+        function _isLastStep() {
+            return self.sequentialWF.getLastStepId() === self.nextSeqStep.id;
         }
 
         /**
@@ -405,10 +412,9 @@ module.exports = function (app) {
          * @return {Promise<void>}
          */
         self.addUserNameAndDateToDocument = async function (event, buttonId, annotation) {
-            var date = moment().format('DD-MM-YYYY');
             var pageInfo = self.currentInstance.pageInfoForIndex(self.currentInstance.viewState.currentPageIndex);
             var usernameAnnotation = new PSPDFKit.Annotations.TextAnnotation({
-                text: employeeService.getEmployee().getTranslatedName() + '\r\n' + date.toString(),
+                text: employeeService.getEmployee().getTranslatedName() + '\r\n' + jobTitle.getTranslatedName(),
                 pageIndex: self.currentInstance.viewState.currentPageIndex,
                 boundingBox: new PSPDFKit.Geometry.Rect({
                     left: 10,
@@ -1407,6 +1413,7 @@ module.exports = function (app) {
         self.applyNextStep = function (content, signatureModel, ignoreValidateMultiSignature, terminateAllWFS) {
             signatureModel.setValidateMultiSignature(!ignoreValidateMultiSignature);
             signatureModel.setSeqWFId(self.sequentialWF.id);
+            signatureModel.setIsNotifyAllPrevious(self.notifyPreviousSteps);
             return sequentialWorkflowService
                 .launchSeqWFCorrespondence(self.correspondence, signatureModel, content, self.isLaunchStep, terminateAllWFS)
                 .then(function (result) {
@@ -1815,6 +1822,10 @@ module.exports = function (app) {
          */
         self.$onInit = function () {
             _getNextStepFromSeqWF();
+            if (self.nextSeqStep && (self.nextSeqStep.isAuthorizeAndSendStep() || _isLastStep())) {
+                self.notifyPreviousSteps = true;
+            }
+
             if (!self.sequentialWF && self.info.docStatus >= 24) {
                 self.enableAttachUsernameAndDate = false;
             }
@@ -1857,6 +1868,14 @@ module.exports = function (app) {
         function _isFromBackStep() {
             return (self.generalStepElementView && typeof self.generalStepElementView.isSeqInBackStep !== "undefined") && self.generalStepElementView.isSeqInBackStep();
         }
+
+        /**
+         * @description check if the it is seq and in back step.
+         * @return {*}
+         */
+        self.isSeqBackStep = function () {
+            return self.sequentialWF && _isFromBackStep();
+        };
 
         /**
          * @description Checks if back step button can be shown
