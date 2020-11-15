@@ -43,6 +43,9 @@
 }
 
 .step-item {
+  &.seq-step-item {
+    background-color: #b8a778;
+  }
   &.step-valid {
     background-color: green;
   }
@@ -112,6 +115,14 @@ md-icon.indicator-size {
   .step-item {
     margin-left: 10px;
   }
+}
+
+.row-placeholder {
+  height: 35px;
+  line-height: 1.2em;
+  border: 1px solid #dad55e;
+  background: #fffa90;
+  margin-bottom: 5px;
 }
 
 html.rtl {

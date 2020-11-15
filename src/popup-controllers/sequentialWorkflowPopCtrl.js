@@ -45,7 +45,7 @@ module.exports = function (app) {
                     return true;
                 }
                 generator.validateRequiredSelectFields(form);
-                return form.$valid && _isValidSteps() && _isLastStepValid();
+                return form.$valid && _isValidSteps();
             };
 
             function _hasStepRows() {
@@ -139,9 +139,6 @@ module.exports = function (app) {
                     return;
                 } else if (self.sequentialWorkflow.stepRows.length < minimumStepsCount) {
                     toast.info(langService.get('error_min_steps').change({number: minimumStepsCount}));
-                    return;
-                } else if (!_isLastStepValid()) {
-                    toast.info(langService.get('seq_wf_last_step_note'));
                     return;
                 }
                 self.editMode ? _updateSequentialWorkflow() : _addSequentialWorkflow();

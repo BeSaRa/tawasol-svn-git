@@ -23,6 +23,8 @@ module.exports = function (app) {
             self.itemOrder = null;
             self.sequentialWFId = null;
             self.uiOuId = null;  // selected regOu.
+            this.toOUInfo =  null;
+            this.toUserInfo =  null;
 
             self.userIdAndOuId = null; // combination of user and ouId. To be deleted before sending
 
@@ -78,21 +80,21 @@ module.exports = function (app) {
             };
 
             SequentialWFStep.prototype.getTranslatedUserName = function () {
-                if (!this.toUserInfo){
+                if (!this.toUserInfo) {
                     return '';
                 }
                 return this.toUserInfo[langService.current + 'Name'];
             };
 
             SequentialWFStep.prototype.getTranslatedOuName = function () {
-                if (!this.toOUInfo){
+                if (!this.toOUInfo) {
                     return '';
                 }
                 return this.toOUInfo[langService.current + 'Name'];
             };
 
             SequentialWFStep.prototype.getTranslatedUserAndOuName = function () {
-                if (!this.getTranslatedUserName()){
+                if (!this.getTranslatedUserName()) {
                     return '';
                 }
                 return this.getTranslatedUserName() + ' - ' + this.getTranslatedOuName();
@@ -169,15 +171,15 @@ module.exports = function (app) {
 
             SequentialWFStep.prototype.isPastSeqWFStep = function (correspondenceRecord) {
                 //return this.id < correspondenceRecord.getSeqWFCurrentStepId();
-                return this.id <= correspondenceRecord.getSeqWFCurrentStepId();
+                return this.id && this.id <= correspondenceRecord.getSeqWFCurrentStepId();
             };
             SequentialWFStep.prototype.isCurrentSeqWFStep = function (correspondenceRecord) {
                 //return this.id === correspondenceRecord.getSeqWFCurrentStepId();
-                return this.id === correspondenceRecord.getSeqWFNextStepId();
+                return this.id && this.id === correspondenceRecord.getSeqWFNextStepId();
             };
             SequentialWFStep.prototype.isFutureSeqWFStep = function (correspondenceRecord) {
                 //return this.id >= correspondenceRecord.getSeqWFNextStepId();
-                return this.id > correspondenceRecord.getSeqWFNextStepId();
+                return this.id && this.id > correspondenceRecord.getSeqWFNextStepId();
             };
             SequentialWFStep.prototype.getUserIdAndOuIdCombination = function () {
                 if (this.toUserId && this.toOUID) {

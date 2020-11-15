@@ -79,8 +79,10 @@ module.exports = function (app) {
                 }*/
                 $(element)
                     .sortable({
+                        items: "> div:not(.sort-cancel)",
                         tolerance: "pointer",
                         cancel: '.sort-cancel',
+                        placeholder: "row-placeholder",
                         update: function () {
                             self.updateRows();
                         }

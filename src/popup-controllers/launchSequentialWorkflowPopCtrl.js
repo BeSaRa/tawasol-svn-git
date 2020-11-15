@@ -129,7 +129,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.launchSeqWFWithEdit = function ($event) {
-            if (!self.canAddSeqWF || !self.selectedSeqWF) {
+            if (!self.selectedSeqWF) {
                 return;
             }
 

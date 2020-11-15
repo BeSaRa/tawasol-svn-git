@@ -2,7 +2,8 @@
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            aria-label="{{lang.grid_action_launch_sequential_workflow}}">
     <popup-toolbar-directive
-            header-text="{{lang.grid_action_launch_sequential_workflow}} : {{ctrl.record.getInfo().title}}"></popup-toolbar-directive>
+            header-text="{{lang.grid_action_launch_sequential_workflow}} : {{ctrl.record.getInfo().title}}"
+            full-screen="ctrl.fullScreen" full-screen-button="true"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <div layout="column">

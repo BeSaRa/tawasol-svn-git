@@ -60,21 +60,58 @@ module.exports = function (app) {
             self.compileAll(self.seqWF.stepRows);
         };
 
+        function _canSortRow(stepRow, rowIndex) {
+            if (self.viewOnly) {
+                return false;
+            }
+            if (!stepRow) {
+                return true;
+            }
+            if (self.usageType === 'manage-steps') {
+                return true;
+            } else if (self.usageType === 'launch') {
+                return (rowIndex > 0);
+            } else if (self.usageType === 'view-steps') {
+                return (!stepRow.id || (stepRow.id >= self.correspondence.getSeqWFNextStepId()));
+            }
+        }
+
+        function _canDeleteRow(stepRow, rowIndex) {
+            if (self.viewOnly) {
+                return false;
+            }
+            if (!stepRow) {
+                return true;
+            }
+            if (self.usageType === 'manage-steps') {
+                return true;
+            } else if (self.usageType === 'launch') {
+                return (rowIndex > 0);
+            } else if (self.usageType === 'view-steps') {
+                return (!stepRow.id || (stepRow.id >= self.correspondence.getSeqWFNextStepId()));
+            }
+        }
+
         self.createRow = function (stepRow, idx) {
-            return angular
+            var row = angular
                 .element('<div />', {
                     layout: 'row',
-                    class: 'step-row ' + (self.seqWF.id ? 'sort-cancel' : ''),
+                    class: 'step-row ' + (_canSortRow(stepRow, idx) ? '' : 'sort-cancel'),
                     'seq-step-droppable': 'ctrl.seqWF'
-                })
-                .append(self.seqWF.id ? '' : self.createDeleteButton('row', idx))
-                .data('rowIndex', idx);
+                }).data('rowIndex', idx);
+
+            if (_canDeleteRow(stepRow, idx)) {
+                row.append(self.createDeleteButton('row', idx));
+            }
+            return row;
         };
 
         self.deleteRow = function ($event) {
             var row = angular.element($event.target).parents('.step-row');
+            // _updateStructure();
+            self.seqWF.stepRows.splice(row.data('rowIndex'), 1);
             row.remove();
-            _updateStructure();
+            self.compileAll(self.seqWF.stepRows);
         };
 
         self.createDeleteButton = function (type, idx) {
@@ -90,45 +127,68 @@ module.exports = function (app) {
                 })));
         };
 
+        self.setStepLegend = function () {
+            // if (usageType = 'launch'), show current/future/valid/invalid step
+            // if (usageType = 'manage-steps') means we are using from admin screen, show valid/invalid steps
+            // if (usageType = 'view-steps'), show past/current/future/valid/invalid steps
+            if (self.usageType === 'launch') {
+                self.stepLegendList.push(self.stepLegendClassList.currentStep);
+                self.stepLegendList.push(self.stepLegendClassList.futureStep);
+            } else if (self.usageType === 'manage-steps') {
+                // self.stepLegendList.push(self.stepLegendClassList.validStep);
+                // self.stepLegendList.push(self.stepLegendClassList.inValidStep);
+            } else if (self.usageType === 'view-steps') {
+                self.stepLegendList.push(self.stepLegendClassList.pastStep);
+                self.stepLegendList.push(self.stepLegendClassList.currentStep);
+                self.stepLegendList.push(self.stepLegendClassList.futureStep);
+            }
+        };
+
+        function _setStepClass(element, stepAction, idx) {
+            // if (usageType = 'launch'), first step is current, all other steps are future/valid/invalid
+            // if (usageType = 'manage-steps') means we are using from admin screen, steps are valid/invalid
+            // if (usageType = 'view-steps'), steps are past/current/future/valid/invalid
+            var stepStatusClass = '';
+            if (self.usageType === 'launch') {
+                if (idx === 0) {
+                    stepStatusClass = self.stepLegendClassList.currentStep.class;
+                } else {
+                    stepStatusClass = self.stepLegendClassList.futureStep.class;
+                }
+            } else if (self.usageType === 'manage-steps') {
+                /*if (stepAction.isValidStep(self.seqWF)) {
+                    stepStatusClass = self.stepLegendClassList.validStep.class;
+                } else {
+                    stepStatusClass = self.stepLegendClassList.inValidStep.class;
+                }*/
+            } else if (self.usageType === 'view-steps') {
+                if (stepAction.isCurrentSeqWFStep(self.correspondence)) {
+                    stepStatusClass = self.stepLegendClassList.currentStep.class;
+                } else if (stepAction.isPastSeqWFStep(self.correspondence)) {
+                    stepStatusClass = self.stepLegendClassList.pastStep.class;
+                } else if (stepAction.isFutureSeqWFStep(self.correspondence)) {
+                    stepStatusClass = self.stepLegendClassList.futureStep.class;
+                }
+            }
+            element.addClass(stepStatusClass);
+        }
+
         self.createItem = function (stepAction, idx) {
             stepAction.dummyId = uuidv4();
             stepAction.itemOrder = idx;
             var element = angular
                 .element('<div />', {
-                    class: 'step-item no-style',
+                    class: 'step-item seq-step-item no-style',
                     flex: ''
                 })
-                .append(self.seqWF.id ? '' : self.createDeleteButton('item', idx))
+                .append(_canDeleteRow(stepAction, idx) ? self.createDeleteButton('item', idx) : '')
                 .append()
                 .data('item', stepAction)
                 .data('rowIndex', idx)
                 .attr('ng-dblclick', 'ctrl.editStep(item, $event)');
 
-            // if usageType = 'launch', first step is current, all other steps are future
-            // (no self.correspondence or usageType = 'manage-steps') means we are using from admin screen
-            // otherwise from next actions screen
-            if (self.usageType === 'launch') {
-                element.attr('ng-class', "{" +
-                    "'" + self.stepLegendClassList.currentStep.class + "' : " + (idx === 0) + ", " +
-                    "'" + self.stepLegendClassList.futureStep.class + "' : " + (idx > 0) +
-                    "}");
-            } else if (self.usageType === 'manage-steps') {
-                element.attr('ng-class', "{" +
-                    "'" + self.stepLegendClassList.validStep.class + "' : item.isValidStep(ctrl.seqWF), " +
-                    "'" + self.stepLegendClassList.inValidStep.class + "' : !item.isValidStep(ctrl.seqWF)" +
-                    "}");
-            } else {
-                var stepClass = '';
-                if (stepAction.isCurrentSeqWFStep(self.correspondence)) {
-                    stepClass = self.stepLegendClassList.currentStep.class;
-                } else if (stepAction.isPastSeqWFStep(self.correspondence)) {
-                    stepClass = self.stepLegendClassList.pastStep.class;
-                } else if (stepAction.isFutureSeqWFStep(self.correspondence)) {
-                    stepClass = self.stepLegendClassList.futureStep.class;
-                }
-                element.addClass(stepClass);
-            }
 
+            _setStepClass(element, stepAction, idx);
 
             var titleText = '{{item.getTranslatedName()}}';
             if (stepAction.getTranslatedUserAndOuName()) {
@@ -141,10 +201,21 @@ module.exports = function (app) {
                 'tooltip': "{{item.getStepIconTooltip()}}",
                 'ng-click': "ctrl.editStep(item, $event)"
             });
+            var stepStatusIcon = null;
+
+            if (!stepAction.isValidStep(self.seqWF)) {
+                stepStatusIcon = angular.element('<md-icon />', {
+                    'md-svg-icon': "alert",
+                    'class': 'indicator-size',
+                    'tooltip': langService.get('invalid_step'),
+                    'ng-click': "ctrl.editStep(item, $event)"
+                });
+            }
 
             var titleAndIconContainer = angular.element('<div layout="row"/>');
             titleAndIconContainer.append(title);
             titleAndIconContainer.append(angular.element('<span />', {flex: ''}));
+            titleAndIconContainer.append(stepStatusIcon ? stepStatusIcon : '');
             titleAndIconContainer.append(stepTypeIcon);
 
             element.append();
@@ -203,48 +274,24 @@ module.exports = function (app) {
             }
         };
 
-        self.setStepLegend = function () {
-            // if usageType = 'launch', show current step, future step
-            // (no self.correspondence or usageType = 'manage-steps') means we are using from admin screen, show valid, invalid steps
-            // otherwise from next actions after launch, show past, current, future steps
-            if (self.usageType === 'launch') {
-                self.stepLegendList.push(self.stepLegendClassList.currentStep);
-                self.stepLegendList.push(self.stepLegendClassList.futureStep);
-            } else if (self.usageType === 'manage-steps') {
-                self.stepLegendList.push(self.stepLegendClassList.validStep);
-                self.stepLegendList.push(self.stepLegendClassList.inValidStep);
-            } else {
-                self.stepLegendList.push(self.stepLegendClassList.pastStep);
-                self.stepLegendList.push(self.stepLegendClassList.currentStep);
-                self.stepLegendList.push(self.stepLegendClassList.futureStep);
-            }
-        };
-
-        /*self.setSelectedRow = function (element) {
-            self.selectedRowIndex = angular.element(element).data('rowIndex');
-        };*/
-
         self.editStep = function (seqWFStep, $event) {
             $event.preventDefault();
             var rowIndex = angular.element($event.target).parents('.step-item').data('rowIndex'),
-                viewOnly = self.viewOnly;
+                viewOnly = false;
 
             if (self.usageType === 'view-steps') {
-                viewOnly = seqWFStep.id <= self.correspondence.getSeqWFCurrentStepId();
+                viewOnly = seqWFStep.id && seqWFStep.id <= self.correspondence.getSeqWFCurrentStepId();
+            } else if (self.usageType === 'manage-steps') {
+                viewOnly = false;
+            } else if (self.usageType === 'launch') {
+                viewOnly = true;
             }
 
             sequentialWorkflowService.controllerMethod
                 .sequentialWorkflowStepEdit(self.seqWF, seqWFStep, viewOnly, $event)
                 .then(function (updatedSeqWFStep) {
                     self.seqWF.stepRows.splice(rowIndex, 1, updatedSeqWFStep);
-                    if (self.usageType === 'view-steps') {
-                        _updateSequentialWorkflow()
-                            .then(function (result) {
-                                self.compileAll(self.seqWF.stepRows);
-                            });
-                    } else {
-                        self.compileAll(self.seqWF.stepRows);
-                    }
+                    self.compileAll(self.seqWF.stepRows);
                 })
         };
 

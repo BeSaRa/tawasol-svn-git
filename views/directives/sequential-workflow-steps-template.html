@@ -9,7 +9,7 @@
                 </div>
             </div>
             <div flex layout="row">
-                <div class="block-display" layout="column" ng-if="!ctrl.viewOnly && !ctrl.seqWF.id">
+                <div class="block-display" layout="column" ng-if="!ctrl.viewOnly">
                     <div ng-repeat="item in ctrl.actionsList track by $index"
                          class="step-item" ng-class="{'disabled':item.disabled()}"
                          seq-action-draggable="item" flex>
@@ -18,18 +18,13 @@
                 </div>
                 <div flex class="step-layout-border" layout="column">
                     <div class="step-layout-generator" layout="column">
-                        <md-button class="md-raised add-row-button"
-                                   ng-if="!ctrl.viewOnly && !ctrl.seqWF.id"
+                        <md-button class="md-raised add-row-button" ng-if="!ctrl.viewOnly"
                                    ng-disabled="!ctrl.seqWF.hasAnyDocumentType()"
                                    ng-click="ctrl.insertRowElement()">
                             <md-icon md-svg-icon="plus"></md-icon>
                         </md-button>
                         <div seq-container-sortable layout="column" class="step-layout-rows">
 
-                        </div>
-                        <div class="help-text-div p10"
-                             ng-if="!ctrl.viewOnly && !ctrl.seqWF.id && ctrl.seqWF.hasAnyDocumentType() && !ctrl.seqWF.isIncomingSeqWF()">
-                            {{lang.seq_wf_last_step_note}}
                         </div>
                     </div>
                 </div>

@@ -21,6 +21,14 @@ module.exports = function (app) {
             // assign stepRows to steps to send to service
             model.steps = generator.interceptSendCollection('SequentialWFStep', model.stepRows);
 
+            // set the id of seqWF to step if its new step in existing seqWF
+            if (model.id) {
+                _.map(model.steps, function (item) {
+                    item.sequentialWFId = item.sequentialWFId ? item.sequentialWFId : model.id;
+                    return item;
+                });
+            }
+
             delete model.docClassInfo;
             delete model.stepRows;
             return model;

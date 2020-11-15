@@ -9,13 +9,17 @@
                 <sequential-workflow-steps-directive
                         usage-type="view-steps"
                         seq-w-f="ctrl.sequentialWF"
-                        view-only="true"
                         correspondence="ctrl.correspondence">
                 </sequential-workflow-steps-directive>
             </div>
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary"
+                   ng-disabled="!ctrl.isValidSteps(launchSequentialWFForm)"
+                   ng-click="ctrl.saveSeqWF($event)">
+            {{lang.save}}
+        </md-button>
         <md-button class="md-raised red-text" ng-click="ctrl.closePopup($event)">{{lang.close}}
         </md-button>
     </md-dialog-actions>

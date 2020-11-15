@@ -1359,7 +1359,38 @@ module.exports = function (app) {
                 bindToController: true,
                 controller: function (dialog) {
                     'ngInject';
-                    var ctrl = this;
+                    var ctrl = this,
+                        minimumStepsCount = 2;
+
+                    ctrl.isValidSteps = function () {
+                        if (!_hasStepRows()) {
+                            return false;
+                        }
+                        return _.every(ctrl.sequentialWF.stepRows, function (stepRow) {
+                            if (!stepRow) {
+                                return false;
+                            }
+                            return stepRow.isValidStep(ctrl.sequentialWF);
+                        })
+                    };
+
+                    function _hasStepRows() {
+                        return ctrl.sequentialWF.stepRows && ctrl.sequentialWF.stepRows.length;
+                    }
+
+                    ctrl.saveSeqWF = function () {
+                        if (ctrl.sequentialWF.stepRows.length < minimumStepsCount) {
+                            toast.info(langService.get('error_min_steps').change({number: minimumStepsCount}));
+                            return;
+                        }
+
+                        sequentialWorkflowService.updateSequentialWorkflow(ctrl.sequentialWF)
+                            .then(function (result) {
+                                toast.success(langService.get('edit_success').change({name: result.getNames()}));
+                                dialog.hide('SEQ_WF_UPDATED');
+                            });
+                    };
+
                     ctrl.closePopup = function () {
                         dialog.cancel();
                     }
