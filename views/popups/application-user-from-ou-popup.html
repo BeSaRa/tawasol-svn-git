@@ -452,7 +452,12 @@
                                         <label>{{lang.prompt_for_pincode_in_approve}} :
                                             {{ctrl.applicationUser.getTranslatedYesNo('pinCodePrompt')}}</label>
                                     </md-switch>
-                                    <span flex></span>
+                                    <md-switch flex ng-model="ctrl.applicationUser.isFirstViewForApproval"
+                                               ng-disabled="!ctrl.rootEntity.hasPSPDFViewer()"
+                                               aria-label="{{lang.always_open_for_approval}}">
+                                        <label>{{lang.always_open_for_approval}} :
+                                            {{ctrl.applicationUser.getTranslatedYesNo('isFirstViewForApproval')}}</label>
+                                    </md-switch>
                                 </div>
                             </div>
                         </md-content>
