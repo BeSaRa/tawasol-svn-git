@@ -421,6 +421,13 @@ module.exports = function (app) {
             };
 
             /**
+             * @description Show seqWF status
+             */
+            WorkItem.prototype.showSeqWFStatusSteps = function ($event) {
+                return sequentialWorkflowService.openWFStatusStepsDialog(this.getSeqWFId(), $event);
+            };
+
+            /**
              * @description to start simple launch workflow item.
              * @param $event
              * @param action

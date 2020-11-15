@@ -21,6 +21,7 @@ module.exports = function (app) {
                 },
                 minimumStepsCount = 2;
             self.controllerName = 'sequentialWorkflowPopCtrl';
+            self.stepsUsageType = sequentialWorkflowService.stepsUsageTypes.manageWFSteps;
 
             self.form = null;
             self.editMode = editMode;

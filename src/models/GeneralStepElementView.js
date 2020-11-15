@@ -10,6 +10,7 @@ module.exports = function (app) {
                                                     Incoming,
                                                     Information,
                                                     $sce,
+                                                    sequentialWorkflowService,
                                                     employeeService) {
         'ngInject';
         return function GeneralStepElementView(model) {
@@ -152,6 +153,13 @@ module.exports = function (app) {
 
             GeneralStepElementView.prototype.isSeqInBackStep = function () {
                 return this.generalStepElm.isSeqWFBackward;
+            };
+
+            /**
+             * @description Show seqWF status
+             */
+            GeneralStepElementView.prototype.showSeqWFStatusSteps = function ($event) {
+                return sequentialWorkflowService.openWFStatusStepsDialog(this.getSeqWFId(), $event);
             };
 
             /**

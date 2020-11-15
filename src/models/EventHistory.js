@@ -3,6 +3,7 @@ module.exports = function (app) {
                                           langService,
                                           Indicator,
                                           correspondenceService,
+                                          sequentialWorkflowService,
                                           Information,
                                           managerService,
                                           rootEntity,
@@ -90,6 +91,7 @@ module.exports = function (app) {
             self.docClassName = null;
             self.mainSiteInfo = [];
             self.subSiteInfo = [];
+            self.seqWFId = null;
 
             // need from backend
             self.priorityLevel = null;
@@ -143,12 +145,24 @@ module.exports = function (app) {
                 return this.mainSiteSubSiteString.getTranslatedName();
             };
 
+
+            EventHistory.prototype.getSeqWFId = function () {
+                return this.seqWFId;
+            };
+
             /**
              * @description Checks if correspondence already has any active sequential workflow
              * @returns {boolean}
              */
             EventHistory.prototype.hasActiveSeqWF = function () {
-                return false;
+                return !!this.getSeqWFId();
+            };
+
+            /**
+             * @description Show seqWF status
+             */
+            EventHistory.prototype.showSeqWFStatusSteps = function ($event) {
+                return sequentialWorkflowService.openWFStatusStepsDialog(this.getSeqWFId(), $event);
             };
 
             /**

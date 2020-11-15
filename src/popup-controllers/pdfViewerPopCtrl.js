@@ -1350,11 +1350,12 @@ module.exports = function (app) {
                 },
                 controllerAs: 'ctrl',
                 bindToController: true,
-                controller: function (dialog) {
+                controller: function (dialog, sequentialWorkflowService) {
                     'ngInject';
                     var ctrl = this,
                         minimumStepsCount = 2;
 
+                    ctrl.stepsUsageType = sequentialWorkflowService.stepsUsageTypes.viewWFSteps;
                     ctrl.isValidSteps = function () {
                         if (!_hasStepRows()) {
                             return false;

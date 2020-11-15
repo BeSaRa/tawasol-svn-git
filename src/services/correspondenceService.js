@@ -78,7 +78,8 @@ module.exports = function (app) {
                                                    encryptionService,
                                                    AdminResultRelation,
                                                    TawasolStamp,
-                                                   TawasolDocument) {
+                                                   TawasolDocument,
+                                                   SequentialWFResult) {
         'ngInject';
         var self = this, managerService, correspondenceStorageService;
         self.serviceName = 'correspondenceService';
@@ -104,6 +105,8 @@ module.exports = function (app) {
         util.inherits(TawasolStamp, TawasolDocument);
         // admin result relation
         util.inherits(AdminResultRelation, Information);
+        // SequentialWFResult
+        util.inherits(SequentialWFResult, Information);
 
 
         /**

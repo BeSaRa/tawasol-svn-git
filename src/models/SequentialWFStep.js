@@ -23,8 +23,8 @@ module.exports = function (app) {
             self.itemOrder = null;
             self.sequentialWFId = null;
             self.uiOuId = null;  // selected regOu.
-            this.toOUInfo =  null;
-            this.toUserInfo =  null;
+            this.toOUInfo = null;
+            this.toUserInfo = null;
 
             self.userIdAndOuId = null; // combination of user and ouId. To be deleted before sending
 
@@ -50,6 +50,10 @@ module.exports = function (app) {
              */
             SequentialWFStep.prototype.getRequiredFields = function () {
                 return requiredFields;
+            };
+
+            SequentialWFStep.prototype.getId = function () {
+                return this.id;
             };
 
             /**

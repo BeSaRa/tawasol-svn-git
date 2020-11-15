@@ -14,6 +14,7 @@ module.exports = function (app) {
                                                        AnnotationType,
                                                        downloadService,
                                                        employeeService,
+                                                       SequentialWFResult,
                                                        errorCode) {
         'ngInject';
         var self = this;
@@ -25,6 +26,13 @@ module.exports = function (app) {
             2: 'authorizeAndSend',
             sendDocument: 1,
             authorizeAndSend: 2
+        };
+
+        self.stepsUsageTypes = {
+            launchWF: 'launch',
+            manageWFSteps: 'manage-steps',
+            viewWFSteps: 'view-steps',
+            viewWFStatusSteps: 'view-wf-status-steps'
         };
 
         self.workflowStepActionTypes = {
@@ -581,6 +589,52 @@ module.exports = function (app) {
                 })
                 .catch(function (error) {
                     return errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
+                });
+        };
+
+        /**
+         * @description Loads the step status
+         * @param sequentialWorkflowId
+         * @returns {*}
+         */
+        self.loadSeqWFStatusSteps = function (sequentialWorkflowId) {
+            return $http.get(urlService.sequentialWorkflow + '/wf-status/' + generator.getNormalizedValue(sequentialWorkflowId, 'id'))
+                .then(function (result) {
+                    result.data.rs.first = generator.interceptReceivedInstance('SequentialWF', generator.generateInstance(result.data.rs.first, SequentialWF, self._sharedMethods));
+                    result.data.rs.second = generator.interceptReceivedInstance('SequentialWFResult', generator.generateInstance(result.data.rs.second, SequentialWFResult));
+                    return result.data.rs;
+                });
+        };
+
+        /**
+         * @description Opens the dialog to show steps of sequential workflow status
+         * @param sequentialWorkflowId
+         * @param $event
+         */
+        self.openWFStatusStepsDialog = function (sequentialWorkflowId, $event) {
+            self.loadSeqWFStatusSteps(sequentialWorkflowId)
+                .then(function (result) {
+                    return dialog
+                        .showDialog({
+                            targetEvent: $event || null,
+                            templateUrl: cmsTemplate.getPopup('view-seq-wf-status-steps'),
+                            controllerAs: 'ctrl',
+                            locals: {
+                                viewOnly: true,
+                                sequentialWF: angular.copy(result.first),
+                                sequentialWFResult: angular.copy(result.second)
+                            },
+                            bindToController: true,
+                            controller: function (dialog, sequentialWorkflowService) {
+                                'ngInject';
+                                var self = this;
+                                self.stepsUsageType = sequentialWorkflowService.stepsUsageTypes.viewWFStatusSteps;
+
+                                self.closePopup = function () {
+                                    dialog.cancel();
+                                }
+                            }
+                        });
                 });
         };
 

@@ -1386,6 +1386,15 @@ module.exports = function (app) {
             item.addToUserFollowUp();
         };
 
+        /**
+         * @description Shows the steps of sequential workflow
+         * @param record
+         * @param $event
+         */
+        self.showSeqWFSteps = function (record, $event) {
+            record.showSeqWFStatusSteps($event)
+        };
+
         self.gridActions = [
             // Document Information
             {
@@ -1609,6 +1618,19 @@ module.exports = function (app) {
                 permissionKey: 'LAUNCH_SEQ_WF',
                 checkShow: function (action, model) {
                     return rootEntity.hasPSPDFViewer() && !model.hasActiveSeqWF() && !model.isCorrespondenceApprovedBefore() && !model.isBroadcasted();
+                }
+            },
+            // View Seq WF Steps
+            {
+                type: 'action',
+                icon: 'stairs',
+                text: 'grid_action_view_seq_wf_steps',
+                shortcut: false,
+                showInView: false,
+                callback: self.showSeqWFSteps,
+                class: "action-red",
+                checkShow: function (action, model) {
+                    return model.hasActiveSeqWF();
                 }
             },
             // Subscribe

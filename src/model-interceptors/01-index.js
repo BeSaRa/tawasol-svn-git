@@ -121,6 +121,7 @@ module.exports = function (app) {
     require('./UserFollowupRequestInterceptor')(app);
     require('./TawasolStampInterceptor')(app);
     require('./SequentialWFInterceptor')(app);
+    require('./SequentialWFResultInterceptor')(app);
     require('./SequentialWFStepInterceptor')(app);
     require('./ActionLogViewInterceptor')(app);
     require('./ActionLogInterceptor')(app);

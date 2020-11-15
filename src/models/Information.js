@@ -54,6 +54,9 @@ module.exports = function (app) {
                 return this[language + 'Name'] || '';
             };
 
+            Information.prototype.getId = function (id) {
+                return this.id;
+            };
             Information.prototype.setId = function (id) {
                 this.id = id;
                 return this;

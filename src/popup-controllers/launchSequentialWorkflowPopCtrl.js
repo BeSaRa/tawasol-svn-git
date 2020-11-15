@@ -16,6 +16,7 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'launchSequentialWorkflowPopCtrl';
+        self.stepsUsageType = sequentialWorkflowService.stepsUsageTypes.launchWF;
         self.form = null;
         self.record = record;
         self.sequentialWorkflows = sequentialWorkflows;

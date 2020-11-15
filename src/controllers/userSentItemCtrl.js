@@ -222,7 +222,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.recallBulkSentItems = function ($event) {
-           // console.log('recall bulk sent items : ', self.selectedUserSentItems);
+            // console.log('recall bulk sent items : ', self.selectedUserSentItems);
         };
 
         /**
@@ -345,7 +345,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (userSentItem, $event) {
-           // var info = userSentItem.getInfo();
+            // var info = userSentItem.getInfo();
             userSentItem.manageDocumentComments($event)
                 .then(function (documentComments) {
                     //userSentItem.comments = documentComments;
@@ -448,7 +448,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendSMS = function (userSentItem, $event) {
-          //  console.log('sendSMS : ', userSentItem);
+            //  console.log('sendSMS : ', userSentItem);
         };
 
         /**
@@ -622,6 +622,15 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Shows the steps of sequential workflow
+         * @param record
+         * @param $event
+         */
+        self.showSeqWFSteps = function (record, $event) {
+            record.showSeqWFStatusSteps($event)
+        };
+
+        /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
          */
@@ -777,6 +786,22 @@ module.exports = function (app) {
                 hide: true,
                 checkShow: function (action, model) {
                     return true;
+                }
+            },
+            // View Seq WF Steps
+            {
+                type: 'action',
+                icon: 'stairs',
+                text: 'grid_action_view_seq_wf_steps',
+                shortcut: false,
+                showInView: false,
+                callback: self.showSeqWFSteps,
+                class: "action-red",
+                checkShow: function (action, model) {
+                    if (!(model instanceof EventHistory)) {
+                        model = angular.copy(self.userSentItemCopy);
+                    }
+                    return model.hasActiveSeqWF();
                 }
             },
             // view Correspondence Sites

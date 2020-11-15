@@ -203,6 +203,13 @@ module.exports = function (app) {
             };
 
             /**
+             * @description Show seqWF status
+             */
+            Correspondence.prototype.showSeqWFStatusSteps = function ($event) {
+                return sequentialWorkflowService.openWFStatusStepsDialog(this.getSeqWFId(), $event);
+            };
+
+            /**
              * @description Returns the security level lookup based on value from database
              * @returns {*}
              */

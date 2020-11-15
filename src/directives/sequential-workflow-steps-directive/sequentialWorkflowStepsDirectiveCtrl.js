@@ -67,12 +67,14 @@ module.exports = function (app) {
             if (!stepRow) {
                 return true;
             }
-            if (self.usageType === 'manage-steps') {
+            if (self.usageType === sequentialWorkflowService.stepsUsageTypes.manageWFSteps) {
                 return true;
-            } else if (self.usageType === 'launch') {
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
                 return (rowIndex > 0);
-            } else if (self.usageType === 'view-steps') {
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
                 return (!stepRow.id || (stepRow.id >= self.correspondence.getSeqWFNextStepId()));
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFStatusSteps) {
+                return false;
             }
         }
 
@@ -83,12 +85,14 @@ module.exports = function (app) {
             if (!stepRow) {
                 return true;
             }
-            if (self.usageType === 'manage-steps') {
+            if (self.usageType === sequentialWorkflowService.stepsUsageTypes.manageWFSteps) {
                 return true;
-            } else if (self.usageType === 'launch') {
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
                 return (rowIndex > 0);
-            } else if (self.usageType === 'view-steps') {
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
                 return (!stepRow.id || (stepRow.id >= self.correspondence.getSeqWFNextStepId()));
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFStatusSteps) {
+                return false;
             }
         }
 
@@ -131,13 +135,17 @@ module.exports = function (app) {
             // if (usageType = 'launch'), show current/future/valid/invalid step
             // if (usageType = 'manage-steps') means we are using from admin screen, show valid/invalid steps
             // if (usageType = 'view-steps'), show past/current/future/valid/invalid steps
-            if (self.usageType === 'launch') {
+            if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
                 self.stepLegendList.push(self.stepLegendClassList.currentStep);
                 self.stepLegendList.push(self.stepLegendClassList.futureStep);
-            } else if (self.usageType === 'manage-steps') {
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.manageWFSteps) {
                 // self.stepLegendList.push(self.stepLegendClassList.validStep);
                 // self.stepLegendList.push(self.stepLegendClassList.inValidStep);
-            } else if (self.usageType === 'view-steps') {
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
+                self.stepLegendList.push(self.stepLegendClassList.pastStep);
+                self.stepLegendList.push(self.stepLegendClassList.currentStep);
+                self.stepLegendList.push(self.stepLegendClassList.futureStep);
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFStatusSteps) {
                 self.stepLegendList.push(self.stepLegendClassList.pastStep);
                 self.stepLegendList.push(self.stepLegendClassList.currentStep);
                 self.stepLegendList.push(self.stepLegendClassList.futureStep);
@@ -149,24 +157,32 @@ module.exports = function (app) {
             // if (usageType = 'manage-steps') means we are using from admin screen, steps are valid/invalid
             // if (usageType = 'view-steps'), steps are past/current/future/valid/invalid
             var stepStatusClass = '';
-            if (self.usageType === 'launch') {
+            if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
                 if (idx === 0) {
                     stepStatusClass = self.stepLegendClassList.currentStep.class;
                 } else {
                     stepStatusClass = self.stepLegendClassList.futureStep.class;
                 }
-            } else if (self.usageType === 'manage-steps') {
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.manageWFSteps) {
                 /*if (stepAction.isValidStep(self.seqWF)) {
                     stepStatusClass = self.stepLegendClassList.validStep.class;
                 } else {
                     stepStatusClass = self.stepLegendClassList.inValidStep.class;
                 }*/
-            } else if (self.usageType === 'view-steps') {
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
                 if (stepAction.isCurrentSeqWFStep(self.correspondence)) {
                     stepStatusClass = self.stepLegendClassList.currentStep.class;
                 } else if (stepAction.isPastSeqWFStep(self.correspondence)) {
                     stepStatusClass = self.stepLegendClassList.pastStep.class;
                 } else if (stepAction.isFutureSeqWFStep(self.correspondence)) {
+                    stepStatusClass = self.stepLegendClassList.futureStep.class;
+                }
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFStatusSteps) {
+                if (stepAction.getId() === self.correspondence.getSeqWFCurrentStepId()) {
+                    stepStatusClass = self.stepLegendClassList.currentStep.class;
+                } else if (stepAction.getId() < self.correspondence.getSeqWFCurrentStepId()) {
+                    stepStatusClass = self.stepLegendClassList.pastStep.class;
+                } else if (stepAction.getId() > self.correspondence.getSeqWFCurrentStepId()) {
                     stepStatusClass = self.stepLegendClassList.futureStep.class;
                 }
             }
@@ -279,11 +295,13 @@ module.exports = function (app) {
             var rowIndex = angular.element($event.target).parents('.step-item').data('rowIndex'),
                 viewOnly = false;
 
-            if (self.usageType === 'view-steps') {
-                viewOnly = seqWFStep.id && seqWFStep.id <= self.correspondence.getSeqWFCurrentStepId();
-            } else if (self.usageType === 'manage-steps') {
+            if (self.usageType === sequentialWorkflowService.stepsUsageTypes.manageWFSteps) {
                 viewOnly = false;
-            } else if (self.usageType === 'launch') {
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
+                viewOnly = true;
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
+                viewOnly = seqWFStep.id && seqWFStep.id <= self.correspondence.getSeqWFCurrentStepId();
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFStatusSteps) {
                 viewOnly = true;
             }
 

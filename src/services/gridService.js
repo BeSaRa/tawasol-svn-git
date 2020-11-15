@@ -914,7 +914,8 @@ module.exports = function (app) {
                 launch: 'sitemap',
                 quickSend: 'sitemap',
                 conditionalApprove: 'clock-start',
-                sequentialWF: 'view-sequential'
+                sequentialWF: 'view-sequential',
+                showSteps: 'stairs'
             },
             indicators: {
                 securityLevel: 'security',

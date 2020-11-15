@@ -44,7 +44,7 @@
                     </div>
 
                     <sequential-workflow-steps-directive
-                            usage-type="launch"
+                            usage-type="{{ctrl.stepsUsageType}}"
                             ng-if="ctrl.selectedSeqWF"
                             seq-w-f="ctrl.selectedSeqWF"
                             redraw-steps="ctrl.redrawSteps"
