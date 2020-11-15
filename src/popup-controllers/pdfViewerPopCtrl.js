@@ -98,26 +98,9 @@ module.exports = function (app) {
 
         self.notifyPreviousSteps = false;
 
-        self.readyToExportExcludedAnnotationList = [
-            "annotate",
-            "ink",
-            "highlighter",
-            "text-highlighter",
-            "ink-eraser",
-            "ink-signature",
-            "image",
-            "note",
-            "text",
-            "line",
-            "arrow",
-            "rectangle",
-            "ellipse",
-            "polyline",
-            "polygon",
-            "document-editor",
-            "approve",
-            // "barcode",
-        ];
+        self.readyToExportExcludedAnnotationList = configurationService.READY_TO_EXPORT_EXCLUDED_TOOLBAR_ITEMS;
+
+        self.officialAttachmentExcludedList = configurationService.OFFICIAL_ATTACHMENT_EXCLUDED_TOOLBAR_ITEMS;
 
         self.generalStepElementView = generalStepElementView;
         // used to store value of attache user name and date toggle
@@ -173,7 +156,11 @@ module.exports = function (app) {
         }
 
         function _itemInExcludedList(item) {
-            return (self.readyToExportExcludedAnnotationList.indexOf(item) !== -1)
+            return (self.readyToExportExcludedAnnotationList.indexOf(item) !== -1);
+        }
+
+        function _itemInOfficialExcludedList(item) {
+            return (self.officialAttachmentExcludedList.indexOf(item) !== -1);
         }
 
         /**
@@ -323,6 +310,12 @@ module.exports = function (app) {
             }
 
             toolbarInstance = toolbarInstance.filter(item => item.type !== 'ink-eraser');
+
+            if (self.info.isAttachment && self.correspondence.isOfficial) {
+                toolbarInstance = toolbarInstance.filter(item => {
+                    return item.type === 'custom' ? !_itemInOfficialExcludedList(item.id) : !_itemInOfficialExcludedList(item.type);
+                });
+            }
 
             return toolbarInstance;
         }
