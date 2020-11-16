@@ -1932,6 +1932,15 @@ module.exports = function (app) {
                 && self.correspondence && (typeof self.correspondence.getSeqWFNextStepId !== "undefined") && !!self.correspondence.getSeqWFNextStepId();
         };
 
+        self.terminateSEQWF = function ($event) {
+            var terminateAction = _.find(self.generalStepElementView.actions, {text: 'grid_action_terminate'});
+            var defer = $q.defer();
+            defer.promise.then(function () {
+                dialog.cancel();
+            });
+            return terminateAction ? terminateAction.callback(self.correspondence, $event, defer) : null;
+        };
+
         /**
          * @description watch destroy event to call disposable method
          */

@@ -29,7 +29,7 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <div ng-if="ctrl.isSeqBackStep()">
+        <div ng-if="!ctrl.isSeqBackStep()">
             <md-switch ng-model="ctrl.notifyPreviousSteps">{{lang.notify_previous_users}}</md-switch>
         </div>
         <div ng-if="!ctrl.sequentialWF">
@@ -40,6 +40,13 @@
         <div ng-if="ctrl.checkSaveAndSend()">
             <md-button ng-disabled="ctrl.disableSaveButton" class="md-raised md-primary"
                        ng-click="ctrl.saveAndSendDocumentAnnotations()">{{lang.save_and_send}}
+            </md-button>
+        </div>
+        <div ng-if="ctrl.sequentialWF">
+            <!--tooltip="{{ctrl.nextSeqStep.getTranslatedName()}}"-->
+            <md-button ng-if="!ctrl.isLaunchStep" ng-disabled="ctrl.disableSaveButton"
+                       class="md-raised md-primary"
+                       ng-click="ctrl.terminateSEQWF()">{{lang.terminate}}
             </md-button>
         </div>
         <div ng-if="ctrl.checkCanSendBack()">
