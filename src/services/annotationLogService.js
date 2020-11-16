@@ -117,6 +117,21 @@ module.exports = function (app) {
             return _.map(collection, _mapAnnotationType);
         }
 
+        function _checkNoteIsUpdated(oldNote, newNote) {
+            return _sizeAndPositionUpdated(oldNote, newNote) ||
+                _checkIsColorsUpdated(oldNote.color, newNote.color) ||
+                _checkTextUpdated(oldNote.text, newNote.text) ||
+                _checkTextUpdated(oldNote.icon, newNote.icon);
+        }
+
+        function _checkTextUpdated(oldText, newText) {
+            return oldText !== newText;
+        }
+
+        function _checkIsColorsUpdated(oldColor, newColor) {
+            return oldColor.r !== newColor.r || oldColor.b !== newColor.b || oldColor.g !== newColor.g;
+        }
+
 
         /**
          * @description check if the annotation updated
@@ -125,13 +140,21 @@ module.exports = function (app) {
          * @private
          */
         function _isAnnotationUpdated(id) {
-            var oldBoundingBox = self.oldAnnotations[id].boundingBox;
-            var newBoundingBox = self.newAnnotations[id].boundingBox;
+            var oldAnnotation = self.oldAnnotations[id];
+            var newAnnotation = self.newAnnotations[id];
+            if (oldAnnotation instanceof PSPDFKit.Annotations.NoteAnnotation) {
+                return _checkNoteIsUpdated(oldAnnotation, newAnnotation);
+            }
+            return _sizeAndPositionUpdated(oldAnnotation, newAnnotation);
+        }
+
+        function _sizeAndPositionUpdated(oldAnnotation, newAnnotation) {
+            var oldBoundingBox = oldAnnotation.boundingBox;
+            var newBoundingBox = newAnnotation.boundingBox;
             return oldBoundingBox.width !== newBoundingBox.width ||
                 oldBoundingBox.height !== newBoundingBox.height ||
                 oldBoundingBox.left !== newBoundingBox.left ||
                 oldBoundingBox.bottom !== newBoundingBox.bottom;
-
         }
 
         /**
