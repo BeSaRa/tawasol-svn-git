@@ -17,6 +17,7 @@ module.exports = function (app) {
                                                    employeeService,
                                                    $timeout,
                                                    loadingIndicatorService,
+                                                   authenticationService,
                                                    langService,
                                                    CorrespondenceInfo,
                                                    Site,
@@ -4791,17 +4792,20 @@ module.exports = function (app) {
         self.openICNArchiveDialog = function (correspondence, options, entryTemplate, $event) {
             var info = correspondence.getInfo(),
                 archiveIcnUrl = urlService.correspondence + '/' + info.documentClass + '/' + info.vsId + '/archive-icn',
-                entryTemplateUrl = entryTemplate.hasOwnProperty('menuItem') ? entryTemplate.menuItem : entryTemplate;
+                entryTemplateUrl = entryTemplate.hasOwnProperty('menuItem') ? entryTemplate.menuItem : entryTemplate,
+                userData = authenticationService.getUserData();
 
             entryTemplateUrl = entryTemplateUrl && entryTemplateUrl.hasOwnProperty('url') ? entryTemplateUrl.url : entryTemplateUrl;
             return $http.put(archiveIcnUrl, options)
                 .then(function (result) {
                     //var variables = '%2C:docId%2C:vsId%2C:refVsId%2C:locale'.change({
-                    var variables = ['', 'docId', 'vsId', 'refVsId', 'locale'].join('%2C:').change({
+                    var variables = ['', 'docId', 'vsId', 'refVsId', 'username', 'password', 'locale'].join('%2C:').change({
                         vsId: result.data.rs.vsId, // icn plugin will use to fetch content
                         docId: result.data.rs.id,
                         refVsId: result.data.rs.refVSID, // icn plugin will use to fetch metadata(vsId of original document)
-                        locale: langService.current
+                        locale: langService.current,
+                        username: encodeURIComponent(userData.username),
+                        password: encodeURIComponent(userData.password)
                     });
                     entryTemplateUrl = entryTemplateUrl.replace('&mimeType', variables + '&mimeType');
                     return _showICNArchiveDialog(correspondence, entryTemplateUrl, $event)
@@ -4819,12 +4823,6 @@ module.exports = function (app) {
                     locals: {
                         correspondence: correspondence,
                         entryTemplateUrl: entryTemplateUrl
-                    },
-                    resolve: {
-                        credentials: function (authenticationService) {
-                            'ngInject';
-                            return authenticationService.getUserData();
-                        }
                     }
                 });
         };

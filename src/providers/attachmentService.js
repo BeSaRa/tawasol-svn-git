@@ -124,7 +124,8 @@ module.exports = function (app) {
                                       fileTypeService,
                                       tokenService,
                                       langService,
-                                      errorCode) {
+                                      errorCode,
+                                      authenticationService) {
                 'ngInject';
                 var self = this;
                 self.serviceName = 'attachmentService';
@@ -694,14 +695,15 @@ module.exports = function (app) {
                         attachmentType = attachment.attachmentType && attachment.attachmentType.hasOwnProperty('lookupKey') ? attachment.attachmentType.lookupKey : attachment.attachmentType,
                         searchTemplate = attachment.searchTemplate.menuItem,
                         searchTemplateUrl = searchTemplate.hasOwnProperty('menuItem') ? searchTemplate.menuItem : searchTemplate,
-                        updateActionStatus = attachment.updateActionStatus && attachment.updateActionStatus.hasOwnProperty('lookupKey') ? attachment.updateActionStatus.lookupKey : attachment.updateActionStatus;
+                        updateActionStatus = attachment.updateActionStatus && attachment.updateActionStatus.hasOwnProperty('lookupKey') ? attachment.updateActionStatus.lookupKey : attachment.updateActionStatus,
+                        userData = authenticationService.getUserData();
 
                     // if securityLevel or priorityLevel are not Lookup objects or integers, use "id" which will represent lookup
                     securityLevel = securityLevel.hasOwnProperty('id') ? securityLevel.id : securityLevel;
                     priorityLevel = priorityLevel.hasOwnProperty('id') ? priorityLevel.id : priorityLevel;
                     searchTemplateUrl = searchTemplateUrl && searchTemplateUrl.hasOwnProperty('url') ? searchTemplateUrl.url : searchTemplateUrl;
 
-                    var variables = ['', 'token', 'vsId', 'attachmentType', 'securityLevel', 'attachmentName', 'updateActionStatus', 'exportStatus', 'priorityLevel', 'locale'].join('%2C:').change({
+                    var variables = ['', 'token', 'vsId', 'attachmentType', 'securityLevel', 'attachmentName', 'updateActionStatus', 'exportStatus', 'priorityLevel', 'username', 'password', 'locale'].join('%2C:').change({
                         token: tokenService.getToken(),
                         vsId: correspondence.getInfo().vsId,
                         attachmentType: attachmentType,
@@ -710,7 +712,9 @@ module.exports = function (app) {
                         locale: langService.current,
                         updateActionStatus: updateActionStatus,
                         priorityLevel: priorityLevel,
-                        exportStatus: attachment.exportStatus
+                        exportStatus: attachment.exportStatus,
+                        username: encodeURIComponent(userData.username),
+                        password: encodeURIComponent(userData.password)
                     });
                     searchTemplateUrl = searchTemplateUrl.replace('&mimeType', variables + '&mimeType');
 
@@ -724,12 +728,6 @@ module.exports = function (app) {
                             locals: {
                                 correspondence: correspondence,
                                 searchTemplateUrl: searchTemplateUrl
-                            },
-                            resolve: {
-                                credentials: function (authenticationService) {
-                                    'ngInject';
-                                    return authenticationService.getUserData();
-                                }
                             }
                         });
                 };
