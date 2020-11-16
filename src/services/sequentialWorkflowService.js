@@ -157,7 +157,7 @@ module.exports = function (app) {
                             editMode: false,
                             viewOnly: false,
                             sequentialWorkflow: newSequentialWF,
-                            defaultDocClass: null
+                            defaultDocClass: adHoc ? newSequentialWF.docClassID : null
                         }
                     });
             },
