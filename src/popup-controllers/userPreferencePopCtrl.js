@@ -1574,8 +1574,7 @@ module.exports = function (app) {
          * @description Close the popup
          */
         self.closeUserPreferencePopupFromCtrl = function () {
-            employeeService.setCurrentEmployee(self.ouApplicationUserCopy.applicationUser);
-
+            //employeeService.setCurrentEmployee(self.ouApplicationUserCopy.applicationUser);
             if (self.requestForApprove)
                 dialog.hide(self.applicationUser.signature);
             dialog.cancel();
@@ -1651,7 +1650,7 @@ module.exports = function (app) {
 
             return defer.promise;
 
-        }
+        };
 
         self.checkIfEmptyProxyUserChanged = function () {
             return !self.selectedProxyUser && self.selectedProxyUser === self.ouApplicationUserCopy.proxyUser;

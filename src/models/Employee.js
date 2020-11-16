@@ -61,6 +61,7 @@ module.exports = function (app) {
             self.slowConnectionMode = false;
             self.pinCodePrompt = false;
             self.subAdminOuList = [];
+            self.isFirstViewForApproval = false;
 
             var collectionResults = [
                 'reminderSmsPriority',

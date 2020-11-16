@@ -5099,15 +5099,14 @@ module.exports = function (app) {
         };
 
         self.annotateCorrespondence = function (correspondence, annotationType, attachedBook, sequentialWF, generalStepElementView) {
-            var info = correspondence.getInfo(),
-                forApproval = employeeService.getEmployee().isFirstViewForApproval && !info.isPaper && info.docStatus < 23;
+            var info = correspondence.getInfo();
             return downloadService
-                .downloadContentWithWaterMark(correspondence, forApproval ? AnnotationType.SIGNATURE : annotationType)
+                .downloadContentWithWaterMark(correspondence, annotationType)
                 .then(function (blob) {
                     var fr = new FileReader();
                     return $q(function (resolve, reject) {
                         fr.onloadend = function () {
-                            resolve(PDFService.openPDFViewer(fr.result, correspondence, forApproval ? AnnotationType.SIGNATURE : annotationType, attachedBook, sequentialWF, generalStepElementView));
+                            resolve(PDFService.openPDFViewer(fr.result, correspondence, annotationType, attachedBook, sequentialWF, generalStepElementView));
                         };
                         fr.readAsArrayBuffer(blob);
                     });

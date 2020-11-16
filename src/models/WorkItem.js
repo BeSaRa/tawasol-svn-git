@@ -1133,28 +1133,30 @@ module.exports = function (app) {
             };
 
             WorkItem.prototype.openForAnnotation = function (inboxItem) {
-                var self = this;
+                var self = this, info = this.getInfo(),
+                    forApproval = employeeService.getEmployee().isFirstViewForApproval && !info.isPaper && info.docStatus < 23 && !self.getSeqWFId();
                 if (!inboxItem) {
-                    return correspondenceService.annotateCorrespondence(self);
+                    return correspondenceService.annotateCorrespondence(self, (forApproval ? 3 : null));
                 }
                 return viewDocumentService.viewUserInboxDocument(self, [], 'userInbox', null, true)
                     .then(function (generalStepElementView) {
                         // just to set the seqWFId from the real correspondence
                         self.generalStepElm.seqWFId = generalStepElementView.correspondence.seqWFId;
-                        return correspondenceService.annotateCorrespondence(self);
+                        return correspondenceService.annotateCorrespondence(self, (forApproval ? 3 : null));
                     });
             };
 
             WorkItem.prototype.openSequentialDocument = function (annotationType, seqWF, actions) {
-                var self = this;
+                var self = this, info = this.getInfo(),
+                    forApproval = employeeService.getEmployee().isFirstViewForApproval && !info.isPaper && info.docStatus < 23;
                 return viewDocumentService.viewUserInboxDocument(self, actions, 'userInbox', null, true)
                     .then(function (generalStepElementView) {
                         generalStepElementView.actions = actions;
                         if (seqWF) {
-                            return correspondenceService.annotateCorrespondence(self, typeof annotationType !== 'undefined' ? annotationType : null, null, seqWF, generalStepElementView);
+                            return correspondenceService.annotateCorrespondence(self, (forApproval ? 3 : annotationType), null, seqWF, generalStepElementView);
                         }
                         return sequentialWorkflowService.loadSequentialWorkflowById(self.getSeqWFId()).then(function (seqWF) {
-                            return correspondenceService.annotateCorrespondence(self, typeof annotationType !== 'undefined' ? annotationType : null, null, seqWF, generalStepElementView);
+                            return correspondenceService.annotateCorrespondence(self, (forApproval ? 3 : annotationType), null, seqWF, generalStepElementView);
                         });
                     });
             };

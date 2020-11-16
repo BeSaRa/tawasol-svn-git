@@ -84,7 +84,6 @@ module.exports = function (app) {
                 employee.isAdmin = result.isAdminUser;
                 employee.mappedToCentralArchive = result.mappedToCentralArchive;
                 employee.subAdminOuList = result.subAdminOuList;
-
                 employee.setRootEntityService(rootEntity);
             }
             // set globalSetting for root entity
