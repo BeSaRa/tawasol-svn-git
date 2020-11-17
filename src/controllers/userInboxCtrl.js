@@ -1296,7 +1296,7 @@ module.exports = function (app) {
                 return;
             }
 
-            if (info.hasActiveSeqWF && info.docStatus < 24 && self.psPDFViewerEnabled) {
+            if (info.hasActiveSeqWF && self.psPDFViewerEnabled) {
                 return workItem.openSequentialDocument(null, null, self.gridActions)
                     .then(function () {
                         self.reloadUserInboxes(self.grid.page);
