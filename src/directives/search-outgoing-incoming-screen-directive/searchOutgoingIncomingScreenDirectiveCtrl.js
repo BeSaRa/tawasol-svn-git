@@ -1701,7 +1701,6 @@ module.exports = function (app) {
                 icon: 'stairs',
                 text: 'grid_action_view_seq_wf_steps',
                 shortcut: false,
-                showInView: false,
                 callback: self.showSeqWFSteps,
                 class: "action-red",
                 checkShow: function (action, model) {
