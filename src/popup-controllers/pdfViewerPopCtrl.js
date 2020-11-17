@@ -108,6 +108,14 @@ module.exports = function (app) {
 
         self.attacheUsernameAndDateToSignature = false;
 
+        self.documentClassPermissionMap = {
+            outgoing: function (isPaper) {
+                return isPaper ? 'EDIT_OUTGOING_PAPER' : 'EDIT_OUTGOING_CONTENT';
+            },
+            incoming: 'EDIT_INCOMING’S_CONTENT',
+            internal: 'EDIT_INTERNAL_CONTENT'
+        };
+
         function _getFlattenStatus(hasMySignature) {
             if (typeof hasMySignature === 'undefined') {
                 return !!(self.sequentialWF && self.sequentialWF.getLastStepId() === self.nextSeqStep.id) || (self.info && !self.info.isAttachment && !self.info.isPaper && self.info.signaturesCount === 1 && !self.correspondence.getSeqWFId());
@@ -1932,6 +1940,11 @@ module.exports = function (app) {
                 && self.correspondence && (typeof self.correspondence.getSeqWFNextStepId !== "undefined") && !!self.correspondence.getSeqWFNextStepId();
         };
 
+        /**
+         * @description Terminate sequential workflow
+         * @param $event
+         * @returns {*}
+         */
         self.terminateSEQWF = function ($event) {
             var terminateAction = _.find(self.generalStepElementView.actions, {text: 'grid_action_terminate'});
             var defer = $q.defer();
@@ -1939,6 +1952,37 @@ module.exports = function (app) {
                 dialog.cancel();
             });
             return terminateAction ? terminateAction.callback(self.correspondence, $event, defer) : null;
+        };
+
+        /**
+         * @description Check if edit content is enabled
+         * @returns {boolean|*}
+         */
+        self.employeeCanEditContent = function () {
+            if (!self.info) {
+                return false;
+            }
+            var documentClass = (self.info.documentClass + ''),
+                permissionName = self.documentClassPermissionMap[documentClass];
+            if (typeof permissionName === 'function') {
+                permissionName = permissionName(self.info.isPaper);
+            }
+            return employeeService.hasPermissionTo(permissionName)
+                && !!self.sequentialWF
+                && self.info.needToApprove();
+        };
+
+        /**
+         * @description Edit content
+         */
+        self.toggleCorrespondenceEditMode = function () {
+            self.correspondence.manageDocumentContent(null)
+                .then(function(){
+                    self.loadUpdatedContent(self.annotationType !== AnnotationType.SIGNATURE);
+                })
+                .catch(function(){
+                    self.loadUpdatedContent(self.annotationType !== AnnotationType.SIGNATURE);
+                });
         };
 
         /**

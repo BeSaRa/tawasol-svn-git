@@ -13,6 +13,11 @@
                        ng-model="ctrl.attacheUsernameAndDateToSignature">
                 <label>{{lang.get('attach_name_and_date_to_signature')}}</label>
             </md-switch>
+            <md-button class="md-raised md-primary"
+                       ng-if="ctrl.employeeCanEditContent()"
+                       ng-click="ctrl.toggleCorrespondenceEditMode()">
+                {{lang.edit_content}}
+            </md-button>
             <md-button ng-if="ctrl.correspondence" ng-click="ctrl.closeDialog()"
                        class="md-icon-button">
                 <md-icon md-svg-icon="close" class="red-text"></md-icon>
