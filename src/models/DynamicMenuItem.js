@@ -8,6 +8,7 @@ module.exports = function (app) {
                                              $timeout,
                                              lookupService,
                                              langService,
+                                             authenticationService,
                                              $q) {
         'ngInject';
         return function DynamicMenuItem(model) {
@@ -302,15 +303,26 @@ module.exports = function (app) {
                 }
             };
 
-            DynamicMenuItem.prototype.getMenuUrlAfterReplacement = function () {
-                var self = this, url = self.url, variables = self.scanURLVariables();
+            DynamicMenuItem.prototype.getMenuUrlAfterReplacement = function (includeUsernamePassword) {
+                var self = this, url = self.url, variables = self.scanURLVariables(),
+                    dynamicVariables = '';
+                if (includeUsernamePassword) {
+                    var userData = authenticationService.getUserData();
+                    dynamicVariables = ['', 'username', 'password', 'locale'].join('%2C:').change({
+                        username: encodeURIComponent(userData.username),
+                        password: encodeURIComponent(userData.password),
+                        locale: langService.current
+                    })
+                }
                 if (variables && variables.length) {
                     _.map(variables, function (item) {
                         url = url.replace(item, self.getReplacement(self.parsedURLParams[item]));
                     });
+                    url = url.replace('&mimeType', dynamicVariables + '&mimeType');
                     return url;
                 } else {
-                    return self.url;
+                    url = url.replace('&mimeType', dynamicVariables + '&mimeType');
+                    return url;
                 }
             };
 

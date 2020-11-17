@@ -1512,36 +1512,20 @@ module.exports = function (app) {
             .state('app.icn', {
                 url: '/icn/:menuId',
                 abstract: false,
-                template: '<iframe id="icn-login" ng-hide="true" width="0" height="0" ng-src="{{ctrl.loginURL}}"></iframe>' +
-                    '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}" style="z-index:3;"></iframe>',
-                controller: function ($scope, langService, credentials, $stateParams, urlService, sidebarService, $timeout, $sce) {
+                template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}" style="z-index:3;"></iframe>',
+                controller: function ($scope, langService, $stateParams, urlService, sidebarService, $timeout, $sce) {
                     'ngInject';
                     var self = this, menuId = $stateParams.menuId,
-                        menuItem = sidebarService.getDynamicMenuItemByID(menuId),
-                        menuURL = menuItem.getMenuUrlAfterReplacement(),
-                        aLink = null;
-
-                    self.createLoginIframe = function () {
-                        aLink = angular.element('<a />').attr('href', encodeURI(menuURL));
-                        var loginLink = aLink[0].protocol + '//' + aLink[0].host + '/navigator/jaxrs/logon?userid={{username}}&password={{password}}';
-                        self.loginURL = $sce.trustAsResourceUrl(loginLink.replace('{{username}}', encodeURIComponent(credentials.username)).replace('{{password}}', encodeURIComponent(credentials.password)));
-                    };
-
-                    self.removeLoginIframe = function () {
-                        angular.element('#icn-login').remove();
-                    };
-                    self.createLoginIframe();
-
+                        menuItem = sidebarService.getDynamicMenuItemByID(menuId);
 
                     self.prepareUrl = function () {
-                        var url = menuItem.getMenuUrlAfterReplacement();
+                        var url = menuItem.getMenuUrlAfterReplacement(true);
                         self.url = $sce.trustAsResourceUrl(url);
                     };
 
-                    $timeout(function () {
-                        self.removeLoginIframe();
+                    self.$onInit = function () {
                         self.prepareUrl();
-                    }, 2000);
+                    };
 
                     // to change the report language
                     langService.listeningToChange(function () {
@@ -1550,13 +1534,7 @@ module.exports = function (app) {
 
                 },
                 controllerAs: 'ctrl',
-                isDynamic: true,
-                resolve: {
-                    credentials: function (authenticationService) {
-                        'ngInject';
-                        return authenticationService.getUserData();
-                    }
-                }
+                isDynamic: true
             })
             .state('app.g2g', {
                 abstract: true,
