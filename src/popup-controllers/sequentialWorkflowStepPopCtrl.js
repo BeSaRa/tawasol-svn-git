@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                               generator,
                                                               $scope,
                                                               _,
+                                                              Information,
                                                               ouApplicationUserService) {
         'ngInject';
         var self = this,
@@ -45,6 +46,28 @@ module.exports = function (app) {
             self.step.userComment = null;
         }
 
+        function _updateOuAndUserInfo() {
+            var ouAppUser = _.find(self.ouApplicationUsers, function (item) {
+                    return item.userIdAndOuId === self.step.userIdAndOuId;
+                }),
+                selectedOu = _.find(self.organizations, function (item) {
+                    return item.id === Number(self.step.uiOuId);
+                });
+
+            if (selectedOu && ouAppUser.getApplicationUser()) {
+                self.step.toUserInfo = new Information({
+                    arName: ouAppUser.getApplicationUser().getNameByLanguage('ar'),
+                    enName: ouAppUser.getApplicationUser().getNameByLanguage('en'),
+                    id: Number(self.step.getUserIdFromCombination())
+                });
+
+                self.step.toOUInfo = new Information({
+                    arName: selectedOu.getNameByLanguage('ar') + ' - ' + ouAppUser.getOrganization().getNameByLanguage('ar'),
+                    enName: selectedOu.getNameByLanguage('en') + ' - ' + ouAppUser.getOrganization().getNameByLanguage('en')
+                });
+            }
+        }
+
         /**
          * @description Set the step values and close dialog
          * @param $event
@@ -62,6 +85,7 @@ module.exports = function (app) {
             if (!self.step.userIdAndOuId) {
                 _resetUserData();
             }
+            _updateOuAndUserInfo();
             dialog.hide(self.step);
         };
 

@@ -87,6 +87,13 @@ module.exports = function (app) {
                 return this.applicationUser.hasOwnProperty('id') ? this.applicationUser.id : this.applicationUser;
             };
 
+            OUApplicationUser.prototype.getApplicationUser = function () {
+                if (!this.applicationUser) {
+                    return null;
+                }
+                return this.applicationUser;
+            };
+
             OUApplicationUser.prototype.getOuId = function () {
                 if (this.hasOwnProperty('ouInfo') && this.ouInfo && this.ouInfo.id) {
                     return this.ouInfo.id;
@@ -94,6 +101,17 @@ module.exports = function (app) {
                     return this.ouid.hasOwnProperty('id') ? this.ouid.id : this.ouid;
                 }else if (this.ouId) {
                     return this.ouId.hasOwnProperty('id') ? this.ouId.id : this.ouId;
+                }
+                return null;
+            };
+
+            OUApplicationUser.prototype.getOrganization = function () {
+                if (this.hasOwnProperty('ouInfo') && this.ouInfo && this.ouInfo.id) {
+                    return this.ouInfo;
+                } else if (this.hasOwnProperty('ouid') && this.ouid && this.ouid.id) {
+                    return this.ouid;
+                }else if (this.hasOwnProperty('ouId') && this.ouId && this.ouId.id) {
+                    return this.ouId;
                 }
                 return null;
             };
