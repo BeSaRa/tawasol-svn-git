@@ -1147,7 +1147,8 @@ module.exports = function (app) {
                     priorityLevel: 1,
                     attachmentType: 0,
                     updateActionStatus: 0,
-                    isAnnotation: true
+                    isAnnotation: true,
+                    exportStatus: false
                 });
                 attachment.file = content;
                 return attachmentService.addAttachment(info, attachment).then(function (result) {
