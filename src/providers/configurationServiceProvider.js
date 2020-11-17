@@ -42,8 +42,8 @@ module.exports = function (app) {
                 "barcode",
                 "stamp",
                 "custom-stamps",
+                "username-date",
                 // "approve",
-                // "username-date",
                 // "ink-signature",
             ],
             READY_TO_EXPORT_EXCLUDED_TOOLBAR_ITEMS : [
