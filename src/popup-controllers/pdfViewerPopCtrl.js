@@ -1436,7 +1436,7 @@ module.exports = function (app) {
          * @return {*}
          */
         self.applyNextStep = function (content, signatureModel, ignoreValidateMultiSignature, terminateAllWFS) {
-            signatureModel.setValidateMultiSignature(!ignoreValidateMultiSignature);
+            signatureModel.setValidateMultiSignature(self.isSeqBackStep() ? false : !ignoreValidateMultiSignature);
             signatureModel.setSeqWFId(self.sequentialWF.id);
             signatureModel.setIsNotifyAllPrevious(self.notifyPreviousSteps);
             return sequentialWorkflowService
