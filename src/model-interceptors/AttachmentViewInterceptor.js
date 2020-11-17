@@ -18,6 +18,7 @@ module.exports = function (app) {
             delete model.progress;
             delete model.refVSID;
             delete model.attachmentTypeInfo;
+            delete model.isOfficialIndicator;
             return model;
         });
 
