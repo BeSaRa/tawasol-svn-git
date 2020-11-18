@@ -540,7 +540,12 @@ module.exports = function (app) {
              * @returns {*}
              */
             WorkItem.prototype.viewNewWorkItemDocument = function (actions, queueName, $event) {
-                return viewDocumentService.viewUserInboxDocument(this, actions, queueName, $event);
+                var self = this, info = self.getInfo(), pdfViewerEnabled = rootEntity.hasPSPDFViewer();
+                if (pdfViewerEnabled && !info.isPaper && employeeService.getEmployee().isFirstViewForApproval && self.checkElectronicSignaturePermission()) {
+                    return self.openForAnnotation(true, info.docStatus < 23 ? 3 : 1, actions, true);
+                } else {
+                    return viewDocumentService.viewUserInboxDocument(this, actions, queueName, $event);
+                }
             };
             /**
              * @description Opens the new viewer for approved internal items
@@ -1132,17 +1137,17 @@ module.exports = function (app) {
                 return correspondenceService.updateContentByAnnotation(correspondence, content, annotationType);
             };
 
-            WorkItem.prototype.openForAnnotation = function (inboxItem) {
-                var self = this, info = this.getInfo(),
-                    forApproval = employeeService.getEmployee().isFirstViewForApproval && !info.isPaper && info.docStatus < 23 && !self.getSeqWFId();
+            WorkItem.prototype.openForAnnotation = function (inboxItem, annotationType, actions, displayInformation) {
+                var self = this;
                 if (!inboxItem) {
-                    return correspondenceService.annotateCorrespondence(self, (forApproval ? 3 : null));
+                    return correspondenceService.annotateCorrespondence(self, annotationType);
                 }
                 return viewDocumentService.viewUserInboxDocument(self, [], 'userInbox', null, true)
                     .then(function (generalStepElementView) {
                         // just to set the seqWFId from the real correspondence
                         self.generalStepElm.seqWFId = generalStepElementView.correspondence.seqWFId;
-                        return correspondenceService.annotateCorrespondence(self, (forApproval ? 3 : null));
+                        generalStepElementView.actions = actions;
+                        return correspondenceService.annotateCorrespondence(self, annotationType, null, null, displayInformation ? generalStepElementView : false);
                     });
             };
 

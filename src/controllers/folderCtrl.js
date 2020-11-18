@@ -275,7 +275,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.annotateDocument = function (workItem, $event, defer) {
-            workItem.openForAnnotation(true)
+            workItem.openForAnnotation(true, null, self.gridActions, true)
                 .then(function () {
                     self.reloadFolders(self.grid.page)
                         .then(function () {
