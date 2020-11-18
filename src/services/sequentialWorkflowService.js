@@ -546,9 +546,10 @@ module.exports = function (app) {
          * @param backStepOptions
          * @param pdfInstance
          * @param documentOperations
+         * @param ignoreContent
          * @return {*}
          */
-        self.backStepSeqWFCorrespondence = async function (correspondence, backStepOptions, pdfInstance, documentOperations) {
+        self.backStepSeqWFCorrespondence = async function (correspondence, backStepOptions, pdfInstance, documentOperations, ignoreContent) {
             var info = correspondence.getInfo(), addAttachment = false;
             var INSTANT_JSON = await pdfInstance.exportInstantJSON();
             delete INSTANT_JSON.pdfId;
@@ -562,7 +563,7 @@ module.exports = function (app) {
                         seqWFId: correspondence.getSeqWFId(),
                         backwardOptions: backStepOptions
                     }));
-                    if (info.isPaper || info.docStatus >= 23) {
+                    if (info.isPaper || info.docStatus >= 23 && !ignoreContent) {
                         formData.append('content', pdfContent);
                     } else {
                         addAttachment = true;

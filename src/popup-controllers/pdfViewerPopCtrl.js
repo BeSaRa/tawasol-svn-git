@@ -307,7 +307,7 @@ module.exports = function (app) {
                 toolbarInstance.push(openForApprovalButton);
             }
 
-            if (self.info.docStatus === 24 && (self.info.documentClass === 'outgoing' || self.info.documentClass === 'internal')) {
+            if (self.info.docStatus === 24 && (self.info.documentClass === 'outgoing' || self.info.documentClass === 'internal') && !self.sequentialWF) {
                 toolbarInstance = toolbarInstance.filter(item => {
                     return item.type === 'custom' ? !_itemInExcludedList(item.id) : !_itemInExcludedList(item.type);
                 });
@@ -1589,17 +1589,45 @@ module.exports = function (app) {
                     }
                 })
                 .then(function (backStepOptions) {
-                    sequentialWorkflowService.backStepSeqWFCorrespondence(self.correspondence, backStepOptions, self.currentInstance, self.documentOperations).then(function (data) {
-                        toast.success(langService.get('launch_sequential_workflow_back_success'));
-                        self.disableSaveButton = false;
-                        dialog.hide();
-                    }).catch(function (error) {
-                        self.disableSaveButton = false;
-                        toast.error(error.data.eo[langService.current + 'Name']);
+                    self.getDocumentAnnotations(true).then(function ({annotations, bookmarks}) {
+                        self.newAnnotations = annotations;
+                        self.newBookmarks = bookmarks;
+                        var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations, self.documentOperations, self.oldBookmarks, self.newBookmarks);
+                        if (self.info.isPaper || self.info.docStatus >= 23) {
+                            if (!hasChanges.length) {
+                                return self.performSendBackStep(backStepOptions, true);
+                            }
+                            return dialog.confirmMessage(langService.get('confirm_annotation_save_on_content'))
+                                .then(function () {
+                                    return self.performSendBackStep(backStepOptions, false);
+                                })
+                                .catch(function () {
+                                    return self.performSendBackStep(backStepOptions, true);
+                                });
+                        } else {
+                            return self.performSendBackStep(backStepOptions, false);
+                        }
                     });
+
+
                 }).catch(function () {
                     self.disableSaveButton = false;
                 });
+        };
+        /**
+         * @description perform back step action
+         * @param backStepOptions
+         * @param ignoreContent
+         */
+        self.performSendBackStep = function (backStepOptions, ignoreContent) {
+            sequentialWorkflowService.backStepSeqWFCorrespondence(self.correspondence, backStepOptions, self.currentInstance, self.documentOperations, ignoreContent).then(function (data) {
+                toast.success(langService.get('launch_sequential_workflow_back_success'));
+                self.disableSaveButton = false;
+                dialog.hide();
+            }).catch(function (error) {
+                self.disableSaveButton = false;
+                toast.error(error.data.eo[langService.current + 'Name']);
+            });
         };
         /**
          * @description check if the current user can edit annotation or not
@@ -1918,8 +1946,7 @@ module.exports = function (app) {
             if (!self.sequentialWF) {
                 return false;
             }
-            return self.sequentialWF.getFirstStepId() !== self.correspondence.getSeqWFCurrentStepId();
-            // return !!self.sequentialWF && !_isFromBackStep();
+            return !self.isLaunchStep;
         };
 
         /**
