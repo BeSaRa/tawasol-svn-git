@@ -1338,14 +1338,13 @@ module.exports = function (app) {
                 callback: self.resetWorkflow,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    if (model.hasActiveSeqWF()) {
-                        return true;
+                    var info = model.getInfo();
+                    if (info.documentClass === 'incoming') {
+                        return false;
                     }
 
-                    var info = model.getInfo();
-                    return !info.isPaper
-                        && info.documentClass !== 'incoming'
-                        && info.docStatus === 23;
+                    return model.hasActiveSeqWF() ||
+                        (!info.isPaper && info.docStatus === 23);
                 }
             },
             // View Tracking Sheet
