@@ -1051,12 +1051,19 @@ module.exports = function (app) {
                         if (ignoreClosePopup) {
                             return self.loadUpdatedContent(self.annotationType !== AnnotationType.SIGNATURE);
                         }
-                        dialog.hide({
-                            content: self.savedPdfContent,
-                            action: PDFViewer.CANCEL_LAUNCH
-                        });
                         if (self.launchAfterSave) {
-                            self.correspondence.launchWorkFlow(null, 'forward', 'favorites');
+                            self.correspondence.launchWorkFlow(null, 'forward', 'favorites')
+                                .then(function () {
+                                    dialog.hide({
+                                        content: self.savedPdfContent,
+                                        action: PDFViewer.DOCUMENT_LAUNCHED_ALREADY
+                                    });
+                                });
+                        } else {
+                            dialog.hide({
+                                content: self.savedPdfContent,
+                                action: PDFViewer.CANCEL_LAUNCH
+                            });
                         }
                     });
             } else if (result === correspondenceService.authorizeStatus.SAME_USER_AUTHORIZED.text) {
@@ -1078,12 +1085,20 @@ module.exports = function (app) {
                         }
                         return self.loadUpdatedContent(self.annotationType !== AnnotationType.SIGNATURE);
                     }
-                    dialog.hide({
-                        content: self.savedPdfContent,
-                        action: PDFViewer.JUST_AUTHORIZE
-                    });
+
                     if (self.launchAfterSave) {
-                        self.correspondence.launchWorkFlow(null, 'forward', 'favorites');
+                        self.correspondence.launchWorkFlow(null, 'forward', 'favorites')
+                            .then(function () {
+                                dialog.hide({
+                                    content: self.savedPdfContent,
+                                    action: PDFViewer.DOCUMENT_LAUNCHED_ALREADY
+                                });
+                            });
+                    } else {
+                        dialog.hide({
+                            content: self.savedPdfContent,
+                            action: PDFViewer.JUST_AUTHORIZE
+                        });
                     }
                 }, function (error) {
                     console.log('error', error);
@@ -1155,9 +1170,6 @@ module.exports = function (app) {
                         type: 'ATTACHMENT',
                         action: PDFViewer.UPDATE_ATTACHMENT
                     });
-                    if (self.launchAfterSave) {
-                        self.correspondence.launchWorkFlow(null, 'forward', 'favorites');
-                    }
                 }).catch(self.handleExceptions);
         };
         /**
@@ -1212,12 +1224,20 @@ module.exports = function (app) {
                 if (ignoreClosePopup) {
                     return self.loadUpdatedContent(self.annotationType !== AnnotationType.SIGNATURE);
                 }
-                dialog.hide({
-                    content: self.savedPdfContent,
-                    action: PDFViewer.UPDATE_DOCUMENT_CONTENT
-                });
+
                 if (self.launchAfterSave) {
-                    self.correspondence.launchWorkFlow(null, 'forward', 'favorites');
+                    self.correspondence.launchWorkFlow(null, 'forward', 'favorites')
+                        .then(function () {
+                            dialog.hide({
+                                content: self.savedPdfContent,
+                                action: PDFViewer.DOCUMENT_LAUNCHED_ALREADY
+                            });
+                        });
+                } else {
+                    dialog.hide({
+                        content: self.savedPdfContent,
+                        action: PDFViewer.UPDATE_DOCUMENT_CONTENT
+                    });
                 }
             }).catch(self.handleExceptions);
         };
@@ -1238,13 +1258,20 @@ module.exports = function (app) {
                 if (ignoreClosePopup) {
                     return self.loadUpdatedContent(self.annotationType !== AnnotationType.SIGNATURE);
                 }
-                dialog.hide({
-                    content: attachment,
-                    type: 'ATTACHMENT',
-                    action: PDFViewer.ADD_ATTACHMENT
-                });
                 if (self.launchAfterSave) {
-                    self.correspondence.launchWorkFlow(null, 'forward', 'favorites');
+                    self.correspondence.launchWorkFlow(null, 'forward', 'favorites')
+                        .then(function () {
+                            dialog.hide({
+                                content: self.savedPdfContent,
+                                action: PDFViewer.DOCUMENT_LAUNCHED_ALREADY
+                            });
+                        });
+                } else {
+                    dialog.hide({
+                        content: attachment,
+                        type: 'ATTACHMENT',
+                        action: PDFViewer.ADD_ATTACHMENT
+                    });
                 }
             }).catch(self.handleExceptions);
         };
@@ -2004,10 +2031,10 @@ module.exports = function (app) {
          */
         self.toggleCorrespondenceEditMode = function () {
             self.correspondence.manageDocumentContent(null)
-                .then(function(){
+                .then(function () {
                     self.loadUpdatedContent(self.annotationType !== AnnotationType.SIGNATURE);
                 })
-                .catch(function(){
+                .catch(function () {
                     self.loadUpdatedContent(self.annotationType !== AnnotationType.SIGNATURE);
                 });
         };
