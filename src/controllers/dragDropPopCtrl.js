@@ -24,6 +24,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'dragDropPopCtrl';
         self.attachment = attachment;
+        self.attachmentCopy = angular.copy(attachment);
         // dop area element
         self.dropArea = $element.find('#drop-area');
         // valid files in array

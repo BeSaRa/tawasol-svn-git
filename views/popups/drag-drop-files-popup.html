@@ -63,7 +63,8 @@
                                    ng-model="ctrl.exportStatus"
                                    ng-change="ctrl.changeValueOf('exportStatus', ctrl.exportStatus)"
                                    aria-label="{{lang.export_status}}">
-                            <label>{{lang.export_status}} : {{ctrl.exportStatus ? lang.save_and_export : lang.save_only}}</label>
+                            <label>{{lang.export_status}} : {{ctrl.exportStatus ? lang.save_and_export :
+                                lang.save_only}}</label>
                         </md-switch>
                     </div>
                 </div>
@@ -82,7 +83,15 @@
                             </md-option>
                         </md-select>
                     </md-input-container>
-                    <span flex></span>
+                    <!-- Is Official Document -->
+                    <div flex class="cms-input-container">
+                        <md-switch flex ng-model="ctrl.isOfficial"
+                                   aria-label="{{lang.official_document}}"
+                                   ng-change="ctrl.changeValueOf('isOfficial', ctrl.isOfficial)">
+                            <label>{{lang.official_document}} :
+                                {{ctrl.isOfficial ? lang.yes : lang.no}}</label>
+                        </md-switch>
+                    </div>
                 </div>
 
                 <div layout="row">
@@ -181,6 +190,19 @@
                                 {{ctrl.attachment.getTranslatedExportStatus()}}</label>
                         </md-switch>
                     </div>
+                </div>
+                <div layout="row">
+                    <!-- Is Official Document -->
+                    <div flex class="cms-input-container">
+                        <md-switch flex ng-model="ctrl.attachment.isOfficial"
+                                   aria-label="{{lang.official_document}}"
+                                   ng-change="ctrl.changeValueOf('isOfficial',ctrl.attachment.isOfficial)"
+                                   ng-disabled="ctrl.attachmentCopy && ctrl.attachmentCopy.isOfficial">
+                            <label>{{lang.official_document}} :
+                                {{ctrl.attachment.getTranslatedYesNo('isOfficial')}}</label>
+                        </md-switch>
+                    </div>
+                    <span flex></span>
                 </div>
 
                 <div class="cms-input-container" flex>
@@ -290,9 +312,20 @@
                                 <div flex class="cms-input-container">
                                     <md-switch flex
                                                ng-model="attachment.exportStatus"
-                                               aria-label="{{lang.export_status}}">
-                                        <label>{{lang.export_status}} :
-                                            {{attachment.getTranslatedExportStatus()}}</label>
+                                               aria-label="{{lang.export_status}}"
+                                               tooltip="{{lang.export_status}}">
+                                        <label>{{attachment.getTranslatedExportStatus()}}</label>
+                                    </md-switch>
+                                </div>
+                            </div>
+                            <div>
+                                <div flex class="cms-input-container">
+                                    <md-switch flex
+                                               ng-model="attachment.isOfficial"
+                                               aria-label="{{lang.official_document}}"
+                                               ng-disabled="ctrl.attachmentCopy && ctrl.attachmentCopy.isOfficial"
+                                               tooltip="{{lang.official_document}}">
+                                        <label>{{attachment.getTranslatedYesNo('isOfficial')}}</label>
                                     </md-switch>
                                 </div>
                             </div>
@@ -352,6 +385,11 @@
                             <div>
                                 <md-button>
                                     {{attachment.getTranslatedExportStatus()}}
+                                </md-button>
+                            </div>
+                            <div>
+                                <md-button>
+                                    {{attachment.getTranslatedYesNo('isOfficial')}}
                                 </md-button>
                             </div>
                             <div ng-if="!ctrl.attachment">

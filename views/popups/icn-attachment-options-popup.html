@@ -117,7 +117,14 @@
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
-                        <span flex ng-if="!ctrl.inheritSecurity"></span>
+                        <!-- Is Official Document -->
+                        <div flex class="cms-input-container">
+                            <md-switch flex ng-model="ctrl.attachment.isOfficial"
+                                       aria-label="{{lang.official_document}}">
+                                <label>{{lang.official_document}} :
+                                    {{ctrl.attachment.getTranslatedYesNo('isOfficial')}}</label>
+                            </md-switch>
+                        </div>
                     </div>
                 </div>
             </form>
