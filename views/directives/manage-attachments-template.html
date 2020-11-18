@@ -146,7 +146,8 @@
             <!-- Is Official Document -->
             <div flex class="cms-input-container">
                 <md-switch flex ng-model="ctrl.attachment.isOfficial"
-                           aria-label="{{lang.official_document}}">
+                           aria-label="{{lang.official_document}}"
+                           ng-disabled="ctrl.attachmentCopyBeforeEdit.isOfficial">
                     <label>{{lang.official_document}} :
                         {{ctrl.attachment.getTranslatedYesNo('isOfficial')}}</label>
                 </md-switch>
