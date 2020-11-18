@@ -34,7 +34,7 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <div ng-if="!ctrl.isSeqBackStep()">
+        <div ng-if="!ctrl.isSeqBackStep() && ctrl.sequentialWF">
             <md-switch ng-model="ctrl.notifyPreviousSteps">{{lang.notify_previous_users}}</md-switch>
         </div>
         <div ng-if="!ctrl.sequentialWF">
