@@ -1157,6 +1157,7 @@ module.exports = function (app) {
                 return viewDocumentService.viewUserInboxDocument(self, actions, 'userInbox', null, true)
                     .then(function (generalStepElementView) {
                         generalStepElementView.actions = actions;
+                        self.generalStepElm.isSeqWFBackward = generalStepElementView.generalStepElm.isSeqWFBackward;
                         if (seqWF) {
                             return correspondenceService.annotateCorrespondence(self, (forApproval ? 3 : annotationType), null, seqWF, generalStepElementView);
                         }
