@@ -339,7 +339,7 @@ module.exports = function (app) {
                 .post(urlService.sequentialWorkflow, generator.interceptSendInstance('SequentialWF', sequentialWorkflow))
                 .then(function (result) {
                     sequentialWorkflow.id = result.data.rs;
-                    return sequentialWorkflow;
+                    return generator.interceptReceivedInstance('sequentialWF', sequentialWorkflow);
                 })
                 .catch(function (error) {
                     return errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
@@ -355,7 +355,7 @@ module.exports = function (app) {
             return $http
                 .put(urlService.sequentialWorkflow, generator.interceptSendInstance('SequentialWF', sequentialWorkflow))
                 .then(function () {
-                    return sequentialWorkflow;
+                    return generator.interceptReceivedInstance('sequentialWF', sequentialWorkflow);
                 })
                 .catch(function (error) {
                     return errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
