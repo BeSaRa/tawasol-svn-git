@@ -322,12 +322,21 @@ module.exports = function (app) {
                     stepStatusClass = self.stepLegendClassList.inValidStep.class;
                 }*/
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
-                if (stepAction.isCurrentSeqWFStep(self.correspondence)) {
-                    stepStatusClass = self.stepLegendClassList.currentStep.class;
-                } else if (stepAction.isPastSeqWFStep(self.correspondence)) {
-                    stepStatusClass = self.stepLegendClassList.pastStep.class;
-                } else if (stepAction.isFutureSeqWFStep(self.correspondence)) {
-                    stepStatusClass = self.stepLegendClassList.futureStep.class;
+                // if no seqWFId, means correspondence is not launched, so its similar to launch step
+                if (!self.correspondence.getSeqWFId()){
+                    if (idx === 0) {
+                        stepStatusClass = self.stepLegendClassList.currentStep.class;
+                    } else {
+                        stepStatusClass = self.stepLegendClassList.futureStep.class;
+                    }
+                } else {
+                    if (stepAction.isCurrentSeqWFStep(self.correspondence)) {
+                        stepStatusClass = self.stepLegendClassList.currentStep.class;
+                    } else if (stepAction.isPastSeqWFStep(self.correspondence)) {
+                        stepStatusClass = self.stepLegendClassList.pastStep.class;
+                    } else if (stepAction.isFutureSeqWFStep(self.correspondence)) {
+                        stepStatusClass = self.stepLegendClassList.futureStep.class;
+                    }
                 }
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFStatusSteps) {
                 if (stepAction.getId() === self.correspondence.getSeqWFCurrentStepId()) {
