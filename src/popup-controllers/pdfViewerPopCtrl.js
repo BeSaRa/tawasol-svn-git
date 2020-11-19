@@ -1649,13 +1649,16 @@ module.exports = function (app) {
         self.performSendBackStep = function (backStepOptions, ignoreContent) {
             sequentialWorkflowService.backStepSeqWFCorrespondence(self.correspondence, backStepOptions, self.currentInstance, self.documentOperations, ignoreContent).then(function (data) {
                 toast.success(langService.get('launch_sequential_workflow_back_success'));
-                self.sendAnnotationLogs(function () {
+                !ignoreContent ? self.sendAnnotationLogs(function () {
                     self.disableSaveButton = false;
                     dialog.hide();
-                },function (error) {
+                }, function (error) {
                     self.disableSaveButton = false;
                     toast.error(error.data.eo[langService.current + 'Name']);
-                });
+                }) : (function () {
+                    self.disableSaveButton = false;
+                    dialog.hide();
+                })();
             }).catch(function (error) {
                 self.disableSaveButton = false;
                 toast.error(error.data.eo[langService.current + 'Name']);
