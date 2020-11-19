@@ -131,6 +131,12 @@ module.exports = function (app) {
         self.onChangeUser = function () {
             if (!self.step.userIdAndOuId) {
                 _resetUserData();
+            } else {
+                var user = _.find(self.ouApplicationUsers, function (item) {
+                    return item.userIdAndOuId === self.step.userIdAndOuId;
+                });
+                self.step.sendSMS = user.getApplicationUser().subscriptionsmsNotify;
+                self.step.sendEmail = user.getApplicationUser().subscriptionEmailNotify;
             }
         };
 
