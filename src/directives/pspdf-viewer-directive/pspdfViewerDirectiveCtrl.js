@@ -14,6 +14,18 @@ module.exports = function (app) {
 
         self.licenseKey = rootEntity.returnRootEntity().rootEntity.psPDFLicenseKey;
 
+        var bookmarkButton = {
+            type: "custom",
+            id: "bookmark-shortcut",
+            title: "Export",
+            icon: "./assets/images/bookmark.svg",
+            onPress: function () {
+                self.instance.setViewState((state) => {
+                    return state.set('sidebarMode', PSPDFKit.SidebarMode.BOOKMARKS);
+                });
+            }
+        };
+
         self.destroyInstance = function () {
             try {
                 PSPDFKit.unload(self.container)
@@ -32,6 +44,7 @@ module.exports = function (app) {
                 baseUrl: (location.protocol + '//' + location.host + '/' + (configurationService.APP_CONTEXT ? configurationService.APP_CONTEXT + '/' : '')),
                 container: self.container,
                 printMode: PSPDFKit.PrintMode.EXPORT_PDF,
+                toolbarItems: PSPDFKit.defaultToolbarItems.concat(bookmarkButton),
                 document: typeof self.docUrl === 'object' ? self.docUrl.$$unwrapTrustedValue() : self.docUrl,
                 licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
                 initialViewState: initialViewState

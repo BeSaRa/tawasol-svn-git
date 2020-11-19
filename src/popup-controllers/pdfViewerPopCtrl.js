@@ -186,6 +186,17 @@ module.exports = function (app) {
                     self.exportDocument();
                 }
             };
+            var bookmarkButton = {
+                type: "custom",
+                id: "bookmark-shortcut",
+                title: "Export",
+                icon: "./assets/images/bookmark.svg",
+                onPress: function () {
+                    self.currentInstance.setViewState((state) => {
+                        return state.set('sidebarMode', PSPDFKit.SidebarMode.BOOKMARKS);
+                    });
+                }
+            };
             var customStampsButton = {
                 type: "custom",
                 id: "custom-stamps",
@@ -235,7 +246,7 @@ module.exports = function (app) {
                 onPress: self.addUserNameAndDateToDocument
             };
             // remove default print from toolbar
-            var toolbarInstance = _.filter(defaultToolbar.concat([usernameDateButton, printWithoutAnnotationButton]), function (item) {
+            var toolbarInstance = _.filter(defaultToolbar.concat([usernameDateButton, printWithoutAnnotationButton, bookmarkButton]), function (item) {
                 return item.type !== 'print';
             });
 
