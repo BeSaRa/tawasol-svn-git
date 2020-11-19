@@ -20,10 +20,10 @@ module.exports = function (app) {
             FOLLOWUP_BOOK_FILTER_START_BEFORE_VALUE: 30,
             ANNOTATE_DOCUMENT_PERMISSION: '',
             APP_CONTEXT: 'ui',
-            // PSPDF_LICENSE_KEY: false,
-            PSPDF_LICENSE_KEY: 'Onl2Q0e1go6bqEygUIxNj-FPmkcpLLqE0fXNcvMIZC9z073qKaQpFE35vTVXN2GAqUeaOXzL9OT11lWn8YvOY1XY9tFVmPcj-9YDu4vCnyj5-Z6XmP4hj4r3_ZlMIGwQ2-83euah5F45aWhov1xA0Xp43Z-S9LCl11Q1dqG8nnrX6x9S0ONX5_E4UG93HP1hPYQI2_mNG4Lj8jlVxfSupFj6hK9T_Ma-D-PGZ-qVCLmKDeie1buTo9ycJ5QxmlHkKRJA7NKOLo0_siScXumHmLaYS1gVBfxq-Fj-kg9OPNggn0AQ2FcfeWyzR2Yq8mlTHnc5FwQ39uaYHz1_jHg4CsEmXPxBhcK7ldQC8odBZxG6NkWDrIwj60sWXJcn0_Yg7K00HrMI__OMXlqP94vQRUlFEz3jq3E53IVuPV72YP8ib9AdC5FMTmhKOW0TCRjx',
+            PSPDF_LICENSE_KEY: false,
+            // PSPDF_LICENSE_KEY: 'Onl2Q0e1go6bqEygUIxNj-FPmkcpLLqE0fXNcvMIZC9z073qKaQpFE35vTVXN2GAqUeaOXzL9OT11lWn8YvOY1XY9tFVmPcj-9YDu4vCnyj5-Z6XmP4hj4r3_ZlMIGwQ2-83euah5F45aWhov1xA0Xp43Z-S9LCl11Q1dqG8nnrX6x9S0ONX5_E4UG93HP1hPYQI2_mNG4Lj8jlVxfSupFj6hK9T_Ma-D-PGZ-qVCLmKDeie1buTo9ycJ5QxmlHkKRJA7NKOLo0_siScXumHmLaYS1gVBfxq-Fj-kg9OPNggn0AQ2FcfeWyzR2Yq8mlTHnc5FwQ39uaYHz1_jHg4CsEmXPxBhcK7ldQC8odBZxG6NkWDrIwj60sWXJcn0_Yg7K00HrMI__OMXlqP94vQRUlFEz3jq3E53IVuPV72YP8ib9AdC5FMTmhKOW0TCRjx',
             REPLICATION_EXCLUDED_LIST: ['Note', 'Highlight', 'Squiggle', 'StrikeOut', 'Underline', 'Redaction'],
-            OFFICIAL_ATTACHMENT_EXCLUDED_TOOLBAR_ITEMS : [
+            OFFICIAL_ATTACHMENT_EXCLUDED_TOOLBAR_ITEMS: [
                 "annotate",
                 "ink",
                 "highlighter",
@@ -46,7 +46,7 @@ module.exports = function (app) {
                 // "approve",
                 // "ink-signature",
             ],
-            READY_TO_EXPORT_EXCLUDED_TOOLBAR_ITEMS : [
+            READY_TO_EXPORT_EXCLUDED_TOOLBAR_ITEMS: [
                 "annotate",
                 "ink",
                 "highlighter",
@@ -66,7 +66,8 @@ module.exports = function (app) {
                 "approve",
                 // "barcode",
             ],
-            SELECT_MAIN_SITE_IF_ONLY_ONE: true
+            SELECT_MAIN_SITE_IF_ONLY_ONE: true,
+            REASONABLE_INK_SIGNATURE_SIZE: {width: 120, height: 57}
         };
         var configurationServiceProvider = provider;
         /**

@@ -930,6 +930,43 @@ module.exports = function (app) {
         self.handleDeleteInkSignatureAnnotation = function (annotation) {
             return applicationUserSignatureService.deleteUserInkSignature(annotation.customData.additionalData.vsId);
         };
+
+        self.generateReasonableSize = function (annotation) {
+            var pageSize = self.currentInstance.pageInfoForIndex(self.currentInstance.viewState.currentPageIndex);
+            var defaultWidth = configurationService.REASONABLE_INK_SIGNATURE_SIZE.width,
+                defaultHeight = configurationService.REASONABLE_INK_SIGNATURE_SIZE.height,
+                defaultLeft = (pageSize.width / 2) - (defaultWidth / 2),
+                defaultTop = (pageSize.height / 2) - (defaultHeight / 2);
+
+            var widthRatio = defaultWidth / annotation.boundingBox.width,
+                heightRatio = defaultHeight / annotation.boundingBox.height,
+                ratio = Math.min(widthRatio, heightRatio),
+                newWidth = annotation.boundingBox.width * ratio,
+                newHeight = annotation.boundingBox.height * ratio,
+                resizeRatio = newWidth / annotation.boundingBox.width,
+                newLeft = (defaultLeft + defaultWidth / 2) - (newWidth / 2),
+                newTop = (defaultTop + defaultHeight / 2) - (newHeight / 2),
+                newLines = annotation.lines.map(line => {
+                    return line.map(point => {
+                        return new PSPDFKit.Geometry.DrawingPoint({
+                            x: newLeft + (point.x - annotation.boundingBox.left) * resizeRatio,
+                            y: newTop + (point.y - annotation.boundingBox.top) * resizeRatio,
+                        });
+                    })
+                }),
+                boundingBox = new PSPDFKit.Geometry.Rect({
+                    width: newWidth,
+                    height: newHeight,
+                    left: newLeft,
+                    top: newTop
+                }),
+                lineWidth = annotation.lineWidth * resizeRatio;
+            return {
+                lines: newLines,
+                boundingBox: boundingBox,
+                lineWidth: lineWidth
+            }
+        };
         /**
          * @description create annotation handler
          * @param annotations
@@ -944,10 +981,13 @@ module.exports = function (app) {
                 var customData = angular.copy(annotation.customData);
                 delete customData.repeaterHandler;
                 delete customData.repeatedAnnotation;
-
+                var reasonableSize = self.generateReasonableSize(annotation);
                 var updatedAnnotation = annotation
                     .set('isSignature', _getRightTypeForElectronicSignature() !== 1)
-                    .set('customData', customData);
+                    .set('customData', customData)
+                    .set('boundingBox', reasonableSize.boundingBox)
+                    .set('lines', reasonableSize.lines)
+                    .set('lineWidth', reasonableSize.lineWidth);
                 if (self.attacheUsernameAndDateToSignature) {
                     self.addUserNameAndDateToDocument(null, null, updatedAnnotation);
                 }
