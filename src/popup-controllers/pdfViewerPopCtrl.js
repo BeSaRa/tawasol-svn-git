@@ -2021,7 +2021,7 @@ module.exports = function (app) {
          * @returns {boolean|*}
          */
         self.employeeCanEditContent = function () {
-            if (!self.info) {
+            if (!self.info || self.info.isAttachment) {
                 return false;
             }
             var documentClass = (self.info.documentClass + ''),
