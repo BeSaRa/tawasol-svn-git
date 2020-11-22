@@ -189,11 +189,22 @@ module.exports = function (app) {
             var bookmarkButton = {
                 type: "custom",
                 id: "bookmark-shortcut",
-                title: "Export",
-                icon: "./assets/images/bookmark.svg",
+                title: "Bookmarks",
+                icon: "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\">\n" +
+                    "    <path fill=\"currentColor\" d=\"M15,5A2,2 0 0,1 17,7V23L10,20L3,23V7C3,5.89 3.9,5 5,5H15M9,1H19A2,2 0 0,1 21,3V19L19,18.13V3H7A2,2 0 0,1 9,1Z\" />\n" +
+                    "</svg>",
                 onPress: function () {
                     self.currentInstance.setViewState((state) => {
-                        return state.set('sidebarMode', PSPDFKit.SidebarMode.BOOKMARKS);
+                        self.currentInstance.setToolbarItems(items => {
+                            return items.map(item => {
+                                if (item.id === "bookmark-shortcut") {
+                                    item.selected = !item.selected;
+                                    state = state.set('sidebarMode', item.selected ? PSPDFKit.SidebarMode.BOOKMARKS : null);
+                                }
+                                return item;
+                            });
+                        });
+                        return state;
                     });
                 }
             };
@@ -1069,6 +1080,7 @@ module.exports = function (app) {
                 self.currentInstance.removeEventListener("inkSignatures.delete", self.handleDeleteInkSignatureAnnotation);
                 self.currentInstance.removeEventListener("annotations.create", self.handleCreateAnnotations);
                 self.currentInstance.removeEventListener("annotations.willChange", self.handleDeleteAnnotations);
+                self.currentInstance.removeEventListener("viewState.change", self.bookmarkSidebarListener);
             }
             try {
                 PSPDFKit.unload($element.find('#pdf-viewer')[0]);
@@ -1891,6 +1903,29 @@ module.exports = function (app) {
                     });
                 });
         };
+
+        self.bookmarkSidebarListener = function (state) {
+            if (state.sidebarMode === 'BOOKMARKS') {
+                self.currentInstance.setToolbarItems(items => {
+                    return items.map(item => {
+                        if (item.id === "bookmark-shortcut") {
+                            item.selected = true;
+                        }
+                        return item;
+                    });
+                });
+            } else {
+                self.currentInstance.setToolbarItems(items => {
+                    return items.map(item => {
+                        if (item.id === "bookmark-shortcut") {
+                            item.selected = false;
+                        }
+                        return item;
+                    });
+                });
+
+            }
+        };
         /**
          * @description to register all event listener that we need during annotate the document.
          */
@@ -1899,6 +1934,7 @@ module.exports = function (app) {
             self.currentInstance.addEventListener("inkSignatures.create", self.handleCreateInkSignatureAnnotation);
             self.currentInstance.addEventListener("inkSignatures.delete", self.handleDeleteInkSignatureAnnotation);
             self.currentInstance.addEventListener("annotations.create", self.handleCreateAnnotations);
+            self.currentInstance.addEventListener("viewState.change", self.bookmarkSidebarListener);
             // to handle delete annotations
             self.currentInstance.addEventListener("annotations.willChange", self.handleDeleteAnnotations);
             // for debug purpose
@@ -1973,7 +2009,7 @@ module.exports = function (app) {
                 self.notifyPreviousSteps = true;
             }
 
-            if (!self.sequentialWF && self.info.docStatus >= 24) {
+            if ((!self.sequentialWF && self.info.docStatus >= 24) || (self.info.isAttachment && self.correspondence.isOfficial)) {
                 self.enableAttachUsernameAndDate = false;
             }
             self.attacheUsernameAndDateToSignature = $cookies.get(cookieKey) ? JSON.parse($cookies.get(cookieKey)) : false;
