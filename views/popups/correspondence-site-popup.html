@@ -20,7 +20,7 @@
                                     <!-- Arabic Name -->
                                     <md-input-container flex>
                                         <label for="arName">{{lang.arabic_name}}</label>
-                                        <input name="arName" id="arName" required minlength="4" maxlength="80"
+                                        <input name="arName" id="arName" required minlength="4" maxlength="150"
                                                ng-model="ctrl.correspondenceSite.arName"
                                                custom-validate-directive="A1NS">
                                         <div ng-messages="correspondenceSiteForm.arName.$error">
@@ -32,7 +32,7 @@
                                     <!-- English Name -->
                                     <md-input-container flex>
                                         <label for="enName">{{lang.english_name}}</label>
-                                        <input name="enName" id="enName" required minlength="4" maxlength="80"
+                                        <input name="enName" id="enName" required minlength="4" maxlength="150"
                                                ng-model="ctrl.correspondenceSite.enName"
                                                custom-validate-directive="E1NS">
                                         <div ng-messages="correspondenceSiteForm.enName.$error">
@@ -46,7 +46,7 @@
                                     <!-- Arabic Display Name -->
                                     <md-input-container flex>
                                         <label for="arDisplayName">{{lang.arabic_display_name}}</label>
-                                        <input name="arDisplayName" id="arDisplayName" minlength="4" maxlength="80"
+                                        <input name="arDisplayName" id="arDisplayName" minlength="4" maxlength="150"
                                                ng-model="ctrl.correspondenceSite.arDisplayName"
                                                custom-validate-directive="ANS">
                                         <div ng-messages="correspondenceSiteForm.arDisplayName.$error">
@@ -57,7 +57,7 @@
                                     <!-- English Display Name -->
                                     <md-input-container flex>
                                         <label for="enDisplayName">{{lang.english_display_name}}</label>
-                                        <input name="enDisplayName" id="enDisplayName" minlength="4" maxlength="80"
+                                        <input name="enDisplayName" id="enDisplayName" minlength="4" maxlength="150"
                                                ng-model="ctrl.correspondenceSite.enDisplayName"
                                                custom-validate-directive="ENS">
                                         <div ng-messages="correspondenceSiteForm.enDisplayName.$error">
