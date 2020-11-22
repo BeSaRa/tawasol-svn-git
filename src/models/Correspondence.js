@@ -1037,9 +1037,7 @@ module.exports = function (app) {
             };
 
             Correspondence.prototype.openForAnnotation = function ($event) {
-                var info = this.getInfo(),
-                    forApproval = employeeService.getEmployee().isFirstViewForApproval && !info.isPaper && info.docStatus < 23;
-                return correspondenceService.annotateCorrespondence(this, (forApproval ? 3 : null));
+                return correspondenceService.annotateCorrespondence(this);
             };
             Correspondence.prototype.openSequentialDocument = function (annotationType, seqWF) {
                 var self = this;
