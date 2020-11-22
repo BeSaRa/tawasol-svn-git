@@ -3277,7 +3277,11 @@ module.exports = function (app) {
             return $http.put(urlService.correspondenceWF + '/outgoing/bulk/export', {data: items, options: options})
                 .then(function () {
                     return workItems;
-                });
+                }).catch(function (error) {
+                    if (errorCode.checkIf(error, 'CANNOT_EXPORT_MORE_THAN_FIFTY_ATTACHMENTS_OR_LINKED_DOCUMENTS_TO_G2G') === true) {
+                        dialog.errorMessage(generator.getTranslatedError(error));
+                    }
+                })
         };
 
         /**
