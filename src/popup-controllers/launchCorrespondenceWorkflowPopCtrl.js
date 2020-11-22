@@ -1629,7 +1629,9 @@ module.exports = function (app) {
 
             return _.some(proxyUsers, function (proxyUser) {
                 var proxyInfoSecurityLevels = generator.getSelectedCollectionFromResult(securityLevels, proxyUser.proxyInfo.securityLevels, 'lookupKey');
-                return proxyInfoSecurityLevels.indexOf(self.correspondence.securityLevelLookup) !== -1;
+                return _.some(proxyInfoSecurityLevels, function (proxyInfoSecurityLevel) {
+                    return proxyInfoSecurityLevel.lookupKey === self.correspondence.securityLevelLookup.lookupKey;
+                });
             })
         }
 

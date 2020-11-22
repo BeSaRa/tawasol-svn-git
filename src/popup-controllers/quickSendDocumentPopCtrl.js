@@ -319,7 +319,9 @@ module.exports = function (app) {
 
             return _.some(proxyUsers, function (proxyUser) {
                 var proxyInfoSecurityLevels = generator.getSelectedCollectionFromResult(securityLevels, proxyUser.proxyInfo.securityLevels, 'lookupKey');
-                return proxyInfoSecurityLevels.indexOf(self.record.securityLevelLookup) !== -1;
+                return _.some(proxyInfoSecurityLevels, function (proxyInfoSecurityLevel) {
+                    return proxyInfoSecurityLevel.lookupKey === self.record.securityLevelLookup.lookupKey;
+                });
             })
         }
 
