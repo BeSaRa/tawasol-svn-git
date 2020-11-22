@@ -274,7 +274,7 @@ module.exports = function (app) {
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
                 viewOnly = true;
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
-                viewOnly = seqWFStep.id && seqWFStep.id <= self.correspondence.getSeqWFNextStepId();
+                viewOnly = seqWFStep.id && seqWFStep.id < self.correspondence.getSeqWFNextStepId();
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFStatusSteps) {
                 viewOnly = true;
             }
