@@ -2082,7 +2082,8 @@ module.exports = function (app) {
             }
             return employeeService.hasPermissionTo(permissionName)
                 && !!self.sequentialWF
-                && self.info.needToApprove();
+                && (self.info.documentClass.toLowerCase() !== 'incoming')
+                && (self.info.docStatus < 23) && !self.info.isPaper;
         };
 
         /**
