@@ -64,7 +64,7 @@
                         <md-content class="md-padding">
                             <div layout="column">
                                 <div layout="row">
-                                    <!-- Document Type -->
+                                    <!-- Document Class -->
                                     <md-input-container flex>
                                         <label for="docType">{{ctrl.lookupNames['key_2'].getTranslatedName()}}</label>
                                         <md-select name="docType" id="docType"
@@ -72,11 +72,26 @@
                                                    ng-model="ctrl.filter.ui.key_2.value">
                                             <md-option ng-value="null">{{lang.none}}</md-option>
                                             <md-option ng-value="docType.lookupKey"
-                                                       ng-repeat="docType in ctrl.documentTypes">
+                                                       ng-repeat="docType in ctrl.documentClasses">
                                                 {{docType.getTranslatedName()}}
                                             </md-option>
                                         </md-select>
                                     </md-input-container>
+                                    <!-- Document Category -->
+                                    <md-input-container flex>
+                                        <label for="docCategory">{{ctrl.lookupNames['key_12'].getTranslatedName()}}</label>
+                                        <md-select id="docCategory"
+                                                   ng-disabled="ctrl.checkDocCategoryDisabled()"
+                                                   ng-model="ctrl.filter.ui.key_12.value">
+                                            <md-option ng-value="null">{{lang.none}}</md-option>
+                                            <md-option ng-repeat="option in ctrl.documentTypes"
+                                                       ng-value="option.id">
+                                                {{option.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
                                     <!-- Document Subject -->
                                     <md-input-container flex>
                                         <label for="docSubject">{{ctrl.lookupNames['key_3'].getTranslatedName()}}</label>
@@ -294,7 +309,7 @@
                                         </md-input-container>
                                     </div>
                                 </fieldset>
-
+                                <!-- Due Date Between -->
                                 <fieldset layout="column" class="search-fieldset">
                                     <legend class="md-accent">{{ctrl.lookupNames['key_10'].getTranslatedName()}}
                                     </legend>

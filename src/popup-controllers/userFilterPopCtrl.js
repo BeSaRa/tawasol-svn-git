@@ -10,8 +10,8 @@ module.exports = function (app) {
                                                   editMode,
                                                   toast,
                                                   rootEntity,
-                                                  // generator,
-                                                  // employeeService,
+                                                  generator,
+                                                  correspondenceService,
                                                   validationService,
                                                   userFilterService,
                                                   _,
@@ -31,7 +31,8 @@ module.exports = function (app) {
 
         self.senders = senders;
         self.actions = actions;
-        self.documentTypes = lookupService.returnLookups(lookupService.documentClass);
+        self.documentClasses = lookupService.returnLookups(lookupService.documentClass);
+        self.documentTypes = [];
         // self.securityLevels = generator.getSelectedCollectionFromResult(lookupService.returnLookups(lookupService.securityLevel), employeeService.getEmployee().organization.securityLevels, 'lookupKey');
 
         self.securityLevels = rootEntity.getGlobalSettings().securityLevels;
@@ -246,12 +247,19 @@ module.exports = function (app) {
         });
 
         self.onChangeDocumentType = function ($event) {
-            if (self.filter.ui.key_2.value && self.filter.ui.key_2.value === 2) {
-                self.filter.ui.key_siteType.value = null;
-                self.filter.ui.key_mainSite.value = null;
-                self.filter.ui.key_subSite.value = null;
-                self.mainSites = [];
-                self.subSites = [];
+            self.filter.ui.key_12.value = null;
+            self.documentTypes = [];
+
+            if (generator.validRequired(self.filter.ui.key_2.value)) {
+                if (self.filter.ui.key_2.value === 2) {
+                    self.filter.ui.key_siteType.value = null;
+                    self.filter.ui.key_mainSite.value = null;
+                    self.filter.ui.key_subSite.value = null;
+                    self.mainSites = [];
+                    self.subSites = [];
+                }
+
+                self.documentTypes = correspondenceService.getLookup(generator.getDocumentClassName(self.filter.ui.key_2.value), 'docTypes');
             }
         };
 
@@ -461,7 +469,7 @@ module.exports = function (app) {
             if (self.mainClassifications.length)
                 self.previousMainClassifications = angular.copy(self.mainClassifications);
 
-            classificationService.classificationSearch(self.mainClassificationSearchText , undefined , true)
+            classificationService.classificationSearch(self.mainClassificationSearchText, undefined, true)
                 .then(function (classifications) {
                     self.mainClassifications = classifications;
                 });
@@ -481,7 +489,7 @@ module.exports = function (app) {
                 self.previousSubClassifications = angular.copy(self.subClassifications);
 
             // self.filter.ui.key_23.value parent classification value.
-            classificationService.classificationSearch(self.subClassificationSearchText, self.filter.ui.key_23.value , true)
+            classificationService.classificationSearch(self.subClassificationSearchText, self.filter.ui.key_23.value, true)
                 .then(function (classifications) {
                     self.subClassifications = classifications;
                 });
@@ -491,9 +499,16 @@ module.exports = function (app) {
             self.loadSubClassificationByCriteria();
         };
 
+        self.checkDocCategoryDisabled = function () {
+            return !(generator.validRequired(self.filter.ui.key_2.value));
+        };
+
         self.$onInit = function () {
             if (self.filter.ui.key_23.value) {
                 self.onMainClassificationChanged();
+            }
+            if (generator.validRequired(self.filter.ui.key_2.value)) {
+                self.documentTypes = correspondenceService.getLookup(generator.getDocumentClassName(self.filter.ui.key_2.value), 'docTypes');
             }
         }
     });
