@@ -38,7 +38,9 @@ module.exports = function (app) {
                                                    $stateParams,
                                                    correspondenceService,
                                                    $q,
-                                                   rootEntity) {
+                                                   rootEntity,
+                                                   downloadService,
+                                                   errorCode) {
         'ngInject';
         var self = this;
 
@@ -205,6 +207,10 @@ module.exports = function (app) {
                     }
                 }).catch(function (error) {
                     self.saveInProgress = false;
+                    if (errorCode.checkIf(error, 'CANNOT_EXPORT_TOO_MANY_ATTACHMENTS_OR_LINKED_DOCUMENTS') === true) {
+                        dialog.errorMessage(generator.getTranslatedError(error));
+                    }
+
                     return $q.reject(error);
                 });
             });

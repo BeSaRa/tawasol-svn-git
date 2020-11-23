@@ -18,7 +18,9 @@ module.exports = function (app) {
                                                                   Internal,
                                                                   General,
                                                                   G2G,
-                                                                  G2GMessagingHistory) {
+                                                                  G2GMessagingHistory,
+                                                                  errorCode,
+                                                                  generator) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageLinkedDocumentDirectiveCtrl';
@@ -101,8 +103,12 @@ module.exports = function (app) {
                     self.linkedDocs = linkedDocs;
                     toast.success(langService.get('success_messages'));
                 })
-                .catch(function () {
-                    toast.success(langService.get('error_messages'));
+                .catch(function (error) {
+                    if (errorCode.checkIf(error, 'CANNOT_EXPORT_TOO_MANY_ATTACHMENTS_OR_LINKED_DOCUMENTS') === true) {
+                        dialog.errorMessage(generator.getTranslatedError(error));
+                    } else {
+                        toast.error(langService.get('error_messages'));
+                    }
                 });
         };
 

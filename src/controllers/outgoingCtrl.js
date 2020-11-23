@@ -41,7 +41,9 @@ module.exports = function (app) {
                                              gridService,
                                              _,
                                              rootEntity,
-                                             configurationService) {
+                                             configurationService,
+                                             downloadService,
+                                             errorCode) {
         'ngInject';
         var self = this;
         self.controllerName = 'outgoingCtrl';
@@ -266,9 +268,11 @@ module.exports = function (app) {
                         self.saveInProgress = false;
                         if (typeof error === 'string') {
                             toast.error(error);
-                        } else {
-                            return $q.reject(error);
+                        } else if (errorCode.checkIf(error, 'CANNOT_EXPORT_TOO_MANY_ATTACHMENTS_OR_LINKED_DOCUMENTS') === true) {
+                            dialog.errorMessage(generator.getTranslatedError(error));
                         }
+
+                        return $q.reject(error);
                     });
             })
         };
