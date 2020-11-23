@@ -30,6 +30,27 @@ module.exports = function (app) {
         return function WorkItem(model) {
             var self = this,
                 correspondenceService = null,
+                exportData = {
+                    inbox_serial: function () {
+                        return this.generalStepElm.docFullSerial;
+                    },
+                    subject: function () {
+                        return this.generalStepElm.docSubject;
+                    },
+                    received_date: function () {
+                        return this.getReceivedDateTime();
+                    },
+                    action: function () {
+                        return this.action.getTranslatedName();
+                    },
+                    sender: function () {
+                        return this.senderInfo.getTranslatedName()
+                    },
+                    due_date: 'generalStepElm.dueDate',
+                    correspondence_sites: function () {
+                        return this.getTranslatedCorrespondenceSiteInfo();
+                    }
+                },
                 followUpUserService = null,
                 managerService = null,
                 downloadService = null,
@@ -1318,6 +1339,10 @@ module.exports = function (app) {
 
             WorkItem.prototype.isSeqInBackStep = function () {
                 return this.generalStepElm.isSeqWFBackward;
+            };
+
+            WorkItem.prototype.getExportedData = function () {
+                return exportData;
             };
 
             // don't remove CMSModelInterceptor from last line

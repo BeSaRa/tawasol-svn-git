@@ -43,7 +43,8 @@ module.exports = function (app) {
                                               gridService,
                                               WorkItem,
                                               configurationService,
-                                              sequentialWorkflowService) {
+                                              sequentialWorkflowService,
+                                              printService) {
         'ngInject';
         var self = this;
         self.controllerName = 'userInboxCtrl';
@@ -2526,6 +2527,50 @@ module.exports = function (app) {
 
         if (employeeService.getEmployee().getIntervalMin()) {
             self.refreshInbox(employeeService.getEmployee().getIntervalMin());
+        }
+
+        self.printResult = function (printSelected, $event) {
+         //   return false;
+            var printTitle = langService.get('menu_item_user_inbox');
+            var records = [];
+            var headers = [
+                'inbox_serial',
+                'subject',
+                'received_date',
+                'action',
+                'sender',
+                'due_date',
+                'correspondence_sites'
+            ];
+
+            if (printSelected) {
+                records = self.selectedUserInboxes;
+            } else {
+                if (self.selectedFilter && self.selectedGridType === 'filter') {
+                    // filter tabs
+                    printTitle = printTitle + ' - ' + self.selectedFilter.filter.getTranslatedName();
+                    records = self.workItemsFilters[self.selectedFilter.index];
+                } else if (self.selectedGridType === 'starred') {
+                    // starred
+                    printTitle = printTitle + ' - ' + langService.get('starred_tab');
+                    records = self.starredUserInboxes;
+                } else {
+                    records = self.userInboxes;
+                }
+            }
+
+            printService
+                .printData(records, headers, printTitle);
+        }
+
+        self.canShowPrint = function () {
+            if (self.selectedFilter && self.selectedGridType === 'filter') {
+                return self.workItemsFilters[self.selectedFilter.index] && self.workItemsFilters[self.selectedFilter.index].length > 0;
+            } else if (self.selectedGridType === 'starred') {
+                return self.starredUserInboxes > 0;
+            } else {
+                return self.userInboxes;
+            }
         }
 
         $scope.$on('$folder_deleted', function (event) {

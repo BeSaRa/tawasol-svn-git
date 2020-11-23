@@ -30,7 +30,8 @@ module.exports = function (app) {
                 quickActions: '=',
                 moveToFolderBulk: '=?',
                 sortingCallback: '=',
-                sortOrder: '='
+                sortOrder: '=',
+                printUserInboxBulk: '=?'
             }
         }
     })

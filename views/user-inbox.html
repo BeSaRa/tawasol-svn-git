@@ -45,6 +45,10 @@
                 </md-switch>
             </div>
             <span flex></span>
+            <md-button ng-if="ctrl.canShowPrint()"
+                       ng-click="ctrl.printResult(false,$event)" class="md-icon-button" tooltip="{{lang.print}}">
+                <md-icon md-svg-icon="printer"></md-icon>
+            </md-button>
             <md-button ng-click="ctrl.userFilterCreate($event)"
                        aria-label="{{lang.create_filter}}"
                        class="md-icon-button" tooltip="{{lang.create_filter}}">
@@ -105,7 +109,8 @@
                                                 mark-as-read-unread="ctrl.markAsReadUnread"
                                                 check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
                                                 selected-work-items="ctrl.selectedUserInboxes"
-                                                sorting-callback="ctrl.getSortedDataForInbox">
+                                                sorting-callback="ctrl.getSortedDataForInbox"
+                                                print-user-inbox-bulk="ctrl.printResult">
                                         </work-item-inbox-directive>
                                     </md-content>
                                 </md-tab>
@@ -128,7 +133,8 @@
                                                 mark-as-read-unread="ctrl.markAsReadUnread"
                                                 check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
                                                 selected-work-items="ctrl.selectedUserInboxes"
-                                                sorting-callback="ctrl.getSortedDataForStarred">
+                                                sorting-callback="ctrl.getSortedDataForStarred"
+                                                print-user-inbox-bulk="ctrl.printResult">
                                         </work-item-inbox-directive>
                                     </md-content>
                                 </md-tab>
@@ -187,7 +193,8 @@
                                                     mark-as-read-unread="ctrl.markAsReadUnread"
                                                     check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
                                                     selected-work-items="ctrl.selectedUserInboxes"
-                                                    sorting-callback="ctrl.getSortedDataForFilter">
+                                                    sorting-callback="ctrl.getSortedDataForFilter"
+                                                    print-user-inbox-bulk="ctrl.printResult">
                                             </work-item-inbox-directive>
                                         </md-content>
                                     </md-tab-body>
@@ -222,7 +229,8 @@
                                         selected-work-items="ctrl.selectedUserInboxes"
                                         work-items="ctrl.userInboxes"
                                         sorting-callback="ctrl.getSortedDataForInbox"
-                                        sort-order="ctrl.grid.order">
+                                        sort-order="ctrl.grid.order"
+                                        print-user-inbox-bulk="ctrl.printResult">
                                 </magazine-layout-directive>
                             </md-content>
                         </md-tab>
@@ -249,7 +257,8 @@
                                         selected-work-items="ctrl.selectedUserInboxes"
                                         work-items="ctrl.starredUserInboxes"
                                         sorting-callback="ctrl.getSortedDataForStarred"
-                                        sort-order="ctrl.starredGrid.order">
+                                        sort-order="ctrl.starredGrid.order"
+                                        print-user-inbox-bulk="ctrl.printResult">
                                 </magazine-layout-directive>
                             </md-content>
                         </md-tab>
@@ -312,7 +321,8 @@
                                             selected-work-items="ctrl.selectedUserInboxes"
                                             work-items="ctrl.workItemsFilters[$index]"
                                             sorting-callback="ctrl.getSortedDataForFilter"
-                                            sort-order="ctrl.filterGrid[$index].order"></magazine-layout-directive>
+                                            sort-order="ctrl.filterGrid[$index].order"
+                                            print-user-inbox-bulk="ctrl.printResult"></magazine-layout-directive>
                                 </md-content>
                             </md-tab-body>
                         </md-tab>

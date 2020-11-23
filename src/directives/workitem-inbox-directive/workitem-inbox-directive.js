@@ -22,7 +22,8 @@ module.exports = function (app) {
                 markAsReadUnread: '=',
                 grid: '=',
                 searchModel: '=',
-                sortingCallback: '='
+                sortingCallback: '=',
+                printUserInboxBulk: '=?'
             }
         }
     })
