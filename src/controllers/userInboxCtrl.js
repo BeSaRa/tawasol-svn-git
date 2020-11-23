@@ -2530,7 +2530,6 @@ module.exports = function (app) {
         }
 
         self.printResult = function (printSelected, $event) {
-         //   return false;
             var printTitle = langService.get('menu_item_user_inbox');
             var records = [];
             var headers = [
@@ -2567,9 +2566,9 @@ module.exports = function (app) {
             if (self.selectedFilter && self.selectedGridType === 'filter') {
                 return self.workItemsFilters[self.selectedFilter.index] && self.workItemsFilters[self.selectedFilter.index].length > 0;
             } else if (self.selectedGridType === 'starred') {
-                return self.starredUserInboxes > 0;
+                return self.starredUserInboxes.length > 0;
             } else {
-                return self.userInboxes;
+                return self.userInboxes.length > 0;
             }
         }
 

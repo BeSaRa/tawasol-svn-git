@@ -29,6 +29,10 @@
                     <md-icon md-svg-icon="folder"></md-icon>
                 </md-button>
             </div>
+            <md-button ng-if="ctrl.workItems.length"
+                       ng-click="ctrl.printResult(false,$event)" class="md-icon-button" tooltip="{{lang.print}}">
+                <md-icon md-svg-icon="printer"></md-icon>
+            </md-button>
             <grid-search-directive grid="ctrl.grid"></grid-search-directive>
         </div>
         <!-- end page-header -->
@@ -71,6 +75,12 @@
                                                 <span flex></span>
 
                                                 <!--ng-if="ctrl.selectedWorkItems.length > 1"-->
+                                                <md-button class="md-icon-button"
+                                                           aria-label="{{lang.print}}"
+                                                           tooltip="{{lang.print}}"
+                                                           ng-click="ctrl.printResult(true,$event)">
+                                                    <md-icon md-svg-icon="printer" class="action-green"></md-icon>
+                                                </md-button>
                                                 <md-button class="md-icon-button"
                                                            tooltip="{{lang.grid_action_forward}}"
                                                            ng-click="ctrl.forwardBulk($event)">
@@ -323,7 +333,8 @@
                                 selected-work-items="ctrl.selectedWorkItems"
                                 work-items="ctrl.workItems"
                                 sorting-callback="ctrl.getSortedData"
-                                sort-order="ctrl.grid.order">
+                                sort-order="ctrl.grid.order"
+                                print-user-inbox-bulk="ctrl.printResult">
                         </magazine-layout-directive>
                     </div>
                 </div>

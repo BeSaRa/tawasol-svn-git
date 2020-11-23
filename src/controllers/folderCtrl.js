@@ -26,7 +26,8 @@ module.exports = function (app) {
                                            gridService,
                                            $scope,
                                            configurationService,
-                                           sequentialWorkflowService) {
+                                           sequentialWorkflowService,
+                                           printService) {
         'ngInject';
         var self = this;
         self.controllerName = 'folderCtrl';
@@ -2068,6 +2069,29 @@ module.exports = function (app) {
                 }
             }
         ];
+
+        self.printResult = function (printSelected, $event) {
+            var printTitle = langService.get('menu_item_folders') + ' - ' + self.selectedFolder.getTranslatedName(),
+                records = [],
+                headers = [
+                    'inbox_serial',
+                    'subject',
+                    'received_date',
+                    'action',
+                    'sender',
+                    'due_date',
+                    'correspondence_sites'
+                ];
+
+            if (printSelected) {
+                records = self.selectedWorkItems;
+            } else {
+                records = self.workItems;
+            }
+
+            printService
+                .printData(records, headers, printTitle);
+        }
 
         $scope.$on('$folder_deleted', function (event) {
             if (self.controllerName === 'folderCtrl') {
