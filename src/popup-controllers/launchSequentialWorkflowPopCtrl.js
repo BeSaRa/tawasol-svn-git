@@ -109,7 +109,6 @@ module.exports = function (app) {
                 // cause no need any of those properties is case it is just send (pinCode , composite , ignoreMultiSignValidation)
                 var signatureModel = self.record.prepareSignatureModel(null, null, null);
                 signatureModel.setSeqWFId(self.selectedSeqWF.id);
-                console.log('signatureModel FORM Launch SEQ', signatureModel);
                 sequentialWorkflowService.launchSeqWFCorrespondence(self.record, signatureModel, null, true, terminateAllWFS)
                     .then(function (result) {
                         if (result === 'ERROR_MULTI_USER') {
