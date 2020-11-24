@@ -27,7 +27,8 @@ module.exports = function (app) {
                                                           generator,
                                                           rootEntity,
                                                           $filter,
-                                                          manageLaunchWorkflowService) {
+                                                          manageLaunchWorkflowService,
+                                                          documentTagService) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewCorrespondencePopCtrl';
@@ -875,6 +876,14 @@ module.exports = function (app) {
         self.$onInit = function () {
             self.hideSlowModeToggleButton = self.psPDFViewerEnabled && self.correspondence && self.correspondence.mimeType === 'application/pdf';
         }
+
+        self.saveTags = function () {
+            documentTagService
+                .saveDocumentTags(self.correspondence.getInfo().documentClass, self.correspondence.vsId, self.correspondence.tags)
+                .then(function (tags) {
+                    toast.success(langService.get('tags_saved_success'));
+                });
+        };
 
     });
 };
