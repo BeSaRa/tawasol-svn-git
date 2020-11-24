@@ -53,6 +53,7 @@ module.exports = function (app) {
         self.disableSend = false;
         self.rootEntity = rootEntity;
         self.canMinimize = false;
+        self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
 
         /**
          * get multi info in case the correspondence array.
@@ -758,28 +759,44 @@ module.exports = function (app) {
         }
 
         /**
+         * @description
+         * @param proxies
+         * @private
+         */
+        function _showProxyMessage(proxies) {
+            var proxyUsersNotHaveDocumentSecurityLevel = self.getUsersDoesNotHaveDocumentSecurityLevel(proxies);
+            if (proxyUsersNotHaveDocumentSecurityLevel && proxyUsersNotHaveDocumentSecurityLevel.length) {
+                dialog.alertMessage(_prepareProxyMessage(proxyUsersNotHaveDocumentSecurityLevel, false));
+            }
+            var proxyUsersHaveSecurityLevel = _.differenceBy(proxies, proxyUsersNotHaveDocumentSecurityLevel, 'proxyInfo.proxyDomain');
+            if (proxyUsersHaveSecurityLevel.length) {
+                dialog.alertMessage(_prepareProxyMessage(proxyUsersHaveSecurityLevel, true));
+            }
+        }
+
+        /**
          * @description prepare proxy Message
          * @param proxyUsers
          * @private
          */
-        function _prepareProxyMessage(proxyUsers) {
-            if (!self.isDelegatedUsersHasDocumentSecurityLevel(proxyUsers)) {
-                return langService.get('document_doesnot_have_security_level_as_delegated_user')
-            } else {
-                var titleTemplate = angular.element('<span class="validation-title">' + langService.get('proxy_user_message') + '</span> <br/>');
-                titleTemplate.html(langService.get('proxy_user_message'));
+        function _prepareProxyMessage(proxyUsers, isDocumentHaveSecurityLevel) {
+            var titleMessage = isDocumentHaveSecurityLevel ?
+                langService.get('proxy_user_message') :
+                langService.get('document_doesnot_have_security_level_as_delegated_user');
 
-                var tableRows = _.map(proxyUsers, function (user) {
-                    return [user.arName, user.enName, user.proxyInfo.arName, user.proxyInfo.enName, user.proxyInfo.proxyDomain, moment(user.proxyInfo.proxyStartDate).format('YYYY-MM-DD'), moment(user.proxyInfo.proxyEndDate).format('YYYY-MM-DD'), user.proxyInfo.proxyMessage];
-                });
+            var titleTemplate = angular.element('<span class="validation-title">' + titleMessage + '</span> <br/>');
+            titleTemplate.html(titleMessage);
 
-                var table = tableGeneratorService.createTable([langService.get('arabic_name'), langService.get('english_name'), langService.get('proxy_arabic_name'), langService.get('proxy_english_name'), langService.get('proxy_domain'), langService.get('start_date'), langService.get('end_date'), langService.get('proxy_message')], 'error-table');
-                table.createTableRows(tableRows);
+            var tableRows = _.map(proxyUsers, function (user) {
+                return [user.arName, user.enName, user.proxyInfo.arName, user.proxyInfo.enName, user.proxyInfo.proxyDomain, moment(user.proxyInfo.proxyStartDate).format('YYYY-MM-DD'), moment(user.proxyInfo.proxyEndDate).format('YYYY-MM-DD'), user.proxyInfo.proxyMessage];
+            });
 
-                titleTemplate.append(table.getTable(true));
+            var table = tableGeneratorService.createTable([langService.get('arabic_name'), langService.get('english_name'), langService.get('proxy_arabic_name'), langService.get('proxy_english_name'), langService.get('proxy_domain'), langService.get('start_date'), langService.get('end_date'), langService.get('proxy_message')], 'error-table');
+            table.createTableRows(tableRows);
 
-                return titleTemplate.html();
-            }
+            titleTemplate.append(table.getTable(true));
+
+            return titleTemplate.html();
         }
 
         /**
@@ -1258,8 +1275,9 @@ module.exports = function (app) {
             // get proxies users to display message before add.
             var proxies = _getProxiesUsers(selectedUsers);
             // display proxy message
-            if (proxies.length)
-                dialog.alertMessage(_prepareProxyMessage(proxies));
+            if (proxies.length) {
+                _showProxyMessage(proxies);
+            }
             // add users to grid
             _addUsersToSelectedGrid(selectedUsers);
         }
@@ -1275,8 +1293,9 @@ module.exports = function (app) {
             // get proxies users to display message before add.
             var proxies = _getProxiesUsers(selectedUsers);
             // display proxy message
-            if (proxies.length)
-                dialog.alertMessage(_prepareProxyMessage(proxies));
+            if (proxies.length) {
+                _showProxyMessage(proxies);
+            }
             // add users to grid
             _addUsersToSelectedGrid(selectedUsers);
         };
@@ -1325,8 +1344,9 @@ module.exports = function (app) {
                         // get proxies users to display message before add.
                         var proxies = _getProxiesUsers(users);
                         // display proxy message
-                        if (proxies.length)
-                            dialog.alertMessage(_prepareProxyMessage(proxies));
+                        if (proxies.length) {
+                            _showProxyMessage(proxies);
+                        }
                         // add users to grid
                         _addUsersToSelectedGrid(users);
                     });
@@ -1334,8 +1354,9 @@ module.exports = function (app) {
                 // get proxies users to display message before add.
                 var proxies = _getProxiesUsers(users);
                 // display proxy message
-                if (proxies.length)
-                    dialog.alertMessage(_prepareProxyMessage(proxies));
+                if (proxies.length) {
+                    _showProxyMessage(proxies);
+                }
                 // add users to grid
                 _addUsersToSelectedGrid(users);
             }
@@ -1624,13 +1645,12 @@ module.exports = function (app) {
                 });
         };
 
-        self.isDelegatedUsersHasDocumentSecurityLevel = function (proxyUsers) {
-            var securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+        self.getUsersDoesNotHaveDocumentSecurityLevel = function (proxyUsers) {
+            return _.filter(proxyUsers, function (proxyUser) {
+                var proxyUserSecurityLevels = generator.getSelectedCollectionFromResult(self.securityLevels, proxyUser.proxyInfo.securityLevels, 'lookupKey');
 
-            return _.some(proxyUsers, function (proxyUser) {
-                var proxyInfoSecurityLevels = generator.getSelectedCollectionFromResult(securityLevels, proxyUser.proxyInfo.securityLevels, 'lookupKey');
-                return _.some(proxyInfoSecurityLevels, function (proxyInfoSecurityLevel) {
-                    return proxyInfoSecurityLevel.lookupKey === self.correspondence.securityLevelLookup.lookupKey;
+                return _.every(proxyUserSecurityLevels, function (userSecurityLevel) {
+                    return userSecurityLevel.lookupKey !== self.correspondence.securityLevelLookup.lookupKey;
                 });
             })
         }
