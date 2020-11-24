@@ -1006,10 +1006,14 @@ module.exports = function (app) {
                 var reasonableSize = self.generateReasonableSize(annotation);
                 var updatedAnnotation = annotation
                     .set('isSignature', _getRightTypeForElectronicSignature() !== 1)
-                    .set('customData', customData)
-                    .set('boundingBox', reasonableSize.boundingBox)
-                    .set('lines', reasonableSize.lines)
-                    .set('lineWidth', reasonableSize.lineWidth);
+                    .set('customData', customData);
+
+                if (!customData.hasOwnProperty('parentId')) {
+                    updatedAnnotation = updatedAnnotation.set('boundingBox', reasonableSize.boundingBox)
+                        .set('lines', reasonableSize.lines)
+                        .set('lineWidth', reasonableSize.lineWidth);
+                }
+
                 if (self.attacheUsernameAndDateToSignature) {
                     self.addUserNameAndDateToDocument(null, null, updatedAnnotation);
                 }
