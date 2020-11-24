@@ -24,6 +24,7 @@ module.exports = function (app) {
                                       SignDocumentModel,
                                       sequentialWorkflowService,
                                       encryptionService,
+                                      _,
                                       Lookup) {
         'ngInject';
 
@@ -1173,17 +1174,23 @@ module.exports = function (app) {
             };
 
             WorkItem.prototype.openSequentialDocument = function (annotationType, seqWF, actions) {
-                var self = this, info = this.getInfo(),
-                    forApproval = employeeService.getEmployee().isFirstViewForApproval && !info.isPaper && info.docStatus < 23;
+                var self = this, info = this.getInfo(), step = null,
+                    forApproval = employeeService.getEmployee().isFirstViewForApproval && !info.isPaper && info.docStatus < 23 && self.checkElectronicSignaturePermission();
                 return viewDocumentService.viewUserInboxDocument(self, actions, 'userInbox', null, true)
                     .then(function (generalStepElementView) {
                         generalStepElementView.actions = actions;
                         self.generalStepElm.isSeqWFBackward = generalStepElementView.generalStepElm.isSeqWFBackward;
                         if (seqWF) {
-                            return correspondenceService.annotateCorrespondence(self, (forApproval ? 3 : annotationType), null, seqWF, generalStepElementView);
+                            var step = _.find(seqWF.steps, function (step) {
+                                return step.id === generalStepElementView.generalStepElm.seqWFNextStepId;
+                            });
+                            return correspondenceService.annotateCorrespondence(self, (forApproval && step.isAuthorizeAndSendStep() ? 3 : annotationType), null, seqWF, generalStepElementView);
                         }
                         return sequentialWorkflowService.loadSequentialWorkflowById(self.getSeqWFId()).then(function (seqWF) {
-                            return correspondenceService.annotateCorrespondence(self, (forApproval ? 3 : annotationType), null, seqWF, generalStepElementView);
+                            var step = _.find(seqWF.steps, function (step) {
+                                return step.id === generalStepElementView.generalStepElm.seqWFNextStepId;
+                            });
+                            return correspondenceService.annotateCorrespondence(self, (forApproval && step.isAuthorizeAndSendStep() ? 3 : annotationType), null, seqWF, generalStepElementView);
                         });
                     });
             };
