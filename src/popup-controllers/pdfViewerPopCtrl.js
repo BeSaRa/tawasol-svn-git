@@ -1689,17 +1689,17 @@ module.exports = function (app) {
                         var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations, self.documentOperations, self.oldBookmarks, self.newBookmarks);
                         if (self.info.isPaper || self.info.docStatus >= 23) {
                             if (!hasChanges.length) {
-                                return self.performSendBackStep(backStepOptions, true);
+                                return self.performSendBackStep(backStepOptions, true, hasChanges.length);
                             }
                             return dialog.confirmMessage(langService.get('confirm_annotation_save_on_content'))
                                 .then(function () {
-                                    return self.performSendBackStep(backStepOptions, false);
+                                    return self.performSendBackStep(backStepOptions, false, hasChanges.length);
                                 })
                                 .catch(function () {
-                                    return self.performSendBackStep(backStepOptions, true);
+                                    return self.performSendBackStep(backStepOptions, true, hasChanges.length);
                                 });
                         } else {
-                            return self.performSendBackStep(backStepOptions, false);
+                            return self.performSendBackStep(backStepOptions, false, hasChanges.length);
                         }
                     });
 
@@ -1712,9 +1712,10 @@ module.exports = function (app) {
          * @description perform back step action
          * @param backStepOptions
          * @param ignoreContent
+         * @param hasChanges
          */
-        self.performSendBackStep = function (backStepOptions, ignoreContent) {
-            sequentialWorkflowService.backStepSeqWFCorrespondence(self.correspondence, backStepOptions, self.currentInstance, self.documentOperations, ignoreContent).then(function (data) {
+        self.performSendBackStep = function (backStepOptions, ignoreContent, hasChanges) {
+            sequentialWorkflowService.backStepSeqWFCorrespondence(self.correspondence, backStepOptions, self.currentInstance, self.documentOperations, ignoreContent, hasChanges).then(function (data) {
                 toast.success(langService.get('launch_sequential_workflow_back_success'));
                 !ignoreContent ? self.sendAnnotationLogs(function () {
                     self.disableSaveButton = false;

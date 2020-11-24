@@ -548,9 +548,10 @@ module.exports = function (app) {
          * @param pdfInstance
          * @param documentOperations
          * @param ignoreContent
+         * @param hasChanges
          * @return {*}
          */
-        self.backStepSeqWFCorrespondence = async function (correspondence, backStepOptions, pdfInstance, documentOperations, ignoreContent) {
+        self.backStepSeqWFCorrespondence = async function (correspondence, backStepOptions, pdfInstance, documentOperations, ignoreContent, hasChanges) {
             var info = correspondence.getInfo(), addAttachment = false;
             var INSTANT_JSON = await pdfInstance.exportInstantJSON();
             delete INSTANT_JSON.pdfId;
@@ -565,7 +566,7 @@ module.exports = function (app) {
                         backwardOptions: backStepOptions
                     }));
                     if (info.isPaper || info.docStatus >= 23 && !ignoreContent) {
-                        formData.append('content', pdfContent);
+                        hasChanges ? formData.append('content', pdfContent) : null;
                     } else {
                         addAttachment = true;
                     }
@@ -574,7 +575,7 @@ module.exports = function (app) {
                             'Content-Type': undefined
                         }
                     }).then(function (result) {
-                        addAttachment ? correspondence.addAnnotationAsAttachment(pdfContent) : result;
+                        addAttachment && hasChanges ? correspondence.addAnnotationAsAttachment(pdfContent) : result;
                     });
                 })
         };
