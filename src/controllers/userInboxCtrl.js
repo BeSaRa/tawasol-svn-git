@@ -447,10 +447,7 @@ module.exports = function (app) {
                     self.userInboxesCopy = angular.copy(self.userInboxes);
                     self.starredUserInboxes = _.filter(result, 'generalStepElm.starred');
                     self.starredUserInboxesCopy = angular.copy(self.starredUserInboxes);
-                    self.selectedUserInboxes = _.filter(self.userInboxes, function (item) {
-                        return workItemsWobNumbers.indexOf(item.generalStepElm.workObjectNumber) !== -1;
-                    });
-                    defer.resolve(true);
+
                     if (pageNumber) {
                         self.grid.page = pageNumber;
                         self.starredGrid.page = pageNumber;
@@ -459,6 +456,11 @@ module.exports = function (app) {
                     self.getSortedDataForStarred();
                     self.grid.searchCallback();
                     self.starredGrid.searchCallback();
+
+                    self.selectedUserInboxes = _.filter(self.userInboxes, function (item) {
+                        return workItemsWobNumbers.indexOf(item.generalStepElm.workObjectNumber) !== -1;
+                    });
+                    defer.resolve(true);
                     return result;
                 });
         };
