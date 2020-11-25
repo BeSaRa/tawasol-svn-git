@@ -85,7 +85,7 @@
                                                    ng-model="ctrl.filter.ui.key_12.value">
                                             <md-option ng-value="null">{{lang.none}}</md-option>
                                             <md-option ng-repeat="option in ctrl.documentTypes"
-                                                       ng-value="option.id">
+                                                       ng-value="option.lookupKey">
                                                 {{option.getTranslatedName()}}
                                             </md-option>
                                         </md-select>
