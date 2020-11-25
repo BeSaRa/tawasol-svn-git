@@ -384,16 +384,20 @@ module.exports = function (app) {
          * @param ignoreMessage
          * @param saveBeforeApprove
          * @param skipCheck
+         * @param userComment
          * @returns {*}
          */
-        self.saveCorrespondenceChanges = function ($event, ignoreMessage, saveBeforeApprove, skipCheck) {
+        self.saveCorrespondenceChanges = function ($event, ignoreMessage, saveBeforeApprove, skipCheck, userComment) {
             var info = self.correspondence.getInfo();
+            delete self.correspondence.userCommentForSave;
+
             var method = info.needToApprove() && self.editMode ? 'saveDocumentWithContent' : 'saveDocument';
             if (method === 'saveDocumentWithContent') {
                 angular.element('iframe#iframe-main-document').remove();
                 self.disableSaveTimeout = true;
                 return $timeout(function () {
-                    return self.correspondence[method](self.content)
+                    self.correspondence.userCommentForSave = userComment;
+                    return self.correspondence[method](self.content, false)
                         .then(function () {
                             if (!ignoreMessage)
                                 toast.success(langService.get('save_success'));
@@ -424,6 +428,7 @@ module.exports = function (app) {
                         });
                 }, configurationService.OFFICE_ONLINE_DELAY);
             } else {
+                self.correspondence.userCommentForSave = userComment;
                 return self.correspondence[method](false, skipCheck)
                     .then(function () {
                         if (!ignoreMessage)
@@ -435,13 +440,24 @@ module.exports = function (app) {
                         if (errorCode.checkIf(error, 'ALREADY_EXISTS_INCOMING_BOOK_WITH_SAME_REFERENCE_NUMBER') === true) {
                             dialog.confirmMessage(langService.get('incoming_book_exists_same_number_site_year') + "<br/>" + langService.get('confirm_continue_message'))
                                 .then(function () {
-                                    return self.saveCorrespondenceChanges($event, ignoreMessage, saveBeforeApprove, true);
+                                    return self.saveCorrespondenceChanges($event, ignoreMessage, saveBeforeApprove, true, userComment);
                                 }).catch(function () {
                                 return $q.reject(error);
                             });
                         }
                     });
             }
+        };
+
+        /**
+         * @description Save the document with user comment
+         * @param $event
+         */
+        self.saveWithComment = function ($event) {
+            correspondenceService.showReasonDialog('comment', $event, 'save')
+                .then(function (comment) {
+                    self.saveCorrespondenceChanges($event, false, false, false, comment);
+                })
         };
 
         self.saveAndSend = function ($event) {

@@ -679,11 +679,21 @@ module.exports = function (app) {
         self.updateCorrespondence = function (correspondence, withoutCheck) {
             var route = 'metadata';
             var info = correspondence.getInfo();
+            var queryString = '', queryStringValues = [];
 
             // to check weather incoming reference no already exists
             if (!withoutCheck && info.documentClass === 'incoming') {
-                route += '?with-check=true';
+                queryStringValues.push('with-check=true');
             }
+            if (!!correspondence.userCommentForSave) {
+                queryStringValues.push('userComments=' + correspondence.userCommentForSave);
+            }
+            delete correspondence.userCommentForSave;
+            if (queryStringValues.length > 0) {
+                queryString += '?' + queryStringValues.join('&');
+            }
+
+            route += queryString;
 
             return $http
                 .put(_createUrlSchema(null, correspondence.docClassName, route),
@@ -771,8 +781,21 @@ module.exports = function (app) {
          */
         self.updateCorrespondenceWithContent = function (correspondence, information) {
             var book = _createCorrespondenceStructure(correspondence, information);
+            var route = 'full-with-template';
+            var queryString = '', queryStringValues = [];
+
+            if (!!correspondence.userCommentForSave) {
+                queryStringValues.push('userComments=' + correspondence.userCommentForSave);
+            }
+            delete correspondence.userCommentForSave;
+            if (queryStringValues.length > 0) {
+                queryString += '?' + queryStringValues.join('&');
+            }
+
+            route += queryString;
+
             // BeSaRa: just for NHRC and after that i will remove it and should make it from backend team.
-            return $http.put(_createUrlSchema(null, correspondence.docClassName, 'full-with-template'), book)
+            return $http.put(_createUrlSchema(null, correspondence.docClassName, route), book)
                 .then(function (result) {
                     correspondence.vsId = result.data.rs;
                     return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
