@@ -47,7 +47,9 @@ module.exports = function (app) {
                     sender: function () {
                         return this.senderInfo.getTranslatedName()
                     },
-                    due_date: 'generalStepElm.dueDate',
+                    due_date: function () {
+                        return this.generalStepElm.dueDate;
+                    },
                     correspondence_sites: function () {
                         return this.getTranslatedCorrespondenceSiteInfo();
                     }
