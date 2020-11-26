@@ -101,7 +101,8 @@ module.exports = function (app) {
             } else {
                 model.linkedEntities = angular.toJson([]);
             }
-            model.docDate = model.docDateTimeStamp;
+
+            model.docDate = model.docDateTimeStamp ? model.docDateTimeStamp : model.docDate;
             /*if (info.documentClass === 'outgoing') {
 
             } else if (info.documentClass === 'incoming') {
