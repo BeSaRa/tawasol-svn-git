@@ -101,7 +101,7 @@ module.exports = function (app) {
             } else {
                 model.linkedEntities = angular.toJson([]);
             }
-            model.docDate = generator.getTimeStampFromDate(model.docDate);
+            model.docDate = model.docDateTimeStamp;
             /*if (info.documentClass === 'outgoing') {
 
             } else if (info.documentClass === 'incoming') {
@@ -172,6 +172,7 @@ module.exports = function (app) {
             delete model.defaultModeIfEditing;
             delete model.numberOfDays;
             delete model.recordGridName;
+            delete model.docDateTimeStamp;
             return model;
         });
 
@@ -204,6 +205,7 @@ module.exports = function (app) {
             model.priorityLevel = model.priorityLevelLookup = lookupService.getLookupByLookupKey(lookupService.priorityLevel, model.priorityLevel);
 
             model.creatorInfo = model.creatorInfo ? new Information(model.creatorInfo) : new Information();
+            model.docDateTimeStamp = angular.copy(model.docDate);
             if (model.docDate && !angular.isDate(model.docDate)) {
                 model.docDate = moment(model.docDate).format('YYYY-MM-DD');
                 model.createdOn = angular.copy(model.docDate);
