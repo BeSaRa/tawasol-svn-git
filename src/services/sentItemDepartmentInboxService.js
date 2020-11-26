@@ -25,7 +25,7 @@ module.exports = function (app) {
             * Pending(0),Sent(1),Delivered(2),Returned(3),Removed(4)
             * */
             month = month.hasOwnProperty('value') ? month.value : month;
-            return $http.post(urlService.departmentInboxes + '/dept-sent-items/month/' + month + '/year/' + year, [0, 1, 2, 3], {
+            return $http.post(urlService.departmentInboxes + '/dept-sent-items/month/' + month + '/year/' + year, [0, 1, 2], {
                 params: {
                     'is-central': !!centralArchive
                 }
