@@ -101,7 +101,7 @@ module.exports = function (app) {
             } else {
                 model.linkedEntities = angular.toJson([]);
             }
-
+            model.docDate = generator.getTimeStampFromDate(model.docDate);
             /*if (info.documentClass === 'outgoing') {
 
             } else if (info.documentClass === 'incoming') {
