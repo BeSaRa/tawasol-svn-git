@@ -102,22 +102,12 @@ module.exports = function (app) {
                 model.linkedEntities = angular.toJson([]);
             }
 
-            model.docDate = model.docDateTimeStamp ? model.docDateTimeStamp : model.docDate;
-            /*if (info.documentClass === 'outgoing') {
-
-            } else if (info.documentClass === 'incoming') {
-                var toArray = generator.interceptSendCollection('Site', model.sitesInfoTo);
-                var ccArray = generator.interceptSendCollection('Site', model.sitesInfoCC);
-                var merged = toArray.concat(ccArray)[0];
-                model = angular.extend(model, merged);
-                delete model.sitesInfoTo;
-                delete model.sitesInfoCC
-
-            } else {
-                delete model.sitesInfoTo;
-                delete model.sitesInfoCC
-            }*/
-
+            var now = new Date();
+            var docDate = new Date(model.docDate);
+            docDate.setHours(now.getHours());
+            docDate.setMinutes(now.getMinutes());
+            docDate.setSeconds(now.getSeconds());
+            model.docDate = generator.getTimeStampFromDate(docDate);
 
             delete model.cbrEnabled;
 
@@ -173,7 +163,6 @@ module.exports = function (app) {
             delete model.defaultModeIfEditing;
             delete model.numberOfDays;
             delete model.recordGridName;
-            delete model.docDateTimeStamp;
             return model;
         });
 
@@ -206,7 +195,7 @@ module.exports = function (app) {
             model.priorityLevel = model.priorityLevelLookup = lookupService.getLookupByLookupKey(lookupService.priorityLevel, model.priorityLevel);
 
             model.creatorInfo = model.creatorInfo ? new Information(model.creatorInfo) : new Information();
-            model.docDateTimeStamp = angular.copy(model.docDate);
+
             if (model.docDate && !angular.isDate(model.docDate)) {
                 model.docDate = moment(model.docDate).format('YYYY-MM-DD');
                 model.createdOn = angular.copy(model.docDate);
