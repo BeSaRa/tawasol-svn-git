@@ -81,7 +81,6 @@
                                     <md-input-container flex>
                                         <label for="docCategory">{{ctrl.lookupNames['key_12'].getTranslatedName()}}</label>
                                         <md-select id="docCategory"
-                                                   ng-disabled="ctrl.checkDocCategoryDisabled()"
                                                    ng-model="ctrl.filter.ui.key_12.value">
                                             <md-option ng-value="null">{{lang.none}}</md-option>
                                             <md-option ng-repeat="option in ctrl.documentTypes"

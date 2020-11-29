@@ -260,6 +260,8 @@ module.exports = function (app) {
                 }
 
                 self.documentTypes = correspondenceService.getLookup(generator.getDocumentClassName(self.filter.ui.key_2.value), 'docTypes');
+            } else {
+                self.documentTypes = correspondenceService.getLookupUnionByLookupName('docTypes');
             }
         };
 
