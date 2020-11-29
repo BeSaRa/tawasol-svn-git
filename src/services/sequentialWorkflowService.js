@@ -176,8 +176,13 @@ module.exports = function (app) {
                         locals: {
                             editMode: true,
                             viewOnly: false,
-                            sequentialWorkflow: angular.copy(sequentialWorkflow),
                             defaultDocClass: null
+                        },
+                        resolve: {
+                            sequentialWorkflow: function (){
+                                'ngInject';
+                                return self.loadSequentialWorkflowById(sequentialWorkflow);
+                            }
                         }
                     });
             },
@@ -196,8 +201,13 @@ module.exports = function (app) {
                         locals: {
                             editMode: true,
                             viewOnly: true,
-                            sequentialWorkflow: angular.copy(sequentialWorkflow),
                             defaultDocClass: null
+                        },
+                        resolve: {
+                            sequentialWorkflow: function (){
+                                'ngInject';
+                                return self.loadSequentialWorkflowById(sequentialWorkflow);
+                            }
                         }
                     });
             },
