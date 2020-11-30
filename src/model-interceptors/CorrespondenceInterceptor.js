@@ -102,12 +102,12 @@ module.exports = function (app) {
                 model.linkedEntities = angular.toJson([]);
             }
 
-            var now = new Date();
+            /*var now = new Date();
             var docDate = new Date(model.docDate);
             docDate.setHours(now.getHours());
             docDate.setMinutes(now.getMinutes());
             docDate.setSeconds(now.getSeconds());
-            model.docDate = generator.getTimeStampFromDate(docDate);
+            model.docDate = generator.getTimeStampFromDate(docDate);*/
 
             delete model.cbrEnabled;
 
