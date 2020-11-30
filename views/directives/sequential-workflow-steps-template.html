@@ -26,6 +26,10 @@
                         <div seq-container-sortable layout="column" class="step-layout-rows">
 
                         </div>
+                        <div class="help-text-div p10"
+                             ng-if="!ctrl.viewOnly && ctrl.seqWF.hasAnyDocumentType() && !ctrl.seqWF.isIncomingSeqWF()">
+                            {{lang.seq_wf_steps_note}}
+                        </div>
                     </div>
                 </div>
             </div>

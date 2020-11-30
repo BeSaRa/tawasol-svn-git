@@ -46,8 +46,24 @@ module.exports = function (app) {
                     return true;
                 }
                 generator.validateRequiredSelectFields(form);
-                return form.$valid && _isValidSteps();
+                return form.$valid && _isValidSteps() && _hasOneAuthorizeAndSend();
             };
+
+            function _hasOneAuthorizeAndSend() {
+                if (!_hasStepRows()) {
+                    return false;
+                }
+                if (self.sequentialWorkflow.isIncomingSeqWF()) {
+                    return true;
+                } else {
+                    return !!_.find(self.sequentialWorkflow.stepRows, function (stepRow) {
+                        if (!stepRow) {
+                            return false;
+                        }
+                        return stepRow.isAuthorizeAndSendStep();
+                    })
+                }
+            }
 
             function _hasStepRows() {
                 return self.sequentialWorkflow.stepRows && self.sequentialWorkflow.stepRows.length;
