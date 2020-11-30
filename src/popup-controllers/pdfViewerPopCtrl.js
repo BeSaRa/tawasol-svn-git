@@ -105,6 +105,7 @@ module.exports = function (app) {
         self.generalStepElementView = generalStepElementView;
         // used to store value of attache user name and date toggle
         var cookieKey = employeeService.getEmployee().domainName + '_' + 'attach_username_date';
+        var cookieAttachedTypeKey = employeeService.getEmployee().domainName + '_' + 'attached_data_type';
 
         self.attacheUsernameAndDateToSignature = false;
 
@@ -252,12 +253,25 @@ module.exports = function (app) {
             var usernameDateButton = {
                 type: "custom",
                 id: "username-date",
-                title: "user name and date ",
-                icon: "./assets/images/username-date.svg",
+                title: "user name and date",
+                dropdownGroup: 'title-data-username',
+                icon: "<svg xmlns=\"http://www.w3.org/2000/svg\"  width=\"24\" height=\"24\" viewBox=\"0 0 24 24\">\n" +
+                    "   <path fill=\"currentColor\" d=\"M19,4H18V2H16V4H8V2H6V4H5A2,2 0 0,0 3,6V20A2,2 0 0,0 5,22H19A2,2 0 0,0 21,20V6A2,2 0 0,0 19,4M19,20H5V10H19V20M19,8H5V6H19M12,11C14,11 15,13.42 13.59,14.84C12.17,16.26 9.75,15.25 9.75,13.25C9.75,12 10.75,11 12,11M16.5,18.88V19H7.5V18.88C7.5,17.63 9.5,16.63 12,16.63C14.5,16.63 16.5,17.63 16.5,18.88Z\" />\n" +
+                    "</svg>",
                 onPress: self.addUserNameAndDateToDocument
             };
+            var usernameJobTitleButton = {
+                type: "custom",
+                id: "username-job-title",
+                dropdownGroup: 'title-data-username',
+                title: "user name and job title ",
+                icon: "<svg xmlns=\"http://www.w3.org/2000/svg\"  width=\"24\" height=\"24\" viewBox=\"0 0 24 24\">\n" +
+                    "   <path fill=\"currentColor\" d=\"M2,3H22C23.05,3 24,3.95 24,5V19C24,20.05 23.05,21 22,21H2C0.95,21 0,20.05 0,19V5C0,3.95 0.95,3 2,3M14,6V7H22V6H14M14,8V9H21.5L22,9V8H14M14,10V11H21V10H14M8,13.91C6,13.91 2,15 2,17V18H14V17C14,15 10,13.91 8,13.91M8,6A3,3 0 0,0 5,9A3,3 0 0,0 8,12A3,3 0 0,0 11,9A3,3 0 0,0 8,6Z\" />\n" +
+                    "</svg>",
+                onPress: self.addUserNameAndJobTitleToDocument
+            };
             // remove default print from toolbar
-            var toolbarInstance = _.filter(defaultToolbar.concat([usernameDateButton, printWithoutAnnotationButton, bookmarkButton]), function (item) {
+            var toolbarInstance = _.filter(defaultToolbar.concat([usernameDateButton, usernameJobTitleButton, printWithoutAnnotationButton, bookmarkButton]), function (item) {
                 return item.type !== 'print';
             });
 
@@ -430,11 +444,22 @@ module.exports = function (app) {
             });
         };
 
+        function _setButtonCookies(value) {
+            var date = (new Date());
+            date.setFullYear(date.getFullYear() + 1);
+            $cookies.put(cookieAttachedTypeKey, value, {
+                expires: date
+            });
+        }
+
         /**
          * @description add username and date to the document
          * @return {Promise<void>}
          */
-        self.addUserNameAndDateToDocument = async function (event, buttonId, annotation) {
+        self.addUserNameAndJobTitleToDocument = function (event, buttonId, annotation) {
+            if (event) {
+                _setButtonCookies('addUserNameAndJobTitleToDocument');
+            }
             var pageInfo = self.currentInstance.pageInfoForIndex(self.currentInstance.viewState.currentPageIndex);
             var usernameAnnotation = new PSPDFKit.Annotations.TextAnnotation({
                 text: employeeService.getEmployee().getTranslatedName() + '\r\n' + jobTitle.getTranslatedName(),
@@ -462,10 +487,45 @@ module.exports = function (app) {
             }));
 
             self.currentInstance.create(usernameAnnotation).then(annotations => {
-                console.log('annotations[0]', annotations[0]);
                 self.selectAnnotation(annotations[0]);
             });
         };
+
+        self.addUserNameAndDateToDocument = function (event, buttonId, annotation) {
+            if (event) {
+                _setButtonCookies('addUserNameAndDateToDocument');
+            }
+            var date = moment().format('DD-MM-YYYY');
+            var pageInfo = self.currentInstance.pageInfoForIndex(self.currentInstance.viewState.currentPageIndex);
+            var usernameAnnotation = new PSPDFKit.Annotations.TextAnnotation({
+                text: employeeService.getEmployee().getTranslatedName() + '\r\n' + date.toString(),
+                pageIndex: self.currentInstance.viewState.currentPageIndex,
+                boundingBox: new PSPDFKit.Geometry.Rect({
+                    left: 10,
+                    top: 20,
+                    width: 100,
+                    height: 20
+                }),
+                fontSize: 15,
+                horizontalAlign: 'center',
+                isFitting: true,
+                customData: {
+                    additionalData: {type: _getRightTypeForElectronicSignature()}
+                }
+            });
+            usernameAnnotation = self.currentInstance.calculateFittingTextAnnotationBoundingBox(usernameAnnotation);
+
+            usernameAnnotation = usernameAnnotation.set('boundingBox', new PSPDFKit.Geometry.Rect({
+                left: annotation ? (annotation.boundingBox.left + annotation.boundingBox.width) : (pageInfo.width / 2) - usernameAnnotation.boundingBox.width,
+                top: (pageInfo.height / 2) - usernameAnnotation.boundingBox.height,
+                width: usernameAnnotation.boundingBox.width,
+                height: usernameAnnotation.boundingBox.height,
+            }));
+
+            self.currentInstance.create(usernameAnnotation).then(annotations => {
+                self.selectAnnotation(annotations[0]);
+            });
+        }
 
         /**
          * @description select given annotation
@@ -588,7 +648,7 @@ module.exports = function (app) {
             }).then(function (annotations) {
                 annotations.length === 1 ? self.selectAnnotation(annotations[0]) : null;
                 if (self.attacheUsernameAndDateToSignature) {
-                    return self.addUserNameAndDateToDocument(null, null, annotations[0]);
+                    return $cookies.get(cookieAttachedTypeKey) ? self[$cookies.get(cookieAttachedTypeKey)](null, null, annotations[0]) : self.addUserNameAndDateToDocument(null, null, annotations[0]);
                 }
             });
         };
@@ -1015,7 +1075,7 @@ module.exports = function (app) {
                 }
 
                 if (self.attacheUsernameAndDateToSignature) {
-                    self.addUserNameAndDateToDocument(null, null, updatedAnnotation);
+                    $cookies.get(cookieAttachedTypeKey) ? self[$cookies.get(cookieAttachedTypeKey)](null, null, updatedAnnotation) : self.addUserNameAndDateToDocument(null, null, updatedAnnotation);
                 }
                 return self.currentInstance.updateAnnotation(updatedAnnotation);
             }
