@@ -62,9 +62,12 @@ module.exports = function (app) {
                 });
 
                 self.step.toOUInfo = new Information({
-                    arName: selectedOu.getNameByLanguage('ar') + ' - ' + ouAppUser.getOrganization().getNameByLanguage('ar'),
-                    enName: selectedOu.getNameByLanguage('en') + ' - ' + ouAppUser.getOrganization().getNameByLanguage('en')
+                    arName: selectedOu.getNameByLanguage('ar'), // + ' - ' + ouAppUser.getOrganization().getNameByLanguage('ar'),
+                    enName: selectedOu.getNameByLanguage('en')// + ' - ' + ouAppUser.getOrganization().getNameByLanguage('en')
                 });
+            } else {
+                self.step.toUserInfo = null;
+                self.step.toOUInfo = null;
             }
         }
 

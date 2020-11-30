@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                                      langService,
                                                                      toast,
                                                                      dialog,
+                                                                     employeeService,
                                                                      _,
                                                                      LangWatcher,
                                                                      $timeout,
@@ -18,6 +19,7 @@ module.exports = function (app) {
 
         self.controllerName = 'sequentialWorkflowStepsDirectiveCtrl';
         LangWatcher($scope);
+        self.employee = employeeService.getEmployee();
 
         self.actionsList = [
             new SequentialWFStep({
@@ -109,10 +111,12 @@ module.exports = function (app) {
 
             _setStepClass(element, stepAction, idx);
 
-            var titleText = '{{item.getTranslatedName()}}';
+            /*var titleText = '{{item.getTranslatedName()}}';
             if (stepAction.getTranslatedUserAndOuName()) {
                 titleText += ' ({{item.getTranslatedUserAndOuName() }})'
-            }
+            }*/
+            var titleText = _getStepText(stepAction);
+
             var title = angular.element('<span class="no-style" />', {'md-truncate': ''}).html(titleText);
             var stepTypeIcon = angular.element('<md-icon />', {
                 'md-svg-icon': "{{item.getStepIcon()}}",
@@ -219,8 +223,77 @@ module.exports = function (app) {
 
         function _getStepById(stepId) {
             return _.find(self.seqWF.stepRows, function (item) {
-                return item.id === generator.getNormalizedValue(stepId, 'id');
+                return item && item.id === generator.getNormalizedValue(stepId, 'id');
             })
+        }
+
+        function _getStepByItemOrder(itemOrder) {
+            return _.find(self.seqWF.stepRows, function (item) {
+                return item && item.itemOrder === generator.getNormalizedValue(itemOrder, 'itemOrder');
+            })
+        }
+
+
+        function _getStepText(stepRow) {
+            if (!stepRow) {
+                return '';
+            }
+
+            var titleText = '',
+                previousStep = _getStepByItemOrder(stepRow.itemOrder - 1),
+                iconName = langService.current === 'ar' ? 'arrow-left' : 'arrow-right',
+                stepIcon = "&nbsp;<md-icon class='indicator-size' md-svg-icon='" + iconName + "'></md-icon>&nbsp;";
+
+            if (self.usageType === sequentialWorkflowService.stepsUsageTypes.manageWFSteps) {
+                if (stepRow.itemOrder === 0) {
+                    titleText = stepRow.getTranslatedName();
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepIcon + stepRow.getTranslatedUserAndOuName();
+                    }
+                } else {
+                    titleText = previousStep.getTranslatedUserAndOuName() + stepIcon + stepRow.getTranslatedName();
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepIcon + stepRow.getTranslatedUserAndOuName();
+                    }
+                }
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
+                if (stepRow.itemOrder === 0) {
+                    titleText = (self.employee.getTranslatedName() + ' - ' + self.employee.getExtraFields().ouInfo.getTranslatedName()) + stepIcon + stepRow.getTranslatedName();
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepIcon + stepRow.getTranslatedUserAndOuName();
+                    }
+                } else {
+                    titleText = previousStep.getTranslatedUserAndOuName() + stepIcon + stepRow.getTranslatedName();
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepIcon + stepRow.getTranslatedUserAndOuName()
+                    }
+                }
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
+                if (stepRow.itemOrder === 0) {
+                    titleText = self.seqWF.getTranslatedCreatorAndOuName() + stepIcon + stepRow.getTranslatedName();
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepIcon + stepRow.getTranslatedUserAndOuName();
+                    }
+                } else {
+                    titleText = previousStep.getTranslatedUserAndOuName() + stepIcon + stepRow.getTranslatedName();
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepIcon + stepRow.getTranslatedUserAndOuName()
+                    }
+                }
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFStatusSteps) {
+                if (stepRow.itemOrder === 0) {
+                    titleText = self.seqWF.getTranslatedCreatorAndOuName() + stepIcon + stepRow.getTranslatedName();
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepIcon + stepRow.getTranslatedUserAndOuName();
+                    }
+                } else {
+                    titleText = previousStep.getTranslatedUserAndOuName() + stepIcon + stepRow.getTranslatedName();
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepIcon + stepRow.getTranslatedUserAndOuName()
+                    }
+                }
+            }
+            return titleText;
         }
 
         function _canSortRow(stepRow, rowIndex) {

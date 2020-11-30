@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.run(function (CMSModelInterceptor,
                       Information,
+                      AdminResultRelation,
                       generator,
                       SequentialWFStep,
                       lookupService,
@@ -44,6 +45,8 @@ module.exports = function (app) {
                 model.steps = generator.interceptReceivedCollection('SequentialWFStep', generator.generateCollection(model.steps, SequentialWFStep));
                 model.stepRows = angular.copy(model.steps);
             }
+            model.creatorInfo = model.creatorInfo ? new Information(model.creatorInfo) : model.creatorInfo;
+            model.creatorRegouInfo = model.creatorRegouInfo ? new AdminResultRelation(model.creatorRegouInfo) : model.creatorRegouInfo;
             return model;
         });
 

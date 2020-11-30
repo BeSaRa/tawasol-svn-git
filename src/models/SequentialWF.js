@@ -15,7 +15,9 @@ module.exports = function (app) {
             self.enName = null;
             self.status = true;
             self.creatorId = null;
+            self.creatorInfo = null;
             self.creatorOUId = null;
+            self.creatorRegouInfo = null;
             self.regOUId = null;
             self.docClassID = null;
             self.isAdhoc = null;
@@ -61,6 +63,28 @@ module.exports = function (app) {
              */
             SequentialWF.prototype.getTranslatedName = function (reverse) {
                 return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
+            };
+
+
+            SequentialWF.prototype.getTranslatedCreatorName = function () {
+                if (!this.creatorId) {
+                    return '';
+                }
+                return this.creatorInfo.getTranslatedName();
+            };
+
+            SequentialWF.prototype.getTranslatedCreatorOuName = function () {
+                if (!this.creatorOUId) {
+                    return '';
+                }
+                return this.creatorRegouInfo.getTranslatedName();
+            };
+
+            SequentialWF.prototype.getTranslatedCreatorAndOuName = function () {
+                if (!this.getTranslatedCreatorName() || !this.getTranslatedCreatorOuName()) {
+                    return '';
+                }
+                return this.getTranslatedCreatorName() + ' - ' + this.getTranslatedCreatorOuName();
             };
 
             /**
