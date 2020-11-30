@@ -229,6 +229,7 @@ module.exports = function (app) {
                 id: "print-without-annotations",
                 title: "print without annotations",
                 icon: "./assets/images/print-without-annotation.svg",
+                dropdownGroup: 'print-menu',
                 disabled: !(employeeService.hasPermissionTo('PRINT_DOCUMENT')),
                 onPress: function (e) {
                     self.printWithOutAnnotations(e, true);
@@ -288,6 +289,7 @@ module.exports = function (app) {
                 id: 'print',
                 icon: './assets/images/print.svg',
                 title: 'Print',
+                dropdownGroup: 'print-menu',
                 disabled: !(employeeService.hasPermissionTo('PRINT_DOCUMENT')),
                 onPress: function (e) {
                     self.printWithOutAnnotations(e, false);

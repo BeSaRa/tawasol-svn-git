@@ -227,6 +227,7 @@ module.exports = function (app) {
                 .annotateCorrespondence(attachment, AnnotationType.ANNOTATION, self.correspondence);
         }
 
+
         self.$onInit = function () {
             filterStickyActions();
         }
