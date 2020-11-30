@@ -240,9 +240,10 @@ module.exports = function (app) {
             }
 
             var titleText = '',
-                previousStep = _getStepByItemOrder(stepRow.itemOrder - 1),
                 iconName = langService.current === 'ar' ? 'arrow-left' : 'arrow-right',
-                stepIcon = "&nbsp;<md-icon class='indicator-size' md-svg-icon='" + iconName + "'></md-icon>&nbsp;";
+                stepIcon = "&nbsp;<md-icon class='indicator-size' md-svg-icon='" + iconName + "'></md-icon>&nbsp;",
+                previousStep = _getStepByItemOrder(stepRow.itemOrder - 1),
+                previousStepUserIcon = (previousStep && previousStep.getTranslatedUserAndOuName()) ? (previousStep.getTranslatedUserAndOuName() + stepIcon) : '';
 
             if (self.usageType === sequentialWorkflowService.stepsUsageTypes.manageWFSteps) {
                 if (stepRow.itemOrder === 0) {
@@ -251,7 +252,7 @@ module.exports = function (app) {
                         titleText += stepIcon + stepRow.getTranslatedUserAndOuName();
                     }
                 } else {
-                    titleText = previousStep.getTranslatedUserAndOuName() + stepIcon + stepRow.getTranslatedName();
+                    titleText = previousStepUserIcon + stepRow.getTranslatedName();
                     if (stepRow.getTranslatedUserAndOuName()) {
                         titleText += stepIcon + stepRow.getTranslatedUserAndOuName();
                     }
@@ -263,7 +264,7 @@ module.exports = function (app) {
                         titleText += stepIcon + stepRow.getTranslatedUserAndOuName();
                     }
                 } else {
-                    titleText = previousStep.getTranslatedUserAndOuName() + stepIcon + stepRow.getTranslatedName();
+                    titleText = previousStepUserIcon + stepRow.getTranslatedName();
                     if (stepRow.getTranslatedUserAndOuName()) {
                         titleText += stepIcon + stepRow.getTranslatedUserAndOuName()
                     }
@@ -275,7 +276,7 @@ module.exports = function (app) {
                         titleText += stepIcon + stepRow.getTranslatedUserAndOuName();
                     }
                 } else {
-                    titleText = previousStep.getTranslatedUserAndOuName() + stepIcon + stepRow.getTranslatedName();
+                    titleText = previousStepUserIcon + stepRow.getTranslatedName();
                     if (stepRow.getTranslatedUserAndOuName()) {
                         titleText += stepIcon + stepRow.getTranslatedUserAndOuName()
                     }
@@ -287,7 +288,7 @@ module.exports = function (app) {
                         titleText += stepIcon + stepRow.getTranslatedUserAndOuName();
                     }
                 } else {
-                    titleText = previousStep.getTranslatedUserAndOuName() + stepIcon + stepRow.getTranslatedName();
+                    titleText = previousStepUserIcon + stepRow.getTranslatedName();
                     if (stepRow.getTranslatedUserAndOuName()) {
                         titleText += stepIcon + stepRow.getTranslatedUserAndOuName()
                     }
