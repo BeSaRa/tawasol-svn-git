@@ -145,6 +145,10 @@
                                         <grid-indicator-directive record="searchedOutgoingDocument"
                                                                   indicator-type="siteFollowUpEnded"
                                                                   record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Sequential Workflow -->
+                                        <grid-indicator-directive record="searchedOutgoingDocument"
+                                                                  indicator-type="sequentialWF"
+                                                                  record-type="Correspondence"></grid-indicator-directive>
                                         <span flex
                                               ng-class="{'indicator-content': searchedOutgoingDocument.followUpStatusIndicator}">
                                         <md-icon ng-if="searchedOutgoingDocument.followUpStatusIndicator"
@@ -310,6 +314,10 @@
                                         <grid-indicator-directive record="searchedInternalDocument"
                                                                   indicator-type="hasLinkedDocuments"
                                                                   record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Sequential Workflow -->
+                                        <grid-indicator-directive record="searchedInternalDocument"
+                                                                  indicator-type="sequentialWF"
+                                                                  record-type="Correspondence"></grid-indicator-directive>
                                     </td>
                                     <td md-cell><span
                                             class="serial-td">{{searchedInternalDocument.docFullSerial}}</span></td>
@@ -471,6 +479,10 @@
                                         <grid-indicator-directive record="searchedIncomingDocument"
                                                                   indicator-type="siteFollowUpEnded"
                                                                   record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Sequential Workflow -->
+                                        <grid-indicator-directive record="searchedIncomingDocument"
+                                                                  indicator-type="sequentialWF"
+                                                                  record-type="Correspondence"></grid-indicator-directive>
                                     </td>
                                     <td md-cell>
                                         <span class="serial-td">{{searchedIncomingDocument.docFullSerial}}</span>
@@ -646,6 +658,10 @@
                                         <grid-indicator-directive record="searchedOutgoingIncomingDocument"
                                                                   indicator-type="siteFollowUpEnded"
                                                                   record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Sequential Workflow -->
+                                        <grid-indicator-directive record="searchedOutgoingIncomingDocument"
+                                                                  indicator-type="sequentialWF"
+                                                                  record-type="Correspondence"></grid-indicator-directive>
                                     </td>
                                     <td md-cell><span class="serial-td">{{searchedOutgoingIncomingDocument.docFullSerial}}</span>
                                     </td>
@@ -830,6 +846,10 @@
                                         <grid-indicator-directive record="searchedGeneralDocument"
                                                                   indicator-type="siteFollowUpEnded"
                                                                   record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Sequential Workflow -->
+                                        <grid-indicator-directive record="searchedGeneralDocument"
+                                                                  indicator-type="sequentialWF"
+                                                                  record-type="Correspondence"></grid-indicator-directive>
                                         <span flex
                                               ng-class="{'indicator-content': searchedGeneralDocument.followUpStatusIndicator}">
                                         <md-icon ng-if="searchedGeneralDocument.followUpStatusIndicator"

@@ -474,6 +474,10 @@ module.exports = function (app) {
                 return indicator.getIsBroadcastedIndicator(this.isBroadcasted());
             };
 
+            Correspondence.prototype.getSequentialWFIndicator = function () {
+                return indicator.getSequentialWFIndicator();
+            };
+
             Correspondence.prototype.getSiteFollowupDueDateIndicator = function ($event) {
                 var info = this.getInfo();
                 if (info.documentClass !== 'outgoing' && info.documentClass !== 'incoming') {

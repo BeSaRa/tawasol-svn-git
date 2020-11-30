@@ -600,8 +600,7 @@ module.exports = function (app) {
             };
 
             /**
-             * @description Returns the conditional approved indicator and description
-             * @param isConditionalApproved
+             * @description Returns the sequential workflow indicator and description
              * @returns {Indicator}
              */
             Indicator.prototype.getSequentialWFIndicator = function () {

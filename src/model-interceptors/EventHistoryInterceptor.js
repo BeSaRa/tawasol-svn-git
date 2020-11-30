@@ -29,6 +29,7 @@ module.exports = function (app) {
             delete model.mainSiteSubSiteString;   // added in model when binding main-site-sub-site directive value in grid
             delete model.actionType_vts;
             delete model.recordGridName;
+            delete model.hasSequentialWFIndicator;
             return model;
         });
 
@@ -55,7 +56,7 @@ module.exports = function (app) {
             model.dueDateStatusIndicator = model.dueDate ? model.getDueDateStatusIndicator(model.dueDate) : null;
 
             model.docClassIndicator = model.docClassName ? model.getDocClassIndicator(model.docClassName) : null;
-
+            model.hasSequentialWFIndicator = model.hasActiveSeqWF() ? model.getSequentialWFIndicator() : null;
             model.actionType_vts = model.mapActionType();
             model.setMainSiteSubSiteString();
 

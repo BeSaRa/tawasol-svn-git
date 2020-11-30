@@ -158,6 +158,10 @@ module.exports = function (app) {
                 return !!this.getSeqWFId();
             };
 
+            EventHistory.prototype.getSequentialWFIndicator = function () {
+                return indicator.getSequentialWFIndicator();
+            };
+
             /**
              * @description Show seqWF status
              */

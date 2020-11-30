@@ -163,6 +163,7 @@ module.exports = function (app) {
             delete model.defaultModeIfEditing;
             delete model.numberOfDays;
             delete model.recordGridName;
+            delete model.hasSequentialWFIndicator;
             return model;
         });
 
@@ -242,6 +243,7 @@ module.exports = function (app) {
             model.isPaperIndicator = model.getInfo().documentClass !== 'incoming' ? model.getIsPaperIndicator(model.hasOwnProperty('addMethod') ? model.addMethod : 1) : null;
             model.siteFollowUpDueDateIndicator = model.getSiteFollowupDueDateIndicator();
             model.siteFollowUpEndedIndicator = model.getSiteFollowupEndedIndicator();
+            model.hasSequentialWFIndicator = model.hasActiveSeqWF() ? model.getSequentialWFIndicator() : null;
             model.setMainSiteSubSiteString();
 
             model.numberOfDays = generator.getNumberOfDays(model.getSiteMaxFollowupDate(), null);
