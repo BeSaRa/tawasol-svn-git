@@ -12,8 +12,7 @@ module.exports = function (app) {
                                                                      LangWatcher,
                                                                      $timeout,
                                                                      SequentialWFStep,
-                                                                     sequentialWorkflowService,
-                                                                     uuidv4) {
+                                                                     sequentialWorkflowService) {
         'ngInject';
         var self = this;
 
@@ -49,7 +48,6 @@ module.exports = function (app) {
             futureStep: {key: 'next_seq_step', class: 'step-future'}
         };
 
-        self.selectedRowIndex = null;
         self.$generatorElement = $element.find('.step-layout-rows');
 
         self.insertRowElement = function () {
@@ -96,7 +94,6 @@ module.exports = function (app) {
         };
 
         self.createItem = function (stepAction, idx) {
-            stepAction.dummyId = uuidv4();
             stepAction.itemOrder = idx;
             var element = angular
                 .element('<div />', {
@@ -209,17 +206,6 @@ module.exports = function (app) {
                 })
         };
 
-        var _updateSequentialWorkflow = function () {
-            return sequentialWorkflowService.updateSequentialWorkflow(self.seqWF)
-                .then(function (result) {
-                    return sequentialWorkflowService.loadSequentialWorkflowById(self.seqWF).then(function (seqWFResult) {
-                        toast.success(langService.get('edit_success').change({name: result.getNames()}));
-                        self.seqWF = seqWFResult;
-                        return seqWFResult;
-                    });
-                });
-        };
-
         function _updateStructure() {
             self.seqWF.stepRows = [];
             self.$generatorElement.children('.step-row').each(function (idx, row) {
@@ -229,6 +215,12 @@ module.exports = function (app) {
                     self.seqWF.stepRows[idx] = angular.element(item).data('item');
                 });
             });
+        }
+
+        function _getStepById(stepId) {
+            return _.find(self.seqWF.stepRows, function (item) {
+                return item.id === generator.getNormalizedValue(stepId, 'id');
+            })
         }
 
         function _canSortRow(stepRow, rowIndex) {
@@ -243,7 +235,8 @@ module.exports = function (app) {
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
                 return (rowIndex > 0);
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
-                return (!stepRow.id || (stepRow.id > self.correspondence.getSeqWFNextStepId()));
+                var docCurrentStep = _getStepById(self.correspondence.getSeqWFNextStepId());
+                return (!stepRow.id || (stepRow.itemOrder > docCurrentStep.itemOrder));
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFStatusSteps) {
                 return false;
             }
@@ -261,7 +254,8 @@ module.exports = function (app) {
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
                 return (rowIndex > 0);
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
-                return (!stepRow.id || (stepRow.id > self.correspondence.getSeqWFNextStepId()));
+                var docCurrentStep = _getStepById(self.correspondence.getSeqWFNextStepId());
+                return (!stepRow.id || (stepRow.itemOrder > docCurrentStep.itemOrder));
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFStatusSteps) {
                 return false;
             }
@@ -274,7 +268,8 @@ module.exports = function (app) {
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
                 viewOnly = true;
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
-                viewOnly = seqWFStep.id && seqWFStep.id < self.correspondence.getSeqWFNextStepId();
+                var docCurrentStep = _getStepById(self.correspondence.getSeqWFNextStepId());
+                viewOnly = seqWFStep.id && (seqWFStep.itemOrder < docCurrentStep.itemOrder);
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFStatusSteps) {
                 viewOnly = true;
             }
@@ -323,27 +318,32 @@ module.exports = function (app) {
                 }*/
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
                 // if no seqWFId, means correspondence is not launched, so its similar to launch step
-                if (!self.correspondence.getSeqWFId()){
+                if (!self.correspondence.getSeqWFId()) {
                     if (idx === 0) {
                         stepStatusClass = self.stepLegendClassList.currentStep.class;
                     } else {
                         stepStatusClass = self.stepLegendClassList.futureStep.class;
                     }
                 } else {
-                    if (stepAction.isCurrentSeqWFStep(self.correspondence)) {
+                    if (!stepAction.id) {
+                        return;
+                    }
+                    var docCurrentStep = _getStepById(self.correspondence.getSeqWFNextStepId());
+                    if (stepAction.itemOrder === docCurrentStep.itemOrder) {
                         stepStatusClass = self.stepLegendClassList.currentStep.class;
-                    } else if (stepAction.isPastSeqWFStep(self.correspondence)) {
+                    } else if (stepAction.itemOrder < docCurrentStep.itemOrder) {
                         stepStatusClass = self.stepLegendClassList.pastStep.class;
-                    } else if (stepAction.isFutureSeqWFStep(self.correspondence)) {
+                    } else if (stepAction.itemOrder > docCurrentStep.itemOrder) {
                         stepStatusClass = self.stepLegendClassList.futureStep.class;
                     }
                 }
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFStatusSteps) {
-                if (stepAction.getId() === self.correspondence.getSeqWFCurrentStepId()) {
+                var docCurrentStep = _getStepById(self.correspondence.getSeqWFCurrentStepId());
+                if (stepAction.itemOrder === docCurrentStep.itemOrder) {
                     stepStatusClass = self.stepLegendClassList.currentStep.class;
-                } else if (stepAction.getId() < self.correspondence.getSeqWFCurrentStepId()) {
+                } else if (stepAction.itemOrder < docCurrentStep.itemOrder) {
                     stepStatusClass = self.stepLegendClassList.pastStep.class;
-                } else if (stepAction.getId() > self.correspondence.getSeqWFCurrentStepId()) {
+                } else if (stepAction.itemOrder > docCurrentStep.itemOrder) {
                     stepStatusClass = self.stepLegendClassList.futureStep.class;
                 }
             }

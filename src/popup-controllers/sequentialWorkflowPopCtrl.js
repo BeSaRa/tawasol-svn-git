@@ -65,13 +65,6 @@ module.exports = function (app) {
                 })
             }
 
-            function _isLastStepValid() {
-                if (self.sequentialWorkflow.isIncomingSeqWF()) {
-                    return true;
-                }
-                return _.last(self.sequentialWorkflow.stepRows).isAuthorizeAndSendStep();
-            }
-
             /**
              * @description Checks if value exists
              * @param value

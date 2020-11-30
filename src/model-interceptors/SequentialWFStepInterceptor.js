@@ -21,13 +21,11 @@ module.exports = function (app) {
             model.sendSMS = model.sendSMS || false;
             model.sendEmail = model.sendEmail || false;
 
-            delete model.dummyId;
             delete model.userIdAndOuId;
             return model;
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            model.dummyId = uuidv4();
             model.userIdAndOuId = model.getUserIdAndOuIdCombination(); // used in binding user in step popup. because it is binding to applicationUserId which will be multiple in ouApplicationUser list.
             return model;
         });

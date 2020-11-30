@@ -152,7 +152,7 @@ module.exports = function (app) {
             };
 
             SequentialWFStep.prototype.getStepIndex = function (sequentialWF) {
-                return _.findIndex(sequentialWF.stepRows, {dummyId: this.dummyId});
+                return _.findIndex(sequentialWF.stepRows, {itemOrder: this.itemOrder});
             };
 
             SequentialWFStep.prototype.getStepIcon = function () {
