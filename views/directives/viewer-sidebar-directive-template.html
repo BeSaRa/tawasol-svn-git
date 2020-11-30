@@ -49,7 +49,11 @@
                             <a flex href="#" ng-click="ctrl.showAttachment(attachment , $index , $event)">
                                 {{attachment.getTranslatedName()}}
                             </a>
-
+                            <md-button title="{{lang.annotate_document}}"
+                                       ng-click="ctrl.openAnnotateAttachment(attachment , $event)"
+                                       class="md-icon-button view-icon-button">
+                                <md-icon md-svg-icon="draw"></md-icon>
+                            </md-button>
                             <grid-indicator-directive record="attachment"
                                                       indicator-type="isLinkedExportedDoc"
                                                       record-type="Attachment"></grid-indicator-directive>
@@ -62,14 +66,6 @@
                         <li class="section-title">
                             <div layout="row" layout-align="start center">
                                 <span class="manage-span" flex>{{lang.get('annotated_attachments')}}</span>
-                              <!--  <md-button class="md-icon-button collapse-button"
-                                           ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')"
-                                           aria-label="{{lang.grid_action_attachments}}"
-                                           ng-click="ctrl.manageAttachments($event)"
-                                           tooltip="{{lang.annotated_attachments}}"
-                                           tooltip-direction="{{lang.current === 'ar' ? 'left': 'right'}}">
-                                    <md-icon md-svg-icon="settings-box"></md-icon>
-                                </md-button>-->
                             </div>
                         </li>
                         <li layout-align="start center" layout="row"
@@ -78,7 +74,11 @@
                             <a flex href="#" ng-click="ctrl.showAttachment(attachment , $index , $event)">
                                 {{attachment.getTranslatedName()}}
                             </a>
-
+                            <md-button title="{{lang.annotate_document}}"
+                                       ng-click="ctrl.openAnnotateAttachment(attachment , $event)"
+                                       class="md-icon-button view-icon-button">
+                                <md-icon md-svg-icon="draw"></md-icon>
+                            </md-button>
                             <grid-indicator-directive record="attachment"
                                                       indicator-type="isLinkedExportedDoc"
                                                       record-type="Attachment"></grid-indicator-directive>
@@ -103,7 +103,8 @@
                         </li>
                         <li layout-align="start center" layout="row"
                             ng-repeat="doc in ctrl.correspondence.linkedDocs track by $index">
-                            <a flex href="#" ng-click="ctrl.showLinkedDocument(doc , $index ,  $event, false)">{{doc.getTranslatedName()}}</a>&nbsp;&nbsp;
+                            <a flex href="#"
+                               ng-click="ctrl.showLinkedDocument(doc , $index ,  $event, false)">{{doc.getTranslatedName()}}</a>&nbsp;&nbsp;
                             <md-button class="md-icon-button view-icon-button"
                                        ng-if="ctrl.employeeService.hasPermissionTo('VIEW_DOCUMENT\'S_TRACKING_SHEET')"
                                        tooltip="{{lang.grid_action_view_tracking_sheet}}"
@@ -155,7 +156,7 @@
                                         <div ng-messages="commentForm.comments.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="maxlength">
-                                                {{lang.max_length.change({length:2000})}}
+                                                {{lang.max_length.change({length: 2000})}}
                                             </div>
                                         </div>
                                     </md-input-container>

@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('viewerSidebarDirectiveCtrl', function ($scope, $state, viewTrackingSheetService, correspondenceService, attachmentService, employeeService, $q, dialog, manageLaunchWorkflowService, LangWatcher, $filter, langService, gridService) {
+    app.controller('viewerSidebarDirectiveCtrl', function ($scope, AnnotationType, $state, viewTrackingSheetService, correspondenceService, attachmentService, employeeService, $q, dialog, manageLaunchWorkflowService, LangWatcher, $filter, langService, gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewerSidebarDirectiveCtrl';
@@ -221,6 +221,11 @@ module.exports = function (app) {
                 .viewTrackingSheetPopup(linkedDoc, ['view_tracking_sheet', 'tabs', gridService.grids.others.linkedDoc], $event).then(function (result) {
             });
         };
+
+        self.openAnnotateAttachment = function (attachment, $event) {
+            return correspondenceService
+                .annotateCorrespondence(attachment, AnnotationType.ANNOTATION, self.correspondence);
+        }
 
         self.$onInit = function () {
             filterStickyActions();
