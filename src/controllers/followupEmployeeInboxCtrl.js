@@ -1212,9 +1212,9 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: function (action, model) {
                     var info = model.getInfo();
-                    if (info.documentClass === 'incoming') {
+                    /*if (info.documentClass === 'incoming') {
                         return false;
-                    }
+                    }*/
 
                     return model.hasActiveSeqWF() ||
                         (!info.isPaper && info.docStatus === 23);
