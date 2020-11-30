@@ -103,10 +103,11 @@ module.exports = function (app) {
                 _setRedrawSteps();
             }
 
-            /**
-             * @description Handles the change of document type to manage steps
-             */
-            self.handleDocTypeChange = function (ignoreMessage) {
+        /**
+         * @description Handles the change of document type to manage steps
+         * @param ignoreReset
+         */
+        self.handleDocTypeChange = function (ignoreReset) {
                 if (self.viewOnly || self.model.id) {
                     self.selectedDocClass = angular.copy(self.sequentialWorkflow.docClassID);
                     return;
@@ -116,8 +117,9 @@ module.exports = function (app) {
                 if (!self.hasValue(self.sequentialWorkflow.docClassID) || !_isIncomingSeqWF(self.selectedDocClass)) {
                     self.sequentialWorkflow.docClassID = angular.copy(self.selectedDocClass);
                 } else {
-                    if (ignoreMessage) {
-                        _setIncomingDocType();
+                    if (ignoreReset) {
+                        self.sequentialWorkflow.docClassID = angular.copy(self.selectedDocClass);
+                        _setRedrawSteps();
                         return;
                     }
                     dialog.confirmMessage(langService.get('confirm_seq_wf_class_change'))
@@ -197,7 +199,7 @@ module.exports = function (app) {
                 $timeout(function () {
                     self.form = $scope.sequentialWorkflowForm || null;
                     // if add seqWF and default document class exists, set it to seqWF and model and handle change of docClass
-                    if (!self.editMode && generator.validRequired(defaultDocClass)) {
+                    if (!self.editMode && self.sequentialWorkflow.isAdhoc && generator.validRequired(defaultDocClass)) {
                         self.selectedDocClass = defaultDocClass;
                         self.sequentialWorkflow.docClassID = defaultDocClass;
                         self.model = angular.copy(self.sequentialWorkflow);

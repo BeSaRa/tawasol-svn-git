@@ -45,7 +45,7 @@
                             <label for="docClass">{{lang.label_document_type}}</label>
                             <md-select id="docClass" name="docClass" required
                                        ng-disabled="ctrl.viewOnly || ctrl.editMode || ctrl.hasValue(ctrl.defaultDocClass)"
-                                       ng-change="ctrl.handleDocTypeChange()"
+                                       ng-change="ctrl.handleDocTypeChange(false)"
                                        ng-model="ctrl.selectedDocClass">
                                 <md-option ng-repeat="type in ctrl.documentClasses track by $index"
                                            ng-value="type.lookupKey">
