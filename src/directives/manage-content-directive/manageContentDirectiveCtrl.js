@@ -21,7 +21,8 @@ module.exports = function (app) {
                                                            employeeService,
                                                            $timeout,
                                                            validationService,
-                                                           documentTemplateService) {
+                                                           documentTemplateService,
+                                                           $stateParams) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageContentDirectiveCtrl';
@@ -367,16 +368,22 @@ module.exports = function (app) {
             if (justView) {
                 return self.editInOfficeOnlineAfterApprove(justView);
             }
+            var action = $stateParams.action;
 
-            if (employeeService.getEmployee().defaultEditMode === correspondenceService.documentEditModes.desktop) {
-                // edit in desktop
-                self.editInDesktopAfterApprove();
-            } else if (employeeService.getEmployee().defaultEditMode === correspondenceService.documentEditModes.officeOnline) {
+            if (action === 'duplicateVersion') {
                 // edit in office online
                 self.editInOfficeOnlineAfterApprove();
             } else {
-                // confirmation to select which edit mode
-                _defaultBehavior();
+                if (employeeService.getEmployee().defaultEditMode === correspondenceService.documentEditModes.desktop) {
+                    // edit in desktop
+                    self.editInDesktopAfterApprove();
+                } else if (employeeService.getEmployee().defaultEditMode === correspondenceService.documentEditModes.officeOnline) {
+                    // edit in office online
+                    self.editInOfficeOnlineAfterApprove();
+                } else {
+                    // confirmation to select which edit mode
+                    _defaultBehavior();
+                }
             }
         };
 
