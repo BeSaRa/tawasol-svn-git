@@ -411,13 +411,17 @@ module.exports = function (app) {
                     }
                 }
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFStatusSteps) {
-                var docCurrentStep = _getStepById(self.correspondence.getSeqWFCurrentStepId());
-                if (stepAction.itemOrder === docCurrentStep.itemOrder) {
-                    stepStatusClass = self.stepLegendClassList.currentStep.class;
-                } else if (stepAction.itemOrder < docCurrentStep.itemOrder) {
+                var docCurrentStep = self.correspondence.getSeqWFCurrentStepId() ? _getStepById(self.correspondence.getSeqWFCurrentStepId()) : null;
+                if (!docCurrentStep) {
                     stepStatusClass = self.stepLegendClassList.pastStep.class;
-                } else if (stepAction.itemOrder > docCurrentStep.itemOrder) {
-                    stepStatusClass = self.stepLegendClassList.futureStep.class;
+                } else {
+                    if (stepAction.itemOrder === docCurrentStep.itemOrder) {
+                        stepStatusClass = self.stepLegendClassList.currentStep.class;
+                    } else if (stepAction.itemOrder < docCurrentStep.itemOrder) {
+                        stepStatusClass = self.stepLegendClassList.pastStep.class;
+                    } else if (stepAction.itemOrder > docCurrentStep.itemOrder) {
+                        stepStatusClass = self.stepLegendClassList.futureStep.class;
+                    }
                 }
             }
             element.addClass(stepStatusClass);
