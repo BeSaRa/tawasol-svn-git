@@ -891,14 +891,11 @@ module.exports = function (app) {
          * @param $event
          */
         self.resetWorkflow = function (userInbox, $event) {
-            dialog.confirmMessage(langService.get('confirm_continue_message'))
-                .then(function () {
-                    sequentialWorkflowService.resetSeqWF(userInbox)
-                        .then(function (result) {
-                            toast.success(langService.get('success_reset_seq_wf'));
-                            self.reloadUserInboxes(self.grid.page);
-                            dialog.cancel();
-                        })
+            sequentialWorkflowService.resetSeqWF(userInbox, $event)
+                .then(function (result) {
+                    toast.success(langService.get('success_reset_seq_wf'));
+                    self.reloadUserInboxes(self.grid.page);
+                    dialog.cancel();
                 })
         };
 

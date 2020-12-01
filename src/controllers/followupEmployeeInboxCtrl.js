@@ -322,14 +322,11 @@ module.exports = function (app) {
          * @param $event
          */
         self.resetWorkflow = function (followupEmployeeInbox, $event) {
-            dialog.confirmMessage(langService.get('confirm_continue_message'))
-                .then(function () {
-                    sequentialWorkflowService.resetSeqWF(followupEmployeeInbox)
-                        .then(function (result) {
-                            toast.success(langService.get('success_reset_seq_wf'));
-                            self.reloadFollowupEmployeeInboxes(self.grid.page);
-                            dialog.cancel();
-                        })
+            sequentialWorkflowService.resetSeqWF(followupEmployeeInbox, $event)
+                .then(function (result) {
+                    toast.success(langService.get('success_reset_seq_wf'));
+                    self.reloadFollowupEmployeeInboxes(self.grid.page);
+                    dialog.cancel();
                 })
         };
 

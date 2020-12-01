@@ -146,10 +146,10 @@ module.exports = function (app) {
                             defaultDocClass: adHoc ? sequentialWorkflow.docClassID : null
                         },
                         resolve: {
-                            sequentialWorkflow: function (){
+                            sequentialWorkflow: function () {
                                 'ngInject';
                                 return self.loadSequentialWorkflowById(sequentialWorkflow)
-                                    .then(function (newSequentialWF){
+                                    .then(function (newSequentialWF) {
                                         newSequentialWF.id = null;
                                         newSequentialWF.regOUId = regOuId ? generator.getNormalizedValue(regOuId, 'id') : null;
                                         newSequentialWF.steps = _.map(newSequentialWF.steps, function (step) {
@@ -183,7 +183,7 @@ module.exports = function (app) {
                             defaultDocClass: null
                         },
                         resolve: {
-                            sequentialWorkflow: function (){
+                            sequentialWorkflow: function () {
                                 'ngInject';
                                 return self.loadSequentialWorkflowById(sequentialWorkflow);
                             }
@@ -208,7 +208,7 @@ module.exports = function (app) {
                             defaultDocClass: null
                         },
                         resolve: {
-                            sequentialWorkflow: function (){
+                            sequentialWorkflow: function () {
                                 'ngInject';
                                 return self.loadSequentialWorkflowById(sequentialWorkflow);
                             }
@@ -596,17 +596,22 @@ module.exports = function (app) {
 
         /**
          * @description Resets the sequential workflow for the book and send it back to initial state
+         * @param correspondence
+         * @param $event
          */
-        self.resetSeqWF = function (correspondence) {
-            var info = correspondence.getInfo(),
-                url = urlService.correspondence + '/' + info.documentClass + '/vsid/' + info.vsId + '/wob-num/' + info.wobNumber + '/authorize/reset';
-            return $http.put(url)
-                .then(function (result) {
-                    return result.data.rs;
+        self.resetSeqWF = function (correspondence, $event) {
+            return self.showReasonDialog('reset_reason', $event, 'reset')
+                .then(function (reason) {
+                    var info = correspondence.getInfo(),
+                        url = urlService.correspondence + '/' + info.documentClass + '/vsid/' + info.vsId + '/wob-num/' + info.wobNumber + '/authorize/reset?userComments=' + reason;
+                    return $http.put(url)
+                        .then(function (result) {
+                            return result.data.rs;
+                        })
+                        .catch(function (error) {
+                            return errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
+                        });
                 })
-                .catch(function (error) {
-                    return errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
-                });
         };
 
         /**
@@ -654,6 +659,36 @@ module.exports = function (app) {
                         });
                 });
         };
+        /**
+         * @description  open reason dialog
+         * @param dialogTitle
+         * @param $event
+         * @param saveButtonKey
+         * @param reasonText
+         * @returns {promise|*}
+         */
+        self.showReasonDialog = function (dialogTitle, $event, saveButtonKey, reasonText) {
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('reason'),
+                    controller: 'reasonPopCtrl',
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    targetEvent: $event,
+                    locals: {
+                        title: dialogTitle,
+                        saveButtonKey: saveButtonKey,
+                        reasonText: reasonText || ''
+                    },
+                    resolve: {
+                        comments: function (userCommentService) {
+                            'ngInject';
+                            return userCommentService.loadUserCommentsForDistribution();
+                        }
+                    }
+                });
+        };
+
 
         /**
          * @description create the shared method to the model.

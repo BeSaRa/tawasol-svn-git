@@ -1584,15 +1584,13 @@ module.exports = function (app) {
 
         /**
          * @description Reset the seqWF
+         * @param $event
          */
-        self.resetSeqWF = function () {
-            dialog.confirmMessage(langService.get('confirm_continue_message'))
-                .then(function () {
-                    sequentialWorkflowService.resetSeqWF(self.correspondence)
-                        .then(function (result) {
-                            toast.success(langService.get('success_reset_seq_wf'));
-                            dialog.cancel();
-                        })
+        self.resetSeqWF = function ($event) {
+            sequentialWorkflowService.resetSeqWF(self.correspondence, $event)
+                .then(function (result) {
+                    toast.success(langService.get('success_reset_seq_wf'));
+                    dialog.cancel();
                 })
         };
 
