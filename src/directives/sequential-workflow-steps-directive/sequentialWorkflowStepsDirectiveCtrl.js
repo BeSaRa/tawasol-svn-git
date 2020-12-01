@@ -310,7 +310,14 @@ module.exports = function (app) {
                 return (rowIndex > 0);
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
                 var docCurrentStep = _getStepById(self.correspondence.getSeqWFNextStepId());
-                return (!stepRow.id || (stepRow.itemOrder > docCurrentStep.itemOrder));
+                if (!stepRow.id) {
+                    return true;
+                }
+                // opened from authorize and send as first step
+                if (!docCurrentStep) {
+                    return stepRow.itemOrder > 0;
+                }
+                return (stepRow.itemOrder > docCurrentStep.itemOrder);
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFStatusSteps) {
                 return false;
             }
@@ -329,7 +336,15 @@ module.exports = function (app) {
                 return (rowIndex > 0);
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
                 var docCurrentStep = _getStepById(self.correspondence.getSeqWFNextStepId());
-                return (!stepRow.id || (stepRow.itemOrder > docCurrentStep.itemOrder));
+                if (!stepRow.id) {
+                    return true;
+                }
+                // opened from authorize and send as first step
+                if (!docCurrentStep) {
+                    return stepRow.itemOrder > 0;
+                }
+
+                return (stepRow.itemOrder > docCurrentStep.itemOrder);
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFStatusSteps) {
                 return false;
             }
@@ -343,7 +358,13 @@ module.exports = function (app) {
                 viewOnly = true;
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
                 var docCurrentStep = _getStepById(self.correspondence.getSeqWFNextStepId());
-                viewOnly = seqWFStep.id && (seqWFStep.itemOrder < docCurrentStep.itemOrder);
+                if (!seqWFStep.id) {
+                    viewOnly = false;
+                } else if (!docCurrentStep) { // opened from authorize and send as first step
+                    viewOnly = false;
+                } else {
+                    viewOnly = (seqWFStep.itemOrder < docCurrentStep.itemOrder);
+                }
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFStatusSteps) {
                 viewOnly = true;
             }
@@ -362,9 +383,14 @@ module.exports = function (app) {
                 // self.stepLegendList.push(self.stepLegendClassList.validStep);
                 // self.stepLegendList.push(self.stepLegendClassList.inValidStep);
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
-                self.stepLegendList.push(self.stepLegendClassList.pastStep);
-                self.stepLegendList.push(self.stepLegendClassList.currentStep);
-                self.stepLegendList.push(self.stepLegendClassList.futureStep);
+                if (!self.correspondence.getSeqWFId()) {
+                    self.stepLegendList.push(self.stepLegendClassList.currentStep);
+                    self.stepLegendList.push(self.stepLegendClassList.futureStep);
+                } else {
+                    self.stepLegendList.push(self.stepLegendClassList.pastStep);
+                    self.stepLegendList.push(self.stepLegendClassList.currentStep);
+                    self.stepLegendList.push(self.stepLegendClassList.futureStep);
+                }
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFStatusSteps) {
                 self.stepLegendList.push(self.stepLegendClassList.pastStep);
                 self.stepLegendList.push(self.stepLegendClassList.currentStep);
