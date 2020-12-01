@@ -1081,7 +1081,7 @@ module.exports = function (app) {
                         .set('lineWidth', reasonableSize.lineWidth);
                 }
 
-                if (self.attacheUsernameAndDateToSignature) {
+                if (self.attacheUsernameAndDateToSignature && !customData.hasOwnProperty('parentId')) {
                     $cookies.get(cookieAttachedTypeKey) ? self[$cookies.get(cookieAttachedTypeKey)](null, null, updatedAnnotation) : self.addUserNameAndDateToDocument(null, null, updatedAnnotation);
                 }
                 return self.currentInstance.updateAnnotation(updatedAnnotation);
