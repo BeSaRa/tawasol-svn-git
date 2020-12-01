@@ -1520,7 +1520,12 @@ module.exports = function (app) {
                         minimumStepsCount = 2;
 
                     ctrl.stepsUsageType = sequentialWorkflowService.stepsUsageTypes.viewWFSteps;
-                    ctrl.isValidSteps = function () {
+
+                    ctrl.isValidSeqWF = function () {
+                        return _isValidSteps() && _hasOneAuthorizeAndSend();
+                    };
+
+                    function _isValidSteps() {
                         if (!_hasStepRows()) {
                             return false;
                         }
@@ -1530,7 +1535,23 @@ module.exports = function (app) {
                             }
                             return stepRow.isValidStep(ctrl.sequentialWF);
                         })
-                    };
+                    }
+
+                    function _hasOneAuthorizeAndSend() {
+                        if (!_hasStepRows()) {
+                            return false;
+                        }
+                        if (ctrl.sequentialWF.isIncomingSeqWF()) {
+                            return true;
+                        } else {
+                            return !!_.find(ctrl.sequentialWF.stepRows, function (stepRow) {
+                                if (!stepRow) {
+                                    return false;
+                                }
+                                return stepRow.isAuthorizeAndSendStep();
+                            })
+                        }
+                    }
 
                     function _hasStepRows() {
                         return ctrl.sequentialWF.stepRows && ctrl.sequentialWF.stepRows.length;
