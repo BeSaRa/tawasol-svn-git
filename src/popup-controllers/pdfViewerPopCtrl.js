@@ -991,15 +991,20 @@ module.exports = function (app) {
             return applicationUserSignatureService
                 .addUserInkSignature(PSPDFKit.Annotations.toSerializableObject(annotation))
                 .then(function (vsId) {
+                    var reasonableSize = self.generateReasonableSize(self.latestInkAnnotation);
 
                     var customData = angular.extend(annotation.customData);
                     customData.additionalData.vsId = vsId;
                     self.latestInkAnnotation = self.latestInkAnnotation.set('customData', customData);
 
+                    self.latestInkAnnotation = self.latestInkAnnotation.set('boundingBox', reasonableSize.boundingBox)
+                        .set('lines', reasonableSize.lines)
+                        .set('lineWidth', reasonableSize.lineWidth);
+
                     return self.currentInstance.getInkSignatures().then(function (signatures) {
                         signatures = signatures.splice(signatures.size - 1, 1, self.latestInkAnnotation);
                         return self.currentInstance.setInkSignatures(signatures).then(function () {
-                            return self.currentInstance.updateAnnotation(self.latestInkAnnotation).then(function () {
+                            return self.currentInstance.update(self.latestInkAnnotation).then(function () {
                                 self.latestInkAnnotation = null;
                             });
                         });
