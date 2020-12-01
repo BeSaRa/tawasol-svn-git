@@ -202,11 +202,11 @@ module.exports = function (app) {
                 $timeout(function () {
                     self.form = $scope.sequentialWorkflowForm || null;
                     // if add seqWF and default document class exists, set it to seqWF and model and handle change of docClass
-                    if (!self.editMode && self.sequentialWorkflow.isAdhoc && generator.validRequired(defaultDocClass)) {
+                    if (!self.editMode && generator.validRequired(defaultDocClass)) {
                         self.selectedDocClass = defaultDocClass;
                         self.sequentialWorkflow.docClassID = defaultDocClass;
                         self.model = angular.copy(self.sequentialWorkflow);
-                        self.handleDocTypeChange(true);
+                        self.handleDocTypeChange(!!self.sequentialWorkflow.isAdhoc);
                     }
                 });
             };
