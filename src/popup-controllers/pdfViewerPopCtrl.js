@@ -2097,7 +2097,7 @@ module.exports = function (app) {
                 self.notifyPreviousSteps = true;
             }
 
-            if ((!self.sequentialWF && self.info.docStatus >= 24) || (self.info.isAttachment && self.correspondence.isOfficial)) {
+            if ((!self.sequentialWF && self.info.docStatus >= 24)) { // || (self.info.isAttachment && self.correspondence.isOfficial)
                 self.enableAttachUsernameAndDate = false;
             }
             self.attacheUsernameAndDateToSignature = $cookies.get(cookieKey) ? JSON.parse($cookies.get(cookieKey)) : false;
