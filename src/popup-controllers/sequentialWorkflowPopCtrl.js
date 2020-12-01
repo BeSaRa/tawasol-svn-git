@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                           langService,
                                                           editMode,
                                                           viewOnly,
+                                                          employeeService,
                                                           defaultDocClass,
                                                           sequentialWorkflow,
                                                           sequentialWorkflowService) {
@@ -103,11 +104,11 @@ module.exports = function (app) {
                 _setRedrawSteps();
             }
 
-        /**
-         * @description Handles the change of document type to manage steps
-         * @param ignoreReset
-         */
-        self.handleDocTypeChange = function (ignoreReset) {
+            /**
+             * @description Handles the change of document type to manage steps
+             * @param ignoreReset
+             */
+            self.handleDocTypeChange = function (ignoreReset) {
                 if (self.viewOnly || self.model.id) {
                     self.selectedDocClass = angular.copy(self.sequentialWorkflow.docClassID);
                     return;
@@ -157,6 +158,8 @@ module.exports = function (app) {
             };
 
             var _addSequentialWorkflow = function () {
+                self.sequentialWorkflow.creatorId = employeeService.getEmployee().id;
+                self.sequentialWorkflow.creatorOUId = employeeService.getEmployee().getOUID();
                 sequentialWorkflowService.addSequentialWorkflow(self.sequentialWorkflow)
                     .then(function (result) {
                         dialog.hide(result);

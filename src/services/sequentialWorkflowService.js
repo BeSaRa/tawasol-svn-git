@@ -119,8 +119,8 @@ module.exports = function (app) {
                             viewOnly: false,
                             sequentialWorkflow: new SequentialWF({
                                 regOUId: regOuId ? generator.getNormalizedValue(regOuId, 'id') : null,
-                                creatorId: employeeService.getEmployee().id,
-                                creatorOUId: employeeService.getEmployee().getOUID()
+                                /*creatorId: employeeService.getEmployee().id,
+                                creatorOUId: employeeService.getEmployee().getOUID()*/
                             }),
                             defaultDocClass: (generator.validRequired(docClassId) ? docClassId : null)
                         }
@@ -134,19 +134,6 @@ module.exports = function (app) {
              * @param $event
              */
             sequentialWorkflowCopy: function (sequentialWorkflow, regOuId, adHoc, $event) {
-                var newSequentialWF = angular.copy(sequentialWorkflow);
-
-                newSequentialWF.id = null;
-                newSequentialWF.regOUId = regOuId ? generator.getNormalizedValue(regOuId, 'id') : null;
-                newSequentialWF.creatorId = employeeService.getEmployee().id;
-                newSequentialWF.creatorOUId = employeeService.getEmployee().getOUID();
-                newSequentialWF.steps = _.map(sequentialWorkflow.steps, function (step) {
-                    step.id = null;
-                    return step;
-                });
-                newSequentialWF.isAdhoc = adHoc;
-                newSequentialWF.stepRows = angular.copy(newSequentialWF.steps);
-
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -156,8 +143,25 @@ module.exports = function (app) {
                         locals: {
                             editMode: false,
                             viewOnly: false,
-                            sequentialWorkflow: newSequentialWF,
-                            defaultDocClass: adHoc ? newSequentialWF.docClassID : null
+                            defaultDocClass: adHoc ? sequentialWorkflow.docClassID : null
+                        },
+                        resolve: {
+                            sequentialWorkflow: function (){
+                                'ngInject';
+                                return self.loadSequentialWorkflowById(sequentialWorkflow)
+                                    .then(function (newSequentialWF){
+                                        newSequentialWF.id = null;
+                                        newSequentialWF.regOUId = regOuId ? generator.getNormalizedValue(regOuId, 'id') : null;
+                                        newSequentialWF.steps = _.map(newSequentialWF.steps, function (step) {
+                                            step.id = null;
+                                            return step;
+                                        });
+                                        newSequentialWF.isAdhoc = adHoc;
+                                        newSequentialWF.stepRows = angular.copy(newSequentialWF.steps);
+
+                                        return newSequentialWF;
+                                    });
+                            }
                         }
                     });
             },
