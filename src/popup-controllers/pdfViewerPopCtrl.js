@@ -345,13 +345,17 @@ module.exports = function (app) {
                 toolbarInstance.push(openForApprovalButton);
             }
 
-            if (self.info.docStatus === 24 && (self.info.documentClass === 'outgoing' || self.info.documentClass === 'internal') && !self.sequentialWF) {
+            if (self.info.docStatus === 24 && (self.info.documentClass === 'outgoing' || self.info.documentClass === 'internal') && !self.sequentialWF && !self.correspondence.fromUserInbox) {
                 toolbarInstance = toolbarInstance.filter(item => {
                     return item.type === 'custom' ? !_itemInExcludedList(item.id) : !_itemInExcludedList(item.type);
                 });
             }
 
             if ((_isElectronicAndAuthorizeByAnnotationBefore() && !rootEntity.getGlobalSettings().allowEditAfterFirstApprove) || self.annotationType === AnnotationType.SIGNATURE) {
+                toolbarInstance = toolbarInstance.filter(item => item.type !== 'document-editor');
+            }
+
+            if (self.info.docStatus === 24) {
                 toolbarInstance = toolbarInstance.filter(item => item.type !== 'document-editor');
             }
 

@@ -1171,6 +1171,7 @@ module.exports = function (app) {
                         // just to set the seqWFId from the real correspondence
                         self.generalStepElm.seqWFId = generalStepElementView.correspondence.seqWFId;
                         generalStepElementView.actions = actions;
+                        self.fromUserInbox = true;
                         return correspondenceService.annotateCorrespondence(self, annotationType, null, null, displayInformation ? generalStepElementView : false);
                     });
             };
