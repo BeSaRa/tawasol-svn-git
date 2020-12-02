@@ -21,24 +21,20 @@
                                     <md-input-container flex>
                                         <label for="arName">{{lang.arabic_name}}</label>
                                         <input name="arName" id="arName" required minlength="4" maxlength="150"
-                                               ng-model="ctrl.correspondenceSite.arName"
-                                               custom-validate-directive="A1NS">
+                                               ng-model="ctrl.correspondenceSite.arName">
                                         <div ng-messages="correspondenceSiteForm.arName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
-                                            <div ng-message="A1NS">{{lang.one_arabic_number_space}}</div>
                                         </div>
                                     </md-input-container>
                                     <!-- English Name -->
                                     <md-input-container flex>
                                         <label for="enName">{{lang.english_name}}</label>
                                         <input name="enName" id="enName" required minlength="4" maxlength="150"
-                                               ng-model="ctrl.correspondenceSite.enName"
-                                               custom-validate-directive="E1NS">
+                                               ng-model="ctrl.correspondenceSite.enName">
                                         <div ng-messages="correspondenceSiteForm.enName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
-                                            <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
                                         </div>
                                     </md-input-container>
                                 </div>
