@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                             dialog,
                                                             followUpOrganizations,
                                                             currentFollowedUpOu,
+                                                            allowedMaxLength,
                                                             currentFollowedUpUser,
                                                             ouApplicationUserService,
                                                             comments,
@@ -34,6 +35,7 @@ module.exports = function (app) {
         self.currentFollowedUpOu = currentFollowedUpOu;
         // current followed up user
         self.currentFollowedUpUser = currentFollowedUpUser;
+        self.allowedMaxLength = allowedMaxLength;
         // all ouApplication users
         self.ouApplicationUsers = [];
         // selected organization unit
@@ -176,7 +178,7 @@ module.exports = function (app) {
 
         self.openReasonDialog = function (item, $event) {
             correspondenceService
-                .openCommentDialog()
+                .openCommentDialog(self.allowedMaxLength)
                 .then(function (reason) {
                     item.reason = reason;
                 });

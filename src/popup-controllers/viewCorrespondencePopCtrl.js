@@ -454,7 +454,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.saveWithComment = function ($event) {
-            correspondenceService.showReasonDialog('comment', $event, 'save')
+            correspondenceService.showReasonDialog('comment', $event, 'save', null, 1000)
                 .then(function (comment) {
                     self.saveCorrespondenceChanges($event, false, false, false, comment);
                 })

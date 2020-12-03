@@ -1,7 +1,7 @@
 <md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.transfer_reason}}">
-        <popup-toolbar-directive header-text="{{lang.transfer_reason}}"></popup-toolbar-directive>
+    <popup-toolbar-directive header-text="{{lang.transfer_reason}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="reason_form" autocomplete="off">
@@ -90,14 +90,17 @@
                     <div ng-if="ctrl.isArray" layout="row">
                         <md-input-container flex>
                             <label for="reason">{{lang.reason}}</label>
-                            <textarea id="reason" maxlength="200" minlength="3" name="reason"
+                            <textarea id="reason" maxlength="{{ctrl.allowedMaxLength}}" minlength="3" name="reason"
+                                      md-maxlength="{{ctrl.allowedMaxLength}}"
                                       ng-required="ctrl.selectedOrganization"
                                       ng-disabled="!ctrl.selectedOrganization"
                                       ng-model="ctrl.reason">
                             </textarea>
                             <div ng-messages="reason_form.reason.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
-                                <div ng-message="maxlength">{{lang.max_length.change({length:200})}}</div>
+                                <div ng-message="maxlength">
+                                    {{lang.max_length.change({length: ctrl.allowedMaxLength})}}
+                                </div>
                             </div>
                             <div class="hint" ng-if="!reason_form.reason.$error.required">{{lang.reason_all}}</div>
                         </md-input-container>
@@ -105,14 +108,17 @@
                     <div ng-if="!ctrl.isArray" layout="row">
                         <md-input-container flex>
                             <label for="reason">{{lang.reason}}</label>
-                            <textarea id="reason" maxlength="200" minlength="3" name="reason"
+                            <textarea id="reason" maxlength="{{ctrl.allowedMaxLength}}" minlength="3" name="reason"
+                                      md-maxlength="{{ctrl.allowedMaxLength}}"
                                       ng-required="ctrl.selectedOrganization"
                                       ng-disabled="!ctrl.selectedOrganization"
                                       ng-model="ctrl.reason">
                             </textarea>
                             <div ng-messages="reason_form.reason.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
-                                <div ng-message="maxlength">{{lang.max_length.change({length:200})}}</div>
+                                <div ng-message="maxlength">
+                                    {{lang.max_length.change({length: ctrl.allowedMaxLength})}}
+                                </div>
                             </div>
                         </md-input-container>
                     </div>

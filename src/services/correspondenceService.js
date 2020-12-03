@@ -1298,8 +1298,9 @@ module.exports = function (app) {
          * @param currentFollowedUpOu
          * @param currentFollowedUpUser
          * @param $event
+         * @param allowedMaxLength
          */
-        self.openTransferDialog = function (workItems, currentFollowedUpOu, currentFollowedUpUser, $event) {
+        self.openTransferDialog = function (workItems, currentFollowedUpOu, currentFollowedUpUser, $event, allowedMaxLength) {
             return dialog
                 .showDialog({
                     templateUrl: cmsTemplate.getPopup('transfer-mail'),
@@ -1309,7 +1310,8 @@ module.exports = function (app) {
                     locals: {
                         workItems: workItems,
                         currentFollowedUpOu: currentFollowedUpOu,
-                        currentFollowedUpUser: currentFollowedUpUser
+                        currentFollowedUpUser: currentFollowedUpUser,
+                        allowedMaxLength: allowedMaxLength || 200
                     },
                     resolve: {
                         organizations: function (distributionWFService) {
@@ -1343,7 +1345,7 @@ module.exports = function (app) {
          * @description open comment dialog for workItem reason.
          * @returns {promise|*}
          */
-        self.openCommentDialog = function () {
+        self.openCommentDialog = function (allowedMaxLength) {
             return dialog
                 .showDialog({
                     templateUrl: cmsTemplate.getPopup('reason'),
@@ -1352,12 +1354,12 @@ module.exports = function (app) {
                     bindToController: true,
                     locals: {
                         justReason: true,
-                        title: 'select_reason'
+                        title: 'select_reason',
+                        allowedMaxLength: allowedMaxLength || 200
                     },
                     resolve: {
                         comments: function (userCommentService) {
                             'ngInject';
-                            /*return userCommentService.getUserComments();*/
                             return userCommentService.loadUserCommentsForDistribution();
                         }
                     }
@@ -2855,9 +2857,10 @@ module.exports = function (app) {
          * @param $event
          * @param saveButtonKey
          * @param reasonText
+         * @param allowedMaxLength
          * @returns {promise|*}
          */
-        self.showReasonDialog = function (dialogTitle, $event, saveButtonKey, reasonText) {
+        self.showReasonDialog = function (dialogTitle, $event, saveButtonKey, reasonText, allowedMaxLength) {
             return dialog
                 .showDialog({
                     templateUrl: cmsTemplate.getPopup('reason'),
@@ -2868,7 +2871,8 @@ module.exports = function (app) {
                     locals: {
                         title: dialogTitle,
                         saveButtonKey: saveButtonKey,
-                        reasonText: reasonText || ''
+                        reasonText: reasonText || '',
+                        allowedMaxLength: allowedMaxLength || 200
                     },
                     resolve: {
                         comments: function (userCommentService) {
@@ -2883,8 +2887,9 @@ module.exports = function (app) {
          * @param dialogTitle
          * @param workItems
          * @param $event
+         * @param allowedMaxLength
          */
-        self.showReasonBulkDialog = function (dialogTitle, workItems, $event) {
+        self.showReasonBulkDialog = function (dialogTitle, workItems, $event, allowedMaxLength) {
             return dialog
                 .showDialog({
                     templateUrl: cmsTemplate.getPopup('reason-bulk'),
@@ -2894,15 +2899,12 @@ module.exports = function (app) {
                     bindToController: true,
                     locals: {
                         workItems: workItems,
-                        title: dialogTitle
+                        title: dialogTitle,
+                        allowedMaxLength: allowedMaxLength || 200
                     },
                     resolve: {
                         comments: function (userCommentService) {
                             'ngInject';
-                            /*return userCommentService.getUserComments()
-                                .then(function (result) {
-                                    return _.filter(result, 'status');
-                                });*/
                             return userCommentService.loadUserCommentsForDistribution();
                         }
                     }

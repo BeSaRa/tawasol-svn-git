@@ -90,14 +90,15 @@
                     <div layout="row">
                         <md-input-container flex>
                             <label for="reason">{{lang.reason}}</label>
-                            <textarea id="reason" maxlength="200" minlength="3" name="reason"
+                            <textarea id="reason" maxlength="{{ctrl.allowedMaxLength}}" minlength="3" name="reason"
+                                      md-maxlength="{{ctrl.allowedMaxLength}}"
                                       ng-required="ctrl.selectedOrganization"
                                       ng-disabled="!ctrl.selectedOrganization"
                                       ng-model="ctrl.reason">
                             </textarea>
                             <div ng-messages="reason_form.reason.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
-                                <div ng-message="maxlength">{{lang.max_length.change({length:200})}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:ctrl.allowedMaxLength})}}</div>
                             </div>
                             <div class="hint" ng-if="ctrl.isArray && !reason_form.reason.$error.required">
                                 {{lang.reason_all}}

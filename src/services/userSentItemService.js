@@ -142,9 +142,10 @@ module.exports = function (app) {
              * @param $event
              * @param saveButtonKey
              * @param reasonText
+             * @param allowedMaxLength
              * @returns {promise|*}
              */
-            self.showReasonDialog = function (dialogTitle, $event, saveButtonKey, reasonText) {
+            self.showReasonDialog = function (dialogTitle, $event, saveButtonKey, reasonText, allowedMaxLength) {
                 return dialog
                     .showDialog({
                         templateUrl: cmsTemplate.getPopup('reason'),
@@ -155,7 +156,8 @@ module.exports = function (app) {
                         locals: {
                             title: dialogTitle,
                             saveButtonKey: saveButtonKey,
-                            reasonText: reasonText || ''
+                            reasonText: reasonText || '',
+                            allowedMaxLength: allowedMaxLength || 200
                         },
                         resolve: {
                             comments: function (userCommentService) {
@@ -170,8 +172,9 @@ module.exports = function (app) {
              * @param dialogTitle
              * @param workItems
              * @param $event
+             * @param allowedMaxLength
              */
-            self.showReasonBulkDialog = function (dialogTitle, workItems, $event) {
+            self.showReasonBulkDialog = function (dialogTitle, workItems, $event, allowedMaxLength) {
                 return dialog
                     .showDialog({
                         templateUrl: cmsTemplate.getPopup('reason-bulk'),
@@ -180,15 +183,12 @@ module.exports = function (app) {
                         bindToController: true,
                         locals: {
                             workItems: workItems,
-                            title: dialogTitle
+                            title: dialogTitle,
+                            allowedMaxLength: allowedMaxLength || 200
                         },
                         resolve: {
                             comments: function (userCommentService) {
                                 'ngInject';
-                                /*return userCommentService.getUserComments()
-                                    .then(function (result) {
-                                        return _.filter(result, 'status');
-                                    });*/
                                 return userCommentService.loadUserCommentsForDistribution();
                             }
                         }

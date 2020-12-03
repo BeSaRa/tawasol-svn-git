@@ -665,9 +665,10 @@ module.exports = function (app) {
          * @param $event
          * @param saveButtonKey
          * @param reasonText
+         * @param allowedMaxLength
          * @returns {promise|*}
          */
-        self.showReasonDialog = function (dialogTitle, $event, saveButtonKey, reasonText) {
+        self.showReasonDialog = function (dialogTitle, $event, saveButtonKey, reasonText, allowedMaxLength) {
             return dialog
                 .showDialog({
                     templateUrl: cmsTemplate.getPopup('reason'),
@@ -678,7 +679,8 @@ module.exports = function (app) {
                     locals: {
                         title: dialogTitle,
                         saveButtonKey: saveButtonKey,
-                        reasonText: reasonText || ''
+                        reasonText: reasonText || '',
+                        allowedMaxLength: allowedMaxLength || 1000
                     },
                     resolve: {
                         comments: function (userCommentService) {

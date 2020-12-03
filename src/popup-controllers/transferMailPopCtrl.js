@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                     organizations,
                                                     currentFollowedUpOu,
                                                     currentFollowedUpUser,
+                                                    allowedMaxLength,
                                                     ouApplicationUserService,
                                                     comments,
                                                     _,
@@ -35,6 +36,7 @@ module.exports = function (app) {
         self.selectedOrganization = null;
         // selected application user to set it
         self.selectedApplicationUser = null;
+        self.allowedMaxLength = allowedMaxLength;
 
         self.selectedUserDomain = null;
         self.ouSearchText = '';
@@ -180,7 +182,7 @@ module.exports = function (app) {
 
         self.openReasonDialog = function (workItem, $event) {
             correspondenceService
-                .openCommentDialog()
+                .openCommentDialog(self.allowedMaxLength)
                 .then(function (reason) {
                     workItem.reason = reason;
                 });

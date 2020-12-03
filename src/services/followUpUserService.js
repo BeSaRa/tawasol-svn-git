@@ -557,9 +557,10 @@ module.exports = function (app) {
              * @param $event
              * @param saveButtonKey
              * @param reasonText
+             * @param allowedMaxLength
              * @returns {promise|*}
              */
-            self.showReasonDialog = function (dialogTitle, $event, saveButtonKey, reasonText) {
+            self.showReasonDialog = function (dialogTitle, $event, saveButtonKey, reasonText, allowedMaxLength) {
                 return dialog
                     .showDialog({
                         templateUrl: cmsTemplate.getPopup('reason'),
@@ -570,7 +571,8 @@ module.exports = function (app) {
                         locals: {
                             title: dialogTitle,
                             saveButtonKey: saveButtonKey,
-                            reasonText: reasonText || ''
+                            reasonText: reasonText || '',
+                            allowedMaxLength: allowedMaxLength || 200
                         },
                         resolve: {
                             comments: function (userCommentService) {
@@ -585,8 +587,9 @@ module.exports = function (app) {
              * @param dialogTitle
              * @param followupBooks
              * @param $event
+             * @param allowedMaxLength
              */
-            self.showReasonBulkDialog = function (dialogTitle, followupBooks, $event) {
+            self.showReasonBulkDialog = function (dialogTitle, followupBooks, $event, allowedMaxLength) {
                 return dialog
                     .showDialog({
                         templateUrl: cmsTemplate.getPopup('reason-bulk'),
@@ -596,7 +599,8 @@ module.exports = function (app) {
                         bindToController: true,
                         locals: {
                             workItems: followupBooks,
-                            title: dialogTitle
+                            title: dialogTitle,
+                            allowedMaxLength: allowedMaxLength || 200
                         },
                         resolve: {
                             comments: function (userCommentService) {
@@ -691,7 +695,7 @@ module.exports = function (app) {
                         resolve: {
                             emailAddress: function (applicationUserService) {
                                 'ngInject';
-                                if(!receivingUser){
+                                if (!receivingUser) {
                                     return null;
                                 }
                                 if (employeeService.isCurrentApplicationUser(receivingUser)) {
@@ -1003,8 +1007,9 @@ module.exports = function (app) {
              * @param currentFollowedUpOu
              * @param currentFollowedUpUser
              * @param $event
+             * @param allowedMaxLength
              */
-            self.openTransferDialog = function (records, currentFollowedUpOu, currentFollowedUpUser, $event) {
+            self.openTransferDialog = function (records, currentFollowedUpOu, currentFollowedUpUser, $event, allowedMaxLength) {
                 return dialog
                     .showDialog({
                         templateUrl: cmsTemplate.getPopup('transfer-followup-book'),
@@ -1014,7 +1019,8 @@ module.exports = function (app) {
                         locals: {
                             records: records,
                             currentFollowedUpOu: currentFollowedUpOu,
-                            currentFollowedUpUser: currentFollowedUpUser
+                            currentFollowedUpUser: currentFollowedUpUser,
+                            allowedMaxLength: allowedMaxLength || 200
                         },
                         resolve: {
                             followUpOrganizations: function (organizationService) {

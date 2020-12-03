@@ -34,15 +34,15 @@
                         <md-input-container flex>
                             <label for="reason">{{lang.description}}</label>
                             <textarea required id="reason"
-                                      maxlength="200"
-                                      md-maxlength="200"
+                                      maxlength="{{ctrl.allowedMaxLength}}"
+                                      md-maxlength="{{ctrl.allowedMaxLength}}"
                                       minlength="3" name="reason"
                                       ng-model="ctrl.reason" class="cms-comment">
                             </textarea>
                             <div ng-messages="reason_form.reason.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                                 <div ng-message="minlength">{{lang.min_length.change({length: 3})}}</div>
-                                <div ng-message="maxlength">{{lang.max_length.change({length:200})}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:ctrl.allowedMaxLength})}}</div>
                             </div>
                             <div class="hint" ng-if="!reason_form.reason.$error.required">{{lang.reason_all}}</div>
                         </md-input-container>

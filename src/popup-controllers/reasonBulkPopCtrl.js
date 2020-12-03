@@ -28,7 +28,7 @@ module.exports = function (app) {
 
         self.openReasonDialog = function (workItem) {
             correspondenceService
-                .openCommentDialog()
+                .openCommentDialog(self.allowedMaxLength)
                 .then(function (reason) {
                     workItem.reason = reason;
                 });
