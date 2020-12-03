@@ -23,7 +23,7 @@
                                            placeholder="{{lang.search}}"
                                            class="select-header-input">
                                 </md-select-header>
-                                <md-option
+                                <md-option ng-class="{'background-warning' : option.isAdhoc}"
                                         ng-repeat="option in ctrl.sequentialWorkflows | translatedNameFilter: ctrl.seqWFSearchText"
                                         ng-value="option">
                                     <span

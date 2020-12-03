@@ -62,9 +62,8 @@ module.exports = function (app) {
 
         /**
          * @description Handles the change of sequential workflow
-         * @param $event
          */
-        self.onChangeSequentialWorkflow = function ($event) {
+        self.onChangeSequentialWorkflow = function () {
             self.redrawSteps = true;
             $timeout(function () {
                 self.redrawSteps = false;
@@ -137,6 +136,8 @@ module.exports = function (app) {
                 .controllerMethod
                 .sequentialWorkflowCopy(self.selectedSeqWF, self.selectedSeqWF.regOUId, true, $event)
                 .then(function (result) {
+                    self.sequentialWorkflows.push(result);
+                    self.onChangeSequentialWorkflow();
                     toast.success(langService.get('add_success').change({name: result.getNames()}));
                     self.selectedSeqWF = result;
                     self.launchSeqWF($event);
