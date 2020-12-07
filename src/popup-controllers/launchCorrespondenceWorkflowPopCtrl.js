@@ -1650,7 +1650,11 @@ module.exports = function (app) {
                 var proxyUserSecurityLevels = generator.getSelectedCollectionFromResult(self.securityLevels, proxyUser.proxyInfo.securityLevels, 'lookupKey');
 
                 return _.every(proxyUserSecurityLevels, function (userSecurityLevel) {
-                    return userSecurityLevel.lookupKey !== self.correspondence.securityLevelLookup.lookupKey;
+                    if (self.correspondence.hasOwnProperty('securityLevelLookup')) {
+                        return userSecurityLevel.lookupKey !== self.correspondence.securityLevelLookup.lookupKey
+                    } else {
+                        return userSecurityLevel.lookupKey !== self.correspondence.securityLevel.lookupKey
+                    }
                 });
             })
         }
