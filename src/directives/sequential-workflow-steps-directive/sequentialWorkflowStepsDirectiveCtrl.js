@@ -56,7 +56,14 @@ module.exports = function (app) {
             if (!self.seqWF.hasAnyDocumentType()) {
                 return false;
             }
-            self.seqWF.stepRows.splice(self.seqWF.stepRows.length, 0, null);
+            var indexToInsert = self.seqWF.stepRows.length;
+            if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
+                var docCurrentStep = _getStepById(self.correspondence.getSeqWFNextStepId());
+                if (docCurrentStep) {
+                    indexToInsert = docCurrentStep.itemOrder + 1;
+                }
+            }
+            self.seqWF.stepRows.splice(indexToInsert, 0, null);
             self.compileAll(self.seqWF.stepRows);
         };
 
