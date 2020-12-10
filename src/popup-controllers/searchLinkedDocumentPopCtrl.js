@@ -550,11 +550,12 @@ module.exports = function (app) {
                 includeDisabled: true // to include private regOu
             }).then(function (result) {
                 if (result.length) {
-                    var availableSubSitesIds = _.map(self.subSitesCopy, 'id');
+                    var availableSubSitesIds = _.map(self.subSitesCopy, 'subSiteId');
                     result = _.filter(result, function (corrSite) {
                         return availableSubSitesIds.indexOf(corrSite.id) === -1;
                     });
 
+                    result = _.map(result, _mapSubSites);
                     self.subSites = self.subSites.concat(result);
                     self.subSitesCopy = angular.copy(self.subSites);
 
