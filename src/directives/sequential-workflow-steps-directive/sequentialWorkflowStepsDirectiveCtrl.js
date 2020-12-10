@@ -240,8 +240,69 @@ module.exports = function (app) {
             })
         }
 
-
         function _getStepText(stepRow) {
+            if (!stepRow) {
+                return '';
+            }
+
+            var titleText = '',
+                previousStep = _getStepByItemOrder(stepRow.itemOrder - 1),
+                previousStepUser = (previousStep && previousStep.getTranslatedUserAndOuName()) ? (previousStep.getTranslatedUserAndOuName()) : '',
+                stepActionText = ' (' + stepRow.getTranslatedName() + ') ';
+
+            if (self.usageType === sequentialWorkflowService.stepsUsageTypes.manageWFSteps) {
+                if (stepRow.itemOrder === 0) {
+                    titleText = stepActionText;
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepRow.getTranslatedUserAndOuName();
+                    }
+                } else {
+                    titleText = previousStepUser + stepActionText;
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepRow.getTranslatedUserAndOuName();
+                    }
+                }
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
+                if (stepRow.itemOrder === 0) {
+                    titleText = (self.employee.getTranslatedName() + ' - ' + self.employee.getExtraFields().ouInfo.getTranslatedName()) + stepActionText;
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepRow.getTranslatedUserAndOuName();
+                    }
+                } else {
+                    titleText = previousStepUser + stepActionText;
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepRow.getTranslatedUserAndOuName()
+                    }
+                }
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
+                if (stepRow.itemOrder === 0) {
+                    titleText = self.seqWF.getTranslatedCreatorAndOuName() + stepActionText;
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepRow.getTranslatedUserAndOuName();
+                    }
+                } else {
+                    titleText = previousStepUser + stepActionText;
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepRow.getTranslatedUserAndOuName()
+                    }
+                }
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFStatusSteps) {
+                if (stepRow.itemOrder === 0) {
+                    titleText = self.seqWF.getTranslatedCreatorAndOuName() + stepActionText;
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepRow.getTranslatedUserAndOuName();
+                    }
+                } else {
+                    titleText = previousStepUser + stepActionText;
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepRow.getTranslatedUserAndOuName()
+                    }
+                }
+            }
+            return titleText;
+        }
+
+        function _getStepTextWithIcon(stepRow) {
             if (!stepRow) {
                 return '';
             }
