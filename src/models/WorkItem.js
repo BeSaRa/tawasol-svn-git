@@ -1187,12 +1187,22 @@ module.exports = function (app) {
                             var step = _.find(seqWF.steps, function (step) {
                                 return step.id === generalStepElementView.generalStepElm.seqWFNextStepId;
                             });
+                            if (!step) {
+                                step = _.find(seqWF.steps, function (step) {
+                                    return step.itemOrder === 0;
+                                });
+                            }
                             return correspondenceService.annotateCorrespondence(self, (forApproval && step.isAuthorizeAndSendStep() ? 3 : annotationType), null, seqWF, generalStepElementView);
                         }
                         return sequentialWorkflowService.loadSequentialWorkflowById(self.getSeqWFId()).then(function (seqWF) {
                             var step = _.find(seqWF.steps, function (step) {
                                 return step.id === generalStepElementView.generalStepElm.seqWFNextStepId;
                             });
+                            if (!step) {
+                                step = _.find(seqWF.steps, function (step) {
+                                    return step.itemOrder === 0;
+                                });
+                            }
                             return correspondenceService.annotateCorrespondence(self, (forApproval && step.isAuthorizeAndSendStep() ? 3 : annotationType), null, seqWF, generalStepElementView);
                         });
                     });
