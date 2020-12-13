@@ -1714,7 +1714,7 @@ module.exports = function (app) {
                     var info = model.getInfo();
                     return rootEntity.hasPSPDFViewer() && !model.hasActiveSeqWF()
                         && !model.isCorrespondenceApprovedBefore() && !model.isComposite()
-                        && !model.isTerminatedSEQ() && !model.isBroadcasted();
+                        && !model.isTerminatedSEQ() && !model.isBroadcasted() && !model.generalStepElm.isSeqWFLaunch;
                 }
             },
             // Broadcast
