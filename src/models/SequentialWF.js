@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.factory('SequentialWF', function (CMSModelInterceptor,
                                           langService,
+                                          _,
                                           generator) {
         'ngInject';
         return function SequentialWF(model) {
@@ -145,7 +146,7 @@ module.exports = function (app) {
                 return this.steps && this.steps[this.steps.length - 1].id;
             };
             SequentialWF.prototype.getFirstStepId = function () {
-                return this.steps && this.steps[0].id;
+                return this.steps && _.find(this.steps, (step) => step.itemOrder === 0).id;
             };
 
             SequentialWF.prototype.isAdhocSeqWF = function () {

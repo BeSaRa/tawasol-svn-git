@@ -2163,7 +2163,7 @@ module.exports = function (app) {
             if (!self.sequentialWF) {
                 return false;
             }
-            return !self.isLaunchStep;
+            return  !self.isLaunchStep && (self.sequentialWF.getFirstStepId() !== self.nextSeqStep.id);
         };
 
         /**
