@@ -565,7 +565,7 @@ module.exports = function (app) {
              */
             WorkItem.prototype.viewNewWorkItemDocument = function (actions, queueName, $event) {
                 var self = this, info = self.getInfo(), pdfViewerEnabled = rootEntity.hasPSPDFViewer();
-                if (pdfViewerEnabled && !info.isPaper && employeeService.getEmployee().isFirstViewForApproval && self.checkElectronicSignaturePermission()) {
+                if (pdfViewerEnabled && !info.isPaper && employeeService.getEmployee().isFirstViewForApproval && self.checkElectronicSignaturePermission() && self.generalStepElm.isMultiSignature) {
                     return self.openForAnnotation(true, info.docStatus < 23 ? 3 : 1, actions, true);
                 } else {
                     return viewDocumentService.viewUserInboxDocument(this, actions, queueName, $event);
