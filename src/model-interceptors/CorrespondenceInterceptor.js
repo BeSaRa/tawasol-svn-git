@@ -102,13 +102,30 @@ module.exports = function (app) {
                 model.linkedEntities = angular.toJson([]);
             }
 
-            /*var now = new Date();
+            var now = new Date();
             var docDate = new Date(model.docDate);
-            docDate.setHours(now.getHours());
-            docDate.setMinutes(now.getMinutes());
-            docDate.setSeconds(now.getSeconds());
-            model.docDate = generator.getTimeStampFromDate(docDate);*/
+            if (!model.vsId) {
+                docDate.setHours(now.getHours());
+                docDate.setMinutes(now.getMinutes());
+                docDate.setSeconds(now.getSeconds());
 
+                model.docDate = generator.getTimeStampFromDate(docDate);
+                model.docDateTemp = angular.copy(model.docDate);
+            } else {
+                var docDateTemp = generator.getDateObjectFromTimeStamp(model.docDateTemp);
+                if (!docDateTemp ||
+                    docDateTemp.getFullYear() !== docDate.getFullYear() ||
+                    docDateTemp.getMonth() !== docDate.getMonth() ||
+                    docDateTemp.getDate() !== docDate.getDate()) {
+                    docDate.setHours(now.getHours());
+                    docDate.setMinutes(now.getMinutes());
+                    docDate.setSeconds(now.getSeconds());
+
+                    model.docDate = generator.getTimeStampFromDate(docDate);
+                } else {
+                    model.docDate = model.docDateTemp;
+                }
+            }
             delete model.cbrEnabled;
 
             delete model.securityLevelIndicator;
@@ -164,6 +181,7 @@ module.exports = function (app) {
             delete model.numberOfDays;
             delete model.recordGridName;
             delete model.hasSequentialWFIndicator;
+            delete model.docDateTemp;
             return model;
         });
 
@@ -198,6 +216,7 @@ module.exports = function (app) {
             model.creatorInfo = model.creatorInfo ? new Information(model.creatorInfo) : new Information();
 
             if (model.docDate && !angular.isDate(model.docDate)) {
+                model.docDateTemp = angular.copy(model.docDate);
                 model.docDate = moment(model.docDate).format('YYYY-MM-DD');
                 model.createdOn = angular.copy(model.docDate);
             }
