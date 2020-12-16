@@ -67,72 +67,62 @@
                             <!-- Simple Search Box -->
                             <div layout="row" flex
                                  ng-if="ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence">
+                                <!-- Site Type -->
                                 <md-input-container flex>
-                                    <label for="siteType">{{lang.sites_select_site_type}}</label>
-                                    <md-select id="siteType" ng-model="ctrl.selectedSiteType"
-                                               ng-change="ctrl.onSiteTypeChange($event)">
-                                        <md-option ng-value="type" ng-repeat="type in ctrl.correspondenceSiteTypes">
-                                            {{type.getTranslatedName()}}
-                                        </md-option>
-                                    </md-select>
-                                </md-input-container>
-                                <md-input-container flex>
-                                    <label for="mainSite">{{lang.main_site}}</label>
-                                    <md-select id="mainSite" ng-model="ctrl.selectedMainSite"
-                                               ng-disabled="!ctrl.selectedSiteType || !ctrl.selectedSiteType.id"
-                                               ng-change="ctrl.getSubSites($event)"
-                                               md-on-close="ctrl.clearSearchText('mainSite')"
+                                    <label for="siteTypeSimple">{{lang.sites_select_site_type}}</label>
+                                    <md-select id="siteTypeSimple" ng-model="ctrl.selectedSiteTypeSimple"
+                                               ng-change="ctrl.onSiteTypeSimpleChange($event)"
+                                               md-on-close="ctrl.clearSearchText('siteTypeSimple')"
                                                data-md-container-class="select-header-container sticky-search-bar">
                                         <md-select-header class="select-header">
-                                            <input ng-model="ctrl.selectedMainSiteSearchText"
+                                            <input ng-model="ctrl.siteTypeSimpleSearchText"
                                                    ng-keydown="ctrl.preventSearchKeyDown($event)"
                                                    placeholder="{{lang.search}}"
                                                    class="select-header-input">
                                         </md-select-header>
                                         <md-option ng-value="type"
-                                                   ng-repeat="type in ctrl.mainSites | translatedNameFilter:ctrl.selectedMainSiteSearchText">
-                              <span md-highlight-text="ctrl.selectedMainSiteSearchText"
-                                    md-highlight-flags="i">{{type.getTranslatedName()}}</span>
-                                        </md-option>
-                                        <md-option ng-value="null">{{lang.none}}</md-option>
-                                    </md-select>
-                                </md-input-container>
-                            </div>
-
-                            <!-- Advanced Search Box -->
-                            <div layout="row" flex
-                                 ng-if="!ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence">
-                                <!-- Correspondence Site Type -->
-                                <md-input-container flex>
-                                    <label for="siteType">{{lang.sites_select_site_type}}</label>
-                                    <md-select id="siteType" ng-model="ctrl.selectedType">
-                                        <md-option ng-value="type" ng-repeat="type in ctrl.correspondenceSiteTypes">
-                                            {{type.getTranslatedName()}}
+                                                   ng-repeat="type in ctrl.correspondenceSiteTypes | translatedNameFilter:ctrl.siteTypeSimpleSearchText">
+                                            <span md-highlight-text="ctrl.siteTypeSimpleSearchText"
+                                                  md-highlight-flags="i">{{type.getTranslatedName()}}</span>
                                         </md-option>
                                     </md-select>
                                 </md-input-container>
                                 <!-- Main Site -->
-                                <md-autocomplete
-                                        flex
-                                        md-autoselect
-                                        md-no-cache="true"
-                                        md-selected-item="ctrl.selectedMain"
-                                        md-search-text="ctrl.mainSearch"
-                                        md-selected-item-change="ctrl.onMainChange(item)"
-                                        md-items="item in ctrl.onMainSearch(ctrl.mainSearch)"
-                                        md-item-text="item.display"
-                                        md-min-length="3"
-                                        md-floating-label="{{lang.sites_select_main_site}}">
-                                    <span>{{item.getTranslatedName()}}</span>
-                                </md-autocomplete>
-                                <!-- Sub Site -->
                                 <md-input-container flex>
-                                    <label for="subSearch">{{lang.sites_select_sub_site}}</label>
-                                    <input id="subSearch" ng-model="ctrl.subSearch"
-                                           ng-change="ctrl.onSubSearch($event)">
+                                    <label for="mainSiteSimple">{{lang.main_site}}</label>
+                                    <md-select id="mainSiteSimple" ng-model="ctrl.selectedMainSiteSimple"
+                                               ng-model-options="{trackBy: '$value.id'}"
+                                               ng-disabled="!ctrl.selectedSiteTypeSimple || !ctrl.selectedSiteTypeSimple.id"
+                                               ng-change="ctrl.onMainSiteChangeSimple($event)"
+                                               md-on-close="ctrl.clearSearchText('mainSiteSimple')"
+                                               data-md-container-class="select-header-container sticky-search-bar">
+                                        <md-select-header class="select-header" layout="column">
+                                            <div layout="row" flex class="size-100">
+                                                <input ng-model="ctrl.mainSiteSimpleSearchText"
+                                                       ng-keydown="ctrl.preventSearchKeyDown($event, 'mainSiteSimple')"
+                                                       placeholder="{{lang.search}}"
+                                                       class="select-header-input">
+                                                <md-button ng-if="ctrl.mainSiteSimpleSearchText"
+                                                           ng-click="ctrl.loadMainSitesRecords($event)"
+                                                           class="select-header-icon md-icon-button"
+                                                           tooltip="{{lang.load_more_records}}">
+                                                    <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                                </md-button>
+                                            </div>
+                                            <div class="help-text-div" ng-if="ctrl.mainSiteSimpleSearchText">
+                                                {{lang.press_enter_to_load_more_records}}
+                                            </div>
+                                        </md-select-header>
+                                        <md-option ng-value="null">{{lang.none}}</md-option>
+                                        <md-option
+                                                ng-repeat="type in ctrl.mainSites | translatedNameFilter:ctrl.mainSiteSimpleSearchText"
+                                                ng-value="type">
+                                            <span md-highlight-text="ctrl.mainSiteSimpleSearchText"
+                                                  md-highlight-flags="i">{{type.getTranslatedName()}}</span>
+                                        </md-option>
+                                    </md-select>
                                 </md-input-container>
                             </div>
-
                             <!-- Search Results -->
                             <div flex layout="column">
                                 <md-card ng-if="ctrl.subSearchResult.length" md-whiteframe="3" layout="column"
@@ -141,8 +131,46 @@
                                                 ng-class="{'selected':ctrl.subSearchSelected.length}">
                                         <div class="md-toolbar-tools">
                                             <!-- Close search results -->
-                                            <div layout="row" ng-if="!ctrl.subSearchSelected.length" flex>
+                                            <div layout="row" ng-if="!ctrl.subSearchSelected.length" flex
+                                                 layout-align="start center">
                                                 <div flex>{{lang.sites_search_results}}</div>
+                                                <!-- sub site result search -->
+                                                <div ng-if="ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence"
+                                                     flex>
+                                                    <div class="cms-autocomplete-wrapper" flex>
+                                                        <span class="button-container">
+                                                            <md-button ng-if="ctrl.isSubSiteSearchEnabled()"
+                                                                       ng-click="ctrl.loadSubSitesRecords($event)"
+                                                                       class="md-icon-button search-button"
+                                                                       tooltip="{{lang.load_more_records}}">
+                                                                <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                                            </md-button>
+                                                        </span>
+                                                        <div class="help-text-div text-center"
+                                                             ng-if="ctrl.isSubSiteSearchEnabled()">
+                                                            {{lang.press_enter_to_load_more_records}}
+                                                        </div>
+                                                        <md-autocomplete
+                                                                ng-class="{'ac-search-button': ctrl.isSubSiteSearchEnabled()}"
+                                                                md-no-cache="true"
+                                                                md-select-on-match="true"
+                                                                md-selected-item="ctrl.selectedSimpleSub"
+                                                                md-selected-item-change="ctrl.onSimpleSubSiteSelectedChange(item)"
+                                                                md-search-text="ctrl.simpleSubSiteResultSearchText"
+                                                                md-items="item in ctrl.getSimpleSubSearchOptions(ctrl.simpleSubSiteResultSearchText)"
+                                                                md-item-text="item.getTranslatedName()"
+                                                                md-min-length="0"
+                                                                placeholder="{{lang.sub_site}}"
+                                                                md-autofocus
+                                                                ng-keydown="ctrl.preventSearchKeyDown($event, 'subSiteSimple')">
+                                                            <md-item-template>
+                                                    <span md-highlight-text="ctrl.simpleSubSiteResultSearchText"
+                                                          md-highlight-flags="i">{{item.getTranslatedName()}}</span>
+                                                            </md-item-template>
+                                                        </md-autocomplete>
+                                                    </div>
+                                                </div>
+                                                <!-- Close search results -->
                                                 <div>
                                                     <md-button tooltip="{{lang.sites_hide_search}}"
                                                                class="md-icon-button close-search-button"
@@ -164,7 +192,7 @@
                                                                 <md-button ng-click="$mdMenu.open()"
                                                                            ng-disabled="!!ctrl.disableCorrespondence">
                                                                     {{ctrl.followupStatus.getTranslatedName() ||
-                                                                    lang.sites_follow_up_status}}
+                                                                lang.sites_follow_up_status}}
                                                                 </md-button>
                                                                 <md-menu-content width="3">
                                                                     <md-menu-item
@@ -267,7 +295,7 @@
                                                                         <md-button ng-click="$mdMenu.open()"
                                                                                    ng-disabled="!!ctrl.disableCorrespondence">
                                                                             {{site.followupStatus.getTranslatedName() ||
-                                                                            lang.sites_follow_up_status}}
+                                                                        lang.sites_follow_up_status}}
                                                                         </md-button>
                                                                         <md-menu-content width="3">
                                                                             <md-menu-item
@@ -355,8 +383,8 @@
                                                             <md-menu>
                                                                 <md-button ng-click="$mdMenu.open()">
                                                                     {{ctrl.sitesInfoToFollowupStatus.getTranslatedName()
-                                                                    ||
-                                                                    lang.sites_follow_up_status}}
+                                                                ||
+                                                                lang.sites_follow_up_status}}
                                                                 </md-button>
                                                                 <md-menu-content width="3">
                                                                     <md-menu-item
@@ -435,12 +463,13 @@
                                                         </div>
                                                     </td>
                                                     <td md-cell>
-                                                        <div layout="row"><span flex>{{site.followupStatus.getTranslatedName()}}</span>
+                                                        <div layout="row"><span
+                                                                flex>{{site.followupStatus.getTranslatedName()}}</span>
                                                         </div>
                                                     </td>
                                                     <td md-cell>
                                                         <div layout="row"><span
-                                                                flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
+                                                                flex>{{site.followupDate | date:'yyyy-MM-dd'}}</span>
                                                         </div>
                                                     </td>
                                                     <td md-cell>
@@ -489,8 +518,8 @@
                                                             <md-menu>
                                                                 <md-button ng-click="$mdMenu.open()">
                                                                     {{ctrl.sitesInfoCCFollowupStatus.getTranslatedName()
-                                                                    ||
-                                                                    lang.sites_follow_up_status}}
+                                                                ||
+                                                                lang.sites_follow_up_status}}
                                                                 </md-button>
                                                                 <md-menu-content width="3">
                                                                     <md-menu-item
@@ -569,12 +598,13 @@
                                                         </div>
                                                     </td>
                                                     <td md-cell>
-                                                        <div layout="row"><span flex>{{site.followupStatus.getTranslatedName()}}</span>
+                                                        <div layout="row"><span
+                                                                flex>{{site.followupStatus.getTranslatedName()}}</span>
                                                         </div>
                                                     </td>
                                                     <td md-cell>
                                                         <div layout="row"><span
-                                                                flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
+                                                                flex>{{site.followupDate | date:'yyyy-MM-dd'}}</span>
                                                         </div>
                                                     </td>
                                                     <td md-cell>
@@ -657,7 +687,7 @@
                                                                 <md-button ng-click="$mdMenu.open()"
                                                                            ng-disabled="!!ctrl.disableCorrespondence">
                                                                     {{ctrl.followupStatus_DL.getTranslatedName() ||
-                                                                    lang.sites_follow_up_status}}
+                                                                lang.sites_follow_up_status}}
                                                                 </md-button>
                                                                 <md-menu-content width="3">
                                                                     <md-menu-item
@@ -759,7 +789,7 @@
                                                                         <md-button ng-click="$mdMenu.open()"
                                                                                    ng-disabled="!!ctrl.disableCorrespondence">
                                                                             {{site.followupStatus.getTranslatedName() ||
-                                                                            lang.sites_follow_up_status}}
+                                                                        lang.sites_follow_up_status}}
                                                                         </md-button>
                                                                         <md-menu-content width="3">
                                                                             <md-menu-item
@@ -848,8 +878,8 @@
                                                             <md-menu>
                                                                 <md-button ng-click="$mdMenu.open()">
                                                                     {{ctrl.sitesInfoToFollowupStatus.getTranslatedName()
-                                                                    ||
-                                                                    lang.sites_follow_up_status}}
+                                                                ||
+                                                                lang.sites_follow_up_status}}
                                                                 </md-button>
                                                                 <md-menu-content width="3">
                                                                     <md-menu-item
@@ -928,12 +958,13 @@
                                                         </div>
                                                     </td>
                                                     <td md-cell>
-                                                        <div layout="row"><span flex>{{site.followupStatus.getTranslatedName()}}</span>
+                                                        <div layout="row"><span
+                                                                flex>{{site.followupStatus.getTranslatedName()}}</span>
                                                         </div>
                                                     </td>
                                                     <td md-cell>
                                                         <div layout="row"><span
-                                                                flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
+                                                                flex>{{site.followupDate | date:'yyyy-MM-dd'}}</span>
                                                         </div>
                                                     </td>
                                                     <td md-cell>
@@ -982,8 +1013,8 @@
                                                             <md-menu>
                                                                 <md-button ng-click="$mdMenu.open()">
                                                                     {{ctrl.sitesInfoCCFollowupStatus.getTranslatedName()
-                                                                    ||
-                                                                    lang.sites_follow_up_status}}
+                                                                ||
+                                                                lang.sites_follow_up_status}}
                                                                 </md-button>
                                                                 <md-menu-content width="3">
                                                                     <md-menu-item
@@ -1062,12 +1093,13 @@
                                                         </div>
                                                     </td>
                                                     <td md-cell>
-                                                        <div layout="row"><span flex>{{site.followupStatus.getTranslatedName()}}</span>
+                                                        <div layout="row"><span
+                                                                flex>{{site.followupStatus.getTranslatedName()}}</span>
                                                         </div>
                                                     </td>
                                                     <td md-cell>
                                                         <div layout="row"><span
-                                                                flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
+                                                                flex>{{site.followupDate | date:'yyyy-MM-dd'}}</span>
                                                         </div>
                                                     </td>
                                                     <td md-cell>

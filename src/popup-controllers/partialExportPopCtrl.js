@@ -15,6 +15,7 @@ module.exports = function (app) {
                                                      $scope,
                                                      CorrespondenceSiteType,
                                                      lookupService,
+                                                     configurationService,
                                                      correspondenceViewService,
                                                      correspondenceService,
                                                      correspondence) {
@@ -30,11 +31,12 @@ module.exports = function (app) {
 
         self.settings = rootEntity.getGlobalSettings();
         // to check if the search is simple or not
-        self.isSimpleCorrespondenceSiteSearchType = self.settings.simpleCorsSiteSearch;
+        self.isSimpleCorrespondenceSiteSearchType = true;
+        // self.isSimpleCorrespondenceSiteSearchType = self.settings.simpleCorsSiteSearch;
+
         // followup statuses
         self.followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
 
-        self.isSimpleCorrespondenceSiteSearchType = true;
         self.disableExport = false;
         self.tabsToShow = [
             // 'exportOptions',
@@ -54,10 +56,15 @@ module.exports = function (app) {
         // all distributions list.
         self.distributionLists = angular.copy(correspondenceService.getLookup(self.documentClass, 'distributionList'));
         // selected site type.
-        self.selectedSiteType = null;
+        self.selectedSiteTypeSimple = null;
 
-        self.selectedMainSite = null;
-        self.selectedMainSiteSearchText = '';
+        self.siteTypeSimpleSearchText = '';
+        self.selectedMainSiteSimple = null;
+        self.mainSiteSimpleSearchText = '';
+        self.simpleSubSiteResultSearchText = '';
+
+        // selected subCorrespondence sites from internal search box
+        self.selectedSimpleSub = null;
 
         self.subRecords = [];
         _concatCorrespondenceSites(false);
@@ -306,31 +313,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Get main correspondence sites on change of correspondence site type.
-         * @param $event
-         */
-        self.onSiteTypeChange = function ($event) {
-            self.mainSites = [];
-            self.subSearchResult = [];
-            self.subSearchResultCopy = [];
-
-            if (self.selectedSiteType.id) {
-                correspondenceViewService.correspondenceSiteSearch('main', {
-                    type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
-                    criteria: null,
-                    excludeOuSites: false
-                }).then(function (result) {
-                    self.mainSites = result;
-
-                    if (result && result.length === 1) {
-                        self.selectedMainSite = result[0];
-                        self.getSubSites($event);
-                    }
-                });
-            }
-        };
-
-        /**
          * @description empty the subSearch result and selected to hide the search result grid.
          */
         self.onCloseSearch = function () {
@@ -375,22 +357,6 @@ module.exports = function (app) {
          */
         self.changeSiteTo = function (type, site, index) {
             self.partialExportList['sites' + type + 'List'] = self.partialExportList['sites' + type + 'List'].concat(self.partialExportList['sites' + self.reversedMap[type] + 'List'].splice(index, 1));
-        };
-
-        /**
-         * @description Get sub sites on change of main site
-         * @param $event
-         */
-        self.getSubSites = function ($event) {
-            correspondenceViewService.correspondenceSiteSearch('sub', {
-                type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
-                parent: self.selectedMainSite ? self.selectedMainSite.id : null,
-                criteria: null,
-                excludeOuSites: true
-            }).then(function (result) {
-                self.subSearchResultCopy = angular.copy(result);
-                self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
-            });
         };
 
 
@@ -612,15 +578,198 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Prevent the default dropdown behavior of keys inside the search box of workflow action dropdown
+         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
          * @param $event
+         * @param fieldType
          */
-        self.preventSearchKeyDown = function ($event) {
+        self.preventSearchKeyDown = function ($event, fieldType) {
             if ($event) {
                 var code = $event.which || $event.keyCode;
-                if (code !== 38 && code !== 40)
+                // if enter key pressed, load from server with search text
+                if (code === 13) {
+                    if (fieldType === 'mainSiteSimple' || fieldType === 'mainSiteAdvanced') {
+                        self.loadMainSitesRecords($event);
+                    } else if (fieldType === 'subSiteSimple') {
+                        self.loadSubSitesRecords($event).then(function () {
+                            angular.element($event.target).focus();
+                        });
+                    }
+                }
+                // prevent keydown except arrow up and arrow down keys
+                else if (code !== 38 && code !== 40) {
                     $event.stopPropagation();
+                }
             }
+        };
+
+        /**
+         * @description Get main correspondence sites on change of correspondence site type.
+         * @param $event
+         */
+        self.onSiteTypeSimpleChange = function ($event) {
+            self.mainSites = [];
+            self.mainSitesCopy = angular.copy(self.mainSites);
+            self.subSearchResult = [];
+            self.subSearchResultCopy = angular.copy(self.subSearchResult);
+            self.selectedMainSiteSimple = null;
+
+            if (self.selectedSiteTypeSimple.id) {
+                correspondenceViewService.correspondenceSiteSearch('main', {
+                    type: self.selectedSiteTypeSimple ? self.selectedSiteTypeSimple.lookupKey : null,
+                    criteria: null,
+                    excludeOuSites: false
+                }).then(function (result) {
+                    self.mainSites = result;
+                    self.mainSitesCopy = angular.copy(self.mainSites);
+                    _selectDefaultMainSiteAndGetSubSites();
+                });
+            }
+        };
+
+        /**
+         * @description Get sub sites on change of main site
+         * @param $event
+         */
+        self.onMainSiteChangeSimple = function ($event) {
+            self.subSearchResult = [];
+            self.subSearchResultCopy = angular.copy(self.subSearchResult);
+            self.subSearchSelected = []
+            self.simpleSubSiteResultSearchText = '';
+            self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
+
+            if (!self.selectedMainSiteSimple) {
+                return;
+            }
+            correspondenceViewService.correspondenceSiteSearch('sub', {
+                type: self.selectedSiteTypeSimple ? self.selectedSiteTypeSimple.lookupKey : null,
+                parent: self.selectedMainSiteSimple ? self.selectedMainSiteSimple.id : null,
+                criteria: null,
+                excludeOuSites: true
+            }).then(function (result) {
+                self.subSearchResultCopy = angular.copy(_.map(result, _mapSubSites));
+                self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
+
+                self.subSearchSelected = [];
+                if (self.subSearchResult.length === 1) {
+                    self.subSearchSelected.push(self.subSearchResult[0]);
+                }
+
+                // bind sub site search
+                if (self.isSimpleCorrespondenceSiteSearchType) {
+                    self.simpleSubSiteResultSearchText = '';
+                    self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
+                }
+            });
+        };
+
+        /**
+         * @description request service for loading dropdown records with searchText
+         * @param $event
+         */
+        self.loadMainSitesRecords = function ($event) {
+            var searchText = self.isSimpleCorrespondenceSiteSearchType ? self.mainSiteSimpleSearchText : self.mainSiteAdvancedSearchText,
+                siteType = self.isSimpleCorrespondenceSiteSearchType ? self.selectedSiteTypeSimple : self.selectedSiteTypeAdvanced,
+                excludeOUSites = false;
+
+            if (searchText) {
+                siteType = siteType ? (siteType.hasOwnProperty('lookupKey') ? siteType.lookupKey : siteType) : null;
+                correspondenceViewService.correspondenceSiteSearch('main', {
+                    type: siteType,
+                    criteria: searchText,
+                    excludeOuSites: excludeOUSites
+                }).then(function (result) {
+                    if (result.length) {
+                        // self.subSearchResult = [];
+                        var availableMainSitesIds = _.map(self.mainSitesCopy, 'id');
+                        result = _.filter(result, function (corrSite) {
+                            return availableMainSitesIds.indexOf(corrSite.id) === -1;
+                        });
+                        self.mainSites = self.mainSites.concat(result);
+                        self.mainSitesCopy = angular.copy(self.mainSites);
+                        // _selectDefaultMainSiteAndGetSubSites();
+                    } else {
+                        self.mainSites = angular.copy(self.mainSitesCopy);
+                    }
+                }).catch(function (error) {
+                    self.mainSites = angular.copy(self.mainSitesCopy);
+                });
+            }
+        };
+
+        /**
+         * @description request service for loading sub site dropdown records with searchText
+         * @param $event
+         */
+        self.loadSubSitesRecords = function ($event) {
+            return correspondenceViewService.correspondenceSiteSearch('sub', {
+                type: self.selectedSiteTypeSimple ? self.selectedSiteTypeSimple.lookupKey : null,
+                parent: self.selectedMainSiteSimple ? self.selectedMainSiteSimple.id : null,
+                criteria: self.simpleSubSiteResultSearchText,
+                excludeOuSites: true
+            }).then(function (result) {
+                if (result.length) {
+                    var availableSubSitesIds = _.map(self.subSearchResultCopy, 'subSiteId');
+                    result = _.filter(result, function (corrSite) {
+                        return availableSubSitesIds.indexOf(corrSite.id) === -1;
+                    });
+                    result = _.filter(_.map(result, _mapSubSites), _filterSubSites);
+
+                    self.subSearchResult = self.subSearchResult.concat(result);
+                    self.subSearchResultCopy = angular.copy(self.subSearchResult);
+
+                    self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
+                } else {
+                    self.subSearchResult = angular.copy(self.subSearchResultCopy);
+                }
+                return self.subSearchResult;
+            }).catch(function (error) {
+                return self.subSearchResult = angular.copy(self.subSearchResultCopy);
+            });
+        };
+
+
+        var _selectDefaultMainSiteAndGetSubSites = function () {
+            if (self.selectedSiteTypeSimple && self.mainSites && self.mainSites.length > 0) {
+                if (configurationService.SELECT_MAIN_SITE_IF_ONLY_ONE && self.mainSites.length === 1) {
+                    self.selectedMainSiteSimple = self.mainSites[0];
+                } else if (self.selectedSiteTypeSimple.lookupKey === 1) {
+                    self.selectedMainSiteSimple = _.find(self.mainSites, function (site) {
+                        return site.id === 10000000;
+                    });
+                }
+                self.selectedMainSiteSimple ? self.onMainSiteChangeSimple() : null;
+            }
+        };
+
+        /**
+         * @description Check if sub site search has text and is enabled
+         * @returns {string|boolean}
+         */
+        self.isSubSiteSearchEnabled = function () {
+            return self.simpleSubSiteResultSearchText;
+        };
+
+        /**
+         * @description drop down values for sub site result search
+         * @param searchText
+         * @returns {Array}
+         */
+        self.getSimpleSubSearchOptions = function (searchText) {
+            if (searchText) {
+                return _.filter(self.simpleSubSiteSearchCopy, function (simpleSearchSite) {
+                    return simpleSearchSite.getTranslatedName().toLowerCase().indexOf(searchText.toLowerCase()) !== -1;
+                });
+            }
+            return self.simpleSubSiteSearchCopy;
+        };
+
+        self.onSimpleSubSiteSelectedChange = function (subSite) {
+            if (subSite) {
+                self.subSearchResult = _.filter(self.subSearchResultCopy, function (resultCopy) {
+                    return resultCopy.subSiteId === subSite.subSiteId;
+                });
+            } else
+                self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
         };
 
         /**
