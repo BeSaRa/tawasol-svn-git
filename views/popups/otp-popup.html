@@ -11,12 +11,12 @@
                     <md-input-container flex>
                         <label for="otp">{{lang.enter_otp}}</label>
                         <input name="otp" id="otp" required ng-model="ctrl.otp"
-                               custom-validate-directive="number" minlength="4" maxlength="4">
+                               custom-validate-directive="number" minlength="4" maxlength="6">
                         <div ng-messages="otpForm.otp.$error">
                             <div ng-message="required">{{lang.field_required}}</div>
                             <div ng-message="number">{{lang.numberonly}}</div>
                             <div ng-message="minlength">{{lang.min_length.change({length: 4})}}</div>
-                            <div ng-message="maxlength">{{lang.max_length.change({length:4})}}</div>
+                            <div ng-message="maxlength">{{lang.max_length.change({length:6})}}</div>
                         </div>
                     </md-input-container>
                     <div>
