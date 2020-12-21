@@ -39,6 +39,8 @@ module.exports = function (app) {
             self.siteTypeResult = null;
             self.siteCategory = null;
             self.faxNumber = '';
+            self.exportStatus = null;
+            self.exportWay = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -148,6 +150,9 @@ module.exports = function (app) {
 
             Site.prototype.getExportWayText = function () {
                 return langService.get(exportWayMap[this.exportWay]);
+            };
+            Site.prototype.getExportStatusText = function () {
+                return langService.get(this.exportStatus ? 'export_status_exported' : 'export_status_ready_to_export');
             };
 
             Site.prototype.getVersionType = function () {

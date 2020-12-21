@@ -25,6 +25,9 @@
                                         <th md-column>
                                             <span>{{lang.export_type}}</span>
                                         </th>
+                                        <th md-column>
+                                            <span>{{lang.export_status}}</span>
+                                        </th>
                                     </tr>
                                     </thead>
                                     <tbody md-body>
@@ -48,6 +51,11 @@
                                         <td md-cell>
                                             <div flex layout="column">
                                                 <span class="span-column">{{site.getExportWayText()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getExportStatusText()}}</span>
                                             </div>
                                         </td>
                                     </tr>
