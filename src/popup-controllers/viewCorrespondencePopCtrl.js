@@ -291,41 +291,6 @@ module.exports = function (app) {
             return !rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
         };
 
-        $timeout(function () {
-            manageLaunchWorkflowService.clearLaunchData();
-            self.detailsReady = true;
-            self.model = angular.copy(self.correspondence);
-            // set action to review/user-inbox/search will enable edit of security level
-            self.action = correspondenceService.getSecurityLevelEnabledActionByScreenName();
-
-            if (self.correspondence) {
-                self.info = self.correspondence.getInfo();
-                if (self.correspondence.defaultModeIfEditing === correspondenceService.documentEditModes.officeOnline) {
-                    self.editContentFrom = 'editContentFromGrid';
-                    self.toggleCorrespondenceEditMode(correspondenceService.documentEditModes.officeOnline);
-                } else if (self.correspondence.openInEditMode) {
-                    self.editContentFrom = 'editContentFromGrid';
-                    self.toggleCorrespondenceEditMode();
-                }
-            }
-
-            self.recordType = 'normalDocument';
-
-            if (self.g2gItemCopy) {
-                if (self.g2gItemCopy instanceof G2GMessagingHistory) {
-                    self.recordType = 'g2gmessaginghistory';
-                } else {
-                    self.recordType = 'g2g';
-                }
-            }
-
-            // exclude manage attachments/linked doc if not transferred books in department incoming
-            if (self.workItem && !self.workItem.isTransferredDocument()) {
-                self.excludedManagePopupsFromGrids.push("departmentIncoming");
-            }
-            filterStickyActions();
-        }, 100);
-
         self.selectedList = null;
         self.listIndex = null;
 
@@ -358,7 +323,10 @@ module.exports = function (app) {
          * @description toggle correspondence details sidebar
          */
         self.toggleCorrespondenceDetails = function () {
-            $mdSidenav(self.sideNavId).toggle();
+            self.detailsReady = true;
+            $timeout(function () {
+                $mdSidenav(self.sideNavId).toggle();
+            }, 100);
         };
         /**
          * @description toggle fullScreen dialog
@@ -926,5 +894,39 @@ module.exports = function (app) {
                 formWatch();
             }
         });
+
+        self.$onInit = function () {
+            manageLaunchWorkflowService.clearLaunchData();
+            self.model = angular.copy(self.correspondence);
+            // set action to review/user-inbox/search will enable edit of security level
+            self.action = correspondenceService.getSecurityLevelEnabledActionByScreenName();
+
+            if (self.correspondence) {
+                self.info = self.correspondence.getInfo();
+                if (self.correspondence.defaultModeIfEditing === correspondenceService.documentEditModes.officeOnline) {
+                    self.editContentFrom = 'editContentFromGrid';
+                    self.toggleCorrespondenceEditMode(correspondenceService.documentEditModes.officeOnline);
+                } else if (self.correspondence.openInEditMode) {
+                    self.editContentFrom = 'editContentFromGrid';
+                    self.toggleCorrespondenceEditMode();
+                }
+            }
+
+            self.recordType = 'normalDocument';
+
+            if (self.g2gItemCopy) {
+                if (self.g2gItemCopy instanceof G2GMessagingHistory) {
+                    self.recordType = 'g2gmessaginghistory';
+                } else {
+                    self.recordType = 'g2g';
+                }
+            }
+
+            // exclude manage attachments/linked doc if not transferred books in department incoming
+            if (self.workItem && !self.workItem.isTransferredDocument()) {
+                self.excludedManagePopupsFromGrids.push("departmentIncoming");
+            }
+            filterStickyActions();
+        }
     });
 };
