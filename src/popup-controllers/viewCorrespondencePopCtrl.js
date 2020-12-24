@@ -378,6 +378,19 @@ module.exports = function (app) {
             }
         };
 
+        var invalidFields = [];
+        self.validateCorrespondence = function () {
+            invalidFields = [];
+            if (self.document_properties.$invalid) {
+                invalidFields.push('document_properties');
+            }
+            if (self.checkDisabled()) {
+                invalidFields.push('correspondence_sites');
+            }
+
+            return invalidFields.length === 0;
+        };
+
         /**
          * @description save correspondence Changes for content.
          * @param $event
@@ -388,6 +401,10 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.saveCorrespondenceChanges = function ($event, ignoreMessage, saveBeforeApprove, skipCheck, userComment) {
+            if (!self.validateCorrespondence()) {
+                generator.generateErrorFields('check_this_fields', invalidFields);
+                return;
+            }
             var info = self.correspondence.getInfo();
             delete self.correspondence.userCommentForSave;
 
@@ -901,5 +918,13 @@ module.exports = function (app) {
                 });
         };
 
+        var formWatch = $scope.$watch(function () {
+            return self.document_properties;
+        }, function (newValue, oldValue) {
+            if (!oldValue && newValue) {
+                generator.validateRequiredSelectFields(self.document_properties, true);
+                formWatch();
+            }
+        });
     });
 };

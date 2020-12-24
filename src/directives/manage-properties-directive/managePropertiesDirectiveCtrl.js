@@ -802,6 +802,7 @@ module.exports = function (app) {
 
         $timeout(function () {
             self.sourceForm = $scope.outgoing_properties;
+            self.sourceForm.$setPristine();
         });
 
         self.$onInit = function () {
@@ -870,8 +871,6 @@ module.exports = function (app) {
 
             _getClassifications(false);
             _getDocumentFiles(false);
-
-
 
             _selectFirstOptionForRequired();
         };

@@ -365,7 +365,7 @@
                                                 <div ng-messages="commentForm.comments.$error">
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                     <div ng-message="maxlength">
-                                                        {{lang.max_length.change({length:2000})}}
+                                                        {{lang.max_length.change({length: 2000})}}
                                                     </div>
                                                 </div>
                                             </md-input-container>
@@ -445,7 +445,7 @@
         <div ng-if="ctrl.editContentFrom !== 'editContentFromGrid' && ctrl.correspondence && ctrl.correspondence.docStatus !== 25 && !ctrl.correspondence.viewVersion && !ctrl.g2gItemCopy && !ctrl.disableEverything
                     && ctrl.pageName !=='departmentReadyToExport' && ( ctrl.pageName !=='departmentIncoming' || (ctrl.pageName === 'departmentIncoming' && ctrl.workItem &&  ctrl.workItem.generalStepElm.isReassigned))">
             <md-button class="md-raised md-primary" ng-click="ctrl.saveCorrespondenceChanges($event, false)"
-                       ng-disabled="ctrl.checkDisabled() || ctrl.document_properties.$invalid">{{lang.save}}
+                       ng-disabled="!ctrl.document_properties.$dirty">{{lang.save}}
             </md-button>
         </div>
         <div ng-if="ctrl.editContentFrom !== 'editContentFromGrid' && ctrl.correspondence && !ctrl.correspondence.viewVersion && !ctrl.g2gItemCopy && !ctrl.disableEverything
@@ -457,7 +457,7 @@
         </div>
         <div ng-if="ctrl.pageName === 'userInbox' && ctrl.editContentFrom !== 'editContentFromGrid' && ctrl.correspondence && !ctrl.correspondence.viewVersion && !ctrl.disableEverything">
             <md-button class="md-raised md-primary" ng-click="ctrl.saveAndSend($event, false)"
-                       ng-disabled="ctrl.checkDisabled() || ctrl.document_properties.$invalid">{{lang.save_and_send}}
+                       ng-disabled="!ctrl.document_properties.$dirty">{{lang.save_and_send}}
             </md-button>
         </div>
         <div ng-if="ctrl.pageName ==='departmentReadyToExport'">

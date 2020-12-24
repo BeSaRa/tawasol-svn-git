@@ -19,7 +19,8 @@ module.exports = function (app) {
                 registryOrganizations: '=?',
                 receiveG2g: '=?',
                 isNewDocument: '=?',
-                action: '=?'
+                action: '=?',
+                forceDirty: '=?'
             }
         }
     })
