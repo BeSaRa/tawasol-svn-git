@@ -766,7 +766,7 @@ module.exports = function (app) {
             if (!hasPermission) {
                 return false;
             }
-            var allowedActionsList = ["editafterexport", "editafterapproved", "duplicateversion", "receive", "review", "editafterreturng2g", "user-inbox"];
+            var allowedActionsList = ["editafterexport", "editafterapproved", "duplicateversion", "receive", "receiveg2g", "review", "editafterreturng2g", "user-inbox"];
             if (self.action && self.action.toLowerCase() === 'search-screen') {
                 // allowed to edit security level (if not exported and docRegOuId === currentLoggedInUserRegOuId)
                 hasPermission = self.document.getInfo().docStatus !== 25
