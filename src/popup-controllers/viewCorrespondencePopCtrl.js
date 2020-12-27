@@ -206,6 +206,7 @@ module.exports = function (app) {
 
         function _editInOfficeOnline() {
             self.editMode = true;
+            _setPropertiesFormDirty();
             if (self.content.desktop) {
                 self.content.desktop.overlay = false;
             }
@@ -242,6 +243,7 @@ module.exports = function (app) {
 
                         ctrl.editInOfficeOnlineCallback = function () {
                             self.editMode = true;
+                            _setPropertiesFormDirty();
                             dialog.hide();
                         };
 
@@ -886,10 +888,20 @@ module.exports = function (app) {
                 });
         };
 
+        function _setPropertiesFormDirty() {
+            if (self.document_properties) {
+                self.document_properties.$setDirty();
+            } else {
+                self.document_properties = {};
+                self.document_properties.ignoreValidation = true;
+                self.document_properties.$dirty = true;
+            }
+        }
+
         var formWatch = $scope.$watch(function () {
             return self.document_properties;
         }, function (newValue, oldValue) {
-            if (!oldValue && newValue) {
+            if (!oldValue && newValue && !newValue.ignoreValidation) {
                 generator.validateRequiredSelectFields(self.document_properties, true);
                 formWatch();
             }
