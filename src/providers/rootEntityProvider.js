@@ -153,6 +153,9 @@ module.exports = function (app) {
                 },
                 hasPSPDFViewer: function () {
                     return rootEntity && rootEntity.hasPSPDFViewer();
+                },
+                isDocClassifierEnabled: function () {
+                    return rootEntity && rootEntity.isDocClassifierEnabled();
                 }
             };
         }

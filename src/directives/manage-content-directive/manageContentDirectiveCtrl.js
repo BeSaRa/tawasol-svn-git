@@ -243,6 +243,7 @@ module.exports = function (app) {
                 var extensions = _.map(availableTypes, function (value, key) {
                     return '.' + availableTypes[key].extension;
                 });
+                var bjClassifierEnabled = rootEntity.isDocClassifierEnabled();
 
                 if (info.documentClass.toLowerCase() === 'incoming' || info.isPaper) {
                     allowedDocument = 'Paper' + info.documentClass;
@@ -255,30 +256,52 @@ module.exports = function (app) {
                             attachmentService
                                 .validateBeforeUpload(allowedDocument, contentFiles[0])
                                 .then(function (file) {
-                                    return correspondenceService
-                                        .sendUploadedFileToPrepare(file, self.document)
-                                        .then(function (result) {
-                                            self.uploadedCallback && self.uploadedCallback();
-                                            if (self.isSimpleAdd)
-                                                return self.getTrustViewUrl(file.name, null, result);
+                                    function _uploadDocument() {
+                                        return correspondenceService
+                                            .sendUploadedFileToPrepare(file, self.document)
+                                            .then(function (result) {
+                                                self.uploadedCallback && self.uploadedCallback();
+                                                if (self.isSimpleAdd)
+                                                    return self.getTrustViewUrl(file.name, null, result);
 
-                                            else
-                                                return self.openPreparedTemplate(file.name, null, result);
-                                        })
-                                        .catch(function (error) {
-                                            errorCode.checkIf(error, 'MAIP_PROTECTED_TEMPLATE', function () {
-                                                dialog.errorMessage(langService.get('protected_template'));
-                                            });
-                                            errorCode.checkIf(error, 'FILE_NOT_ALLOWED', function () {
-                                                dialog.errorMessage(langService.get('invalid_template'));
+                                                else
+                                                    return self.openPreparedTemplate(file.name, null, result);
                                             })
+                                            .catch(function (error) {
+                                                errorCode.checkIf(error, 'MAIP_PROTECTED_TEMPLATE', function () {
+                                                    dialog.errorMessage(langService.get('protected_template'));
+                                                });
+                                                errorCode.checkIf(error, 'FILE_NOT_ALLOWED', function () {
+                                                    dialog.errorMessage(langService.get('invalid_template'));
+                                                })
 
-                                        })
+                                            })
+                                    }
+
+                                    if (bjClassifierEnabled) {
+                                        return correspondenceService.getBJClassifierInformation(file)
+                                            .then(function (result) {
+                                                self.document.securityLevel = result;
+                                                return _uploadDocument();
+                                            })
+                                            .catch(function () {
+                                                return dialog.confirmMessage(langService.get('bj_warning')).then(function () {
+                                                    return _uploadDocument();
+                                                }).catch(function () {
+                                                    return true; // to avoid passing this reject to outer catch
+                                                });
+                                            })
+                                    } else {
+                                        return _uploadDocument();
+                                    }
+
                                 })
                                 .catch(function (availableExtensions) {
                                     self.document.contentFile = null;
                                     self.isContentFileAttached = false;
-                                    dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(availableExtensions.join(', ')));
+                                    if (availableExtensions && availableExtensions.length) {
+                                        dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(availableExtensions.join(', ')));
+                                    }
                                 });
 
                         });
@@ -287,36 +310,59 @@ module.exports = function (app) {
                 return attachmentService
                     .validateBeforeUpload(allowedDocument, contentFiles[0])
                     .then(function (file) {
-                        self.document.contentFile = file;
-                        self.isContentFileAttached = true;
-                        self.templateOrFileName = fileName;
 
-                        if (self.isSimpleAdd) {
-                            // available viewer
-                            var availableViewer = ['jpg', 'jpeg', 'gif', 'png'];
-                            if (availableViewer.indexOf(file.name.split('.').pop().toLowerCase()) === -1) {
-                                return file;
+                        function _completeUploadPaperDocument() {
+                            self.document.contentFile = file;
+                            self.isContentFileAttached = true;
+                            self.templateOrFileName = fileName;
+
+                            if (self.isSimpleAdd) {
+                                // available viewer
+                                var availableViewer = ['jpg', 'jpeg', 'gif', 'png'];
+                                if (availableViewer.indexOf(file.name.split('.').pop().toLowerCase()) === -1) {
+                                    return file;
+                                }
+                                var reader = new FileReader();
+                                reader.onload = function () {
+                                    var bytesArray = new Uint8Array(reader.result);
+                                    var blob = new Blob([bytesArray], {
+                                        type: file.type
+                                    });
+                                    $timeout(function () {
+                                        self.simpleViewUrl = $sce.trustAsResourceUrl(URL.createObjectURL(blob));
+                                    });
+                                };
+                                reader.readAsArrayBuffer(file);
                             }
-                            var reader = new FileReader();
-                            reader.onload = function () {
-                                var bytesArray = new Uint8Array(reader.result);
-                                var blob = new Blob([bytesArray], {
-                                    type: file.type
-                                });
-                                $timeout(function () {
-                                    self.simpleViewUrl = $sce.trustAsResourceUrl(URL.createObjectURL(blob));
-                                });
-                            };
-                            reader.readAsArrayBuffer(file);
+
+                            return file;
                         }
 
-                        return file;
+                        if (bjClassifierEnabled) {
+                            return correspondenceService.getBJClassifierInformation(file)
+                                .then(function (result) {
+                                    self.document.securityLevel = result;
+                                    return _completeUploadPaperDocument();
+                                })
+                                .catch(function () {
+                                    return dialog.confirmMessage(langService.get('bj_warning')).then(function () {
+                                        return _completeUploadPaperDocument();
+                                    }).catch(function () {
+                                        return true; // to avoid passing this reject to outer catch
+                                    });
+                                })
+                        } else {
+                            return _completeUploadPaperDocument();
+                        }
+
                     })
                     .catch(function (availableExtensions) {
                         self.document.contentFile = null;
                         self.isContentFileAttached = false;
                         self.templateOrFileName = null;
-                        dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(availableExtensions.join(', ')));
+                        if (availableExtensions && availableExtensions.length) {
+                            dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(availableExtensions.join(', ')));
+                        }
                     });
             } else {
                 $timeout(function () {

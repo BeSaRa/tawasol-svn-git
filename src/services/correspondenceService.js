@@ -5165,6 +5165,25 @@ module.exports = function (app) {
                     }
                 });
         };
+        /**
+         * @description get Document Classifier Information BJ
+         * @param content
+         * @return {*}
+         */
+        self.getBJClassifierInformation = function (content) {
+            var formData = new FormData();
+            formData.append('content', content);
+            return $http.post(urlService.BJClassifier, formData, {
+                headers: {
+                    'Content-Type': undefined
+                }
+            }).then(function (result) {
+                var securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+                var userSecurityLevels = generator.getSelectedCollectionFromResult(securityLevels, employeeService.getEmployee().organization.archiveSecurityLevels, 'lookupKey');
+                var securityLevelsIds = _.map(userSecurityLevels, 'lookupKey');
+                return securityLevelsIds.indexOf(result.data.rs) !== -1 ? $q.resolve(userSecurityLevels[securityLevelsIds.indexOf(result.data.rs)]) : $q.reject(result.data.rs);
+            });
+        }
 
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);

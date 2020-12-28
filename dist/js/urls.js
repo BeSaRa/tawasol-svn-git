@@ -209,6 +209,7 @@
                 .addToAllWithBase('openForApproval', 'cms-entity/correspondence/:documentClass/open-for-approval/vsid/:vsId')
                 .addToAllWithBase('authorizeDocumentByAnnotation', 'cms-entity/correspondence/:documentClass/annotation/authorize')
                 .addToAllWithBase('userInkSignature', 'cms-entity/user/annotation')
+                .addToAllWithBase('BJClassifier', 'cms-entity/admin/documentsecurity/classifier/label')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

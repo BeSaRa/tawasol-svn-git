@@ -101,6 +101,10 @@ module.exports = function (app) {
                 return self.rootEntity.hasOwnProperty('psPDFEnabled') && !!self.rootEntity.psPDFEnabled;
             };
 
+            RootEntity.prototype.isDocClassifierEnabled = function () {
+                return self.rootEntity.hasOwnProperty('docClassifierEnabled') && !!self.rootEntity.docClassifierEnabled;
+            }
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('RootEntity', 'init', this);
