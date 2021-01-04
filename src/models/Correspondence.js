@@ -618,12 +618,16 @@ module.exports = function (app) {
                 return correspondenceService.openLaunchSeqWFDialog(this, $event);
             };
 
-            Correspondence.prototype.launchWorkFlowAndCheckExists = function ($event, action, tab, isDeptIncoming, ignoreConformation) {
+            Correspondence.prototype.launchWorkFlowAndCheckExists = function ($event, action, tab, isDeptIncoming, ignoreConfirmation) {
                 var info = this.getInfo();
                 var self = this;
 
+                if (info.documentClass === 'outgoing' && info.isPaper) {
+                    return correspondenceService.launchCorrespondenceWorkflow(self, $event, action, tab, isDeptIncoming);
+                }
+
                 // electronic not approved
-                if (!ignoreConformation && info.docStatus < 24 && !info.isPaper) {
+                if (!ignoreConfirmation && info.docStatus < 24 && !info.isPaper) {
                     return dialog.confirmMessage(langService.get("confirm_launch_document_has_active_workflow")).then(function () {
                         correspondenceService.launchCorrespondenceWorkflow(self, $event, action, tab, isDeptIncoming);
                     })
