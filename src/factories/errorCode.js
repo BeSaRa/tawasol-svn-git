@@ -78,7 +78,8 @@ module.exports = function (app) {
                 SEQ_WF_WF_USER_INVALID: 3061,
                 SEQ_WF_DELETE_FAILED: 2019,
                 SEQ_WF_FORWARD_FAILED: 3063,
-                SEQ_WF_CONTENT_UPDATE_FAILED: 3064
+                SEQ_WF_CONTENT_UPDATE_FAILED: 3064,
+                G2G_CANT_RETURN_AS_ALREADY_RECEIVED: 14014
             },
             errorLangKeys = {
                 1001: 'no_records_found',
@@ -114,7 +115,8 @@ module.exports = function (app) {
                 2060: 'cannot_export_too_many_attachments_or_linked_documents',
                 2019: 'error_delete_seq_wf_active_wf',
                 3055: 'error_recall_book',
-                3051: 'cannot_export_more_than_fifty_attachments_or_linked_documents_to_g2g'
+                3051: 'cannot_export_more_than_fifty_attachments_or_linked_documents_to_g2g',
+                14014: 'g2g_cant_return_as_already_received'
             };
 
         return {

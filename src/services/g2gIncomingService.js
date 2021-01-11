@@ -121,7 +121,13 @@ module.exports = function (app) {
                             errorCode.checkIf(error, 'G2G_ERROR_WHILE_RETURNING_TO_SENDER', function () {
                                 dialog.errorMessage(langService.get('g2g_error_while_returning_to_sender'));
                             });*/
-                            return errorCode.showErrorDialog(error);
+
+                            if (errorCode.checkIf(error, 'G2G_CANT_RETURN_AS_ALREADY_RECEIVED') === true) {
+                                dialog.errorMessage(generator.getTranslatedError(error));
+                                return $q.reject(error);
+                            } else {
+                                return errorCode.showErrorDialog(error);
+                            }
                         });
                 });
         };
