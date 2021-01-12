@@ -6,18 +6,17 @@ module.exports = function (app) {
             link: function (scope, element, attrs) {
                 var item = angular.copy(scope.item);
                 element.data('item', item);
-                var self = scope.ctrl;
+                var self = scope.ctrl,
+                    containmentElement = '.steps-container-' + self.usageType;
                 $(element)
                     .draggable({
                         cancel: '.disabled',
-                        containment: '#steps-wrapper',
-                        //connectToSortable: '.step-row',
+                        containment: containmentElement,
                         revert: 'invalid',
                         helper: 'clone',
                         tolerance: "pointer",
                         start: function (e, ui) {
                             if (scope.item) {
-                                //ui.helper.prepend($compile(self.createDeleteButton('item'))(scope));
                                 ui.helper.data('item', item);
                             }
                         }
@@ -69,16 +68,11 @@ module.exports = function (app) {
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
-                var self = scope.ctrl;
-                /*if (element.hasClass('step-row')) {
-                    element.on('click', function (e) {
-                        if (angular.element(e.target).hasClass('step-row')) {
-                            self.setSelectedRow(element);
-                        }
-                    })
-                }*/
+                var self = scope.ctrl,
+                    containmentElement = '.steps-container-' + self.usageType + ' .step-rows-container';
                 $(element)
                     .sortable({
+                        containment: containmentElement,
                         items: "> div:not(.sort-cancel)",
                         tolerance: "pointer",
                         cancel: '.sort-cancel',

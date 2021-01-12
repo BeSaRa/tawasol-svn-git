@@ -1,5 +1,5 @@
 <div layout="row">
-    <fieldset id="steps-wrapper" class="size-100">
+    <fieldset class="size-100">
         <legend class="md-accent">{{lang.steps}}</legend>
         <div layout="column" flex>
             <div layout="row" layout-align="end start" class="step-legend-container">
@@ -8,27 +8,31 @@
                     <span md-truncate>{{lang[item.key]}}</span>
                 </div>
             </div>
-            <div flex layout="row">
-                <div class="block-display" layout="column" ng-if="!ctrl.viewOnly">
-                    <div ng-repeat="item in ctrl.actionsList track by $index"
-                         class="step-item" ng-class="{'disabled':item.disabled()}"
-                         seq-action-draggable="item" flex>
-                        <span md-truncate>{{item.getTranslatedName()}}</span>
-                    </div>
-                </div>
-                <div flex class="step-layout-border" layout="column">
-                    <div class="step-layout-generator" layout="column">
-                        <md-button class="md-raised add-row-button" ng-if="!ctrl.viewOnly"
-                                   ng-disabled="!ctrl.seqWF.hasAnyDocumentType()"
-                                   ng-click="ctrl.insertRowElement()">
-                            <md-icon md-svg-icon="plus"></md-icon>
-                        </md-button>
-                        <div seq-container-sortable layout="column" class="step-layout-rows">
-
+            <div flex class="steps-container-{{ctrl.usageType}}">
+                <div layout="row">
+                    <div class="block-display" layout="column" ng-if="!ctrl.viewOnly">
+                        <div ng-repeat="item in ctrl.actionsList track by $index"
+                             class="step-item" ng-class="{'disabled':item.disabled()}"
+                             seq-action-draggable="item" flex>
+                            <span md-truncate>{{item.getTranslatedName()}}</span>
                         </div>
-                        <div class="help-text-div p10"
-                             ng-if="!ctrl.viewOnly && ctrl.seqWF.hasAnyDocumentType() && !ctrl.seqWF.isIncomingSeqWF()">
-                            {{lang.seq_wf_steps_note}}
+                    </div>
+                    <div flex class="step-layout-border" layout="column">
+                        <div class="step-layout-generator" layout="column">
+                            <md-button class="md-raised add-row-button" ng-if="!ctrl.viewOnly"
+                                       ng-disabled="!ctrl.seqWF.hasAnyDocumentType()"
+                                       ng-click="ctrl.insertRowElement()">
+                                <md-icon md-svg-icon="plus"></md-icon>
+                            </md-button>
+                            <div class="step-rows-container">
+                                <div seq-container-sortable layout="column" class="step-layout-rows position-relative">
+
+                                </div>
+                            </div>
+                            <div class="help-text-div p10"
+                                 ng-if="!ctrl.viewOnly && ctrl.seqWF.hasAnyDocumentType() && !ctrl.seqWF.isIncomingSeqWF()">
+                                {{lang.seq_wf_steps_note}}
+                            </div>
                         </div>
                     </div>
                 </div>
