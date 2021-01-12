@@ -140,7 +140,7 @@ module.exports = function (app) {
                     self.onChangeSequentialWorkflow();
                     toast.success(langService.get('add_success').change({name: result.getNames()}));
                     self.selectedSeqWF = result;
-                    self.launchSeqWF($event);
+                    //self.launchSeqWF($event);
                 })
                 .catch(function () {
 
