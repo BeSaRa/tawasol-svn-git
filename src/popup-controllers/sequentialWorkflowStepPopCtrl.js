@@ -180,10 +180,10 @@ module.exports = function (app) {
         self.$onInit = function () {
             $timeout(function () {
                 self.form = $scope.sequentialWorkflowStepForm || null;
-                // if internal seqWF, disable organization as wf will be inside organization only
+                /*// if internal seqWF, disable organization as wf will be inside organization only
                 if (self.seqWF.isInternalSeqWF()) {
                     readonlyFields.push('uiOuId');
-                }
+                }*/
                 self.stepCopy = angular.copy(self.step);
                 self.isUserRequired = self.step.checkUserRequired(self.seqWF);
             });
