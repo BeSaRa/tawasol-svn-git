@@ -189,7 +189,7 @@ module.exports = function (app) {
                     console.log(isMemberExist);
                     if (isMemberExist) {
                         dialog
-                            .confirmMessage(langService.get('replace_worflow_group_member').change(
+                            .confirmMessage(langService.get('replace_workflow_group_member').change(
                                 {
                                     name: isMemberExist.applicationUser.getTranslatedName(),
                                     ou: isMemberExist.ouid.getTranslatedName()
