@@ -183,27 +183,43 @@ module.exports = function (app) {
             if (selectedUsers && selectedUsers.length) {
                 _.map(selectedUsers, function (selectedUser) {
                     var isMemberExist = _.find(self.workflowGroup.groupMembers, function (member) {
-                        return member.applicationUser.id === selectedUser.toUserId
-                            && member.ouid.id === selectedUser.appUserOUID
+                        return member.applicationUser.id === selectedUser.toUserId;
                     });
-                    if (!isMemberExist) {
-                        var user = new OUApplicationUser({
-                            applicationUser: new ApplicationUser({
-                                arFullName: selectedUser.arName,
-                                enFullName: selectedUser.enName,
-                                id: selectedUser.toUserId
-                            }),
-                            ouid: new Organization({
-                                id: selectedUser.appUserOUID,
-                                arName: selectedUser.arOUName,
-                                enName: selectedUser.enOUName
-                            })
-                        });
-                        self.workflowGroup.groupMembers.push(user);
+
+                    console.log(isMemberExist);
+                    if (isMemberExist) {
+                        dialog
+                            .confirmMessage(langService.get('replace_worflow_group_member').change(
+                                {
+                                    name: isMemberExist.applicationUser.getTranslatedName(),
+                                    ou: isMemberExist.ouid.getTranslatedName()
+                                }))
+                            .then(function () {
+                                _removeWorkflowGroupMember(isMemberExist);
+                                _addSelectedUserToArray(selectedUser);
+                            });
+                    } else {
+                        _addSelectedUserToArray(selectedUser);
                     }
                 });
             }
         };
+
+        function _addSelectedUserToArray(selectedUser) {
+            var user = new OUApplicationUser({
+                applicationUser: new ApplicationUser({
+                    arFullName: selectedUser.arName,
+                    enFullName: selectedUser.enName,
+                    id: selectedUser.toUserId
+                }),
+                ouid: new Organization({
+                    id: selectedUser.appUserOUID,
+                    arName: selectedUser.arOUName,
+                    enName: selectedUser.enOUName
+                })
+            });
+            self.workflowGroup.groupMembers.push(user);
+        }
 
         self.getApplicationUsers = function (groupMembers) {
             if (!groupMembers.length)
@@ -223,13 +239,17 @@ module.exports = function (app) {
             dialog
                 .confirmMessage(langService.get('confirm_delete').change({name: groupMember.applicationUser.getNames()}))
                 .then(function () {
-                    var index = _.findIndex(self.workflowGroup.groupMembers, function (addedGroupMember) {
-                        return addedGroupMember.applicationUser.id === groupMember.applicationUser.id;
-                    });
-                    if (index > -1)
-                        self.workflowGroup.groupMembers.splice(index, 1);
+                    _removeWorkflowGroupMember(groupMember)
                 });
         };
+
+        function _removeWorkflowGroupMember(groupMember) {
+            var index = _.findIndex(self.workflowGroup.groupMembers, function (addedGroupMember) {
+                return addedGroupMember.applicationUser.id === groupMember.applicationUser.id;
+            });
+            if (index > -1)
+                self.workflowGroup.groupMembers.splice(index, 1);
+        }
 
         self.resetModel = function () {
             generator.resetFields(self.workflowGroup, self.model);
