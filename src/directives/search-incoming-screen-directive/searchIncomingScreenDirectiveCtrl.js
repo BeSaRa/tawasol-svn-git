@@ -390,13 +390,13 @@ module.exports = function (app) {
             organizationService
                 .loadChildrenOrganizations(self.searchCriteria.registryOU)
                 .then(function (organizations) {
-                    var organizationsIdList = _.map(organizations, 'id');
-                    // the use logged in with reg ou
-                    if (self.employee.isInDepartment()) {
-                        organizationsIdList.indexOf(self.employee.getOUID()) === -1 && organizations.unshift(angular.copy(self.employee.userOrganization));
-                    } else {
-                        organizationsIdList.indexOf(self.employee.getRegistryOUID()) === -1 && organizations.unshift(organizationService.getOrganizationById(self.employee.getRegistryOUID(), true));
-                    }
+                    /*  var organizationsIdList = _.map(organizations, 'id');
+                      // the use logged in with reg ou
+                      if (self.employee.isInDepartment()) {
+                          organizationsIdList.indexOf(self.employee.getOUID()) === -1 && organizations.unshift(angular.copy(self.employee.userOrganization));
+                      } else {
+                          organizationsIdList.indexOf(self.employee.getRegistryOUID()) === -1 && organizations.unshift(organizationService.getOrganizationById(self.employee.getRegistryOUID(), true));
+                      }*/
                     self.organizations = organizations;
                 });
 
