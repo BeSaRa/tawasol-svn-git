@@ -17,8 +17,8 @@ module.exports = function (app) {
 
         versionServiceProvider
             .setVersionNumber('2.4.0')
-            .setBuildNumber('T#7158')
-            .setPrivateBuildNumber('T#7158');
+            .setBuildNumber('T#7160')
+            .setPrivateBuildNumber('T#7160');
 
 
         $urlRouterProvider.otherwise('/404');
