@@ -9,11 +9,13 @@ module.exports = function (app) {
                                                  generator,
                                                  $q,
                                                  $timeout,
-                                                 employeeService) {
+                                                 employeeService,
+                                                 emailItem) {
         var self = this;
         self.controllerName = 'searchScreenCtrl';
         // to give the user the ability to collapse the accordion by clicking on it's label.
         self.labelCollapse = true;
+        self.emailItem = emailItem;
         // all available navigation tabs for search screens
         self.searchTabs = [
             {
@@ -143,7 +145,7 @@ module.exports = function (app) {
             self.selectedTabResultKey = tab.resultKey;
             self.selectedTabName = tab.tabKey;
             generator.selectedSearchCtrl = self.searchScreens[tab.tabKey];
-            self.renderSelectedTab(self.selectedTabName);
+            return self.renderSelectedTab(self.selectedTabName);
         }
 
         /**
@@ -179,7 +181,19 @@ module.exports = function (app) {
         self.$onInit = function () {
             self.loadSubOrganizationsToAllScreens().then(function () {
                 self.compileSearchScreenDirectives();
-                _setSelectedTabName();
+                var selectedTab = self.emailItem ? (self.searchTabs.find(item => {
+                    return item.tabKey === self.emailItem.getInfo().documentClass;
+                })) : null;
+
+                _setSelectedTabName(selectedTab).then(function (actions) {
+                    var actionMenu = actions.find((action) => {
+                        return action.text === 'grid_action_view';
+                    });
+
+                    if (actionMenu && self.emailItem) {
+                        actionMenu.callback(self.emailItem);
+                    }
+                });
             });
         };
 
@@ -242,10 +256,18 @@ module.exports = function (app) {
         };
 
         self.renderSelectedTab = function (tab) {
+            var defer = $q.defer()
             if (!self.renderdTabs.hasOwnProperty(tab)) {
                 self.renderdTabs[tab] = true;
                 angular.element('#search-container').append($compile(self.searchForms[tab])($scope));
+                $timeout(function () {
+                    defer.resolve(self.searchScreens[tab].controller.gridActions);
+                }, 1000);
+            } else {
+                defer.reject();
             }
+
+            return defer.promise;
         }
     });
 };

@@ -1672,7 +1672,7 @@ module.exports = function (app) {
                 }
             })
             .state('app.search-screen', {
-                url: '/search-screen',
+                url: '/search-screen?action?document-class?vsid',
                 templateUrl: templateProvider.getView('search-screen'),
                 controller: 'searchScreenCtrl',
                 controllerAs: 'ctrl',

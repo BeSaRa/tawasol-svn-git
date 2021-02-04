@@ -153,7 +153,7 @@ module.exports = function (app) {
                     'ngInject';
                     return lookupService.getLookups(lookupService.securitySchema);
                 },
-                organizations: function(organizationService){
+                organizations: function (organizationService) {
                     'ngInject';
                     return organizationService.loadAllOrganizationsStructureView();
                 },
@@ -721,6 +721,12 @@ module.exports = function (app) {
                         .then(function (organizations) {
                             return _.filter(organizations, 'hasRegistry');
                         }));
+                },
+                emailItem: function (correspondenceService, $stateParams) {
+                    'ngInject';
+                    var action = $stateParams.action, source = $stateParams['document-class'],
+                        vsId = $stateParams['vsid'];
+                    return vsId && source ? correspondenceService.loadCorrespondenceByVsIdClass(vsId, source) : false;
                 }
             })
             .bulkResolveToState('app.administration.serials-screen', {
