@@ -365,11 +365,11 @@
                                         <label>{{lang.slow_connection_mode}} :
                                             {{ctrl.applicationUser.getTranslatedYesNo('slowConnectionMode')}}</label>
                                     </md-switch>
-                                    <md-switch flex ng-model="ctrl.applicationUser.otpEnabled"
-                                               aria-label="{{lang.otp}}"
-                                               ng-disabled="!ctrl.rootEntity.returnRootEntity().rootEntity.otpEnabled">
-                                        <label>{{lang.otp}} :
-                                            {{ctrl.applicationUser.getTranslatedYesNo('otpEnabled')}}</label>
+                                    <md-switch flex ng-model="ctrl.applicationUser.isFirstViewForApproval"
+                                               ng-disabled="!ctrl.rootEntity.hasPSPDFViewer()"
+                                               aria-label="{{lang.always_open_for_approval}}">
+                                        <label>{{lang.always_open_for_approval}} :
+                                            {{ctrl.applicationUser.getTranslatedYesNo('isFirstViewForApproval')}}</label>
                                     </md-switch>
                                 </div>
                                 <div layout="row">
@@ -380,12 +380,12 @@
                                         <label>{{lang.prompt_for_pincode_in_approve}} :
                                             {{ctrl.applicationUser.getTranslatedYesNo('pinCodePrompt')}}</label>
                                     </md-switch>
-                                    <md-switch flex ng-model="ctrl.applicationUser.isFirstViewForApproval"
-                                               ng-disabled="!ctrl.rootEntity.hasPSPDFViewer()"
-                                               aria-label="{{lang.always_open_for_approval}}">
-                                        <label>{{lang.always_open_for_approval}} :
-                                            {{ctrl.applicationUser.getTranslatedYesNo('isFirstViewForApproval')}}</label>
-                                    </md-switch>
+                                    <!--<md-switch flex ng-model="ctrl.applicationUser.otpEnabled"
+                                               aria-label="{{lang.otp}}"
+                                               ng-disabled="!ctrl.rootEntity.returnRootEntity().rootEntity.otpEnabled">
+                                        <label>{{lang.otp}} :
+                                            {{ctrl.applicationUser.getTranslatedYesNo('otpEnabled')}}</label>
+                                    </md-switch>-->
                                 </div>
                             </div>
                         </md-content>
