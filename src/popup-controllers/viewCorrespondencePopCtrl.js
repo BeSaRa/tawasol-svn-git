@@ -898,6 +898,11 @@ module.exports = function (app) {
             }
         }
 
+
+        self.canShowAnnotateAttachment = function () {
+            return _.some(self.correspondence.attachments, {isAnnotation: true});
+        }
+
         var formWatch = $scope.$watch(function () {
             return self.document_properties;
         }, function (newValue, oldValue) {

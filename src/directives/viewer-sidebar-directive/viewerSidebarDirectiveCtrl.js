@@ -76,6 +76,10 @@ module.exports = function (app) {
             return !!manageLaunchWorkflowService.isValidLaunchData();
         };
 
+        self.canShowAnnotateAttachment = function () {
+            return _.some(self.correspondence.attachments, {isAnnotation: true});
+        }
+
         /**
          * @description Show readonly correspondence sites from sticky actions
          * @param record
