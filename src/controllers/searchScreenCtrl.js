@@ -191,7 +191,13 @@ module.exports = function (app) {
                     });
 
                     if (actionMenu && self.emailItem) {
-                        actionMenu.callback(self.emailItem);
+                        var subActionMenu = actionMenu.subMenu.find((subAction) => {
+                            return subAction.text === 'grid_action_open'
+                        });
+
+                        if (subActionMenu) {
+                            subActionMenu.callback(self.emailItem);
+                        }
                     }
                 });
             });
