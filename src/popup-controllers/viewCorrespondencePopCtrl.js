@@ -545,7 +545,7 @@ module.exports = function (app) {
             });
         }
 
-        self.showAttachment = function (attachment, $index, $event, slowConnectionToggledByUser) {
+        self.showAttachment = function (attachment, $index, $event, slowConnectionToggledByUser , popup) {
             if (!slowConnectionToggledByUser) {
                 _resetViewModeToggle();
             }
@@ -559,8 +559,11 @@ module.exports = function (app) {
                     });
             } else {
                 attachmentService
-                    .viewAttachment(attachment, self.correspondence.classDescription, true)
+                    .viewAttachment(attachment, self.correspondence.classDescription, !popup)
                     .then(function (result) {
+                        if(popup){
+                            return;
+                        }
                         _changeSecondURL(result, 'attachments', $index);
                     });
             }
