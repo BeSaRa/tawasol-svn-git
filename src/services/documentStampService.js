@@ -404,10 +404,10 @@ module.exports = function (app) {
 
         self.addKwtAlDiyarDigitalStamp = function (workItem, stamp) {
             var info = workItem.getInfo();
-            return $http.get(urlService.kwtDigitalStamp.change({
+            return $http.put(urlService.kwtDigitalStamp.change({
                 vsId: info.vsId,
                 stampVsId: stamp.vsId
-            })).then(function (result) {
+            }), null).then(function (result) {
                 return result.data.rs;
             })
         }
