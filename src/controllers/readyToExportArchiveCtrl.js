@@ -30,10 +30,12 @@ module.exports = function (app) {
                                                          $timeout,
                                                          errorCode,
                                                          rootEntity,
-                                                         configurationService) {
+                                                         configurationService,
+                                                         documentStampService) {
         'ngInject';
         var self = this;
         self.controllerName = 'readyToExportArchiveCtrl';
+        self.rootEntity = rootEntity.returnRootEntity().rootEntity;
 
         /*
          IT WILL ALWAYS GET OUTGOING DOCUMENTS ONLY
@@ -535,7 +537,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
-          //  console.log('manageReadyToExportTasks : ', readyToExport);
+            //  console.log('manageReadyToExportTasks : ', readyToExport);
         };
 
         /**
@@ -616,7 +618,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
-          //  console.log('viewReadyToExportDirectLinkedDocuments : ', readyToExport);
+            //  console.log('viewReadyToExportDirectLinkedDocuments : ', readyToExport);
         };
 
         /**
@@ -629,7 +631,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
-          //  console.log('viewReadyToExportCompleteLinkedDocuments : ', readyToExport);
+            //  console.log('viewReadyToExportCompleteLinkedDocuments : ', readyToExport);
         };
 
         /**
@@ -731,6 +733,13 @@ module.exports = function (app) {
             workItem.barcodePrint($event);
         };
 
+
+        self.addKwtAlDiyarDigitalStamp = function (workItem, $event) {
+            documentStampService.openKwtAlDiyarStampsDialog(workItem, $event)
+                .then(function (result) {
+                    toast.success(langService.get('success_add_digital_stamp'));
+                })
+        }
 
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
             var info = model.getInfo();
@@ -1184,6 +1193,19 @@ module.exports = function (app) {
                 },
                 checkShow: function (action, model) {
                     return employeeService.hasPermissionTo('ICN_ENTRY_TEMPLATE');
+                }
+            },
+            {
+                type: 'action',
+                icon: 'postage-stamp',
+                text: 'grid_action_add_stamp',
+                shortcut: true,
+                permissionKey: 'ADD_STAMP',
+                callback: self.addKwtAlDiyarDigitalStamp,
+                class: 'action-green',
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return !info.isPaper && self.rootEntity.kwtAlDiyarDigitalEnabled;
                 }
             },
             // Print Barcode

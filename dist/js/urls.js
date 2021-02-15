@@ -210,6 +210,7 @@
                 .addToAllWithBase('authorizeDocumentByAnnotation', 'cms-entity/correspondence/:documentClass/annotation/authorize')
                 .addToAllWithBase('userInkSignature', 'cms-entity/user/annotation')
                 .addToAllWithBase('BJClassifier', 'cms-entity/admin/documentsecurity/classifier/label')
+                .addToAllWithBase('kwtDigitalStamp', 'cms-entity/correspondence/outgoing/digital-stamp/vsid/:vsId/stamp-vsid/:stampVsId')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();
