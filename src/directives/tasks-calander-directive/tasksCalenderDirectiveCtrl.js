@@ -170,7 +170,7 @@ module.exports = function (app) {
                         content.find('.fc-title').attr('flex', '');
                         content.attr('layout', 'row');
                         content.attr('layout-align', 'start center');
-                        content.find('.fc-title').attr('ng-click', 'ctrl.viewTask(ctrl.task , $event)');
+                        content.find('.fc-title').attr('ng-click', 'ctrl.viewTask(ctrl.task , $event)').attr('tooltip','{{ctrl.task.taskTitle}}');
 
                         if (scope.ctrl.task.creator) {
                             // creator indicator
