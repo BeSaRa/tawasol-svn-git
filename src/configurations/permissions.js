@@ -16,8 +16,8 @@ module.exports = function (app) {
             .addMenuPermissions('menu_item_document_stamps', function (employee) {
                 var rootEntity = employee.getRootEntity(),
                     globalSettings = rootEntity && rootEntity.getGlobalSettings();
-                if (!rootEntity || !rootEntity.hasPSPDFViewer() || !globalSettings ||
-                    !rootEntity.returnRootEntity().rootEntity.kwtAlDiyarDigitalEnabled) {
+                if (!rootEntity || !globalSettings ||
+                    (!rootEntity.hasPSPDFViewer() && !rootEntity.returnRootEntity().rootEntity.kwtAlDiyarDigitalEnabled)) {
                     return false;
                 }
                 return globalSettings.isStampModuleEnabled() && employee.hasPermissionTo('MANAGE_STAMPS');
