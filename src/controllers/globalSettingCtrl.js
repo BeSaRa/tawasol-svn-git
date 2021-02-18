@@ -44,6 +44,7 @@ module.exports = function (app) {
         self.saveLogo = true;
         self.fileTypes = fileTypes;
         self.hasPSPDFViewer = rootEntity.hasPSPDFViewer();
+        self.kwtAlDiyarDigitalEnabled = rootEntity.returnRootEntity().rootEntity.kwtAlDiyarDigitalEnabled;
 
         var filterExcludedFileTypes = ["xlsx", "docx", "doc", "pptx"];
         self.excludedFileTypes = _.filter(self.fileTypes, function (fileType) {
@@ -364,7 +365,7 @@ module.exports = function (app) {
         self.getMaxSearchAmountLimit = function () {
             return Number(self.globalSetting.searchAmountLimit || 0) + 1;
         };
-        
+
         /**
          * @description Handles the change of digitalCertificateEnabled
          */
