@@ -171,10 +171,14 @@
                         </div>
                     </md-select-header>
                     <md-option ng-if="!ctrl.subSiteSearchText.length" ng-value="null">{{lang.none}}</md-option>
-                    <md-option md-highlight-text="ctrl.subSiteSearchText" md-highlight-flags="i"
-                               ng-value="subSite"
+                    <md-option ng-value="subSite"
                                ng-repeat="subSite in ctrl.subSites|translatedNameFilter:ctrl.subSiteSearchText">
-                        {{subSite.getTranslatedName()}}
+                        <div flex layout="column">
+                            <span md-highlight-text="ctrl.subSiteSearchText"
+                                  md-highlight-flags="i">{{subSite.getTranslatedName()}}</span>
+                            <span class="option-sub-text"
+                                  ng-if="!ctrl.selectedMainSite">{{subSite.getTranslatedParentName()}}</span>
+                        </div>
                     </md-option>
                     <md-option ng-click="ctrl.loadSubSitesByCriteria($event)"
                                ng-if="!(ctrl.subSites|translatedNameFilter:ctrl.subSiteSearchText).length && ctrl.subSiteSearchText.length">

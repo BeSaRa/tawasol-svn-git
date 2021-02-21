@@ -839,6 +839,7 @@ md-tabs-canvas {
 .not-found {
   border: 1px dashed red;
 }
+
 .border-red {
   border: 1px solid red;
 }
@@ -2416,6 +2417,12 @@ md-select-menu {
   md-option {
     .md-text {
       width: 100%;
+    }
+
+    .option-sub-text {
+      font-size: 11px;
+      line-height: 18px;
+      color: grey;
     }
   }
 }
