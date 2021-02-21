@@ -1201,6 +1201,7 @@ module.exports = function (app) {
                 text: 'grid_action_add_stamp',
                 shortcut: true,
                 permissionKey: 'ADD_STAMP',
+                sticky: true,
                 callback: self.addKwtAlDiyarDigitalStamp,
                 class: 'action-green',
                 checkShow: function (action, model) {

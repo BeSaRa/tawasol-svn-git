@@ -14,7 +14,8 @@ module.exports = function (app) {
                 correspondence: '=',
                 g2gItemCopy: '=?',
                 editMode: '=',
-                saveCorrespondenceChanges: '='
+                saveCorrespondenceChanges: '=',
+                notifyCallback: '=?'
             }
         }
     })

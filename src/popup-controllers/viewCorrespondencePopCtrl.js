@@ -720,6 +720,7 @@ module.exports = function (app) {
                     var record = (self.workItem || self.correspondence);
                     record.gridAction = action;
 
+                    self.actionClicked(action);
                     if (action.hasOwnProperty('params') && action.params) {
                         action.callback(record, action.params, $event, defer, additionalData);
                     } else {
@@ -947,6 +948,13 @@ module.exports = function (app) {
                 self.excludedManagePopupsFromGrids.push("departmentIncoming");
             }
             filterStickyActions();
+        }
+
+        self.actionClicked = function (action) {
+            if (self.content.desktop && action.text === 'grid_action_add_stamp') {
+                self.content.desktop.overlay = true;
+                self.editMode = true;
+            }
         }
     });
 };

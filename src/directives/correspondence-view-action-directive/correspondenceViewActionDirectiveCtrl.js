@@ -41,7 +41,9 @@ module.exports = function (app) {
                     }
 
                     record.gridAction = action;
-
+                    if (self.notifyCallback) {
+                        self.notifyCallback(action);
+                    }
                     if (action.hasOwnProperty('params') && action.params) {
                         return action.callback(record, action.params, $event, defer, additionalData);
                     }

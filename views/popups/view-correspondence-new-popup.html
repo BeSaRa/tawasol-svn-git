@@ -12,7 +12,8 @@
                                               correspondence="ctrl.correspondence"
                                               g2g-item-copy="ctrl.g2gItemCopy"
                                               edit-mode="ctrl.editMode"
-                                              save-correspondence-changes="ctrl.saveCorrespondenceChanges"></correspondence-view-action-directive>
+                                              save-correspondence-changes="ctrl.saveCorrespondenceChanges"
+                                              notify-callback="ctrl.actionClicked"></correspondence-view-action-directive>
         <div flex layout-align="center center" layout="row">
             <span flex md-truncate class="font-bold text-center">{{::ctrl.correspondence.getTranslatedName()}}</span>
             <md-progress-circular ng-if="ctrl.loadingIndicatorService.loading" md-mode="indeterminate"
