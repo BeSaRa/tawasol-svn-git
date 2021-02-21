@@ -131,8 +131,8 @@ module.exports = function (app) {
                         employeeNum: {
                             required: true,
                             customValidation: {
-                                type: 'number',
-                                message: 'numberonly'
+                                type: 'EN',
+                                message: 'english_number'
                             },
                             fieldIdentifier: 'employeeNumber'
                         },
