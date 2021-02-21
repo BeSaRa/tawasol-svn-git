@@ -217,6 +217,34 @@ module.exports = function (app) {
                 })
         };
 
+        self.isViewStepsUsageType = function () {
+            return self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps;
+        }
+
+        /**
+         * @description Imports the steps from existing sequential workflow
+         * @param $event
+         */
+        self.importStepsFromSeqWF = function ($event) {
+            sequentialWorkflowService.controllerMethod
+                .selectSequentialWorkflow($event, self.correspondence.getInfo().docClassId)
+                .then(function (selectedSeqWF) {
+                    var docCurrentStep = _getStepById(self.correspondence.getSeqWFNextStepId());
+                    var indexToInsert = -1;
+                    if (docCurrentStep) {
+                        indexToInsert = docCurrentStep.itemOrder + 1;
+                    }
+
+                    var newSteps = _.map(angular.copy(selectedSeqWF.stepRows), function (item) {
+                        item.id = null;
+                        return item;
+                    });
+
+                    self.seqWF.stepRows.splice(indexToInsert, 0, ...newSteps);
+                    self.compileAll(self.seqWF.stepRows);
+                });
+        }
+
         function _updateStructure() {
             self.seqWF.stepRows = [];
             self.$generatorElement.children('.step-row').each(function (idx, row) {
@@ -419,6 +447,9 @@ module.exports = function (app) {
         }
 
         function _checkIfStepViewOnly(seqWFStep) {
+            if (self.viewOnly) {
+                return true;
+            }
             var viewOnly = false;
             if (self.usageType === sequentialWorkflowService.stepsUsageTypes.manageWFSteps) {
                 viewOnly = false;

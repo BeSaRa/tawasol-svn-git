@@ -1523,66 +1523,7 @@ module.exports = function (app) {
                 },
                 controllerAs: 'ctrl',
                 bindToController: true,
-                controller: function (dialog, sequentialWorkflowService) {
-                    'ngInject';
-                    var ctrl = this,
-                        minimumStepsCount = 2;
-
-                    ctrl.stepsUsageType = sequentialWorkflowService.stepsUsageTypes.viewWFSteps;
-
-                    ctrl.isValidSeqWF = function () {
-                        return _isValidSteps() && _hasOneAuthorizeAndSend();
-                    };
-
-                    function _isValidSteps() {
-                        if (!_hasStepRows()) {
-                            return false;
-                        }
-                        return _.every(ctrl.sequentialWF.stepRows, function (stepRow) {
-                            if (!stepRow) {
-                                return false;
-                            }
-                            return stepRow.isValidStep(ctrl.sequentialWF);
-                        })
-                    }
-
-                    function _hasOneAuthorizeAndSend() {
-                        if (!_hasStepRows()) {
-                            return false;
-                        }
-                        if (ctrl.sequentialWF.isIncomingSeqWF()) {
-                            return true;
-                        } else {
-                            return !!_.find(ctrl.sequentialWF.stepRows, function (stepRow) {
-                                if (!stepRow) {
-                                    return false;
-                                }
-                                return stepRow.isAuthorizeAndSendStep();
-                            })
-                        }
-                    }
-
-                    function _hasStepRows() {
-                        return ctrl.sequentialWF.stepRows && ctrl.sequentialWF.stepRows.length;
-                    }
-
-                    ctrl.saveSeqWF = function () {
-                        if (ctrl.sequentialWF.stepRows.length < minimumStepsCount) {
-                            toast.info(langService.get('error_min_steps').change({number: minimumStepsCount}));
-                            return;
-                        }
-
-                        sequentialWorkflowService.updateSequentialWorkflow(ctrl.sequentialWF)
-                            .then(function (result) {
-                                toast.success(langService.get('edit_success').change({name: result.getNames()}));
-                                dialog.hide('SEQ_WF_UPDATED');
-                            });
-                    };
-
-                    ctrl.closePopup = function () {
-                        dialog.cancel();
-                    }
-                }
+                controller: 'viewSeqWfStepsPopCtrl'
             })
         };
 
@@ -2163,7 +2104,7 @@ module.exports = function (app) {
             if (!self.sequentialWF) {
                 return false;
             }
-            return  !self.isLaunchStep && (self.sequentialWF.getFirstStepId() !== self.nextSeqStep.id);
+            return !self.isLaunchStep && (self.sequentialWF.getFirstStepId() !== self.nextSeqStep.id);
         };
 
         /**

@@ -340,7 +340,27 @@ module.exports = function (app) {
                         });
                 });
             },
-
+            /**
+             * @description Opens the dialog to select sequential workflow
+             * @param $event
+             * @param docClassId
+             * @returns {*}
+             */
+            selectSequentialWorkflow: function ($event, docClassId) {
+                return dialog
+                    .showDialog({
+                        templateUrl: cmsTemplate.getPopup('select-sequential-workflow'),
+                        controller: 'selectSequentialWorkflowPopCtrl',
+                        controllerAs: 'ctrl',
+                        targetEvent: $event,
+                        resolve: {
+                            sequentialWorkflows: function (employeeService) {
+                                'ngInject';
+                                return self.loadSequentialWorkflowsByRegOuDocClassActive(employeeService.getEmployee().getRegistryOUID(), docClassId);
+                            }
+                        }
+                    });
+            }
         };
 
         /**
