@@ -293,6 +293,7 @@ module.exports = function (app) {
             return exportDefer.promise.then(function () {
                 var info = readyToExport.getInfo(),
                     correspondenceToLaunch = new Outgoing({
+                        addMethod: info.isPaper,
                         docStatus: info.docStatus,
                         docSubject: info.title,
                         documentTitle: info.title,
