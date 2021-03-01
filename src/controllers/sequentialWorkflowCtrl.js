@@ -183,7 +183,7 @@ module.exports = function (app) {
             }
             sequentialWorkflowService
                 .controllerMethod
-                .sequentialWorkflowCopy(angular.copy(sequentialWorkflow), self.selectedOrganization, false, $event)
+                .sequentialWorkflowCopy($event, angular.copy(sequentialWorkflow), self.selectedOrganization, false)
                 .then(function (result) {
                     self.reloadSequentialWorkflows(self.grid.page)
                         .then(function () {

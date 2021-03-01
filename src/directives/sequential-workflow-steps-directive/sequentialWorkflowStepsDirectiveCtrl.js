@@ -78,7 +78,15 @@ module.exports = function (app) {
             if (_canDeleteRow(stepRow, idx)) {
                 row.append(self.createDeleteButton('row', idx));
             }
+            if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
+                row.append(self.createRowCheckBox(stepRow, idx))
+            }
             return row;
+        };
+
+        self.createRowCheckBox = function (stepRow, idx) {
+            return angular.element('<md-checkbox aria-label="check-box" ng-checked="ctrl.seqWF.stepRows[' + idx + '].isSelectedForSubSeqWF" ' +
+                ' class="sort-cancel check-box-with-no-padding" ng-model="ctrl.seqWF.stepRows[' + idx + '].isSelectedForSubSeqWF"></md-checkbox>')
         };
 
         self.deleteRow = function ($event) {
@@ -227,7 +235,7 @@ module.exports = function (app) {
          */
         self.importStepsFromSeqWF = function ($event) {
             sequentialWorkflowService.controllerMethod
-                .selectSequentialWorkflow($event, self.correspondence.getInfo().docClassId)
+                .selectSubSequentialWorkflow($event)
                 .then(function (selectedSeqWF) {
                     var docCurrentStep = _getStepById(self.correspondence.getSeqWFNextStepId());
                     var indexToInsert = -1;

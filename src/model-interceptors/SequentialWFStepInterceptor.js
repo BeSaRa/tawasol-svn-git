@@ -23,6 +23,7 @@ module.exports = function (app) {
             model.sendEmail = model.sendEmail || false;
 
             delete model.userIdAndOuId;
+            delete model.isSelectedForSubSeqWF;
             return model;
         });
 

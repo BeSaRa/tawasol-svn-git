@@ -97,6 +97,17 @@ module.exports = function (app) {
                 });
         };
 
+        self.loadSubSequentialWorkflowsByRegOu = function (regOuId) {
+            if (!regOuId) {
+                return $q.reject('MISSING_REGISTRY_ORGANIZATION');
+            }
+            var url = urlService.sequentialWorkflow + '/sub-workflows/reg-ou/' + generator.getNormalizedValue(regOuId, 'id');
+            return $http.get(url)
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('SequentialWF', generator.generateCollection(result.data.rs, SequentialWF, self._sharedMethods));
+                });
+        }
+
         /**
          * @description Contains methods for CRUD operations for sequential workflow
          */
@@ -128,12 +139,13 @@ module.exports = function (app) {
             },
             /**
              * @description Opens popup to add new sequential workflow as copy of given record
+             * @param $event
              * @param sequentialWorkflow
              * @param regOuId
              * @param adHoc
-             * @param $event
+             * @param subSeqWF
              */
-            sequentialWorkflowCopy: function (sequentialWorkflow, regOuId, adHoc, $event) {
+            sequentialWorkflowCopy: function ($event, sequentialWorkflow, regOuId, adHoc, subSeqWF) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -143,7 +155,7 @@ module.exports = function (app) {
                         locals: {
                             editMode: false,
                             viewOnly: false,
-                            defaultDocClass: adHoc ? sequentialWorkflow.docClassID : null
+                            defaultDocClass: (adHoc || regOuId) ? sequentialWorkflow.docClassID : null
                         },
                         resolve: {
                             sequentialWorkflow: function () {
@@ -152,11 +164,16 @@ module.exports = function (app) {
                                     .then(function (newSequentialWF) {
                                         newSequentialWF.id = null;
                                         newSequentialWF.regOUId = regOuId ? generator.getNormalizedValue(regOuId, 'id') : null;
+                                        // replace steps with selected steps if adding sub sequential workflow
+                                        if (subSeqWF) {
+                                            newSequentialWF.steps = _.filter(sequentialWorkflow.stepRows, 'isSelectedForSubSeqWF');
+                                        }
                                         newSequentialWF.steps = _.map(newSequentialWF.steps, function (step) {
                                             step.id = null;
                                             return step;
                                         });
                                         newSequentialWF.isAdhoc = adHoc;
+                                        newSequentialWF.isSubWorkflow = subSeqWF;
                                         newSequentialWF.stepRows = angular.copy(newSequentialWF.steps);
 
                                         return newSequentialWF;
@@ -341,12 +358,12 @@ module.exports = function (app) {
                 });
             },
             /**
-             * @description Opens the dialog to select sequential workflow
+             * @description Opens the dialog to select sub sequential workflow
              * @param $event
-             * @param docClassId
+             * @param regOuId
              * @returns {*}
              */
-            selectSequentialWorkflow: function ($event, docClassId) {
+            selectSubSequentialWorkflow: function ($event, regOuId) {
                 return dialog
                     .showDialog({
                         templateUrl: cmsTemplate.getPopup('select-sequential-workflow'),
@@ -356,7 +373,7 @@ module.exports = function (app) {
                         resolve: {
                             sequentialWorkflows: function (employeeService) {
                                 'ngInject';
-                                return self.loadSequentialWorkflowsByRegOuDocClassActive(employeeService.getEmployee().getRegistryOUID(), docClassId);
+                                return self.loadSubSequentialWorkflowsByRegOu(regOuId || employeeService.getEmployee().getRegistryOUID());
                             }
                         }
                     });
