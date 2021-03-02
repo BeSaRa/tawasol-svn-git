@@ -370,6 +370,9 @@ module.exports = function (app) {
                         controller: 'selectSequentialWorkflowPopCtrl',
                         controllerAs: 'ctrl',
                         targetEvent: $event,
+                        locals: {
+                            allowDelete: true
+                        },
                         resolve: {
                             sequentialWorkflows: function (employeeService) {
                                 'ngInject';

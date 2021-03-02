@@ -3,13 +3,17 @@ module.exports = function (app) {
                                                                 dialog,
                                                                 $timeout,
                                                                 sequentialWorkflowService,
-                                                                sequentialWorkflows) {
+                                                                sequentialWorkflows,
+                                                                allowDelete,
+                                                                employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'selectSequentialWorkflowPopCtrl';
         self.stepsUsageType = sequentialWorkflowService.stepsUsageTypes.manageWFSteps;
         self.sequentialWorkflows = sequentialWorkflows;
         self.selectedSeqWF = null;
+        self.allowDelete = allowDelete;
+        self.employeeService = employeeService;
         self.seqWFSearchText = '';
 
         /**
@@ -41,6 +45,24 @@ module.exports = function (app) {
                     $event.stopPropagation();
             }
         };
+
+        /**
+         * @description Delete the selected seqWF
+         * @param $event
+         */
+        self.deleteSeqWF = function ($event) {
+            if (!employeeService.hasPermissionTo('ADD_SEQ_WF') || !self.selectedSeqWF) {
+                return;
+            }
+            sequentialWorkflowService
+                .controllerMethod
+                .sequentialWorkflowDelete(self.selectedSeqWF, $event)
+                .then(function () {
+                    self.sequentialWorkflows = self.sequentialWorkflows.filter(item => item.id !== self.selectedSeqWF.id);
+                    self.selectedSeqWF = null;
+                    self.onChangeSequentialWorkflow();
+                });
+        }
 
         /**
          * @description Closes popup with selected seqWF

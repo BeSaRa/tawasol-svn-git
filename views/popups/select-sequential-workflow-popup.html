@@ -31,6 +31,13 @@
                                             md-highlight-flags="i">{{option.getTranslatedName()}}</span>
                                 </md-option>
                             </md-select>
+                            <md-button ng-if="ctrl.employeeService.hasPermissionTo('ADD_SEQ_WF') && ctrl.allowDelete"
+                                       ng-disabled="!ctrl.selectedSeqWF"
+                                       ng-click="ctrl.deleteSeqWF($event)"
+                                       class="md-icon-button cms-select-overlay-button"
+                                       tooltip="{{lang.delete}}">
+                                <md-icon md-svg-icon="delete"></md-icon>
+                            </md-button>
                             <div ng-messages="selectSequentialWFForm.seqWF.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
