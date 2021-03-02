@@ -53,6 +53,7 @@ module.exports = function (app) {
             self.isMSTeamsEnabled = null;
             self.otpEnabled = false;
             self.isFirstViewForApproval = false;
+            self.oTPMobilityEnabled = false;
 
             var collectionResults = [
                 'reminderSmsPriority',
