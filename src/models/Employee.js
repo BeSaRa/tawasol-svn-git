@@ -9,7 +9,8 @@ module.exports = function (app) {
                                       OUApplicationUser) {
         'ngInject';
         return function Employee(model) {
-            var self = this, organizationService, Organization, workflowActionService, applicationUserService, $http, rootEntity;
+            var self = this, organizationService, Organization, workflowActionService, applicationUserService, $http,
+                rootEntity;
             self.arFullName = null;
             self.deadlineEmailNotify = null;
             self.deadlineEmailPriority = null;
@@ -62,6 +63,7 @@ module.exports = function (app) {
             self.pinCodePrompt = false;
             self.subAdminOuList = [];
             self.isFirstViewForApproval = false;
+            self.oTPMobilityEnabled = false;
 
             var collectionResults = [
                 'reminderSmsPriority',
