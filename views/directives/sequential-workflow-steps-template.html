@@ -40,7 +40,7 @@
                                 </div>
                             </div>
                             <div class="help-text-div p10"
-                                 ng-if="!ctrl.viewOnly && ctrl.seqWF.hasAnyDocumentType() && !ctrl.seqWF.isIncomingSeqWF()">
+                                 ng-if="!ctrl.viewOnly && ctrl.seqWF.hasAnyDocumentType() && !ctrl.seqWF.isIncomingSeqWF() && !ctrl.seqWF.isSubWorkflow">
                                 {{lang.seq_wf_steps_note}}
                             </div>
                         </div>

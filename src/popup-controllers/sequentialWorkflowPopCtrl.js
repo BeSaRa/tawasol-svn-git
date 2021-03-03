@@ -47,6 +47,9 @@ module.exports = function (app) {
                     return true;
                 }
                 generator.validateRequiredSelectFields(form);
+                if (self.sequentialWorkflow.isSubWorkflow) {
+                    return form.$valid && _isValidSteps();
+                }
                 return form.$valid && _isValidSteps() && _hasOneAuthorizeAndSend();
             };
 
