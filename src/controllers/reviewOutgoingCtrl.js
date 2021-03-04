@@ -878,7 +878,7 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: function (action, model) {
                     var info = model.getInfo();
-                    return info.documentClass === 'outgoing' && model.hasContent() && info.isPaper && !model.hasActiveSeqWF();
+                    return info.documentClass === 'outgoing' && model.hasContent() && info.isPaper && !model.isPrivateSecurityLevel() && !model.hasActiveSeqWF();
                 }
             },
             // Remove
