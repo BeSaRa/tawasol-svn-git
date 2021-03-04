@@ -32,7 +32,8 @@ module.exports = function (app) {
             launchWF: 'launch',
             manageWFSteps: 'manage-steps',
             viewWFSteps: 'view-steps',
-            viewWFStatusSteps: 'view-wf-status-steps'
+            viewWFStatusSteps: 'view-wf-status-steps',
+            selectSeqWF: 'select-seq-wf'
         };
 
         self.workflowStepActionTypes = {

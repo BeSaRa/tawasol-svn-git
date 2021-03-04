@@ -298,6 +298,18 @@ module.exports = function (app) {
                         titleText += stepRow.getTranslatedUserAndOuName();
                     }
                 }
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.selectSeqWF) {
+                if (stepRow.itemOrder === 0) {
+                    titleText = stepActionText;
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepRow.getTranslatedUserAndOuName();
+                    }
+                } else {
+                    titleText = previousStepUser + stepActionText;
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepRow.getTranslatedUserAndOuName();
+                    }
+                }
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
                 if (stepRow.itemOrder === 0) {
                     titleText = (self.employee.getTranslatedName() + ' - ' + self.employee.getExtraFields().ouInfo.getTranslatedName()) + stepActionText;
@@ -361,6 +373,18 @@ module.exports = function (app) {
                         titleText += stepIcon + stepRow.getTranslatedUserAndOuName();
                     }
                 }
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.selectSeqWF) {
+                if (stepRow.itemOrder === 0) {
+                    titleText = stepRow.getTranslatedName();
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepIcon + stepRow.getTranslatedUserAndOuName();
+                    }
+                } else {
+                    titleText = previousStepUserIcon + stepRow.getTranslatedName();
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepIcon + stepRow.getTranslatedUserAndOuName();
+                    }
+                }
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
                 if (stepRow.itemOrder === 0) {
                     titleText = (self.employee.getTranslatedName() + ' - ' + self.employee.getExtraFields().ouInfo.getTranslatedName()) + stepIcon + stepRow.getTranslatedName();
@@ -410,6 +434,8 @@ module.exports = function (app) {
             }
             if (self.usageType === sequentialWorkflowService.stepsUsageTypes.manageWFSteps) {
                 return true;
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.selectSeqWF) {
+                return false;
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
                 return (rowIndex > 0);
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
@@ -436,6 +462,8 @@ module.exports = function (app) {
             }
             if (self.usageType === sequentialWorkflowService.stepsUsageTypes.manageWFSteps) {
                 return true;
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.selectSeqWF) {
+                return false;
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
                 return (rowIndex > 0);
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
@@ -461,6 +489,8 @@ module.exports = function (app) {
             var viewOnly = false;
             if (self.usageType === sequentialWorkflowService.stepsUsageTypes.manageWFSteps) {
                 viewOnly = false;
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.selectSeqWF) {
+                viewOnly = true;
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
                 viewOnly = true;
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
@@ -487,6 +517,9 @@ module.exports = function (app) {
                 self.stepLegendList.push(self.stepLegendClassList.currentStep);
                 self.stepLegendList.push(self.stepLegendClassList.futureStep);
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.manageWFSteps) {
+                // self.stepLegendList.push(self.stepLegendClassList.validStep);
+                // self.stepLegendList.push(self.stepLegendClassList.inValidStep);
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.selectSeqWF) {
                 // self.stepLegendList.push(self.stepLegendClassList.validStep);
                 // self.stepLegendList.push(self.stepLegendClassList.inValidStep);
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
@@ -518,6 +551,12 @@ module.exports = function (app) {
                     stepStatusClass = self.stepLegendClassList.futureStep.class;
                 }
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.manageWFSteps) {
+                /*if (stepAction.isValidStep(self.seqWF)) {
+                    stepStatusClass = self.stepLegendClassList.validStep.class;
+                } else {
+                    stepStatusClass = self.stepLegendClassList.inValidStep.class;
+                }*/
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.selectSeqWF) {
                 /*if (stepAction.isValidStep(self.seqWF)) {
                     stepStatusClass = self.stepLegendClassList.validStep.class;
                 } else {

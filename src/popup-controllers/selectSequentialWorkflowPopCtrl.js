@@ -9,7 +9,7 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'selectSequentialWorkflowPopCtrl';
-        self.stepsUsageType = sequentialWorkflowService.stepsUsageTypes.manageWFSteps;
+        self.stepsUsageType = sequentialWorkflowService.stepsUsageTypes.selectSeqWF;
         self.sequentialWorkflows = sequentialWorkflows;
         self.selectedSeqWF = null;
         self.allowDelete = allowDelete;
