@@ -372,7 +372,8 @@ module.exports = function (app) {
                         controllerAs: 'ctrl',
                         targetEvent: $event,
                         locals: {
-                            allowDelete: true
+                            allowDelete: true,
+                            allowEdit: true
                         },
                         resolve: {
                             sequentialWorkflows: function (employeeService) {

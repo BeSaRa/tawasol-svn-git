@@ -5,6 +5,9 @@ module.exports = function (app) {
                                                                 sequentialWorkflowService,
                                                                 sequentialWorkflows,
                                                                 allowDelete,
+                                                                allowEdit,
+                                                                toast,
+                                                                langService,
                                                                 employeeService) {
         'ngInject';
         var self = this;
@@ -13,6 +16,7 @@ module.exports = function (app) {
         self.sequentialWorkflows = sequentialWorkflows;
         self.selectedSeqWF = null;
         self.allowDelete = allowDelete;
+        self.allowEdit = allowEdit;
         self.employeeService = employeeService;
         self.seqWFSearchText = '';
 
@@ -47,6 +51,20 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Reloads the sub sequential workflows
+         * @returns {*}
+         */
+        self.reloadSubSequentialWorkflows = function () {
+            return sequentialWorkflowService
+                .loadSubSequentialWorkflowsByRegOu(employeeService.getEmployee().getRegistryOUID())
+                .then(function (result) {
+                    self.sequentialWorkflows = result;
+                    self.onChangeSequentialWorkflow();
+                    return result;
+                });
+        };
+
+        /**
          * @description Delete the selected seqWF
          * @param $event
          */
@@ -62,7 +80,27 @@ module.exports = function (app) {
                     self.selectedSeqWF = null;
                     self.onChangeSequentialWorkflow();
                 });
-        }
+        };
+
+        /**
+         * @description Edit the selected seqWF
+         * @param $event
+         */
+        self.editSeqWF = function ($event) {
+            if (!employeeService.hasPermissionTo('ADD_SEQ_WF') || !self.selectedSeqWF) {
+                return;
+            }
+            sequentialWorkflowService
+                .controllerMethod
+                .sequentialWorkflowEdit(self.selectedSeqWF, $event)
+                .then(function (result) {
+                    self.reloadSubSequentialWorkflows()
+                        .then(function () {
+                            toast.success(langService.get('edit_success').change({name: result.getNames()}));
+                            self.onChangeSequentialWorkflow();
+                        })
+                });
+        };
 
         /**
          * @description Closes popup with selected seqWF

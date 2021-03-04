@@ -85,6 +85,27 @@ md-input-container:not(.cms-default) {
     }
   }
 
+  div.cms-select-overlay-container,
+  div.cms-input-overlay-container {
+    position: absolute;
+    right: 20px;
+    top: 0;
+
+    button {
+      margin: 0 !important;
+    }
+
+    button[disabled] md-icon {
+      color: rgba(0, 0, 0, 0.38) !important;
+    }
+  }
+
+  div.cms-input-overlay-container {
+    button {
+      right: 0;
+    }
+  }
+
   button.cms-select-overlay-button,
   button.cms-input-overlay-button {
     position: absolute;
@@ -155,8 +176,18 @@ html.rtl {
       }
     }
 
+    div.cms-select-overlay-container {
+      left: 20px;
+      right: auto;
+    }
+
     button.cms-select-overlay-button {
       left: 20px;
+      right: auto;
+    }
+
+    div.cms-input-overlay-container {
+      left: 0;
       right: auto;
     }
 

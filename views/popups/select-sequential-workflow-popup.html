@@ -31,13 +31,22 @@
                                             md-highlight-flags="i">{{option.getTranslatedName()}}</span>
                                 </md-option>
                             </md-select>
-                            <md-button ng-if="ctrl.employeeService.hasPermissionTo('ADD_SEQ_WF') && ctrl.allowDelete"
-                                       ng-disabled="!ctrl.selectedSeqWF"
-                                       ng-click="ctrl.deleteSeqWF($event)"
-                                       class="md-icon-button cms-select-overlay-button"
-                                       tooltip="{{lang.delete}}">
-                                <md-icon md-svg-icon="delete"></md-icon>
-                            </md-button>
+                            <div class="cms-select-overlay-container">
+                                <md-button ng-if="ctrl.employeeService.hasPermissionTo('ADD_SEQ_WF') && ctrl.allowEdit"
+                                           ng-disabled="!ctrl.selectedSeqWF"
+                                           ng-click="ctrl.editSeqWF($event)"
+                                           class="md-icon-button "
+                                           tooltip="{{lang.edit}}">
+                                    <md-icon md-svg-icon="pencil"></md-icon>
+                                </md-button>
+                                <md-button ng-if="ctrl.employeeService.hasPermissionTo('ADD_SEQ_WF') && ctrl.allowDelete"
+                                           ng-disabled="!ctrl.selectedSeqWF"
+                                           ng-click="ctrl.deleteSeqWF($event)"
+                                           class="md-icon-button"
+                                           tooltip="{{lang.delete}}">
+                                    <md-icon md-svg-icon="delete"></md-icon>
+                                </md-button>
+                            </div>
                             <div ng-messages="selectSequentialWFForm.seqWF.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
