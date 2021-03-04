@@ -11,12 +11,13 @@ module.exports = function (app) {
         self.controllerName = 'viewSeqWfStepsPopCtrl';
 
         self.stepsUsageType = sequentialWorkflowService.stepsUsageTypes.viewWFSteps;
+        self.canAddSubSeqWF = employeeService.hasPermissionTo('ADD_SEQ_WF');
 
         self.isValidSeqWF = function () {
             return _isValidSteps() && _hasOneAuthorizeAndSend();
         };
 
-        self.isValidSubSeqWF = function(){
+        self.isValidSubSeqWF = function () {
             return _isValidSteps(true);
         }
 

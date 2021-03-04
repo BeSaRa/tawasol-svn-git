@@ -78,7 +78,7 @@ module.exports = function (app) {
             if (_canDeleteRow(stepRow, idx)) {
                 row.append(self.createDeleteButton('row', idx));
             }
-            if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
+            if (self.canAddSubSeqWF) {
                 row.append(self.createRowCheckBox(stepRow, idx))
             }
             return row;
@@ -610,6 +610,7 @@ module.exports = function (app) {
 
         self.$onInit = function () {
             $timeout(function () {
+                self.canAddSubSeqWF = self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps && employeeService.hasPermissionTo('ADD_SEQ_WF');
                 self.compileAll(self.seqWF.stepRows);
 
                 _setStepLegend();
