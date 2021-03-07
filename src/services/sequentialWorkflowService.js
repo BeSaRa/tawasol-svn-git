@@ -167,7 +167,7 @@ module.exports = function (app) {
                                         newSequentialWF.regOUId = regOuId ? generator.getNormalizedValue(regOuId, 'id') : null;
                                         // replace steps with selected steps if adding sub sequential workflow
                                         if (subSeqWF) {
-                                            newSequentialWF.steps = _.filter(sequentialWorkflow.stepRows, 'isSelectedForSubSeqWF');
+                                            newSequentialWF.steps = _.filter(angular.copy(sequentialWorkflow.stepRows), 'isSelectedForSubSeqWF');
                                         }
                                         newSequentialWF.steps = _.map(newSequentialWF.steps, function (step) {
                                             step.id = null;

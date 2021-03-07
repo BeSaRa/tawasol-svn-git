@@ -52,13 +52,19 @@ module.exports = function (app) {
 
         /**
          * @description Reloads the sub sequential workflows
+         * @param avoidResetSelected
          * @returns {*}
          */
-        self.reloadSubSequentialWorkflows = function () {
+        self.reloadSubSequentialWorkflows = function (avoidResetSelected) {
             return sequentialWorkflowService
                 .loadSubSequentialWorkflowsByRegOu(employeeService.getEmployee().getRegistryOUID())
                 .then(function (result) {
                     self.sequentialWorkflows = result;
+                    var id = self.selectedSeqWF ? self.selectedSeqWF.id : null;
+                    self.selectedSeqWF = null;
+                    if (avoidResetSelected && id !== null) {
+                        self.selectedSeqWF = _.find(self.sequentialWorkflows, {id: id});
+                    }
                     self.onChangeSequentialWorkflow();
                     return result;
                 });
@@ -94,10 +100,9 @@ module.exports = function (app) {
                 .controllerMethod
                 .sequentialWorkflowEdit(self.selectedSeqWF, $event)
                 .then(function (result) {
-                    self.reloadSubSequentialWorkflows()
+                    self.reloadSubSequentialWorkflows(true)
                         .then(function () {
                             toast.success(langService.get('edit_success').change({name: result.getNames()}));
-                            self.onChangeSequentialWorkflow();
                         })
                 });
         };
