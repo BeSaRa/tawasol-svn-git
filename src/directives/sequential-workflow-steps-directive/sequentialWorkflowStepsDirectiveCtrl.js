@@ -85,7 +85,7 @@ module.exports = function (app) {
         };
 
         self.createRowCheckBox = function (stepRow, idx) {
-            return angular.element('<md-checkbox aria-label="check-box" ng-checked="ctrl.seqWF.stepRows[' + idx + '].isSelectedForSubSeqWF" ' +
+            return angular.element('<md-checkbox ng-if="ctrl.seqWF.stepRows[' + idx + ']" aria-label="check-box" ng-checked="ctrl.seqWF.stepRows[' + idx + '].isSelectedForSubSeqWF" ' +
                 ' class="sort-cancel check-box-with-no-padding" ng-model="ctrl.seqWF.stepRows[' + idx + '].isSelectedForSubSeqWF"></md-checkbox>')
         };
 
