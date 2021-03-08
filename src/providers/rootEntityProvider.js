@@ -52,6 +52,7 @@ module.exports = function (app) {
                         .then(function (result) {
                             self.setLoaded(true);
                             $cookies.put(privateKey, rootIdentifier);
+                            localStorage.setItem(privateKey, rootIdentifier);
                             dialog.cancel();
                             self.setRootEntity(new RootEntity(result.data.rs));
                             // single sign on
@@ -121,7 +122,7 @@ module.exports = function (app) {
 
                 },
                 getOldIdentifier: function () {
-                    return $cookies.get(privateKey);
+                    return $cookies.get(privateKey) || localStorage.getItem(privateKey);
                 },
                 setRootEntityIdentifier: function (identifier) {
                     return self.setRootEntityIdentifier(identifier);
