@@ -84,11 +84,11 @@ module.exports = function (app) {
                 this.settings.fileTypesMap = map;
                 return this;
             };
-            RootEntity.prototype.checkSSO = function () {
+            RootEntity.prototype.checkSSO = function (waitTime) {
                 var self = this, defer = $q.defer();
                 $timeout(function () {
                     self.rootEntity.isSSO ? defer.resolve(authenticationService) : defer.reject(false);
-                });
+                }, waitTime ? waitTime : 0);
                 return defer.promise;
             };
 
@@ -103,6 +103,10 @@ module.exports = function (app) {
 
             RootEntity.prototype.isDocClassifierEnabled = function () {
                 return self.rootEntity.hasOwnProperty('docClassifierEnabled') && !!self.rootEntity.docClassifierEnabled;
+            }
+
+            RootEntity.prototype.getRootEntityIdentifier = function () {
+                return this.rootEntity.identifier;
             }
 
             // don't remove CMSModelInterceptor from last line

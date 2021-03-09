@@ -127,4 +127,5 @@ module.exports = function (app) {
     require('./PDFService')(app);
     require('./annotationLogService')(app);
     require('./manageLaunchWorkflowService')(app);
+    require('./ssoService')(app);
 };

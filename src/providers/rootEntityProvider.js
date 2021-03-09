@@ -36,7 +36,7 @@ module.exports = function (app) {
             return self;
         };
 
-        self.$get = function (RootEntity, tokenService, employeeService, $state, Credentials, GlobalSetting, titleService, generator, lookupService, $rootScope, $sce, errorCode, $cookies, $stateParams, $http, $location, urlService, dialog, $q) {
+        self.$get = function (RootEntity, ssoService, tokenService, employeeService, $state, Credentials, GlobalSetting, titleService, generator, lookupService, $rootScope, $sce, errorCode, $cookies, $stateParams, $http, $location, urlService, dialog, $q) {
             'ngInject';
             return {
                 loadInformation: function (rootIdentifier, ignoreSSO) {
@@ -50,6 +50,7 @@ module.exports = function (app) {
                             }
                         })
                         .then(function (result) {
+                            ssoService.initPromise();
                             self.setLoaded(true);
                             $cookies.put(privateKey, rootIdentifier);
                             localStorage.setItem(privateKey, rootIdentifier);
@@ -57,26 +58,30 @@ module.exports = function (app) {
                             self.setRootEntity(new RootEntity(result.data.rs));
                             // single sign on
                             if (!tokenService.getToken()) {
-                                rootEntity.checkSSO().then(function (authenticationService) {
+                                rootEntity.checkSSO(1000).then(function (authenticationService) {
                                     authenticationService
                                         .authenticate(new Credentials({
                                             isSSO: true
                                         }))
                                         .then(function (result) {
                                             employeeService.setEmployee(result);
-                                            if (!employeeService.isAdminUser()) {
-                                                if (employeeService.hasPermissionTo('LANDING_PAGE'))
-                                                    $state.go('app.landing-page', {identifier: rootEntity.getRootEntityIdentifier()});
-                                                else
-                                                    $state.go('app.inbox.user-inbox', {identifier: rootEntity.getRootEntityIdentifier()});
-                                            } else {
-                                                $state.go('app.administration.entities', {identifier: rootEntity.getRootEntityIdentifier()});
-                                            }
+                                            // if (!employeeService.isAdminUser()) {
+                                            //     if (employeeService.hasPermissionTo('LANDING_PAGE'))
+                                            //         $state.go('app.landing-page', {identifier: rootEntity.getRootEntityIdentifier()});
+                                            //     else
+                                            //         $state.go('app.inbox.user-inbox', {identifier: rootEntity.getRootEntityIdentifier()});
+                                            // } else {
+                                            //     $state.go('app.administration.entities', {identifier: rootEntity.getRootEntityIdentifier()});
+                                            // }
+                                            ssoService.resolve('SSO ON');
                                         })
                                         .catch(function (reason) {
+                                            ssoService.reject('SSO FAILED');
                                             //   console.log("SINGLE SIGN ON FAILED !!", reason);
                                         })
                                 });
+                            } else {
+                                ssoService.resolve('SSO OFF')
                             }
                             titleService.setTitle(self.getRootEntity().getTranslatedAppName());
                             return self.getRootEntity();

@@ -138,20 +138,22 @@ module.exports = function (app) {
             var spinnerService = transition.injector().get('loadingIndicatorService');
             var tokenService = transition.injector().get('tokenService');
             var loginDialogService = transition.injector().get('loginDialogService');
+            var ssoService = transition.injector().get('ssoService');
 
             spinnerService.startLoading();
             transition.promise.finally(spinnerService.endLoading);
-            return tokenService
-                .tokenRefresh()
-                .then(function () {
-                    return true;
-                    // return loginDialogService
-                    //     .openLoginDialog(true);
-                })
-                .catch(function () {
-                    return loginDialogService
-                        .openLoginDialog(true);
-                });
+            return ssoService.promise.then(function () {
+                return tokenService
+                    .tokenRefresh()
+                    .then(function () {
+                        return true;
+                    })
+                    .catch(function () {
+                        console.log('CATCH tokenRefresh');
+                        return loginDialogService
+                            .openLoginDialog(true);
+                    });
+            });
         });
 
 

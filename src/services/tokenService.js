@@ -164,6 +164,7 @@ module.exports = function (app) {
                                         defer.resolve(service.getToken());
                                     });
                                 } else {
+                                    console.log('REJECT HERE');
                                     defer.reject(false);
                                 }
                             })
