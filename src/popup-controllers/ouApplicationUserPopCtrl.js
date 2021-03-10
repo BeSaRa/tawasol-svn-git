@@ -166,9 +166,9 @@ module.exports = function (app) {
                 return false;
             }
             _setSecurityLevelsBeforeSave();
-            self.ouApplicationUser.wfsecurity = self.ouApplicationUser.ouid.wfsecurity.lookupKey;
 
             if (!self.ouApplicationUser.id) {
+                self.ouApplicationUser.wfsecurity = self.ouApplicationUser.ouid.wfsecurity.lookupKey;
                 ouApplicationUserService
                     .addOUApplicationUser(self.ouApplicationUser)
                     .then(function (result) {
