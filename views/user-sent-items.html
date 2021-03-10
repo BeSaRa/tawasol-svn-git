@@ -1,3 +1,4 @@
+<!-- start of view -->
 <div background-directive="tall" class="page-content" flex="">
     <div layout="column" class="content">
         <!-- page-header start -->
@@ -38,13 +39,11 @@
         <!-- end page-header -->
         <!-- page-content -->
         <div layout="column" flex>
-            <div layout="column" class="page-padding no-tb-padding">
-                <md-card md-whiteframe="3" layout="column" flex class="card-overlay">
-                    <md-virtual-repeat-container class="cms-virtual-repeater"
-                                                 ng-class="{'no-length':!ctrl.userSentItems.length}"
-                                                 md-auto-shrink="true">
+            <div scroll-directive>
+                <div class="page-padding">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
                         <md-table-container>
-                            <div flex overlay-scroll-bar-directive>
+                            <div flex scroll-directive>
                                 <table md-table ng-model="ctrl.selectedUserSentItems"
                                        md-progress="ctrl.grid.progress"><!-- md-row-select multiple-->
                                     <thead md-head md-order="ctrl.grid.order"
@@ -118,10 +117,11 @@
                                     </tr>
                                     </thead>
                                     <tbody md-body>
-                                    <tr md-row md-select="userSentItem" model="userSentItem"
-                                        grid-right-click-directive="userSentItem"
+                                    <tr md-row md-select="userSentItem"
+                                        grid-context-menu-directive="ctrl.contextMenuActions"
+                                        context-menu-type="grid"
                                         selected-length="{{ctrl.selectedUserSentItems.length ? ctrl.selectedUserSentItems.length : 0}}"
-                                        md-virtual-repeat="userSentItem in ctrl.userSentItems">
+                                        ng-repeat="userSentItem in ctrl.userSentItems track by $index">
                                         <!-- | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) -->
                                         <td md-cell class="indicator-td">
                                             <!-- Security Level -->
@@ -198,9 +198,9 @@
                                         <td md-cell ng-if="ctrl.selectedUserSentItems.length < 2">
                                             <div layout-align="start center" ng-if="!ctrl.selectedUserSentItems.length
                                                   || ctrl.selectedUserSentItems.length===1 && ctrl.selectedUserSentItems[0].id === userSentItem.id">
-                                                <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
-                                                                        model="userSentItem">
-                                                </grid-actions-directive>
+                                                <grid-shortcut-actions-directive actions="ctrl.shortcutActions"
+                                                                                 model="userSentItem">
+                                                </grid-shortcut-actions-directive>
                                             </div>
                                         </td>
                                     </tr>
@@ -218,17 +218,17 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                    md-total="{{ctrl.totalRecords}}"
+                                    md-page-select
+                                    md-on-paginate="ctrl.grid.pagingCallback">
+                            </md-table-pagination>
                         </md-table-container>
-                    </md-virtual-repeat-container>
-                    <md-table-pagination
-                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                            md-limit-options="ctrl.grid.limitOptions"
-                            md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                            md-total="{{ctrl.totalRecords}}"
-                            md-page-select
-                            md-on-paginate="ctrl.grid.pagingCallback">
-                    </md-table-pagination>
-                </md-card>
+                    </md-card>
+                </div>
             </div>
         </div>
         <!-- end page content -->
