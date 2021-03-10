@@ -272,11 +272,6 @@ module.exports = function (app) {
                 var step = angular.copy(sequentialWorkflowStep),
                     defer = $q.defer();
 
-                /*// if new step and seqWF is internal, set organization to selected regOu as WF will be inside organization only
-                if (!sequentialWorkflowStep.id && sequentialWorkflow.isInternalSeqWF()) {
-                    step.uiOuId = sequentialWorkflow.regOUId;
-                }*/
-
                 // if not view only, proceed
                 // otherwise, load seqWF by id and use it as record and use step from it
                 if (!viewOnly) {
@@ -367,8 +362,8 @@ module.exports = function (app) {
             selectSubSequentialWorkflow: function ($event, regOuId) {
                 return dialog
                     .showDialog({
-                        templateUrl: cmsTemplate.getPopup('select-sequential-workflow'),
-                        controller: 'selectSequentialWorkflowPopCtrl',
+                        templateUrl: cmsTemplate.getPopup('select-sub-sequential-workflow'),
+                        controller: 'selectSubSequentialWorkflowPopCtrl',
                         controllerAs: 'ctrl',
                         targetEvent: $event,
                         locals: {

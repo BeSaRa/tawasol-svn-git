@@ -157,5 +157,5 @@ module.exports = function (app) {
     require('./pdfViewerPopCtrl')(app);
     require('./seqBackStepPopCtrl')(app);
     require('./viewSeqWfStepsPopCtrl')(app);
-    require('./selectSequentialWorkflowPopCtrl')(app);
+    require('./selectSubSequentialWorkflowPopCtrl')(app);
 };

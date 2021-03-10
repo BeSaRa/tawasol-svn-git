@@ -2,7 +2,8 @@
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.sequential_workflow : ctrl.model.getNames()}}">
     <popup-toolbar-directive ng-if="!ctrl.editMode" full-screen-button="true" full-screen="ctrl.fullScreen"
-                             header-text="{{lang.add_new_sequential_workflow}}"></popup-toolbar-directive>
+                             header-text="{{ctrl.sequentialWorkflow.isSubWorkflow ? lang.add_new_sub_sequential_workflow : lang.add_new_sequential_workflow}}">
+    </popup-toolbar-directive>
     <popup-toolbar-directive ng-if="ctrl.editMode" full-screen-button="true" full-screen="ctrl.fullScreen"
                              header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
@@ -21,7 +22,7 @@
                                 <div ng-message="required">{{lang.field_required}}</div>
                                 <div ng-message="minlength">{{lang.short}}</div>
                                 <div ng-message="A1NS">{{lang.one_arabic_number_space}}</div>
-                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length: 80})}}</div>
                             </div>
                         </md-input-container>
                         <!-- English Name -->
@@ -35,7 +36,7 @@
                                 <div ng-message="required">{{lang.field_required}}</div>
                                 <div ng-message="minlength">{{lang.short}}</div>
                                 <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
-                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length: 80})}}</div>
                             </div>
                         </md-input-container>
                     </div>
@@ -81,7 +82,7 @@
                    ng-if="!ctrl.viewOnly"
                    ng-disabled="!ctrl.isValidForm(sequentialWorkflowForm)"
                    ng-click="ctrl.saveSequentialWorkflow($event)">
-            {{ctrl.editMode? lang.save : lang.add}}
+            {{ctrl.editMode ? lang.save : lang.add}}
         </md-button>
         <md-button class="md-raised"
                    ng-if="!ctrl.viewOnly"

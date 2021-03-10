@@ -1,17 +1,17 @@
 module.exports = function (app) {
-    app.controller('selectSequentialWorkflowPopCtrl', function (_,
-                                                                dialog,
-                                                                $timeout,
-                                                                sequentialWorkflowService,
-                                                                sequentialWorkflows,
-                                                                allowDelete,
-                                                                allowEdit,
-                                                                toast,
-                                                                langService,
-                                                                employeeService) {
+    app.controller('selectSubSequentialWorkflowPopCtrl', function (_,
+                                                                   dialog,
+                                                                   $timeout,
+                                                                   sequentialWorkflowService,
+                                                                   sequentialWorkflows,
+                                                                   allowDelete,
+                                                                   allowEdit,
+                                                                   toast,
+                                                                   langService,
+                                                                   employeeService) {
         'ngInject';
         var self = this;
-        self.controllerName = 'selectSequentialWorkflowPopCtrl';
+        self.controllerName = 'selectSubSequentialWorkflowPopCtrl';
         self.stepsUsageType = sequentialWorkflowService.stepsUsageTypes.selectSeqWF;
         self.sequentialWorkflows = sequentialWorkflows;
         self.selectedSeqWF = null;
