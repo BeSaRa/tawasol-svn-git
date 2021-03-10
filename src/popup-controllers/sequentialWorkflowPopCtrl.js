@@ -12,6 +12,8 @@ module.exports = function (app) {
                                                           employeeService,
                                                           defaultDocClass,
                                                           sequentialWorkflow,
+                                                          allowChangeOu,
+                                                          organizations,
                                                           sequentialWorkflowService) {
             'ngInject';
             var self = this,
@@ -31,10 +33,12 @@ module.exports = function (app) {
             self.sequentialWorkflow = sequentialWorkflow;
             self.model = angular.copy(self.sequentialWorkflow);
             self.selectedDocClass = self.model.docClassID;
+            self.allowChangeOu = allowChangeOu;
+            self.organizations = organizations;
 
             self.defaultDocClass = defaultDocClass;
-
             self.documentClasses = lookupService.returnLookups(lookupService.documentClass);
+            self.ouSearchText = '';
 
             /**
              * @description Checks if form is valid
@@ -193,6 +197,26 @@ module.exports = function (app) {
                     self.redrawSteps = false;
                 }, 100);
             }
+
+            /**
+             * @description Clears the searchText for the given field
+             * @param fieldType
+             */
+            self.clearSearchText = function (fieldType) {
+                self[fieldType + 'SearchText'] = '';
+            };
+
+            /**
+             * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
+             * @param $event
+             */
+            self.preventSearchKeyDown = function ($event) {
+                if ($event) {
+                    var code = $event.which || $event.keyCode;
+                    if (code !== 38 && code !== 40)
+                        $event.stopPropagation();
+                }
+            };
 
             /**
              * @description Close the popup

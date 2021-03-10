@@ -995,5 +995,37 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Get the list of organizations available for seqWF
+         * @returns {*}
+         */
+        self.getOrganizationsForSeqWF = function (){
+            var defer = $q.defer();
+            if (employeeService.isSuperAdminUser() || employeeService.isSubAdminInCurrentOu()) {
+                self.loadAllOrganizationsStructure(true)
+                    .then(function (result) {
+                        defer.resolve(result);
+                    });
+            } else {
+                var ouList = angular.copy(employeeService.getEmployee().getExtraFields().ouList),
+                    regOuIndex = _.findIndex(ouList, function (item) {
+                        return item.id === employeeService.getEmployee().getRegistryOUID();
+                    });
+                if (regOuIndex === -1) {
+                    employeeService.getEmployee().getRegistryOrganization()
+                        .then(function (result) {
+                            ouList.push(result);
+                            defer.resolve(ouList);
+                        })
+                } else {
+                    defer.resolve(ouList);
+                }
+            }
+            return defer.promise.then(function (organizations) {
+                return _.filter(organizations, function (ou) {
+                    return !!ou.status && ou.hasRegistry;
+                });
+            });
+        }
     });
 };

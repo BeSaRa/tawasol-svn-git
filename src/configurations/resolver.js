@@ -112,32 +112,7 @@ module.exports = function (app) {
             .bulkResolveToState('app.administration.sequential-workflows', {
                 organizations: function (organizationService, employeeService, ouApplicationUserService, $q, _) {
                     'ngInject';
-                    var defer = $q.defer();
-                    if (employeeService.isSuperAdminUser() || employeeService.isSubAdminInCurrentOu()) {
-                        organizationService.loadAllOrganizationsStructure(true)
-                            .then(function (result) {
-                                defer.resolve(result);
-                            });
-                    } else {
-                        var ouList = angular.copy(employeeService.getEmployee().getExtraFields().ouList),
-                            regOuIndex = _.findIndex(ouList, function (item) {
-                                return item.id === employeeService.getEmployee().getRegistryOUID();
-                            });
-                        if (regOuIndex === -1) {
-                            employeeService.getEmployee().getRegistryOrganization()
-                                .then(function (result) {
-                                    ouList.push(result);
-                                    defer.resolve(ouList);
-                                })
-                        } else {
-                            defer.resolve(ouList);
-                        }
-                    }
-                    return defer.promise.then(function (organizations) {
-                        return _.filter(organizations, function (ou) {
-                            return !!ou.status && ou.hasRegistry;
-                        });
-                    });
+                    return organizationService.getOrganizationsForSeqWF();
                 }
             })
             .bulkResolveToState('app.administration.organizations', {

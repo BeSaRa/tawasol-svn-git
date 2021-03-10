@@ -84,7 +84,7 @@ module.exports = function (app) {
                 return;
             }
             sequentialWorkflowService.controllerMethod
-                .sequentialWorkflowCopy($event, self.sequentialWF, employeeService.getEmployee().getRegistryOUID(), false, true)
+                .sequentialWorkflowCopy($event, self.sequentialWF, employeeService.getEmployee().getRegistryOUID(), false, true, false)
                 .then(function (result) {
                     toast.success(langService.get('add_success').change({name: result.getNames()}));
                 });

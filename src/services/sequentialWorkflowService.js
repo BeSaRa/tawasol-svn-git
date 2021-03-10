@@ -15,6 +15,7 @@ module.exports = function (app) {
                                                        downloadService,
                                                        employeeService,
                                                        SequentialWFResult,
+                                                       organizationService,
                                                        errorCode) {
         'ngInject';
         var self = this;
@@ -134,7 +135,9 @@ module.exports = function (app) {
                                 /*creatorId: employeeService.getEmployee().id,
                                 creatorOUId: employeeService.getEmployee().getOUID()*/
                             }),
-                            defaultDocClass: (generator.validRequired(docClassId) ? docClassId : null)
+                            defaultDocClass: (generator.validRequired(docClassId) ? docClassId : null),
+                            allowChangeOu: false,
+                            organizations: []
                         }
                     });
             },
@@ -145,8 +148,9 @@ module.exports = function (app) {
              * @param regOuId
              * @param adHoc
              * @param subSeqWF
+             * @param allowChangeOu
              */
-            sequentialWorkflowCopy: function ($event, sequentialWorkflow, regOuId, adHoc, subSeqWF) {
+            sequentialWorkflowCopy: function ($event, sequentialWorkflow, regOuId, adHoc, subSeqWF, allowChangeOu) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -156,7 +160,8 @@ module.exports = function (app) {
                         locals: {
                             editMode: false,
                             viewOnly: false,
-                            defaultDocClass: (adHoc || regOuId) ? sequentialWorkflow.docClassID : null
+                            defaultDocClass: (adHoc || regOuId) ? sequentialWorkflow.docClassID : null,
+                            allowChangeOu: allowChangeOu
                         },
                         resolve: {
                             sequentialWorkflow: function () {
@@ -179,6 +184,13 @@ module.exports = function (app) {
 
                                         return newSequentialWF;
                                     });
+                            },
+                            organizations: function (){
+                                'ngInject';
+                                if (!allowChangeOu){
+                                    return [];
+                                }
+                                return organizationService.getOrganizationsForSeqWF();
                             }
                         }
                     });
@@ -198,7 +210,9 @@ module.exports = function (app) {
                         locals: {
                             editMode: true,
                             viewOnly: false,
-                            defaultDocClass: null
+                            defaultDocClass: null,
+                            allowChangeOu: false,
+                            organizations: []
                         },
                         resolve: {
                             sequentialWorkflow: function () {
@@ -223,7 +237,9 @@ module.exports = function (app) {
                         locals: {
                             editMode: true,
                             viewOnly: true,
-                            defaultDocClass: null
+                            defaultDocClass: null,
+                            allowChangeOu: false,
+                            organizations: []
                         },
                         resolve: {
                             sequentialWorkflow: function () {

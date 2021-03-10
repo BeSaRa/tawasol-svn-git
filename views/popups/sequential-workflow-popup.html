@@ -10,6 +10,34 @@
         <div class="md-dialog-content cms-dialog-content">
             <div>
                 <form name="sequentialWorkflowForm" autocomplete="off">
+                    <div layout="row" ng-if="ctrl.allowChangeOu">
+                        <!-- Organization -->
+                        <md-input-container flex>
+                            <label for="organization">{{lang.organization_unit}}</label>
+                            <md-select id="organization" name="organization" aria-label="{{lang.organization_unit}}"
+                                       ng-change="ctrl.regOuChanged()"
+                                       ng-model="ctrl.sequentialWorkflow.regOUId"
+                                       ng-model-options="{trackBy: '$value'}"
+                                       md-on-close="ctrl.clearSearchText('ou')"
+                                       data-md-container-class="select-header-container sticky-search-bar">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.ouSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <md-option ng-value="organization.id" ng-if="organization.status"
+                                           ng-repeat="organization in ctrl.organizations |translatedNameFilter: ctrl.ouSearchText">
+                        <span
+                                md-highlight-text="ctrl.ouSearchText"
+                                md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="sequentialWorkflowForm.organization.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
                     <div layout="row">
                         <!-- Arabic Name -->
                         <md-input-container flex>
@@ -57,6 +85,7 @@
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
+                        <!-- Status -->
                         <div flex class="p020">
                             <md-switch flex ng-model="ctrl.sequentialWorkflow.status"
                                        ng-disabled="ctrl.viewOnly || ctrl.hasValue(ctrl.defaultDocClass)"

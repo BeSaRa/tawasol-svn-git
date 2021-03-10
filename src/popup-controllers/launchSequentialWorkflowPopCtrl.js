@@ -134,7 +134,7 @@ module.exports = function (app) {
 
             sequentialWorkflowService
                 .controllerMethod
-                .sequentialWorkflowCopy($event, self.selectedSeqWF, self.selectedSeqWF.regOUId, true)
+                .sequentialWorkflowCopy($event, self.selectedSeqWF, self.selectedSeqWF.regOUId, true, false, false)
                 .then(function (result) {
                     self.sequentialWorkflows.push(result);
                     self.onChangeSequentialWorkflow();
