@@ -98,6 +98,7 @@ module.exports = function (app) {
                 delete self.conditionalApproveIndicator;
                 delete self.conditionalApproveExportDate;
                 delete self.conditionalApproveComment;
+                return this;
             };
 
             /**
