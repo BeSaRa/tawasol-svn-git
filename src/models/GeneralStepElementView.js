@@ -67,6 +67,10 @@ module.exports = function (app) {
                 return this;
             };
 
+            GeneralStepElementView.prototype.isConditionalApproved = function () {
+                return !this.getInfo().isPaper && !!this.generalStepElm.dueDate;
+            };
+
             GeneralStepElementView.prototype.mapReceived = function () {
                 var self = this;
                 _.map(mapInfo, function (property) {
@@ -78,12 +82,22 @@ module.exports = function (app) {
                 self.generalStepElm = self.stepElm;
                 self.documentViewInfo.viewURL = $sce.trustAsResourceUrl(self.documentViewInfo.viewURL);
                 self.documentViewInfo.editURL = $sce.trustAsResourceUrl(self.documentViewInfo.editURL);
+
+                var dueDateOriginal = angular.copy(self.generalStepElm.dueDate);
+                if (self.isConditionalApproved()) {
+                    self.conditionalApproveIndicator = self.getConditionalApproveIndicator();//  for conditional approve, due date is actually export date set while conditional approve action
+                    self.conditionalApproveExportDate = generator.getDateFromTimeStamp(dueDateOriginal);
+                    self.conditionalApproveComment = self.generalStepElm.comments;
+                }
                 delete self.stepElm;
                 return this;
             };
 
             GeneralStepElementView.prototype.mapSend = function () {
-
+                var self = this;
+                delete self.conditionalApproveIndicator;
+                delete self.conditionalApproveExportDate;
+                delete self.conditionalApproveComment;
             };
 
             /**
@@ -191,6 +205,14 @@ module.exports = function (app) {
                     (info.documentClass === 'outgoing' && employee.hasPermissionTo('ELECTRONIC_SIGNATURE'))
                     || (info.documentClass === 'internal' && employee.hasPermissionTo('ELECTRONIC_SIGNATURE_MEMO'))
                 );
+            };
+
+            GeneralStepElementView.prototype.getConditionalApproveExportDate = function () {
+                return this.conditionalApproveExportDate;
+            };
+
+            GeneralStepElementView.prototype.getConditionalApproveComment = function () {
+                return this.conditionalApproveComment;
             };
 
             // don't remove CMSModelInterceptor from last line
