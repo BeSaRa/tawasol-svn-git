@@ -45,7 +45,7 @@ module.exports = function (app) {
                 });
                 return true;
             })
-            .resolveToState('login', 'MUST_LOGGED_IN', function (tokenService, rootEntity, employeeService, dialog, $timeout, $q, $state) {
+            .resolveToState('login', 'MUST_LOGGED_IN', function (ssoService, tokenService, rootEntity, employeeService, dialog, $timeout, $q, $state) {
                 'ngInject';
                 var defer = $q.defer();
                 return ssoService.promise.then(function () {
