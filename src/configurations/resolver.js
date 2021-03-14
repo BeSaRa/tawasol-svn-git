@@ -48,23 +48,25 @@ module.exports = function (app) {
             .resolveToState('login', 'MUST_LOGGED_IN', function (tokenService, rootEntity, employeeService, dialog, $timeout, $q, $state) {
                 'ngInject';
                 var defer = $q.defer();
-                tokenService
-                    .tokenRefresh()
-                    .then(function () {
-                        if (!employeeService.isAdminUser()) {
-                            if (employeeService.hasPermissionTo('LANDING_PAGE'))
-                                $state.go('app.landing-page', {identifier: rootEntity.getRootEntityIdentifier()});
-                            else
-                                $state.go('app.inbox.user-inbox', {identifier: rootEntity.getRootEntityIdentifier()});
-                        } else {
-                            $state.go('app.administration.entities', {identifier: rootEntity.getRootEntityIdentifier()});
-                        }
-                    })
-                    .catch(function (error) {
-                        defer.resolve(true);
-                        dialog.cancel();
-                    });
-                return defer.promise;
+                return ssoService.promise.then(function () {
+                    tokenService
+                        .tokenRefresh()
+                        .then(function () {
+                            if (!employeeService.isAdminUser()) {
+                                if (employeeService.hasPermissionTo('LANDING_PAGE'))
+                                    $state.go('app.landing-page', {identifier: rootEntity.getRootEntityIdentifier()});
+                                else
+                                    $state.go('app.inbox.user-inbox', {identifier: rootEntity.getRootEntityIdentifier()});
+                            } else {
+                                $state.go('app.administration.entities', {identifier: rootEntity.getRootEntityIdentifier()});
+                            }
+                        })
+                        .catch(function (error) {
+                            defer.resolve(true);
+                            dialog.cancel();
+                        });
+                    return defer.promise;
+                });
             })
             .bulkResolveToState('app.administration.classifications', {
                 classifications: function (classificationService, organizations) {
