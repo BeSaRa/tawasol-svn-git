@@ -2246,6 +2246,41 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Sets the custom style for pspdf iframe
+         * @private
+         */
+        function _setRuntimeFrameCSS() {
+            var frame = $element.find('#pdf-viewer > .PSPDFKit-Container > iframe');
+            if (!frame || !frame.length) {
+                return;
+            }
+            var frameHead = angular.element(frame[0]).contents().find("head");
+
+            /*var styleCss = '.PSPDFKit-Root .PSPDFKit-Signature-Dialog-Picker-Item-Delete-Button svg { color: black !important;}';
+            var frameStyle = angular.element(frameHead).find('style');
+
+            if (!frameStyle || !frameStyle.length) {
+                var style = angular.element('<style />', {
+                    id: 'custom-pspdf-style'
+                });
+                style.type = 'text/css';
+                angular.element(frameHead).append(style);
+                style[0].sheet.insertRule(styleCss, 0);
+            } else {
+                // add custom css rule at last of existing style tag
+                frameStyle[0].sheet.insertRule(styleCss, frameStyle[0].sheet.rules.length);
+            }*/
+
+            var link = angular.element('<link />', {
+                id: 'custom-pspdf-style',
+                rel: 'stylesheet',
+                type: 'text/css',
+                href: 'assets/css/css/pspdf-frame-custom.css'
+            });
+            angular.element(frameHead).append(link);
+        }
+
+        /**
          * @description viewer initialization
          */
         self.$onInit = function () {
@@ -2295,6 +2330,7 @@ module.exports = function (app) {
                     });
                     self.currentInstance.setAnnotationCreatorName(employeeService.getEmployee().domainName);
                     self.registerEventListeners();
+                    _setRuntimeFrameCSS();
                 });
             });
         };
