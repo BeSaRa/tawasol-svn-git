@@ -57,8 +57,8 @@ module.exports = function (app) {
                             dialog.cancel();
                             self.setRootEntity(new RootEntity(result.data.rs));
                             // single sign on
-                            if (!tokenService.getToken()) {
-                                rootEntity.checkSSO(1000).then(function (authenticationService) {
+                            rootEntity.checkSSO(1000)
+                                .then(function (authenticationService) {
                                     authenticationService
                                         .authenticate(new Credentials({
                                             isSSO: true
@@ -79,10 +79,11 @@ module.exports = function (app) {
                                             ssoService.reject('SSO FAILED');
                                             //   console.log("SINGLE SIGN ON FAILED !!", reason);
                                         })
+                                })
+                                .catch(function () {
+                                    ssoService.resolve('SSO OFF');
                                 });
-                            } else {
-                                ssoService.resolve('SSO OFF')
-                            }
+
                             titleService.setTitle(self.getRootEntity().getTranslatedAppName());
                             return self.getRootEntity();
                         })
