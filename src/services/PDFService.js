@@ -1,8 +1,40 @@
 module.exports = function (app) {
-    app.service('PDFService', function (dialog, $q, cmsTemplate, AnnotationType, downloadService) {
+    app.service('PDFService', function (dialog, $q, cmsTemplate, AnnotationType, downloadService, employeeService, _,
+                                        langService, moment, jobTitleService, configurationService, $cookies) {
         'ngInject';
         var self = this;
         self.serviceName = 'PDFService';
+        self.cookieAttachedTypeKey = '';
+
+        self.userInfoAnnotationTypes = [
+            {
+                id: configurationService.USER_INFO_ANNOTATION_IDS.date,
+                langKey: 'date',
+                selected: false,
+                getValue: function () {
+                    return moment().format('DD-MM-YYYY').toString();
+                }
+            },
+            {
+                id: configurationService.USER_INFO_ANNOTATION_IDS.jobTitle,
+                langKey: 'job_title',
+                selected: false,
+                getValue: function () {
+                    var jobTitle = _.find(jobTitleService.jobTitles, function (title) {
+                        return title.lookupKey === employeeService.getEmployee().jobTitle;
+                    });
+                    return jobTitle ? jobTitle.getTranslatedName() : '';
+                }
+            },
+            {
+                id: configurationService.USER_INFO_ANNOTATION_IDS.username,
+                langKey: 'username',
+                selected: false,
+                getValue: function () {
+                    return employeeService.getEmployee().getTranslatedName();
+                }
+            }
+        ];
 
         /**
          * @description open PDfViewer visible for the user to handel all annotation from UI
@@ -98,5 +130,39 @@ module.exports = function (app) {
                 });
         }
 
+        /**
+         * @description Gets the user user information annotation rows from employee;
+         * @returns {*}
+         */
+        self.getRowsForResultUserInfoAnnotation = function () {
+            var selectedTypes = employeeService.getEmployee().getSignAnnotationSettings();
+            if (selectedTypes) {
+                selectedTypes = JSON.parse(selectedTypes);
+            } else {
+                selectedTypes = _.map(self.userInfoAnnotationTypes, function (item) {
+                    return {id: item.id, selected: item.selected};
+                });
+            }
+
+            return _.map(selectedTypes, function (item, index) {
+                var row = self.userInfoAnnotationTypes.find(x => x.id === item.id);
+                if (row) {
+                    row.selected = item.selected;
+                    row.rowIndex = index;
+                }
+                return row;
+            });
+        };
+
+        /**
+         * @description Get the result from user information annotation rows
+         * @param userInfoAnnotationRows
+         * @returns {*}
+         */
+        self.getResultFromSelectedRowsUserInfoAnnotation = function (userInfoAnnotationRows) {
+            return _.map(userInfoAnnotationRows, function (item) {
+                return {id: item.id, selected: item.selected};
+            });
+        }
     });
 };

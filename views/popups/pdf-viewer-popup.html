@@ -9,9 +9,9 @@
                                                   correspondence="ctrl.generalStepElementView.correspondence"
                                                   g2g-item-copy="ctrl.g2gItemCopy"></correspondence-view-action-directive>
             <span flex md-truncate class="font-bold text-center">{{::ctrl.correspondence.getTranslatedName()}}</span>
-            <md-switch ng-if="ctrl.enableAttachUsernameAndDate" ng-change="ctrl.onAttachToggleChange()"
-                       ng-model="ctrl.attacheUsernameAndDateToSignature">
-                <label>{{lang.get('attach_name_and_date_to_signature')}}</label>
+            <md-switch ng-if="ctrl.enableAttachUserInfo" ng-change="ctrl.onAttachToggleChange()"
+                       ng-model="ctrl.attachUserInfoToSignature">
+                <label>{{lang.get('attach_user_info_to_sign')}}</label>
             </md-switch>
             <md-button class="md-raised md-primary"
                        ng-if="ctrl.employeeCanEditContent()"

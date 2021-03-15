@@ -158,4 +158,5 @@ module.exports = function (app) {
     require('./seqBackStepPopCtrl')(app);
     require('./viewSeqWfStepsPopCtrl')(app);
     require('./selectSubSequentialWorkflowPopCtrl')(app);
+    require('./configureAnnotationPatternPopCtrl')(app);
 };

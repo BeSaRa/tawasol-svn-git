@@ -67,7 +67,12 @@ module.exports = function (app) {
                 // "barcode",
             ],
             SELECT_MAIN_SITE_IF_ONLY_ONE: true,
-            REASONABLE_INK_SIGNATURE_SIZE: {width: 120, height: 57}
+            REASONABLE_INK_SIGNATURE_SIZE: {width: 120, height: 57},
+            USER_INFO_ANNOTATION_IDS: {
+                date: 1,
+                jobTitle: 2,
+                username: 3
+            }
         };
         var configurationServiceProvider = provider;
         /**

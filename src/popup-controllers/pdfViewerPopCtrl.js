@@ -66,8 +66,8 @@ module.exports = function (app) {
         self.skippedPdfObjectIds = [];
         // all document operations
         self.documentOperations = [];
-        // show/hide attach username and date toggle
-        self.enableAttachUsernameAndDate = true;
+        // show/hide attach user info toggle
+        self.enableAttachUserInfo = true;
 
         self.oldBookmarks = [];
 
@@ -103,11 +103,9 @@ module.exports = function (app) {
         self.officialAttachmentExcludedList = configurationService.OFFICIAL_ATTACHMENT_EXCLUDED_TOOLBAR_ITEMS;
 
         self.generalStepElementView = generalStepElementView;
-        // used to store value of attache user name and date toggle
+        // used to store value of attach user name and date toggle
         var cookieKey = employeeService.getEmployee().domainName + '_' + 'attach_username_date';
-        var cookieAttachedTypeKey = employeeService.getEmployee().domainName + '_' + 'attached_data_type';
-
-        self.attacheUsernameAndDateToSignature = false;
+        self.attachUserInfoToSignature = false;
 
         self.documentClassPermissionMap = {
             outgoing: function (isPaper) {
@@ -251,11 +249,11 @@ module.exports = function (app) {
                     dialog.hide(AnnotationType.SIGNATURE);
                 }
             };
-            var usernameDateButton = {
+            /*var usernameDateButton = {
                 type: "custom",
                 id: "username-date",
                 title: "user name and date",
-                dropdownGroup: 'title-data-username',
+                dropdownGroup: 'title-date-username',
                 icon: "<svg xmlns=\"http://www.w3.org/2000/svg\"  width=\"24\" height=\"24\" viewBox=\"0 0 24 24\">\n" +
                     "   <path fill=\"currentColor\" d=\"M19,4H18V2H16V4H8V2H6V4H5A2,2 0 0,0 3,6V20A2,2 0 0,0 5,22H19A2,2 0 0,0 21,20V6A2,2 0 0,0 19,4M19,20H5V10H19V20M19,8H5V6H19M12,11C14,11 15,13.42 13.59,14.84C12.17,16.26 9.75,15.25 9.75,13.25C9.75,12 10.75,11 12,11M16.5,18.88V19H7.5V18.88C7.5,17.63 9.5,16.63 12,16.63C14.5,16.63 16.5,17.63 16.5,18.88Z\" />\n" +
                     "</svg>",
@@ -264,15 +262,72 @@ module.exports = function (app) {
             var usernameJobTitleButton = {
                 type: "custom",
                 id: "username-job-title",
-                dropdownGroup: 'title-data-username',
+                dropdownGroup: 'title-date-username',
                 title: "user name and job title ",
                 icon: "<svg xmlns=\"http://www.w3.org/2000/svg\"  width=\"24\" height=\"24\" viewBox=\"0 0 24 24\">\n" +
                     "   <path fill=\"currentColor\" d=\"M2,3H22C23.05,3 24,3.95 24,5V19C24,20.05 23.05,21 22,21H2C0.95,21 0,20.05 0,19V5C0,3.95 0.95,3 2,3M14,6V7H22V6H14M14,8V9H21.5L22,9V8H14M14,10V11H21V10H14M8,13.91C6,13.91 2,15 2,17V18H14V17C14,15 10,13.91 8,13.91M8,6A3,3 0 0,0 5,9A3,3 0 0,0 8,12A3,3 0 0,0 11,9A3,3 0 0,0 8,6Z\" />\n" +
                     "</svg>",
                 onPress: self.addUserNameAndJobTitleToDocument
+            };*/
+            var userInfoNameButton = {
+                type: "custom",
+                id: "user-info-name",
+                dropdownGroup: 'user_info',
+                title: langService.get('username'),
+                icon: "<svg id=\"account\" viewBox=\"0 0 24 24\"><path d=\"M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z\" /></svg>",
+                onPress: function (event, buttonId, annotation) {
+                    self.addUserInfoByTypeToDocument(event, buttonId, annotation, configurationService.USER_INFO_ANNOTATION_IDS.username);
+                }
             };
+            var userInfoDateButton = {
+                type: "custom",
+                id: "user-info-date",
+                dropdownGroup: 'user_info',
+                title: langService.get('date'),
+                icon: "<svg id=\"calendar-range\" viewBox=\"0 0 24 24\"><path d=\"M9,10H7V12H9V10M13,10H11V12H13V10M17,10H15V12H17V10M19,3H18V1H16V3H8V1H6V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,19H5V8H19V19Z\" /></svg>",
+                onPress: function (event, buttonId, annotation,) {
+                    self.addUserInfoByTypeToDocument(event, buttonId, annotation, configurationService.USER_INFO_ANNOTATION_IDS.date);
+                }
+            };
+            var userInfoJobTitleButton = {
+                type: "custom",
+                id: "user-info-job-title",
+                dropdownGroup: 'user_info',
+                title: langService.get('job_title'),
+                icon: "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n" +
+                    "    <path fill=\"currentColor\" d=\"M17,3H14V5H17V21H7V5H10V3H7A2,2 0 0,0 5,5V21A2,2 0 0,0 7,23H17A2,2 0 0,0 19,21V5A2,2 0 0,0 17,3M12,7A2,2 0 0,1 14,9A2,2 0 0,1 12,11A2,2 0 0,1 10,9A2,2 0 0,1 12,7M16,15H8V14C8,12.67 10.67,12 12,12C13.33,12 16,12.67 16,14V15M16,18H8V17H16V18M12,20H8V19H12V20M13,5H11V1H13V5Z\" />\n" +
+                    "</svg>",
+                onPress: function (event, buttonId, annotation,) {
+                    self.addUserInfoByTypeToDocument(event, buttonId, annotation, configurationService.USER_INFO_ANNOTATION_IDS.jobTitle);
+                }
+            };
+            var userInfoButton = {
+                type: "custom",
+                id: "user-info",
+                dropdownGroup: 'user_info',
+                title: langService.get('user_info'),
+                icon: "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n" +
+                    "    <path fill=\"currentColor\" d=\"M8,9A2,2 0 0,1 10,11A2,2 0 0,1 8,13A2,2 0 0,1 6,11A2,2 0 0,1 8,9M12,17H4V16C4,14.67 6.67,14 8,14C9.33,14 12,14.67 12,16V17M20,8H14V10H20V8M20,12H14V14H20V12M20,16H14V18H20V16M22,4H14V6H22V20H2V6H10V4H2A2,2 0 0,0 0,6V20A2,2 0 0,0 2,22H22A2,2 0 0,0 24,20V6A2,2 0 0,0 22,4M13,6H11V2H13V6Z\" />\n" +
+                    "</svg>",
+                onPress: self.addUserInfoToDocument
+            };
+            var configureUserInfoButton = {
+                type: "custom",
+                id: "configure-user-info",
+                dropdownGroup: 'user_info',
+                title: langService.get('configure_annotation'),
+                icon: "<svg id=\"settings\" viewBox=\"0 0 24 24\"><path d=\"M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z\" /></svg>",
+                onPress: self.configureUserInfoAnnotation
+            };
+
+            var buttonList = [];
+            if (!(self.info.isAttachment && self.correspondence.isOfficial && !employeeService.hasPermissionTo('ANNOTATE_OFFICIAL_ATTACHMENT'))) {
+                buttonList = buttonList.concat([userInfoButton, userInfoNameButton, userInfoJobTitleButton, userInfoDateButton, configureUserInfoButton]);
+            }
+            buttonList = buttonList.concat([printWithoutAnnotationButton, bookmarkButton]);
+
             // remove default print from toolbar
-            var toolbarInstance = _.filter(defaultToolbar.concat([usernameDateButton, usernameJobTitleButton, printWithoutAnnotationButton, bookmarkButton]), function (item) {
+            var toolbarInstance = _.filter(defaultToolbar.concat(buttonList), function (item) {
                 return item.type !== 'print';
             });
 
@@ -445,7 +500,7 @@ module.exports = function (app) {
         self.onAttachToggleChange = function () {
             var date = (new Date());
             date.setFullYear(date.getFullYear() + 1);
-            $cookies.put(cookieKey, self.attacheUsernameAndDateToSignature, {
+            $cookies.put(cookieKey, self.attachUserInfoToSignature, {
                 expires: date
             });
         };
@@ -453,7 +508,7 @@ module.exports = function (app) {
         function _setButtonCookies(value) {
             var date = (new Date());
             date.setFullYear(date.getFullYear() + 1);
-            $cookies.put(cookieAttachedTypeKey, value, {
+            $cookies.put(PDFService.cookieAttachedTypeKey, value, {
                 expires: date
             });
         }
@@ -531,7 +586,158 @@ module.exports = function (app) {
             self.currentInstance.create(usernameAnnotation).then(annotations => {
                 self.selectAnnotation(annotations[0]);
             });
+        };
+
+        /**
+         * @description Adds the user information by type
+         * @param event
+         * @param buttonId
+         * @param annotation
+         * @param type
+         * @returns {null}
+         */
+        self.addUserInfoByTypeToDocument = function (event, buttonId, annotation, type) {
+            if (!type) {
+                return null;
+            }
+            var annotationText = '';
+            if (type === configurationService.USER_INFO_ANNOTATION_IDS.username) {
+                annotationText = employeeService.getEmployee().getTranslatedName();
+            } else if (type === configurationService.USER_INFO_ANNOTATION_IDS.jobTitle) {
+                annotationText = jobTitle.getTranslatedName()
+            } else if (type === configurationService.USER_INFO_ANNOTATION_IDS.date) {
+                annotationText = moment().format('DD-MM-YYYY').toString();
+            }
+
+            var pageInfo = self.currentInstance.pageInfoForIndex(self.currentInstance.viewState.currentPageIndex);
+            var infoAnnotation = new PSPDFKit.Annotations.TextAnnotation({
+                text: annotationText,
+                pageIndex: self.currentInstance.viewState.currentPageIndex,
+                boundingBox: new PSPDFKit.Geometry.Rect({
+                    left: 10,
+                    top: 20,
+                    width: 100,
+                    height: 20
+                }),
+                fontSize: 15,
+                horizontalAlign: 'center',
+                isFitting: true,
+                customData: {
+                    additionalData: {type: _getRightTypeForElectronicSignature()}
+                }
+            });
+            infoAnnotation = self.currentInstance.calculateFittingTextAnnotationBoundingBox(infoAnnotation);
+
+            infoAnnotation = infoAnnotation.set('boundingBox', new PSPDFKit.Geometry.Rect({
+                left: annotation ? (annotation.boundingBox.left + annotation.boundingBox.width) : (pageInfo.width / 2) - infoAnnotation.boundingBox.width,
+                top: (pageInfo.height / 2) - infoAnnotation.boundingBox.height,
+                width: infoAnnotation.boundingBox.width,
+                height: infoAnnotation.boundingBox.height,
+            }));
+
+            self.currentInstance.create(infoAnnotation).then(annotations => {
+                self.selectAnnotation(annotations[0]);
+            });
         }
+
+        /**
+         * @description Get the user info annotation text elements by configuration
+         * @returns {[]}
+         * @private
+         */
+        function _getUserInfoAnnotationTextItems() {
+            var annotationText = [];
+            var annotationSettings = PDFService.getRowsForResultUserInfoAnnotation();
+            if (annotationSettings && annotationSettings.length > 0) {
+                _.map(annotationSettings, function (item) {
+                    if (item.selected) {
+                        annotationText.push(item.getValue());
+                    }
+                    return item;
+                })
+            }
+            return annotationText;
+        }
+
+        /**
+         * @description Add user information to the document according to the saved configuration for annotation
+         * @param event
+         * @param buttonId
+         * @param annotation
+         */
+        self.addUserInfoToDocument = function (event, buttonId, annotation) {
+            var annotationTextItems = _getUserInfoAnnotationTextItems();
+
+            var defer = $q.defer();
+            if (annotationTextItems.length === 0) {
+                self.configureUserInfoAnnotation(null)
+                    .then(function () {
+                        annotationTextItems = _getUserInfoAnnotationTextItems();
+                        defer.resolve(true);
+                    })
+            } else {
+                defer.resolve(true);
+            }
+
+            defer.promise.then(function () {
+                if (event) {
+                    _setButtonCookies('addUserInfoToDocument');
+                }
+
+                var pageInfo = self.currentInstance.pageInfoForIndex(self.currentInstance.viewState.currentPageIndex);
+                var userInfoAnnotation = new PSPDFKit.Annotations.TextAnnotation({
+                    text: annotationTextItems.join('\r\n'),
+                    pageIndex: self.currentInstance.viewState.currentPageIndex,
+                    boundingBox: new PSPDFKit.Geometry.Rect({
+                        left: 10,
+                        top: 20,
+                        width: 100,
+                        height: 20
+                    }),
+                    fontSize: 15,
+                    horizontalAlign: 'center',
+                    isFitting: true,
+                    customData: {
+                        additionalData: {type: _getRightTypeForElectronicSignature()}
+                    }
+                });
+                userInfoAnnotation = self.currentInstance.calculateFittingTextAnnotationBoundingBox(userInfoAnnotation);
+
+                userInfoAnnotation = userInfoAnnotation.set('boundingBox', new PSPDFKit.Geometry.Rect({
+                    left: annotation ? (annotation.boundingBox.left + annotation.boundingBox.width) : (pageInfo.width / 2) - userInfoAnnotation.boundingBox.width,
+                    top: (pageInfo.height / 2) - userInfoAnnotation.boundingBox.height,
+                    width: userInfoAnnotation.boundingBox.width,
+                    height: userInfoAnnotation.boundingBox.height,
+                }));
+
+                self.currentInstance.create(userInfoAnnotation).then(annotations => {
+                    self.selectAnnotation(annotations[0]);
+                });
+            })
+        };
+
+        /**
+         * @description Opens the dialog to configure username, date, job title annotation
+         * @param event
+         */
+        self.configureUserInfoAnnotation = function (event) {
+            return dialog.showDialog({
+                templateUrl: cmsTemplate.getPopup('configure-annotation-pattern'),
+                controllerAs: 'ctrl',
+                controller: 'configureAnnotationPatternPopCtrl',
+                resolve: {
+                    // load jobTitles if not available, to be used in final pattern
+                    jobTitles: function (jobTitleService) {
+                        'ngInject';
+                        return jobTitleService.getJobTitles();
+                    },
+                    applicationUser: function (applicationUserService) {
+                        'ngInject';
+                        return applicationUserService.loadApplicationUserById(employeeService.getEmployee().id);
+                    }
+                }
+            })
+        };
 
         /**
          * @description select given annotation
@@ -653,8 +859,9 @@ module.exports = function (app) {
                 return self.addAnnotationsToPDFDocument(annotations);
             }).then(function (annotations) {
                 annotations.length === 1 ? self.selectAnnotation(annotations[0]) : null;
-                if (self.attacheUsernameAndDateToSignature) {
-                    return $cookies.get(cookieAttachedTypeKey) ? self[$cookies.get(cookieAttachedTypeKey)](null, null, annotations[0]) : self.addUserNameAndDateToDocument(null, null, annotations[0]);
+                if (self.attachUserInfoToSignature) {
+                    //return $cookies.get(PDFService.cookieAttachedTypeKey) ? self[$cookies.get(PDFService.cookieAttachedTypeKey)](null, null, annotations[0]) : self.addUserNameAndDateToDocument(null, null, annotations[0]);
+                    return self.addUserInfoToDocument(null, null, annotations[0]);
                 }
             });
         };
@@ -1085,8 +1292,9 @@ module.exports = function (app) {
                         .set('lineWidth', reasonableSize.lineWidth);
                 }
 
-                if (self.attacheUsernameAndDateToSignature && !customData.hasOwnProperty('parentId')) {
-                    $cookies.get(cookieAttachedTypeKey) ? self[$cookies.get(cookieAttachedTypeKey)](null, null, updatedAnnotation) : self.addUserNameAndDateToDocument(null, null, updatedAnnotation);
+                if (self.attachUserInfoToSignature && !customData.hasOwnProperty('parentId')) {
+                    // $cookies.get(PDFService.cookieAttachedTypeKey) ? self[$cookies.get(PDFService.cookieAttachedTypeKey)](null, null, updatedAnnotation) : self.addUserNameAndDateToDocument(null, null, updatedAnnotation);
+                    self.addUserInfoToDocument(null, null, updatedAnnotation);
                 }
                 return self.currentInstance.updateAnnotation(updatedAnnotation);
             }
@@ -2036,19 +2244,26 @@ module.exports = function (app) {
                     }, 1000);
                 });
         };
+
         /**
          * @description viewer initialization
          */
         self.$onInit = function () {
+            PDFService.cookieAttachedTypeKey = employeeService.getEmployee().domainName + '_' + 'attached_data_type';
             _getNextStepFromSeqWF();
             if (self.nextSeqStep && (self.nextSeqStep.isAuthorizeAndSendStep() || _isLastStep())) {
                 self.notifyPreviousSteps = true;
             }
 
-            if ((!self.sequentialWF && self.info.docStatus >= 24)) { // || (self.info.isAttachment && self.correspondence.isOfficial)
-                self.enableAttachUsernameAndDate = false;
+            if ((!self.sequentialWF && self.info.docStatus >= 24) ||
+                (self.info.isAttachment && self.correspondence.isOfficial && !employeeService.hasPermissionTo('ANNOTATE_OFFICIAL_ATTACHMENT'))) {
+                self.enableAttachUserInfo = false;
             }
-            self.attacheUsernameAndDateToSignature = $cookies.get(cookieKey) ? JSON.parse($cookies.get(cookieKey)) : false;
+
+            self.attachUserInfoToSignature = $cookies.get(cookieKey) ? JSON.parse($cookies.get(cookieKey)) : false;
+            if (self.info.isAttachment && self.correspondence.isOfficial && !employeeService.hasPermissionTo('ANNOTATE_OFFICIAL_ATTACHMENT')) {
+                self.attachUserInfoToSignature = false;
+            }
             self.onAttachToggleChange();
             $timeout(function () {
                 if (instantJSON) {

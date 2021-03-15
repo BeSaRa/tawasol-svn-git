@@ -54,6 +54,7 @@ module.exports = function (app) {
             self.otpEnabled = false;
             self.isFirstViewForApproval = false;
             self.oTPMobilityEnabled = false;
+            self.signAnnotationSettings = '';
 
             var collectionResults = [
                 'reminderSmsPriority',
@@ -359,6 +360,19 @@ module.exports = function (app) {
 
             ApplicationUser.prototype.getTranslatedMSTeamsStatus = function () {
                 return this.isMSTeamsEnabled ? langService.get('active') : langService.get('inactive');
+            };
+
+            ApplicationUser.prototype.setSignAnnotationSettings = function (value) {
+                if (typeof value === 'string') {
+                    this.signAnnotationSettings = value;
+                } else {
+                    this.signAnnotationSettings = JSON.stringify(value);
+                }
+                return this;
+            };
+
+            ApplicationUser.prototype.getSignAnnotationSettings = function () {
+                return this.signAnnotationSettings;
             };
 
             // don't remove CMSModelInterceptor from last line

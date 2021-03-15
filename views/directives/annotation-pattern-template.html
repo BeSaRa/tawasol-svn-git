@@ -1,0 +1,24 @@
+<div layout="row">
+    <div flex class="pattern-rows-wrapper">
+        <div layout="row">
+            <div flex class="step-layout-border">
+                <div class="step-layout-generator">
+                    <div class="pattern-rows-container">
+                        <div annotation-container-sortable layout="column"
+                             class="pattern-layout-rows position-relative">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div flex layout="column" class="final-pattern-container">
+                <div class="text-center text-bold preview">{{lang.preview}}</div>
+                <div class="final-pattern-item" md-truncate
+                     ng-repeat="patternItem in ctrl.annotationRows track by $index"
+                     ng-if="patternItem.selected">
+                    <span>{{patternItem.getValue()}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

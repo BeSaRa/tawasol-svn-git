@@ -1,0 +1,133 @@
+.step-item {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  background-color: #db4343;
+  font-size: 12px;
+  line-height: 12px;
+  margin-bottom: 5px;
+  padding: 5px 20px;
+  color: white;
+  position: relative;
+  z-index: 2;
+
+  &.disabled {
+    background-color: gray;
+  }
+}
+
+.step-layout-border {
+  padding: 0 10px;
+}
+
+.step-layout-generator {
+  background-color: #EEE;
+  border: 2px dashed #c5cecc;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.step-row {
+  background-color: #f0f9f7;
+  border: 1px dashed #c5cecc;
+  padding: 20px 10px 10px 10px;
+  position: relative;
+  margin-bottom: 5px;
+
+  .step-item {
+    margin: 0 2.5px;
+    cursor: pointer;
+  }
+}
+
+.step-item {
+  &.pattern-item {
+    background-color: #b8a778;
+  }
+}
+
+.step-delete-item-button {
+  position: absolute;
+  left: 5px;
+  top: 3px;
+
+  button {
+    min-height: auto !important;
+    min-width: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 15px !important;
+    height: 15px !important;
+
+    md-icon {
+      width: 15px;
+      height: 15px;
+      min-width: auto;
+      min-height: auto;
+      color: white;
+    }
+  }
+
+  &.black {
+    button {
+      md-icon {
+        color: black;
+      }
+    }
+  }
+}
+
+.final-pattern-container {
+  width: 150px;
+  max-width: 150px;
+  position: relative;
+
+  border: 2px dashed #c5cecc;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  padding: 10px;
+
+  .preview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: black;
+    width: 100%;
+    background-color: #eee;
+    font-size: 18px;
+    pointer-events: none;
+  }
+
+  .final-pattern-item {
+    max-width: 150px;
+    margin-top: 10px;
+  }
+}
+
+md-icon.indicator-size {
+  min-width: 18px;
+  min-height: 18px;
+  height: 18px;
+  width: 18px;
+  color: white;
+}
+
+.row-placeholder {
+  height: 35px;
+  line-height: 1.2em;
+  border: 1px solid #dad55e;
+  background: #fffa90;
+  margin-bottom: 5px;
+}
+
+html.rtl {
+  .step-legend-container {
+    .step-item {
+      margin-right: 10px;
+      margin-left: 0;
+    }
+  }
+}

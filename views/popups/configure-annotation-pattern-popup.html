@@ -1,0 +1,22 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-attr-aria-label="Stamps">
+    <popup-toolbar-directive
+            header-text="{{lang.configure_annotation}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <div>
+                <annotation-pattern-directive info-pattern="ctrl.infoPattern"></annotation-pattern-directive>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary"
+                   ng-disabled="!ctrl.isValidPattern()"
+                   ng-click="ctrl.savePattern($event)">
+            {{lang.save}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup($event)">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>
