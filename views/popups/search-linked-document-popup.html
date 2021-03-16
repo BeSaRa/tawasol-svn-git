@@ -10,34 +10,33 @@
                     <md-content class="md-padding">
                         <div layout="column">
                             <div layout="row">
+                                <!-- Subject -->
                                 <md-input-container flex>
                                     <label for="docSubject">{{lang.linked_document_subject}}</label>
                                     <input type="text" id="docSubject" name="docSubject"
                                            ng-model="ctrl.correspondence.docSubject">
                                 </md-input-container>
+                                <!-- Serial -->
                                 <md-input-container flex>
                                     <label for="docFullSerial">{{lang.linked_document_serial}}</label>
                                     <input type="text" id="docFullSerial" name="docFullSerial"
                                            ng-model="ctrl.correspondence.docFullSerial">
                                 </md-input-container>
+                                <!-- Document Type -->
                                 <md-input-container flex>
                                     <label for="docType">{{lang.linked_document_type}}</label>
                                     <md-select id="docType" ng-model="ctrl.searchType"
                                                ng-change="ctrl.changeDocumentClass()">
+                                        <md-option ng-value="null">{{lang.all}}</md-option>
                                         <md-option ng-value="documentClass"
                                                    ng-repeat="documentClass in ctrl.documentClasses">
                                             {{documentClass.getTranslatedName()}}
                                         </md-option>
                                     </md-select>
                                 </md-input-container>
-                                <md-input-container flex
-                                                    ng-if="ctrl.searchType.getStringKeyValue().toLowerCase() === 'incoming'">
-                                    <label for="refDocNumber">{{lang.document_number}}</label>
-                                    <input type="text" id="refDocNumber" name="refDocNumber"
-                                           ng-model="ctrl.correspondence.refDocNumber">
-                                </md-input-container>
                             </div>
                             <div layout="row">
+                                <!-- Organization -->
                                 <md-input-container flex>
                                     <label for="registryOU">{{lang.linked_document_organization}}</label>
                                     <md-select ng-disabled="ctrl.disableSelectedOrganization" id="registryOU"
@@ -61,6 +60,7 @@
                                         </md-option>
                                     </md-select>
                                 </md-input-container>
+                                <!-- Security Level -->
                                 <md-input-container flex>
                                     <label for="securityLevel">{{lang.linked_document_security_level}}</label>
                                     <md-select id="securityLevel" name="securityLevel"
@@ -74,6 +74,7 @@
                                         </md-option>
                                     </md-select>
                                 </md-input-container>
+                                <!-- Year -->
                                 <md-input-container flex>
                                     <label for="year">{{lang.linked_document_year}}</label>
                                     <md-select id="year" ng-model="ctrl.correspondence.year">
@@ -189,7 +190,7 @@
                                     </md-select>
                                 </md-input-container>
                             </div>
-                            <div layout="row" ng-if="!ctrl.isInternalDocClass()">
+                            <div layout="row" ng-if="!ctrl.isInternalDocClass() && !ctrl.isAllDocClass()">
                                 <!-- Correspondence Site Type -->
                                 <md-input-container flex>
                                     <label for="siteType">{{lang.correspondence_site_type}}</label>
@@ -289,12 +290,14 @@
                                 </md-input-container>
                             </div>
                             <div layout="row">
+                                <!-- File Code -->
                                 <md-input-container flex>
                                     <label for="fileCode">{{lang.linked_document_file_code}}</label>
                                     <input name="fileCode"
                                            id="fileCode"
                                            ng-model="ctrl.correspondence.fileCode">
                                 </md-input-container>
+                                <!-- File Number -->
                                 <md-input-container flex>
                                     <label for="fileSerial">{{lang.linked_document_file_number}}</label>
                                     <input name="fileSerial"
@@ -312,7 +315,14 @@
                                         </md-option>
                                     </md-select>
                                 </md-input-container>
-                                <md-input-container flex ng-if="!ctrl.isOutgoingDocClass()"></md-input-container>
+                                <!-- Document Number -->
+                                <md-input-container flex ng-if="ctrl.isIncomingDocClass()">
+                                    <label for="refDocNumber">{{lang.document_number}}</label>
+                                    <input type="text" id="refDocNumber" name="refDocNumber"
+                                           ng-model="ctrl.correspondence.refDocNumber">
+                                </md-input-container>
+                                <md-input-container flex
+                                                    ng-if="ctrl.isInternalDocClass() || ctrl.isAllDocClass()"></md-input-container>
                             </div>
                         </div>
                     </md-content>
@@ -454,7 +464,7 @@
                                                 <td md-cell>{{correspondence.priorityLevel.getTranslatedName()}}</td>
                                                 <td md-cell>{{correspondence.securityLevel.getTranslatedName()}}</td>
                                                 <td md-cell>{{lang[correspondence.getInfo().documentClass
-                                                    +"_document_class"]}}
+                                                + "_document_class"]}}
                                                 </td>
                                                 <td md-cell>{{correspondence.creatorInfo.getTranslatedName()}}</td>
                                                 <td md-cell>{{correspondence.createdOn}}</td>

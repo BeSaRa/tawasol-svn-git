@@ -425,6 +425,10 @@ module.exports = function (app) {
             self.originality = 1;
         };
 
+        self.isAllDocClass = function () {
+            return !self.searchType;
+        };
+
         self.isOutgoingDocClass = function () {
             return generator.getNormalizedValue(self.searchType, 'lookupKey') === 0;
         };
@@ -578,8 +582,16 @@ module.exports = function (app) {
             self.correspondence.subSite = self.selectedSubSite ? self.selectedSubSite : null;
             self.correspondence.originality = self.originality ? self.originality : 1;
 
+            var searchCriteria = angular.copy(self.correspondence);
+            if (!self.searchType) {
+                searchCriteria.docClassName = 'Correspondence';
+                searchCriteria.classDescription = 'Correspondence';
+            } else {
+                searchCriteria.setDocClassName(self.searchType.getStringKeyValue())
+            }
+
             correspondenceService
-                .correspondenceSearch(self.correspondence.setDocClassName(self.searchType.getStringKeyValue()), isAdminSearch)
+                .correspondenceSearch(searchCriteria, isAdminSearch)
                 .then(function (result) {
                     self.correspondences = _.filter(result, function (item) {
                         return vsIds.indexOf(item.getInfo().vsId) === -1;

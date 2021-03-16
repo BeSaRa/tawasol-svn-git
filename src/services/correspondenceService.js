@@ -926,10 +926,14 @@ module.exports = function (app) {
          * @param isAdminSearch
          */
         self.correspondenceSearch = function (correspondence, isAdminSearch) {
-            var info = correspondence.getInfo(),
-                url = urlService.searchDocument.change({searchType: info.documentClass}),
+            var searchType = 'general',
+                info = correspondence.getInfo();
+            if (correspondence.docClassName.toLowerCase() !== 'correspondence') {
+                searchType = info.documentClass;
+            }
+            var url = urlService.searchDocument.change({searchType: searchType}),
                 criteria;
-            criteria = generator.interceptSendInstance('Search' + _getModelName(info.documentClass), correspondence);
+            criteria = generator.interceptSendInstance('Search' + _getModelName(searchType), correspondence);
             criteria = _checkPropertyConfiguration(criteria, lookupService.getPropertyConfigurations(info.documentClass));
             if (isAdminSearch) {
                 url = url + '?isAdmin=' + isAdminSearch
@@ -937,7 +941,7 @@ module.exports = function (app) {
             return $http
                 .post(url, generator.interceptSendInstance('SearchCriteria', criteria))
                 .then(function (result) {
-                    return generator.interceptReceivedCollection(['Correspondence', _getModelName(info.documentClass)], generator.generateCollection(result.data.rs, _getModel(info.documentClass)))
+                    return generator.interceptReceivedCollection(['Correspondence', _getModelName(searchType)], generator.generateCollection(result.data.rs, _getModel(searchType)))
                 });
         };
         /**
