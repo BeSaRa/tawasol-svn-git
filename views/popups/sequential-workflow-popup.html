@@ -2,7 +2,7 @@
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.sequential_workflow : ctrl.model.getNames()}}">
     <popup-toolbar-directive ng-if="!ctrl.editMode" full-screen-button="true" full-screen="ctrl.fullScreen"
-                             header-text="{{ctrl.sequentialWorkflow.isSubWorkflow ? lang.add_new_sub_sequential_workflow : lang.add_new_sequential_workflow}}">
+                             header-text="{{ctrl.sequentialWorkflow.isSubWorkflow ? lang.add_new_sub_seq_wf : lang.add_new_sequential_workflow}}">
     </popup-toolbar-directive>
     <popup-toolbar-directive ng-if="ctrl.editMode" full-screen-button="true" full-screen="ctrl.fullScreen"
                              header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
