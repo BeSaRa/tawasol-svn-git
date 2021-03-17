@@ -233,7 +233,7 @@ module.exports = function (app) {
                         self.selectedDocClass = defaultDocClass;
                         self.sequentialWorkflow.docClassID = defaultDocClass;
                         self.model = angular.copy(self.sequentialWorkflow);
-                        self.handleDocTypeChange(!!self.sequentialWorkflow.isAdhoc || !!self.sequentialWorkflow.isSubWorkflow);
+                        self.handleDocTypeChange(_isIncomingSeqWF(self.selectedDocClass) || !!self.sequentialWorkflow.isAdhoc || !!self.sequentialWorkflow.isSubWorkflow);
                     }
                 });
             };
