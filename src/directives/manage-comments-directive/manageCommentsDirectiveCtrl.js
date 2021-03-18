@@ -174,7 +174,7 @@ module.exports = function (app) {
         self.services = {
             users: {
                 service: ouApplicationUserService,
-                method: 'getOuApplicationUserByOu',
+                method: 'loadOuApplicationUserByOu',
                 param: null,
                 mapResult: function (item) {
                     //var applicationUser = angular.extend(item, {display: item.applicationUser[langService.current + 'FullName']});
