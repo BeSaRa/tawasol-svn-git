@@ -778,7 +778,7 @@ module.exports = function (app) {
                 return;
             }
 
-            if (info.hasActiveSeqWF && info.docStatus < 24 && self.psPDFViewerEnabled) {
+            /*if (info.hasActiveSeqWF && info.docStatus < 24 && self.psPDFViewerEnabled) {
                 return workItem.openSequentialDocument()
                     .then(function () {
                         self.reloadProxyMailInboxes(self.grid.page);
@@ -786,7 +786,7 @@ module.exports = function (app) {
                     .catch(function () {
                         self.reloadProxyMailInboxes(self.grid.page);
                     });
-            }
+            }*/
 
             workItem
                 .viewNewProxyDocument(self.gridActions, 'proxyMail', $event)
