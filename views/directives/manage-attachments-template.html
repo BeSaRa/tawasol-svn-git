@@ -142,7 +142,7 @@
                 </md-switch>
             </div>
         </div>
-        <div ng-if="ctrl.attachment" layout="row">
+        <div ng-if="ctrl.attachment && ctrl.hasPSPDFViewer" layout="row">
             <!-- Is Official Document -->
             <div flex class="cms-input-container">
                 <md-switch flex ng-model="ctrl.attachment.isOfficial"
@@ -186,7 +186,8 @@
                     <th md-column md-order-by="isOfficial">
                     </th>
                     <th md-column md-order-by="docSubject">
-                        <span class="color-default" ng-if="ctrl.selectedAttachments.length">{{ctrl.selectedAttachments.length}} {{lang.items_selected}} </span>
+                        <span class="color-default"
+                              ng-if="ctrl.selectedAttachments.length">{{ctrl.selectedAttachments.length}} {{lang.items_selected}} </span>
                         <span ng-if="!ctrl.selectedAttachments.length">{{lang.attachment_document_title}}</span>
                     </th>
                     <th md-column

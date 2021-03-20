@@ -64,7 +64,7 @@
                                    ng-change="ctrl.changeValueOf('exportStatus', ctrl.exportStatus)"
                                    aria-label="{{lang.export_status}}">
                             <label>{{lang.export_status}} : {{ctrl.exportStatus ? lang.save_and_export :
-                                lang.save_only}}</label>
+                                    lang.save_only}}</label>
                         </md-switch>
                     </div>
                 </div>
@@ -191,7 +191,7 @@
                         </md-switch>
                     </div>
                 </div>
-                <div layout="row">
+                <div layout="row" ng-if="ctrl.hasPSPDFViewer">
                     <!-- Is Official Document -->
                     <div flex class="cms-input-container">
                         <md-switch flex ng-model="ctrl.attachment.isOfficial"
@@ -318,7 +318,7 @@
                                     </md-switch>
                                 </div>
                             </div>
-                            <div>
+                            <div ng-if="ctrl.hasPSPDFViewer">
                                 <div flex class="cms-input-container">
                                     <md-switch flex
                                                ng-model="attachment.isOfficial"
@@ -387,7 +387,7 @@
                                     {{attachment.getTranslatedExportStatus()}}
                                 </md-button>
                             </div>
-                            <div>
+                            <div ng-if="ctrl.hasPSPDFViewer">
                                 <md-button>
                                     {{attachment.getTranslatedYesNo('isOfficial')}}
                                 </md-button>

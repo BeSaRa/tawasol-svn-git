@@ -68,6 +68,7 @@ module.exports = function (app) {
         self.failsFilesUploaded = [];
         // get inherit Security for attachment from GlobalSettings
         self.inheritSecurity = rootEntity.getGlobalSettings().attachmentInheritSecurity;
+        self.hasPSPDFViewer = rootEntity.hasPSPDFViewer();
 
         self.icons = {
             pdf: new FileIcon({
