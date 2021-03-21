@@ -76,7 +76,7 @@ module.exports = function (app) {
                                             ssoService.resolve('SSO ON');
                                         })
                                         .catch(function (reason) {
-                                            ssoService.reject('SSO FAILED');
+                                            ssoService.resolve('SSO FAILED');
                                             //   console.log("SINGLE SIGN ON FAILED !!", reason);
                                         })
                                 })

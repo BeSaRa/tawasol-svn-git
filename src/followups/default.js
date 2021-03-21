@@ -149,10 +149,13 @@ module.exports = function (app) {
                         return true;
                     })
                     .catch(function () {
-                        console.log('CATCH tokenRefresh');
                         return loginDialogService
                             .openLoginDialog(true);
                     });
+            }).catch(function () {
+                console.log('HERE !!');
+                return loginDialogService
+                    .openLoginDialog(true);
             });
         });
 
