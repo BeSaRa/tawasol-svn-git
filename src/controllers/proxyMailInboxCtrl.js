@@ -778,15 +778,15 @@ module.exports = function (app) {
                 return;
             }
 
-            /*if (info.hasActiveSeqWF && info.docStatus < 24 && self.psPDFViewerEnabled) {
-                return workItem.openSequentialDocument()
+            if (info.hasActiveSeqWF && info.docStatus < 24 && self.psPDFViewerEnabled) {
+                return workItem.openSequentialProxyDocument()
                     .then(function () {
                         self.reloadProxyMailInboxes(self.grid.page);
                     })
                     .catch(function () {
                         self.reloadProxyMailInboxes(self.grid.page);
                     });
-            }*/
+            }
 
             workItem
                 .viewNewProxyDocument(self.gridActions, 'proxyMail', $event)

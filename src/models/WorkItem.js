@@ -589,7 +589,12 @@ module.exports = function (app) {
              * @returns {*}
              */
             WorkItem.prototype.viewNewProxyDocument = function (actions, queueName, $event) {
-                return viewDocumentService.viewUserInboxProxyDocument(this, actions, queueName, $event);
+                var self = this, info = self.getInfo(), pdfViewerEnabled = rootEntity.hasPSPDFViewer();
+                if (pdfViewerEnabled && !info.isPaper && employeeService.getEmployee().isFirstViewForApproval && self.checkElectronicSignaturePermission() && self.generalStepElm.isMultiSignature) {
+                    return self.openForAnnotation(true, info.docStatus < 23 ? 3 : 1, actions, true);
+                } else {
+                    return viewDocumentService.viewUserInboxProxyDocument(this, actions, queueName, $event);
+                }
             };
             /**
              * @description view from group inbox documents as full view.
@@ -1180,6 +1185,38 @@ module.exports = function (app) {
                 var self = this, info = this.getInfo(), step = null,
                     forApproval = employeeService.getEmployee().isFirstViewForApproval && !info.isPaper && info.docStatus < 23 && self.checkElectronicSignaturePermission();
                 return viewDocumentService.viewUserInboxDocument(self, actions, 'userInbox', null, true)
+                    .then(function (generalStepElementView) {
+                        generalStepElementView.actions = actions;
+                        self.generalStepElm.isSeqWFBackward = generalStepElementView.generalStepElm.isSeqWFBackward;
+                        if (seqWF) {
+                            var step = _.find(seqWF.steps, function (step) {
+                                return step.id === generalStepElementView.generalStepElm.seqWFNextStepId;
+                            });
+                            if (!step) {
+                                step = _.find(seqWF.steps, function (step) {
+                                    return step.itemOrder === 0;
+                                });
+                            }
+                            return correspondenceService.annotateCorrespondence(self, (forApproval && step.isAuthorizeAndSendStep() ? 3 : annotationType), null, seqWF, generalStepElementView);
+                        }
+                        return sequentialWorkflowService.loadSequentialWorkflowById(self.getSeqWFId()).then(function (seqWF) {
+                            var step = _.find(seqWF.steps, function (step) {
+                                return step.id === generalStepElementView.generalStepElm.seqWFNextStepId;
+                            });
+                            if (!step) {
+                                step = _.find(seqWF.steps, function (step) {
+                                    return step.itemOrder === 0;
+                                });
+                            }
+                            return correspondenceService.annotateCorrespondence(self, (forApproval && step.isAuthorizeAndSendStep() ? 3 : annotationType), null, seqWF, generalStepElementView);
+                        });
+                    });
+            };
+
+            WorkItem.prototype.openSequentialProxyDocument = function (annotationType, seqWF, actions) {
+                var self = this, info = this.getInfo(), step = null,
+                    forApproval = employeeService.getEmployee().isFirstViewForApproval && !info.isPaper && info.docStatus < 23 && self.checkElectronicSignaturePermission();
+                return viewDocumentService.viewUserInboxProxyDocument(self, actions, 'proxyMail', null)
                     .then(function (generalStepElementView) {
                         generalStepElementView.actions = actions;
                         self.generalStepElm.isSeqWFBackward = generalStepElementView.generalStepElm.isSeqWFBackward;
