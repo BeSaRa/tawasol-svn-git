@@ -28,7 +28,7 @@ module.exports = function (app) {
             },
             {
                 id: configurationService.USER_INFO_ANNOTATION_IDS.username,
-                langKey: 'username',
+                langKey: 'annotate_username',
                 selected: false,
                 getValue: function () {
                     return employeeService.getEmployee().getTranslatedName();
