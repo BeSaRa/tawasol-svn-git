@@ -65,6 +65,7 @@ module.exports = function (app) {
             self.stampModuleEnabled = false;
             self.filterInternalBookRegOU = true;
             self.allowEditAfterFirstApprove = false;
+            self.externalAuthorization = false;
             //endregion
 
             // every model has required fields

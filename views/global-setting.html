@@ -661,7 +661,12 @@
                                     </md-switch>
                                 </div>
                                 <div flex>
-
+                                    <!-- External Authorization -->
+                                    <md-switch ng-model="ctrl.globalSetting.externalAuthorization"
+                                               aria-label="{{lang.external_authorization}}">
+                                        <span>{{lang.external_authorization}} : </span>{{
+                                        ctrl.globalSetting.getTranslatedYesNo('externalAuthorization')}}
+                                    </md-switch>
                                 </div>
                             </div>
                         </div>
