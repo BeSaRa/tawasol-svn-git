@@ -9,7 +9,7 @@
         <div class="md-dialog-content cms-dialog-content">
             <form name="applicationUserSignatureForm" autocomplete="off">
                 <div layout="row">
-                    <div flex="70">
+                    <div flex="60">
                         <div layout="row">
                             <img ng-src="{{ctrl.fileUrl}}"
                                  name="fileUrl_sign" id="fileUrl_sign"
@@ -37,7 +37,7 @@
                         </div>
                         <!--<div class="help-text-div">{{ctrl.imageDimensionsInfo}}</div>-->
                     </div>
-                    <div flex="30">
+                    <div flex="40">
                         <md-input-container flex>
                             <label for="docSubject">{{lang.subject}}</label>
                             <input name="docSubject" id="docSubject" required minlength="4"
@@ -60,6 +60,11 @@
                                 <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
                             </div>
                         </md-input-container>
+                        <md-switch ng-model="ctrl.applicationUserSignature.isDefault"
+                                   aria-label="{{lang.default_sign}}">
+                            <span>{{lang.default_sign}} : </span>{{
+                            ctrl.applicationUserSignature.getTranslatedYesNo('isDefault')}}
+                        </md-switch>
                     </div>
                 </div>
             </form>

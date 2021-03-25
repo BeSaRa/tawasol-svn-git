@@ -1128,6 +1128,12 @@
                                                     </div>
                                                 </div>
                                             </md-input-container>
+                                            <md-switch ng-if="ctrl.enableAdd"
+                                                       ng-model="ctrl.signature.isDefault"
+                                                       aria-label="{{lang.default_sign}}">
+                                                <span>{{lang.default_sign}} : </span>{{
+                                                ctrl.signature.getTranslatedYesNo('isDefault')}}
+                                            </md-switch>
                                         </div>
                                         <div layout="row" ng-if="ctrl.enableAdd">
                                             <div flex>
@@ -1179,6 +1185,10 @@
                                                             md-order-by="documentTitle">
                                                             <span>{{lang.title}}</span>
                                                         </th>
+                                                        <th ng-if="!ctrl.selectedSignature.length" md-column
+                                                            md-order-by="isDefault">
+                                                            <span>{{lang.default_sign}}</span>
+                                                        </th>
                                                         <th ng-if="!ctrl.selectedSignature.length" md-column>
                                                             <span>{{lang.actions}}</span>
                                                         </th>
@@ -1189,6 +1199,12 @@
                                                         ng-repeat="signature in ctrl.applicationUser.signature | limitTo: ctrl.signatureGrid.limit: ((ctrl.signatureGrid.page - 1) * ctrl.signatureGrid.limit) track by $index">
                                                         <td md-cell>{{signature.docSubject}}</td>
                                                         <td md-cell>{{signature.documentTitle}}</td>
+                                                        <td md-cell>
+                                                            <md-switch aria-label="{{lang.default_sign}}"
+                                                                       disabled
+                                                                       tooltip="{{signature.getTranslatedYesNo('isDefault')}}"
+                                                                       ng-model="signature.isDefault"></md-switch>
+                                                        </td>
                                                         <td md-cell>
                                                             <div flex layout="row" layout-align="start center">
                                                                 <md-button class="md-icon-button" title="{{lang.edit}}"
