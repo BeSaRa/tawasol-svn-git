@@ -95,6 +95,15 @@
                         </md-checkbox>
                     </div>
                 </div>
+                <div layout="row" ng-if="ctrl.isReadyForApprovalAvailable(ctrl.distWorkflowItem)">
+                    <!-- Ready for approval -->
+                    <md-checkbox
+                            ng-model="ctrl.distWorkflowItem.isReadyForApproval"
+                            aria-label="{{lang.ready_for_approval}}">
+                        {{lang.ready_for_approval}}
+                    </md-checkbox>
+                    <div flex></div>
+                </div>
                 <div layout="row" ng-if="ctrl.currentUserOrg.enableEscalation && !ctrl.isEscalationHidden()">
                     <md-input-container flex>
                         <label for="escalationStatus">{{lang.choose_escalation_process}}</label>

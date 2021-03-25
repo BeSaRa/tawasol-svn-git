@@ -7,6 +7,7 @@ module.exports = function (app) {
             self.toUserDomain = null;
             self.appUserOUID = null;
             self.toUserId = null;
+            self.isReadyForApproval = false;
             // will delete before send to backend
             self.arOUName = null;
             self.enOUName = null;

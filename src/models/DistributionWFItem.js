@@ -105,6 +105,10 @@ module.exports = function (app) {
                 this.isSecureAction = isSecureAction;
                 return this;
             };
+            DistributionWFItem.prototype.setReadyForApproval = function (isReadyForApproval) {
+                this.isReadyForApproval = isReadyForApproval;
+                return this;
+            };
             DistributionWFItem.prototype.setSendRelatedDocs = function (isSendRelatedDocs) {
                 this.sendRelatedDocs = isSendRelatedDocs;
                 return this;

@@ -100,7 +100,6 @@ module.exports = function (app) {
             return approvedStatus;
         }
 
-        // cannot_send_to_multi
         self.actionKey = actionKey;
         // selected_document_has_not_approved_document
         self.multi = multi;
@@ -1225,7 +1224,8 @@ module.exports = function (app) {
                     fromPredefined: false,
                     item: self.correspondence,
                     isWorkItem: angular.isArray(self.correspondence) ? false : self.correspondence.isWorkItem(),
-                    hiddenForwardSenderInfo: self.isHiddenForwardSenderInfo()
+                    hiddenForwardSenderInfo: self.isHiddenForwardSenderInfo(),
+                    actionKey: self.actionKey
                 }
             })
         };
