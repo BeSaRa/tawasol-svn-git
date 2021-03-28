@@ -31,13 +31,17 @@
                                        min-max-number-directive>
                                 <div ng-messages="simpleSearchForm.serialNoFrom.$error">
                                     <div ng-message="number">{{lang.numberonly}}</div>
-                                    <div ng-message="min">{{lang.min_number.change({number:
+                                    <div ng-message="min">{{lang.min_number.change({
+                                        number:
                                         ctrl.getMinMaxSerialNumberValues('from',
-                                        'min').errorValue})}}
+                                                'min').errorValue
+                                    })}}
                                     </div>
-                                    <div ng-message="max">{{lang.max_number.change({number:
+                                    <div ng-message="max">{{lang.max_number.change({
+                                        number:
                                         ctrl.getMinMaxSerialNumberValues('from',
-                                        'max').errorValue})}}
+                                                'max').errorValue
+                                    })}}
                                     </div>
                                 </div>
                             </md-input-container>
@@ -52,9 +56,11 @@
                                        min-max-number-directive>
                                 <div ng-messages="simpleSearchForm.serialNoTo.$error">
                                     <div ng-message="number">{{lang.numberonly}}</div>
-                                    <div ng-message="min">{{lang.min_number.change({number:
+                                    <div ng-message="min">{{lang.min_number.change({
+                                        number:
                                         ctrl.getMinMaxSerialNumberValues('to',
-                                        'min').errorValue})}}
+                                                'min').errorValue
+                                    })}}
                                     </div>
                                 </div>
                             </md-input-container>
@@ -245,8 +251,8 @@
                                                    placeholder="{{lang.search}}"
                                                    class="select-header-input">
                                             <md-button ng-if="ctrl.mainClassificationSearchText"
-                                                    ng-click="ctrl.loadMainClassificationByCriteria($event)"
-                                                    tooltip="{{lang.load_more_records}}" class="md-icon-button">
+                                                       ng-click="ctrl.loadMainClassificationByCriteria($event)"
+                                                       tooltip="{{lang.load_more_records}}" class="md-icon-button">
                                                 <md-icon md-svg-icon="magnify-plus"></md-icon>
                                             </md-button>
                                         </div>
@@ -286,8 +292,8 @@
                                                    placeholder="{{lang.search}}"
                                                    class="select-header-input">
                                             <md-button ng-if="ctrl.subClassificationSearchText"
-                                                    ng-click="ctrl.loadSubClassificationByCriteria($event)"
-                                                    tooltip="{{lang.load_more_records}}" class="md-icon-button">
+                                                       ng-click="ctrl.loadSubClassificationByCriteria($event)"
+                                                       tooltip="{{lang.load_more_records}}" class="md-icon-button">
                                                 <md-icon md-svg-icon="magnify-plus"></md-icon>
                                             </md-button>
                                         </div>
@@ -340,7 +346,7 @@
                     </div><!-- Sixth row -->
                     <div layout="row">
                         <div ng-if="ctrl.checkFieldStatus('docType')" flex layout="row">
-                            <md-input-container  flex="">
+                            <md-input-container flex="">
                                 <label for="docType">{{lang.outgoing_document_type}}</label>
                                 <md-select data-md-container-class="select-header-container sticky-search-bar"
                                            id="docType"
@@ -368,7 +374,7 @@
                             </md-input-container>
                         </div>
                         <div ng-if="ctrl.checkFieldStatus('fileId')" flex layout="row">
-                            <md-input-container  flex="">
+                            <md-input-container flex="">
                                 <label for="documentFile">{{lang.outgoing_file}}</label>
                                 <md-select data-md-container-class="select-header-container sticky-search-bar"
                                            id="documentFile"
@@ -407,7 +413,7 @@
                             </md-input-container>
                         </div>
                         <div ng-if="ctrl.checkFieldStatus('fileCode')" flex layout="row">
-                            <md-input-container  class="restrict-max" flex>
+                            <md-input-container class="restrict-max" flex>
                                 <label for="fileCodeGeneral">{{lang.outgoing_file_code}}</label>
                                 <input name="fileCode"
                                        id="fileCodeGeneral" ng-enter="ctrl.onFileCodeChanged()"
@@ -415,7 +421,7 @@
                                        type="text">
                             </md-input-container>
                         </div>
-                        <div ng-if="ctrl.checkFieldStatus('fileSerial')"  flex layout="row">
+                        <div ng-if="ctrl.checkFieldStatus('fileSerial')" flex layout="row">
                             <md-input-container class="restrict-max" flex>
                                 <label for="fileSerialGeneral">{{lang.outgoing_file_serial}}</label>
                                 <input name="fileSerial" custom-validate-directive="number"
@@ -455,6 +461,13 @@
                                         {{creator.getAppUserAndOuTranslate()}}
                                     </md-option>
                                 </md-select>
+                            </md-input-container>
+                        </div>
+                        <div ng-if="ctrl.checkFieldStatus('tags')" flex="25" layout="row">
+                            <md-input-container flex>
+                                <label for="tags">{{lang.tags}}</label>
+                                <input name="tags" id="tags" ng-model="ctrl.searchCriteria.tags"
+                                       placeholder="{{lang.tags}}">
                             </md-input-container>
                         </div>
                     </div>

@@ -546,6 +546,13 @@
                                 </md-select>
                             </md-input-container>
                         </div>
+                        <div ng-if="ctrl.checkFieldStatus('tags')" flex="25" layout="row">
+                            <md-input-container flex>
+                                <label for="tags">{{lang.tags}}</label>
+                                <input name="tags" id="tags" ng-model="ctrl.searchCriteria.tags"
+                                       placeholder="{{lang.tags}}">
+                            </md-input-container>
+                        </div>
                     </div>
                     <div ng-if="ctrl.checkFieldStatus('docNotes')" layout="row">
                         <div flex layout="row">

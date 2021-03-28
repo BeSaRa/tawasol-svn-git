@@ -9,7 +9,10 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            model.hasOwnProperty('Tags') ? model.Tags = null : null;
+            // model.hasOwnProperty('Tags') ? model.Tags = null : null;
+            if (Array.isArray(model.Tags)) {
+                model.Tags = null;
+            }
             model.hasOwnProperty('LinkedDocs') ? model.LinkedDocs = null : null;
 
             model.hasOwnProperty('Attachments') ? model.Attachments = null : null;
