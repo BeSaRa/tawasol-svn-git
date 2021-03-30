@@ -477,7 +477,7 @@ module.exports = function (app) {
 
         function _isElectronicAndAuthorizeByAnnotationBefore() {
             // return (self.info.docStatus === 23 && !self.info.isPaper && (self.correspondence.getAuthorizeByAnnotationStatus() || (self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep())))
-            return self.info.docStatus === 23 && !self.info.isPaper && self.correspondence.getAuthorizeByAnnotationStatus();
+            return (self.info.docStatus === 23 || self.info.docStatus === 24) && !self.info.isPaper && self.correspondence.getAuthorizeByAnnotationStatus();
         }
 
         /**
