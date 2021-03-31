@@ -59,7 +59,7 @@ module.exports = function (app) {
             3: 'internal',
             2: 'incoming'
         };
-        self.searchType = self.documentClasses[0];
+        self.searchType = null;
 
         self.globalSetting = rootEntity.getGlobalSettings();
 
@@ -110,7 +110,8 @@ module.exports = function (app) {
          * @private
          */
         function _getDocumentFiles(timeout) {
-            var docClass = self.searchType.lookupStrKey;
+            // var docClass = self.searchType.lookupStrKey;
+            var docClass = (!self.searchType || !generator.validRequired(self.searchType.lookupStrKey)) ? 'outgoing' : self.searchType.lookupStrKey;
             if (timeout) {
                 return $timeout(function () {
                     self.documentFiles = angular.copy(correspondenceService.getLookup(docClass, 'documentFiles'));
@@ -131,7 +132,8 @@ module.exports = function (app) {
          * @private
          */
         function _getClassifications(timeout) {
-            var docClass = self.searchType.lookupStrKey;
+            // var docClass = self.searchType.lookupStrKey;
+            var docClass = (!self.searchType || !generator.validRequired(self.searchType.lookupStrKey)) ? 'outgoing' : self.searchType.lookupStrKey;
             if (timeout) {
                 return $timeout(function () {
                     self.classifications = angular.copy(correspondenceService.getLookup(docClass, 'classifications'));
