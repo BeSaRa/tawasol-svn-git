@@ -377,7 +377,7 @@
                                                     <span>{{lang.security_level}}</span>
                                                 </th>
                                                 <th md-column ng-if="!ctrl.selectedCorrespondences.length"
-                                                    md-order-by="docType">
+                                                    md-order-by="docClassString">
                                                     <span>{{lang.label_document_type}}</span>
                                                 </th>
                                                 <th md-column ng-if="!ctrl.selectedCorrespondences.length"
@@ -463,9 +463,7 @@
                                                         class="serial-td">{{correspondence.docFullSerial}}</span></td>
                                                 <td md-cell>{{correspondence.priorityLevel.getTranslatedName()}}</td>
                                                 <td md-cell>{{correspondence.securityLevel.getTranslatedName()}}</td>
-                                                <td md-cell>{{lang[correspondence.getInfo().documentClass
-                                                + "_document_class"]}}
-                                                </td>
+                                                <td md-cell>{{correspondence.docClassString}}</td>
                                                 <td md-cell>{{correspondence.creatorInfo.getTranslatedName()}}</td>
                                                 <td md-cell>{{correspondence.createdOn}}</td>
                                             </tr>
