@@ -36,7 +36,8 @@ module.exports = function (app) {
                                                                  userSubscriptionService,
                                                                  printService,
                                                                  ouApplicationUserService,
-                                                                 configurationService) {
+                                                                 configurationService,
+                                                                 documentTagService) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchGeneralScreenDirectiveCtrl';
@@ -157,6 +158,7 @@ module.exports = function (app) {
         self.previousDocumentFiles = [];
         // mapped property configurations
         self.configurations = {};
+        self.tagsSearchText = '';
 
         var noneLookup = new Lookup({
             defaultEnName: langService.getByLangKey('none', 'en'),
@@ -2322,6 +2324,15 @@ module.exports = function (app) {
          */
         self.checkFieldStatus = function (fieldName) {
             return self.checkFieldPropertyValue(fieldName, 'status');
+        };
+
+        // search for tag -- calling the search service if tags more than 100, unless filter the current tags on client side
+        self.querySearchTags = function (query) {
+            return documentTagService
+                .searchForTag(query)
+                .then(function (result) {
+                    return self.searchResult = _.uniq(_.map(result, 'tagValue'));
+                });
         };
 
         self.$onInit = function () {

@@ -463,12 +463,23 @@
                                 </md-select>
                             </md-input-container>
                         </div>
-                        <div ng-if="ctrl.checkFieldStatus('tags')" flex="25" layout="row">
-                            <md-input-container flex>
-                                <label for="tags">{{lang.tags}}</label>
-                                <input name="tags" id="tags" ng-model="ctrl.searchCriteria.tags"
-                                       placeholder="{{lang.tags}}">
-                            </md-input-container>
+                        <div ng-if="ctrl.checkFieldStatus('tags')" flex="25" layout="row"
+                             class="cms-autocomplete-wrapper">
+                            <md-autocomplete flex
+                                             class="cms-md-autocomplete"
+                                             md-autoselect="false"
+                                             md-no-cache="true"
+                                             md-selected-item="ctrl.searchCriteria.tags"
+                                             md-search-text="ctrl.tagsSearchText"
+                                             md-items="item in ctrl.querySearchTags(ctrl.tagsSearchText)"
+                                             md-item-text="item"
+                                             md-delay="500"
+                                             placeholder="{{lang.tags}}">
+                                <span md-highlight-text="ctrl.tagsSearchText">{{item}}</span>
+                                <md-not-found>
+                                    {{lang.no_records_found_matching_search}}
+                                </md-not-found>
+                            </md-autocomplete>
                         </div>
                     </div>
                     <div ng-if="ctrl.checkFieldStatus('docNotes')" layout="row">
