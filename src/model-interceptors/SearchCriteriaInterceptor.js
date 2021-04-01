@@ -12,6 +12,8 @@ module.exports = function (app) {
             // model.hasOwnProperty('Tags') ? model.Tags = null : null;
             if (Array.isArray(model.Tags)) {
                 model.Tags = null;
+            } else if (model.Tags) {
+                model.Tags = model.Tags.replace(/\s/g, '_');
             }
             model.hasOwnProperty('LinkedDocs') ? model.LinkedDocs = null : null;
 

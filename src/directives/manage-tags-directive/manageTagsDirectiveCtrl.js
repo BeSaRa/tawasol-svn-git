@@ -60,8 +60,15 @@ module.exports = function (app) {
          * @return {string|*}
          */
         self.transformChip = function (chip) {
+            var maxLength = 150;
             chip = chip.replace(/#/g, '').replace(/\s/g, '_');
             chip = '#' + chip + '#';
+
+            if (chip.length > maxLength) {
+                chip = chip.substring(0, maxLength);
+                toast.error(langService.get('max_length').change({length: maxLength}));
+            }
+
             return chip;
         };
 
