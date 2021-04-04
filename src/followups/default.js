@@ -60,6 +60,8 @@ module.exports = function (app) {
             var url = xhr.config.url;
             if (url === urlService.login) {
                 errorCode.showErrorDialog(xhr);
+            } else if (url === urlService.documentTags.replace('tag/search?criteria={{tag}}', 'tag/bulk')) {
+                return false;
             } else {
                 if (!errorCode.hasErrorCode(xhr) && (xhr.config.method !== 'DELETE') && !xhr.config.ignore) {
                     dialog
