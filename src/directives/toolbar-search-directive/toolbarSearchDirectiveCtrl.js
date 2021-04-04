@@ -8,12 +8,15 @@ module.exports = function (app) {
                                                            $timeout,
                                                            _,
                                                            employeeService,
+                                                           documentTagService,
                                                            gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'toolbarSearchDirectiveCtrl';
         self.quick = quickSearchCorrespondenceService;
         self.query = null;
+        self.tagsSearchText = '';
+
         self.labels = {
             search: 'search'
         };
@@ -68,7 +71,8 @@ module.exports = function (app) {
 
         self.setSelectedKey = function (menuItem) {
             self.searchCriteria = menuItem;
-            if (self.searchCriteria.key === 'QR') {
+            self.tagsSearchText = '';
+            if (self.searchCriteria.key === 'QR' || self.isTagKeySelected()) {
                 self.query = '';
             }
             angular.element($element).find('input#query').focus();
@@ -76,7 +80,7 @@ module.exports = function (app) {
 
         self.onKeyPressSearch = function (event) {
             var code = event.which || event.code;
-            if (code === 13)
+            if (code === 13 || event === 'mouse-clicked')
                 self.showSearch();
             else if (code === 27) {
                 self.hideSearch();
@@ -93,12 +97,23 @@ module.exports = function (app) {
                 return val.key === $location.search().key;
             })[0];
         }
+
+        self.querySearchTags = function (query) {
+            return documentTagService
+                .searchForTag(query)
+                .then(function (result) {
+                    return self.searchResult = _.uniq(_.map(result, 'tagValue'));
+                });
+        };
+
+        self.isTagKeySelected = function () {
+            return self.searchCriteria.key === 'Tags';
+        }
+
         $scope.$on('$emptySearchInput', function () {
             //$element.find('input').val("");
             self.query = null;
             self.searchCriteria = self.availableSearchCriteria[0];
         })
-    })
-    ;
-}
-;
+    });
+};

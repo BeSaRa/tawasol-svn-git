@@ -7,11 +7,32 @@
     </label>
     <input ng-class="{'quick-search-by-qr-code':search.searchCriteria.key === 'QR'}"
            placeholder="{{lang.get('search_by').replace(':type',lang.get(search.searchCriteria.value))}}"
-           ng-if="search.quick.searchForm" md-autofocus class="no-style"
+           ng-if="search.quick.searchForm && !search.isTagKeySelected()" md-autofocus class="no-style"
            id="query"
            ng-model="search.query"
            ng-keydown="search.onKeyPressSearch($event)"
            name="query" flex type="text">
+    <!-- tags only -->
+    <md-autocomplete flex
+                     id="query" name="query"
+                     class="no-style"
+                     md-autoselect="false"
+                     md-no-cache="true"
+                     md-selected-item="search.query"
+                     md-search-text="search.tagsSearchText"
+                     md-items="item in search.querySearchTags(search.tagsSearchText)"
+                     md-item-text="item"
+                     md-delay="500"
+                     placeholder="{{lang.get('search_by').replace(':type',lang.get(search.searchCriteria.value))}}"
+                     ng-keydown="search.onKeyPressSearch($event)"
+                     md-selected-item-change="search.onKeyPressSearch('mouse-clicked')"
+                     ng-if="search.isTagKeySelected()">
+        <span md-highlight-text="search.tagsSearchText">{{item}}</span>
+        <md-not-found>
+            {{lang.no_records_found_matching_search}}
+        </md-not-found>
+    </md-autocomplete>
+
     <md-progress-circular md-mode="indeterminate"
                           ng-if="search.loadingService.loading && search.quick.searchForm "></md-progress-circular>
     &nbsp;

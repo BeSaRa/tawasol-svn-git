@@ -143,6 +143,17 @@ body, html, #main-view, #sub-view-wrapper {
 .no-style {
   border: none;
   outline: none;
+
+  md-autocomplete-wrap {
+    border: none;
+    outline: none;
+    box-shadow: none;
+
+    input {
+      font-size: inherit !important;
+      padding: 0 2px;
+    }
+  }
 }
 
 /******* search ******/
@@ -2618,3 +2629,6 @@ md-chips.custom-chips {
   position: absolute;
   left: 10px;
 }
+
+
+
