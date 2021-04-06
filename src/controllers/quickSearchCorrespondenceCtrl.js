@@ -133,7 +133,7 @@ module.exports = function (app) {
             self.grid.progress = defer.promise;
 
             var searchJSON = {};
-            searchJSON[$stateParams.key] = ($stateParams.key.toLowerCase() === 'tags') ? $stateParams.q.replace(/\s/g, '_') : $stateParams.q;
+            searchJSON[$stateParams.key] = $stateParams.q;
 
             if (self.isOverdueSearch())
                 return self.reloadQuickSearchOverdueCorrespondence(pageNumber, defer);

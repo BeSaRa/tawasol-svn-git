@@ -1127,7 +1127,7 @@ module.exports = function (app) {
                             return quickSearchCorrespondenceService['load' + generator.ucFirst($stateParams.q)]();
                         }
                         var searchJSON = {};
-                        searchJSON[$stateParams.key] = ($stateParams.key.toLowerCase() === 'tags') ? $stateParams.q.replace(/\s/g, '_') : $stateParams.q;
+                        searchJSON[$stateParams.key] = $stateParams.q;
                         return quickSearchCorrespondenceService.loadQuickSearchCorrespondence(searchJSON);
                     }
                 }
