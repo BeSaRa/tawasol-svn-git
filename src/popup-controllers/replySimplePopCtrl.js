@@ -243,7 +243,11 @@ module.exports = function (app) {
                 distributionWF.setReceivedRegOUs(regOus);
             }
             distributionWFService.startLaunchWorkflow(distributionWF, record)
-                .then(function () {
+                .then(function (result) {
+                    if (!result) {
+                        self.disableReply = false;
+                        return;
+                    }
                     toast.success(langService.get('launch_success_distribution_workflow'));
                     dialog.hide();
                 }).catch(function () {

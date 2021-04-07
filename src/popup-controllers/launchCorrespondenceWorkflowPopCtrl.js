@@ -1466,18 +1466,23 @@ module.exports = function (app) {
                     self.distributionWF.setIsSeqWFLaunch(typeof self.correspondence.getSeqWFId !== "undefined" ? !!self.correspondence.getSeqWFId() : false);
 
                     distributionWFService.startLaunchWorkflow(self.distributionWF, self.correspondence, self.actionKey)
-                        .then(function () {
+                        .then(function (result) {
+                            if (!result) {
+                                self.disableSend = false;
+                                return;
+                            }
                             toast.success(langService.get('launch_success_distribution_workflow'));
                             dialog.hide();
                         }).catch(function (error) {
                         self.disableSend = false;
-                        if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                        /*if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                             var info = self.correspondence.getInfo();
                             dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                             return false;
                         } else {
-                            return errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
-                        }
+                           errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
+                            return false;
+                        }*/
                     });
                 }).catch(function () {
                     self.disableSend = false;

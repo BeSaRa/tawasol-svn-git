@@ -199,19 +199,22 @@ module.exports = function (app) {
                     self.distributionWF.setReceivedRegOUs(_.filter(selectedWorkflowItems, _filterWFRegDepartments));
 
                     distributionWFService.startLaunchWorkflow(self.distributionWF, self.record)
-                        .then(function () {
+                        .then(function (result) {
+                            if (!result) {
+                                return;
+                            }
                             toast.success(langService.get('launch_success_distribution_workflow'));
                             dialog.hide();
                         })
-                        .catch(function (error) {
-                            if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
-                                var info = self.record.getInfo();
-                                dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
-                                return false;
-                            } else {
-                                return errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
-                            }
-                        });
+                    /*.catch(function (error) {
+                        if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                            var info = self.record.getInfo();
+                            dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
+                            return false;
+                        } else {
+                            return errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
+                        }
+                    });*/
                 })
         };
 

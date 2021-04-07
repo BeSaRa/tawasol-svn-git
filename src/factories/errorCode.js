@@ -79,6 +79,7 @@ module.exports = function (app) {
                 SEQ_WF_DELETE_FAILED: 2019,
                 SEQ_WF_FORWARD_FAILED: 3063,
                 SEQ_WF_CONTENT_UPDATE_FAILED: 3064,
+                SEQ_WF_MULTI_USER_FAILED: 3065,
                 G2G_CANT_RETURN_AS_ALREADY_RECEIVED: 14014
             },
             errorLangKeys = {
