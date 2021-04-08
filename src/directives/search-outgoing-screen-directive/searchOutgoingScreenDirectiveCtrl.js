@@ -697,6 +697,12 @@ module.exports = function (app) {
         };
         // run search query
         self.searchCorrespondence = function () {
+            if (!self.searchCriteria.hasValidApproveDateRange() || !self.searchCriteria.hasValidExportDateRange() || !self.searchCriteria.hasValidFollowUpDateRange()){
+                toast.info(langService.get('msg_invalid_date_range'));
+                $scope.simpleSearchForm ? $scope.simpleSearchForm.$setTouched() : null;
+                $scope.advancedSearchForm ? $scope.advancedSearchForm.$setTouched() : null;
+                return;
+            }
             validationService
                 .createValidation('SEARCH_OUTGOING')
                 .addStep('check_required', true, [], self.searchCriteria, function (result) {
