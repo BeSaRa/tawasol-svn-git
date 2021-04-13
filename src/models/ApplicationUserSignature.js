@@ -10,7 +10,6 @@ module.exports = function (app) {
             self.appUserId = null;
             self.id = null;
             self.vsId = null;
-            self.isDefault = false;
 
 
             // every model has required fields
@@ -39,15 +38,6 @@ module.exports = function (app) {
             ApplicationUserSignature.prototype.getNames = function (separator) {
                 // return this.subject + ' ' + (separator ? separator : '-') + ' ' + this.subject;
                 return this.docSubject;
-            };
-
-            /**
-             * @description Get the translated true/false as active/inactive or yes/no
-             * @param fieldName
-             * * @returns {*}
-             */
-            ApplicationUserSignature.prototype.getTranslatedYesNo = function (fieldName) {
-                return this[fieldName] ? langService.get('yes') : langService.get('no');
             };
 
 
