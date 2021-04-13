@@ -6,6 +6,7 @@ module.exports = function (app) {
                                             langService,
                                             counterService,
                                             queueStatusService,
+                                            PSPDFKit,
                                             $q,
                                             dialog,
                                             moment,
@@ -105,6 +106,9 @@ module.exports = function (app) {
             self.linkedExportedDocsList = [];
             self.isMigrated = false;
             self.seqWFId = null;
+            // azure
+            self.azureResultItem = null;
+            self.highlights = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -1179,7 +1183,6 @@ module.exports = function (app) {
                 } else if (info.isPaper && info.documentClass === 'incoming') {
                     return employeeService.hasPermissionTo('EDIT_INCOMING’S_CONTENT');
                 }
-                console.log('user cannot Annotate', info);
                 return false;
             };
             Correspondence.prototype.getAuthorizeByAnnotationStatus = function () {
@@ -1196,9 +1199,53 @@ module.exports = function (app) {
                 return !info.isPaper && info.docStatus !== 21;
             };
 
+
+            Correspondence.prototype.getLinesHighlights = function (keyword) {
+
+                function hasAnyKeyword(word, keyWords) {
+                    return keyWords.some(function (key) {
+                        return word.indexOf(key) !== -1;
+                    });
+                }
+
+                if (!keyword) {
+                    return null;
+                }
+                var keywords = Array.from(new Set(keyword.split(" ").filter(Boolean))).map(item => item.toLowerCase());
+                var self = this, highlightedWords = [];
+                self.azureResultItem.lines.forEach(function (line) {
+                    if (hasAnyKeyword(line.lineString.toLowerCase(), keywords)) {
+                        highlightedWords = highlightedWords.concat(line.words.filter(function (word) {
+                            return hasAnyKeyword(word.wordstring.toLowerCase(), keywords);
+                        }).map(function (word) {
+                            let [left, top, width, height] = word.boundingBox.split(',').map(item => Number(item));
+                            return {
+                                left: (left * 100) / self.azureResultItem.imgW,
+                                top: (top * 100) / self.azureResultItem.imgH,
+                                width: (width * 100) / self.azureResultItem.imgW,
+                                height: (height * 100) / self.azureResultItem.imgH
+                            }
+                        }))
+                    }
+                });
+                if (!highlightedWords.length) {
+                    return self.highlights = null;
+                }
+                self.highlights = [{
+                    pageIndex: self.azureResultItem.pageNum - 1,
+                    reacts: highlightedWords,
+                    dimensions: {
+                        width: self.azureResultItem.imgW,
+                        height: self.azureResultItem.imgH,
+                        dpi: [self.azureResultItem.dpiX, self.azureResultItem.dpiY]
+                    }
+                }];
+                return self.highlights;
+            }
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Correspondence', 'init', this);
         }
-    })
+    });
 };

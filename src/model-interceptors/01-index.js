@@ -127,4 +127,5 @@ module.exports = function (app) {
     require('./ActionLogInterceptor')(app);
     require('./ApplicationUserLookupInterceptor')(app);
     require('./OrganizationUnitViewInterceptor')(app);
+    require('./AzureSearchCriteriaInterceptor')(app);
 };

@@ -88,4 +88,5 @@ module.exports = function (app) {
     require('./userFollowupBookByUserCtrl')(app);
     require('./documentStampCtrl')(app);
     require('./sequentialWorkflowCtrl')(app);
+    require('./searchIntelligenceCtrl')(app);
 };

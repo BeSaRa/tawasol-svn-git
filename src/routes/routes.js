@@ -1713,6 +1713,13 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_sequential_workflows'
             })
+            .state('app.intelligence-search', {
+                url: '/intelligence-search',
+                templateUrl: templateProvider.getView('search-intelligence'),
+                controller: 'searchIntelligenceCtrl',
+                controllerAs: 'ctrl',
+                permission: 'menu_item_intelligence_search'
+            })
 
     });
 };

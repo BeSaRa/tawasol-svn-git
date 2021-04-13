@@ -182,6 +182,8 @@ module.exports = function (app) {
             delete model.recordGridName;
             delete model.hasSequentialWFIndicator;
             delete model.docDateTemp;
+            delete model.azureResultItem;
+            delete model.highlights;
             return model;
         });
 
