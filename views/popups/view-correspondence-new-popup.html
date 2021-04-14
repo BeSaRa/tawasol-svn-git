@@ -211,7 +211,7 @@
                         <!-- Quick Actions -->
                         <li>
                             <div class="viewer-actions" layout="row" ng-repeat="chunk in ctrl.stickyActionsChunk">
-                                <div ng-repeat="quickAction in chunk track by $index"
+                                <div ng-repeat="quickAction in chunk"
                                      ng-class="{'icon-relative':ctrl.isShowActionCount(quickAction)}">
                                     <!-- ng-if="ctrl.isShowViewerAction(quickAction)"-->
                                     <md-button
@@ -225,7 +225,7 @@
                                         ></md-icon>
                                     </md-button>
                                     <span ng-if="ctrl.isShowActionCount(quickAction)"
-                                          class="counter blue">{{quickAction.count()}}</span>
+                                          class="counter blue">{{quickAction.count(quickAction, ctrl.workItem)}}</span>
                                 </div>
                             </div>
                         </li>

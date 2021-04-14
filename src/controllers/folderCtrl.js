@@ -1443,6 +1443,15 @@ module.exports = function (app) {
                         sticky: true,
                         checkShow: function (action, model) {
                             return true;
+                        },
+                        count: function (action, model) {
+                            var info = model.getInfo();
+                            // we do filter here because we can't get the updated count of workItem inside correspondence popup
+                            var selectedWorkItem = _.find(self.workItems, function (item) {
+                                return item.generalStepElm.workObjectNumber === info.wobNumber;
+                            });
+
+                            return selectedWorkItem.generalStepElm.commentsNO;
                         }
                     },
                     // Tasks

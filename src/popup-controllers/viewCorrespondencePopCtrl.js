@@ -671,11 +671,12 @@ module.exports = function (app) {
 
         self.isShowActionCount = function (action) {
             var record = self.workItem || self.correspondence;
-            if (record.getInfo().documentClass !== 'outgoing') {
-                return false;
-            } else if (action.hasOwnProperty('count')) {
-                return true;
+            var count = action.hasOwnProperty('count') ? action.count : null;
+
+            if (count && typeof count === 'function') {
+                count = count(action, record);
             }
+            return !!generator.validRequired(count);
         };
 
         /**

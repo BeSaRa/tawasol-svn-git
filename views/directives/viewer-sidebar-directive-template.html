@@ -23,7 +23,7 @@
                                          class="{{quickAction.class}}"></md-icon>
                             </md-button>
                             <span ng-if="ctrl.isShowActionCount(quickAction)"
-                                  class="counter blue">{{quickAction.count()}}</span>
+                                  class="counter blue">{{quickAction.count(quickAction, ctrl.workItem)}}</span>
                         </div>
                     </div>
                 </li>
