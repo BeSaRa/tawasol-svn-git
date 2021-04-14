@@ -448,6 +448,15 @@ module.exports = function (app) {
             }
         ];
 
+        self.isShowActionCount = function (action, record) {
+            var count = action.hasOwnProperty('count') ? action.count : null;
+
+            if (count && typeof count === 'function') {
+                count = count(action, record);
+            }
+            return !!generator.validRequired(count);
+        };
+
         self.getSortedMagazineData = function () {
             self.sortOrder = self.sortOrder && self.sortOrder.hasOwnProperty('value') ? self.sortOrder.value() : self.sortOrder;
             self.sortingCallback(self.sortOrder);
