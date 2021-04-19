@@ -79,7 +79,6 @@ module.exports = function (app) {
                                                    encryptionService,
                                                    AdminResultRelation,
                                                    TawasolStamp,
-                                                   CorrespondenceView,
                                                    TawasolDocument,
                                                    SequentialWFResult) {
         'ngInject';
@@ -90,7 +89,6 @@ module.exports = function (app) {
         util.inherits(Internal, Correspondence);
         util.inherits(Incoming, Correspondence);
         util.inherits(General, Correspondence);
-        util.inherits(CorrespondenceView, Correspondence);
         util.inherits(GeneralStepElementView, WorkItem);
         // for partial export
         util.inherits(PartialExportCollection, PartialExport);
@@ -5189,28 +5187,6 @@ module.exports = function (app) {
                 var securityLevelsIds = _.map(userSecurityLevels, 'lookupKey');
                 return securityLevelsIds.indexOf(result.data.rs) !== -1 ? $q.resolve(userSecurityLevels[securityLevelsIds.indexOf(result.data.rs)]) : $q.reject(result.data.rs);
             });
-        }
-
-        self.innovationSearch = function (criteria) {
-            return $http.post(
-                _createUrlSchema(null, null, 'search/azure-cognitive'),
-                generator.interceptSendInstance('AzureSearchCriteria', criteria)
-            ).then(function (result) {
-                result.data.rs.first = self.interceptReceivedCollectionBasedOnEachDocumentClass(result.data.rs.first);
-                // result.data.rs.second = generator.interceptReceivedInstance('', result.data.rs.second);
-                return result.data.rs;
-            });
-        }
-
-        self.innovationAutoComplete = function (text) {
-            return $http.get(
-                _createUrlSchema(null, null, 'search/azure-cognitive-auto-complete'),
-                {
-                    params: {criteria: text}
-                }
-            ).then(function (result) {
-                return result.data.rs.value;
-            })
         }
 
         $timeout(function () {

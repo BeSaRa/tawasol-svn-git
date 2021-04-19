@@ -202,7 +202,5 @@ module.exports = function (app) {
     require('./ApplicationUserView')(app);
     require('./OrganizationUnitView')(app);
     require('./BackStepOptions')(app);
-    require('./AzureSearchCriteria')(app);
-    require('./CorrespondenceView')(app);
 
 };

@@ -321,10 +321,6 @@ module.exports = function (app) {
                             disabled.disableProperties = true;
                         }
 
-                        if (correspondence.highlights) {
-                            result.metaData.highlights = correspondence.highlights;
-                        }
-
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
