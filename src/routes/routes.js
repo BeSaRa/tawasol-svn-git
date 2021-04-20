@@ -17,11 +17,8 @@ module.exports = function (app) {
 
         versionServiceProvider
             .setVersionNumber('2.4.0')
-            .setBuildNumber('T#7283')
-            .setPrivateBuildNumber('T#7283');
-
-
-        $urlRouterProvider.otherwise('/404');
+            .setBuildNumber('T#7292')
+            .setPrivateBuildNumber('T#7292');
         /**
          * md-datepicker settings for default date format
          * @param date
