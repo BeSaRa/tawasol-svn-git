@@ -679,8 +679,9 @@ module.exports = function (app) {
              * @param actions
              * @param $event
              * @param pageName
+             * @param getGeneralStepElementView
              */
-            self.viewUserInboxProxyDocument = function (workItem, actions, pageName, $event) {
+            self.viewUserInboxProxyDocument = function (workItem, actions, pageName, $event, getGeneralStepElementView) {
                 var info = typeof workItem.getInfo === 'function' ? workItem.getInfo() : new WorkItem(workItem).getInfo();
                 var disabled = _checkDisabled(pageName, workItem);
 
@@ -700,6 +701,11 @@ module.exports = function (app) {
                     })
                     .then(function (generalStepElementView) {
                         generalStepElementView.documentViewInfo.desktop = desktop;
+                        generalStepElementView.allInternalSites = workItem.allInternalSites;
+                        if (getGeneralStepElementView) {
+                            return generalStepElementView;
+                        }
+
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),

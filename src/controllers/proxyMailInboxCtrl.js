@@ -779,7 +779,7 @@ module.exports = function (app) {
             }
 
             if (info.hasActiveSeqWF && info.docStatus < 24 && self.psPDFViewerEnabled) {
-                return workItem.openSequentialProxyDocument()
+                return workItem.openSequentialProxyDocument(null, null, self.gridActions)
                     .then(function () {
                         self.reloadProxyMailInboxes(self.grid.page);
                     })

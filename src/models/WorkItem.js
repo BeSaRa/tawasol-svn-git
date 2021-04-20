@@ -1216,7 +1216,7 @@ module.exports = function (app) {
             WorkItem.prototype.openSequentialProxyDocument = function (annotationType, seqWF, actions) {
                 var self = this, info = this.getInfo(), step = null,
                     forApproval = employeeService.getEmployee().isFirstViewForApproval && !info.isPaper && info.docStatus < 23 && self.checkElectronicSignaturePermission();
-                return viewDocumentService.viewUserInboxProxyDocument(self, actions, 'proxyMail', null)
+                return viewDocumentService.viewUserInboxProxyDocument(self, actions, 'proxyMail', null, true)
                     .then(function (generalStepElementView) {
                         generalStepElementView.actions = actions;
                         self.generalStepElm.isSeqWFBackward = generalStepElementView.generalStepElm.isSeqWFBackward;
