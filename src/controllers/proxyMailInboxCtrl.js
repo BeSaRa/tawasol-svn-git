@@ -29,6 +29,7 @@ module.exports = function (app) {
                                                    $state,
                                                    gridService,
                                                    errorCode,
+                                                   configurationService,
                                                    sequentialWorkflowService) {
         'ngInject';
         var self = this;
@@ -778,7 +779,7 @@ module.exports = function (app) {
                 return;
             }
 
-            if (info.hasActiveSeqWF && info.docStatus < 24 && self.psPDFViewerEnabled) {
+            if (info.hasActiveSeqWF && self.psPDFViewerEnabled) {
                 return workItem.openSequentialProxyDocument(null, null, self.gridActions)
                     .then(function () {
                         self.reloadProxyMailInboxes(self.grid.page);
@@ -855,6 +856,26 @@ module.exports = function (app) {
 
         self.viewInDeskTop = function (workItem) {
             return correspondenceService.viewWordInDesktop(workItem);
+        };
+
+
+        /**
+         * @description annotate document
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.annotateDocument = function (workItem, $event, defer) {
+            workItem.openForAnnotation(true)
+                .then(function () {
+                    self.reloadProxyMailInboxes(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
+                })
+                .catch(function () {
+                    self.reloadProxyMailInboxes(self.grid.page);
+                });
         };
 
         /**
@@ -991,8 +1012,24 @@ module.exports = function (app) {
                 callback: self.terminate,
                 class: "action-green",
                 showInViewOnly: true,
+                sticky: true,
+                stickyIndex: 1,
                 checkShow: function (action, model) {
                     return true;
+                }
+            },
+            // Annotate Document
+            {
+                type: 'action',
+                icon: 'draw',
+                text: 'grid_action_annotate_document',
+                shortcut: true,
+                callback: self.annotateDocument,
+                class: "action-green",
+                sticky: true,
+                stickyIndex: 1,
+                checkShow: function (action, model) {
+                    return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION) && !model.isTerminatedSEQ();
                 }
             },
             // Add To
@@ -1075,6 +1112,8 @@ module.exports = function (app) {
                 callback: self.forward,
                 class: "action-green",
                 showInViewOnly: true,
+                sticky: true,
+                stickyIndex: 4,
                 checkShow: function (action, model) {
                     return true;
                 }
@@ -1088,6 +1127,8 @@ module.exports = function (app) {
                 callback: self.reply,
                 class: "action-green",
                 showInViewOnly: true,
+                sticky: true,
+                stickyIndex: 5,
                 checkShow: function (action, model) {
                     return !model.hasActiveSeqWF();
                 }
@@ -1151,13 +1192,15 @@ module.exports = function (app) {
                 callback: self.sendWorkItemToReadyToExport,
                 class: "action-green",
                 showInViewOnly: true,
+                sticky: true,
                 checkShow: function (action, model, showInViewOnly) {
                     //addMethod = 0 (Electronic/Digital) - hide the export button
                     //addMethod = 1 (Paper) - show the export button
                     var info = model.getInfo();
                     // If internal book, no export is allowed
                     // If incoming book, no addMethod will be available. So check workFlowName(if incoming) and show export button
-                    return info.isPaper && info.documentClass === 'outgoing' && !model.isBroadcasted() && (info.docStatus <= 22) && !model.isPrivateSecurityLevel();
+                    return info.isPaper && info.documentClass === 'outgoing' && !model.isBroadcasted() && (info.docStatus <= 22) && !model.isPrivateSecurityLevel()
+                        && !model.hasActiveSeqWF();
                     // (model.generalStepElm.addMethod && model.generalStepElm.workFlowName.toLowerCase() !== 'internal')
                     // || model.generalStepElm.workFlowName.toLowerCase() === 'incoming';
                 }
@@ -1191,6 +1234,20 @@ module.exports = function (app) {
                     return true;
                 },
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
+            },
+            // View Tracking Sheet (Sticky Only)
+            {
+                type: 'action',
+                icon: 'eye',
+                text: 'grid_action_view_tracking_sheet',
+                permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
+                checkShow: gridService.checkToShowAction,
+                sticky: true,
+                stickyIndex: 2,
+                showInView: false,
+                showInViewOnly: true,
+                callback: self.viewTrackingSheet,
+                params: ['view_tracking_sheet', 'tabs', gridService.grids.inbox.proxy]
             },
             // Manage
             {
@@ -1236,9 +1293,20 @@ module.exports = function (app) {
                         shortcut: false,
                         permissionKey: "MANAGE_DOCUMENT’S_COMMENTS",
                         callback: self.manageComments,
+                        sticky: true,
+                        stickyIndex: 3,
                         class: "action-green",
                         checkShow: function (action, model) {
                             return true;
+                        },
+                        count: function (action, model) {
+                            var info = model.getInfo();
+                            // we do filter here because we can't get the updated count of workItem inside correspondence popup
+                            var selectedWorkItem = _.find(self.proxyMailInboxes, function (item) {
+                                return item.generalStepElm.workObjectNumber === info.wobNumber;
+                            });
+
+                            return selectedWorkItem.generalStepElm.commentsNO;
                         }
                     },
                     // Tasks
@@ -1496,29 +1564,16 @@ module.exports = function (app) {
             // Sign(Approve)
             {
                 type: 'action',
-                icon: 'pencil-lock',
+                icon: 'check-decagram',
                 text: 'grid_action_approve',//signature
                 shortcut: false,
                 showInViewOnly: true,
                 //docClass: "Outgoing",
                 checkShow: function (action, model, showInViewOnly) {
-                    if (model.hasActiveSeqWF()) {
+                    if (model.hasActiveSeqWF() || model.isTerminatedSEQ()) {
                         return false;
                     }
-                    //addMethod = 0 (Electronic/Digital) - show the button
-                    //addMethod = 1 (Paper) - hide the button
-
-                    // If outgoing or internal, show the button
-
-                    /*If document is unapproved or partially approved, show the button. If fully approved, hide the button.
-                     docStatus = 24 is approved
-                     */
-                    var info = model.getInfo();
-                    return !model.isBroadcasted()
-                        && !info.isPaper
-                        && model.checkElectronicSignaturePermission()
-                        && model.needApprove()
-                        && gridService.checkToShowMainMenuBySubMenu(action, model);
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "ELECTRONIC_SIGNATURE",
@@ -1530,13 +1585,35 @@ module.exports = function (app) {
                     // e-Signature
                     {
                         type: 'action',
-                        //icon: 'link-variant',
+                        icon: 'check-decagram',
                         text: 'grid_action_electronic',//e_signature
                         shortcut: false,
                         callback: self.signProxyMailInboxESignature,
                         class: "action-green",
+                        sticky: true,
+                        stickyIndex: 6,
                         checkShow: function (action, model) {
-                            return true;
+                            //addMethod = 0 (Electronic/Digital) - show the button
+                            //addMethod = 1 (Paper) - hide the button
+
+                            // If outgoing or internal, show the button
+
+                            /*If document is unapproved or partially approved, show the button. If fully approved, hide the button.
+                             docStatus = 24 is approved
+                             */
+
+                            if (model.hasActiveSeqWF() || model.isTerminatedSEQ()) {
+                                return false;
+                            }
+                            if (model.getAuthorizeByAnnotationStatus()) {
+                                return false;
+                            }
+                            var info = model.getInfo();
+                            return !model.isBroadcasted()
+                                && !info.isPaper
+                                && model.checkElectronicSignaturePermission()
+                                && model.needApprove()
+                                && gridService.checkToShowMainMenuBySubMenu(action, model);
                         }
                     },
                     // Digital Signature
@@ -1710,6 +1787,7 @@ module.exports = function (app) {
 
         self.shortcutActions = gridService.getShortcutActions(self.gridActions);
         self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
+        self.stickyActions = $filter('orderBy')(gridService.getStickyActions(self.gridActions), 'stickyIndex');
 
         //console.log(self.shortcutActions, self.contextMenuActions);
     });
