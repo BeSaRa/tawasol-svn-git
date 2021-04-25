@@ -11,6 +11,7 @@ module.exports = function (app) {
                                          contextHelpService,
                                          dialog,
                                          gridService,
+                                         $timeout,
                                          generator) {
         'ngInject';
         var self = this;
@@ -19,7 +20,9 @@ module.exports = function (app) {
         self.permissions = permissions;
         // all roles
         self.roles = roles;
-        _prepareRoleMembers(); // run prepareRoleMember for the first time.
+        $timeout(function () {
+            _prepareRoleMembers(); // run prepareRoleMember for the first time.
+        });
         self.rolesCopy = angular.copy(self.roles);
 
         self.selectedRoles = [];
