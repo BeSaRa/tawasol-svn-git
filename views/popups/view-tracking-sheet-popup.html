@@ -21,8 +21,16 @@
                                             <span>{{lang.view_tracking_sheet_sender}}</span>
                                         </th>
                                         <th md-column
+                                            md-order-by="{{ctrl.getSortingKey('userFromOuInfo','Information')}}">
+                                            <span>{{lang.view_tracking_sheet_sender_ou}}</span>
+                                        </th>
+                                        <th md-column
                                             md-order-by="{{ctrl.getSortingKey('userToInfo','Information')}}">
                                             <span>{{lang.view_tracking_sheet_receiver}}</span>
+                                        </th>
+                                        <th md-column
+                                            md-order-by="{{ctrl.getSortingKey('userToOuInfo','Information')}}">
+                                            <span>{{lang.view_tracking_sheet_receiver_ou}}</span>
                                         </th>
                                         <th md-column
                                             md-order-by="{{ctrl.getSortingKey('action','Information')}}">
@@ -30,7 +38,8 @@
                                         </th>
                                         <!--<th md-column md-order-by="documentCreationDate_vts"><span>{{lang.view_tracking_sheet_creation_date}}</span>
                                         </th>-->
-                                        <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                        <th md-column md-order-by="actionDate_vts">
+                                            <span>{{lang.view_tracking_sheet_action_date}}</span>
                                         </th>
                                         <th md-column md-order-by="comments">
                                             <span>{{lang.view_tracking_sheet_comments}}</span>
@@ -44,6 +53,9 @@
                                             {{workflowHistoryRecord.userFromInfo.getTranslatedName()}}
                                         </td>
                                         <td md-cell>
+                                            {{workflowHistoryRecord.userFromOuInfo.getTranslatedName()}}
+                                        </td>
+                                        <td md-cell>
                                             <span class="action-type-icon-container">
                                                 <md-icon
                                                         ng-if="workflowHistoryRecord.actionType_vts"
@@ -52,6 +64,9 @@
                                                 ></md-icon>
                                             </span>
                                             {{workflowHistoryRecord.userToInfo.getTranslatedName()}}
+                                        </td>
+                                        <td md-cell>
+                                            {{workflowHistoryRecord.userToOuInfo.getTranslatedName()}}
                                         </td>
                                         <!--{{workflowHistoryRecord.getTranslatedUserTo()}}-->
                                         <td md-cell>{{workflowHistoryRecord.getTranslatedAction()}}</td>
@@ -107,14 +122,17 @@
                                                     <th md-column
                                                         md-order-by="{{ctrl.getSortingKey('subSiteToIdInfo', 'Information')}}">
                                                         <span>{{lang.view_tracking_sheet_sub_site_to}}</span></th>
-                                                    <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                                    <th md-column md-order-by="actionDate_vts">
+                                                        <span>{{lang.view_tracking_sheet_action_date}}</span>
                                                     </th>
-                                                    <th md-column md-order-by="deliveryDate_vts"><span>{{lang.view_tracking_sheet_delivery_date}}</span>
+                                                    <th md-column md-order-by="deliveryDate_vts">
+                                                        <span>{{lang.view_tracking_sheet_delivery_date}}</span>
                                                     </th>
                                                     <th md-column
                                                         md-order-by="{{ctrl.getSortingKey('messageStatus','Information')}}">
                                                         <span>{{lang.view_tracking_sheet_message_status}}</span></th>
-                                                    <th md-column md-order-by="comment"><span>{{lang.view_tracking_sheet_comments}}</span>
+                                                    <th md-column md-order-by="comment">
+                                                        <span>{{lang.view_tracking_sheet_comments}}</span>
                                                     </th>
                                                 </tr>
                                                 </thead>
@@ -203,9 +221,11 @@
                                                     </th>
                                                     <!--<th md-column md-order-by="documentCreationDate_vts"><span>{{lang.view_tracking_sheet_creation_date}}</span>
                                                     </th>-->
-                                                    <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                                    <th md-column md-order-by="actionDate_vts">
+                                                        <span>{{lang.view_tracking_sheet_action_date}}</span>
                                                     </th>
-                                                    <th md-column md-order-by="comments"><span>{{lang.view_tracking_sheet_comments}}</span>
+                                                    <th md-column md-order-by="comments">
+                                                        <span>{{lang.view_tracking_sheet_comments}}</span>
                                                     </th>
                                                 </tr>
                                                 </thead>
@@ -261,7 +281,8 @@
                                             md-order-by="{{ctrl.getSortingKey('actionByInfo', 'Information')}}">
                                             <span>{{lang.view_tracking_sheet_action_by}}</span>
                                         </th>
-                                        <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                        <th md-column md-order-by="actionDate">
+                                            <span>{{lang.view_tracking_sheet_action_date}}</span>
                                         </th>
                                         <th md-column
                                             md-order-by="{{ctrl.getSortingKey('actionByOUInfo', 'Information')}}">
@@ -331,9 +352,11 @@
                                     <thead md-head md-order="ctrl.mergedLinkedDocHistoryGrid.order"
                                            md-on-reorder="ctrl.sortMergedLinkedDocs">
                                     <tr md-row>
-                                        <th md-column md-order-by="docSubject"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
+                                        <th md-column md-order-by="docSubject">
+                                            <span>{{lang.view_tracking_sheet_doc_subject}}</span>
                                         </th>
-                                        <th md-column md-order-by="documentCreationDate"><span>{{lang.view_tracking_sheet_creation_date}}</span>
+                                        <th md-column md-order-by="documentCreationDate">
+                                            <span>{{lang.view_tracking_sheet_creation_date}}</span>
                                         </th>
                                         <th md-column md-order-by="mainDoc">
                                             <span>{{lang.view_tracking_sheet_main_doc}}</span>
@@ -411,7 +434,8 @@
                                     <thead md-head md-order="ctrl.attachmentsHistoryGrid.order"
                                            md-on-reorder="ctrl.getSortedDataAttachmentsHistory">
                                     <tr md-row>
-                                        <th md-column md-order-by="itemName"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
+                                        <th md-column md-order-by="itemName">
+                                            <span>{{lang.view_tracking_sheet_doc_subject}}</span>
                                         </th>
                                         <th md-column
                                             md-order-by="{{ctrl.getSortingKey('eventTypeInfo','Information')}}">
@@ -421,7 +445,8 @@
                                             md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}}">
                                             <span>{{lang.view_tracking_sheet_action_by}}</span>
                                         </th>
-                                        <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                        <th md-column md-order-by="actionDate">
+                                            <span>{{lang.view_tracking_sheet_action_date}}</span>
                                         </th>
                                     </tr>
                                     </thead>
@@ -486,9 +511,11 @@
                                         </th>
                                         <th md-column md-order-by="ouInfo"><span>{{lang.view_tracking_sheet_organization}}</span>
                                         </th>-->
-                                        <th md-column md-order-by="docSubject"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
+                                        <th md-column md-order-by="docSubject">
+                                            <span>{{lang.view_tracking_sheet_doc_subject}}</span>
                                         </th>
-                                        <th md-column md-order-by="documentType"><span>{{lang.view_tracking_sheet_document_type}}</span>
+                                        <th md-column md-order-by="documentType">
+                                            <span>{{lang.view_tracking_sheet_document_type}}</span>
                                         </th>
                                         <th md-column><span>{{lang.view_tracking_sheet_viewers}}</span></th>
                                     </tr>
@@ -557,7 +584,8 @@
                                     <thead md-head md-order="ctrl.linkedDocumentsHistoryGrid.order"
                                            md-on-reorder="ctrl.getSortedDataLinkedDocumentsHistory">
                                     <tr md-row>
-                                        <th md-column md-order-by="itemName"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
+                                        <th md-column md-order-by="itemName">
+                                            <span>{{lang.view_tracking_sheet_doc_subject}}</span>
                                         </th>
                                         <th md-column
                                             md-order-by="{{ctrl.getSortingKey('eventTypeInfo', 'Information')}}">
@@ -567,9 +595,11 @@
                                             md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}}">
                                             <span>{{lang.view_tracking_sheet_action_by}}</span>
                                         </th>
-                                        <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                        <th md-column md-order-by="actionDate">
+                                            <span>{{lang.view_tracking_sheet_action_date}}</span>
                                         </th>
-                                        <th md-column md-order-by="itemFullSerial"><span>{{lang.view_tracking_sheet_full_serial_number}}</span>
+                                        <th md-column md-order-by="itemFullSerial">
+                                            <span>{{lang.view_tracking_sheet_full_serial_number}}</span>
                                         </th>
                                         <!--<th md-column md-order-by="itemType"><span>{{lang.view_tracking_sheet_type}}</span>
                                         </th>-->
@@ -624,7 +654,8 @@
                                             md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}}">
                                             <span>{{lang.view_tracking_sheet_action_by}}</span>
                                         </th>
-                                        <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                        <th md-column md-order-by="actionDate">
+                                            <span>{{lang.view_tracking_sheet_action_date}}</span>
                                         </th>
                                         <th md-column
                                             md-order-by="{{ctrl.getSortingKey('eventTypeInfo','Information')}}">
@@ -636,7 +667,8 @@
                                             md-order-by="{{ctrl.getSortingKey('itemTypeInfo','Information')}}">
                                             <span>{{lang.view_tracking_sheet_entity_type}}</span>
                                         </th>
-                                        <th md-column md-order-by="itemName"><span>{{lang.view_tracking_sheet_destination_full_name}}</span>
+                                        <th md-column md-order-by="itemName">
+                                            <span>{{lang.view_tracking_sheet_destination_full_name}}</span>
                                         </th>
                                     </tr>
                                     </thead>
@@ -683,7 +715,8 @@
                                             md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}}">
                                             <span>{{lang.view_tracking_sheet_action_by}}</span>
                                         </th>
-                                        <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                        <th md-column md-order-by="actionDate">
+                                            <span>{{lang.view_tracking_sheet_action_date}}</span>
                                         </th>
                                         <th md-column
                                             md-order-by="{{ctrl.getSortingKey('eventTypeInfo','Information')}}">
@@ -742,7 +775,8 @@
                                             md-order-by="{{ctrl.getSortingKey('organization', 'OrganizationUnit')}}">
                                             <span>{{lang.organization}}</span>
                                         </th>
-                                        <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                        <th md-column md-order-by="actionDate_vts">
+                                            <span>{{lang.view_tracking_sheet_action_date}}</span>
                                         </th>
                                         <th md-column md-order-by="message">
                                             <span>{{lang.sms_message}}</span>
@@ -837,7 +871,8 @@
                                             md-order-by="{{ctrl.getSortingKey('actionStatusInfo', 'Information')}}">
                                             <span>{{lang.status}}</span>
                                         </th>
-                                        <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                        <th md-column md-order-by="actionDate_vts">
+                                            <span>{{lang.view_tracking_sheet_action_date}}</span>
                                         </th>
                                         <th md-column md-order-by="userComment">
                                             <span>{{lang.view_tracking_sheet_comments}}</span>
@@ -887,7 +922,8 @@
                                             md-order-by="{{ctrl.getSortingKey('actionByInfo', 'Information')}}">
                                             <span>{{lang.view_tracking_sheet_action_by}}</span>
                                         </th>
-                                        <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                        <th md-column md-order-by="actionDate_vts">
+                                            <span>{{lang.view_tracking_sheet_action_date}}</span>
                                         </th>
                                     </tr>
                                     </thead>

@@ -47,6 +47,9 @@ module.exports = function (app) {
 
             model.receiverInfo = (model.userToInfo && model.userToInfo.id !== -1)? new Information(model.userToInfo) : new Information(model.userToOuInfo);
 
+            model.userFromOuInfo = model.userFromOuInfo ? new Information(model.userFromOuInfo) : new Information();
+            model.userToOuInfo = model.userToOuInfo ? new Information(model.userToOuInfo) : new Information();
+
             model.securityLevelLookup = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
             model.securityLevelIndicator = model.securityLevelLookup ? model.getSecurityLevelIndicator(model.securityLevelLookup) : null;
 

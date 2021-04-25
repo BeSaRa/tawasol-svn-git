@@ -24,8 +24,16 @@
                                                 <span>{{lang.view_tracking_sheet_sender}}</span>
                                             </th>
                                             <th md-column
+                                                md-order-by="{{ctrl.getSortingKey('userFromOuInfo','Information')}}">
+                                                <span>{{lang.view_tracking_sheet_sender_ou}}</span>
+                                            </th>
+                                            <th md-column
                                                 md-order-by="{{ctrl.getSortingKey('userToInfo','Information')}}">
                                                 <span>{{lang.view_tracking_sheet_receiver}}</span>
+                                            </th>
+                                            <th md-column
+                                                md-order-by="{{ctrl.getSortingKey('userToOuInfo','Information')}}">
+                                                <span>{{lang.view_tracking_sheet_receiver_ou}}</span>
                                             </th>
                                             <th md-column
                                                 md-order-by="{{ctrl.getSortingKey('action','Information')}}">
@@ -46,6 +54,9 @@
                                                 {{workflowHistoryRecord.userFromInfo.getTranslatedName()}}
                                             </td>
                                             <td md-cell>
+                                                {{workflowHistoryRecord.userFromOuInfo.getTranslatedName()}}
+                                            </td>
+                                            <td md-cell>
                                                 <span class="action-type-icon-container">
                                                     <md-icon
                                                             ng-if="workflowHistoryRecord.actionType_vts"
@@ -55,6 +66,9 @@
                                                 </span>
                                                 {{workflowHistoryRecord.userToInfo.getTranslatedName()}}
                                             </td><!--{{workflowHistoryRecord.getTranslatedUserTo()}}-->
+                                            <td md-cell>
+                                                {{workflowHistoryRecord.userToOuInfo.getTranslatedName()}}
+                                            </td>
                                             <td md-cell>{{workflowHistoryRecord.getTranslatedAction()}}</td>
                                             <!--<td md-cell>{{workflowHistoryRecord.documentCreationDate_vts}}</td>-->
                                             <td md-cell>{{workflowHistoryRecord.actionDate_vts}}</td>

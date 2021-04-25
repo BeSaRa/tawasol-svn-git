@@ -807,7 +807,9 @@ module.exports = function (app) {
                     if (self.workflowHistory.length) {
                         headerNames = [
                             langService.get('view_tracking_sheet_sender'),
+                            langService.get('view_tracking_sheet_sender_ou'),
                             langService.get('view_tracking_sheet_receiver'),
+                            langService.get('view_tracking_sheet_receiver_ou'),
                             langService.get('view_tracking_sheet_action'),
                             //langService.get('view_tracking_sheet_creation_date'),
                             langService.get('view_tracking_sheet_action_date'),
@@ -817,7 +819,9 @@ module.exports = function (app) {
                             record = self.workflowHistory[i];
                             data.push([
                                 record.userFromInfo.getTranslatedName(),
+                                record.userFromOuInfo.getTranslatedName(),
                                 record.userToInfo.getTranslatedName(),
+                                record.userToOuInfo.getTranslatedName(),
                                 record.getTranslatedAction(),
                                 //record.documentCreationDate_vts,
                                 record.actionDate_vts,
