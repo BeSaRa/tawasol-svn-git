@@ -22,8 +22,8 @@ module.exports = function (app) {
         self.roles = roles;
         $timeout(function () {
             _prepareRoleMembers(); // run prepareRoleMember for the first time.
+            self.rolesCopy = angular.copy(self.roles);
         });
-        self.rolesCopy = angular.copy(self.roles);
 
         self.selectedRoles = [];
 
