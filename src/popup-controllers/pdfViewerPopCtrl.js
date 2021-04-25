@@ -775,7 +775,7 @@ module.exports = function (app) {
                 c.height = image.naturalHeight;
                 ctx.drawImage(image, 0, 0);
                 c.toBlob(function (blob) {
-                    resolve(blob);
+                    resolve({blob: blob, size: {width: c.width, height: c.height}});
                 });
             });
         };
@@ -792,6 +792,7 @@ module.exports = function (app) {
             var pageInfo = self.currentInstance.pageInfoForIndex(pageIndex);
             var attachments = [];
             var totalPages = self.currentInstance.totalPageCount;
+            console.log('size', size);
             attachments.push(self.currentInstance.createAttachment(blob));
             return $q(function (resolve, reject) {
                 var imageAnnotations = [];
@@ -835,8 +836,8 @@ module.exports = function (app) {
                 return self.convertUrlToImage(imageUrl);
             }).then(function (image) {
                 return self.convertImageToBlob(image);
-            }).then(function (blob) {
-                return self.createAnnotationFromBlob(blob, repeated, null, {type: AnnotationType.STAMP});
+            }).then(function (data) {
+                return self.createAnnotationFromBlob(data.blob, repeated, data.size, {type: AnnotationType.STAMP});
             }).then(function (annotations) {
                 return self.addAnnotationsToPDFDocument(annotations);
             }).then(function (annotations) {
@@ -853,8 +854,13 @@ module.exports = function (app) {
                 return self.convertUrlToImage(imageUrl);
             }).then(function (image) {
                 return self.convertImageToBlob(image);
-            }).then(function (blob) {
-                return self.createAnnotationFromBlob(blob, repeated, null, {type: _getRightTypeForElectronicSignature()});
+            }).then(function (data) {
+                var heightRatio = Math.min(configurationService.SIGNATURE_BOX_SIZE.height, data.size.height) / Math.max(configurationService.SIGNATURE_BOX_SIZE.height, data.size.height);
+                var widthRatio = Math.min(configurationService.SIGNATURE_BOX_SIZE.width, data.size.width) / Math.max(configurationService.SIGNATURE_BOX_SIZE.width, data.size.width);
+                return self.createAnnotationFromBlob(data.blob, repeated, {
+                    width: widthRatio * data.size.width,
+                    height: heightRatio * data.size.height,
+                }, {type: _getRightTypeForElectronicSignature()});
             }).then(function (annotations) {
                 return self.addAnnotationsToPDFDocument(annotations);
             }).then(function (annotations) {
@@ -1233,8 +1239,8 @@ module.exports = function (app) {
 
         self.generateReasonableSize = function (annotation) {
             var pageSize = self.currentInstance.pageInfoForIndex(self.currentInstance.viewState.currentPageIndex);
-            var defaultWidth = configurationService.REASONABLE_INK_SIGNATURE_SIZE.width,
-                defaultHeight = configurationService.REASONABLE_INK_SIGNATURE_SIZE.height,
+            var defaultWidth = configurationService.SIGNATURE_BOX_SIZE.width,
+                defaultHeight = configurationService.SIGNATURE_BOX_SIZE.height,
                 defaultLeft = (pageSize.width / 2) - (defaultWidth / 2),
                 defaultTop = (pageSize.height / 2) - (defaultHeight / 2);
 
