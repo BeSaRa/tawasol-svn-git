@@ -6,7 +6,8 @@ module.exports = function (app) {
             scope: {
                 fromDialog: '=',
                 tags: '=',
-                disableEverything: '=?'
+                disableEverything: '=?',
+                notifyAfterChanges: '=?'
             },
             templateUrl: cmsTemplate.getDirective('manage-tags-template.html'),
             controller: 'manageTagsDirectiveCtrl',

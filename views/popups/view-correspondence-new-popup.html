@@ -87,7 +87,7 @@
                                             document-class="ctrl.correspondence.docClassName"
                                             sites-info-c-c="ctrl.correspondence.sitesInfoCC"
                                             sites-info-to="ctrl.correspondence.sitesInfoTo"
-                                            notify-after-changes="ctrl.correspondenceSitesChanged"
+                                            notify-after-changes="ctrl.setDirtyForm"
                                             disable-correspondence="ctrl.disableCorrespondence">
                                     </manage-correspondence-sites-directive>
                                     <manage-correspondence-site-incoming-directive
@@ -95,6 +95,7 @@
                                             vs-id="ctrl.correspondence.vsId"
                                             site="ctrl.correspondence.site"
                                             document-class="ctrl.correspondence.docClassName"
+                                            notify-after-changes="ctrl.setDirtyForm"
                                             disable-correspondence="ctrl.disableCorrespondence"></manage-correspondence-site-incoming-directive>
 
                                     <manage-correspondence-site-g2g-directive
@@ -188,7 +189,8 @@
                                 <div>
                                     <manage-tags-directive from-dialog="false"
                                                            tags="ctrl.correspondence.tags"
-                                                           disable-everything="ctrl.disableEverything">
+                                                           disable-everything="ctrl.disableEverything"
+                                                           notify-after-changes="ctrl.setDirtyForm">
                                     </manage-tags-directive>
                                     <md-button class="md-raised md-primary" ng-click="ctrl.saveTags()"
                                                ng-if="ctrl.correspondence && ctrl.correspondence.docStatus === 25">

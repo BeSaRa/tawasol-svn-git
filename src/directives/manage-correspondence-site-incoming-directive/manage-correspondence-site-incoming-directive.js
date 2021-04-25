@@ -13,7 +13,8 @@ module.exports = function (app) {
                 emptySubRecords: '=',
                 site: '=',
                 disableCorrespondence: '=',
-                correspondence: '=?'
+                correspondence: '=?',
+                notifyAfterChanges: '=?'
             }
         }
     });

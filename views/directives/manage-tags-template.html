@@ -6,6 +6,7 @@
               md-removable="!ctrl.disableEverything"
               md-transform-chip="ctrl.transformChip($chip)"
               md-on-add="ctrl.addTagToDocument($chip)"
+              md-on-remove="ctrl.removeTagToDocument($chip)"
               placeholder="{{lang.tags_add_tag}}"
               readonly="ctrl.disableEverything ||
                               !ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_TAGS')">

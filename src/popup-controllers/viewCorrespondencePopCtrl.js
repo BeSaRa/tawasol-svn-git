@@ -877,7 +877,7 @@ module.exports = function (app) {
             }
         };
 
-        self.correspondenceSitesChanged = function (event) {
+        self.setDirtyForm = function (event) {
             self.document_properties.$dirty = true;
         };
 

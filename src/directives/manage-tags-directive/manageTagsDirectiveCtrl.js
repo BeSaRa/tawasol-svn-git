@@ -26,8 +26,20 @@ module.exports = function (app) {
         };
 
         self.addTagToDocument = function (tag) {
+            if (self.notifyAfterChanges) {
+                self.notifyAfterChanges('add');
+            }
+
             self.checkTagExists(tag) ? null : documentTagService.addBulkTags(tag);
         };
+
+        self.removeTagToDocument = function (tag) {
+            if (self.notifyAfterChanges) {
+                self.notifyAfterChanges('delete');
+            }
+
+            return true;
+        }
 
         self.checkTagExists = function (tag) {
             return self.searchResult && self.searchResult.length && self.searchResult.indexOf(self.normalizeTag(tag)) !== -1;

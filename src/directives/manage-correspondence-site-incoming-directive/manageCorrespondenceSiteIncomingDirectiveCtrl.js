@@ -560,6 +560,9 @@ module.exports = function (app) {
                     .confirmMessage(langService.get('correspondence_site_will_change'))
                     .then(function () {
                         self.site = site;
+                        if (self.notifyAfterChanges) {
+                            self.notifyAfterChanges('add');
+                        }
                         return true;
                     });
             } else {
@@ -579,6 +582,9 @@ module.exports = function (app) {
                 .confirmMessage(langService.get('confirm_delete_correspondence_site').change({name: self.site.getTranslatedName()}))
                 .then(function () {
                     self.site = null;
+                    if (self.notifyAfterChanges) {
+                        self.notifyAfterChanges('delete');
+                    }
                     _concatCorrespondenceSites(true).then(function () {
                         self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
                     });
