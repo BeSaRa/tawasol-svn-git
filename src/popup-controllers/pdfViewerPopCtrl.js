@@ -792,8 +792,8 @@ module.exports = function (app) {
             var pageInfo = self.currentInstance.pageInfoForIndex(pageIndex);
             var attachments = [];
             var totalPages = self.currentInstance.totalPageCount;
-            console.log('size', size);
             attachments.push(self.currentInstance.createAttachment(blob));
+            var isBarcode = !!(additionalData && additionalData.type === AnnotationType.BARCODE);
             return $q(function (resolve, reject) {
                 var imageAnnotations = [];
                 $q.all(attachments).then(function (attachmentIds) {
@@ -808,7 +808,7 @@ module.exports = function (app) {
                             },
                             boundingBox: new PSPDFKit.Geometry.Rect({
                                 left: (pageInfo.width / 2) - (size ? (size.width / 2) : 50),
-                                top: (pageInfo.height / 2) - (size ? (size.height / 2) : 50),
+                                top: isBarcode ? 50 : (pageInfo.height / 2) - (size ? (size.height / 2) : 50),
                                 width: size ? size.width : 100,
                                 height: size ? size.height : 100,
                             })
@@ -879,7 +879,18 @@ module.exports = function (app) {
          */
         self.addBarcodeAnnotationToPDF = function (blob, repeated, size) {
             return $timeout(function () {
-                return self.createAnnotationFromBlob(blob, repeated, size, {type: AnnotationType.BARCODE});
+                return URL.createObjectURL(blob);
+            }).then(function (imageUrl) {
+                return self.convertUrlToImage(imageUrl);
+            }).then(function (image) {
+                return self.convertImageToBlob(image);
+            }).then(function (data) {
+                var heightRatio = Math.min(configurationService.BARCODE_BOX_SIZE.height, data.size.height) / Math.max(configurationService.BARCODE_BOX_SIZE.height, data.size.height);
+                var widthRatio = Math.min(configurationService.BARCODE_BOX_SIZE.width, data.size.width) / Math.max(configurationService.BARCODE_BOX_SIZE.width, data.size.width);
+                return self.createAnnotationFromBlob(data.blob, repeated, {
+                    width: data.size.width * widthRatio,
+                    height: data.size.height * heightRatio
+                }, {type: AnnotationType.BARCODE});
             }).then(function (annotations) {
                 return self.addAnnotationsToPDFDocument(annotations);
             }).then(function (annotations) {
