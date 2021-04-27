@@ -23,6 +23,7 @@ module.exports = function (app) {
         self.employeeService = employeeService;
         self.employee = employeeService.getEmployee();
         self.themeService = themeService;
+        self.ouSearchText = null;
 
         self.toggleSidebar = function (sidebarId) {
             $mdSidenav(sidebarId).toggle();
@@ -107,8 +108,13 @@ module.exports = function (app) {
         };
 
         self.openUserOrganizationMenu = function ($mdMenu) {
+            self.ouSearchText = null;
             if (self.employee.ouList.length > 1)
                 $mdMenu.open();
         };
+
+        self.showSearchOuInput = function ($event) {
+            return self.employee.ouList.length > 10;
+        }
     });
 };

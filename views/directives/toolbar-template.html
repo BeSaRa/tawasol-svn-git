@@ -23,8 +23,15 @@
                             </div>
                         </md-button>
                         <md-menu-content width="3">
+                            <md-menu-item ng-if="toolbar.showSearchOuInput($event)">
+                                <div flex layout="column" layout-align="center center" class="toolbar-ou-search">
+                                    <input ng-model="toolbar.ouSearchText" placeholder="{{lang.search}}" flex
+                                           md-autofocus>
+                                </div>
+                            </md-menu-item>
+                            <md-divider ng-if="toolbar.showSearchOuInput($event)"></md-divider>
                             <md-menu-item ng-if="!toolbar.isCurrentOrganization(organization)"
-                                          ng-repeat="organization in toolbar.employee.ouList track by $index">
+                                          ng-repeat="organization in toolbar.employee.ouList | filter: toolbar.ouSearchText track by $index">
                                 <md-button ng-click="toolbar.switchOrganization(organization)">
                                     {{organization.getTranslatedName()}}
                                 </md-button>
