@@ -568,6 +568,7 @@ module.exports = function (app) {
             } else {
                 promise = $timeout(function () {
                     self.site = site;
+                    self.notifyAfterChanges('add');
                 });
             }
             promise.then(function () {
