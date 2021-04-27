@@ -101,6 +101,7 @@ module.exports = function (app) {
         self.readyToExportExcludedAnnotationList = configurationService.READY_TO_EXPORT_EXCLUDED_TOOLBAR_ITEMS;
 
         self.officialAttachmentExcludedList = configurationService.OFFICIAL_ATTACHMENT_EXCLUDED_TOOLBAR_ITEMS;
+        self.employeeService = employeeService;
 
         self.generalStepElementView = generalStepElementView;
         // used to store value of attach user name and date toggle

@@ -49,7 +49,7 @@
         </div>
         <div ng-if="ctrl.sequentialWF">
             <!--tooltip="{{ctrl.nextSeqStep.getTranslatedName()}}"-->
-            <md-button ng-if="!ctrl.isLaunchStep" ng-disabled="ctrl.disableSaveButton"
+            <md-button ng-if="!ctrl.isLaunchStep && ctrl.employeeService.hasPermissionTo('TERMINATE_SEQ_WF')" ng-disabled="ctrl.disableSaveButton"
                        class="md-raised md-primary"
                        ng-click="ctrl.terminateSEQWF()">{{lang.terminate}}
             </md-button>
