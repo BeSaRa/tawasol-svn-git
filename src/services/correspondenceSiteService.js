@@ -442,7 +442,9 @@ module.exports = function (app) {
                     parent: typeof parent !== 'undefined' ? (parent.hasOwnProperty('id') ? parent.id : parent) : null
                 }
             }).then(function (result) {
-                return generator.interceptReceivedCollection('CorrespondenceSite', generator.generateCollection(result.data.rs, CorrespondenceSite, self._sharedMethods));
+                var correspondenceSites = generator.interceptReceivedCollection('CorrespondenceSite', generator.generateCollection(result.data.rs, CorrespondenceSite, self._sharedMethods));
+                self.correspondenceSites = _.unionBy(correspondenceSites, self.correspondenceSites, 'id');
+                return correspondenceSites;
             });
         };
     });
