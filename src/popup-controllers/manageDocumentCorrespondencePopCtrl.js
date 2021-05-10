@@ -3,6 +3,8 @@ module.exports = function (app) {
                                                                     toast,
                                                                     sites,
                                                                     langService,
+                                                                    _,
+                                                                    $state,
                                                                     correspondence) {
         'ngInject';
         var self = this;
@@ -63,17 +65,21 @@ module.exports = function (app) {
          * @description in case if outgoing
          */
         self.saveCorrespondenceSites = function () {
-            if (!self.correspondence.hasVsId()) {
-                self.updateCurrentModel();
-                return dialog.hide(self.model);
-            }
-
-            self.correspondence
-                .updateSites()
-                .then(function () {
+            if (!self.isExternalOrG2GInCentralArchive()) {
+                dialog.alertMessage(langService.get("can_not_add_archive_without_g2g_external_site"));
+            } else {
+                if (!self.correspondence.hasVsId()) {
                     self.updateCurrentModel();
-                    toast.success(langService.get('correspondence_sites_save_success'));
-                });
+                    return dialog.hide(self.model);
+                }
+
+                self.correspondence
+                    .updateSites()
+                    .then(function () {
+                        self.updateCurrentModel();
+                        toast.success(langService.get('correspondence_sites_save_success'));
+                    });
+            }
         };
         /**
          * @description in cas if incoming
@@ -98,6 +104,17 @@ module.exports = function (app) {
 
         self.updateCurrentModel = function () {
             self.model = angular.copy(self.correspondence);
+        }
+
+        self.isExternalOrG2GInCentralArchive = function () {
+            var isExternalOrG2G = true;
+            if ($state.current.name === 'app.central-archive.ready-to-export') {
+                return isExternalOrG2G = _.find(self.correspondence.sitesInfoTo.concat(self.correspondence.sitesInfoCC), function (site) {
+                    return site.siteType.isExternalSiteType() || site.siteType.isGovernmentSiteType();
+                });
+            }
+
+            return isExternalOrG2G;
         }
     });
 };

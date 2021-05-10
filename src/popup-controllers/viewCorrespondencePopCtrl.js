@@ -375,6 +375,12 @@ module.exports = function (app) {
                 generator.generateErrorFields('check_this_fields', invalidFields);
                 return;
             }
+
+            if (!self.isExternalOrG2GInCentralArchive()) {
+                dialog.alertMessage(langService.get("can_not_add_archive_without_g2g_external_site"));
+                return;
+            }
+
             var info = self.correspondence.getInfo();
             delete self.correspondence.userCommentForSave;
 
@@ -956,6 +962,16 @@ module.exports = function (app) {
                 self.content.desktop.overlay = true;
                 self.editMode = true;
             }
+        }
+
+        self.isExternalOrG2GInCentralArchive = function () {
+            if ($state.current.name === 'app.central-archive.ready-to-export') {
+                return _.find(self.correspondence.sitesInfoTo.concat(self.correspondence.sitesInfoCC), function (site) {
+                    return site.siteType.isExternalSiteType() || site.siteType.isGovernmentSiteType();
+                });
+            }
+
+            return true;
         }
     });
 };
