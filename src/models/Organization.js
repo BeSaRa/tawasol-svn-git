@@ -86,8 +86,8 @@ module.exports = function (app) {
                 'escalationNotifySender',
                 'escalationNotifyReceiver',
                 'deadlineReminder',
-                'enableSmsnotification',
-                'enableEmailNotification',
+                // 'enableSmsnotification',
+                // 'enableEmailNotification',
                 'sla'
             ];
 
