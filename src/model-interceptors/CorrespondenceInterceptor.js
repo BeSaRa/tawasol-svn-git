@@ -126,14 +126,6 @@ module.exports = function (app) {
                     model.docDate = model.docDateTemp;
                 }
             }
-
-            if (model.enableSmsnotification === null || typeof model.enableSmsnotification === 'undefined') {
-                model.enableSmsnotification = false;
-            }
-            if (model.enableEmailNotification === null || typeof model.enableEmailNotification === 'undefined') {
-                model.enableEmailNotification = false;
-            }
-
             delete model.cbrEnabled;
 
             delete model.securityLevelIndicator;

@@ -35,6 +35,12 @@ module.exports = function (app) {
                 model[property] = model[property] && model[property].hasOwnProperty('id') ? model[property].id : model[property];
                 return property;
             });
+            if (model.enableSmsnotification === null || typeof model.enableSmsnotification === 'undefined') {
+                model.enableSmsnotification = false;
+            }
+            if (model.enableEmailNotification === null || typeof model.enableEmailNotification === 'undefined') {
+                model.enableEmailNotification = false;
+            }
             model.correspondenceTypeId = (model.correspondenceTypeId && model.correspondenceTypeId.hasOwnProperty('id')) ? model.correspondenceTypeId.lookupKey : model.correspondenceTypeId;
             model.outype = model.outype.hasOwnProperty('id') ? model.outype.lookupKey : model.outype;
             model.registryParentId = model.hasRegistry ? null : (model.registryParentId && model.registryParentId.hasOwnProperty('id') ? model.registryParentId.id : model.registryParentId);
