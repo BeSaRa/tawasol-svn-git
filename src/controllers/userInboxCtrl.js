@@ -1546,6 +1546,11 @@ module.exports = function (app) {
                 sticky: true,
                 stickyIndex: 1,
                 checkShow: function (action, model) {
+                    var hasPermission = employeeService.hasPermissionTo("TERMINATE_SEQ_WF");
+                    if (model.hasActiveSeqWF()) {
+                        return hasPermission;
+                    }
+                    
                     return true;
                 }
             },

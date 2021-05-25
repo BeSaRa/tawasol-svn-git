@@ -1096,6 +1096,11 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
+                    var hasPermission = employeeService.hasPermissionTo("TERMINATE_SEQ_WF");
+                    if (model.hasActiveSeqWF()) {
+                        return hasPermission;
+                    }
+
                     return true;
                 }
             },

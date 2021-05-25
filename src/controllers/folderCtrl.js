@@ -1116,6 +1116,11 @@ module.exports = function (app) {
                 callback: self.terminate,
                 class: "action-green",
                 checkShow: function (action, model) {
+                    var hasPermission = employeeService.hasPermissionTo("TERMINATE_SEQ_WF");
+                    if (model.hasActiveSeqWF()) {
+                        return hasPermission;
+                    }
+
                     return true;
                 }
             },
