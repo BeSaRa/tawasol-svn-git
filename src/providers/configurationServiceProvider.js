@@ -20,8 +20,8 @@ module.exports = function (app) {
             FOLLOWUP_BOOK_FILTER_START_BEFORE_VALUE: 30,
             ANNOTATE_DOCUMENT_PERMISSION: '',
             APP_CONTEXT: 'ui',
-            // PSPDF_LICENSE_KEY: false,
-            PSPDF_LICENSE_KEY: 'KG-tdeJHigxiE508_pkWvgUZPYz6IEWokopt21j2R_aV6sWdLtDmjWWdES4JUmYA9-RSJ191Gm5CHK2-ydujckel5gXG_hzwN97K8I48FRQvEU20eJqR_nRmAoOm0fwVTVixPkbhWScti5fnOdOTyl3AhD8a6hUptG9hH1yBniAanexj-GsT0EUfGTwfKmfnKGOt_hw5Y7i_FOfM_F9kGXby-8l31NsdVt1mkyVStp3m1bKleOCgceP8UTMj1ruxvn9Ct47RVk4vrNjoajCYHIgDrgJW-yWPB_iyYV0FOspCHaSKTrN70Bi2a7X7lWBKSn8QMNkWndAs6SZHRLTXm9PcYYz1RL57TatlmJuAHoR2nFN-6HEH4zfJQ3Hw3qFenuN5TLn49BvqkzlLcVRWM2E_O06KV0E53hZFDUYwe3tx2iP__RMg4put1-88CcTLi2hodRjamZD7vkS6ofIAZw==',
+            PSPDF_LICENSE_KEY: false,
+            // PSPDF_LICENSE_KEY: 'KG-tdeJHigxiE508_pkWvgUZPYz6IEWokopt21j2R_aV6sWdLtDmjWWdES4JUmYA9-RSJ191Gm5CHK2-ydujckel5gXG_hzwN97K8I48FRQvEU20eJqR_nRmAoOm0fwVTVixPkbhWScti5fnOdOTyl3AhD8a6hUptG9hH1yBniAanexj-GsT0EUfGTwfKmfnKGOt_hw5Y7i_FOfM_F9kGXby-8l31NsdVt1mkyVStp3m1bKleOCgceP8UTMj1ruxvn9Ct47RVk4vrNjoajCYHIgDrgJW-yWPB_iyYV0FOspCHaSKTrN70Bi2a7X7lWBKSn8QMNkWndAs6SZHRLTXm9PcYYz1RL57TatlmJuAHoR2nFN-6HEH4zfJQ3Hw3qFenuN5TLn49BvqkzlLcVRWM2E_O06KV0E53hZFDUYwe3tx2iP__RMg4put1-88CcTLi2hodRjamZD7vkS6ofIAZw==',
             REPLICATION_EXCLUDED_LIST: ['Note', 'Highlight', 'Squiggle', 'StrikeOut', 'Underline', 'Redaction'],
             OFFICIAL_ATTACHMENT_EXCLUDED_TOOLBAR_ITEMS: [
                 "annotate",
