@@ -514,8 +514,7 @@
                                 <!-- Allow Edit After First Approve -->
                                 <md-input-container flex>
                                     <md-switch flex ng-model="ctrl.globalSetting.allowEditAfterFirstApprove"
-                                               aria-label="{{lang.allow_edit_after_first_approve}}"
-                                               ng-disabled="ctrl.hasPSPDFViewer">
+                                               aria-label="{{lang.allow_edit_after_first_approve}}">
                                         <span>{{lang.allow_edit_after_first_approve}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('allowEditAfterFirstApprove')}}
                                     </md-switch>
                                 </md-input-container>
