@@ -24,7 +24,7 @@
                             <tbody md-body>
                             <tr md-select="contentViewHistoryViewer" md-row
                                 ng-repeat="contentViewHistoryViewer in ctrl.contentViewHistoryViewers | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
-                                <td md-cell>
+                                <td md-cell ng-class="{'font-bold': contentViewHistoryViewer.actionByInfo.id === ctrl.employee.id}">
                                     {{contentViewHistoryViewer.actionByInfo.getTranslatedName()}}
                                 </td>
                                 <td md-cell>{{contentViewHistoryViewer.ouInfo.getTranslatedName()}}</td>

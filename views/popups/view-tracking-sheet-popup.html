@@ -303,7 +303,8 @@
                                     <tbody md-body>
                                     <tr md-select="fullHistoryRecord" md-row
                                         ng-repeat="fullHistoryRecord in ctrl.fullHistoryRecords | filter:ctrl.searchModelFullHistory | limitTo: ctrl.fullHistoryGrid.limit: ((ctrl.fullHistoryGrid.page - 1) * ctrl.fullHistoryGrid.limit) track by $index">
-                                        <td md-cell>
+                                        <td md-cell
+                                            ng-class="{'font-bold': fullHistoryRecord.actionByInfo.id === ctrl.employee.id}">
                                             <span class="action-type-icon-container">
                                                 <md-icon
                                                         ng-if="fullHistoryRecord.actionType_vts"
@@ -465,7 +466,8 @@
                                         <td md-cell>
                                             {{attachmentHistoryRecord.eventTypeInfo.getTranslatedName()}}
                                         </td>
-                                        <td md-cell>
+                                        <td md-cell
+                                            ng-class="{'font-bold': attachmentHistoryRecord.actionByInfo.id === ctrl.employee.id}">
                                             {{attachmentHistoryRecord.actionByInfo.getTranslatedName()}}
                                         </td>
                                         <td md-cell>{{attachmentHistoryRecord.actionDate}}</td>
@@ -620,7 +622,8 @@
                                         <td md-cell>
                                             {{linkedDocumentHistoryRecord.eventTypeInfo.getTranslatedName()}}
                                         </td>
-                                        <td md-cell>
+                                        <td md-cell
+                                            ng-class="{'font-bold': linkedDocumentHistoryRecord.actionByInfo.id === ctrl.employee.id}">
                                             {{linkedDocumentHistoryRecord.actionByInfo.getTranslatedName()}}
                                         </td>
                                         <td md-cell>{{linkedDocumentHistoryRecord.actionDate}}</td>
@@ -675,7 +678,8 @@
                                     <tbody md-body>
                                     <tr md-select="linkedEntitiesHistoryRecord" md-row
                                         ng-repeat="linkedEntitiesHistoryRecord in ctrl.linkedEntitiesHistoryRecords | filter:ctrl.searchModelLinkedEntitiesHistory | limitTo: ctrl.linkedEntitiesHistoryGrid.limit: ((ctrl.linkedEntitiesHistoryGrid.page - 1) * ctrl.linkedEntitiesHistoryGrid.limit) track by $index">
-                                        <td md-cell>
+                                        <td md-cell
+                                            ng-class="{'font-bold': linkedEntitiesHistoryRecord.actionByInfo.id === ctrl.employee.id}">
                                             {{linkedEntitiesHistoryRecord.actionByInfo.getTranslatedName()}}
                                         </td>
                                         <td md-cell>{{linkedEntitiesHistoryRecord.actionDate}}</td>
@@ -733,7 +737,8 @@
                                     <tbody md-body>
                                     <tr md-select="destinationHistoryRecord" md-row
                                         ng-repeat="destinationHistoryRecord in ctrl.destinationHistoryRecords | filter:ctrl.searchModelDestinationHistory | limitTo: ctrl.destinationHistoryGrid.limit: ((ctrl.destinationHistoryGrid.page - 1) * ctrl.destinationHistoryGrid.limit) track by $index">
-                                        <td md-cell>
+                                        <td md-cell
+                                            ng-class="{'font-bold': destinationHistoryRecord.actionByInfo.id === ctrl.employee.id}">
                                             {{destinationHistoryRecord.actionByInfo.getTranslatedName()}}
                                         </td>
                                         <td md-cell>{{destinationHistoryRecord.actionDate}}</td>
@@ -786,7 +791,10 @@
                                     <tbody md-body>
                                     <tr md-select="smsLogRecord" md-row
                                         ng-repeat="smsLogRecord in ctrl.smsLogRecords | filter:ctrl.searchModelSMSLogs | limitTo: ctrl.smsLogsGrid.limit: ((ctrl.smsLogsGrid.page - 1) * ctrl.smsLogsGrid.limit) |orderBy:ctrl.smsLogsGrid.order  track by $index">
-                                        <td md-cell>{{smsLogRecord.user.getTranslatedName()}}</td>
+                                        <td md-cell
+                                            ng-class="{'font-bold': smsLogRecord.user.id === ctrl.employee.id}">
+                                            {{smsLogRecord.user.getTranslatedName()}}
+                                        </td>
                                         <td md-cell>{{smsLogRecord.organization.getTranslatedName()}}</td>
                                         <td md-cell>{{smsLogRecord.actionDate_vts}}</td>
                                         <td md-cell>{{smsLogRecord.message}}</td>
@@ -882,7 +890,10 @@
                                     <tbody md-body>
                                     <tr md-select="followupLog" md-row
                                         ng-repeat="followupLog in ctrl.followupLogRecords | filter:ctrl.searchModelFollowupLog | limitTo: ctrl.followupLogGrid.limit: ((ctrl.followupLogGrid.page - 1) * ctrl.followupLogGrid.limit) |orderBy:ctrl.followupLogGrid.order  track by $index">
-                                        <td md-cell>{{followupLog.userInfo.getTranslatedName()}}</td>
+                                        <td md-cell
+                                            ng-class="{'font-bold': followupLog.userInfo.id === ctrl.employee.id}">
+                                            {{followupLog.userInfo.getTranslatedName()}}
+                                        </td>
                                         <td md-cell>{{followupLog.ouInfo.getTranslatedName()}}</td>
                                         <td md-cell>{{followupLog.actionStatusInfo.getTranslatedName()}}</td>
                                         <td md-cell>{{followupLog.actionDate_vts}}</td>
@@ -932,7 +943,10 @@
                                         ng-repeat="annotationLog in ctrl.annotationLogRecords | filter:ctrl.searchModelAnnotationLog | limitTo: ctrl.annotationLogGrid.limit: ((ctrl.annotationLogGrid.page - 1) * ctrl.annotationLogGrid.limit) |orderBy:ctrl.annotationLogGrid.order  track by $index">
                                         <td md-cell>{{annotationLog.eventTypeInfo.getTranslatedName()}}</td>
                                         <td md-cell>{{annotationLog.itemTypeInfo.getTranslatedName()}}</td>
-                                        <td md-cell>{{annotationLog.actionByInfo.getTranslatedName()}}</td>
+                                        <td md-cell
+                                            ng-class="{'font-bold': annotationLog.actionByInfo.id === ctrl.employee.id}">
+                                            {{annotationLog.actionByInfo.getTranslatedName()}}
+                                        </td>
                                         <td md-cell>{{annotationLog.actionDate_vts}}</td>
                                     </tr>
                                     </tbody>

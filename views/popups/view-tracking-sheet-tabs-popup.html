@@ -41,9 +41,11 @@
                                             </th>
                                             <!--<th md-column md-order-by="documentCreationDate_vts"><span>{{lang.view_tracking_sheet_creation_date}}</span>
                                             </th>-->
-                                            <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                            <th md-column md-order-by="actionDate_vts">
+                                                <span>{{lang.view_tracking_sheet_action_date}}</span>
                                             </th>
-                                            <th md-column md-order-by="comments"><span>{{lang.view_tracking_sheet_comments}}</span>
+                                            <th md-column md-order-by="comments">
+                                                <span>{{lang.view_tracking_sheet_comments}}</span>
                                             </th>
                                         </tr>
                                         </thead>
@@ -121,14 +123,17 @@
                                             <th md-column
                                                 md-order-by="{{ctrl.getSortingKey('subSiteToIdInfo', 'Information')}}">
                                                 <span>{{lang.view_tracking_sheet_sub_site_to}}</span></th>
-                                            <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                            <th md-column md-order-by="actionDate_vts">
+                                                <span>{{lang.view_tracking_sheet_action_date}}</span>
                                             </th>
-                                            <th md-column md-order-by="deliveryDate_vts"><span>{{lang.view_tracking_sheet_delivery_date}}</span>
+                                            <th md-column md-order-by="deliveryDate_vts">
+                                                <span>{{lang.view_tracking_sheet_delivery_date}}</span>
                                             </th>
                                             <th md-column
                                                 md-order-by="{{ctrl.getSortingKey('messageStatus','Information')}}">
                                                 <span>{{lang.view_tracking_sheet_message_status}}</span></th>
-                                            <th md-column md-order-by="comment"><span>{{lang.view_tracking_sheet_comments}}</span>
+                                            <th md-column md-order-by="comment">
+                                                <span>{{lang.view_tracking_sheet_comments}}</span>
                                             </th>
                                         </tr>
                                         </thead>
@@ -217,9 +222,11 @@
                                             </th>
                                             <!--<th md-column md-order-by="documentCreationDate_vts"><span>{{lang.view_tracking_sheet_creation_date}}</span>
                                             </th>-->
-                                            <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                            <th md-column md-order-by="actionDate_vts">
+                                                <span>{{lang.view_tracking_sheet_action_date}}</span>
                                             </th>
-                                            <th md-column md-order-by="comments"><span>{{lang.view_tracking_sheet_comments}}</span>
+                                            <th md-column md-order-by="comments">
+                                                <span>{{lang.view_tracking_sheet_comments}}</span>
                                             </th>
                                         </tr>
                                         </thead>
@@ -276,7 +283,8 @@
                                                 md-order-by="{{ctrl.getSortingKey('actionByInfo', 'Information')}}">
                                                 <span>{{lang.view_tracking_sheet_action_by}}</span>
                                             </th>
-                                            <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                            <th md-column md-order-by="actionDate">
+                                                <span>{{lang.view_tracking_sheet_action_date}}</span>
                                             </th>
                                             <th md-column
                                                 md-order-by="{{ctrl.getSortingKey('actionByOUInfo', 'Information')}}">
@@ -297,7 +305,8 @@
                                         <tbody md-body>
                                         <tr md-select="fullHistoryRecord" md-row
                                             ng-repeat="fullHistoryRecord in ctrl.fullHistoryRecords | filter:ctrl.searchModelFullHistory | limitTo: ctrl.fullHistoryGrid.limit: ((ctrl.fullHistoryGrid.page - 1) * ctrl.fullHistoryGrid.limit) track by $index">
-                                            <td md-cell>
+                                            <td md-cell
+                                                ng-class="{'font-bold': fullHistoryRecord.actionByInfo.id === ctrl.employee.id}">
                                                 <span class="action-type-icon-container">
                                                     <md-icon
                                                             ng-if="fullHistoryRecord.actionType_vts"
@@ -350,11 +359,14 @@
                                         <thead md-head md-order="ctrl.mergedLinkedDocHistoryGrid.order"
                                                md-on-reorder="ctrl.sortMergedLinkedDocs">
                                         <tr md-row>
-                                            <th md-column md-order-by="docSubject"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
+                                            <th md-column md-order-by="docSubject">
+                                                <span>{{lang.view_tracking_sheet_doc_subject}}</span>
                                             </th>
-                                            <th md-column md-order-by="documentCreationDate"><span>{{lang.view_tracking_sheet_creation_date}}</span>
+                                            <th md-column md-order-by="documentCreationDate">
+                                                <span>{{lang.view_tracking_sheet_creation_date}}</span>
                                             </th>
-                                            <th md-column md-order-by="mainDoc"><span>{{lang.view_tracking_sheet_main_doc}}</span>
+                                            <th md-column md-order-by="mainDoc">
+                                                <span>{{lang.view_tracking_sheet_main_doc}}</span>
                                             </th>
                                             <th md-column><span>{{lang.view_tracking_sheet_actions}}</span></th>
                                         </tr>
@@ -433,7 +445,8 @@
                                         <thead md-head md-order="ctrl.attachmentsHistoryGrid.order"
                                                md-on-reorder="ctrl.getSortedDataAttachmentsHistory">
                                         <tr md-row>
-                                            <th md-column md-order-by="itemName"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
+                                            <th md-column md-order-by="itemName">
+                                                <span>{{lang.view_tracking_sheet_doc_subject}}</span>
                                             </th>
                                             <th md-column
                                                 md-order-by="{{ctrl.getSortingKey('eventTypeInfo','Information')}}">
@@ -443,7 +456,8 @@
                                                 md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}}">
                                                 <span>{{lang.view_tracking_sheet_action_by}}</span>
                                             </th>
-                                            <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                            <th md-column md-order-by="actionDate">
+                                                <span>{{lang.view_tracking_sheet_action_date}}</span>
                                             </th>
                                         </tr>
                                         </thead>
@@ -462,7 +476,8 @@
                                             <td md-cell>
                                                 {{attachmentHistoryRecord.eventTypeInfo.getTranslatedName()}}
                                             </td>
-                                            <td md-cell>
+                                            <td md-cell
+                                                ng-class="{'font-bold': attachmentHistoryRecord.actionByInfo.id === ctrl.employee.id}">
                                                 {{attachmentHistoryRecord.actionByInfo.getTranslatedName()}}
                                             </td>
                                             <td md-cell>{{attachmentHistoryRecord.actionDate}}</td>
@@ -512,9 +527,11 @@
                                             </th>
                                             <th md-column md-order-by="ouInfo"><span>{{lang.view_tracking_sheet_organization}}</span>
                                             </th>-->
-                                            <th md-column md-order-by="docSubject"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
+                                            <th md-column md-order-by="docSubject">
+                                                <span>{{lang.view_tracking_sheet_doc_subject}}</span>
                                             </th>
-                                            <th md-column md-order-by="documentType"><span>{{lang.view_tracking_sheet_document_type}}</span>
+                                            <th md-column md-order-by="documentType">
+                                                <span>{{lang.view_tracking_sheet_document_type}}</span>
                                             </th>
                                             <th md-column><span>{{lang.view_tracking_sheet_viewers}}</span></th>
                                         </tr>
@@ -587,7 +604,8 @@
                                         <thead md-head md-order="ctrl.linkedDocumentsHistoryGrid.order"
                                                md-on-reorder="ctrl.getSortedDataLinkedDocumentsHistory">
                                         <tr md-row>
-                                            <th md-column md-order-by="itemName"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
+                                            <th md-column md-order-by="itemName">
+                                                <span>{{lang.view_tracking_sheet_doc_subject}}</span>
                                             </th>
                                             <th md-column
                                                 md-order-by="{{ctrl.getSortingKey('eventTypeInfo', 'Information')}}">
@@ -597,9 +615,11 @@
                                                 md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}}">
                                                 <span>{{lang.view_tracking_sheet_action_by}}</span>
                                             </th>
-                                            <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                            <th md-column md-order-by="actionDate">
+                                                <span>{{lang.view_tracking_sheet_action_date}}</span>
                                             </th>
-                                            <th md-column md-order-by="itemFullSerial"><span>{{lang.view_tracking_sheet_full_serial_number}}</span>
+                                            <th md-column md-order-by="itemFullSerial">
+                                                <span>{{lang.view_tracking_sheet_full_serial_number}}</span>
                                             </th>
                                             <!--<th md-column md-order-by="itemType"><span>{{lang.view_tracking_sheet_type}}</span>
                                             </th>-->
@@ -620,7 +640,8 @@
                                             <td md-cell>
                                                 {{linkedDocumentHistoryRecord.eventTypeInfo.getTranslatedName()}}
                                             </td>
-                                            <td md-cell>
+                                            <td md-cell
+                                                ng-class="{'font-bold': linkedDocumentHistoryRecord.actionByInfo.id === ctrl.employee.id}">
                                                 {{linkedDocumentHistoryRecord.actionByInfo.getTranslatedName()}}
                                             </td>
                                             <td md-cell>{{linkedDocumentHistoryRecord.actionDate}}</td>
@@ -658,7 +679,8 @@
                                                 md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}}">
                                                 <span>{{lang.view_tracking_sheet_action_by}}</span>
                                             </th>
-                                            <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                            <th md-column md-order-by="actionDate">
+                                                <span>{{lang.view_tracking_sheet_action_date}}</span>
                                             </th>
                                             <th md-column
                                                 md-order-by="{{ctrl.getSortingKey('eventTypeInfo','Information')}}">
@@ -670,14 +692,16 @@
                                                 md-order-by="{{ctrl.getSortingKey('itemTypeInfo','Information')}}">
                                                 <span>{{lang.view_tracking_sheet_entity_type}}</span>
                                             </th>
-                                            <th md-column md-order-by="itemName"><span>{{lang.view_tracking_sheet_destination_full_name}}</span>
+                                            <th md-column md-order-by="itemName">
+                                                <span>{{lang.view_tracking_sheet_destination_full_name}}</span>
                                             </th>
                                         </tr>
                                         </thead>
                                         <tbody md-body>
                                         <tr md-select="linkedEntitiesHistoryRecord" md-row
                                             ng-repeat="linkedEntitiesHistoryRecord in ctrl.linkedEntitiesHistoryRecords | filter:ctrl.searchModelLinkedEntitiesHistory | limitTo: ctrl.linkedEntitiesHistoryGrid.limit: ((ctrl.linkedEntitiesHistoryGrid.page - 1) * ctrl.linkedEntitiesHistoryGrid.limit) track by $index">
-                                            <td md-cell>
+                                            <td md-cell
+                                                ng-class="{'font-bold': linkedEntitiesHistoryRecord.actionByInfo.id === ctrl.employee.id}">
                                                 {{linkedEntitiesHistoryRecord.actionByInfo.getTranslatedName()}}
                                             </td>
                                             <td md-cell>{{linkedEntitiesHistoryRecord.actionDate}}</td>
@@ -721,7 +745,8 @@
                                                 md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}}">
                                                 <span>{{lang.view_tracking_sheet_action_by}}</span>
                                             </th>
-                                            <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                            <th md-column md-order-by="actionDate">
+                                                <span>{{lang.view_tracking_sheet_action_date}}</span>
                                             </th>
                                             <th md-column
                                                 md-order-by="{{ctrl.getSortingKey('eventTypeInfo','Information')}}">
@@ -738,7 +763,8 @@
                                         <tbody md-body>
                                         <tr md-select="destinationHistoryRecord" md-row
                                             ng-repeat="destinationHistoryRecord in ctrl.destinationHistoryRecords | filter:ctrl.searchModelDestinationHistory | limitTo: ctrl.destinationHistoryGrid.limit: ((ctrl.destinationHistoryGrid.page - 1) * ctrl.destinationHistoryGrid.limit) track by $index">
-                                            <td md-cell>
+                                            <td md-cell
+                                                ng-class="{'font-bold': destinationHistoryRecord.actionByInfo.id === ctrl.employee.id}">
                                                 {{destinationHistoryRecord.actionByInfo.getTranslatedName()}}
                                             </td>
                                             <td md-cell>{{destinationHistoryRecord.actionDate}}</td>
@@ -784,7 +810,8 @@
                                                 md-order-by="{{ctrl.getSortingKey('organization', 'OrganizationUnit')}}">
                                                 <span>{{lang.organization}}</span>
                                             </th>
-                                            <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                            <th md-column md-order-by="actionDate_vts">
+                                                <span>{{lang.view_tracking_sheet_action_date}}</span>
                                             </th>
                                             <th md-column md-order-by="message">
                                                 <span>{{lang.sms_message}}</span>
@@ -794,7 +821,10 @@
                                         <tbody md-body>
                                         <tr md-select="smsLogRecord" md-row
                                             ng-repeat="smsLogRecord in ctrl.smsLogRecords | filter:ctrl.searchModelSMSLogs | limitTo: ctrl.smsLogsGrid.limit: ((ctrl.smsLogsGrid.page - 1) * ctrl.smsLogsGrid.limit) |orderBy:ctrl.smsLogsGrid.order  track by $index">
-                                            <td md-cell>{{smsLogRecord.user.getTranslatedName()}}</td>
+                                            <td md-cell
+                                                ng-class="{'font-bold': smsLogRecord.user.id === ctrl.employee.id}">
+                                                {{smsLogRecord.user.getTranslatedName()}}
+                                            </td>
                                             <td md-cell>{{smsLogRecord.organization.getTranslatedName()}}</td>
                                             <td md-cell>{{smsLogRecord.actionDate_vts}}</td>
                                             <td md-cell>{{smsLogRecord.message}}</td>
@@ -887,7 +917,8 @@
                                                 md-order-by="{{ctrl.getSortingKey('actionStatusInfo', 'Information')}}">
                                                 <span>{{lang.status}}</span>
                                             </th>
-                                            <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                            <th md-column md-order-by="actionDate_vts">
+                                                <span>{{lang.view_tracking_sheet_action_date}}</span>
                                             </th>
                                             <th md-column md-order-by="userComment">
                                                 <span>{{lang.view_tracking_sheet_comments}}</span>
@@ -897,7 +928,10 @@
                                         <tbody md-body>
                                         <tr md-select="followupLog" md-row
                                             ng-repeat="followupLog in ctrl.followupLogRecords | filter:ctrl.searchModelFollowupLog | limitTo: ctrl.followupLogGrid.limit: ((ctrl.followupLogGrid.page - 1) * ctrl.followupLogGrid.limit) |orderBy:ctrl.followupLogGrid.order  track by $index">
-                                            <td md-cell>{{followupLog.userInfo.getTranslatedName()}}</td>
+                                            <td md-cell
+                                                ng-class="{'font-bold': followupLog.userInfo.id === ctrl.employee.id}">
+                                                {{followupLog.userInfo.getTranslatedName()}}
+                                            </td>
                                             <td md-cell>{{followupLog.ouInfo.getTranslatedName()}}</td>
                                             <td md-cell>{{followupLog.actionStatusInfo.getTranslatedName()}}</td>
                                             <td md-cell>{{followupLog.actionDate_vts}}</td>
@@ -941,7 +975,8 @@
                                                 md-order-by="{{ctrl.getSortingKey('actionByInfo', 'Information')}}">
                                                 <span>{{lang.view_tracking_sheet_action_by}}</span>
                                             </th>
-                                            <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                            <th md-column md-order-by="actionDate_vts">
+                                                <span>{{lang.view_tracking_sheet_action_date}}</span>
                                             </th>
                                         </tr>
                                         </thead>
@@ -950,7 +985,10 @@
                                             ng-repeat="annotationLog in ctrl.annotationLogRecords | filter:ctrl.searchModelAnnotationLog | limitTo: ctrl.annotationLogGrid.limit: ((ctrl.annotationLogGrid.page - 1) * ctrl.annotationLogGrid.limit) |orderBy:ctrl.annotationLogGrid.order  track by $index">
                                             <td md-cell>{{annotationLog.eventTypeInfo.getTranslatedName()}}</td>
                                             <td md-cell>{{annotationLog.itemTypeInfo.getTranslatedName()}}</td>
-                                            <td md-cell>{{annotationLog.actionByInfo.getTranslatedName()}}</td>
+                                            <td md-cell
+                                                ng-class="{'font-bold': annotationLog.actionByInfo.id === ctrl.employee.id}">
+                                                {{annotationLog.actionByInfo.getTranslatedName()}}
+                                            </td>
                                             <td md-cell>{{annotationLog.actionDate_vts}}</td>
                                         </tr>
                                         </tbody>

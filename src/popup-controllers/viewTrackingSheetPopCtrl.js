@@ -36,6 +36,7 @@ module.exports = function (app) {
         self.gridType = gridType;
         self.heading = heading;
         self.trackingSheetService = viewTrackingSheetService;
+        self.employee = employeeService.getEmployee();
         var docSubject = info.title ? info.title : self.document.docSubject;
 
         if (self.gridType !== 'tabs') {

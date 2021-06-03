@@ -7,12 +7,14 @@ module.exports = function (app) {
                                                                  contentViewHistorySubject,
                                                                  viewTrackingSheetService,
                                                                  $filter,
-                                                                 gridService) {
+                                                                 gridService,
+                                                                 employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'contentViewHistoryViewersPopCtrl';
         self.contentViewHistoryViewers = angular.copy(contentViewHistoryViewers);
         self.contentViewHistorySubject = contentViewHistorySubject;
+        self.employee = employeeService.getEmployee();
 
         self.grid = {
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.trackingSheet.contentViewHistoryViewers) || 5, // default limit
