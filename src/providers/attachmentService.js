@@ -371,6 +371,9 @@ module.exports = function (app) {
                             } else if (errorCode.checkIf(error, 'CANNOT_EXPORT_TOO_MANY_ATTACHMENTS_OR_LINKED_DOCUMENTS') === true) {
                                 dialog.errorMessage(generator.getTranslatedError(error));
                                 return $q.reject(error);
+                            } else if (errorCode.checkIf(error, 'ATTACHMENT_RESTRICTED_TO_MODIFY_AFTER_BOOK_AUTHORIZATION') === true) {
+                                dialog.errorMessage(langService.get('attachment_restricted_to_modify_after_book_authorization'));
+                                return $q.reject(error);
                             }
 
                             return $q.reject(error);
