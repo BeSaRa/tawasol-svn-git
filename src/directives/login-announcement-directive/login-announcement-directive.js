@@ -1,4 +1,5 @@
 module.exports = function (app) {
+    require('./login-announcement-style.scss');
     app.directive('loginAnnouncementDirective', function (LangWatcher, langService, $timeout, cmsTemplate) {
         'ngInject';
         return {
@@ -20,7 +21,8 @@ module.exports = function (app) {
                         .owlCarousel({
                             items: 1,
                             rtl: currentLang === 'ar',
-                            autoplay: true
+                            autoplay: true,
+                            autoHeight:true
                         });
                 }
 
