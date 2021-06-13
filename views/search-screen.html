@@ -44,7 +44,7 @@
                 </md-tab>
                 <md-tab label="{{lang.search_module_search_results}}">
                     <md-table-container ng-if="ctrl.selectedTabName === 'outgoing'">
-                        <div flex scroll-directive>
+                        <div flex overlay-scroll-bar-directive>
                             <table md-table md-row-select multiple
                                    ng-model="ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments"
                                    md-progress="ctrl.searchScreens.outgoing.controller.grid.progress">
@@ -226,7 +226,7 @@
                         </md-table-pagination>
                     </md-table-container>
                     <md-table-container ng-if="ctrl.selectedTabName === 'internal'">
-                        <div flex scroll-directive>
+                        <div flex overlay-scroll-bar-directive>
                             <table md-table md-row-select multiple
                                    ng-model="ctrl.searchScreens.internal.controller.selectedSearchedInternalDocuments"
                                    md-progress="ctrl.searchScreens.internal.controller.grid.progress">
@@ -382,7 +382,7 @@
                         </md-table-pagination>
                     </md-table-container>
                     <md-table-container ng-if="ctrl.selectedTabName === 'incoming'">
-                        <div flex scroll-directive>
+                        <div flex overlay-scroll-bar-directive>
                             <table md-table md-row-select multiple
                                    ng-model="ctrl.searchScreens.incoming.controller.selectedSearchedIncomingDocuments"
                                    md-progress="ctrl.searchScreens.incoming.controller.grid.progress">
@@ -552,7 +552,7 @@
                         </md-table-pagination>
                     </md-table-container>
                     <md-table-container ng-if="ctrl.selectedTabName === 'outgoingIncoming'">
-                        <div flex scroll-directive>
+                        <div flex overlay-scroll-bar-directive>
                             <table md-table md-row-select multiple
                                    ng-model="ctrl.searchScreens.outgoingIncoming.controller.selectedSearchedOutgoingIncomingDocuments"
                                    md-progress="ctrl.searchScreens.outgoingIncoming.controller.grid.progress">
@@ -733,7 +733,7 @@
                         </md-table-pagination>
                     </md-table-container>
                     <md-table-container ng-if="ctrl.selectedTabName === 'general'">
-                        <div flex scroll-directive>
+                        <div flex overlay-scroll-bar-directive>
                             <table md-table md-row-select multiple
                                    ng-model="ctrl.searchScreens.general.controller.selectedSearchedGeneralDocuments"
                                    md-progress="ctrl.searchScreens.general.controller.grid.progress">

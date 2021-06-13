@@ -87,7 +87,7 @@
                 <md-tab label="{{lang.search_module_search_results}}" ng-if="ctrl.showResults"
                         md-on-select="ctrl.setCurrentTab('result')">
                     <md-table-container>
-                        <div flex scroll-directive>
+                        <div flex overlay-scroll-bar-directive>
                             <table md-table md-row-select multiple
                                    ng-model="ctrl.selectedSearchedOutgoingIncomingDocuments"
                                    md-progress="ctrl.grid.progress">

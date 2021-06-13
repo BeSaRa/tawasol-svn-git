@@ -109,7 +109,7 @@
                                          ng-click="ctrl.exportViewerLogToPDF($event)"></md-icon>-->
                             </md-subheader>
                             <md-table-container>
-                                <div flex scroll-directive>
+                                <div flex overlay-scroll-bar-directive>
                                     <table md-table ng-model="ctrl.selectedLogs"
                                            md-progress="ctrl.grid.progress">
                                         <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
