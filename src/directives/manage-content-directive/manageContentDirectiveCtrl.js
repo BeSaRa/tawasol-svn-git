@@ -230,6 +230,7 @@ module.exports = function (app) {
                     .then(function (template) {
                         self.template = template;
                         self.uploadedCallback && self.uploadedCallback();
+                        self.document.externalImportData = null;
                         if (self.isSimpleAdd) {
                             return self.getTrustViewUrl(template.getSubjectTitle(), $event);
                         } else {
@@ -246,6 +247,8 @@ module.exports = function (app) {
         self.checkContentFile = function (contentFiles, element) {
             if (contentFiles.length) {
                 var info = self.document.getInfo();
+                self.document.externalImportData = null;
+
                 //Electronic Document - only word document is allowed
                 var allowedDocument = "wordDocument";
                 //Paper Document - Check global settings for allowed types
