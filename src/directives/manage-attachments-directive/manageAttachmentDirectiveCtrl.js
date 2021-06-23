@@ -76,6 +76,7 @@ module.exports = function (app) {
         // get inherit Security for attachment from GlobalSettings
         self.inheritSecurity = rootEntity.getGlobalSettings().attachmentInheritSecurity;
         self.hasPSPDFViewer = rootEntity.hasPSPDFViewer();
+        self.isExternalDataSourceImportAllowed = rootEntity.returnRootEntity().rootEntity.importDataSourceStatus
 
         function _createAttachmentFile(file, externalImportData) {
             var securityLevel = self.document.securityLevel, attachment;

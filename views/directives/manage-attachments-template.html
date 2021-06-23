@@ -50,7 +50,7 @@
             </div>
         </md-button>
         <md-button ng-disabled="(ctrl.checkReceiveOrReceiveG2G() && ctrl.attachmentCopyBeforeEdit)"
-                   ng-if="ctrl.allowUpload"
+                   ng-if="ctrl.allowUpload && ctrl.isExternalDataSourceImportAllowed"
                    ng-click="ctrl.openExternalImportDialog($event)"
                    class="md-raised">
             <div layout="row" layout-align="start center">
