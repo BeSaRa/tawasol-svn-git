@@ -12,7 +12,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'externalDataSourceImportPopCtrl';
 
-        self.userExtDataSourcesList = dataSourcesList;
+        self.userExtDataSourcesList = [];
         self.selectedUserDataSource = null;
         self.identifier = null;
         self.metaDataKeysList = [];
@@ -80,6 +80,13 @@ module.exports = function (app) {
          */
         self.closePopup = function () {
             dialog.cancel();
+        };
+
+        self.$onInit = function () {
+            self.userExtDataSourcesList = dataSourcesList;
+            if (dataSourcesList.length === 1) {
+                self.selectedUserDataSource = self.userExtDataSourcesList[0];
+            }
         };
     });
 };
