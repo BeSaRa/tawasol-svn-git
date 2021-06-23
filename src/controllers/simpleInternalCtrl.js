@@ -240,10 +240,14 @@ module.exports = function (app) {
             } else {
                 var successKey = 'internal_metadata_saved_success';
                 if (self.documentInformation) {
-                    self.internal.contentSize = 1;
+                    self.internal.contentSize = 1; // dummy content size
                     successKey = 'save_success';
-                } else if (self.internal.contentFile && self.internal.contentFile.size) {
-                    self.internal.contentSize = self.internal.contentFile.size;
+                } else if (self.internal.contentFile) {
+                    if (self.internal.externalImportData) {
+                        self.internal.contentSize = 1; // dummy content size
+                    } else {
+                        self.internal.contentSize = self.internal.contentFile.size;
+                    }
                     successKey = 'save_success';
                 }
 

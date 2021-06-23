@@ -266,8 +266,12 @@ module.exports = function (app) {
                 if (self.documentInformation) {
                     self.incoming.contentSize = 1;
                     successKey = 'save_success';
-                } else if (self.incoming.contentFile && self.incoming.contentFile.size) {
-                    self.incoming.contentSize = self.incoming.contentFile.size;
+                } else if (self.incoming.contentFile) {
+                    if (self.incoming.externalImportData) {
+                        self.incoming.contentSize = 1; // dummy content size
+                    } else {
+                        self.incoming.contentSize = self.incoming.contentFile.size;
+                    }
                     successKey = 'save_success';
                 }
 

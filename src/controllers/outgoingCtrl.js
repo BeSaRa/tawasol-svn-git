@@ -312,10 +312,14 @@ module.exports = function (app) {
             } else {
                 var successKey = 'outgoing_metadata_saved_success';
                 if (self.documentInformation) {
-                    self.outgoing.contentSize = 1;
+                    self.outgoing.contentSize = 1; // dummy content size
                     successKey = 'save_success'
-                } else if (self.outgoing.contentFile && self.outgoing.contentFile.size) {
-                    self.outgoing.contentSize = self.outgoing.contentFile.size;
+                } else if (self.outgoing.contentFile) {
+                    if (self.outgoing.externalImportData){
+                        self.outgoing.contentSize = 1; // dummy content size
+                    } else {
+                        self.outgoing.contentSize = self.outgoing.contentFile.size;
+                    }
                     successKey = 'save_success';
                 }
                 self.requestCompleted = true;
