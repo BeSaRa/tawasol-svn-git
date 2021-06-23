@@ -73,6 +73,10 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    <tr md-row ng-if="!ctrl.metaDataList.length">
+                                        <td md-cell colspan="99" class="red-text text-center">{{lang.no_records_found}}
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>

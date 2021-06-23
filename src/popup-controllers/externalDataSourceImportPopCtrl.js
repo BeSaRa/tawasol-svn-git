@@ -50,12 +50,14 @@ module.exports = function (app) {
             userExternalDataSourceService.loadMetaData(self.selectedUserDataSource.extImportStore.id, self.identifier)
                 .then(function (result) {
                     self.metaDataKeysList = [];
-                    if (result && result.length > 0) {
-                        self.metaDataKeysList = Object.keys(result[0]);
-                    }
+                    self.selectedMetaDatas = [];
                     self.metaDataList = result;
-                    if (result.length === 1) {
-                        self.selectedMetaDatas = result;
+                    if (self.metaDataList && self.metaDataList.length > 0) {
+                        self.metaDataKeysList = Object.keys(self.metaDataList[0]);
+
+                        if (result.length === 1) {
+                            self.selectedMetaDatas.splice(0, 0, self.metaDataList[0]);
+                        }
                     }
                 })
         };
