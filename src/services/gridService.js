@@ -121,7 +121,8 @@ module.exports = function (app) {
                 organization: 'organization',
                 serialNumbers: 'serialNumbers',
                 documentStamp: 'docStamp',
-                sequentialWF: 'seqWF'
+                sequentialWF: 'seqWF',
+                externalDataSources: 'extDataSources'
             },
             others: {
                 linkedDoc: 'linkedDoc',

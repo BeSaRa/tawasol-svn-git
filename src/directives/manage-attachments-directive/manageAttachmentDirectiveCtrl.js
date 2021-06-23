@@ -21,6 +21,7 @@ module.exports = function (app) {
                                                               downloadService,
                                                               _,
                                                               managerService,
+                                                              userExternalDataSourceService,
                                                               employeeService) {
         'ngInject';
         var self = this;
@@ -48,11 +49,13 @@ module.exports = function (app) {
         // to hide buttons when one of the process work.
         self.buttons = {
             upload: 'scanner',
-            scanner: 'upload'
+            scanner: 'upload',
+            externalImport: 'externalImport'
         };
         // our process on the current controller.
         self.upload = true;
         self.scanner = true;
+        self.externalImport = true;
         self.progress = null;
 
         self.selectedAttachments = [];
@@ -74,8 +77,8 @@ module.exports = function (app) {
         self.inheritSecurity = rootEntity.getGlobalSettings().attachmentInheritSecurity;
         self.hasPSPDFViewer = rootEntity.hasPSPDFViewer();
 
-        function _createAttachmentFile(file) {
-            var securityLevel = self.document.securityLevel;
+        function _createAttachmentFile(file, externalImportData) {
+            var securityLevel = self.document.securityLevel, attachment;
             if (securityLevel.hasOwnProperty('lookupKey')) {
                 securityLevel = securityLevel.lookupKey;
             } else if (securityLevel.hasOwnProperty('id')) {
@@ -83,23 +86,38 @@ module.exports = function (app) {
             }
             securityLevel = lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel);
             if (self.attachment && self.attachment.vsId) {
-                var attachment = new Attachment(self.attachment);
-                attachment.file = file;
-                return attachment;
+                if (externalImportData) {
+                    attachment = new Attachment(self.attachment);
+                } else {
+                    attachment = new Attachment(self.attachment);
+                    attachment.file = file;
+                }
             } else {
                 var activeAttachmentTypes = _.filter(self.attachmentTypes, function (type) {
                     return type.status;
                 });
 
-                return new Attachment({
-                    file: file,
-                    securityLevel: self.document ? securityLevel : null,
-                    updateActionStatus: self.attachmentUpdateActions[0],
-                    attachmentType: (activeAttachmentTypes.length) ? activeAttachmentTypes[0] : null,
-                    priorityLevel: self.priorityLevels[0],
-                    exportStatus: (self.document.getInfo().documentClass === 'outgoing')
-                });
+                if (externalImportData) {
+                    attachment = new Attachment({
+                        securityLevel: self.document ? securityLevel : null,
+                        updateActionStatus: self.attachmentUpdateActions[0],
+                        attachmentType: (activeAttachmentTypes.length) ? activeAttachmentTypes[0] : null,
+                        priorityLevel: self.priorityLevels[0],
+                        exportStatus: (self.document.getInfo().documentClass === 'outgoing')
+                    });
+                } else {
+                    attachment = new Attachment({
+                        file: file,
+                        securityLevel: self.document ? securityLevel : null,
+                        updateActionStatus: self.attachmentUpdateActions[0],
+                        attachmentType: (activeAttachmentTypes.length) ? activeAttachmentTypes[0] : null,
+                        priorityLevel: self.priorityLevels[0],
+                        exportStatus: (self.document.getInfo().documentClass === 'outgoing')
+                    });
+                }
             }
+            attachment.externalImportData = externalImportData || null;
+            return attachment;
         }
 
         self.hideButton = function (buttonType) {
@@ -110,6 +128,7 @@ module.exports = function (app) {
         self.showButtons = function () {
             self.upload = true;
             self.scanner = true;
+            self.externalImport = true;
         };
 
         function _checkReceiveG2G() {
@@ -134,7 +153,7 @@ module.exports = function (app) {
                 .openScanner(true, $event)
                 .then(function () {
                     var result = scannerService.getStoredImages();
-                    self.attachment = _createAttachmentFile(result.file);
+                    self.attachment = _createAttachmentFile(result.file, null);
                     self.activeAttachment = self.attachment;
                     self.attachment.sourceType = 2; // scanned attachment.
                 })
@@ -171,6 +190,25 @@ module.exports = function (app) {
                             self.getSortedData();
                         }
                     }
+                });
+        };
+
+        /**
+         * @description Opens dialog to import from external data sources
+         * @param $event
+         */
+        self.openExternalImportDialog = function ($event) {
+            if (_checkReceiveG2G()) {
+                return;
+            }
+
+            userExternalDataSourceService.openExternalImportDialog($event)
+                .then(function (importResult) {
+                    if (!importResult) {
+                        return;
+                    }
+                    self.attachment = _createAttachmentFile(null, importResult);
+                    self.activeAttachment = self.attachment;
                 });
         };
 
@@ -218,7 +256,7 @@ module.exports = function (app) {
             self.attachment = self.setNameToAttachment(self.attachment);
             self.activeAttachment = self.attachment;
             var info = self.document.getInfo();
-            var promise = attachmentService.addAttachment(info, self.attachment);
+            var promise = attachmentService.addAttachment(self.document, self.attachment);
 
             promise
                 .then(function (attachment) {
@@ -369,7 +407,7 @@ module.exports = function (app) {
             attachmentService
                 .validateBeforeUpload('attachmentUpload', files[0])
                 .then(function (file) {
-                    self.attachment = _createAttachmentFile(file);
+                    self.attachment = _createAttachmentFile(file, null);
                     self.activeAttachment = self.attachment;
                 })
                 .catch(function (availableExtensions) {

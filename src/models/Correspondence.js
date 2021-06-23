@@ -106,6 +106,8 @@ module.exports = function (app) {
             self.isMigrated = false;
             self.seqWFId = null;
 
+            self.externalImportData = null; // set the value from external data source import popup. used in upload content
+
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];

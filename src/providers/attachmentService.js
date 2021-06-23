@@ -125,6 +125,7 @@ module.exports = function (app) {
                                       tokenService,
                                       langService,
                                       errorCode,
+                                      CorrespondenceInfo,
                                       authenticationService) {
                 'ngInject';
                 var self = this;
@@ -224,26 +225,21 @@ module.exports = function (app) {
                  * @return {Promise|Attachment}
                  */
                 self.addAttachment = function (document, attachment, callback) {
-                    var url = _generateAttachmentUrl(document);
-                    return $http({
-                        url: url,
-                        method: 'POST',
-                        data: generator.interceptSendInstance('Attachment', attachment),
-                        headers: {'Content-Type': undefined},
-                        uploadEventHandlers: {
-                            progress: function (e) {
-                                if (callback) {
-                                    callback(Math.floor((e.loaded * 100 / e.total)))
-                                }
-                            }
-                        }
-                    }).then(function (result) {
+                    var info = document instanceof CorrespondenceInfo ? document : document.getInfo(),
+                        promise = null;
+                    if (!!attachment.externalImportData) {
+                        promise = _addAttachmentFromExternalSource(document, attachment, callback);
+                    } else {
+                        promise = _addAttachmentFromSystem(document, attachment, callback);
+                    }
+
+                    return promise.then(function (result) {
                         attachment.vsId = result.data.rs;
                         attachment.createdBy = _getEmployeeDomainName();
-                        attachment.isDeletable = self.checkAttachmentIsDeletable(document, attachment);
+                        attachment.isDeletable = self.checkAttachmentIsDeletable(info, attachment);
                         attachment = generator.generateInstance(attachment, Attachment, self._sharedMethods);
                         attachment = generator.interceptReceivedInstance('Attachment', attachment);
-                        return attachment;//generator.generateInstance(attachment, Attachment, self._sharedMethods);
+                        return attachment;
                     })
                         .catch(function (error) {
                             if (errorCode.checkIf(error, 'ERROR_UPLOAD_FILE') === true) {
@@ -257,6 +253,60 @@ module.exports = function (app) {
                             return $q.reject(error);
                         });
                 };
+
+                /**
+                 * @description add new attachment from system
+                 * @param document
+                 * @param attachment
+                 * @param callback
+                 * @return {Promise|Attachment}
+                 */
+                var _addAttachmentFromSystem = function (document, attachment, callback) {
+                    var info = document instanceof CorrespondenceInfo ? document : document.getInfo(),
+                        url = _generateAttachmentUrl(info);
+
+                    return $http({
+                        url: url,
+                        method: 'POST',
+                        data: generator.interceptSendInstance('Attachment', attachment),
+                        headers: {'Content-Type': undefined},
+                        uploadEventHandlers: {
+                            progress: function (e) {
+                                if (callback) {
+                                    callback(Math.floor((e.loaded * 100 / e.total)))
+                                }
+                            }
+                        }
+                    });
+                };
+
+                /**
+                 * @description add new attachment from external source
+                 * @param document
+                 * @param attachment
+                 * @param callback
+                 * @return {Promise|Attachment}
+                 */
+                var _addAttachmentFromExternalSource = function (document, attachment, callback) {
+                    var info = document instanceof CorrespondenceInfo ? document : document.getInfo(),
+                        url = _generateAttachmentUrl(info);
+
+                    url += '/user-ext-import-store?sourceId=' + attachment.externalImportData.sourceId + '&paramValue=' + attachment.externalImportData.identifier;
+
+                    return $http({
+                        url: url,
+                        method: 'POST',
+                        data: generator.interceptSendInstance('Attachment', attachment),
+                        uploadEventHandlers: {
+                            progress: function (e) {
+                                if (callback) {
+                                    callback(Math.floor((e.loaded * 100 / e.total)))
+                                }
+                            }
+                        }
+                    });
+                };
+
                 /**
                  * add attachment to exists document
                  * @param vsId
@@ -345,21 +395,16 @@ module.exports = function (app) {
                  * @return {Promise|Attachment}
                  */
                 self.updateAttachment = function (document, attachment, callback) {
-                    var url = _generateAttachmentUrl(document) + '/update';
-                    return $http({
-                        url: url,
-                        method: 'POST',
-                        data: generator.interceptSendInstance('Attachment', attachment),
-                        headers: {'Content-Type': undefined},
-                        uploadEventHandlers: {
-                            progress: function (e) {
-                                if (callback) {
-                                    callback(Math.floor((e.loaded * 100 / e.total)))
-                                }
-                            }
-                        }
-                    }).then(function (result) {
-                        attachment.isDeletable = self.checkAttachmentIsDeletable(document, attachment);
+                    var info = document instanceof CorrespondenceInfo ? document : document.getInfo(),
+                        promise = null;
+                    if (!!attachment.externalImportData) {
+                        promise = _updateAttachmentFromExternalSource(document, attachment, callback);
+                    } else {
+                        promise = _updateAttachmentFromSystem(document, attachment, callback);
+                    }
+
+                    return promise.then(function (result) {
+                        attachment.isDeletable = self.checkAttachmentIsDeletable(info, attachment);
                         attachment = generator.generateInstance(attachment, Attachment, self._sharedMethods);
                         attachment = generator.interceptReceivedInstance('Attachment', attachment);
                         return attachment;
@@ -379,6 +424,45 @@ module.exports = function (app) {
                             return $q.reject(error);
                         });
                 };
+
+                var _updateAttachmentFromSystem = function (document, attachment, callback) {
+                    var info = document instanceof CorrespondenceInfo ? document : document.getInfo(),
+                        url = _generateAttachmentUrl(info) + '/update';
+
+                    return $http({
+                        url: url,
+                        method: 'POST',
+                        data: generator.interceptSendInstance('Attachment', attachment),
+                        headers: {'Content-Type': undefined},
+                        uploadEventHandlers: {
+                            progress: function (e) {
+                                if (callback) {
+                                    callback(Math.floor((e.loaded * 100 / e.total)))
+                                }
+                            }
+                        }
+                    });
+                }
+                var _updateAttachmentFromExternalSource = function (document, attachment, callback) {
+                    var info = document instanceof CorrespondenceInfo ? document : document.getInfo(),
+                        url = _generateAttachmentUrl(info);
+
+                    url += '/user-ext-import-store?sourceId=' + attachment.externalImportData.sourceId + '&paramValue=' + attachment.externalImportData.identifier;
+                    url += '&withProtect=true';
+
+                    return $http({
+                        url: url,
+                        method: 'PUT',
+                        data: generator.interceptSendInstance('Attachment', attachment),
+                        uploadEventHandlers: {
+                            progress: function (e) {
+                                if (callback) {
+                                    callback(Math.floor((e.loaded * 100 / e.total)))
+                                }
+                            }
+                        }
+                    });
+                }
 
                 /**
                  * @description delete given classification.

@@ -159,4 +159,6 @@ module.exports = function (app) {
     require('./viewSeqWfStepsPopCtrl')(app);
     require('./selectSubSequentialWorkflowPopCtrl')(app);
     require('./configureAnnotationPatternPopCtrl')(app);
+    require('./externalDataSourcePopCtrl')(app);
+    require('./externalDataSourceImportPopCtrl')(app);
 };

@@ -858,6 +858,10 @@ module.exports = function (app) {
          */
         self.saveDocumentContentFile = function (correspondence, content) {
             if (correspondence.hasVsId()) {
+                // if data is imported from external source
+                if (correspondence.externalImportData) {
+                    return self.saveDocumentContentFileFromExternalSource(correspondence);
+                }
                 var form = new FormData();
                 form.append('content', content ? content : correspondence.contentFile);
                 return $http.post(_createUrlSchema(correspondence.vsId, correspondence.docClassName, 'content'), form, {
@@ -866,6 +870,30 @@ module.exports = function (app) {
                     }
                 })
                     .then(function (result) {
+                        correspondence.vsId = result.data.rs;
+                        return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
+                    }).catch(function (error) {
+                        if (errorCode.checkIf(error, 'ERROR_UPLOAD_FILE') === true) {
+                            dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
+                            return $q.reject(error);
+                        }
+                        return $q.reject(self.getTranslatedError(error));
+                    });
+            }
+        };
+        /**
+         * @description add content file into document from external source.
+         * @param correspondence
+         */
+        self.saveDocumentContentFileFromExternalSource = function (correspondence) {
+            if (correspondence.hasVsId()) {
+                var url = _createUrlSchema(correspondence.vsId, correspondence.docClassName, 'user-ext-import-store/content')
+                    + '?sourceId=' + correspondence.externalImportData.sourceId
+                    + '&paramValue=' + correspondence.externalImportData.identifier;
+
+                return $http.put(url, {})
+                    .then(function (result) {
+                        debugger;
                         correspondence.vsId = result.data.rs;
                         return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
                     }).catch(function (error) {

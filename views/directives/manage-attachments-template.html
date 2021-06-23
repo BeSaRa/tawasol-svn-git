@@ -49,6 +49,15 @@
                 <span>{{lang.attachment_scanner}}</span>
             </div>
         </md-button>
+        <md-button ng-disabled="(ctrl.checkReceiveOrReceiveG2G() && ctrl.attachmentCopyBeforeEdit)"
+                   ng-if="ctrl.allowUpload"
+                   ng-click="ctrl.openExternalImportDialog($event)"
+                   class="md-raised">
+            <div layout="row" layout-align="start center">
+                <md-icon md-svg-icon="file-import"></md-icon>
+                <span>{{lang.external_import}}</span>
+            </div>
+        </md-button>
     </div>
 
     <ng-form layout="column" name="attachment_form">

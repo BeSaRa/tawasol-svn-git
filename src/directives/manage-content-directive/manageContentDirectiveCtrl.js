@@ -19,7 +19,9 @@ module.exports = function (app) {
                                                            attachmentService,
                                                            correspondenceService,
                                                            employeeService,
+                                                           userExternalDataSourceService,
                                                            $timeout,
+                                                           toast,
                                                            validationService,
                                                            documentTemplateService,
                                                            $stateParams) {
@@ -198,6 +200,14 @@ module.exports = function (app) {
         self.checkToShowScanButton = function (document) {
             var docClass = document.getInfo().documentClass.toUpperCase();
             return !self.displayPrepare && !self.receiveDocument && employeeService.hasPermissionTo(docClass + '_SCAN_DOCUMENT');
+        };
+
+        /**
+         * @description Checks whether to show/hide import from external data source button
+         * @returns {boolean|*}
+         */
+        self.canShowImportFromExDataSource = function (document) {
+            return !self.displayPrepare && !self.receiveDocument && document.getInfo().isPaper && rootEntity.returnRootEntity().rootEntity.importDataSourceStatus;
         };
 
         /**
@@ -394,6 +404,23 @@ module.exports = function (app) {
                     result.file.name = result.file.name + '.pdf';
                     return self.checkContentFile([result.file]);
                 })
+        };
+
+        /**
+         * @description Opens dialog to import from external data sources
+         * @param $event
+         */
+        self.openExternalImportDialog = function ($event) {
+            userExternalDataSourceService.openExternalImportDialog($event)
+                .then(function (importResult) {
+                    if (!importResult) {
+                        return;
+                    }
+                    self.document.contentFile = {}; // set it empty just to pass the condition of showing file name
+                    self.document.externalImportData = importResult
+                    self.isContentFileAttached = true;
+                    self.templateOrFileName = 'external import file';
+                });
         };
 
         self.showEditContentInEditPopup = function () {

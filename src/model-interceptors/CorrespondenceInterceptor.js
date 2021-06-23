@@ -182,6 +182,7 @@ module.exports = function (app) {
             delete model.recordGridName;
             delete model.hasSequentialWFIndicator;
             delete model.docDateTemp;
+            delete model.externalImportData;
             return model;
         });
 

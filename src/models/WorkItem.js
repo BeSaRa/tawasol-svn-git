@@ -1066,7 +1066,8 @@ module.exports = function (app) {
                     vsId: info.vsId,
                     securityLevel: new Information(self.securityLevel),
                     priorityLevel: new Information(self.priorityLevel),
-                    contentSize: true
+                    contentSize: true,
+                    externalImportData: self.externalImportData
                 }));
 
             };

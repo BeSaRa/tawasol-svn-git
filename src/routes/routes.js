@@ -1713,6 +1713,13 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_sequential_workflows'
             })
+            .state('app.administration.external-data-sources', {
+                url: '/data-sources',
+                templateUrl: templateProvider.getView('external-data-sources'),
+                controller: 'externalDataSourcesCtrl',
+                controllerAs: 'ctrl',
+                permission: 'menu_item_external_data_sources'
+            })
 
     });
 };

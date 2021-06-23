@@ -1,0 +1,101 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.external_import}}">
+    <popup-toolbar-directive header-text="{{lang.external_import}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="externalImportForm" autocomplete="off">
+                <div layout="column">
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="dataSource">{{lang.data_source}}</label>
+                            <md-select id="dataSource" name="dataSource" required
+                                       ng-model-options="{trackBy: '$value.id'}"
+                                       ng-model="ctrl.selectedUserDataSource">
+                                <md-option ng-repeat="userExtDataSource in ctrl.userExtDataSourcesList"
+                                           ng-value="userExtDataSource">
+                                    {{userExtDataSource.extImportStore.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="externalImportForm.dataSource.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label for="identifier">{{lang.identifier}}</label>
+                            <input name="identifier" id="identifier" required
+                                   ng-model="ctrl.identifier"
+                                   custom-validate-directive="ENS">
+                            <div ng-messages="externalImportForm.identifier.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <div class="p10-0">
+                            <md-button ng-click="ctrl.getMetadata($event)"
+                                       ng-disabled="!ctrl.isValidForm()"
+                                       class="md-raised md-primary">
+                                {{lang.select}}
+                            </md-button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div layout="column">
+                <div scroll-directive>
+                    <md-card md-whiteframe="3" class="card-overlay">
+                        <md-table-container>
+                            <div scroll-directive>
+                                <table md-table md-row-select="true"
+                                       ng-model="ctrl.selectedMetaDatas"
+                                       md-progress="ctrl.metaDataGrid.progress">
+                                    <thead md-head>
+                                    <tr md-row>
+                                        <th ng-repeat="header in ctrl.metaDataKeysList"
+                                            md-column>
+                                            <span>{{header}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.actions}}</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="record"
+                                        ng-repeat="record in ctrl.metaDataList | limitTo: ctrl.metaDataGrid.limit: ((ctrl.metaDataGrid.page - 1) * ctrl.metaDataGrid.limit) track by $index">
+                                        <td md-cell ng-repeat="key in ctrl.metaDataKeysList">{{record[key]}}</td>
+                                        <td md-cell>
+                                            <div flex layout="row" layout-align="start center">
+                                                <md-button class="md-icon-button"
+                                                           title="{{lang.view}}"
+                                                           ng-click="ctrl.viewContent($event, record)">
+                                                    <md-icon md-svg-icon="book-open-variant"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.metaDataGrid.limitOptions"
+                                    md-limit="ctrl.metaDataGrid.limit"
+                                    md-page="ctrl.metaDataGrid.page"
+                                    md-total="{{ctrl.metaDataList.length}}" md-page-select>
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary" ng-disabled="!ctrl.selectedMetaDatas.length"
+                   ng-click="ctrl.importData($event)">
+            {{lang.import}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

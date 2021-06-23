@@ -202,5 +202,7 @@ module.exports = function (app) {
     require('./ApplicationUserView')(app);
     require('./OrganizationUnitView')(app);
     require('./BackStepOptions')(app);
+    require('./ExtImportStore')(app);
+    require('./UserExtImportStore')(app);
 
 };

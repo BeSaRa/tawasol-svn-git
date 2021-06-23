@@ -14,7 +14,9 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            var file = model.type === 'scanner' ? model.file.file : model.file, formData = new FormData();
+            var file = model.type === 'scanner' ? model.file.file : model.file,
+                formData = new FormData(),
+                isExternalSourceImport = !!model.externalImportData;
             model.attachmentType = model.attachmentType.hasOwnProperty('lookupKey') ? model.attachmentType.lookupKey : model.attachmentType;
             model.updateActionStatus = model.updateActionStatus.hasOwnProperty('lookupKey') ? model.updateActionStatus.lookupKey : model.updateActionStatus;
             if (model.securityLevel instanceof Lookup) {
@@ -32,6 +34,11 @@ module.exports = function (app) {
             delete model.isLinkedExportedDocAttachment;
             delete model.isOfficialIndicator;
             delete model.createReplyDisableDelete;
+            delete model.externalImportData;
+
+            if (isExternalSourceImport) {
+                return model;
+            }
 
             formData.append('entity', JSON.stringify(model));
             formData.append('content', file || null);

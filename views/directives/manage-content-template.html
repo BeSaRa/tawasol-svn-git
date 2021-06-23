@@ -6,6 +6,7 @@
             {{lang.prepare_document_content}}
         </md-button>
     </div>
+    <!-- Upload Content -->
     <label for="upload-file-content"
            class="md-button md-raised"
            ng-if="!ctrl.receiveDocument">
@@ -19,6 +20,7 @@
                ng-model="ctrl.document.contentFile" aria-label="{{lang.content_upload}}"
                id="upload-file-content" name="upload-file-content">
     </label>
+    <!-- Scanner -->
     <div ng-if="ctrl.checkToShowScanButton(ctrl.document)">
         <md-button ng-click="ctrl.openScannerDialog('scanner',$event)"
                    class="md-raised">
@@ -28,6 +30,17 @@
             </div>
         </md-button>
     </div>
+    <!-- Import from external data source -->
+    <div ng-if="ctrl.canShowImportFromExDataSource(ctrl.document)">
+        <md-button ng-click="ctrl.openExternalImportDialog($event)"
+                   class="md-raised">
+            <div layout="row" layout-align="start center">
+                <md-icon md-svg-icon="file-import"></md-icon>
+                <span>{{lang.external_import}}</span>
+            </div>
+        </md-button>
+    </div>
+    <!-- Edit Content -->
     <div>
         <md-button ng-if="ctrl.showEditContentInEditPopup() && !ctrl.isDefaultEditModeBoth"
                    class="md-raised" ng-click="ctrl.editContentInEditPopup($event)">

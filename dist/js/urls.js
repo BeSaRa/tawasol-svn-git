@@ -211,6 +211,8 @@
                 .addToAllWithBase('userInkSignature', 'cms-entity/user/annotation')
                 .addToAllWithBase('BJClassifier', 'cms-entity/admin/documentsecurity/classifier/label')
                 .addToAllWithBase('kwtDigitalStamp', 'cms-entity/correspondence/outgoing/digital-stamp/vsid/:vsId/stamp-vsid/:stampVsId')
+                .addToAllWithBase('externalDataSource', 'cms-entity/admin/ex-import-store')
+                .addToAllWithBase('userExternalDataSource', 'cms-entity/user/user-ext-import-store')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

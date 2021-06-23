@@ -15,7 +15,7 @@ module.exports = function (app) {
         self.loadingIndicatorService = loadingIndicatorService;
         self.employeeService = employeeService;
         self.slowConnectionEnabled = false; // set it to false so that it will open normally.
-        if (self.typeOfDoc !== 'otp-doc') {
+        if (!(self.typeOfDoc === 'otp-doc' || self.typeOfDoc === 'external-import')) {
             self.slowConnectionEnabled = !!employeeService.getEmployee().isSlowConnectionMode();
         }
 
@@ -30,7 +30,7 @@ module.exports = function (app) {
          * @returns {*|boolean}
          */
         self.isShowSlowConnectionVisible = function () {
-            if (self.typeOfDoc === 'otp-doc') {
+            if (self.typeOfDoc === 'otp-doc' || self.typeOfDoc === 'external-import') {
                 return false;
             }
             return rootEntity.getGlobalSettings() && rootEntity.getGlobalSettings().isSlowConnectionMode()
@@ -61,7 +61,7 @@ module.exports = function (app) {
          * @description Toggles the view mode for the attachment
          */
         self.toggleSlowConnectionMode = function ($event) {
-            if (self.typeOfDoc === 'otp-doc' || !rootEntity.getGlobalSettings().isSlowConnectionMode()) {
+            if (self.typeOfDoc === 'otp-doc' || self.typeOfDoc === 'external-import' || !rootEntity.getGlobalSettings().isSlowConnectionMode()) {
                 return _getOriginalMainDocContent();
             }
 

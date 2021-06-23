@@ -730,6 +730,12 @@ module.exports = function (app) {
                     return organizationService.getFollowUpOrganizations();
                 }
             })
+            .bulkResolveToState('app.administration.external-data-sources', {
+                externalDataSources: function (externalDataSourceService) {
+                    'ngInject';
+                    return externalDataSourceService.loadExternalDataSources();
+                }
+            })
             .registerResolver();
     });
 };

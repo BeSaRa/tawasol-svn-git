@@ -1,0 +1,305 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{!ctrl.editMode ? lang.external_data_source : ctrl.model.getNames()}}">
+    <popup-toolbar-directive full-screen-button="true" full-screen="ctrl.fullScreen"
+                             header-text="{{!ctrl.editMode ? lang.add_new_external_data_source : ctrl.model.getNames()}}">
+    </popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div>
+            <form name="externalDataSourceForm" novalidate autocomplete="off">
+                <md-tabs md-dynamic-height md-selected="ctrl.selectedTabIndex">
+                    <!-- Basic Info-->
+                    <md-tab ng-if="ctrl.showTab(ctrl.tabsData.basic)"
+                            label="{{lang.basic_info}}" ng-click="ctrl.setCurrentTab(ctrl.tabsData.basic)">
+                        <md-content class="md-padding">
+                            <div layout="column">
+                                <div layout="row">
+                                    <!-- Arabic Name -->
+                                    <md-input-container flex>
+                                        <label for="arName">{{lang.arabic_name}}</label>
+                                        <input name="arName" id="arName" required minlength="4"
+                                               custom-validate-directive="A1NS"
+                                               ng-model="ctrl.externalDataSource.arName" maxlength="80">
+                                        <div ng-messages="externalDataSourceForm.arName.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="A1NS">{{lang.one_arabic_number_space}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 80})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <!-- English Name -->
+                                    <md-input-container flex>
+                                        <label for="enName">{{lang.english_name}}</label>
+                                        <input name="enName" id="enName" required minlength="4"
+                                               custom-validate-directive="E1NS"
+                                               ng-model="ctrl.externalDataSource.enName" maxlength="80">
+                                        <div ng-messages="externalDataSourceForm.enName.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 80})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <!-- Data Source Connection -->
+                                    <md-input-container flex>
+                                        <label for="dataSourceJndi">{{lang.data_source_connection}}</label>
+                                        <input name="dataSourceJndi" id="dataSourceJndi" required minlength="3"
+                                               ng-model="ctrl.externalDataSource.dataSourceJndi" maxlength="80">
+                                        <div ng-messages="externalDataSourceForm.dataSourceJndi.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 80})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <!-- Source Name -->
+                                    <md-input-container flex>
+                                        <label for="sourceName">{{lang.data_source_name}}</label>
+                                        <input name="sourceName" id="sourceName" required
+                                               custom-validate-directive="E1NS"
+                                               ng-model="ctrl.externalDataSource.sourceName" maxlength="150">
+                                        <div ng-messages="externalDataSourceForm.sourceName.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 150})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <!-- Source Identifier -->
+                                    <md-input-container flex>
+                                        <label for="sourceIdentifier">{{lang.identifier}}</label>
+                                        <input name="sourceIdentifier" id="sourceIdentifier" required
+                                               custom-validate-directive="E1NS"
+                                               ng-model="ctrl.externalDataSource.sourceIdentifier" maxlength="50">
+                                        <div ng-messages="externalDataSourceForm.sourceIdentifier.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 50})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <!-- Content Column -->
+                                    <md-input-container flex>
+                                        <label for="contentColumn">{{lang.content_column}}</label>
+                                        <input name="contentColumn" id="contentColumn" required
+                                               custom-validate-directive="E1NS"
+                                               ng-model="ctrl.externalDataSource.contentColumn" maxlength="50">
+                                        <div ng-messages="externalDataSourceForm.contentColumn.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 50})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <!-- Content Type Column -->
+                                    <md-input-container flex>
+                                        <label for="contentTypeColumn">{{lang.content_type_column}}</label>
+                                        <input name="contentTypeColumn" id="contentTypeColumn" required
+                                               custom-validate-directive="E1NS"
+                                               ng-model="ctrl.externalDataSource.contentTypeColumn" maxlength="50">
+                                        <div ng-messages="externalDataSourceForm.contentTypeColumn.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 50})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <!-- Status -->
+                                    <div flex class="p020">
+                                        <md-switch flex ng-model="ctrl.externalDataSource.status"
+                                                   aria-label="{{lang.status}}">
+                                            <label>{{lang.status}} :
+                                                {{ctrl.externalDataSource.getTranslatedStatus()}}</label>
+                                        </md-switch>
+                                    </div>
+                                </div>
+                                <div layout="row">
+                                    <!-- Metadata Columns -->
+                                    <div flex>
+                                        <label>{{lang.meta_data_columns}}</label>
+                                        <md-chips ng-model="ctrl.externalDataSource.metaDataColumns"
+                                                  input-aria-label="{{lang.meta_data_columns}}"
+                                                  ng-required="true" name="metaDataColumns">
+                                        </md-chips>
+                                        <div class="md-chips-messages"
+                                             ng-show="externalDataSourceForm.metaDataColumns.$touched"
+                                             ng-messages="externalDataSourceForm.metaDataColumns.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <!-- Mapped Users -->
+                    <md-tab ng-if="ctrl.showTab(ctrl.tabsData.users)"
+                            label="{{lang.users}}" ng-click="ctrl.setCurrentTab(ctrl.tabsData.users)">
+                        <md-content class="md-padding">
+                            <div layout="column">
+                                <div ng-if="!ctrl.userFormShown">
+                                    <div layout="row" class="p20-0">
+                                        <md-button ng-click="ctrl.showUserForm($event)"
+                                                   class="md-icon-button"
+                                                   tooltip="{{lang.add}}">
+                                            <md-icon md-svg-icon="plus"></md-icon>
+                                        </md-button>
+                                        <md-button ng-click="ctrl.reloadMappedUsers()" class="md-icon-button"
+                                                   tooltip="{{lang.reload}}">
+                                            <md-icon md-svg-icon="refresh"></md-icon>
+                                        </md-button>
+                                        <span flex></span>
+                                        <grid-search-directive grid="ctrl.usersGrid"></grid-search-directive>
+                                    </div>
+                                    <div layout="column">
+                                        <div scroll-directive>
+                                            <md-card md-whiteframe="3" class="card-overlay">
+                                                <md-table-container>
+                                                    <div scroll-directive>
+                                                        <table md-table
+                                                               ng-model="ctrl.selectedUsers"
+                                                               md-progress="ctrl.usersGrid.progress">
+                                                            <thead md-head md-order="ctrl.usersGrid.order"
+                                                                   md-on-reorder="ctrl.getSortedUsers">
+                                                            <tr md-row>
+                                                                <th ng-if="!ctrl.selectedUsers.length"
+                                                                    md-column
+                                                                    md-order-by="{{ctrl.getSortingKey('ouInfo', 'AdminResultRelation')}}">
+                                                                    <span>{{lang.organization}}</span>
+                                                                </th>
+                                                                <th ng-if="!ctrl.selectedUsers.length"
+                                                                    md-column
+                                                                    md-order-by="{{ctrl.getSortingKey('userInfo', 'AdminResult')}}">
+                                                                    <span>{{lang.user}}</span>
+                                                                </th>
+                                                                <th ng-if="!ctrl.selectedUsers.length"
+                                                                    md-column>
+                                                                    <span>{{lang.actions}}</span>
+                                                                </th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody md-body>
+                                                            <tr md-row md-select="user"
+                                                                ng-repeat="user in ctrl.mappedUsers | limitTo: ctrl.usersGrid.limit: ((ctrl.usersGrid.page - 1) * ctrl.usersGrid.limit) track by $index">
+                                                                <td md-cell>{{user.ouInfo.getTranslatedName()}}</td>
+                                                                <td md-cell>{{user.userInfo.getTranslatedName()}}</td>
+                                                                <td md-cell>
+                                                                    <div flex layout="row" layout-align="start center">
+                                                                        <md-button class="md-icon-button"
+                                                                                   title="{{lang.delete}}"
+                                                                                   ng-click="ctrl.removeUser($event, user)">
+                                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                                        </md-button>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <md-table-pagination
+                                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                            md-limit-options="ctrl.usersGrid.limitOptions"
+                                                            md-limit="ctrl.usersGrid.limit"
+                                                            md-page="ctrl.usersGrid.page"
+                                                            md-total="{{ctrl.mappedUsers.length}}" md-page-select>
+                                                    </md-table-pagination>
+                                                </md-table-container>
+                                            </md-card>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div ng-if="ctrl.userFormShown">
+                                    <form name="userExternalDataSourceForm" autocomplete="off">
+                                        <div layout="row">
+                                            <!-- Organizations -->
+                                            <md-input-container flex>
+                                                <label for="organization">{{lang.organization_unit}}</label>
+                                                <md-select id="organization" name="organization" required
+                                                           ng-change="ctrl.loadAppUsersForOU($event)"
+                                                           aria-label="{{lang.organization_unit}}"
+                                                           ng-model="ctrl.userExtDataSource.ouId"
+                                                           md-on-close="ctrl.clearSearchText('inlineOU')"
+                                                           data-md-container-class="select-header-container sticky-search-bar">
+                                                    <md-select-header class="select-header">
+                                                        <input ng-model="ctrl.inlineOUSearchText"
+                                                               ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                               placeholder="{{lang.search}}"
+                                                               class="select-header-input">
+                                                    </md-select-header>
+                                                    <md-option
+                                                            ng-repeat="organization in ctrl.ouList | translatedNameFilter: ctrl.inlineOUSearchText : 'getNameByLanguageRegOUSection'"
+                                                            ng-value="organization.id">
+                                                        <span
+                                                                md-highlight-text="ctrl.inlineOUSearchText"
+                                                                md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
+                                                    </md-option>
+                                                </md-select>
+                                                <div ng-messages="userExternalDataSourceForm.ouId.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                </div>
+                                            </md-input-container>
+                                            <!-- Users -->
+                                            <md-input-container flex>
+                                                <label for="applicationUser">{{lang.app_users}}</label>
+                                                <md-select name="applicationUser" id="applicationUser"
+                                                           ng-required="ctrl.userExtDataSource.ouId"
+                                                           ng-disabled="!ctrl.userExtDataSource.ouId"
+                                                           aria-label="{{lang.app_users}}"
+                                                           ng-model="ctrl.userExtDataSource.userId"
+                                                           ng-model-options="{trackBy: '$value.id'}"
+                                                           md-on-close="ctrl.clearSearchText('inlineAppUser')"
+                                                           data-md-container-class="select-header-container sticky-search-bar">
+                                                    <md-select-header class="select-header">
+                                                        <input ng-model="ctrl.inlineAppUserSearchText"
+                                                               ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                               placeholder="{{lang.search}}"
+                                                               class="select-header-input">
+                                                    </md-select-header>
+                                                    <md-option ng-if="!ctrl.isExistingUser(user)"
+                                                               ng-value="user"
+                                                               ng-repeat="user in ctrl.applicationUsers | translatedNameFilter: ctrl.inlineAppUserSearchText">
+                                                       <span md-highlight-text="ctrl.inlineAppUserSearchText"
+                                                             md-highlight-flags="i">{{user.getTranslatedName()}}</span>
+                                                    </md-option>
+                                                </md-select>
+                                                <div ng-messages="userExternalDataSourceForm.applicationUser.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                </div>
+                                            </md-input-container>
+                                            <div class="p10-0">
+                                                <md-button ng-click="ctrl.saveUserExternalDataSource($event)"
+                                                           ng-disabled="!ctrl.isValidUserExternalDataSourceForm()"
+                                                           class="md-raised md-primary">
+                                                    {{lang.add}}
+                                                </md-button>
+                                                <md-button ng-click="ctrl.closeUserForm($event)"
+                                                           class="md-raised">
+                                                    {{lang.cancel}}
+                                                </md-button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                </md-tabs>
+            </form>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary"
+                   ng-if="ctrl.selectedTab === ctrl.tabsData.basic.name"
+                   ng-disabled="!ctrl.isValidExternalDataSourceForm(externalDataSourceForm)"
+                   ng-click="ctrl.saveExternalDataSource($event)">
+            {{ctrl.editMode ? lang.save : lang.add}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup($event)">{{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>
