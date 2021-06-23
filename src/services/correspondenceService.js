@@ -893,7 +893,6 @@ module.exports = function (app) {
 
                 return $http.put(url, {})
                     .then(function (result) {
-                        debugger;
                         correspondence.vsId = result.data.rs;
                         return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
                     }).catch(function (error) {

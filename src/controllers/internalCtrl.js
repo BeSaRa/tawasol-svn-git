@@ -201,9 +201,7 @@ module.exports = function (app) {
                     if (self.internal.contentFile) {
                         return self.internal.addDocumentContentFile()
                             .then(function () {
-                                self.contentFileExist = !!(self.internal.hasOwnProperty('contentFile') && self.internal.contentFile);
-                                self.contentFileSizeExist = !!(self.contentFileExist && self.internal.contentFile.size);
-
+                                self.contentFileExist = true;
                                 saveCorrespondenceFinished(status, ignoreLaunch);
                             })
                     } else if (duplicateVersion && self.internal.hasContent() && self.internal.addMethod) {
@@ -211,12 +209,10 @@ module.exports = function (app) {
                             .attacheContentUrl(self.documentInformation)
                             .then(function () {
                                 self.contentFileExist = true;
-                                self.contentFileSizeExist = true;
                                 saveCorrespondenceFinished(status, ignoreLaunch);
                             });
                     } else {
                         self.contentFileExist = false;
-                        self.contentFileSizeExist = false;
                         saveCorrespondenceFinished(status, ignoreLaunch);
                         return true;
                     }
@@ -522,7 +518,7 @@ module.exports = function (app) {
             self.documentAction.callback(self.internal, $event);
         };
         var _hasContent = function () {
-            return (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+            return (!!self.documentInformationExist || !!self.contentFileExist);
         };
 
         var _hasSingleSignature = function (document) {
@@ -750,7 +746,6 @@ module.exports = function (app) {
             self.documentAction = null;
             self.documentInformationExist = false;
             self.contentFileExist = false;
-            self.contentFileSizeExist = false;
             self.editContent = false;
             self.document_properties.$setUntouched();
 

@@ -271,14 +271,11 @@ module.exports = function (app) {
                     if (self.outgoing.contentFile) {
                         return self.outgoing.addDocumentContentFile()
                             .then(function () {
-                                self.contentFileExist = !!(self.outgoing.hasOwnProperty('contentFile') && self.outgoing.contentFile);
-                                self.contentFileSizeExist = !!(self.contentFileExist && self.outgoing.contentFile.size);
-
+                                self.contentFileExist = true;
                                 saveCorrespondenceFinished(status, ignoreLaunch);
                             })
                     } else {
                         self.contentFileExist = false;
-                        self.contentFileSizeExist = false;
                         saveCorrespondenceFinished(status, ignoreLaunch);
                         return true;
                     }
@@ -355,7 +352,7 @@ module.exports = function (app) {
         };
 
         function _launchAfterSave() {
-            if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist))) {
+            if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && (!!self.documentInformationExist || !!self.contentFileExist)) {
                 dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
                     .then(function () {
                         self.docActionLaunchDistributionWorkflow(self.outgoing);
@@ -666,7 +663,7 @@ module.exports = function (app) {
             self.documentAction.callback(self.outgoing, $event);
         };
         var _hasContent = function () {
-            return (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+            return (!!self.documentInformationExist || !!self.contentFileExist);
         };
 
         var _hasSingleSignature = function (document) {
@@ -946,7 +943,6 @@ module.exports = function (app) {
             self.documentAction = null;
             self.documentInformationExist = false;
             self.contentFileExist = false;
-            self.contentFileSizeExist = false;
 
             self.document_properties.$setUntouched();
 

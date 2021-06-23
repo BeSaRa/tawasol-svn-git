@@ -194,14 +194,11 @@ module.exports = function (app) {
                     if (self.internal.contentFile) {
                         return self.internal.addDocumentContentFile()
                             .then(function () {
-                                self.contentFileExist = !!(self.internal.hasOwnProperty('contentFile') && self.internal.contentFile);
-                                self.contentFileSizeExist = !!(self.contentFileExist && self.internal.contentFile.size);
-
+                                self.contentFileExist = true;
                                 saveCorrespondenceFinished(status, ignoreLaunch);
                             })
                     } else {
                         self.contentFileExist = false;
-                        self.contentFileSizeExist = false;
                         saveCorrespondenceFinished(status, ignoreLaunch);
                         return true;
                     }
@@ -507,7 +504,7 @@ module.exports = function (app) {
             self.documentAction.callback(self.internal, $event);
         };
         var _hasContent = function () {
-            return (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+            return (!!self.documentInformationExist || !!self.contentFileExist);
         };
 
         var _hasSingleSignature = function (document) {
@@ -736,7 +733,6 @@ module.exports = function (app) {
             self.documentAction = null;
             self.documentInformationExist = false;
             self.contentFileExist = false;
-            self.contentFileSizeExist = false;
 
             self.document_properties.$setUntouched();
 
@@ -833,9 +829,8 @@ module.exports = function (app) {
             if (!form) {
                 return true;
             }
-            return form.$invalid
-                || self.saveInProgress || ((self.documentInformationExist
-                    || (self.contentFileExist && self.contentFileSizeExist)) && !(self.documentInformation || self.internal.contentFile))
+            return form.$invalid || self.saveInProgress
+                || ((self.documentInformationExist || self.contentFileExist) && !(self.documentInformation || self.internal.contentFile))
         };
 
         /**

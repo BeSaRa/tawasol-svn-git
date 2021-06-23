@@ -160,16 +160,12 @@ module.exports = function (app) {
                 if (self.incoming.contentFile) {
                     return self.incoming.addDocumentContentFile()
                         .then(function () {
-                            self.contentFileExist = !!(self.incoming.hasOwnProperty('contentFile') && self.incoming.contentFile);
-                            self.contentFileSizeExist = !!(self.contentFileExist && self.incoming.contentFile.size);
-
+                            self.contentFileExist = true;
                             saveCorrespondenceFinished(status, ignoreLaunch);
                             return true;
                         })
                 } else {
                     self.contentFileExist = false;
-                    self.contentFileSizeExist = false;
-
                     saveCorrespondenceFinished(status, ignoreLaunch);
                     return true;
                 }
@@ -251,7 +247,7 @@ module.exports = function (app) {
             if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')) {
                 if (centralArchives && self.incoming.hasContent()) {
                     self.docActionLaunchDistributionWorkflow(self.incoming, false);
-                } else if (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist)) {
+                } else if (!!self.documentInformationExist || !!self.contentFileExist) {
                     dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
                         .then(function () {
                             self.docActionLaunchDistributionWorkflow(self.incoming);
@@ -482,7 +478,7 @@ module.exports = function (app) {
         };
 
         var _hasContent = function () {
-            return (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+            return (!!self.documentInformationExist || !!self.contentFileExist);
         };
 
         self.visibilityArray = [];
@@ -651,7 +647,6 @@ module.exports = function (app) {
             self.documentAction = null;
             self.documentInformationExist = false;
             self.contentFileExist = false;
-            self.contentFileSizeExist = false;
             self.document_properties.$setUntouched();
 
             self.simpleViewUrl = null;
