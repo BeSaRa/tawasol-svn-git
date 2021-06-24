@@ -76,7 +76,6 @@ module.exports = function (app) {
         // get inherit Security for attachment from GlobalSettings
         self.inheritSecurity = rootEntity.getGlobalSettings().attachmentInheritSecurity;
         self.hasPSPDFViewer = rootEntity.hasPSPDFViewer();
-        self.isExternalDataSourceImportAllowed = rootEntity.returnRootEntity().rootEntity.importDataSourceStatus
 
         function _createAttachmentFile(file, externalImportData) {
             var securityLevel = self.document.securityLevel, attachment;
@@ -588,6 +587,17 @@ module.exports = function (app) {
         self.openAnnotateAttachment = function (attachment, $event) {
             correspondenceService
                 .annotateCorrespondence(attachment, AnnotationType.ANNOTATION, self.document);
+        };
+
+        self.$onInit = function (){
+            self.isImportFromExDataSourceAllowed = false;
+            if (rootEntity.returnRootEntity().rootEntity.importDataSourceStatus) {
+                userExternalDataSourceService.loadActiveUserExternalDataSources()
+                    .then(function (result) {
+                        self.isImportFromExDataSourceAllowed = result.length > 0;
+                        return result;
+                    });
+            }
         }
     });
 };

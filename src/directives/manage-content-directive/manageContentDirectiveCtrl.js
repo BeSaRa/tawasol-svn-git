@@ -207,7 +207,10 @@ module.exports = function (app) {
          * @returns {boolean|*}
          */
         self.canShowImportFromExDataSource = function (document) {
-            return !self.displayPrepare && !self.receiveDocument && document.getInfo().isPaper && rootEntity.returnRootEntity().rootEntity.importDataSourceStatus;
+            if (!self.isImportFromExDataSourceAllowed) {
+                return false;
+            }
+            return !self.displayPrepare && !self.receiveDocument && document.getInfo().isPaper;
         };
 
         /**
@@ -604,5 +607,16 @@ module.exports = function (app) {
                     return self.simpleViewUrl;
                 });
         };
+
+        self.$onInit = function () {
+            self.isImportFromExDataSourceAllowed = false;
+            if (rootEntity.returnRootEntity().rootEntity.importDataSourceStatus) {
+                userExternalDataSourceService.loadActiveUserExternalDataSources()
+                    .then(function (result) {
+                        self.isImportFromExDataSourceAllowed = result.length > 0;
+                        return result;
+                    });
+            }
+        }
     });
 };
