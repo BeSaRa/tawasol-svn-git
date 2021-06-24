@@ -15,25 +15,7 @@
                             label="{{lang.basic_info}}" ng-click="ctrl.setCurrentTab('basic')">
                         <md-content class="md-padding">
                             <div layout="column">
-                                <div ng-if="!ctrl.rootMode && !ctrl.editMode" layout="row">
-                                    <md-input-container tooltip="{{ctrl.parentOrganization.getTranslatedName(true)}}"
-                                                        flex>
-                                        <label for="parentOrganization">{{lang.parent_organization}}</label>
-                                        <md-select id="parentOrganization" ng-model-options="{trackBy: '$value.id'}"
-                                                   required name="parent"
-                                                   ng-disabled="true"
-                                                   ng-model="ctrl.parentOrganization">
-                                            <md-option md-truncate ng-value="organization"
-                                                       ng-repeat="organization in ctrl.organizations">
-                                                {{organization.getTranslatedName()}}
-                                            </md-option>
-                                        </md-select>
-                                        <div ng-messages="org_form.parent.$error">
-                                            <div ng-message="required">{{lang.field_required}}</div>
-                                        </div>
-                                    </md-input-container>
-                                </div>
-                                <div ng-if="ctrl.editMode && !ctrl.rootMode" layout="row">
+                                <div ng-if="!ctrl.rootMode" layout="row">
                                     <md-input-container tooltip="{{ctrl.parentOrganization.getTranslatedName(true)}}"
                                                         flex>
                                         <label for="parent">{{lang.parent_organization}}</label>
@@ -94,7 +76,7 @@
                                                custom-validate-directive="number">
                                         <div ng-messages="org_form.ouLevel.$error">
                                             <div ng-message="number">{{lang.numberonly}}</div>
-                                            <div ng-message="min">{{lang.min_number.change({number:0})}}</div>
+                                            <div ng-message="min">{{lang.min_number.change({number: 0})}}</div>
                                         </div>
                                     </md-input-container>
                                     <md-input-container flex>
@@ -125,7 +107,7 @@
                                                ng-model="ctrl.organization.code">
                                         <div ng-messages="org_form.code.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:50})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 50})}}</div>
                                         </div>
                                     </md-input-container>
                                     <md-input-container flex>
@@ -135,7 +117,7 @@
                                         <div ng-messages="org_form.hrCode.$error">
                                             <div ng-message="number">{{lang.numberonly}}</div>
                                             <div ng-message="required">{{lang.field_required}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:4})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 4})}}</div>
                                         </div>
                                     </md-input-container>
                                 </div>
@@ -246,7 +228,8 @@
                                                ng-change="ctrl.onChangePrivateRegistry($event)"
                                                ng-disabled="!ctrl.organization.hasRegistry && ctrl.editMode"
                                                ng-readonly="!ctrl.organization.hasRegistry && ctrl.editMode">
-                                        <span>{{lang.private_registry}} : {{ ctrl.organization.getIsPrivateRegistryTranslate() }}</span>
+                                        <span>{{lang.private_registry}} : {{ ctrl.organization.getIsPrivateRegistryTranslate()
+                                            }}</span>
                                     </md-switch>
 
                                 </div>
@@ -344,9 +327,9 @@
                                                ng-model="ctrl.organization.mobile">
                                         <div ng-messages="org_form.mobile.$error">
                                             <div ng-message="phone_mobile">
-                                                {{lang.invalid_phone_mobile.change({phonemob:lang.mobile})}}
+                                                {{lang.invalid_phone_mobile.change({phonemob: lang.mobile})}}
                                             </div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:15})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 15})}}</div>
                                         </div>
                                     </md-input-container>
                                 </div>
@@ -564,10 +547,10 @@
                                                         <div ng-messages="org_form[priority.lookupKey].$error">
                                                             <div ng-message="number">{{lang.numberonly}}</div>
                                                             <div ng-message="min">
-                                                                {{lang.min_number.change({number:0})}}
+                                                                {{lang.min_number.change({number: 0})}}
                                                             </div>
                                                             <div ng-message="max">
-                                                                {{lang.max_number.change({number:1000})}}
+                                                                {{lang.max_number.change({number: 1000})}}
                                                             </div>
                                                         </div>
                                                     </md-input-container>
@@ -848,7 +831,7 @@
                                                             <td colspan="5">
                                                                 <div class="p20" layout="row"
                                                                      layout-align="center center">
-                                                                    {{lang.get('not_found_to_display').change({name:lang.organization_units})}}
+                                                                    {{lang.get('not_found_to_display').change({name: lang.organization_units})}}
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -1442,7 +1425,8 @@
                     </md-tab>
                     <!-- Property Configuration -->
                     <md-tab ng-if="ctrl.editMode && ctrl.showTab('propertyConfiguration')"
-                            label="{{lang.property_configuration}}" ng-click="ctrl.setCurrentTab('propertyConfiguration')">
+                            label="{{lang.property_configuration}}"
+                            ng-click="ctrl.setCurrentTab('propertyConfiguration')">
                         <md-content class="md-padding">
                             <div layout="column">
                                 <!-- Dropdown and buttons -->

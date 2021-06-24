@@ -550,12 +550,19 @@ module.exports = function (app) {
                             .controllerMethod
                             .organizationAdd(organization, $event)
                             .then(function (ou) {
-                                renderNewNode(ou, node);
+                                 renderNewNode(ou, node);
                             })
                             .catch(function (ou) {
-                                if (ou.id !== Number(node.id)) {
-                                    renderNewNode(ou, node);
+                                if (!ou.id) {
+                                    return;
                                 }
+                                self.reloadCallback() // this function
+                                    .then(function () {
+                                        _updateNodes(node);
+                                    });
+                                /*if (ou.id !== Number(node.id)) {
+                                    renderNewNode(ou, node);
+                                }*/
                             });
                     };
 
