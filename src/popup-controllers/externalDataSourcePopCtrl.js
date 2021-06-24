@@ -249,11 +249,13 @@ module.exports = function (app) {
 
         /**
          * @description Checks if the user from selected ou is already added to external data source
-         * @param user
+         * @param appUser
          * @returns {boolean}
          */
-        self.isExistingUser = function (user) {
-            return false;
+        self.isExistingUser = function (appUser) {
+            return !!(_.find(self.mappedUsers, function (mappedUser) {
+                return mappedUser.userId === appUser.id && mappedUser.ouId === self.userExtDataSource.ouId;
+            }));
         };
 
         /**
