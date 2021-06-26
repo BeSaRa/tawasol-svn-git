@@ -80,6 +80,7 @@
                                     <tr md-row
                                         grid-right-click-directive="g2gItem"
                                         model="g2gItem"
+                                        ng-class="!g2gItem.isOpen ? 'unread-row': 'read-row'"
                                         selected-length="{{ctrl.selectedG2gItems.length ? ctrl.selectedG2gItems.length : 0}}"
                                         ng-repeat="g2gItem in ctrl.g2gItems | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)  track by $index">
                                         <td md-cell class="indicator-td">
