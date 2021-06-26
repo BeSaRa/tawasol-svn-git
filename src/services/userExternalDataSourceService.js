@@ -7,6 +7,7 @@ module.exports = function (app) {
                                                            toast,
                                                            langService,
                                                            cmsTemplate,
+                                                           errorCode,
                                                            UserExtImportStore) {
         'ngInject';
         var self = this;
@@ -101,6 +102,12 @@ module.exports = function (app) {
             return $http.get(urlService.userExternalDataSource + '/id/' + generator.getNormalizedValue(storeId) + '?paramValue=' + identifier)
                 .then(function (result) {
                     return result.data.rs;
+                })
+                .catch(function (error) {
+                    return errorCode.checkIf(error, 'NO_DATA_IN_DATASOURCE', function () {
+                        dialog.errorMessage(generator.getTranslatedError(error));
+                        return $q.reject();
+                    });
                 });
         };
 

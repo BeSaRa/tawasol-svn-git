@@ -54,7 +54,7 @@
                                             md-column>
                                             <span>{{header}}</span>
                                         </th>
-                                        <th md-column>
+                                        <th md-column ng-if="ctrl.metaDataKeysList.length > 0">
                                             <span>{{lang.actions}}</span>
                                         </th>
                                     </tr>

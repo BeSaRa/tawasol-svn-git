@@ -6,8 +6,7 @@ module.exports = function (app) {
                                                                 dialog,
                                                                 $filter,
                                                                 userExternalDataSourceService,
-                                                                langService,
-                                                                cmsTemplate) {
+                                                                langService) {
         'ngInject';
         var self = this;
         self.controllerName = 'externalDataSourceImportPopCtrl';
@@ -47,10 +46,14 @@ module.exports = function (app) {
             if (!self.isValidForm()) {
                 return;
             }
+            self.metaDataKeysList = [];
+            self.selectedMetaDatas = [];
+
             userExternalDataSourceService.loadMetaData(self.selectedUserDataSource.extImportStore.id, self.identifier)
                 .then(function (result) {
-                    self.metaDataKeysList = [];
-                    self.selectedMetaDatas = [];
+                    if (!result) {
+                        return;
+                    }
                     self.metaDataList = result;
                     if (self.metaDataList && self.metaDataList.length > 0) {
                         self.metaDataKeysList = Object.keys(self.metaDataList[0]);

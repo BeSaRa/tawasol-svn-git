@@ -81,7 +81,8 @@ module.exports = function (app) {
                 SEQ_WF_CONTENT_UPDATE_FAILED: 3064,
                 SEQ_WF_MULTI_USER_FAILED: 3065,
                 G2G_CANT_RETURN_AS_ALREADY_RECEIVED: 14014,
-                ATTACHMENT_RESTRICTED_TO_MODIFY_AFTER_BOOK_AUTHORIZATION: 3035
+                ATTACHMENT_RESTRICTED_TO_MODIFY_AFTER_BOOK_AUTHORIZATION: 3035,
+                NO_DATA_IN_DATASOURCE: 1011
             },
             errorLangKeys = {
                 1001: 'no_records_found',
