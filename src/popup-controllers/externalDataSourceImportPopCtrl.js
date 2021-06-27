@@ -46,6 +46,7 @@ module.exports = function (app) {
             if (!self.isValidForm()) {
                 return;
             }
+            self.metaDataList = [];
             self.metaDataKeysList = [];
             self.selectedMetaDatas = [];
 
