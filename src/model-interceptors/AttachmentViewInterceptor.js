@@ -19,6 +19,7 @@ module.exports = function (app) {
             delete model.refVSID;
             delete model.attachmentTypeInfo;
             delete model.isOfficialIndicator;
+            delete model.externalImportData;
             return model;
         });
 
