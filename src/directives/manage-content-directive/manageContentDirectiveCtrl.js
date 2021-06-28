@@ -586,6 +586,7 @@ module.exports = function (app) {
 
             if (information) {
                 self.lastTemplate = information;
+                self.templateOrFileName = templateOrFileName;
                 self.docInfo = information;
                 self.signaturesCount = 1;
                 self.documentInformation = self.lastTemplate;
