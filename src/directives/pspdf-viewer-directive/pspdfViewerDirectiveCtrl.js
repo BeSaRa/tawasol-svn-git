@@ -55,7 +55,7 @@ module.exports = function (app) {
                 delete configuration.licenseKey;
             }
 
-            PSPDFKit.load().then(function (instance) {
+            PSPDFKit.load(configuration).then(function (instance) {
                 self.instance = instance;
             });
         };
