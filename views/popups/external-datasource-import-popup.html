@@ -24,8 +24,7 @@
                         <md-input-container flex>
                             <label for="identifier">{{lang.identifier}}</label>
                             <input name="identifier" id="identifier" required
-                                   ng-model="ctrl.identifier"
-                                   custom-validate-directive="ENS">
+                                   ng-model="ctrl.identifier">
                             <div ng-messages="externalImportForm.identifier.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
