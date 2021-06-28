@@ -1012,6 +1012,15 @@ module.exports = function (app) {
             if (self.employee.isBacklogMode()) {
                 self.checkChangeOutgoingType();
             }
+            // if employee in central archive and the outgoing is paper base
+            if (duplicateVersion && employeeService.isCentralArchive() && self.outgoing.addMethod && centralArchives.length) {
+                self.registryOrganizations = centralArchives;
+                $timeout(function () {
+                    if (self.document_properties) {
+                        generator.validateRequiredSelectFields(self.document_properties, true);
+                    }
+                });
+            }
         };
 
         $rootScope.$on('SEQ_LAUNCH_SUCCESS', function () {

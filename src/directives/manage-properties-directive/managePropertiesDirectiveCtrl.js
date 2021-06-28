@@ -498,7 +498,7 @@ module.exports = function (app) {
          * @param organizationId
          * @param field
          */
-        self.onRegistryChange = function (organizationId, field) {
+        self.onRegistryChange = function (organizationId, field, resetOu) {
             self.checkNullValues(field);
             _broadcastSelectedRegOu();
             self.subOrganizations = [];
@@ -512,7 +512,7 @@ module.exports = function (app) {
                         }]);
                     }
                     self.subOrganizations = result;
-                    self.document.ou = null;
+                    self.document.ou = (resetOu) ? null : self.document.ou;
                 });
         };
 
@@ -587,7 +587,7 @@ module.exports = function (app) {
                             self.document[field.name] = (field.value) ? options[0][field.value] : options[0];
 
                         if (field.name === 'registryOU') {
-                            self.onRegistryChange(self.document.registryOU);
+                            self.onRegistryChange(self.document.registryOU, null, false);
                         }
 
                         if (field.name === 'mainClassification') {
