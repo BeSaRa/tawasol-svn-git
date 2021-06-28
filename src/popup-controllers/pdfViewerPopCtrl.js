@@ -2235,23 +2235,35 @@ module.exports = function (app) {
          */
         self.loadInstantJSON = async function () {
             var documentWithOperationsBuffer = null, instance;
-            instance = await PSPDFKit.load({
+
+            var configuration = {
                 baseUrl: self.baseUrl,
                 document: self.pdfData,
                 headless: true,
                 instantJSON: operations.length ? null : instantJSON,
                 licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey
-            });
+            }
+
+            if(configurationService.PSPDF_LICENSE_KEY){
+                delete configuration.licenseKey;
+            }
+
+            instance = await PSPDFKit.load(configuration);
 
             if (operations.length) {
                 documentWithOperationsBuffer = await instance.exportPDFWithOperations(operations);
-                instance = await PSPDFKit.load({
+                var configuration = {
                     baseUrl: self.baseUrl,
                     document: documentWithOperationsBuffer,
                     headless: true,
                     instantJSON: instantJSON,
                     licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey
-                });
+                };
+                if(configurationService.PSPDF_LICENSE_KEY){
+                    delete configuration.licenseKey;
+                }
+
+                instance = await PSPDFKit.load(configuration);
             }
 
             instance.exportPDF({flatten: flatten})
@@ -2323,7 +2335,7 @@ module.exports = function (app) {
                     return self.loadInstantJSON();
                 }
                 PSPDFKit.Options.INITIAL_DESKTOP_SIDEBAR_WIDTH = 250;
-                PSPDFKit.load({
+                var configuration = {
                     baseUrl: self.baseUrl,
                     container: $element.find('#pdf-viewer')[0],
                     document: self.pdfData,
@@ -2332,7 +2344,13 @@ module.exports = function (app) {
                     populateInkSignatures: self.populateInkSignatures,
                     licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
                     annotationTooltipCallback: self.annotationTooltipCallback
-                }).then(function (instance) {
+                }
+
+                if(configurationService.PSPDF_LICENSE_KEY){
+                    delete configuration.licenseKey;
+                }
+
+                PSPDFKit.load(configuration).then(function (instance) {
                     self.currentInstance = instance;
                     // set current annotations for loaded document
                     self.getDocumentAnnotations().then(function (annotations) {

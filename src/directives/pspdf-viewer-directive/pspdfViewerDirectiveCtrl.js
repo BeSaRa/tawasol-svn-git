@@ -40,7 +40,8 @@ module.exports = function (app) {
                 allowPrinting: employeeService.hasPermissionTo('PRINT_DOCUMENT')
             });
             self.destroyInstance();
-            PSPDFKit.load({
+
+            var configuration = {
                 baseUrl: (location.protocol + '//' + location.host + '/' + (configurationService.APP_CONTEXT ? configurationService.APP_CONTEXT + '/' : '')),
                 container: self.container,
                 printMode: PSPDFKit.PrintMode.EXPORT_PDF,
@@ -48,7 +49,13 @@ module.exports = function (app) {
                 document: typeof self.docUrl === 'object' ? self.docUrl.$$unwrapTrustedValue() : self.docUrl,
                 licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
                 initialViewState: initialViewState
-            }).then(function (instance) {
+            }
+
+            if(configurationService.PSPDF_LICENSE_KEY){
+                delete configuration.licenseKey;
+            }
+
+            PSPDFKit.load().then(function (instance) {
                 self.instance = instance;
             });
         };
