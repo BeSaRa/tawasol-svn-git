@@ -48,7 +48,8 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-select="workflowHistoryRecord" md-row
-                                        ng-repeat="workflowHistoryRecord in ctrl.workflowHistoryRecords | filter:ctrl.searchModelWorkflowHistory | limitTo: ctrl.workflowHistoryGrid.limit: ((ctrl.workflowHistoryGrid.page - 1) * ctrl.workflowHistoryGrid.limit)  track by $index">
+                                        ng-repeat="workflowHistoryRecord in ctrl.workflowHistoryRecords | filter:ctrl.searchModelWorkflowHistory | limitTo: ctrl.workflowHistoryGrid.limit: ((ctrl.workflowHistoryGrid.page - 1) * ctrl.workflowHistoryGrid.limit)  track by $index"
+                                        ng-class="{'font-bold': workflowHistoryRecord.userFromInfo.id === ctrl.employee.id}">
                                         <td md-cell>
                                             {{workflowHistoryRecord.userFromInfo.getTranslatedName()}}
                                         </td>
