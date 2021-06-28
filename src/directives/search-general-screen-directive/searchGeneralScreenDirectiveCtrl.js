@@ -740,6 +740,7 @@ module.exports = function (app) {
                         .then(function (result) {
                             self.searchCriteriaModel = angular.copy(self.searchCriteria);
                             self.searchedGeneralDocuments = _mapResultToAvoidCorrespondenceCheck(result);
+                            self.grid.limitOptions = gridService.getGridLimitOptions(gridService.grids.search.general, self.searchedGeneralDocuments);
                             self.selectedSearchedGeneralDocuments = [];
                             self.selectedTab = 1;
                         })

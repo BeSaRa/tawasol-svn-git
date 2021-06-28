@@ -749,6 +749,7 @@ module.exports = function (app) {
                         .then(function (result) {
                             self.searchCriteriaModel = angular.copy(self.searchCriteria);
                             self.searchedOutgoingIncomingDocuments = _mapResultToAvoidCorrespondenceCheck(result);
+                            self.grid.limitOptions = gridService.getGridLimitOptions(gridService.grids.search.outgoingIncoming, self.searchedOutgoingIncomingDocuments);
                             self.selectedSearchedOutgoingIncomingDocuments = [];
                             self.selectedTab = 1;
                         })
