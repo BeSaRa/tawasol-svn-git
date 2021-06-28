@@ -134,6 +134,10 @@ module.exports = function (app) {
             if (self.loginStatus) {
                 return;
             }
+            if (!self.credentials.username || !self.credentials.password) {
+                dialog.errorMessage(langService.get('required_username_password'));
+                return;
+            }
             self.loginStatus = true;
             authenticationService
                 .authenticate(self.credentials)

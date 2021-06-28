@@ -365,6 +365,31 @@ md-sidenav {
   position: absolute;
 }
 
+#login-popup-lang-container {
+  width: 100%;
+  max-width: 100%;
+
+  .login-title {
+    font-weight: normal;
+    margin-bottom: 0;
+  }
+
+  .icon-wrapper:first-child {
+    padding: 3px 10px;
+    border-right: 1px solid #ccc;
+    border-left: none;
+  }
+}
+
+html.rtl {
+  #login-popup-lang-container {
+    .icon-wrapper:first-child {
+      border-left: 1px solid #ccc;
+      border-right: none;
+    }
+  }
+}
+
 #login-form-wrapper {
   padding: 20px 50px 50px;
   box-sizing: border-box;
@@ -489,6 +514,7 @@ md-sidenav {
       color: #3c763d;
       background-color: #dff0d8;
       border-color: #d6e9c6;
+
       * {
         color: #3c763d !important;
       }
@@ -498,6 +524,7 @@ md-sidenav {
       color: #31708f;
       background-color: #d9edf7;
       border-color: #bce8f1;
+
       * {
         color: #31708f !important;
       }
@@ -507,6 +534,7 @@ md-sidenav {
       color: #8a6d3b;
       background-color: #fcf8e3;
       border-color: #faebcc;
+
       * {
         color: #8a6d3b !important;
       }
@@ -516,6 +544,7 @@ md-sidenav {
       color: #a94442;
       background-color: #f2dede;
       border-color: #ebccd1;
+
       * {
         color: #a94442 !important;
       }

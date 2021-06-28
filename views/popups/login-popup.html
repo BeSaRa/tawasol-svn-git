@@ -11,6 +11,21 @@
             <h2>{{login.rootEntity.getTranslatedName()}}</h2>
             <h4>{{login.rootEntity.getTranslatedAppName()}} - {{ lang.application_description }}</h4>
         </div>
+        <div id="login-popup-lang-container" layout-align="center center" layout="row" flex>
+            <h4 class="login-title" flex>{{lang.login_to_your_account}}</h4>
+            <div layout-align="start center" layout="row" layout-padding="10px">
+                <div ng-class="{'selected':langService.is(language)}"
+                     ng-repeat="language in languages track by $index" class="icon-wrapper">
+                    <a aria-label="{{language.title}}" class="cursor-pointer"
+                       ng-click="langService.setSelectedLanguage(language)">
+                        <div layout-align="start center" layout="row">
+                            <div><img ng-src="assets/images/{{language.image}}.png"></div>
+                            <!-- <span class="language-title">{{language.title}}</span>-->
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
         <form name="login_form" id="login_form" novalidate enter-submit-directive="login-button-popup">
             <div layout="row">
                 <md-input-container flex>
@@ -44,8 +59,7 @@
                     <a id="forget-password-link" href="#">{{lang.forget_password}}</a>
                 </div>
                 <br/>-->
-                <md-button id="login-button-popup" ng-disabled="login_form.$invalid || login.loginStatus"
-                           ng-click="login.login($event , callback)"
+                <md-button id="login-button-popup" ng-click="login.login($event , callback)"
                            class="md-raised md-primary">{{lang.login}}
                 </md-button>
             </div>
