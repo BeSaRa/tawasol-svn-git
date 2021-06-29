@@ -10,7 +10,8 @@ module.exports = function (app) {
             replace: true,
             scope: {
                 item: '=',
-                type: '@?'
+                type: '@?',
+                showIndicator: '='
             }
         }
     });

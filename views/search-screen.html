@@ -187,8 +187,8 @@
                                     <td md-cell>{{searchedOutgoingDocument.creatorInfo.getTranslatedName()}}</td>
                                     <td md-cell>{{searchedOutgoingDocument.createdOn}}</td>
                                     <td md-cell class="td-data">
-                                        <main-site-sub-site-directive
-                                                item="searchedOutgoingDocument"></main-site-sub-site-directive>
+                                        <main-site-sub-site-directive item="searchedOutgoingDocument"
+                                                                      show-indicator="true"></main-site-sub-site-directive>
                                     </td>
                                     <td md-cell
                                         ng-if="ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length < 2">
@@ -514,8 +514,8 @@
                                     <td md-cell>{{searchedIncomingDocument.creatorInfo.getTranslatedName()}}</td>
                                     <td md-cell>{{searchedIncomingDocument.createdOn}}</td>
                                     <td md-cell class="td-data">
-                                        <main-site-sub-site-directive
-                                                item="searchedIncomingDocument"></main-site-sub-site-directive>
+                                        <main-site-sub-site-directive item="searchedIncomingDocument"
+                                                                      show-indicator="true"></main-site-sub-site-directive>
                                     </td>
                                     <td md-cell
                                         ng-if="ctrl.searchScreens.incoming.controller.selectedSearchedIncomingDocuments.length < 2">
@@ -663,7 +663,8 @@
                                                                   indicator-type="sequentialWF"
                                                                   record-type="Correspondence"></grid-indicator-directive>
                                     </td>
-                                    <td md-cell><span class="serial-td">{{searchedOutgoingIncomingDocument.docFullSerial}}</span>
+                                    <td md-cell><span
+                                            class="serial-td">{{searchedOutgoingIncomingDocument.docFullSerial}}</span>
                                     </td>
                                     <td md-cell class="subject">
                                         <!--<grid-document-subject-directive record="searchedOutgoingIncomingDocument"
@@ -695,8 +696,8 @@
                                     </td>
                                     <td md-cell>{{searchedOutgoingIncomingDocument.createdOn}}</td>
                                     <td md-cell class="td-data">
-                                        <main-site-sub-site-directive
-                                                item="searchedOutgoingIncomingDocument"></main-site-sub-site-directive>
+                                        <main-site-sub-site-directive item="searchedOutgoingIncomingDocument"
+                                                                      show-indicator="true"></main-site-sub-site-directive>
                                     </td>
                                     <td md-cell
                                         ng-if="ctrl.searchScreens.outgoingIncoming.controller.selectedSearchedOutgoingIncomingDocuments.length < 2">

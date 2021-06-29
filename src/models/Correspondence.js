@@ -856,6 +856,55 @@ module.exports = function (app) {
                 return this.internalG2G;
             };
 
+            Correspondence.prototype.hasExternalSite = function () {
+                var info = this.getInfo();
+                if (info.documentClass === 'internal') {
+                    return false;
+                } else if (info.documentClass === 'outgoing') {
+                    return !!(_.find([].concat(this.sitesInfoTo, this.sitesInfoCC), function (item) {
+                        return _.startsWith(item.subSiteId.toString(), '2');
+                    }));
+                } else if (info.documentClass === 'incoming') {
+                    return false;
+                }
+            }
+            Correspondence.prototype.hasG2GSite = function () {
+                var info = this.getInfo();
+                if (info.documentClass === 'internal') {
+                    return false;
+                } else if (info.documentClass === 'outgoing') {
+                    return !!(_.find([].concat(this.sitesInfoTo, this.sitesInfoCC), function (item) {
+                        return _.startsWith(item.subSiteId.toString(), '3');
+                    }));
+                } else if (info.documentClass === 'incoming') {
+                    return false;
+                }
+            }
+            Correspondence.prototype.hasInternalSite = function () {
+                var info = this.getInfo();
+                if (info.documentClass === 'internal') {
+                    return false;
+                } else if (info.documentClass === 'outgoing') {
+                    return !!(_.find([].concat(this.sitesInfoTo, this.sitesInfoCC), function (item) {
+                        return _.startsWith(item.subSiteId.toString(), '1');
+                    }));
+                } else if (info.documentClass === 'incoming') {
+                    return false;
+                }
+            }
+
+            Correspondence.prototype.getExternalSiteIndicator = function () {
+                return this.hasExternalSite() ? indicator.getExternalSiteIndicator() : null;
+            };
+
+            Correspondence.prototype.getInternalSiteIndicator = function () {
+                return this.hasInternalSite() ? indicator.getInternalSiteIndicator() : null;
+            };
+
+            Correspondence.prototype.getG2GSiteIndicator = function () {
+                return this.hasG2GSite() ? indicator.getG2GSiteIndicator() : null;
+            };
+
             Correspondence.prototype.loadThumbnails = function () {
                 return correspondenceService.loadDocumentThumbnails(this);
             };

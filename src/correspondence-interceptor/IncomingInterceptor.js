@@ -18,6 +18,9 @@ module.exports = function (app) {
                 model.site.getSiteToIncoming(model);
 
             delete model.site;
+            delete model.externalSiteIndicator;
+            delete model.internalSiteIndicator;
+            delete model.g2gSiteIndicator;
 
             /*If Document has vsId(update document), we will not remove the content file.
              If document don't has vsId(new document), we will remove the content file, so it doesn't affect the save request model */
@@ -63,6 +66,9 @@ module.exports = function (app) {
             model.priorityLevelIndicator = (model.priorityLevelLookup && model.priorityLevelLookup.lookupKey !== 0) ? model.getPriorityLevelIndicator(model.priorityLevelLookup) : null;
 
             model.docClassIndicator = model.getDocClassIndicator();
+            model.externalSiteIndicator = model.getExternalSiteIndicator();
+            model.internalSiteIndicator = model.getInternalSiteIndicator();
+            model.g2gSiteIndicator = model.getG2GSiteIndicator();
 
             return model;
         });

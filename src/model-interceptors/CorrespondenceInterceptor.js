@@ -183,6 +183,9 @@ module.exports = function (app) {
             delete model.hasSequentialWFIndicator;
             delete model.docDateTemp;
             delete model.externalImportData;
+            delete model.externalSiteIndicator;
+            delete model.internalSiteIndicator;
+            delete model.g2gSiteIndicator;
             return model;
         });
 

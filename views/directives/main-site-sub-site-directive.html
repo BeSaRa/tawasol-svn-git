@@ -1,4 +1,16 @@
-<span>
-    <a href="" ng-if="ctrl.showCorrespondenceSites()"
-       ng-click="ctrl.viewCorrespondenceSites($event)">{{ctrl.item.getTranslatedCorrespondenceSiteInfo()}}</a>
-</span>
+<div>
+    <div layout="row" ng-if="ctrl.showCorrespondenceSites()">
+        <div flex="10" layout="column" ng-if="ctrl.showIndicator">
+            <grid-indicator-directive record="ctrl.item"
+                                      indicator-type="internalSite"></grid-indicator-directive>
+            <grid-indicator-directive record="ctrl.item"
+                                      indicator-type="g2gSite"></grid-indicator-directive>
+            <grid-indicator-directive record="ctrl.item" ng-if="!ctrl.item.g2gSiteIndicator"
+                                      indicator-type="externalSite"></grid-indicator-directive>
+        </div>
+        <div flex>
+            <a href=""
+               ng-click="ctrl.viewCorrespondenceSites($event)">{{ctrl.item.getTranslatedCorrespondenceSiteInfo()}}</a>
+        </div>
+    </div>
+</div>

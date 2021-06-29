@@ -933,7 +933,7 @@ module.exports = function (app) {
                 incoming: 'arrow-down-bold-box',
                 internal: 'recycle',
                 paperDocument: 'file-document',
-                electronicDocument: 'tablet',//cellphone-dock';
+                electronicDocument: 'tablet',
                 exportViaCentralArchive: 'archive',
                 linkedExportedDoc: 'link',
                 dueDate: 'calendar',
@@ -961,7 +961,10 @@ module.exports = function (app) {
                 comments: 'comment-account-outline',
                 date: 'calendar-today',
                 sequentialWF: 'view-sequential',
-                isOfficial: 'clipboard-check'
+                isOfficial: 'clipboard-check',
+                externalSite: 'clipboard-arrow-up-outline',
+                internalSite: 'arrow-bottom-left-bold-outline',
+                g2gSite: 'file-cloud'
             }
         };
     });
