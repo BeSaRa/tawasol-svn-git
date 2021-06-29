@@ -862,9 +862,12 @@ module.exports = function (app) {
                     return false;
                 } else if (info.documentClass === 'outgoing') {
                     return !!(_.find([].concat(this.sitesInfoTo, this.sitesInfoCC), function (item) {
-                        return _.startsWith(item.subSiteId.toString(), '2');
+                        return correspondenceService.isExternalSite(item.subSiteId);
                     }));
                 } else if (info.documentClass === 'incoming') {
+                    if (this.site && this.site.subSiteId) {
+                        return correspondenceService.isExternalSite(this.site.subSiteId);
+                    }
                     return false;
                 }
             }
@@ -874,9 +877,12 @@ module.exports = function (app) {
                     return false;
                 } else if (info.documentClass === 'outgoing') {
                     return !!(_.find([].concat(this.sitesInfoTo, this.sitesInfoCC), function (item) {
-                        return _.startsWith(item.subSiteId.toString(), '3');
+                        return correspondenceService.isG2GSite(item.subSiteId);
                     }));
                 } else if (info.documentClass === 'incoming') {
+                    if (this.site && this.site.subSiteId) {
+                        return correspondenceService.isG2GSite(this.site.subSiteId);
+                    }
                     return false;
                 }
             }
@@ -886,9 +892,12 @@ module.exports = function (app) {
                     return false;
                 } else if (info.documentClass === 'outgoing') {
                     return !!(_.find([].concat(this.sitesInfoTo, this.sitesInfoCC), function (item) {
-                        return _.startsWith(item.subSiteId.toString(), '1');
+                        return correspondenceService.isInternalSite(item.subSiteId);
                     }));
                 } else if (info.documentClass === 'incoming') {
+                    if (this.site && this.site.subSiteId) {
+                        return correspondenceService.isInternalSite(this.site.subSiteId);
+                    }
                     return false;
                 }
             }

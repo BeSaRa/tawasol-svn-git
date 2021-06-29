@@ -145,6 +145,12 @@ module.exports = function (app) {
             desktop: 2
         };
 
+        self.siteTypesStartsMap = {
+            INTERNAL: 1,
+            EXTERNAL: 2,
+            G2G: 3
+        };
+
         self.urlServiceByDocumentClass = {
             outgoing: urlService.outgoings,
             incoming: urlService.incomings,
@@ -5214,7 +5220,28 @@ module.exports = function (app) {
                 var securityLevelsIds = _.map(userSecurityLevels, 'lookupKey');
                 return securityLevelsIds.indexOf(result.data.rs) !== -1 ? $q.resolve(userSecurityLevels[securityLevelsIds.indexOf(result.data.rs)]) : $q.reject(result.data.rs);
             });
-        }
+        };
+
+        self.isInternalSite = function (subSiteId) {
+            if (!subSiteId) {
+                return false;
+            }
+            return _.startsWith(('' + subSiteId).toString(), self.siteTypesStartsMap.INTERNAL);
+        };
+
+        self.isExternalSite = function (subSiteId) {
+            if (!subSiteId) {
+                return false;
+            }
+            return _.startsWith(('' + subSiteId).toString(), self.siteTypesStartsMap.EXTERNAL);
+        };
+
+        self.isG2GSite = function (subSiteId) {
+            if (!subSiteId) {
+                return false;
+            }
+            return _.startsWith(('' + subSiteId).toString(), self.siteTypesStartsMap.G2G);
+        };
 
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);
