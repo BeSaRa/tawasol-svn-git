@@ -962,7 +962,7 @@ module.exports = function (app) {
                 date: 'calendar-today',
                 sequentialWF: 'view-sequential',
                 isOfficial: 'clipboard-check',
-                externalSite: 'clipboard-arrow-up-outline',
+                externalSite: 'arrow-top-right-bold-outline',
                 internalSite: 'arrow-bottom-left-bold-outline',
                 g2gSite: 'file-cloud'
             }
