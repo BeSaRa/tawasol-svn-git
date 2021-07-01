@@ -156,6 +156,11 @@ md-input-container:not(.cms-default) {
       left: 7px;
     }
   }
+
+  .input-btn-overlay-padding {
+    padding-right: 40px;
+    padding-left: 0;
+  }
 }
 
 html.rtl {
@@ -194,6 +199,11 @@ html.rtl {
     button.cms-input-overlay-button {
       left: 0;
       right: auto;
+    }
+
+    .input-btn-overlay-padding {
+      padding-left: 40px;
+      padding-right: 0;
     }
 
     md-checkbox.cms-field-overlay-checkbox {
