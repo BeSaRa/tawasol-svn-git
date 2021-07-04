@@ -2,7 +2,7 @@
     <div class="relative chat-bot-iframe-button-wrapper">
         <md-button ng-click="ctrl.toggleChatBot()"
                    class="md-fab md-primary chat-bot-button">
-            <md-tooltip md-direction="top">{{lang.tawasol_assistant}}</md-tooltip>
+            <md-tooltip md-direction="top">{{lang.get("tawasol_assistant")}}</md-tooltip>
             <md-icon md-svg-icon="chat"></md-icon>
         </md-button>
         <iframe ng-class="{opened: ctrl.openStatus}" class="chat-bot-iframe"
