@@ -1,7 +1,6 @@
 module.exports = function (app) {
     app.factory('errorCode', function ($q, _, dialog, langService) {
         'ngInject';
-l
         var errorCodes = {
                 EMPTY_RESULT: 2014,
                 CAN_NOT_DELETE_LOOKUP: 3014,
