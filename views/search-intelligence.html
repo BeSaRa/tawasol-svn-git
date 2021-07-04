@@ -14,74 +14,19 @@
                             </md-button>
                         </div>
                     </div>
-                    <fieldset ng-if="ctrl.docClassId.length">
-                        <legend>{{lang.label_document_class}}</legend>
+                    <fieldset ng-repeat="facet in ctrl.facetsArray" ng-if="ctrl[facet.key].facets.length">
+                        <legend>{{facet.label}}</legend>
                         <div layout="column">
                             <md-checkbox ng-model="item.isSelected"
-                                         ng-change="ctrl.facetChanged('docClassId', item)"
-                                         ng-repeat="item in ctrl.docClassId">
+                                         ng-change="ctrl.facetChanged(facet.key, item)"
+                                         ng-repeat="item in ctrl[facet.key].facets | limitTo: ctrl[facet.key].limit">
                                 {{item.valueInfo.getTranslatedName()}} <!-- - ({{item.count}})-->
                             </md-checkbox>
-                        </div>
-                    </fieldset>
-                    <fieldset ng-if="ctrl.securityLevel.length">
-                        <legend>{{lang.security_level}}</legend>
-                        <div layout="column">
-                            <md-checkbox ng-model="item.isSelected"
-                                         ng-change="ctrl.facetChanged('securityLevel', item)"
-                                         ng-repeat="item in ctrl.securityLevel">
-                                {{item.valueInfo.getTranslatedName()}} <!-- - ({{item.count}})-->
-                            </md-checkbox>
-                        </div>
-                    </fieldset>
-                    <fieldset ng-if="ctrl.docType.length">
-                        <legend>{{lang.document_type}}</legend>
-                        <div layout="column">
-                            <md-checkbox ng-model="item.isSelected"
-                                         ng-change="ctrl.facetChanged('docType', item)"
-                                         ng-repeat="item in ctrl.docType">
-                                {{item.valueInfo.getTranslatedName()}} <!-- - ({{item.count}})-->
-                            </md-checkbox>
-                        </div>
-                    </fieldset>
-                    <fieldset ng-if="ctrl.mainClassification.length">
-                        <legend>{{lang.main_classification}}</legend>
-                        <div layout="column">
-                            <md-checkbox ng-model="item.isSelected"
-                                         ng-change="ctrl.facetChanged('mainClassification', item)"
-                                         ng-repeat="item in ctrl.mainClassification">
-                                {{item.valueInfo.getTranslatedName()}} <!-- - ({{item.count}})-->
-                            </md-checkbox>
-                        </div>
-                    </fieldset>
-                    <fieldset ng-if="ctrl.subClassification.length">
-                        <legend>{{lang.sub_classification}}</legend>
-                        <div layout="column">
-                            <md-checkbox ng-model="item.isSelected"
-                                         ng-change="ctrl.facetChanged('subClassification', item)"
-                                         ng-repeat="item in ctrl.subClassification">
-                                {{item.valueInfo.getTranslatedName()}} <!-- - ({{item.count}})-->
-                            </md-checkbox>
-                        </div>
-                    </fieldset>
-                    <fieldset ng-if="ctrl.registryOU.length">
-                        <legend>{{lang.organization}}</legend>
-                        <div layout="column">
-                            <md-checkbox ng-model="item.isSelected"
-                                         ng-change="ctrl.facetChanged('registryOU', item)"
-                                         ng-repeat="item in ctrl.registryOU">
-                                {{item.valueInfo.getTranslatedName()}} <!-- - ({{item.count}})-->
-                            </md-checkbox>
-                        </div>
-                    </fieldset>
-                    <fieldset ng-if="ctrl.ou.length">
-                        <legend>{{lang.department}}</legend>
-                        <div layout="column">
-                            <md-checkbox ng-model="item.isSelected"
-                                         ng-change="ctrl.facetChanged('ou', item)"
-                                         ng-repeat="item in ctrl.ou">
-                                {{item.valueInfo.getTranslatedName()}} <!-- - ({{item.count}})-->
-                            </md-checkbox>
+
+                            <span ng-if="ctrl[facet.key].facets.length > ctrl.facetsLimit">
+                               <a class="cursor-pointer"
+                                  ng-click="ctrl.toggleFacet(facet.key)">{{ctrl[facet.key].expanded ? lang.show_less : lang.show_more}}</a>
+                            </span>
                         </div>
                     </fieldset>
                 </div>

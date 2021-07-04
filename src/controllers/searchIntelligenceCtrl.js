@@ -21,6 +21,8 @@ module.exports = function (app) {
                                                        correspondenceService,
                                                        cmsTemplate,
                                                        managerService,
+                                                       mailNotificationService,
+                                                       $state,
                                                        dialog) {
         'ngInject';
         var self = this;
@@ -61,15 +63,15 @@ module.exports = function (app) {
         self.facetCriteria = (new AzureSearchCriteria()).toFacetCriteria();
 
         self.maxDate = new Date();
-
+        self.facetsLimit = 5;
         self.facetsArray = [
-            'docClassId',
-            'docType',
-            'mainClassification',
-            'subClassification',
-            'ou',
-            'registryOU',
-            'securityLevel'
+            {key: 'docClassId', label: langService.get('label_document_class')},
+            {key: 'securityLevel', label: langService.get('security_level')},
+            {key: 'docType', label: langService.get('document_type')},
+            {key: 'mainClassification', label: langService.get('main_classification')},
+            {key: 'subClassification', label: langService.get('sub_classification')},
+            {key: 'registryOU', label: langService.get('organization')},
+            {key: 'ou', label: langService.get('department')}
         ];
         self.docClassId = [];
         self.securityLevel = [];
@@ -163,13 +165,14 @@ module.exports = function (app) {
             return correspondenceService
                 .innovationSearch(self.criteria)
                 .then(function (result) {
-                    self.results = result.first;
+                    self.results = _mapResultToAvoidCorrespondenceCheck(result.first);
                     if (!ignoreFacets)
                         self.prepareFacets(result.second);
                     if (!self.results.length) {
                         dialog.errorMessage(langService.get('no_records_found_matching_search'));
                     } else {
                         self.selectedTab = 1;
+                        self.sidebarStatus = true;
                     }
                     return self.results;
                 });
@@ -1863,17 +1866,24 @@ module.exports = function (app) {
 
         self.prepareFacets = function (facets) {
             self.facetsArray.forEach(function (facetName) {
+                facetName = facetName.key;
                 facets[facetName].forEach(function (facet) {
                     facet.isSelected = false;
                     facet.valueInfo = new Information(facet.valueInfo);
                 });
-                self[facetName] = facets[facetName];
+
+                self[facetName] = {
+                    facets: facets[facetName],
+                    expanded: false,
+                    limit: self.facetsLimit
+                };
             });
         }
 
         self.clearFacets = function () {
             self.facetsArray.forEach(function (facetName) {
-                self[facetName].forEach(function (facet) {
+                facetName = facetName.key;
+                self[facetName].facets.forEach(function (facet) {
                     facet.isSelected = false;
                     removeFacet(facetName, facet.value);
                 });
@@ -1940,5 +1950,10 @@ module.exports = function (app) {
                 });
         };
 
+
+        self.toggleFacet = function (facetName) {
+            self[facetName].limit = self[facetName].expanded ? self.facetsLimit : self[facetName].facets.length;
+            self[facetName].expanded = !self[facetName].expanded;
+        }
     });
 };

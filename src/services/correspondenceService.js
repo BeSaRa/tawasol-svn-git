@@ -5264,6 +5264,11 @@ module.exports = function (app) {
                 }
             ).then(function (result) {
                 return result.data.rs.value;
+            }).catch(function (error) {
+                if (errorCode.checkIf(error, 'SEARCH_OPERATION_FAILED') === true) {
+                    toast.error(langService.get('max_length').change({length: 30}));
+                    return $q.reject(error);
+                }
             })
         }
 
