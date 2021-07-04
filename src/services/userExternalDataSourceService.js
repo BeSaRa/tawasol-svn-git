@@ -7,6 +7,7 @@ module.exports = function (app) {
                                                            toast,
                                                            langService,
                                                            cmsTemplate,
+                                                           $sce,
                                                            errorCode,
                                                            UserExtImportStore) {
         'ngInject';
@@ -125,7 +126,7 @@ module.exports = function (app) {
             }
             return $http.get(urlService.userExternalDataSource + '/content/' + generator.getNormalizedValue(storeId) + '?paramValue=' + identifier, options)
                 .then(function (result) {
-                    return result.data;
+                    return asBlob ? result.data : result.data.rs;
                 });
         };
 
@@ -149,12 +150,12 @@ module.exports = function (app) {
         }
 
         self.openContentDialog = function (storeId, identifier, metaData) {
-            self.loadContent(storeId, identifier, true)
-                .then(function (blobResult) {
+            self.loadContent(storeId, identifier, false)
+                .then(function (result) {
                     var data = {
                         metaData: metaData,
                         content: {
-                            viewURL: generator.changeBlobToTrustedUrl(blobResult)
+                            viewURL: $sce.trustAsResourceUrl(result.viewURL)
                         }
                     };
                     dialog.showDialog({
