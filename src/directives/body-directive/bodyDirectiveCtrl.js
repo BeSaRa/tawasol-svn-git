@@ -31,7 +31,8 @@ module.exports = function (app) {
         self.controllerName = 'bodyDirectiveCtrl';
 
         self.loadingService = loadingIndicatorService;
-        self.chatBotEnabled = configurationService.CHAT_BOT.ENABLED;
+        self.rootEntity = rootEntity;
+
 
         self.isSidebarOpen = function () {
             return sidebarService.sidebarLoaded && $mdSidenav('main-sidebar').isLockedOpen();

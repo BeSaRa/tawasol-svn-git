@@ -28,7 +28,12 @@
                 // just for test
                 .updateConfiguration('ENABLE_ACTIVE_SENDER_LINKS', false)
                 // Evaluation license PSPDF
-                .updateConfiguration('PSPDF_LICENSE_KEY', false);
+                .updateConfiguration('PSPDF_LICENSE_KEY', false)
+                // Cahtbot Configurations
+                .updateConfiguration('CHAT_BOT', {
+                    URL: 'http://tawasolbot-b750.azurewebsites.net/chatbot.html?',
+                    APPEND_TOKEN: true
+                });
 
         });
 
