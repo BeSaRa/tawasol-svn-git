@@ -108,10 +108,6 @@ module.exports = function (app) {
         var cookieKey = employeeService.getEmployee().domainName + '_' + 'attach_username_date';
         self.attachUserInfoToSignature = false;
 
-        self.customFonts = ["NotoSansArabicUI-Regular.ttf"].map(
-            font => new PSPDFKit.Font({name: font, callback: downloadService.loadCustomFontPSPDF})
-        );
-
         self.documentClassPermissionMap = {
             outgoing: function (isPaper) {
                 return isPaper ? 'EDIT_OUTGOING_PAPER' : 'EDIT_OUTGOING_CONTENT';

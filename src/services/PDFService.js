@@ -1,6 +1,6 @@
 module.exports = function (app) {
     app.service('PDFService', function (dialog, PSPDFKit, $q, cmsTemplate, AnnotationType, downloadService, employeeService, _,
-                                        langService, moment, jobTitleService, configurationService, $cookies) {
+                                        langService, moment, jobTitleService, configurationService, $cookies, $http) {
         'ngInject';
         var self = this;
         self.serviceName = 'PDFService';
@@ -40,7 +40,7 @@ module.exports = function (app) {
             'Georgia.ttf', 'impact.ttf', 'Lucida_Sans.ttf', 'OpenSans.ttf', 'Tahoma.ttf',
             'times_new_roman.ttf', 'verdana.ttf', 'NotoSansArabicUI-Regular.ttf'];
         self.customFonts = fonts.map(
-            font => new PSPDFKit.Font({name: font, callback: downloadService.loadCustomFontPSPDF})
+            font => new PSPDFKit.Font({name: font, callback: loadCustomFontPSPDF})
         );
 
         /**
@@ -170,6 +170,20 @@ module.exports = function (app) {
             return _.map(userInfoAnnotationRows, function (item) {
                 return {id: item.id, selected: item.selected};
             });
+        }
+
+        function loadCustomFontPSPDF(fontFileName) {
+            var url = 'assets/pspdf_fonts/' + fontFileName;
+            return $http.get(url, {
+                responseType: 'blob'
+            })
+                .then(result => {
+                    if (result.status === 200) {
+                        return result.data;
+                    } else {
+                        throw new Error();
+                    }
+                })
         }
     });
 };

@@ -566,18 +566,6 @@ module.exports = function (app) {
             return self;
         };
 
-        self.loadCustomFontPSPDF = function (fontFileName) {
-            return $http.get('/dist/pspdf_fonts/' + fontFileName, {
-                responseType: 'blob'
-            })
-                .then(result => {
-                    if (result.status === 200) {
-                        return result.data;
-                    } else {
-                        throw new Error();
-                    }
-                })
-        }
 
         $timeout(function () {
             CMSModelInterceptor.runEvent('downloadService', 'init', self);
