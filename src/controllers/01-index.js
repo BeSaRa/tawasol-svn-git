@@ -89,4 +89,5 @@ module.exports = function (app) {
     require('./documentStampCtrl')(app);
     require('./sequentialWorkflowCtrl')(app);
     require('./externalDataSourcesCtrl')(app);
+    require('./searchIntelligenceCtrl')(app);
 };

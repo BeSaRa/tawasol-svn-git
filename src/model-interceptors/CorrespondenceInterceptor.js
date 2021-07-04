@@ -186,6 +186,8 @@ module.exports = function (app) {
             delete model.externalSiteIndicator;
             delete model.internalSiteIndicator;
             delete model.g2gSiteIndicator;
+            delete model.azureResultItem;
+            delete model.highlights;
             return model;
         });
 

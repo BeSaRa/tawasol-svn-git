@@ -2675,6 +2675,10 @@ md-chips.custom-chips {
   left: 10px;
 }
 
+#search-facets {
+  width: 250px;
+  max-width: 250px;
+}
 .toolbar-ou-search {
   margin: 0px !important;
   padding: 10px !important;
@@ -2689,4 +2693,10 @@ md-chips.custom-chips {
   }
 }
 
+.subject.small-screen {
+  max-width: 150px !important;
 
+  .subject-internal {
+    max-width: 150px !important;
+  }
+}

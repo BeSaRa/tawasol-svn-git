@@ -204,5 +204,7 @@ module.exports = function (app) {
     require('./BackStepOptions')(app);
     require('./ExtImportStore')(app);
     require('./UserExtImportStore')(app);
+    require('./AzureSearchCriteria')(app);
+    require('./CorrespondenceView')(app);
 
 };

@@ -1720,6 +1720,13 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_external_data_sources'
             })
+            .state('app.intelligence-search', {
+                url: '/intelligence-search',
+                templateUrl: templateProvider.getView('search-intelligence'),
+                controller: 'searchIntelligenceCtrl',
+                controllerAs: 'ctrl',
+                permission: 'menu_item_intelligence_search'
+            })
 
     });
 };

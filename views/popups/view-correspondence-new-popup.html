@@ -404,7 +404,7 @@
                         class="iframe-main-document"
                         ng-src="{{ctrl.viewURL}}" flex
                         frameborder="0"></iframe>
-                <pspdf-viewer-directive doc-url="ctrl.viewURL"
+                <pspdf-viewer-directive correspondence="ctrl.correspondence" doc-url="ctrl.viewURL"
                                         ng-if="ctrl.displayMainPSPDFViewer()"
                                         id="pdfViewer" class="iframe-main-document" flex></pspdf-viewer-directive>
                 <iframe ng-if="ctrl.mainDocument && ctrl.editMode" id="iframe-main-document"

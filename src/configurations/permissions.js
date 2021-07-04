@@ -157,6 +157,7 @@ module.exports = function (app) {
             .end()
             .addMenuPermissionGroup('menu_item_reports')
             .addMenuPermission('menu_item_reports_statistical_correspondence_report', 'CORRESPONDENCE_REPORT')
+            .addMenuPermission('menu_item_intelligence_search', 'MS_AZURE_COGNITIVE_SEARCH')
             .addMenuPermission('menu_item_reports_statistical_report', 'CORRESPONDENCE_SITE_REPORT')
             .addMenuPermission('menu_item_reports_documentary_report', 'WORKFLOW_OPERATION_REPORT')
             .addMenuPermission('menu_item_reports_followup_report', 'FOLLOWUP_REPORT')

@@ -706,6 +706,39 @@ module.exports = function (app) {
                     return vsId && source ? correspondenceService.loadCorrespondenceByVsIdClass(vsId, source) : false;
                 }
             })
+            .bulkResolveToState('app.intelligence-search', {
+                lookups: function (correspondenceService) {
+                    'ngInject';
+                    return correspondenceService.loadCorrespondenceLookups('common', true);
+                },
+                registryOrganizations: function (employeeService, langService, $q, _, organizationService) {
+                    'ngInject';
+
+                    function _sortResultByCurrentLang(result) {
+                        return _.sortBy(result, function (item) {
+                            return item[langService.current + 'Name'].toLowerCase();
+                        });
+                    }
+
+                    // if user has permission to search in all ou load all organizations and ignore role security
+                    if (employeeService.hasPermissionTo('SEARCH_IN_ALL_OU')) {
+                        return organizationService.loadOrganizations(employeeService.hasPermissionTo('SEARCH_IN_ALL_OU'))
+                            .then(function (result) {
+                                // to sort registry organizations after retrieve
+                                return _sortResultByCurrentLang(_.filter(result, function (organization) {
+                                    return organization.hasRegistry;
+                                }));
+                            });
+                    } else {
+                        return organizationService.getUserViewPermissionOusByUserId(employeeService.getEmployee().id)
+                            .then(function (result) {
+                                return _sortResultByCurrentLang(_.filter(result, function (organization) {
+                                    return organization.hasRegistry;
+                                }));
+                            });
+                    }
+                }
+            })
             .bulkResolveToState('app.administration.serials-screen', {
                 registryOrganizations: function (organizationService, _) {
                     'ngInject';

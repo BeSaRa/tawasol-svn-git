@@ -129,4 +129,5 @@ module.exports = function (app) {
     require('./OrganizationUnitViewInterceptor')(app);
     require('./ExtImportStoreInterceptor')(app);
     require('./UserExtImportStoreInterceptor')(app);
+    require('./AzureSearchCriteriaInterceptor')(app);
 };

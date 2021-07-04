@@ -57,8 +57,42 @@ module.exports = function (app) {
 
             PSPDFKit.load(configuration).then(function (instance) {
                 self.instance = instance;
+
+                if (self.correspondence && self.correspondence.highlights) {
+                    self.createHighlights(self.correspondence.highlights);
+                }
             });
         };
+
+        self.createHighlights = function (highlights) {
+            if (!highlights.length)
+                return;
+
+            var annotations = highlights.map(item => {
+                var list = PSPDFKit.Immutable.List(self.getReactsFromPercentage(item));
+                return new PSPDFKit.Annotations.HighlightAnnotation({
+                    pageIndex: item.pageIndex,
+                    rects: list,
+                    boundingBox: PSPDFKit.Geometry.Rect.union(list)
+                });
+            });
+
+            self.instance.create(annotations).then(function (list) {
+                console.log('list', list);
+            });
+        }
+
+        self.getReactsFromPercentage = function (highlight) {
+            var page = self.instance.pageInfoForIndex(highlight.pageIndex);
+            return PSPDFKit.Immutable.List(highlight.reacts.map(function (item) {
+                return new PSPDFKit.Geometry.Rect({
+                    left: (item.left * page.width) / 100,
+                    top: (item.top * page.height) / 100,
+                    width: (item.width * page.width) / 100,
+                    height: (item.height * page.height) / 100
+                })
+            }));
+        }
 
         self.$onInit = function () {
             $timeout(function () {

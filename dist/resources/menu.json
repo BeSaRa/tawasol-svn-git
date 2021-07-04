@@ -1330,5 +1330,17 @@
     "sort_order": 3,
     "active": true,
     "sort_value": 0
+  },
+  {
+    "ID": 124,
+    "lang_key": "menu_item_intelligence_search",
+    "icon": "layers-search-outline",
+    "parent": null,
+    "link": "#intelligence-search",
+    "state": "app.intelligence-search",
+    "icon_type": "font",
+    "sort_order": 9,
+    "active": true,
+    "sort_value": 0
   }
 ]
