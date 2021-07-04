@@ -25,6 +25,7 @@ module.exports = function (app) {
                                             SignDocumentModel,
                                             sequentialWorkflowService,
                                             encryptionService,
+                                            arabicNormalizerService,
                                             cmsTemplate) {
         'ngInject';
         return function Correspondence(model) {
@@ -1261,7 +1262,6 @@ module.exports = function (app) {
 
 
             Correspondence.prototype.getLinesHighlights = function (keyword) {
-
                 function hasAnyKeyword(word, keyWords) {
                     return keyWords.some(function (key) {
                         return word.indexOf(key) !== -1;
@@ -1271,35 +1271,51 @@ module.exports = function (app) {
                 if (!keyword) {
                     return null;
                 }
-                var keywords = Array.from(new Set(keyword.split(" ").filter(Boolean))).map(item => item.toLowerCase());
-                var self = this, highlightedWords = [];
-                self.azureResultItem.lines.forEach(function (line) {
-                    if (hasAnyKeyword(line.lineString.toLowerCase(), keywords)) {
-                        highlightedWords = highlightedWords.concat(line.words.filter(function (word) {
-                            return hasAnyKeyword(word.wordstring.toLowerCase(), keywords);
-                        }).map(function (word) {
-                            let [left, top, width, height] = word.boundingBox.split(',').map(item => Number(item));
-                            return {
-                                left: (left * 100) / self.azureResultItem.imgW,
-                                top: (top * 100) / self.azureResultItem.imgH,
-                                width: (width * 100) / self.azureResultItem.imgW,
-                                height: (height * 100) / self.azureResultItem.imgH
+                var words = Array.from(new Set(keyword.split(" ").filter(Boolean))).map(item => item.toLowerCase());
+                var keywords = [];
+
+                words.forEach(word => {
+                    var normalized = arabicNormalizerService.normalize(word, ' ');
+                    if (normalized !== word) {
+                        keywords.push(normalized);
+                    }
+                    keywords.push(word);
+                })
+
+
+                var self = this
+                self.highlights = [];
+
+                self.azureResultItem.forEach(item => {
+                 var highlightedWords = [];
+                    item.lines.forEach(function (line) {
+                        if (hasAnyKeyword(line.lineString.toLowerCase(), keywords)) {
+                            highlightedWords = highlightedWords.concat(line.words.filter(function (word) {
+                                return hasAnyKeyword(word.wordstring.toLowerCase(), keywords);
+                            }).map(function (word) {
+                                let [left, top, width, height] = word.boundingBox.split(',').map(item => Number(item));
+                                return {
+                                    left: (left * 100) / item.imgW,
+                                    top: (top * 100) / item.imgH,
+                                    width: (width * 100) / item.imgW,
+                                    height: (height * 100) / item.imgH
+                                }
+                            }))
+                        }
+                    });
+
+                    if (highlightedWords.length) {
+                        self.highlights.push({
+                            pageIndex: item.pageNum - 1,
+                            reacts: highlightedWords,
+                            dimensions: {
+                                width: item.imgW,
+                                height: item.imgH,
+                                dpi: [item.dpiX, item.dpiY]
                             }
-                        }))
+                        })
                     }
                 });
-                if (!highlightedWords.length) {
-                    return self.highlights = null;
-                }
-                self.highlights = [{
-                    pageIndex: self.azureResultItem.pageNum - 1,
-                    reacts: highlightedWords,
-                    dimensions: {
-                        width: self.azureResultItem.imgW,
-                        height: self.azureResultItem.imgH,
-                        dpi: [self.azureResultItem.dpiX, self.azureResultItem.dpiY]
-                    }
-                }];
                 return self.highlights;
             }
 

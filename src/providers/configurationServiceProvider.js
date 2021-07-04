@@ -73,6 +73,11 @@ module.exports = function (app) {
                 date: 1,
                 jobTitle: 2,
                 username: 3
+            },
+            CHAT_BOT: {
+                ENABLED: true,
+                URL: 'http://tawasolbot-b750.azurewebsites.net/chatbot.html?',
+                APPEND_TOKEN: true
             }
         };
         var configurationServiceProvider = provider;

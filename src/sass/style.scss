@@ -1863,6 +1863,10 @@ span.indicator-content {
   bottom: -7px;
 }
 
+.hint.hint-reference-xl {
+  bottom: -12px;
+}
+
 .page-404-header {
   font-size: 5em;
   padding-top: 50px;
@@ -2691,6 +2695,11 @@ md-chips.custom-chips {
     outline: none;
     width: 100% !important;
   }
+}
+
+#search-facets {
+  width: 250px;
+  max-width: 250px;
 }
 
 .subject.small-screen {
