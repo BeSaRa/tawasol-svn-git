@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('pspdfViewerDirectiveCtrl', function (PSPDFKit, configurationService, rootEntity, employeeService, $timeout, $element, generator) {
+    app.controller('pspdfViewerDirectiveCtrl', function (PSPDFKit, PDFService , configurationService, rootEntity, employeeService, $timeout, $element, downloadService) {
         'ngInject';
         var self = this;
         self.controllerName = 'pspdfViewerDirectiveCtrl';
@@ -41,6 +41,7 @@ module.exports = function (app) {
             });
             self.destroyInstance();
 
+
             var configuration = {
                 baseUrl: (location.protocol + '//' + location.host + '/' + (configurationService.APP_CONTEXT ? configurationService.APP_CONTEXT + '/' : '')),
                 container: self.container,
@@ -48,7 +49,8 @@ module.exports = function (app) {
                 toolbarItems: PSPDFKit.defaultToolbarItems.concat(bookmarkButton),
                 document: typeof self.docUrl === 'object' ? self.docUrl.$$unwrapTrustedValue() : self.docUrl,
                 licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
-                initialViewState: initialViewState
+                initialViewState: initialViewState,
+                customFonts: PDFService.customFonts
             }
 
             if(configurationService.PSPDF_LICENSE_KEY){

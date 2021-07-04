@@ -108,6 +108,10 @@ module.exports = function (app) {
         var cookieKey = employeeService.getEmployee().domainName + '_' + 'attach_username_date';
         self.attachUserInfoToSignature = false;
 
+        self.customFonts = ["NotoSansArabicUI-Regular.ttf"].map(
+            font => new PSPDFKit.Font({name: font, callback: downloadService.loadCustomFontPSPDF})
+        );
+
         self.documentClassPermissionMap = {
             outgoing: function (isPaper) {
                 return isPaper ? 'EDIT_OUTGOING_PAPER' : 'EDIT_OUTGOING_CONTENT';
@@ -2241,10 +2245,12 @@ module.exports = function (app) {
                 document: self.pdfData,
                 headless: true,
                 instantJSON: operations.length ? null : instantJSON,
-                licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey
+                licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
+                customFonts: PDFService.customFonts
             }
 
-            if(configurationService.PSPDF_LICENSE_KEY){
+
+            if (configurationService.PSPDF_LICENSE_KEY) {
                 delete configuration.licenseKey;
             }
 
@@ -2252,14 +2258,17 @@ module.exports = function (app) {
 
             if (operations.length) {
                 documentWithOperationsBuffer = await instance.exportPDFWithOperations(operations);
-                var configuration = {
+                configuration = {
                     baseUrl: self.baseUrl,
                     document: documentWithOperationsBuffer,
                     headless: true,
                     instantJSON: instantJSON,
-                    licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey
+                    licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
+                    customFonts: PDFService.customFonts
                 };
-                if(configurationService.PSPDF_LICENSE_KEY){
+
+
+                if (configurationService.PSPDF_LICENSE_KEY) {
                     delete configuration.licenseKey;
                 }
 
@@ -2329,12 +2338,15 @@ module.exports = function (app) {
             if (self.info.isAttachment && self.correspondence.isOfficial && !employeeService.hasPermissionTo('ANNOTATE_OFFICIAL_ATTACHMENT')) {
                 self.attachUserInfoToSignature = false;
             }
+
+
             self.onAttachToggleChange();
             $timeout(function () {
                 if (instantJSON) {
                     return self.loadInstantJSON();
                 }
                 PSPDFKit.Options.INITIAL_DESKTOP_SIDEBAR_WIDTH = 250;
+
                 var configuration = {
                     baseUrl: self.baseUrl,
                     container: $element.find('#pdf-viewer')[0],
@@ -2343,10 +2355,11 @@ module.exports = function (app) {
                     toolbarItems: makeToolbarItems(),
                     populateInkSignatures: self.populateInkSignatures,
                     licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
-                    annotationTooltipCallback: self.annotationTooltipCallback
+                    annotationTooltipCallback: self.annotationTooltipCallback,
+                    customFonts: PDFService.customFonts
                 }
 
-                if(configurationService.PSPDF_LICENSE_KEY){
+                if (configurationService.PSPDF_LICENSE_KEY) {
                     delete configuration.licenseKey;
                 }
 

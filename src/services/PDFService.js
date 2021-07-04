@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.service('PDFService', function (dialog, $q, cmsTemplate, AnnotationType, downloadService, employeeService, _,
+    app.service('PDFService', function (dialog, PSPDFKit, $q, cmsTemplate, AnnotationType, downloadService, employeeService, _,
                                         langService, moment, jobTitleService, configurationService, $cookies) {
         'ngInject';
         var self = this;
@@ -35,6 +35,13 @@ module.exports = function (app) {
                 }
             }
         ];
+
+        var fonts = ['Helvetica.ttf', 'arial.ttf', 'CALIBRI.ttf', 'GOTHIC.TTF', 'Consolas.ttf', 'Courier.ttf',
+            'Georgia.ttf', 'impact.ttf', 'Lucida_Sans.ttf', 'OpenSans.ttf', 'Tahoma.ttf',
+            'times_new_roman.ttf', 'verdana.ttf', 'NotoSansArabicUI-Regular.ttf'];
+        self.customFonts = fonts.map(
+            font => new PSPDFKit.Font({name: font, callback: downloadService.loadCustomFontPSPDF})
+        );
 
         /**
          * @description open PDfViewer visible for the user to handel all annotation from UI
