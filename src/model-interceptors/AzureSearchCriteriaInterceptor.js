@@ -8,6 +8,10 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
+            delete model.year;
+            model.fromDate = new Date(model.fromDate).toISOString();
+            model.toDate = new Date(model.toDate).toISOString();
+
             return model;
         });
 

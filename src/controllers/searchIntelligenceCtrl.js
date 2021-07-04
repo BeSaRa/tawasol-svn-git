@@ -18,7 +18,10 @@ module.exports = function (app) {
                                                        employeeService,
                                                        viewTrackingSheetService,
                                                        $timeout,
-                                                       correspondenceService) {
+                                                       correspondenceService,
+                                                       cmsTemplate,
+                                                       managerService,
+                                                       dialog) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchIntelligenceCtrl';
@@ -48,8 +51,12 @@ module.exports = function (app) {
         self.results = [];
 
         self.selectedTab = 0;
-
-        self.criteria = new AzureSearchCriteria();
+        // all years from 2000 till current year.
+        self.years = _.range(2000, (new Date().getFullYear() + 1));
+        // search text for filtering years DDL
+        self.yearSearchText = '';
+        self.maxCreateDate = new Date();
+        self.criteria = _createNewSearchCriteria();
 
         self.facetCriteria = (new AzureSearchCriteria()).toFacetCriteria();
 
@@ -115,6 +122,14 @@ module.exports = function (app) {
             });
         }
 
+        function _createNewSearchCriteria() {
+            return new AzureSearchCriteria({
+                year: new Date().getFullYear(),
+                fromDate: generator.convertDateToString(new Date(self.maxCreateDate.getFullYear(), 0, 1, 0, 0, 0, 0)),
+                toDate: generator.convertDateToString(self.maxCreateDate)
+            });
+        }
+
         /**
          * @description fir the callback if the provider  text length equal = 0
          * @param $event
@@ -151,7 +166,9 @@ module.exports = function (app) {
                     self.results = result.first;
                     if (!ignoreFacets)
                         self.prepareFacets(result.second);
-                    if (self.results.length) {
+                    if (!self.results.length) {
+                        dialog.errorMessage(langService.get('no_records_found_matching_search'));
+                    } else {
                         self.selectedTab = 1;
                     }
                     return self.results;
@@ -1815,7 +1832,7 @@ module.exports = function (app) {
 
         self.facetChanged = function (type, item) {
             item.isSelected ? addFacet(type, item.value) : removeFacet(type, item.value);
-            self.searchWithFacets();
+            //self.searchWithFacets();
         }
 
         self.displayFacetsSidebar = function () {
@@ -1835,7 +1852,9 @@ module.exports = function (app) {
                 .innovationSearch({...self.criteria, ...self.facetCriteria})
                 .then(function (result) {
                     self.results = result.first;
-                    if (self.results.length) {
+                    if (!self.results.length) {
+                        dialog.errorMessage(langService.get('no_records_found_matching_search'));
+                    } else {
                         self.selectedTab = 1;
                     }
                     return self.results;
@@ -1865,6 +1884,61 @@ module.exports = function (app) {
         self.queryTextSearch = function () {
             return correspondenceService.innovationAutoComplete(self.criteria.keyWords);
         }
+
+        /**
+         * to display year dialog if user select all year.
+         * @param $event
+         */
+        self.onYearChanged = function ($event) {
+            if (self.criteria.year === 'All') {
+                self.changeYearRange($event);
+            } else {
+                var from = new Date(self.criteria.year, 0, 1, 0, 0, 0, 0);
+                var to = (self.maxCreateDate.getFullYear() === self.criteria.year) ? self.maxCreateDate : new Date(self.criteria.year, 11, 31, 23, 59, 59, 999);
+                self.criteria.fromDate = generator.convertDateToString(from);
+                self.criteria.toDate = generator.convertDateToString(to);
+            }
+        };
+
+        /**
+         * @description dialog to change year dates
+         * @returns {*}
+         */
+        self.changeYearRange = function () {
+            var documentSearchCriteria = {
+                year: self.criteria.year,
+                docDateFrom: self.criteria.fromDate,
+                docDateTo: self.criteria.toDate
+            }
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('search-doc-date-range'),
+                    controller: 'searchDocDateRangePopCtrl',
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    escapeToClose: false,
+                    locals: {
+                        document: angular.copy(documentSearchCriteria),
+                        year: self.criteria.year
+                    }
+                }).then(function (result) {
+                    self.criteria.fromDate = result.dateFromLabel;
+                    self.criteria.toDate = result.dateToLabel;
+                })
+                .catch(function (result) {
+                    if (!(self.criteria.fromDate && self.criteria.toDate)) {
+                        self.criteria.year = null;
+                        if (!self.required.hasOwnProperty('fromDate'))
+                            self.required.fromDate = {};
+                        self.required.fromDate.isMandatory = false;
+                        if (!self.required.hasOwnProperty('toDate'))
+                            self.required.toDate = {};
+                        self.required.toDate.isMandatory = false;
+                    }
+                    self.criteria.fromDate = result.dateFromLabel;
+                    self.criteria.toDate = result.dateToLabel;
+                });
+        };
 
     });
 };

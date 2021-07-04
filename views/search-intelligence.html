@@ -5,10 +5,14 @@
             <md-sidenav id="sidebar-folder-structure" md-is-open="ctrl.sidebarStatus"
                         ng-class="{'md-sidenav-right':lang.current === 'ar'}">
                 <div class="p20 first-folder-list" layout="column">
-                    <div layout-align="center center" layout="row">
+                    <div layout="column">
                         <span>{{lang.results_count}} : {{ctrl.results.length}}</span>
-                        <span flex></span>
-                        <md-button class="md-primary md-raised" ng-click="ctrl.clearFacets()">{{lang.clear}}</md-button>
+                        <div>
+                            <md-button class="md-primary md-raised" ng-click="ctrl.clearFacets()">{{lang.clear}}
+                            </md-button>
+                            <md-button class="md-primary md-raised" ng-click="ctrl.searchWithFacets()">{{lang.filter}}
+                            </md-button>
+                        </div>
                     </div>
                     <fieldset ng-if="ctrl.docClassId.length">
                         <legend>{{lang.label_document_class}}</legend>
@@ -113,20 +117,48 @@
                 <md-tab label="{{lang.search}}">
                     <md-content scroll-directive class="page-padding">
                         <br/>
-                        <form name="msSearch">
+                        <form name="msSearch" enter-submit-directive="search-button">
                             <div layout="row">
-                                <md-input-container class="cms-datepicker md-block" flex>
+                                <md-input-container flex="">
+                                    <label for="year">{{lang.search_module_year}}</label>
+                                    <md-select data-md-container-class="select-header-container sticky-search-bar"
+                                               id="year"
+                                               name="year"
+                                               ng-change="ctrl.onYearChanged($event)"
+                                               md-on-close="ctrl.yearSearchText = ''"
+                                               ng-model="ctrl.criteria.year">
+                                        <md-select-header class="select-header" layout="column">
+                                            <div layout="row" flex class="size-100">
+                                                <input ng-model="ctrl.yearSearchText"
+                                                       type="search"
+                                                       ng-keydown="ctrl.allowPropagationUpDownArrows($event)"
+                                                       placeholder="{{lang.search}}"
+                                                       class="select-header-input">
+                                            </div>
+                                        </md-select-header>
+                                        <md-option ng-value="'All'">{{lang.all}}</md-option>
+                                        <md-option
+                                                ng-value="year"
+                                                ng-repeat="year in ctrl.years|filter:ctrl.yearSearchText">
+                                            {{year}}
+                                        </md-option>
+                                    </md-select>
+                                    <md-button class="md-icon-button cms-select-overlay-button"
+                                               tooltip="{{lang.change_date_range}}"
+                                               ng-click="ctrl.changeYearRange($event)">
+                                        <md-icon md-svg-icon="calendar-today"></md-icon>
+                                    </md-button>
+                                </md-input-container>
+                                <md-input-container class="cms-datepicker md-block"
+                                                    flex>
                                     <label>{{lang.search_module_start_date}}</label>
-                                    <md-datepicker md-max-date="ctrl.maxDate" ng-model="ctrl.criteria.fromDate"
-                                                   md-open-on-focus></md-datepicker>
+                                    <input readonly disabled value="{{ctrl.criteria.fromDate}}"/>
                                 </md-input-container>
-                                <md-input-container class="cms-datepicker md-block" flex>
+                                <md-input-container class="cms-datepicker md-block"
+                                                    flex>
                                     <label>{{lang.search_module_end_date}}</label>
-                                    <md-datepicker md-min-date="ctrl.criteria.fromDate" md-max-date="ctrl.maxDate"
-                                                   ng-model="ctrl.criteria.toDate"
-                                                   md-open-on-focus></md-datepicker>
+                                    <input readonly disabled value="{{ctrl.criteria.toDate}}"/>
                                 </md-input-container>
-
                             </div>
                             <div flex layout="row">
                                 <!--                            <md-input-container flex>-->
@@ -134,7 +166,7 @@
                                 <!--                                <textarea ng-model="ctrl.criteria.keyWords" id="keyWords" flex rows="5"></textarea>-->
                                 <!--                            </md-input-container>-->
 
-                                <md-autocomplete flex required
+                                <md-autocomplete flex required md-input-id="keyWordsAutoComplete"
                                                  md-input-name="keyWordsAutoComplete"
                                                  md-input-minlength="3"
                                                  md-input-maxlength="30"
@@ -146,17 +178,24 @@
                                                  md-escape-options="clear"
                                                  md-require-match="false"
                                                  md-delay="300"
+                                                 md-clear-button="true"
                                                  md-floating-label="{{lang.content}}"
                                                  input-aria-describedby="favoriteStateDescription">
                                     <md-item-template>
                                         <span md-highlight-text="ctrl.criteria.keyWords">{{item.text}}</span>
                                     </md-item-template>
+                                    <div ng-messages="msSearch.keyWordsAutoComplete.$error">
+                                        <div ng-message="maxlength">{{lang.max_length.change({length: 30})}}
+                                        </div>
+                                        <div ng-message="minlength">{{lang.min_length.change({length: 3})}}
+                                        </div>
+                                    </div>
                                 </md-autocomplete>
                             </div>
                         </form>
                         <div layout="row">
                             <div>
-                                <md-button ng-disabled="msSearch.$invalid" ng-click="ctrl.search()"
+                                <md-button id="search-button" ng-disabled="msSearch.$invalid" ng-click="ctrl.search()"
                                            class="md-raised md-primary">{{lang.search}}
                                 </md-button>
                             </div>
