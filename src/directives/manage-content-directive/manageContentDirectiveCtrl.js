@@ -42,6 +42,7 @@ module.exports = function (app) {
         self.isDefaultEditModeBoth = (employeeService.getEmployee().getDefaultEditMode() === correspondenceService.documentEditModes.desktopOfficeOnline);
 
         self.simpleViewUrl = null;
+        self.isLimitedCentralUnitAccess = false;
 
         LangWatcher($scope);
 
@@ -569,6 +570,7 @@ module.exports = function (app) {
 
 
         self.savePreparedDocument = function () {
+            debugger
             self.documentInformation = self.docInfo;
             self.templateOrFileName = self.docName;
             if (self.simpleViewUrl) {
@@ -611,6 +613,8 @@ module.exports = function (app) {
 
         self.$onInit = function () {
             self.isImportFromExDataSourceAllowed = false;
+            self.isLimitedCentralUnitAccess = angular.copy(self.document).isLimitedCentralUnitAccess();
+
             if (rootEntity.returnRootEntity().rootEntity.importDataSourceStatus) {
                 userExternalDataSourceService.loadActiveUserExternalDataSources()
                     .then(function (result) {

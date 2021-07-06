@@ -91,11 +91,12 @@
     <div>
         <!-- edit content in add page/ edit after approved -->
         <md-button
-                ng-if="ctrl.editContent && !ctrl.receiveDocument && ctrl.documentInformation && !ctrl.document.addMethod"
+                ng-if="ctrl.editContent && !ctrl.receiveDocument && ctrl.documentInformation &&
+                !ctrl.document.addMethod && !ctrl.isLimitedCentralUnitAccess"
                 class="md-raised" ng-click="ctrl.openCorrespondenceToEdit()">
             {{lang.edit_content}}
         </md-button>
-        <md-button ng-if="ctrl.receiveDocument" class="md-raised"
+        <md-button ng-if="ctrl.receiveDocument && !ctrl.isLimitedCentralUnitAccess" class="md-raised"
                    ng-click="ctrl.openCorrespondenceToEdit(true)">
             {{lang.view}}
         </md-button>

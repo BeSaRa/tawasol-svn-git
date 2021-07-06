@@ -821,7 +821,9 @@ module.exports = function (app) {
                 class: "action-green",
                 sticky: true,
                 checkShow: function (action, model) {
-                    return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION);
+                    return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() &&
+                        employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION) &&
+                        !correspondenceService.isLimitedCentralUnitAccess(model);
                 }
             },
             // Print Barcode

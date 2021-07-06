@@ -235,6 +235,9 @@ module.exports = function (app) {
 
         self.$onInit = function () {
             filterStickyActions();
+            if (self.correspondence) {
+                self.isLimitedCentralUnitAccess = correspondenceService.isLimitedCentralUnitAccess(self.correspondence);
+            }
         }
     });
 };

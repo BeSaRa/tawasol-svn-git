@@ -685,7 +685,7 @@ module.exports = function (app) {
                             isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
                         }
 
-                        return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model);
+                        return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model) && !correspondenceService.isLimitedCentralUnitAccess(model);
                     },
                     permissionKey: [
                         "DOWNLOAD_MAIN_DOCUMENT",
@@ -825,7 +825,7 @@ module.exports = function (app) {
                             callback: self.sendSMS,
                             class: "action-green",
                             checkShow: function (action, model) {
-                                return true;
+                                return !correspondenceService.isLimitedCentralUnitAccess(model);
                             }
                         },
                         // send reminder email to user

@@ -692,9 +692,9 @@ module.exports = function (app) {
         };
         // run search query
         self.searchCorrespondence = function () {
-            if (!self.searchCriteria.hasValidRefDocDateRange() || !self.searchCriteria.hasValidFollowUpDateRange()){
+            if (!self.searchCriteria.hasValidRefDocDateRange() || !self.searchCriteria.hasValidFollowUpDateRange()) {
                 toast.info(langService.get('msg_invalid_date_range'));
-                $scope.simpleSearchForm ? $scope.simpleSearchForm.$setTouched(): null;
+                $scope.simpleSearchForm ? $scope.simpleSearchForm.$setTouched() : null;
                 $scope.advancedSearchForm ? $scope.advancedSearchForm.$setTouched() : null;
                 return;
             }
@@ -986,7 +986,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTasks = function (searchedIncomingDocument, $event) {
-          //  console.log('manage tasks for searched incoming document : ', searchedIncomingDocument);
+            //  console.log('manage tasks for searched incoming document : ', searchedIncomingDocument);
         };
 
         /**
@@ -1145,7 +1145,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.createCopy = function (searchedIncomingDocument, $event) {
-          //  console.log('create copy for searched incoming document : ', searchedIncomingDocument);
+            //  console.log('create copy for searched incoming document : ', searchedIncomingDocument);
         };
 
         /**
@@ -1250,7 +1250,7 @@ module.exports = function (app) {
             }
             correspondence.viewFromQueue(self.gridActions, 'searchIncoming', $event)
                 .then(function () {
-                     return self.reloadSearchCorrespondence(self.grid.page);
+                    return self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function (error) {
                     return self.reloadSearchCorrespondence(self.grid.page);
@@ -1688,7 +1688,9 @@ module.exports = function (app) {
                 callback: self.annotateDocument,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION);
+                    return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() &&
+                        employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION) &&
+                        !correspondenceService.isLimitedCentralUnitAccess(model);
                 }
             },
             // Print Barcode
@@ -1854,7 +1856,8 @@ module.exports = function (app) {
                         isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
                     }
 
-                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model);
+                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model) &&
+                        !correspondenceService.isLimitedCentralUnitAccess(model);
                 },
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
@@ -1921,7 +1924,7 @@ module.exports = function (app) {
                 text: 'grid_action_send',
                 shortcut: false,
                 checkShow: function (action, model) {
-                    return gridService.checkToShowMainMenuBySubMenu(action, model);
+                    return gridService.checkToShowMainMenuBySubMenu(action, model) && !correspondenceService.isLimitedCentralUnitAccess(model);
                 },
                 permissionKey: [
                     "SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL",

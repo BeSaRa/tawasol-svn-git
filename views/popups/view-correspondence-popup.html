@@ -207,6 +207,9 @@
                 </div>
             </md-sidenav>
             <div id="iframe-parent" layout="column" class="relative" flex>
+                <div layout="column" layout-margin ng-if="ctrl.isLimitedCentralUnitAccess">
+                    <span class="red-text font-bold">{{lang.archive_secure_document_content}}</span>
+                </div>
                 <iframe id="iframe-main-document" ng-if="ctrl.displayMainIframeViewer()"
                         ng-src="{{ctrl.viewURL}}" flex
                         class="iframe-main-document"

@@ -518,7 +518,12 @@
                                         <span>{{lang.allow_edit_after_first_approve}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('allowEditAfterFirstApprove')}}
                                     </md-switch>
                                 </md-input-container>
-                                <span flex></span>
+                                <md-input-container flex>
+                                    <md-switch flex ng-model="ctrl.globalSetting.limitedCentralUnitAccess"
+                                               aria-label="{{lang.limited_central_archive_access}}">
+                                        <span>{{lang.limited_central_archive_access}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('limitedCentralUnitAccess')}}
+                                    </md-switch>
+                                </md-input-container>
                             </div>
                             <div layout="row" class="p20">
                                 <!-- Document Security Schema -->

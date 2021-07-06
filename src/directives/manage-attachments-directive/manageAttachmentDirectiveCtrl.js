@@ -44,6 +44,7 @@ module.exports = function (app) {
             self.attachmentUpdateActions = lookupService.returnLookups(lookupService.attachmentUpdateAction);
             self.priorityLevels = lookupService.returnLookups(lookupService.attachmentPriority);
             self.getSortedData();
+            self.isLimitedCentralUnitAccess = correspondenceService.isLimitedCentralUnitAccess(self.document);
         });
 
         // to hide buttons when one of the process work.
@@ -589,7 +590,7 @@ module.exports = function (app) {
                 .annotateCorrespondence(attachment, AnnotationType.ANNOTATION, self.document);
         };
 
-        self.$onInit = function (){
+        self.$onInit = function () {
             self.isImportFromExDataSourceAllowed = false;
             if (rootEntity.returnRootEntity().rootEntity.importDataSourceStatus) {
                 userExternalDataSourceService.loadActiveUserExternalDataSources()

@@ -871,7 +871,8 @@ module.exports = function (app) {
                             return !info.isPaper
                                 && (info.documentClass !== 'incoming')
                                 && model.needApprove()
-                                && hasPermission;
+                                && hasPermission
+                                && !correspondenceService.isLimitedCentralUnitAccess(model);
                         }
                     },
                 ]

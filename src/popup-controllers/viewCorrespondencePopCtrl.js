@@ -49,7 +49,7 @@ module.exports = function (app) {
         self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
 
         self.hideSlowModeToggleButton = false;
-
+        self.isLimitedCentralUnitAccess = false;
         self.excludedManagePopupsFromGrids = [
             // 'departmentIncoming',
             'g2gIncoming',
@@ -139,19 +139,22 @@ module.exports = function (app) {
         };
 
         self.displayMainIframeViewer = function () {
-            return ((self.isTheMainDocumentInView() && !self.psPDFViewerEnabled) || (self.isTheMainDocumentInView() && self.psPDFViewerEnabled && self.isOfficeOnlineViewer(self.viewURL))) && self.correspondence;
+            return ((self.isTheMainDocumentInView() && !self.psPDFViewerEnabled) || (self.isTheMainDocumentInView() && self.psPDFViewerEnabled && self.isOfficeOnlineViewer(self.viewURL)))
+                && self.correspondence && !self.isLimitedCentralUnitAccess;
         };
 
         self.displayMainPSPDFViewer = function () {
-            return self.isTheMainDocumentInView() && self.psPDFViewerEnabled && !self.isOfficeOnlineViewer(self.viewURL) && self.correspondence;
+            return self.isTheMainDocumentInView() && self.psPDFViewerEnabled && !self.isOfficeOnlineViewer(self.viewURL)
+                && self.correspondence && !self.isLimitedCentralUnitAccess;
         };
 
         self.displaySecondIframeViewer = function () {
-            return (!self.mainDocument && !self.psPDFViewerEnabled) || (!self.mainDocument && self.psPDFViewerEnabled && self.isOfficeOnlineViewer(self.secondURL));
+            return (!self.mainDocument && !self.psPDFViewerEnabled) || (!self.mainDocument && self.psPDFViewerEnabled && self.isOfficeOnlineViewer(self.secondURL))
+                && !self.isLimitedCentralUnitAccess;
         };
 
         self.displaySecondPSPDFViewer = function () {
-            return !self.mainDocument && self.psPDFViewerEnabled && !self.isOfficeOnlineViewer(self.secondURL);
+            return !self.mainDocument && self.psPDFViewerEnabled && !self.isOfficeOnlineViewer(self.secondURL) && !self.isLimitedCentralUnitAccess;
         };
         /**
          * @description Toggles the view mode for the document/attachment/linked doc
@@ -285,7 +288,7 @@ module.exports = function (app) {
         };
 
         self.isEditContentDisabled = function () {
-            if (self.editMode) {
+            if (self.editMode || correspondenceService.isLimitedCentralUnitAccess(self.correspondence)) {
                 return true;
             } else if (!self.correspondence.isCorrespondenceApprovedBefore()) {
                 return false;
@@ -551,7 +554,12 @@ module.exports = function (app) {
             });
         }
 
-        self.showAttachment = function (attachment, $index, $event, slowConnectionToggledByUser , popup) {
+        self.showAttachment = function (attachment, $index, $event, slowConnectionToggledByUser, popup) {
+            if (correspondenceService.isLimitedCentralUnitAccess(self.correspondence)) {
+                toast.error(langService.get('archive_secure_document_content'))
+                return false;
+            }
+
             if (!slowConnectionToggledByUser) {
                 _resetViewModeToggle();
             }
@@ -567,7 +575,7 @@ module.exports = function (app) {
                 attachmentService
                     .viewAttachment(attachment, self.correspondence.classDescription, !popup)
                     .then(function (result) {
-                        if(popup){
+                        if (popup) {
                             return;
                         }
                         _changeSecondURL(result, 'attachments', $index);
@@ -581,6 +589,11 @@ module.exports = function (app) {
         };
 
         self.showLinkedDocument = function (linkedDoc, $index, $event, popup, slowConnectionToggledByUser) {
+            if (correspondenceService.isLimitedCentralUnitAccess(self.correspondence)) {
+                toast.error(langService.get('archive_secure_document_content'))
+                return false;
+            }
+
             if (!slowConnectionToggledByUser) {
                 _resetViewModeToggle();
             }
@@ -930,6 +943,7 @@ module.exports = function (app) {
             self.action = correspondenceService.getSecurityLevelEnabledActionByScreenName();
 
             if (self.correspondence) {
+                self.isLimitedCentralUnitAccess = correspondenceService.isLimitedCentralUnitAccess(self.correspondence);
                 self.info = self.correspondence.getInfo();
                 if (self.correspondence.defaultModeIfEditing === correspondenceService.documentEditModes.officeOnline) {
                     self.editContentFrom = 'editContentFromGrid';

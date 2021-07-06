@@ -5272,6 +5272,26 @@ module.exports = function (app) {
             })
         }
 
+        self.isLimitedCentralUnitAccess = function (correspondence) {
+            if (!correspondence) { //|| !correspondence.hasVsId()
+                return false;
+            }
+
+            var isLimitedCentralUnitAccessEnabled = rootEntity.getGlobalSettings().isLimitedCentralUnitAccessEnabled();
+            var info = correspondence.getInfo();
+            var securityLevel = (info.securityLevel.hasOwnProperty('lookupKey')) ? info.securityLevel.lookupKey : info.securityLevel;
+
+            // if security level normal or not enabled from global settings
+            if (info.documentClass === "internal" || securityLevel === 1 || !isLimitedCentralUnitAccessEnabled) {
+                return false;
+            }
+
+            var isCentralArchive = employeeService.getEmployee().inCentralArchive();
+            var currentOUId = employeeService.getEmployee().getOUID();
+
+            return isCentralArchive && correspondence.ou !== currentOUId;
+        }
+
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);
         }, 100);

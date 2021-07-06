@@ -87,6 +87,11 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
+
+            if (correspondence.isLimitedCentralUnitAccess()) {
+                dialog.infoMessage(langService.get('archive_secure_document_content'));
+                return;
+            }
             correspondenceService.viewCorrespondence(correspondence, [], true, true);
         };
 
