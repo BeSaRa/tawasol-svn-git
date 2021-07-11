@@ -451,6 +451,10 @@ module.exports = function (app) {
             //  console.log('sendSMS : ', userSentItem);
         };
 
+        self.sendReminderEmail = function (userSetItem, $event) {
+            userSetItem.openSendEmailReminderDialog($event);
+        }
+
         /**
          * @description Send Main Document Fax
          * @param userSentItem
@@ -1082,6 +1086,18 @@ module.exports = function (app) {
                         hide: false,
                         permissionKey: "SEND_SMS",
                         callback: self.sendSMS,
+                        class: "action-red",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // send reminder by email
+                    {
+                        type: 'action',
+                        icon: 'message',
+                        text: 'grid_action_send_reminder_email',
+                        shortcut: false,
+                        callback: self.sendReminderEmail,
                         class: "action-red",
                         checkShow: function (action, model) {
                             return true;

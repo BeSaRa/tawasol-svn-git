@@ -293,6 +293,10 @@ module.exports = function (app) {
                 return correspondenceService.openSendFaxDialog(this, $event);
             };
 
+            EventHistory.prototype.openSendEmailReminderDialog = function ($event) {
+                return correspondenceService.openSendEmailReminderDialog(this, $event);
+            };
+
             EventHistory.prototype.canSendByFax = function () {
                 return rootEntity.returnRootEntity().rootEntity.faxEnabled;
             };

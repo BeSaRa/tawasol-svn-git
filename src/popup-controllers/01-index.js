@@ -161,4 +161,5 @@ module.exports = function (app) {
     require('./configureAnnotationPatternPopCtrl')(app);
     require('./externalDataSourcePopCtrl')(app);
     require('./externalDataSourceImportPopCtrl')(app);
+    require('./sendEmailReminderPopCtrl')(app);
 };

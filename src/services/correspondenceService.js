@@ -4796,6 +4796,23 @@ module.exports = function (app) {
             })
         };
 
+
+        /**
+         *@description open send email reminder dialog
+         * @param record
+         * @param $event
+         */
+        self.openSendEmailReminderDialog = function (record, $event) {
+            return dialog.showDialog({
+                templateUrl: cmsTemplate.getPopup('send-email-reminder'),
+                controllerAs: 'ctrl',
+                targetEvent: $event || false,
+                bindToController: true,
+                controller: 'sendEmailReminderPopCtrl',
+                escapeToClose: false,
+                correspondence: record.getInfo()
+            })
+        };
         /**
          * @description send fax
          * @param document
@@ -5290,6 +5307,18 @@ module.exports = function (app) {
             var currentOUId = employeeService.getEmployee().getOUID();
 
             return isCentralArchive && correspondence.ou !== currentOUId;
+        }
+
+        self.sendEmailReminder = function (correspondence, comment) {
+            return $http.put(urlService.reminderEmail + '/' + correspondence.id,
+                {
+                    vsId: correspondence.vsId,
+                    workObjectNumber: correspondence.wobNumber,
+                    comment: comment
+                })
+                .then(function (result) {
+                    return result.data.rs;
+                });
         }
 
         $timeout(function () {

@@ -1,0 +1,33 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.comment}}">
+    <popup-toolbar-directive header-text="{{lang.add}} {{lang.comment}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="userCommentsForm" autocomplete="off">
+                <div layout="column">
+                    <div layout="row">
+                        <div flex>
+                            <!-- Comment -->
+                            <label>{{$parent.lang.comment }} <span class="red-text">*</span></label>
+                            <text-angular name="comment" id="arBody" flex
+                                          ng-model="ctrl.comment"
+                                          required
+                                          ta-text-editor-class="cms-ta-scroll"
+                            ></text-angular>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary" ng-disabled="userCommentsForm.$invalid"
+                   ng-click="ctrl.sendReminderEmail($event)">
+            {{lang.send}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup($event)">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

@@ -305,6 +305,10 @@ module.exports = function (app) {
             downloadService.mergeAndDownload(followupSentItem);
         };
 
+        self.sendReminderEmail = function (followupSentItem, $event) {
+            followupSentItem.openSendEmailReminderDialog($event);
+        }
+
         /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
@@ -503,6 +507,32 @@ module.exports = function (app) {
                 callback: self.viewTrackingSheet,
                 params: ['view_tracking_sheet', 'tabs']
             },
+            // Send
+            {
+                type: 'action',
+                icon: 'send',
+                text: 'grid_action_send',
+                shortcut: false,
+                checkShow: function (action, model) {
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
+                },
+                permissionKey: [],
+                checkAnyPermission: true,
+                subMenu: [
+                    // send reminder by email
+                    {
+                        type: 'action',
+                        icon: 'message',
+                        text: 'grid_action_send_reminder_email',
+                        shortcut: false,
+                        callback: self.sendReminderEmail,
+                        class: "action-red",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    }
+                ]
+            }
         ];
 
         self.getEmployeeForFollowupEmployeeSentItems = function ($event) {

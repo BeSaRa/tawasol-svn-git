@@ -214,6 +214,7 @@
                 .addToAllWithBase('externalDataSource', 'cms-entity/admin/ex-import-store')
                 .addToAllWithBase('userExternalDataSource', 'cms-entity/user/user-ext-import-store')
                 .addToAllWithBase('activeOus', 'cms-entity/admin/ou/active/lookup')
+                .addToAllWithBase('reminderEmail','cms-entity/user/inbox/send-remainder')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();
