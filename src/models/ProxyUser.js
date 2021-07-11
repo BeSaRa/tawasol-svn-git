@@ -57,6 +57,10 @@ module.exports = function (app) {
             ProxyUser.prototype.getTranslatedName = function () {
                 return this.applicationUser.getTranslatedName() + ' - ' + this.organization.getTranslatedName();
             };
+
+            ProxyUser.prototype.getTranslatedApplicationUserName = function () {
+                return this.applicationUser.getTranslatedName();
+            }
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('ProxyUser', 'init', this);

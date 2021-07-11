@@ -67,6 +67,7 @@ module.exports = function (app) {
             self.allowEditAfterFirstApprove = false;
             self.externalAuthorization = false;
             self.limitedCentralUnitAccess = false;
+            self.outofofficeFromAllUsers = false;
             //endregion
 
             // every model has required fields

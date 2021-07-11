@@ -819,6 +819,22 @@ module.exports = function (app) {
         };
 
         /**
+         * @description get available proxy users for given organization.
+         * @param ouId
+         * @param includeChildOus
+         * @param excludeApplicationUserId
+         */
+        self.getAvailableProxiesByOu = function (ouId, includeChildOus, excludeApplicationUserId) {
+            return self.searchByCriteria({
+                ou: ouId,
+                includeChildOus: includeChildOus,
+                outOfOffice: false
+            }).then(function (result) {
+                return _filterProxy(_mapProxyUser(result), excludeApplicationUserId);
+            })
+        }
+
+        /**
          * @description Updates the manager proxy before user want to set out of office
          */
         self.updateManagersProxy = function (proxyManagers, $event) {

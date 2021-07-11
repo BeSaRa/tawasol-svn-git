@@ -54,7 +54,8 @@ module.exports = function (app) {
                                                       predefinedActions,
                                                       predefinedActionService,
                                                       AppUserCertificate,
-                                                      errorCode) {
+                                                      errorCode,
+                                                      proxyOrganizations) {
         'ngInject';
         var self = this;
         self.controllerName = 'userPreferencePopCtrl';
@@ -84,6 +85,10 @@ module.exports = function (app) {
         self.userFolderService = userFolderService;
         self.followupFolders = followupFolders;
         self.currentNode = null;
+        self.inlineOUSearchText = '';
+        self.inlineAppUserSearchText = '';
+        self.proxyUsers = [];
+
         self.viewInboxAsOptions = [
             {
                 key: 'view_magazine',
@@ -113,16 +118,17 @@ module.exports = function (app) {
         /**
          * @description Current ou application user
          */
-
+        self.isManagerOfCurrentOu = organizationService.isManagerOfCurrentOu(self.employee);
         self.ouApplicationUser = generator.interceptReceivedInstance('OUApplicationUser', angular.copy(employeeService.getCurrentOUApplicationUser()));
+
         // security levels for current OUApplicationUser
         self.securityLevels = self.ouApplicationUser.getSecurityLevels();
         self.filteredSecurityLevels = [];
         self.availableProxies = availableProxies;
-        self.selectedProxyUser = self.ouApplicationUser.getSelectedProxyId() ? _.find(availableProxies, function (item) {
-            return item.id === self.ouApplicationUser.getSelectedProxyId();
-        }) : null;
-        self.ouApplicationUserCopy = angular.copy(self.ouApplicationUser);
+        self.proxyOrganizations = proxyOrganizations;
+
+        self.ouApplicationUserCopy = angular.copy(self.employee);
+        self.selectedOrganization = self.isManagerOfCurrentOu ? self.ouApplicationUser.proxyOUId : null;
         self.notFound = {};
 
 
@@ -154,6 +160,7 @@ module.exports = function (app) {
          */
         function _checkProxyDate(ouApplicationUser) {
             if (ouApplicationUser.proxyEndDate && new Date(ouApplicationUser.proxyEndDate).valueOf() < (new Date()).valueOf()) {
+                self.selectedOrganization = null;
                 self.applicationUser.outOfOffice = false;
                 self.selectedProxyUser = null;
                 ouApplicationUser.emptyOutOfOffice();
@@ -632,6 +639,7 @@ module.exports = function (app) {
                     .terminateProxyUser(self.ouApplicationUser)
                     .then(function () {
                         if (self.ouApplicationUserCopy.proxyUser) {
+                            self.selectedOrganization = null;
                             self.ouApplicationUser.proxyUser = null;
                             self.selectedProxyUser = null;
                             self.ouApplicationUser.proxyStartDate = null;
@@ -1656,8 +1664,50 @@ module.exports = function (app) {
             return !self.selectedProxyUser && self.selectedProxyUser === self.ouApplicationUserCopy.proxyUser;
         };
 
+        self.getProxyUsersByOU = function (event) {
+            self.selectedProxyUser = null;
+            self.ouApplicationUser.proxyAuthorityLevels = null;
+            self.ouApplicationUser.proxyUser = null;
+            self.filteredSecurityLevels = [];
+            self.proxyUsers = [];
+
+            ouApplicationUserService.getAvailableProxiesByOu(self.selectedOrganization, false, employeeService.getEmployee())
+                .then(result => {
+                    self.proxyUsers = result;
+                });
+        }
+
+        function getSelectedProxyUser(proxyUsers) {
+            return self.ouApplicationUser.getSelectedProxyId() ? _.find(proxyUsers, function (item) {
+                return item.id === self.ouApplicationUser.getSelectedProxyId();
+            }) : null;
+        }
+
+        function setSelectedProxyUser() {
+            var defer = $q.defer();
+            if (self.ouApplicationUser.proxyUser) {
+                if (self.isManagerOfCurrentOu) {
+                    return ouApplicationUserService.getAvailableProxiesByOu(self.selectedOrganization, false, employeeService.getEmployee())
+                        .then(result => {
+                            self.proxyUsers = result;
+                            self.selectedProxyUser = getSelectedProxyUser(self.proxyUsers);
+                            defer.resolve(true);
+                        });
+                } else {
+                    self.selectedProxyUser = getSelectedProxyUser(availableProxies);
+                    defer.resolve(true);
+                }
+            } else {
+                defer.reject(false);
+            }
+
+            return defer.promise;
+        }
+
         self.$onInit = function () {
-            self.filteredSecurityLevels = _.filter(self.securityLevels, self.isSecurityLevelInclude);
+            setSelectedProxyUser().then(() => {
+                self.filteredSecurityLevels = _.filter(self.securityLevels, self.isSecurityLevelInclude);
+            });
 
             $timeout(function () {
                 self.outOfOfficeSettingsForm = $scope.userPreferencesForm.outOfOfficeSettingsForm;

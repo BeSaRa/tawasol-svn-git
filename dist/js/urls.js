@@ -213,6 +213,7 @@
                 .addToAllWithBase('kwtDigitalStamp', 'cms-entity/correspondence/outgoing/digital-stamp/vsid/:vsId/stamp-vsid/:stampVsId')
                 .addToAllWithBase('externalDataSource', 'cms-entity/admin/ex-import-store')
                 .addToAllWithBase('userExternalDataSource', 'cms-entity/user/user-ext-import-store')
+                .addToAllWithBase('activeOus', 'cms-entity/admin/ou/active/lookup')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

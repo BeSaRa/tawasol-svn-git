@@ -14,8 +14,7 @@ module.exports = function (app) {
                                                     userClassificationViewPermissionService,
                                                     ApplicationUserLookup,
                                                     ApplicationUserView,
-                                                    organizationService,
-                                                    userSubscriptionService) {
+                                                    organizationService) {
         'ngInject';
         var self = this;
         self.serviceName = 'applicationUserService';
@@ -301,6 +300,8 @@ module.exports = function (app) {
             manageUserPreference: function (applicationUser, selectedTab, $event) {
                 applicationUser = applicationUser ? applicationUser : employeeService.getEmployee();
                 var ouApplicationUser = employeeService.getCurrentOUApplicationUser();
+                var employee = employeeService.getEmployee();
+                var isManagerOfCurrentOu = organizationService.isManagerOfCurrentOu(employee);
                 var resolveOuApplicationUsers = $q.defer();
                 return dialog
                     .showDialog({
@@ -384,9 +385,13 @@ module.exports = function (app) {
                             },
                             availableProxies: function (ouApplicationUserService) {
                                 'ngInject';
-                                return resolveOuApplicationUsers.promise.then(function () {
+                                return isManagerOfCurrentOu ? [] : resolveOuApplicationUsers.promise.then(function () {
                                     return _getProxyUsers(ouApplicationUserService, applicationUser, ouApplicationUser);
                                 });
+                            },
+                            proxyOrganizations: function (organizationService) {
+                                'ngInject';
+                                return isManagerOfCurrentOu ? organizationService.loadAllActiveOrganizations() : [];
                             },
                             predefinedActions: function (predefinedActionService) {
                                 'ngInject';
@@ -557,7 +562,7 @@ module.exports = function (app) {
             applicationUserId = applicationUserId instanceof ApplicationUser ? applicationUserId.id : applicationUserId;
             return _.find(self.applicationUsers, function (applicationUser) {
                 return Number(applicationUser.id) === Number(applicationUserId);
-            });
+            }) || applicationUserId;
         };
 
         /**

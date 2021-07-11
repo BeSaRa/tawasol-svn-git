@@ -175,6 +175,13 @@ module.exports = function (app) {
             return regOus;
         };
 
+        self.loadAllActiveOrganizations = function () {
+            return $http.get(urlService.activeOus).then(function (result) {
+                var organizations = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
+                return generator.interceptReceivedCollection('Organization', organizations);
+            });
+        }
+
         /**
          * @description add new organization to service
          * @param organization
@@ -1027,5 +1034,17 @@ module.exports = function (app) {
                 });
             });
         }
+
+        self.isManagerOfCurrentOu = function (currentUser) {
+            var currentUserOrg = currentUser.userOrganization;
+
+            if (!currentUserOrg.managerId) {
+                return false;
+            }
+
+            var managerId = currentUserOrg.managerId.hasOwnProperty('id') ? currentUserOrg.managerId.id : currentUserOrg.managerId;
+            return managerId === generator.getNormalizedValue(currentUser, 'id');
+        }
+
     });
 };
