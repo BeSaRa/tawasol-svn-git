@@ -5321,6 +5321,24 @@ module.exports = function (app) {
                 });
         }
 
+        self.getEmailItem = function (items) {
+            var action = $stateParams.action, source = $stateParams.source,
+                wobNumber = $stateParams['wob-num'], item;
+
+            if (action && action === 'open' && source && source === 'email' && wobNumber) {
+                item = _.find(items, function (workItem) {
+                    return workItem.generalStepElm.workObjectNumber === wobNumber;
+                });
+
+                return !item ? (dialog.errorMessage(langService.get('work_item_not_found').change({
+                    wobNumber: wobNumber
+                })).then(function () {
+                    return false;
+                })) : item;
+            }
+            return false;
+        }
+
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);
         }, 100);

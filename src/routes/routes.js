@@ -1054,29 +1054,15 @@ module.exports = function (app) {
                         'ngInject';
                         return incomingDepartmentInboxService.loadIncomingDepartmentInboxes();
                     },
-                    emailItem: function (incomingDepartmentInboxes, langService, dialog, _, $stateParams) {
+                    emailItem: function (incomingDepartmentInboxes, correspondenceService) {
                         'ngInject';
-                        var action = $stateParams.action, source = $stateParams.source,
-                            wobNumber = $stateParams['wob-num'], item;
-
-                        if (action && action === 'open' && source && source === 'email' && wobNumber) {
-                            item = _.find(incomingDepartmentInboxes, function (workItem) {
-                                return workItem.generalStepElm.workObjectNumber === wobNumber;
-                            });
-
-                            return !item ? (dialog.errorMessage(langService.get('work_item_not_found').change({
-                                wobNumber: wobNumber
-                            })).then(function () {
-                                return false;
-                            })) : item;
-                        }
-                        return false;
+                        return correspondenceService.getEmailItem(incomingDepartmentInboxes);
                     }
                 }
             })
             // returned department inbox
             .state('app.department-inbox.returned', {
-                url: '/returned',
+                url: '/returned?action?source?wob-num',
                 templateUrl: templateProvider.getView('department-inbox-returned'),
                 controller: 'returnedDepartmentInboxCtrl',
                 controllerAs: 'ctrl',
@@ -1085,12 +1071,16 @@ module.exports = function (app) {
                     returnedDepartmentInboxes: function (returnedDepartmentInboxService) {
                         'ngInject';
                         return returnedDepartmentInboxService.loadReturnedDepartmentInboxes();
+                    },
+                    emailItem: function (returnedDepartmentInboxes, correspondenceService) {
+                        'ngInject';
+                        return correspondenceService.getEmailItem(returnedDepartmentInboxes);
                     }
                 }
             })
             // ready to export
             .state('app.department-inbox.ready-to-export', {
-                url: '/ready-to-export',
+                url: '/ready-to-export?action?source?wob-num',
                 templateUrl: templateProvider.getView('department-inbox-ready-to-export'),
                 controller: 'readyToExportDepartmentInboxCtrl',
                 controllerAs: 'ctrl',
@@ -1099,12 +1089,16 @@ module.exports = function (app) {
                     readyToExports: function (readyToExportService) {
                         'ngInject';
                         return readyToExportService.loadReadyToExports();
+                    },
+                    emailItem: function (readyToExports, correspondenceService) {
+                        'ngInject';
+                        return correspondenceService.getEmailItem(readyToExports);
                     }
                 }
             })
             // sent items
             .state('app.department-inbox.sent-items', {
-                url: '/sent-items',
+                url: '/sent-items?action?source?wob-num',
                 templateUrl: templateProvider.getView('department-inbox-sent-items'),
                 controller: 'sentItemDepartmentInboxCtrl',
                 controllerAs: 'ctrl',

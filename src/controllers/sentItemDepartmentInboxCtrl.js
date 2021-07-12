@@ -165,7 +165,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.recallBulk = function ($event) {
-          //  console.log('recall bulk : ', $event);
+            //  console.log('recall bulk : ', $event);
         };
 
         /**
@@ -345,7 +345,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTasks = function (sentItemDepartmentInbox, $event) {
-           // console.log('manage tasks : ', sentItemDepartmentInbox)
+            // console.log('manage tasks : ', sentItemDepartmentInbox)
         };
 
         /**
@@ -440,7 +440,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendSMS = function (sentItemDepartmentInbox, $event) {
-          //  console.log('Send sms : ', sentItemDepartmentInbox);
+            //  console.log('Send sms : ', sentItemDepartmentInbox);
         };
 
         /**
@@ -1155,6 +1155,13 @@ module.exports = function (app) {
 
         self.shortcutActions = gridService.getShortcutActions(self.gridActions);
         self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
+
+        self.openEmailItem = function () {
+            var emailItem = correspondenceService.getEmailItem(self.sentItemDepartmentInboxes);
+            emailItem ? self.viewDocument(emailItem) : null;
+        };
+        // to open Email item if it exists.
+        self.openEmailItem();
 
     });
 };
