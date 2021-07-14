@@ -1476,7 +1476,7 @@ module.exports = function (app) {
                             }
                             toast.success(langService.get('launch_success_distribution_workflow'));
                             dialog.hide();
-                            debugger
+
                             reloadCallback && reloadCallback();
                         }).catch(function (error) {
                         self.disableSend = false;
