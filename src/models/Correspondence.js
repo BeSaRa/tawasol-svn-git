@@ -611,8 +611,8 @@ module.exports = function (app) {
             Correspondence.prototype.hasDocumentClass = function (documentClass) {
                 return this.getInfo().documentClass.toLowerCase() === documentClass.toLowerCase();
             };
-            Correspondence.prototype.launchWorkFlow = function ($event, action, tab, isDeptIncoming) {
-                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming);
+            Correspondence.prototype.launchWorkFlow = function ($event, action, tab, isDeptIncoming, reloadCallback) {
+                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming, null, null, [], reloadCallback);
             };
             Correspondence.prototype.launchWorkFlowFromPredefinedAction = function ($event, action, tab, isDeptIncoming, isDeptSent, actionMembers) {
                 return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming, isDeptSent, false, actionMembers);
@@ -661,10 +661,12 @@ module.exports = function (app) {
              * @param queueName
              * @param $event
              * @param viewOnly
+             * @param returnToCentralArchiveEnabled
+             * @param reloadCallback
              * @return {*}
              */
-            Correspondence.prototype.viewFromQueue = function (actions, queueName, $event, viewOnly) {
-                return viewDocumentService.viewQueueDocument(this, actions, queueName, $event, viewOnly);
+            Correspondence.prototype.viewFromQueue = function (actions, queueName, $event, viewOnly, returnToCentralArchiveEnabled, reloadCallback) {
+                return viewDocumentService.viewQueueDocument(this, actions, queueName, $event, viewOnly, returnToCentralArchiveEnabled, reloadCallback);
             };
             /**
              * @description view from queue as full view.
@@ -1287,7 +1289,7 @@ module.exports = function (app) {
                 self.highlights = [];
 
                 self.azureResultItem.forEach(item => {
-                 var highlightedWords = [];
+                    var highlightedWords = [];
                     item.lines.forEach(function (line) {
                         if (hasAnyKeyword(line.lineString.toLowerCase(), keywords)) {
                             highlightedWords = highlightedWords.concat(line.words.filter(function (word) {

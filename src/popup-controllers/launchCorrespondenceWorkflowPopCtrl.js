@@ -43,7 +43,9 @@ module.exports = function (app) {
                                                                     rootEntity,
                                                                     SentItemDepartmentInbox,
                                                                     lookupService,
-                                                                    manageLaunchWorkflowService) {
+                                                                    reloadCallback,
+                                                                    manageLaunchWorkflowService,
+                                                                    $state) {
         'ngInject';
         var self = this;
         self.controllerName = 'launchCorrespondenceWorkflowPopCtrl';
@@ -54,6 +56,7 @@ module.exports = function (app) {
         self.rootEntity = rootEntity;
         self.canMinimize = false;
         self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+        self.isCentralArchive = employeeService.getEmployee().inCentralArchive();
 
         /**
          * get multi info in case the correspondence array.
@@ -1473,6 +1476,8 @@ module.exports = function (app) {
                             }
                             toast.success(langService.get('launch_success_distribution_workflow'));
                             dialog.hide();
+                            debugger
+                            reloadCallback && reloadCallback();
                         }).catch(function (error) {
                         self.disableSend = false;
                         /*if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
@@ -1664,5 +1669,13 @@ module.exports = function (app) {
             })
         }
 
+        self.showMessageCannotReturned = function () {
+            var pages = ['app.outgoing.add', 'app.outgoing.simple-add', 'app.outgoing.review', 'app.outgoing.ready-to-send',
+                'app.incoming.add', 'app.incoming.simple-add', 'app.incoming.review', 'app.incoming.ready-to-send'];
+
+            return self.selectedWorkflowItems.length > 1 &&
+                self.isCentralArchive &&
+                pages.indexOf($state.current.name) !== -1;
+        }
     });
 };

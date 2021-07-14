@@ -90,4 +90,5 @@ module.exports = function (app) {
     require('./sequentialWorkflowCtrl')(app);
     require('./externalDataSourcesCtrl')(app);
     require('./searchIntelligenceCtrl')(app);
+    require('./returnedCentralArchiveCtrl')(app);
 };

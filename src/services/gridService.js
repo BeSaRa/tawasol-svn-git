@@ -78,7 +78,8 @@ module.exports = function (app) {
             },
             centralArchive: {
                 readyToExport: 'caReadyToExport',
-                sentItem: 'caSent'
+                sentItem: 'caSent',
+                returned: 'caReturned'
             },
             search: {
                 outgoing: 'searchOut',

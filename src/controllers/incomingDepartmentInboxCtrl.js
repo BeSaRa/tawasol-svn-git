@@ -25,6 +25,7 @@ module.exports = function (app) {
                                                             emailItem,
                                                             mailNotificationService,
                                                             gridService,
+                                                            rootEntity,
                                                             $timeout) {
         'ngInject';
         var self = this;
@@ -210,6 +211,44 @@ module.exports = function (app) {
             }
             workItem
                 .returnWorkItem($event)
+                .then(function () {
+                    new ResolveDefer(defer);
+                    self.reloadIncomingDepartmentInboxes(self.grid.page);
+                });
+        };
+
+        /**
+         * @description Return the incoming department To Central Archive returned
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.returnWorkItemToCentralArchive = function (workItem, $event, defer) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
+                return;
+            }
+            workItem
+                .returnWorkItemToCentralArchive($event)
+                .then(function () {
+                    new ResolveDefer(defer);
+                    self.reloadIncomingDepartmentInboxes(self.grid.page);
+                });
+        };
+
+        /**
+         * @description Return the incoming department To Central Archive returned
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.returnWorkItemToCentralArchive = function (workItem, $event, defer) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
+                return;
+            }
+            workItem
+                .returnWorkItemToCentralArchive($event)
                 .then(function () {
                     new ResolveDefer(defer);
                     self.reloadIncomingDepartmentInboxes(self.grid.page);
@@ -920,6 +959,24 @@ module.exports = function (app) {
                     return !model.generalStepElm.isReassigned;//!!info.incomingVsId;
                 }
             },
+            // Return To Central Archive
+            {
+                type: 'action',
+                icon: 'archive',
+                text: 'grid_action_return_to_archive',
+                shortcut: true,
+                callback: self.returnWorkItemToCentralArchive,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    // Document is created by central archive.
+                    // Document is sent from central archive.
+                    // Document is created by central archive for the receiver department.
+                    // Document isn’t sent to multiple workflows.
+                    return model.generalStepElm.fromCentralArchive &&
+                        !model.generalStepElm.sentToMultipleOus &&
+                        rootEntity.getGlobalSettings().returnToCentralArchive;
+                }
+            },
             // Receive
             {
                 type: 'action',
@@ -1103,7 +1160,7 @@ module.exports = function (app) {
                 });
         };
 
-        if (employeeService.getEmployee().getIntervalMin()){
+        if (employeeService.getEmployee().getIntervalMin()) {
             self.refreshGrid(employeeService.getEmployee().getIntervalMin());
         }
     });

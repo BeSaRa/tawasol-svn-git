@@ -1478,6 +1478,19 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_central_archive_ready_to_export'
             })
+            .state('app.central-archive.returned', {
+                url: '/returned',
+                templateUrl: templateProvider.getView('central-archive-returned'),
+                controller: 'returnedCentralArchiveCtrl',
+                controllerAs: 'ctrl',
+                permission: 'menu_item_central_archive_ready_to_export',
+                resolve: {
+                    returnedArchiveItems: function (correspondenceService) {
+                        'ngInject';
+                        return correspondenceService.loadReturnedCentralArchive();
+                    },
+                }
+            })
             // temporary route for reports
             .state('app.reports', {
                 url: '/reports/:menuId',

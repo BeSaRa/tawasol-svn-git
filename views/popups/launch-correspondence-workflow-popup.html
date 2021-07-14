@@ -572,6 +572,8 @@
     </md-dialog-content>
     <!-- Buttons and info -->
     <md-dialog-actions class="cms-dialog-actions">
+        <span flex ng-if="ctrl.showMessageCannotReturned()"
+              class="red-text">{{lang.get('multiple_workflows_can_not_be_returned')}}</span>
         <md-button class="md-raised md-primary" ng-click="ctrl.launchDistributionCorrespondenceWorkFlow()"
                    ng-disabled="ctrl.disableSend">
             {{lang.get(ctrl.textButton)}}

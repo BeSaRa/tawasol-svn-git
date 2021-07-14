@@ -68,7 +68,8 @@
                                         source-form="ctrl.document_properties"
                                         document="ctrl.correspondence"
                                         disable-properties="ctrl.disableProperties"
-                                        action="ctrl.action">
+                                        action="ctrl.action"
+                                        return-to-central-archive-enabled="ctrl.returnToCentralArchiveEnabled">
                                 </manage-properties-directive>
                             </accordion-content>
                         </accordion-item>
@@ -255,7 +256,8 @@
                                        ng-if="!ctrl.isLimitedCentralUnitAccess">
                                         {{attachment.getTranslatedName()}}
                                     </a>
-                                    <span flex ng-if="ctrl.isLimitedCentralUnitAccess">{{attachment.getTranslatedName()}}</span>
+                                    <span flex
+                                          ng-if="ctrl.isLimitedCentralUnitAccess">{{attachment.getTranslatedName()}}</span>
                                     <md-button class="md-icon-button view-icon-button"
                                                tooltip="{{lang.open_in_new_popup}}" tooltip-direction="right"
                                                ng-click="ctrl.showAttachment(attachment , $index , $event , false , true)"
@@ -293,7 +295,8 @@
                                        ng-if="!ctrl.isLimitedCentralUnitAccess">
                                         {{attachment.getTranslatedName()}}
                                     </a>
-                                    <span flex ng-if="ctrl.isLimitedCentralUnitAccess">{{attachment.getTranslatedName()}}</span>
+                                    <span flex
+                                          ng-if="ctrl.isLimitedCentralUnitAccess">{{attachment.getTranslatedName()}}</span>
                                     <md-button class="md-icon-button view-icon-button"
                                                tooltip="{{lang.open_in_new_popup}}" tooltip-direction="right"
                                                ng-click="ctrl.showAttachment(attachment , $index , $event , false , true)"
@@ -327,7 +330,8 @@
                                     ng-repeat="doc in ctrl.correspondence.linkedDocs track by $index">
                                     <a flex href="#" ng-click="ctrl.showLinkedDocument(doc , $index ,  $event, false)"
                                        ng-if="!ctrl.isLimitedCentralUnitAccess">{{doc.getTranslatedName()}}</a>
-                                    <span flex ng-if="ctrl.isLimitedCentralUnitAccess">{{doc.getTranslatedName()}}</span>
+                                    <span flex
+                                          ng-if="ctrl.isLimitedCentralUnitAccess">{{doc.getTranslatedName()}}</span>
                                     <md-button class="md-icon-button view-icon-button"
                                                tooltip="{{lang.open_in_new_popup}}" tooltip-direction="right"
                                                ng-click="ctrl.showLinkedDocument(doc, $index ,  $event , true)"
@@ -479,7 +483,8 @@
                 {{lang.save_with_comment}}
             </md-button>
         </div>
-        <div ng-if="ctrl.pageName === 'userInbox' && ctrl.editContentFrom !== 'editContentFromGrid' && ctrl.correspondence && !ctrl.correspondence.viewVersion && !ctrl.disableEverything">
+        <div ng-if="ctrl.pageName === 'returnedCentralArchive' || (ctrl.pageName === 'userInbox' &&
+                   ctrl.editContentFrom !== 'editContentFromGrid' && ctrl.correspondence && !ctrl.correspondence.viewVersion && !ctrl.disableEverything)">
             <md-button class="md-raised md-primary" ng-click="ctrl.saveAndSend($event, false)"
                        ng-disabled="!ctrl.document_properties.$dirty">{{lang.save_and_send}}
             </md-button>

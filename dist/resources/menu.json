@@ -1342,5 +1342,17 @@
     "sort_order": 9,
     "active": true,
     "sort_value": 0
+  },
+  {
+    "ID": 125,
+    "lang_key": "menu_item_archive_returned",
+    "icon": "archive",
+    "parent": 80,
+    "link": "#central-archive-returned",
+    "state": "app.central-archive.returned",
+    "icon_type": "font",
+    "sort_order": 9,
+    "active": true,
+    "sort_value": 0
   }
 ]

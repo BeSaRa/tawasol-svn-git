@@ -27,6 +27,7 @@ module.exports = function (app) {
                                                           generator,
                                                           rootEntity,
                                                           $filter,
+                                                          reloadCallback,
                                                           manageLaunchWorkflowService,
                                                           documentTagService) {
         'ngInject';
@@ -459,8 +460,13 @@ module.exports = function (app) {
         self.saveAndSend = function ($event) {
             return self.saveCorrespondenceChanges($event, false)
                 .then(function (result) {
-                    dialog.hide(true);
-                    self.workItem.launchWorkFlow($event, 'forward', 'favorites');
+                    var document = self.pageName === 'returnedCentralArchive' ? self.correspondence : self.workItem;
+
+                    if (document.isWorkItem()) {
+                        document.launchWorkFlow($event, 'forward', 'favorites', false, false, reloadCallback)
+                    } else {
+                        document.launchWorkFlow($event, 'forward', 'favorites', false, reloadCallback)
+                    }
                 })
         };
 

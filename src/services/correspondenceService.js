@@ -1636,7 +1636,8 @@ module.exports = function (app) {
                             disableCorrespondence: disableCorrespondence,
                             popupNumber: generator.getPopupNumber(),
                             disableEverything: !!departmentIncoming,
-                            pageName: 'none'
+                            pageName: 'none',
+                            reloadCallback: undefined
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1708,7 +1709,8 @@ module.exports = function (app) {
                             disableCorrespondence: true,
                             popupNumber: generator.getPopupNumber(),
                             disableEverything: true,
-                            pageName: 'none'
+                            pageName: 'none',
+                            reloadCallback:undefined
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1785,7 +1787,8 @@ module.exports = function (app) {
                             disableProperties: disableProperties,
                             disableCorrespondence: disableCorrespondence,
                             disableEverything: false,
-                            popupNumber: generator.getPopupNumber()
+                            popupNumber: generator.getPopupNumber(),
+                            reloadCallback:undefined
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1843,7 +1846,8 @@ module.exports = function (app) {
                                 disableCorrespondence: disableCorrespondence,
                                 disableEverything: departmentIncoming,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName: 'none'
+                                pageName: 'none',
+                                reloadCallback:undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1905,7 +1909,8 @@ module.exports = function (app) {
                             disableCorrespondence: disableCorrespondence,
                             disableEverything: departmentIncoming,
                             popupNumber: generator.getPopupNumber(),
-                            pageName: 'none'
+                            pageName: 'none',
+                            reloadCallback:undefined
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -2072,7 +2077,8 @@ module.exports = function (app) {
                     correspondence: false,
                     content: information,
                     popupNumber: generator.getPopupNumber(),
-                    editMode: !justView
+                    editMode: !justView,
+                    reloadCallback:undefined
                 }
             });
         };
@@ -2264,7 +2270,7 @@ module.exports = function (app) {
             });
         };
 
-        function _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers) {
+        function _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers, reloadCallback) {
             var multi = angular.isArray(correspondence) && correspondence.length > 1;
             action = action || 'forward';
             var errorMessage = [];
@@ -2284,7 +2290,8 @@ module.exports = function (app) {
                         isDeptSent: isDeptSent,
                         fromSimplePopup: fromSimplePopup,
                         predefinedActionMembers: predefinedActionMembers,
-                        fromQuickSend: (predefinedActionMembers && predefinedActionMembers.length > 0)
+                        fromQuickSend: (predefinedActionMembers && predefinedActionMembers.length > 0),
+                        reloadCallback: reloadCallback
                     },
                     resolve: {
                         favoritesUsers: function (distributionWFService) {
@@ -2360,9 +2367,10 @@ module.exports = function (app) {
          * @param isDeptSent
          * @param fromSimplePopup
          * @param predefinedActionMembers
+         * @param reloadCallback
          * @returns {promise|*}
          */
-        self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers) {
+        self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers, reloadCallback) {
             var normalCorrespondence = false;
             if (!isDeptSent) {
                 normalCorrespondence = angular.isArray(correspondence) ? !correspondence[0].isWorkItem() : !correspondence.isWorkItem();
@@ -2378,14 +2386,14 @@ module.exports = function (app) {
                             return managerService
                                 .manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event)
                                 .then(function (result) {
-                                    return result.hasSite() ? _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers) : null;
+                                    return result.hasSite() ? _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers , reloadCallback) : null;
                                 })
                         })
                 } else {
-                    return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers);
+                    return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers , reloadCallback);
                 }
             }
-            return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers);
+            return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers , reloadCallback);
 
         };
 
@@ -3796,7 +3804,8 @@ module.exports = function (app) {
                             disableEverything: departmentIncoming,
                             popupNumber: generator.getPopupNumber(),
                             fullScreen: true,
-                            viewerActions: actions.viewerActions
+                            viewerActions: actions.viewerActions,
+                            reloadCallback:undefined
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -3851,7 +3860,8 @@ module.exports = function (app) {
                             disableProperties: disableProperties,
                             disableCorrespondence: disableCorrespondence,
                             disableEverything: false,
-                            popupNumber: generator.getPopupNumber()
+                            popupNumber: generator.getPopupNumber(),
+                            reloadCallback:undefined
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -5309,12 +5319,12 @@ module.exports = function (app) {
             return isCentralArchive && correspondence.ou !== currentOUId;
         }
 
-        self.sendEmailReminder = function (correspondence, comment) {
+        self.sendEmailReminder = function (info, reason) {
             return $http.put(urlService.reminderEmail + '/' + correspondence.id,
                 {
-                    vsId: correspondence.vsId,
-                    workObjectNumber: correspondence.wobNumber,
-                    comment: comment
+                    vsId: info.vsId,
+                    workObjectNumber: info.wobNumber,
+                    comment: reason
                 })
                 .then(function (result) {
                     return result.data.rs;
@@ -5338,6 +5348,44 @@ module.exports = function (app) {
             }
             return false;
         }
+
+        /**
+         * @description Load the returned central archive items from server.
+         * @returns {Promise|returnedArchiveItems}
+         */
+        self.loadReturnedCentralArchive = function () {
+            return $http.get(urlService.returnedArchive).then(function (result) {
+                return self.interceptReceivedCollectionBasedOnEachDocumentClass(result.data.rs);
+            }).catch(function (error) {
+                return [];
+            });
+        };
+
+        /**
+         * @description Return work item To Central Archive.
+         * @param workItem
+         * @param $event
+         * @param ignoreMessage
+         */
+        self.returnWorkItemToCentralArchive = function (workItem, $event, ignoreMessage) {
+            var info = workItem.getInfo();
+            return self.showReasonDialog('return_reason', $event)
+                .then(function (reason) {
+                    return $http
+                        .put(urlService.departmentInboxes + "/return-to-central-archive", {
+                            workObjectNumber: info.wobNumber,
+                            comment: reason,
+                            vsId: info.vsId
+                        })
+                        .then(function () {
+                            if (!ignoreMessage) {
+                                toast.success(langService.get("return_specific_success").change({name: workItem.getNames()}));
+                            }
+                            return workItem;
+                        });
+                });
+
+        };
 
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);

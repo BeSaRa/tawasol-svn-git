@@ -258,7 +258,8 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
-                                pageName: pageName
+                                pageName: pageName,
+                                reloadCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -287,8 +288,10 @@ module.exports = function (app) {
              * @param $event
              * @param pageName
              * @param viewOnly - to hide edit content button in delete pages
+             * @param returnToCentralArchiveEnabled
+             * @param reloadCallback
              */
-            self.viewQueueDocument = function (correspondence, actions, pageName, $event, viewOnly) {
+            self.viewQueueDocument = function (correspondence, actions, pageName, $event, viewOnly, returnToCentralArchiveEnabled, reloadCallback) {
                 var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : new Outgoing(correspondence).getInfo(),
                     disabled;
                 var desktop = new EditInDesktopCallback({
@@ -341,7 +344,9 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
-                                pageName: pageName
+                                pageName: pageName,
+                                returnToCentralArchiveEnabled: returnToCentralArchiveEnabled,
+                                reloadCallback: reloadCallback
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -414,7 +419,8 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
-                                pageName: pageName
+                                pageName: pageName,
+                                reloadCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -498,7 +504,8 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
-                                pageName: pageName
+                                pageName: pageName,
+                                reloadCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -527,8 +534,9 @@ module.exports = function (app) {
              * @param $event
              * @param pageName
              * @param getGeneralStepElementView
+             * @param reloadCallback
              */
-            self.viewUserInboxDocument = function (workItem, actions, pageName, $event, getGeneralStepElementView) {
+            self.viewUserInboxDocument = function (workItem, actions, pageName, $event, getGeneralStepElementView, reloadCallback) {
                 var info = typeof workItem.getInfo === 'function' ? workItem.getInfo() : new WorkItem(workItem).getInfo();
                 var disabled = _checkDisabled(pageName, workItem);
 
@@ -570,6 +578,7 @@ module.exports = function (app) {
                                 disableEverything: disabled.disableAll,
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: pageName,
+                                reloadCallback: reloadCallback
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -643,7 +652,8 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: false,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName: pageName
+                                pageName: pageName,
+                                reloadCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -727,7 +737,8 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: false,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName: pageName
+                                pageName: pageName,
+                                reloadCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -802,7 +813,8 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName: pageName
+                                pageName: pageName,
+                                reloadCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -891,7 +903,8 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName: pageName
+                                pageName: pageName,
+                                reloadCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -957,7 +970,8 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName: pageName
+                                pageName: pageName,
+                                reloadCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1035,7 +1049,8 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName: pageName
+                                pageName: pageName,
+                                reloadCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1123,7 +1138,8 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
-                                pageName: pageName
+                                pageName: pageName,
+                                reloadCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1199,7 +1215,8 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: false,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName: pageName
+                                pageName: pageName,
+                                reloadCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1288,7 +1305,8 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
-                                pageName: pageName
+                                pageName: pageName,
+                                reloadCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1360,7 +1378,8 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
-                                pageName: pageName
+                                pageName: pageName,
+                                reloadCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1426,7 +1445,8 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName: pageName
+                                pageName: pageName,
+                                reloadCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1540,7 +1560,8 @@ module.exports = function (app) {
                                 disableProperties: true,
                                 disableCorrespondence: true,
                                 g2gItemCopy: g2gItemCopy,
-                                pageName: pageName
+                                pageName: pageName,
+                                reloadCallback: undefined
                             }
                         }).then(function (result) {
                             generator.removePopupNumber();
@@ -1617,7 +1638,8 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 g2gItemCopy: g2gItemCopy,
-                                pageName: pageName
+                                pageName: pageName,
+                                reloadCallback: undefined
                             }
                         }).then(function (result) {
                             generator.removePopupNumber();

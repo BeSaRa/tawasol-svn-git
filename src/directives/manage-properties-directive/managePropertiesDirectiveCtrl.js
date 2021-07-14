@@ -488,7 +488,7 @@ module.exports = function (app) {
             })
         }
 
-        function _broadcastSelectedRegOu(){
+        function _broadcastSelectedRegOu() {
             var selectedOu = _findRegistryOuById(self.document.registryOU);
             $rootScope.$broadcast('$RegistryOuChanged', selectedOu);
         }
@@ -799,6 +799,14 @@ module.exports = function (app) {
                 field.$setValidity('required', false);
             }
         };
+
+        self.onOrganizationChange = function (field, $event) {
+            self.checkNullValues(field);
+            if (self.returnToCentralArchiveEnabled) {
+                var organization = _.find(self.organizations, {id: self.document.ou})
+                self.document.registryOU = organization.hasRegistry ? self.document.ou : organization.regouId;
+            }
+        }
 
         $timeout(function () {
             self.sourceForm = $scope.outgoing_properties;

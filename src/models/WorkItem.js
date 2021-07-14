@@ -411,10 +411,11 @@ module.exports = function (app) {
              * @param tab
              * @param isDeptIncoming
              * @param fromSimplePopup
+             * @param reloadCallback
              * @returns {promise|*}
              */
-            WorkItem.prototype.launchWorkFlow = function ($event, action, tab, isDeptIncoming, fromSimplePopup) {
-                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming, null, fromSimplePopup);
+            WorkItem.prototype.launchWorkFlow = function ($event, action, tab, isDeptIncoming, fromSimplePopup , reloadCallback) {
+                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming, null, fromSimplePopup , [] , reloadCallback);
             };
             WorkItem.prototype.launchWorkFlowFromPredefinedAction = function ($event, action, tab, isDeptIncoming, isDeptSent, actionMembers) {
                 return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming, isDeptSent, false, actionMembers);
@@ -561,14 +562,15 @@ module.exports = function (app) {
              * @param actions
              * @param queueName
              * @param $event
+             * @param reloadCallback
              * @returns {*}
              */
-            WorkItem.prototype.viewNewWorkItemDocument = function (actions, queueName, $event) {
+            WorkItem.prototype.viewNewWorkItemDocument = function (actions, queueName, $event, reloadCallback) {
                 var self = this, info = self.getInfo(), pdfViewerEnabled = rootEntity.hasPSPDFViewer();
                 if (pdfViewerEnabled && !info.isPaper && employeeService.getEmployee().isFirstViewForApproval && self.checkElectronicSignaturePermission() && self.generalStepElm.isMultiSignature) {
                     return self.openForAnnotation(true, info.docStatus < 23 ? 3 : 1, actions, true);
                 } else {
-                    return viewDocumentService.viewUserInboxDocument(this, actions, queueName, $event);
+                    return viewDocumentService.viewUserInboxDocument(this, actions, queueName, $event, false, reloadCallback);
                 }
             };
             /**
@@ -752,6 +754,10 @@ module.exports = function (app) {
 
             WorkItem.prototype.returnWorkItem = function ($event, ignoreMessage) {
                 return correspondenceService.returnWorkItem(this, $event, ignoreMessage);
+            };
+
+            WorkItem.prototype.returnWorkItemToCentralArchive = function ($event, ignoreMessage) {
+                return correspondenceService.returnWorkItemToCentralArchive(this, $event, ignoreMessage);
             };
 
             WorkItem.prototype.returnWorkItemFromCentralArchive = function ($event, ignoreMessage) {

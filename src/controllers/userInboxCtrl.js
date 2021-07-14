@@ -1306,7 +1306,10 @@ module.exports = function (app) {
                     });
             }
 
-            workItem.viewNewWorkItemDocument(self.gridActions, 'userInbox', $event)
+            workItem
+                .viewNewWorkItemDocument(self.gridActions, 'userInbox', $event, function () {
+                    self.reloadUserInboxes(self.grid.page);
+                })
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page);
                 })
