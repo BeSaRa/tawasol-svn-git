@@ -188,7 +188,7 @@ module.exports = function (app) {
                 showInView: false
             },
             // Forward
-            {
+          /*  {
                 type: 'action',
                 icon: 'share',
                 text: 'grid_action_forward',
@@ -199,7 +199,7 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     return true;
                 }
-            },
+            },*/
             // View Tracking Sheet (with sub menu)
             {
                 type: 'action',
