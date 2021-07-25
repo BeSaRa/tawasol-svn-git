@@ -36,6 +36,7 @@ module.exports = function (app) {
         self.taskState = 'taskState';
         self.attachmentPriority = 'attachmentPriority';
         self.digitalCertificateMode = 'digitalCertificate';
+        self.searchDefaultView = 'searchDefaultView'
 
         // this propertyConfiguration related to the property configurations Service.
         self.propertyConfigurations = {

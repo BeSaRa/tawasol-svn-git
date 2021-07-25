@@ -168,7 +168,7 @@ module.exports = function (app) {
 
         function _createNewSearchCriteria() {
             return new IncomingSearch({
-                registryOU: self.employee.getRegistryOUID(),
+                registryOU: self.employee.loginDepartmentSearchView() ? self.employee.getRegistryOUID() : null,
                 originality: 1,
                 year: new Date().getFullYear(),
                 docDateFrom: generator.convertDateToString(new Date(self.maxCreateDate.getFullYear(), 0, 1, 0, 0, 0, 0)),

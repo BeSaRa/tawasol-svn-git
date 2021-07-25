@@ -33,9 +33,10 @@ module.exports = function (app) {
         // all document class for Correspondences
         self.documentClasses = lookupService.returnLookups(lookupService.documentClass);
         // the search criteria for correspondence
+        var currentOUApplicationUser = employeeService.getCurrentOUApplicationUser();
         self.correspondence = new Correspondence({
             year: new Date().getFullYear(),
-            registryOU: employeeService.getCurrentOUApplicationUser().ouRegistryID
+            registryOU: currentOUApplicationUser.applicationUser.loginDepartmentSearchView() ? currentOUApplicationUser.ouRegistryID : null,
         });
 
         self.disableSelectedOrganization = !employeeService.hasPermissionTo('SEARCH_IN_ALL_OU');

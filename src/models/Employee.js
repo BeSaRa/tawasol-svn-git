@@ -65,6 +65,7 @@ module.exports = function (app) {
             self.isFirstViewForApproval = false;
             self.oTPMobilityEnabled = false;
             self.signAnnotationSettings = '';
+            self.searchDefaultView = 1;
 
             var collectionResults = [
                 'reminderSmsPriority',
@@ -380,6 +381,10 @@ module.exports = function (app) {
             Employee.prototype.hasPinCodePrompt = function () {
                 return this.pinCodePrompt;
             };
+
+            Employee.prototype.loginDepartmentSearchView = function () {
+                return this.searchDefaultView === 2;
+            }
 
             /**
              * @description check if the current proxy user for the employee inside the given collection of proxyUsers.

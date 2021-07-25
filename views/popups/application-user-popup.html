@@ -384,6 +384,23 @@
                                     <md-input-container flex ng-if="!ctrl.editMode"></md-input-container>
                                 </div>
                                 <div layout="row">
+                                    <!-- Search Default View -->
+                                    <md-input-container flex>
+                                        <label for="searchDefaultView">{{lang.search_default_view}}</label>
+                                        <md-select id="searchDefaultView" name="searchDefaultView" required
+                                                   ng-model="ctrl.applicationUser.searchDefaultView">
+                                            <md-option ng-value="searchDefaultView.lookupKey"
+                                                       ng-repeat="searchDefaultView in ctrl.searchDefaultViewList track by $index">
+                                                {{searchDefaultView.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="applicationUserForm.defaultDisplayLang.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <span flex></span>
+                                </div>
+                                <div layout="row">
                                     <md-switch flex ng-model="ctrl.applicationUser.slowConnectionMode"
                                                ng-disabled="!ctrl.globalSetting.slowConnectionMode"
                                                aria-label="{{lang.slow_connection_mode}}">

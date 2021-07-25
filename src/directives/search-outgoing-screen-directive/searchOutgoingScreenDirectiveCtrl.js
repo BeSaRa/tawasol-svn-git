@@ -169,7 +169,7 @@ module.exports = function (app) {
 
         function _createNewSearchCriteria() {
             return new OutgoingSearch({
-                registryOU: self.employee.getRegistryOUID(),
+                registryOU: self.employee.loginDepartmentSearchView() ? self.employee.getRegistryOUID() : null,
                 originality: 1,
                 year: new Date().getFullYear(),
                 docDateFrom: generator.convertDateToString(new Date(self.maxCreateDate.getFullYear(), 0, 1, 0, 0, 0, 0)),
@@ -697,7 +697,7 @@ module.exports = function (app) {
         };
         // run search query
         self.searchCorrespondence = function () {
-            if (!self.searchCriteria.hasValidApproveDateRange() || !self.searchCriteria.hasValidExportDateRange() || !self.searchCriteria.hasValidFollowUpDateRange()){
+            if (!self.searchCriteria.hasValidApproveDateRange() || !self.searchCriteria.hasValidExportDateRange() || !self.searchCriteria.hasValidFollowUpDateRange()) {
                 toast.info(langService.get('msg_invalid_date_range'));
                 $scope.simpleSearchForm ? $scope.simpleSearchForm.$setTouched() : null;
                 $scope.advancedSearchForm ? $scope.advancedSearchForm.$setTouched() : null;
