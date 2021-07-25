@@ -34,6 +34,7 @@ module.exports = function (app) {
 
             self.actionSearchText = '';
             self.ouSearchText = '';
+            self.broadcastToAll = false;
 
             self.broadcastRecordType = {
                 organization: {
@@ -243,7 +244,7 @@ module.exports = function (app) {
                 });
 
                 return correspondenceService
-                    .broadcasting(broadcast, correspondence)
+                    .broadcasting(broadcast, correspondence, self.broadcastToAll)
                     .then(function (result) {
                         toast.success(langService.get('correspondence_broadcasted_successfully'));
                         dialog.hide(result);

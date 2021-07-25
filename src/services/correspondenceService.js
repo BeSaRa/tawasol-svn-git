@@ -2178,16 +2178,23 @@ module.exports = function (app) {
                 })
         };
 
-        self.broadcasting = function (broadcast, correspondence) {
+        self.broadcasting = function (broadcast, correspondence, broadcastToAll) {
             var info = correspondence.getInfo(), url = [info.documentClass, 'vsid', info.vsId, 'broadcast'];
             // workItem =>  /vsid/{vsid}/wob-num/{wobNum}/broadcast
             // correspondence => /vsid/{vsid}/broadcast
             if (info.isWorkItem()) {
                 url.splice(-1, 0, 'wob-num', info.wobNumber);
             }
-            return $http.put(_createCorrespondenceWFSchema(url), generator.interceptSendInstance('Broadcast', broadcast)).then(function (result) {
-                return result;
-            });
+
+            var requestBody = generator.interceptSendInstance('Broadcast', broadcast);
+            if (broadcastToAll) {
+                requestBody = {broadcastToAll: broadcastToAll, action: requestBody.action}
+            }
+
+            return $http.put(_createCorrespondenceWFSchema(url), requestBody)
+                .then(function (result) {
+                    return result;
+                });
         };
 
         function _broadcast(correspondence, $event) {
