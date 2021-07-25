@@ -91,16 +91,16 @@
                                                 <span>{{lang.sub_site_to}}</span>
                                             </th>
                                             <th ng-if="!ctrl.selectedSentItemCentralArchives.length" md-column
+                                                md-order-by="sentDate">
+                                                <span>{{lang.export_date}}</span>
+                                            </th>
+                                            <th ng-if="!ctrl.selectedSentItemCentralArchives.length" md-column
                                                 md-order-by="deliveryDate">
                                                 <span>{{lang.received_date}}</span>
                                             </th>
                                             <th ng-if="!ctrl.selectedSentItemCentralArchives.length" md-column
                                                 md-order-by="{{ctrl.getSortingKey('messageStatus', 'Information')}}">
                                                 <span>{{lang.status}}</span>
-                                            </th>
-                                            <th ng-if="!ctrl.selectedSentItemCentralArchives.length" md-column
-                                                md-order-by="sentDate">
-                                                <span>{{lang.export_date}}</span>
                                             </th>
                                             <th ng-if="!ctrl.selectedSentItemCentralArchives.length" md-column>
                                                 <!-- Grid Actions -->
@@ -196,9 +196,9 @@
                                                     <span flex>{{centralArchiveItem.subSiteToIdInfo.getTranslatedName()}}</span>
                                                 </div>
                                             </td>
+                                            <td md-cell>{{centralArchiveItem.sentDate}}</td>
                                             <td md-cell>{{centralArchiveItem.deliveryDate}}</td>
                                             <td md-cell>{{centralArchiveItem.messageStatus.getTranslatedName()}}</td>
-                                            <td md-cell>{{centralArchiveItem.sentDate}}</td>
                                             <td md-cell class="p-r0"
                                                 ng-if="ctrl.selectedSentItemCentralArchives.length < 2">
                                                 <div layout-align="start center" flex ng-if="!ctrl.selectedSentItemCentralArchives.length

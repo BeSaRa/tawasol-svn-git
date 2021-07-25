@@ -545,6 +545,7 @@ module.exports = function (app) {
                                 'main_site_to',
                                 'sub_site_to',
                                 'action_by',
+                                'export_date',
                                 'sent_items_receive_date',
                                 'status'
                             ],
@@ -555,6 +556,7 @@ module.exports = function (app) {
                             'mainSiteToIdInfo',
                             'subSiteToIdInfo',
                             'sentByIdInfo',
+                            'sentDate',
                             'deliveryDate',
                             'messageStatus'
                         ]
