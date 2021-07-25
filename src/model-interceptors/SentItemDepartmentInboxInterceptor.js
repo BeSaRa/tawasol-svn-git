@@ -58,6 +58,8 @@ module.exports = function (app) {
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.docClassName = 'outgoing';
             model.deliveryDate ? getDateFromUnixTimeStamp(model, ['deliveryDate']) : "";
+            model.sentDate ? getDateFromUnixTimeStamp(model, ['sentDate']) : "";
+
             model.typeOriginalCopy = (model.type === 0 ? langService.get('original') : langService.get('copy'));
 
             if (!angular.isArray(model.tags))

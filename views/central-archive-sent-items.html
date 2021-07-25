@@ -98,6 +98,10 @@
                                                 md-order-by="{{ctrl.getSortingKey('messageStatus', 'Information')}}">
                                                 <span>{{lang.status}}</span>
                                             </th>
+                                            <th ng-if="!ctrl.selectedSentItemCentralArchives.length" md-column
+                                                md-order-by="sentDate">
+                                                <span>{{lang.export_date}}</span>
+                                            </th>
                                             <th ng-if="!ctrl.selectedSentItemCentralArchives.length" md-column>
                                                 <!-- Grid Actions -->
                                             </th>
@@ -149,14 +153,16 @@
                                                                                  plain-text-only="!centralArchiveItem.hasContent()"
                                                                                  click-callback="ctrl.viewDocument">
                                                 </grid-document-subject-directive>-->
-                                                <a href="" ng-if="centralArchiveItem.hasContent() && ctrl.grid.truncateSubject"
+                                                <a href=""
+                                                   ng-if="centralArchiveItem.hasContent() && ctrl.grid.truncateSubject"
                                                    class="view-doc subject-internal" md-truncate
                                                    tooltip="{{centralArchiveItem.docSubject}}"
                                                    ng-click="ctrl.viewDocument(centralArchiveItem, $event)">{{centralArchiveItem.docSubject}}</a>
                                                 <span ng-if="!centralArchiveItem.hasContent() && ctrl.grid.truncateSubject"
                                                       class="view-doc subject-internal" md-truncate
                                                       tooltip="{{centralArchiveItem.docSubject}}">{{centralArchiveItem.docSubject}}</span>
-                                                <a href="" ng-if="centralArchiveItem.hasContent() && !ctrl.grid.truncateSubject"
+                                                <a href=""
+                                                   ng-if="centralArchiveItem.hasContent() && !ctrl.grid.truncateSubject"
                                                    class="view-doc subject-internal"
                                                    tooltip="{{centralArchiveItem.docSubject}}"
                                                    ng-click="ctrl.viewDocument(centralArchiveItem, $event)">{{centralArchiveItem.docSubject}}</a>
@@ -192,6 +198,7 @@
                                             </td>
                                             <td md-cell>{{centralArchiveItem.deliveryDate}}</td>
                                             <td md-cell>{{centralArchiveItem.messageStatus.getTranslatedName()}}</td>
+                                            <td md-cell>{{centralArchiveItem.sentDate}}</td>
                                             <td md-cell class="p-r0"
                                                 ng-if="ctrl.selectedSentItemCentralArchives.length < 2">
                                                 <div layout-align="start center" flex ng-if="!ctrl.selectedSentItemCentralArchives.length
@@ -203,12 +210,12 @@
                                             </td>
                                         </tr>
                                         <tr md-row ng-if="!ctrl.sentItemCentralArchives.length">
-                                            <td md-cell colspan="12" class="red-text text-center">
+                                            <td md-cell colspan="13" class="red-text text-center">
                                                 {{lang.no_records_found}}
                                             </td>
                                         </tr>
                                         <tr md-row ng-if="ctrl.sentItemCentralArchives.length && !searchResults.length">
-                                            <td md-cell colspan="12" class="red-text text-center">
+                                            <td md-cell colspan="13" class="red-text text-center">
                                                 {{lang.no_records_found_matching_search}}
                                             </td>
                                         </tr>
