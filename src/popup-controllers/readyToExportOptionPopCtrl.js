@@ -220,9 +220,17 @@ module.exports = function (app) {
          */
         self.exportCorrespondenceWorkItem = function () {
             self.disableExport = true;
+            var exportData = null;
             if (self.resend) {
+                if (self.isGroupExport) {
+                    exportData = self.validateExportOption(self.model);
+                } else {
+                    self.partialExportList.exportItems = self.validateExportOption(self.partialExportList.exportItems);
+                    exportData = self.partialExportList;
+                }
+
                 return correspondenceService
-                    .resendCorrespondenceWorkItem(self.readyToExport, self.isGroupExport ? self.validateExportOption(self.model) : self.partialExportList, g2gData)
+                    .resendCorrespondenceWorkItem(self.readyToExport, exportData, g2gData)
                     .then(function (result) {
                         dialog.hide(result);
                     })
@@ -264,6 +272,8 @@ module.exports = function (app) {
                         }
                     });
             } else {
+                self.partialExportList.exportItems = self.validateExportOption(self.partialExportList.exportItems);
+
                 readyToExportService
                     .exportReadyToExportSelective(self.readyToExport, self.partialExportList)
                     .then(function (result) {
@@ -319,6 +329,9 @@ module.exports = function (app) {
             _.map(canExportOptions, function (value, key) {
                 if (!self.settings.canExport(value)) {
                     exportOption.hasOwnProperty(key) ? exportOption[key] = false : null;
+                    if (key === 'RELATED_BOOKS') {
+                        self.isGroupExport ? self.model.setAttachmentLinkedDocs([]) : self.partialExportList.setAttachmentLinkedDocs([]);
+                    }
                 }
             });
             return exportOption

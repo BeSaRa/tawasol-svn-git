@@ -116,7 +116,7 @@
                         </div>
 
                         <div layout="row"
-                             ng-if="ctrl.isGroupExport || (!ctrl.isGroupExport && ctrl.partialExportList.exportItems.RELATED_BOOKS.length)">
+                             ng-if="ctrl.canExportRelatedData('RELATED_BOOKS') && (ctrl.isGroupExport || (!ctrl.isGroupExport && ctrl.partialExportList.exportItems.RELATED_BOOKS.length))">
                             <span flex></span>
                             <md-button class="md-raised" ng-click="ctrl.openLinkedDocsAttachmentDialog($event)"
                                        ng-disabled="!ctrl.model.RELATED_BOOKS">
