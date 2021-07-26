@@ -832,7 +832,7 @@ module.exports = function (app) {
             self.documentTypes = correspondenceService.getLookup(self.document.docClassName, 'docTypes');
             self.securityLevels = correspondenceService.getLookup(self.document.docClassName, 'securityLevels');
             documentSecurityLevelLookupKey = angular.copy(self.document.securityLevel);
-            if (documentSecurityLevelLookupKey.hasOwnProperty('lookupKey')) {
+            if (typeof documentSecurityLevelLookupKey !== 'undefined' && documentSecurityLevelLookupKey.hasOwnProperty('lookupKey')) {
                 documentSecurityLevelLookupKey = documentSecurityLevelLookupKey.lookupKey;
             }
 
