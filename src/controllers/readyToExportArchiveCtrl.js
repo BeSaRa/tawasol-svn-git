@@ -694,8 +694,9 @@ module.exports = function (app) {
          * @description Edit After Approve
          * @param workItem
          * @param $event
+         * @param defer
          */
-        self.editAfterApprove = function (workItem, $event) {
+        self.editAfterApprove = function (workItem, $event, defer) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
@@ -715,6 +716,8 @@ module.exports = function (app) {
                                 vsId: info.vsId,
                                 action: 'editAfterApproved'
                             });
+
+                            new ResolveDefer(defer);
                         })
                         .catch(function () {
                             dialog.errorMessage(langService.get('error_messages'));
@@ -1252,7 +1255,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.editAfterApprove,
                 class: "action-green",
-                showInView: false,
+                showInView: true,
                 hide: true,
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
