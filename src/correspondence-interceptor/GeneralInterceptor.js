@@ -11,6 +11,7 @@ module.exports = function (app) {
                       documentCommentService,
                       $location,
                       correspondenceService,
+                      Information,
                       generator) {
         'ngInject';
         var modelName = 'General';
@@ -74,7 +75,7 @@ module.exports = function (app) {
             delete model.docClassIndicator;
             delete model.cbrEnabled;
             delete model.recordGridName;
-            delete model.docClassString;
+            delete model.docClassInfo;
 
             /*If Document has vsId(update document), we will not remove the content file.
             If document don't has vsId(new document), we will remove the content file, so it doesn't affect the save request model */
@@ -99,7 +100,10 @@ module.exports = function (app) {
             }
 
             model.docClassIndicator = model.getDocClassIndicator(model.getInfo().documentClass);
-            model.docClassString = generator.ucFirst(model.getInfo().documentClass);
+            var documentClass = lookupService.returnLookups(lookupService.documentClass);
+            model.docClassInfo = _.find(documentClass, function (item) {
+                return item.lookupStrKey.toLowerCase() === model.getInfo().documentClass.toLowerCase();
+            });
             //model.isPaperIndicator = model.getIsPaperIndicator(model.addMethod);
 
             return model;
