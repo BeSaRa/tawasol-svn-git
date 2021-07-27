@@ -48,7 +48,7 @@
                                                ng-if="ctrl.internal.addMethod">
                                         {{lang.internal_save_print_barcode}}
                                     </md-button>
-                                    <div ng-if="!ctrl.internal.addMethod">
+                                    <div ng-if="!ctrl.internal.addMethod && ctrl.employeeService.hasPermissionTo('DRAFT_INTERNAL')">
                                         <md-button
                                                 ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, 'saveAsDraft', true)"
                                                 ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">

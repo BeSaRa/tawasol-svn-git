@@ -36,7 +36,7 @@
                                 {{lang.save_and_insert}}
                             </md-button>
                         </div>
-                        <div ng-if="!ctrl.internal.addMethod">
+                        <div ng-if="!ctrl.internal.addMethod && ctrl.employeeService.hasPermissionTo('DRAFT_INTERNAL')">
                             <md-button ng-disabled="!ctrl.isSaveValid('saveAsDraft', true)"
                                        ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
                                 {{lang.internal_save_draft}}
@@ -240,7 +240,7 @@
                                 {{lang.save_and_insert}}
                             </md-button>
                         </div>
-                        <div ng-if="!ctrl.internal.addMethod">
+                        <div ng-if="!ctrl.internal.addMethod && ctrl.employeeService.hasPermissionTo('DRAFT_INTERNAL')">
                             <md-button ng-disabled="!ctrl.isSaveValid('saveAsDraft', true)"
                                        ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
                                 {{lang.internal_save_draft}}
