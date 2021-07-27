@@ -110,6 +110,7 @@ module.exports = function (app) {
             // azure
             self.azureResultItem = null;
             self.highlights = null;
+            self.transfered = false;
 
             self.externalImportData = null; // set the value from external data source import popup. used in upload content
 
@@ -479,6 +480,18 @@ module.exports = function (app) {
 
             Correspondence.prototype.getBroadcastIndicator = function () {
                 return indicator.getIsBroadcastedIndicator(this.isBroadcasted());
+            };
+
+            Correspondence.prototype.getIsTransferredDocumentIndicator = function () {
+                return indicator.getIsTransferredDocumentIndicator(this.isTransferredDocument());
+            };
+
+            /**
+             * @description Checks if the document is transferred
+             * @returns {boolean}
+             */
+            Correspondence.prototype.isTransferredDocument = function () {
+                return this.transfered;
             };
 
             Correspondence.prototype.getSequentialWFIndicator = function () {

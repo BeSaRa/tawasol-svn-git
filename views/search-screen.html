@@ -149,6 +149,11 @@
                                         <grid-indicator-directive record="searchedOutgoingDocument"
                                                                   indicator-type="sequentialWF"
                                                                   record-type="Correspondence"></grid-indicator-directive>
+                                        <!-- Sent To RegOU -->
+                                        <grid-indicator-directive record="searchedOutgoingDocument"
+                                                                  indicator-type="isTransferredDocumentIndicator"
+                                                                  record-type="correspondence">
+                                        </grid-indicator-directive>
                                         <span flex
                                               ng-class="{'indicator-content': searchedOutgoingDocument.followUpStatusIndicator}">
                                         <md-icon ng-if="searchedOutgoingDocument.followUpStatusIndicator"
@@ -483,6 +488,10 @@
                                         <grid-indicator-directive record="searchedIncomingDocument"
                                                                   indicator-type="sequentialWF"
                                                                   record-type="Correspondence"></grid-indicator-directive>
+                                        <!-- Sent To RegOU -->
+                                        <grid-indicator-directive record="searchedIncomingDocument"
+                                                                  indicator-type="isTransferredDocumentIndicator"
+                                                                  record-type="correspondence">
                                     </td>
                                     <td md-cell>
                                         <span class="serial-td">{{searchedIncomingDocument.docFullSerial}}</span>
@@ -662,6 +671,10 @@
                                         <grid-indicator-directive record="searchedOutgoingIncomingDocument"
                                                                   indicator-type="sequentialWF"
                                                                   record-type="Correspondence"></grid-indicator-directive>
+                                        <!-- Sent To RegOU -->
+                                        <grid-indicator-directive record="searchedOutgoingIncomingDocument"
+                                                                  indicator-type="isTransferredDocumentIndicator"
+                                                                  record-type="correspondence">
                                     </td>
                                     <td md-cell><span
                                             class="serial-td">{{searchedOutgoingIncomingDocument.docFullSerial}}</span>
