@@ -45,7 +45,8 @@
                         <md-table-container>
                             <div flex overlay-scroll-bar-directive>
                                 <table md-table ng-model="ctrl.selectedUserSentItems"
-                                       md-progress="ctrl.grid.progress"><!-- md-row-select multiple-->
+                                       md-progress="ctrl.grid.progress"
+                                       md-row-select multiple>
                                     <thead md-head md-order="ctrl.grid.order"
                                            md-on-reorder="ctrl.getSortedData">
                                     <!--md-on-reorder="ctrl.reloadUserSentItems"-->
@@ -55,17 +56,20 @@
                                             <div layout="row" layout-align="start center">
                                                 <span>{{ctrl.selectedUserSentItems.length}} {{lang.items_selected}} </span>
                                                 <span flex></span>
-                                                <!--ng-if="ctrl.selectedUserSentItems.length > 1"-->
-                                                <!--<md-button class="md-icon-button"
-                                                           tooltip="{{lang.grid_action_reassign}}"
-                                                           ng-click="ctrl.reassignBulkSentItems($event)">
-                                                    <md-icon md-svg-icon="tag" class="action-red"></md-icon>
-                                                </md-button>
-                                                <md-button class="md-icon-button"
-                                                           tooltip="{{lang.grid_action_recall}}"
-                                                           ng-click="ctrl.recallBulkSentItems($event)">
-                                                    <md-icon md-svg-icon="tag" class="action-red"></md-icon>
-                                                </md-button>-->
+                                                <div ng-if="ctrl.selectedUserSentItems.length > 1">
+                                                    <md-button class="md-icon-button"
+                                                               tooltip="{{lang.grid_action_recall}}"
+                                                               ng-click="ctrl.recallBulkSentItems($event)"
+                                                               ng-if="ctrl.canShowRecallBulk()">
+                                                        <md-icon md-svg-icon="tag" class="action-red"></md-icon>
+                                                    </md-button>
+                                                    <!--<md-button class="md-icon-button"
+                                                               tooltip="{{lang.grid_action_reassign}}"
+                                                               ng-click="ctrl.reassignBulkSentItems($event)">
+                                                        <md-icon md-svg-icon="tag" class="action-red"></md-icon>
+                                                    </md-button>
+                                                    -->
+                                                </div>
                                             </div>
                                         </th>
                                         <th ng-if="!ctrl.selectedUserSentItems.length" md-column

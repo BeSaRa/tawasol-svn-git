@@ -216,6 +216,7 @@
                 .addToAllWithBase('activeOus', 'cms-entity/admin/ou/active/lookup')
                 .addToAllWithBase('reminderEmail','cms-entity/user/inbox/send-remainder')
                 .addToAllWithBase('returnedArchive', 'cms-entity/correspondence/incoming/ou/returned-to-central-archive')
+                .addToAllWithBase('bulkRecallSentItems', 'cms-entity/user/inbox/bulk/recall')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

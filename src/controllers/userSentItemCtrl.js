@@ -26,6 +26,7 @@ module.exports = function (app) {
                                                  EventHistoryCriteria,
                                                  printService,
                                                  moment,
+                                                 _,
                                                  EventHistory) {
         'ngInject';
         var self = this;
@@ -222,8 +223,33 @@ module.exports = function (app) {
          * @param $event
          */
         self.recallBulkSentItems = function ($event) {
-            // console.log('recall bulk sent items : ', self.selectedUserSentItems);
+            dialog.confirmMessage(langService.get('confirm_multiple_recall'))
+                .then(function () {
+                    userSentItemService.recallMultipleSentItem(self.selectedUserSentItems, $event).then(function (result) {
+                        self.reloadUserSentItems(self.grid.page)
+                            .then(function () {
+                            });
+                    });
+                });
         };
+
+        /**
+         * @description
+         * @returns {boolean|*}
+         */
+        self.canShowRecallBulk = function () {
+            if (self.selectedUserSentItems.length > 20) {
+                return false;
+            }
+
+            return _.every(self.selectedUserSentItems, function (selectedSentItem) {
+                return (selectedSentItem.workflowActionId !== 9 &&
+                    selectedSentItem.actionType !== 3 &&
+                    selectedSentItem.wfId !== null &&
+                    selectedSentItem.wobNum !== null);
+            })
+
+        }
 
         /**
          * @description Reassign Bulk User Sent Items
