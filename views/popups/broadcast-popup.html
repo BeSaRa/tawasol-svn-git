@@ -34,7 +34,7 @@
                                 </div>
                             </md-input-container>
                         </div>
-                        <div flex>
+                        <div flex ng-if="ctrl.employeeService.hasPermissionTo('BROADCAST_DOCUMENT_ALL')">
                             <md-switch aria-label="{{lang.broadcast_to_all}}"
                                        ng-model="ctrl.broadcastToAll">
                                 <span>{{lang.broadcast_to_all}} : </span>
@@ -58,7 +58,6 @@
                                                placeholder="{{lang.search}}"
                                                class="select-header-input">
                                     </md-select-header>
-                                    <md-option ng-value="null">{{lang.all}}</md-option>
                                     <md-option
                                             ng-repeat="organization in ctrl.organizations | translatedNameFilter: ctrl.ouSearchText track by $index"
                                             ng-if="organization.status"
@@ -80,7 +79,6 @@
                                            ng-required="!ctrl.ouBroadcast.length"
                                            name="workflowGroupBroadcast" ng-model="ctrl.wfGroupBroadcast"
                                            ng-disabled="ctrl.broadcastToAll">
-                                    <md-option ng-value="null">{{lang.all}}</md-option>
                                     <md-option md-truncate
                                                ng-repeat="workflowGroup in ctrl.workflowGroups track by $index"
                                                ng-value="workflowGroup"
