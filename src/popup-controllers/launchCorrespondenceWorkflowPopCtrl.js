@@ -58,6 +58,7 @@ module.exports = function (app) {
         self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
         self.isCentralArchive = employeeService.getEmployee().inCentralArchive();
 
+
         /**
          * get multi info in case the correspondence array.
          * @param correspondences
@@ -751,6 +752,12 @@ module.exports = function (app) {
          */
         function _addUsersToSelectedGrid(users) {
             users = angular.isArray(users) ? users : [users];
+            var usersDoesNotHaveDocumentSecurityLevel = _getUsersDoesNotHaveDocumentSecurityLevel(users, 'securityLevel');
+            // notify when user doesn't have security level of secret document
+            if (!self.correspondence.hasNormalOrPersonalPrivateSecurityLevel() && usersDoesNotHaveDocumentSecurityLevel.length) {
+                dialog.alertMessage(_prepareUserHasSecretSecurityLevelMessage(usersDoesNotHaveDocumentSecurityLevel));
+            }
+
             _.map(users, function (item) {
                 if (!item.escalationStatus) {
                     item.escalationStatus = currentOUEscalationProcess;
@@ -766,7 +773,7 @@ module.exports = function (app) {
          * @private
          */
         function _showProxyMessage(proxies) {
-            var proxyUsersNotHaveDocumentSecurityLevel = self.getUsersDoesNotHaveDocumentSecurityLevel(proxies);
+            var proxyUsersNotHaveDocumentSecurityLevel = _getUsersDoesNotHaveDocumentSecurityLevel(proxies, 'proxyInfo.securityLevels');
             if (proxyUsersNotHaveDocumentSecurityLevel && proxyUsersNotHaveDocumentSecurityLevel.length) {
                 dialog.alertMessage(_prepareProxyMessage(proxyUsersNotHaveDocumentSecurityLevel, false));
             }
@@ -779,6 +786,7 @@ module.exports = function (app) {
         /**
          * @description prepare proxy Message
          * @param proxyUsers
+         * @param isDocumentHaveSecurityLevel
          * @private
          */
         function _prepareProxyMessage(proxyUsers, isDocumentHaveSecurityLevel) {
@@ -794,6 +802,30 @@ module.exports = function (app) {
             });
 
             var table = tableGeneratorService.createTable([langService.get('arabic_name'), langService.get('english_name'), langService.get('proxy_arabic_name'), langService.get('proxy_english_name'), langService.get('proxy_domain'), langService.get('start_date'), langService.get('end_date'), langService.get('proxy_message')], 'error-table');
+            table.createTableRows(tableRows);
+
+            titleTemplate.append(table.getTable(true));
+
+            return titleTemplate.html();
+        }
+
+        /**
+         * @description
+         * @param users
+         * @returns {*}
+         * @private
+         */
+        function _prepareUserHasSecretSecurityLevelMessage(users) {
+            var titleMessage = langService.get('users_can_not_view_secret_document');
+
+            var titleTemplate = angular.element('<span class="validation-title">' + titleMessage + '</span> <br/>');
+            titleTemplate.html(titleMessage);
+
+            var tableRows = _.map(users, function (user) {
+                return [user.arName, user.enName];
+            });
+
+            var table = tableGeneratorService.createTable([langService.get('arabic_name'), langService.get('english_name')], 'error-table');
             table.createTableRows(tableRows);
 
             titleTemplate.append(table.getTable(true));
@@ -1655,11 +1687,11 @@ module.exports = function (app) {
                 });
         };
 
-        self.getUsersDoesNotHaveDocumentSecurityLevel = function (proxyUsers) {
-            return _.filter(proxyUsers, function (proxyUser) {
-                var proxyUserSecurityLevels = generator.getSelectedCollectionFromResult(self.securityLevels, proxyUser.proxyInfo.securityLevels, 'lookupKey');
+        function _getUsersDoesNotHaveDocumentSecurityLevel(users, securityLevelProperty) {
+            return _.filter(users, function (user) {
+                var userSecurityLevels = generator.getSelectedCollectionFromResult(self.securityLevels, user[securityLevelProperty], 'lookupKey');
 
-                return _.every(proxyUserSecurityLevels, function (userSecurityLevel) {
+                return _.every(userSecurityLevels, function (userSecurityLevel) {
                     if (self.correspondence.hasOwnProperty('securityLevelLookup')) {
                         return userSecurityLevel.lookupKey !== self.correspondence.securityLevelLookup.lookupKey
                     } else {

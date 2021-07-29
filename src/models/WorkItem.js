@@ -414,8 +414,8 @@ module.exports = function (app) {
              * @param reloadCallback
              * @returns {promise|*}
              */
-            WorkItem.prototype.launchWorkFlow = function ($event, action, tab, isDeptIncoming, fromSimplePopup , reloadCallback) {
-                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming, null, fromSimplePopup , [] , reloadCallback);
+            WorkItem.prototype.launchWorkFlow = function ($event, action, tab, isDeptIncoming, fromSimplePopup, reloadCallback) {
+                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming, null, fromSimplePopup, [], reloadCallback);
             };
             WorkItem.prototype.launchWorkFlowFromPredefinedAction = function ($event, action, tab, isDeptIncoming, isDeptSent, actionMembers) {
                 return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming, isDeptSent, false, actionMembers);
@@ -1408,6 +1408,11 @@ module.exports = function (app) {
             WorkItem.prototype.getExportedData = function () {
                 return exportData;
             };
+
+            WorkItem.prototype.hasNormalOrPersonalPrivateSecurityLevel = function () {
+                return this.hasOwnProperty('securityLevelLookup') &&
+                    (this.securityLevelLookup.lookupKey === 1 || this.securityLevelLookup.lookupKey === 4)
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

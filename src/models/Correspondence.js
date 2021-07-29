@@ -1334,6 +1334,11 @@ module.exports = function (app) {
                 return self.highlights;
             }
 
+            Correspondence.prototype.hasNormalOrPersonalPrivateSecurityLevel = function () {
+                return this.hasOwnProperty('securityLevelLookup') &&
+                    (this.securityLevelLookup.lookupKey === 1 || this.securityLevelLookup.lookupKey === 4)
+            }
+
             Correspondence.prototype.isLimitedCentralUnitAccess = function () {
                 return correspondenceService.isLimitedCentralUnitAccess(this);
             }
