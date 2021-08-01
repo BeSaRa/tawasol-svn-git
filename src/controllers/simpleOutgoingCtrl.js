@@ -1081,6 +1081,37 @@ module.exports = function (app) {
 
         };
 
+        /**
+         * @description open side view document
+         * @param $event
+         */
+        self.openSideViewDocument = function ($event) {
+            var correspondence, typeOfDoc;
+            if (replyTo && self.action === 'createReply') {
+                if ($stateParams.createAsAttachment === "true") {
+                    // attachment
+                    correspondence = self.outgoing.attachments[0];
+                    correspondence.classDescription = 'Outgoing';
+                    typeOfDoc = 'attachment';
+                } else {
+                    // linked document
+                    correspondence = self.outgoing.linkedDocs[0];
+                    typeOfDoc = 'linked-doc';
+                }
+
+                angular.element('iframe#document-viewer').remove();
+                var defer = $q.defer();
+                loadingIndicatorService.loading = true;
+                $timeout(function () {
+                    correspondenceService.openSideViewDocument(correspondence, self.simpleViewUrl, typeOfDoc).then(function () {
+                        self.injectIframe();
+                        loadingIndicatorService.loading = false;
+                        defer.resolve(true);
+                    });
+                }, configurationService.OFFICE_ONLINE_DELAY);
+            }
+        }
+
         $rootScope.$on('SEQ_LAUNCH_SUCCESS', function () {
             self.resetAddCorrespondence();
         });

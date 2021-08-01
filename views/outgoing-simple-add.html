@@ -162,6 +162,16 @@
                                                     simple-view-url="ctrl.simpleViewUrl"
                                                     is-simple-add="ctrl.simpleAdd"></manage-content-directive>
                                             <span flex></span>
+                                            <!-- open document in side view mode -->
+                                            <div class="icon-relative"
+                                                 ng-if="ctrl.action === 'createReply' && !ctrl.outgoing.addMethod">
+                                                <md-button tooltip="{{lang.side_view}}"
+                                                           class="md-raised md-icon-button"
+                                                           ng-click="ctrl.openSideViewDocument($event)"
+                                                           ng-disabled="(!ctrl.documentInformation || !ctrl.outgoing.contentFile) && !ctrl.simpleViewUrl">
+                                                    <md-icon md-svg-icon="view-split-vertical"></md-icon>
+                                                </md-button>
+                                            </div>
                                             <!-- Attachments -->
                                             <div class="icon-relative"
                                                  ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')">

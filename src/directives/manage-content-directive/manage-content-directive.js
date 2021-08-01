@@ -19,9 +19,10 @@ module.exports = function (app) {
                 disableWhen: '=',
                 signaturesCount: '=',
                 simpleViewUrl: '=?',
+                viewUrl: '=?',
                 isSimpleAdd: '=?',
                 receiveDocument: '=?',
-                uploadedCallback : '=?'
+                uploadedCallback: '=?'
             }
         }
     })

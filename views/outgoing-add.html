@@ -154,7 +154,19 @@
                                             vs-id="ctrl.outgoing.vsId"
                                             document="ctrl.outgoing"
                                             signatures-count="ctrl.outgoing.signaturesCount"
-                                            templates="ctrl.templates"></manage-content-directive>
+                                            templates="ctrl.templates"
+                                            view-url="ctrl.viewUrl"></manage-content-directive>
+                                    <span flex></span>
+                                    <!-- open document in side view mode -->
+                                    <div class="icon-relative"
+                                         ng-if="ctrl.action === 'createReply' && !ctrl.outgoing.addMethod">
+                                        <md-button tooltip="{{lang.side_view}}"
+                                                   class="md-raised md-icon-button"
+                                                   ng-click="ctrl.openSideViewDocument($event)"
+                                                   ng-disabled="(!ctrl.documentInformation || !ctrl.outgoing.contentFile) && !ctrl.viewUrl">
+                                            <md-icon md-svg-icon="view-split-vertical"></md-icon>
+                                        </md-button>
+                                    </div>
                                 </div>
                             </accordion-content>
                         </accordion-item>

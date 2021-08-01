@@ -43,6 +43,7 @@ module.exports = function (app) {
                                              rootEntity,
                                              configurationService,
                                              downloadService,
+                                             loadingIndicatorService,
                                              errorCode) {
         'ngInject';
         var self = this;
@@ -315,7 +316,7 @@ module.exports = function (app) {
                     self.outgoing.contentSize = 1; // dummy content size
                     successKey = 'save_success'
                 } else if (self.outgoing.contentFile) {
-                    if (self.outgoing.externalImportData){
+                    if (self.outgoing.externalImportData) {
                         self.outgoing.contentSize = 1; // dummy content size
                     } else {
                         self.outgoing.contentSize = self.outgoing.contentFile.size;
@@ -1007,6 +1008,30 @@ module.exports = function (app) {
                 return isValid;
             }
         };
+
+        /**
+         * @description open side view document
+         * @param $event
+         */
+        self.openSideViewDocument = function ($event) {
+            var correspondence, typeOfDoc;
+            if (replyTo && self.action === 'createReply') {
+                if ($stateParams.createAsAttachment === "true") {
+                    // attachment
+                    correspondence = self.outgoing.attachments[0];
+                    correspondence.classDescription = 'Outgoing';
+                    typeOfDoc = 'attachment';
+                } else {
+                    // linked document
+                    correspondence = self.outgoing.linkedDocs[0];
+                    typeOfDoc = 'linked-doc';
+                }
+
+                correspondenceService.openSideViewDocument(correspondence, self.viewUrl, typeOfDoc).then(function () {
+                    loadingIndicatorService.loading = false;
+                });
+            }
+        }
 
         self.$onInit = function () {
             if (self.employee.isBacklogMode()) {

@@ -38,6 +38,7 @@ module.exports = function (app) {
                                              rootEntity,
                                              configurationService,
                                              downloadService,
+                                             loadingIndicatorService,
                                              errorCode) {
         'ngInject';
         var self = this;
@@ -804,6 +805,30 @@ module.exports = function (app) {
             })
         };
 
+
+        /**
+         * @description open side view document
+         * @param $event
+         */
+        self.openSideViewDocument = function ($event) {
+            var correspondence, typeOfDoc;
+            if (replyTo && self.action === 'replyTo') {
+                if ($stateParams.createAsAttachment === "true") {
+                    // attachment
+                    correspondence = self.internal.attachments[0];
+                    correspondence.classDescription = 'Internal';
+                    typeOfDoc = 'attachment';
+                } else {
+                    // linked document
+                    correspondence = self.internal.linkedDocs[0];
+                    typeOfDoc = 'linked-doc';
+                }
+
+                correspondenceService.openSideViewDocument(correspondence, self.viewUrl, typeOfDoc).then(function () {
+                    loadingIndicatorService.loading = false;
+                });
+            }
+        }
 
         self.isDocumentTypeSwitchDisabled = function () {
             return !!self.internal.vsId || self.duplicateVersion || !self.employeeService.hasPermissionTo('INTERNAL_PAPER') || self.employee.isBacklogMode();

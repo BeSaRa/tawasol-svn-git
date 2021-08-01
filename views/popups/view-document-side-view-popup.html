@@ -1,0 +1,44 @@
+<md-dialog id="attachmentsOnly-dialog" ng-class="{'fullscreen':ctrl.fullScreen}"
+           class="document-dialog"
+           ng-attr-aria-label="{{lang.view_document}}" layout="column">
+    <div layout="row" layout-align="start center">
+        <div flex layout-align="center center" layout="row">
+            <span flex md-truncate class="font-bold text-center">{{::ctrl.document.getTranslatedName()}}</span>
+            <md-progress-circular ng-if="ctrl.loadingIndicatorService.loading" md-mode="indeterminate"
+                                  md-diameter="30"></md-progress-circular>
+        </div>
+        <md-button ng-click="ctrl.toggleFullScreen()" class="md-icon-button">
+            <md-icon md-svg-icon="{{ctrl.fullScreen ? 'fullscreen-exit': 'fullscreen'}}"></md-icon>
+        </md-button>
+        <md-button ng-click="ctrl.closeDocumentSideViewDialog()"
+                   class="md-icon-button">
+            <md-icon md-svg-icon="close" class="red-text"></md-icon>
+        </md-button>
+    </div>
+    <md-dialog-content layout="column" flex scroll-directive>
+        <div layout="row" layout-fill flex>
+            <div id="iframe-parent" layout="row" class="relative" flex>
+                <div layout="column" flex layout-margin ng-if="ctrl.isLimitedCentralUnitAccess">
+                    <span class="red-text font-bold">{{lang.archive_secure_document_content}}</span>
+                </div>
+                <!-- main document -->
+                <iframe class="iframe-main-document" id="main-document-viewer"
+                        ng-if="!ctrl.isLimitedCentralUnitAccess"
+                        ng-src="{{ctrl.viewUrl}}"
+                        flex frameborder="0"></iframe>
+                <!-- replyTo document -->
+                <iframe ng-if="ctrl.displayMainIframeViewer() && !ctrl.isLimitedCentralUnitAccess" id="reply-to-viewer"
+                        class="iframe-main-document"
+                        ng-src="{{ctrl.replyToViewURL}}"
+                        flex frameborder="0"></iframe>
+                <pspdf-viewer-directive doc-url="ctrl.replyToViewURL"
+                                        ng-if="ctrl.displayMainPSPDFViewer() && !ctrl.isLimitedCentralUnitAccess"
+                                        id="pdfViewer" class="iframe-main-document" flex></pspdf-viewer-directive>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeDocumentSideViewDialog()">{{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

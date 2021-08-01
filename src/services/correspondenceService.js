@@ -2061,6 +2061,54 @@ module.exports = function (app) {
         };
 
         /**
+         * @description open side view document
+         * @param replyTo (attachment or linked document)
+         * @param viewUrl
+         * @param typeOfDoc
+         */
+        self.openSideViewDocument = function (replyTo, viewUrl, typeOfDoc) {
+            var info = typeof replyTo.getInfo === 'function' ? replyTo.getInfo() : _createInstance(replyTo).getInfo();
+            var url = typeOfDoc === 'attachment' ?
+                _createUrlSchema(info.vsId, info.documentClass, 'attachment/with-content') :
+                _createUrlSchema(info.vsId, info.documentClass, 'with-content');
+
+            return $http.get(url)
+                .then(function (result) {
+                    var documentClass = result.data.rs.metaData.classDescription;
+                    result.data.rs.metaData = typeOfDoc === 'attachment' ?
+                        generator.generateInstance(result.data.rs.metaData, Attachment) :
+                        generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
+                    return result.data.rs;
+                })
+                .then(function (result) {
+                    generator.addPopupNumber();
+                    result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                    if (result.content.hasOwnProperty('editURL') && result.content.editURL) {
+                        result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
+                    }
+                    return dialog.showDialog({
+                        templateUrl: cmsTemplate.getPopup('view-document-side-view'),
+                        controller: 'viewDocumentSideViewPopCtrl',
+                        controllerAs: 'ctrl',
+                        bindToController: true,
+                        escapeToCancel: false,
+                        locals: {
+                            document: result.metaData,
+                            content: result.content,
+                            viewUrl: viewUrl,
+                            typeOfDoc: typeOfDoc
+                        }
+                    }).then(function () {
+                        generator.removePopupNumber();
+                        return true;
+                    }).catch(function () {
+                        generator.removePopupNumber();
+                        return false;
+                    });
+                });
+        };
+
+        /**
          * to use it just inside edit after approved.
          * @param information
          * @param justView

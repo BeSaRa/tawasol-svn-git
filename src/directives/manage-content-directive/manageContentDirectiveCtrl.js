@@ -42,6 +42,7 @@ module.exports = function (app) {
         self.isDefaultEditModeBoth = (employeeService.getEmployee().getDefaultEditMode() === correspondenceService.documentEditModes.desktopOfficeOnline);
 
         self.simpleViewUrl = null;
+        self.viewUrl = null;
         self.isLimitedCentralUnitAccess = false;
 
         LangWatcher($scope);
@@ -163,7 +164,8 @@ module.exports = function (app) {
                             if (information) {
                                 self.lastTemplate = information;
                                 self.signaturesCount = 1;
-                                return $sce.trustAsResourceUrl(information.viewURL);
+                                self.viewUrl = $sce.trustAsResourceUrl(information.viewURL);
+                                return self.viewUrl;
                             }
                             self.model = angular.copy(self.document);
                             self.model.classDescription = self.document.docClassName;
@@ -172,7 +174,8 @@ module.exports = function (app) {
                                 .then(function (result) {
                                     self.lastTemplate = result;
                                     self.signaturesCount = self.template.signaturesCount;
-                                    return $sce.trustAsResourceUrl(result.viewURL);
+                                    self.viewUrl = $sce.trustAsResourceUrl(result.viewURL);
+                                    return self.viewUrl;
                                 });
                         }
                     }
@@ -400,6 +403,7 @@ module.exports = function (app) {
             self.contentFile = self.document.contentFile = null;
             self.isContentFileAttached = false;
             self.simpleViewUrl = null;
+            self.viewUrl = null;
         };
 
 
