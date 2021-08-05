@@ -176,6 +176,9 @@ module.exports = function (app) {
         }
 
         function _addItem(item, option) {
+            if (option === 'RELATED_BOOKS') {
+                self.partialExportList.setAttachmentLinkedDocs(angular.copy(prepareExport.linkedDocList));
+            }
             self.partialExportList.exportItems[option].push(item);
         }
 
@@ -299,8 +302,15 @@ module.exports = function (app) {
         };
 
         self.printWithTerminate = function () {
-            readyToExportService
-                .exportReadyToExport(self.readyToExport, self.validateExportOption(self.model))
+            var readyToExport;
+            if (self.isGroupExport) {
+                readyToExport = readyToExportService.exportReadyToExport(self.readyToExport, self.validateExportOption(self.model))
+            } else {
+                self.partialExportList.exportItems = self.validateExportOption(self.partialExportList.exportItems);
+                readyToExport = readyToExportService.exportReadyToExportSelective(self.readyToExport, self.partialExportList)
+            }
+
+            readyToExport
                 .then(function (result) {
                     downloadService
                         .controllerMethod
