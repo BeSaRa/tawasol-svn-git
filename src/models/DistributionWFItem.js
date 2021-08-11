@@ -69,6 +69,15 @@ module.exports = function (app) {
                 this.action = action;
                 return this;
             };
+            DistributionWFItem.prototype.setFavoriteAction = function (action) {
+                if (!action) {
+                    return false;
+                }
+                this.action = action;
+                this.action.id = action.actionId;
+                return this;
+            };
+
             DistributionWFItem.prototype.setSLADueDate = function (sLADueDate) {
                 this.sLADueDate = sLADueDate || null;
                 return this;

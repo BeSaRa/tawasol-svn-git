@@ -1,0 +1,97 @@
+<form layout="column" flex name="simpeForward_form" autocomplete="off">
+    <div id="favoriteActions" flex layout="column">
+        <div flex layout="row" layout-align="start center">
+            <span>{{lang.actions}}</span>
+            <md-button class="md-icon-button cms-select-overlay-button" tooltip="{{lang.add_favorite_actions}}"
+                       ng-click="ctrl.openAddUserFavoriteActionDialog($event)">
+                <md-icon md-svg-icon="plus"></md-icon>
+            </md-button>
+        </div>
+        <div flex layout="row" ng-if="ctrl.favorites.actions.total">
+            <md-radio-group ng-model="ctrl.distWorkflowItem.action" aria-labelledby="favoriteWorkFlowActions" layout-fill="">
+                <div flex layout="row" layout-wrap="" layout-align="start center">
+                    <md-radio-button
+                            ng-repeat="action in ctrl.favoriteWorkFlowActions | limitTo: ctrl.favorites.actions.limit"
+                            ng-value="action" class="simple-padding">
+                        <span>{{action.actionInfo.getTranslatedName()}}</span>
+                    </md-radio-button>
+                </div>
+            </md-radio-group>
+        </div>
+        <span flex layout="row" ng-if="!ctrl.favorites.actions.total">{{lang.no_favorite_actions_found}}</span>
+        <span layout-margin="" ng-if="ctrl.favorites.actions.total > ctrl.favoritesLimit">
+            <a class="cursor-pointer" ng-click="ctrl.toggleFavorites('actions')">
+                {{ctrl.favorites.actions.expanded ? lang.show_less : lang.show_more}}
+            </a>
+        </span>
+    </div>
+    <div id="comments">
+        <div layout="row">
+            <!-- Comment -->
+            <md-input-container flex>
+                <label for="comment">{{lang.select_comment}}</label>
+                <md-select id="comment" name="comment" ng-change="ctrl.onCommentChange()"
+                           ng-model="ctrl.comment"
+                           md-on-close="ctrl.clearSearchText('comment')"
+                           data-md-container-class="select-header-container sticky-search-bar">
+                    <md-select-header class="select-header">
+                        <input ng-model="ctrl.commentSearchText"
+                               ng-keydown="ctrl.preventSearchKeyDown($event)"
+                               placeholder="{{lang.search}}"
+                               class="select-header-input">
+                    </md-select-header>
+                    <md-option ng-value="comment"
+                               ng-repeat="comment in ctrl.comments | translatedNameFilter: ctrl.commentSearchText">
+                                    <span
+                                            md-highlight-text="ctrl.commentSearchText"
+                                            md-highlight-flags="i">{{comment.getCommentTitle()}}</span>
+                    </md-option>
+                </md-select>
+                <md-button class="md-icon-button cms-select-overlay-button"
+                           ng-click="ctrl.openAddUserCommentDialog($event)">
+                    <md-icon md-svg-icon="plus"></md-icon>
+                </md-button>
+            </md-input-container>
+        </div>
+        <div layout="row">
+            <md-input-container flex>
+                <label for="comments"> {{lang.type_your_comment}}</label>
+                <textarea style="min-height: 150px !important;" overlay-scroll-bar-directive
+                          id="comments" name="comments" rows="7" class="cms-comment textarea-bootstrap"
+                          ng-model="ctrl.distWorkflowItem.comments"
+                          maxlength="2000"
+                          md-maxlength="2000"
+                          ng-required="ctrl.distWorkflowItem.isSecureAction"></textarea>
+                <div ng-messages="simpeForward_form.comments.$error">
+                    <div ng-message="required">{{lang.field_required}}</div>
+                    <div ng-message="maxlength">{{lang.max_length.change({length: 2000})}}</div>
+                </div>
+            </md-input-container>
+        </div>
+    </div>
+    <div id="users" layout="column">
+        <span ng-if="!ctrl.favorites.users.total">{{lang.no_favorite_users_found}}</span>
+        <div flex layout="row" layout-wrap="" ng-if="ctrl.favorites.users.total">
+            <div ng-repeat="favoriteUser in ctrl.favoriteUsers | limitTo: ctrl.favorites.users.limit"
+                 class="custom-chip" ng-class="{'font-bold':favoriteUser.checked}"
+                 ng-click="ctrl.toggleFavoriteUser(favoriteUser)">
+                <md-icon tooltip="{{lang.user}}"
+                         md-svg-icon="{{favoriteUser.checked?'account-check':'account'}}"></md-icon>
+                <span> {{favoriteUser.getTranslatedName()}}</span>
+            </div>
+        </div>
+        <span layout-margin="" ng-if="ctrl.favorites.users.total > ctrl.favoritesLimit">
+            <a class="cursor-pointer" ng-click="ctrl.toggleFavorites('users')">
+                {{ctrl.favorites.users.expanded ? lang.show_less : lang.show_more}}
+            </a>
+        </span>
+    </div>
+    <div>
+        <md-button class="md-raised md-primary"
+                   ng-disabled="!ctrl.selectedFavUsers.length || !ctrl.distWorkflowItem.action"
+                   ng-click="ctrl.launchDistributionCorrespondenceWorkFlow()">
+            {{lang.send}}
+        </md-button>
+    </div>
+
+</form>

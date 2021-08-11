@@ -1,0 +1,80 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           id="favoriteWFActionsDialog" ng-attr-aria-label="{{lang.actions}}">
+    <popup-toolbar-directive header-text="{{lang.actions}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <div layout="column">
+                <md-card class="card-overlay">
+                    <md-table-container>
+                        <div flex scroll-directive>
+                            <table md-table
+                                   ng-model="ctrl.selectedFavoriteWFActions">
+                                <thead md-head md-order="ctrl.grid.order"
+                                       md-on-reorder="ctrl.getSortedData">
+                                <tr md-row>
+                                    <th colspan="3" class="table-selector-header"
+                                        ng-if="ctrl.selectedFavoriteWFActions.length" md-column>
+                                        <div layout="row" layout-align="start center">
+                                            <span>{{ctrl.selectedFavoriteWFActions.length}} {{lang.items_selected}} </span>
+                                            <span flex></span>
+                                        </div>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedFavoriteWFActions.length" md-column>
+                                        <md-button ng-disabled="!ctrl.favoriteWFActions.length"
+                                                   class="md-icon-button"
+                                                   ng-click="ctrl.toggleBulkFavorites()">
+                                            <md-icon class="star-yellow"
+                                                     md-svg-icon="{{ctrl.isAllInFavorites() ? 'star' :  'star-outline' }}"></md-icon>
+                                        </md-button>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedFavoriteWFActions.length" md-column
+                                        md-order-by="arName">
+                                        {{lang.arabic_name}}
+                                    </th>
+                                    <th ng-if="!ctrl.selectedFavoriteWFActions.length" md-column
+                                        md-order-by="enName">
+                                        {{lang.english_name}}
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row
+                                    ng-repeat="action in ctrl.favoriteWFActions | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index"
+                                    md-select="action">
+                                    <td md-cell>
+                                        <md-button ng-disabled="!ctrl.favoriteWFActions.length"
+                                                   class="md-icon-button"
+                                                   ng-click="ctrl.toggleFavorite(action)">
+                                            <md-icon class="star-yellow"
+                                                     md-svg-icon="{{action.isFavorite() ? 'star' :  'star-outline' }}"></md-icon>
+                                        </md-button>
+                                    </td>
+                                    <td md-cell>{{action.arName}}</td>
+                                    <td md-cell>{{action.enName}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <md-table-pagination
+                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                md-limit-options="ctrl.grid.limitOptions"
+                                md-limit="ctrl.grid.limit"
+                                md-page="ctrl.grid.page"
+                                md-total="{{ctrl.favoriteWFActions.length}}" md-page-select>
+                        </md-table-pagination>
+                    </md-table-container>
+                </md-card>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary"
+                   ng-click="ctrl.saveFavoriteActions()">
+            {{lang.save}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

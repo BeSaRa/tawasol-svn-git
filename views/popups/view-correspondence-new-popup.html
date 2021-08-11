@@ -39,6 +39,11 @@
         <md-button ng-click="ctrl.toggleFullScreen()" class="md-icon-button">
             <md-icon md-svg-icon="{{ctrl.fullScreen ? 'fullscreen-exit': 'fullscreen'}}"></md-icon>
         </md-button>
+        <md-button ng-if="ctrl.showForwardAction"
+                   ng-click="ctrl.toggleSimpleForward()"
+                   class="md-icon-button">
+            <md-icon md-svg-icon="share-all"></md-icon>
+        </md-button>
         <md-button ng-if="!ctrl.correspondence" ng-click="ctrl.returnBackCorrespondenceInformation()"
                    class="md-icon-button">
             <md-icon md-svg-icon="close" class="red-text"></md-icon>
@@ -400,6 +405,18 @@
                             </ul>
                         </li>
                     </ul>
+                </div>
+            </md-sidenav>
+            <md-sidenav id="simple-forward" ng-if="ctrl.simpleForward && ctrl.correspondence"
+                        md-whiteframe="3"
+                        ng-class="{'md-sidenav-right':lang.current === 'en'}"
+                        md-component-id="sideNav-simple-forward">
+                <div class="p20" scroll-directive>
+                    <simple-forward-directive correspondence="ctrl.correspondence"
+                                              work-item="ctrl.workItem"
+                                              comments="ctrl.comments"
+                                              favorite-users="ctrl.favoriteUsers"
+                                              favorite-work-flow-actions="ctrl.favoriteWFActions"></simple-forward-directive>
                 </div>
             </md-sidenav>
             <div id="iframe-parent" layout="column" class="relative" flex>

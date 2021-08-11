@@ -79,6 +79,7 @@
                 .addToAllWithBase('propertyConfigurations', '/cms-entity/correspondence/property-configuration')
                 .addToAllWithBase('searchDocument', '/cms-entity/correspondence/search/:searchType')
                 .addToAllWithBase('favoritesDWF', '/cms-entity/user/user-frequent-list')
+                .addToAllWithBase('favoriteWFActions','/cms-entity/admin/frequent-user-wf-action')
                 .addToAllWithBase('distributionWF', '/cms-entity/admin/ou-application-user/dist')
                 .addToAllWithBase('distributionWFEUsers', '/cms-entity/admin/application-user/dist/ge-heads')
                 .addToAllWithBase('distributionWFActions', '/cms-entity/admin/wf-action/wf')

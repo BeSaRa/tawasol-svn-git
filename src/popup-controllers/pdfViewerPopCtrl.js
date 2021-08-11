@@ -38,6 +38,10 @@ module.exports = function (app) {
                                                  generalStepElementView,
                                                  downloadService,
                                                  jobTitle,
+                                                 distributionWFService,
+                                                 workflowActionService,
+                                                 userCommentService,
+                                                 $mdSidenav,
                                                  cmsTemplate) {
         'ngInject';
         var self = this;
@@ -107,6 +111,7 @@ module.exports = function (app) {
         // used to store value of attach user name and date toggle
         var cookieKey = employeeService.getEmployee().domainName + '_' + 'attach_username_date';
         self.attachUserInfoToSignature = false;
+        self.showForwardAction = true;
 
         self.documentClassPermissionMap = {
             outgoing: function (isPaper) {
@@ -2320,6 +2325,7 @@ module.exports = function (app) {
          */
         self.$onInit = function () {
             PDFService.cookieAttachedTypeKey = employeeService.getEmployee().domainName + '_' + 'attached_data_type';
+            self.showForwardAction = self.checkShowForwardAction();
             _getNextStepFromSeqWF();
             if (self.nextSeqStep && (self.nextSeqStep.isAuthorizeAndSendStep() || _isLastStep())) {
                 self.notifyPreviousSteps = true;
@@ -2466,6 +2472,43 @@ module.exports = function (app) {
                     self.loadUpdatedContent(self.annotationType !== AnnotationType.SIGNATURE);
                 });
         };
+
+
+        /**
+         * @description toggle simple forward
+         */
+        self.toggleSimpleForward = function () {
+            if (typeof self.favoriteUsers === 'undefined' && typeof self.favoriteWFActions === 'undefined' && typeof self.comments === 'undefined') {
+                $q.all([
+                    distributionWFService.loadFavorites('users'),
+                    workflowActionService.loadFavoriteActions(),
+                    userCommentService.loadUserCommentsForDistribution()
+                ]).then(function (result) {
+                    self.favoriteUsers = result[0];
+                    self.favoriteWFActions = result[1];
+                    self.comments = result[2];
+
+                    _toggleSimpleForward()
+                });
+            } else {
+                _toggleSimpleForward()
+            }
+        }
+
+        function _toggleSimpleForward() {
+            self.simpleForward = true;
+            $timeout(function () {
+                $mdSidenav('sideNav-simple-forward').toggle();
+            }, 100);
+        }
+
+        self.checkShowForwardAction = function () {
+            var forwardAction = _.find(self.generalStepElementView.actions, {text: 'grid_action_forward'});
+            if (!forwardAction || (forwardAction.hasOwnProperty('hide') && forwardAction.hide)) {
+                return false;
+            }
+            return forwardAction.checkShow(forwardAction, self.correspondence);
+        }
 
         /**
          * @description watch destroy event to call disposable method

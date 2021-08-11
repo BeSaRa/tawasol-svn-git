@@ -163,4 +163,5 @@ module.exports = function (app) {
     require('./externalDataSourceImportPopCtrl')(app);
     require('./sendEmailReminderPopCtrl')(app);
     require('./viewDocumentSideViewPopCtrl')(app);
+    require('./favoriteActionsPopCtrl')(app);
 };

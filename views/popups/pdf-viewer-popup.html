@@ -18,6 +18,11 @@
                        ng-click="ctrl.toggleCorrespondenceEditMode()">
                 {{lang.edit_content}}
             </md-button>
+            <md-button ng-if="ctrl.showForwardAction"
+                       ng-click="ctrl.toggleSimpleForward()"
+                       class="md-icon-button">
+                <md-icon md-svg-icon="share-all"></md-icon>
+            </md-button>
             <md-button ng-if="ctrl.correspondence" ng-click="ctrl.closeDialog()"
                        class="md-icon-button">
                 <md-icon md-svg-icon="close" class="red-text"></md-icon>
@@ -31,6 +36,19 @@
                                       work-item="ctrl.correspondence"
                                       correspondence="ctrl.generalStepElementView.correspondence"></viewer-sidebar-directive>
             <div id="pdf-viewer" layout="column" class="relative" flex></div>
+
+            <md-sidenav id="simple-forward" ng-if="ctrl.simpleForward && ctrl.correspondence"
+                        md-whiteframe="3"
+                        ng-class="{'md-sidenav-right':lang.current === 'en'}"
+                        md-component-id="sideNav-simple-forward">
+                <div class="p20" scroll-directive>
+                    <simple-forward-directive work-item="ctrl.correspondence"
+                                              correspondence="ctrl.generalStepElementView.correspondence"
+                                              comments="ctrl.comments"
+                                              favorite-users="ctrl.favoriteUsers"
+                                              favorite-work-flow-actions="ctrl.favoriteWFActions"></simple-forward-directive>
+                </div>
+            </md-sidenav>
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">

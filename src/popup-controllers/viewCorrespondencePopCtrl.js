@@ -29,6 +29,9 @@ module.exports = function (app) {
                                                           $filter,
                                                           reloadCallback,
                                                           manageLaunchWorkflowService,
+                                                          distributionWFService,
+                                                          workflowActionService,
+                                                          userCommentService,
                                                           documentTagService) {
         'ngInject';
         var self = this;
@@ -36,6 +39,7 @@ module.exports = function (app) {
         self.fullScreen = true;
         self.validation = false;
         self.detailsReady = false;
+        self.simpleForward = false;
         self.employeeService = employeeService;
         self.mainDocument = true;
         self.secondURL = null;
@@ -51,6 +55,7 @@ module.exports = function (app) {
 
         self.hideSlowModeToggleButton = false;
         self.isLimitedCentralUnitAccess = false;
+        self.showForwardAction = true;
         self.excludedManagePopupsFromGrids = [
             // 'departmentIncoming',
             'g2gIncoming',
@@ -60,7 +65,6 @@ module.exports = function (app) {
         ];
 
         self.viewURL = '';
-
 
         self.isOfficeOnlineViewer = function (url) {
             return url && url.$$unwrapTrustedValue().indexOf('.aspx') !== -1;
@@ -340,6 +344,43 @@ module.exports = function (app) {
         self.toggleFullScreen = function () {
             self.fullScreen = !self.fullScreen;
         };
+
+        /**
+         * @description toggle simple forward
+         */
+        self.toggleSimpleForward = function () {
+            if (typeof self.favoriteUsers === 'undefined' && typeof self.favoriteWFActions === 'undefined' && typeof self.comments === 'undefined') {
+                $q.all([
+                    distributionWFService.loadFavorites('users'),
+                    workflowActionService.loadFavoriteActions(),
+                    userCommentService.loadUserCommentsForDistribution()
+                ]).then(function (result) {
+                    self.favoriteUsers = result[0];
+                    self.favoriteWFActions = result[1];
+                    self.comments = result[2];
+
+                    _toggleSimpleForward()
+                });
+            } else {
+                _toggleSimpleForward()
+            }
+        }
+
+        function _toggleSimpleForward() {
+            self.simpleForward = true;
+            $timeout(function () {
+                $mdSidenav('sideNav-simple-forward').toggle();
+            }, 100);
+        }
+
+        self.checkShowForwardAction = function () {
+            var forwardAction = _.find(self.actions, {text: 'grid_action_forward'});
+
+            if (!forwardAction || (forwardAction.hasOwnProperty('hide') && forwardAction.hide)) {
+                return false;
+            }
+            return forwardAction.checkShow(forwardAction, self.correspondence);
+        }
 
         self.closeCorrespondenceDialog = function () {
             if (self.workItem) {
@@ -947,6 +988,7 @@ module.exports = function (app) {
             self.model = angular.copy(self.correspondence);
             // set action to review/user-inbox/search will enable edit of security level
             self.action = correspondenceService.getSecurityLevelEnabledActionByScreenName();
+            self.showForwardAction = self.checkShowForwardAction();
 
             if (self.correspondence) {
                 self.isLimitedCentralUnitAccess = correspondenceService.isLimitedCentralUnitAccess(self.correspondence);

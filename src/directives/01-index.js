@@ -125,4 +125,5 @@ module.exports = function (app) {
     require('./viewer-sidebar-directive/01-index')(app);
     require('./annotation-pattern-directive/01-index')(app);
     require('./chat-bot-directive/01-index')(app);
+    require('./simple-forward-directive/01-index')(app);
 };

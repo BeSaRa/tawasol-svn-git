@@ -130,4 +130,5 @@ module.exports = function (app) {
     require('./ExtImportStoreInterceptor')(app);
     require('./UserExtImportStoreInterceptor')(app);
     require('./AzureSearchCriteriaInterceptor')(app);
+    require('./FavoriteActionInterceptor')(app);
 };

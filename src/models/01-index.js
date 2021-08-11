@@ -206,5 +206,6 @@ module.exports = function (app) {
     require('./UserExtImportStore')(app);
     require('./AzureSearchCriteria')(app);
     require('./CorrespondenceView')(app);
+    require('./FavoriteAction')(app);
 
 };
