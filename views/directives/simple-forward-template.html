@@ -1,4 +1,5 @@
 <form layout="column" flex name="simpeForward_form" autocomplete="off">
+    <!-- favorite actions -->
     <div id="favoriteActions" flex layout="column">
         <div flex layout="row" layout-align="start center">
             <span>{{lang.actions}}</span>
@@ -7,8 +8,9 @@
                 <md-icon md-svg-icon="plus"></md-icon>
             </md-button>
         </div>
-        <div flex layout="row" ng-if="ctrl.favorites.actions.total">
-            <md-radio-group ng-model="ctrl.distWorkflowItem.action" aria-labelledby="favoriteWorkFlowActions" layout-fill="">
+        <div flex layout="row" ng-if="ctrl.favoriteWorkFlowActions.length">
+            <md-radio-group ng-model="ctrl.distWorkflowItem.action" aria-labelledby="favoriteWorkFlowActions"
+                            layout-fill="">
                 <div flex layout="row" layout-wrap="" layout-align="start center">
                     <md-radio-button
                             ng-repeat="action in ctrl.favoriteWorkFlowActions | limitTo: ctrl.favorites.actions.limit"
@@ -18,13 +20,14 @@
                 </div>
             </md-radio-group>
         </div>
-        <span flex layout="row" ng-if="!ctrl.favorites.actions.total">{{lang.no_favorite_actions_found}}</span>
+        <span flex layout="row" ng-if="!ctrl.favoriteWorkFlowActions.length">{{lang.no_favorite_actions_found}}</span>
         <span layout-margin="" ng-if="ctrl.favorites.actions.total > ctrl.favoritesLimit">
             <a class="cursor-pointer" ng-click="ctrl.toggleFavorites('actions')">
                 {{ctrl.favorites.actions.expanded ? lang.show_less : lang.show_more}}
             </a>
         </span>
     </div>
+    <!-- comments -->
     <div id="comments">
         <div layout="row">
             <!-- Comment -->
@@ -69,9 +72,12 @@
             </md-input-container>
         </div>
     </div>
+    <!-- favorite users -->
     <div id="users" layout="column">
-        <span ng-if="!ctrl.favorites.users.total">{{lang.no_favorite_users_found}}</span>
-        <div flex layout="row" layout-wrap="" ng-if="ctrl.favorites.users.total">
+        <span ng-if="!ctrl.favoriteUsers.length">{{lang.no_favorite_users_found}}</span>
+        <span ng-if="ctrl.selectedFavUsers.length"
+              layout-margin>({{ctrl.selectedFavUsers.length}}) {{lang.users}}</span>
+        <div flex layout="row" layout-wrap="" ng-if="ctrl.favoriteUsers.length">
             <div ng-repeat="favoriteUser in ctrl.favoriteUsers | limitTo: ctrl.favorites.users.limit"
                  class="custom-chip" ng-class="{'font-bold':favoriteUser.checked}"
                  ng-click="ctrl.toggleFavoriteUser(favoriteUser)">
