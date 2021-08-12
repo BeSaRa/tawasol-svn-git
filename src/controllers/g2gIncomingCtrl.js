@@ -147,7 +147,8 @@ module.exports = function (app) {
                 .then(function (result) {
                     if (result !== 'receive' && result !== 'return') {
                         if (!g2gItem.getInfo().vsId) {
-                            g2gItem.correspondence.vsId = result.vsId;
+                            g2gItem.isOpen = true;
+                            g2gItem.correspondence.vsId = localStorageService.get('vsid');
                             self.replaceRecord(g2gItem);
                         }
                     }
@@ -181,7 +182,8 @@ module.exports = function (app) {
                 .then(function (result) {
                     if (result !== 'receive' && result !== 'return') {
                         if (!g2gItem.getInfo().vsId) {
-                            g2gItem.correspondence.vsId = result.vsId;
+                            g2gItem.isOpen = true;
+                            g2gItem.correspondence.vsId = localStorageService.get('vsid');
                             self.replaceRecord(g2gItem);
                         }
                     }
