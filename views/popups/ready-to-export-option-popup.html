@@ -147,7 +147,7 @@
         </md-button>
         <md-button ng-if="!ctrl.resend && ctrl.isManualExport()" class="md-raised md-primary"
                    ng-click="ctrl.printWithTerminate()">
-            {{lang.print_with_terminate}}
+            {{ctrl.isLimitedCentralUnitAccess ? lang.terminate : lang.print_with_terminate}}
         </md-button>
         <md-button class="md-raised red-text" ng-click="ctrl.closeExportPopupFromCtrl()">
             {{lang.close}}

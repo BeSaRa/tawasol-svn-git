@@ -51,7 +51,7 @@ module.exports = function (app) {
         self.hasExternalSite = _.find(self.correspondenceSites, function (item) {
             return item.siteCategory === 2;
         });
-
+        self.isLimitedCentralUnitAccess = correspondenceService.isLimitedCentralUnitAccess(self.readyToExport);
 
         self.getExportWayText = function () {
             var exportWayMap = {
@@ -312,6 +312,11 @@ module.exports = function (app) {
 
             readyToExport
                 .then(function (result) {
+                    if (self.isLimitedCentralUnitAccess) {
+                        toast.success(langService.get('export_success'));
+                        dialog.hide(result);
+                        return;
+                    }
                     downloadService
                         .controllerMethod
                         .mainDocumentDownload(self.readyToExport, null, true)
