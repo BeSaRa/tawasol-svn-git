@@ -44,7 +44,7 @@ module.exports = function (app) {
 
                 G2G_RECALL_FAILED: 3044,
                 NO_DOCUMENT_SECURITY: 13006,
-                FAIL_DUPLICATION: 2053,
+                FAIL_DUPLICATION: 2056,
                 INVALID_REFERENCE_FORMAT: 3025,
                 // entity connection errors
                 SEC_LDAP_ADDING_ENTITY: 13008,
