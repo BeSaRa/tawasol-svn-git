@@ -574,7 +574,6 @@ module.exports = function (app) {
 
 
         self.savePreparedDocument = function () {
-            debugger
             self.documentInformation = self.docInfo;
             self.templateOrFileName = self.docName;
             if (self.simpleViewUrl) {
