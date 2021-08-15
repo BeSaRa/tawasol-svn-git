@@ -1054,9 +1054,9 @@ module.exports = function (app) {
                         'ngInject';
                         return incomingDepartmentInboxService.loadIncomingDepartmentInboxes();
                     },
-                    emailItem: function (incomingDepartmentInboxes, correspondenceService) {
+                    emailItem: function (incomingDepartmentInboxes, correspondenceService, $stateParams) {
                         'ngInject';
-                        return correspondenceService.getEmailItem(incomingDepartmentInboxes);
+                        return correspondenceService.getEmailItem(incomingDepartmentInboxes, $stateParams);
                     }
                 }
             })
@@ -1072,9 +1072,9 @@ module.exports = function (app) {
                         'ngInject';
                         return returnedDepartmentInboxService.loadReturnedDepartmentInboxes();
                     },
-                    emailItem: function (returnedDepartmentInboxes, correspondenceService) {
+                    emailItem: function (returnedDepartmentInboxes, correspondenceService, $stateParams) {
                         'ngInject';
-                        return correspondenceService.getEmailItem(returnedDepartmentInboxes);
+                        return correspondenceService.getEmailItem(returnedDepartmentInboxes, $stateParams);
                     }
                 }
             })
@@ -1090,9 +1090,9 @@ module.exports = function (app) {
                         'ngInject';
                         return readyToExportService.loadReadyToExports();
                     },
-                    emailItem: function (readyToExports, correspondenceService) {
+                    emailItem: function (readyToExports, correspondenceService, $stateParams) {
                         'ngInject';
-                        return correspondenceService.getEmailItem(readyToExports);
+                        return correspondenceService.getEmailItem(readyToExports, $stateParams);
                     }
                 }
             })

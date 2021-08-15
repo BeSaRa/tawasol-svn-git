@@ -5389,9 +5389,9 @@ module.exports = function (app) {
                 });
         }
 
-        self.getEmailItem = function (items) {
-            var action = $stateParams.action, source = $stateParams.source,
-                wobNumber = $stateParams['wob-num'], item;
+        self.getEmailItem = function (items, stateParams) {
+            var action = stateParams.action, source = stateParams.source,
+                wobNumber = stateParams['wob-num'], item;
 
             if (action && action === 'open' && source && source === 'email' && wobNumber) {
                 item = _.find(items, function (workItem) {
