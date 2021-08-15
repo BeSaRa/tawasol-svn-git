@@ -327,6 +327,15 @@ module.exports = function (app) {
                 var info = this.getInfo();
                 downloadService.getCompositeDocumentEmailContent(info.vsId, info.docClassId);
             };
+            EventHistory.prototype.isTerminated = function () {
+                return this.workflowActionId === 9
+            }
+            EventHistory.prototype.isApproved = function () {
+                return this.workflowActionId === 15;
+            }
+            EventHistory.prototype.isSentToDepartmentOnly = function () {
+                return this.userToRegOuId !== null && this.userToId === null && this.userToOuId === null;
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

@@ -1126,7 +1126,7 @@ module.exports = function (app) {
                         callback: self.sendReminderEmail,
                         class: "action-red",
                         checkShow: function (action, model) {
-                            return true;
+                            return !model.isTerminated() && !model.isApproved() && !model.isSentToDepartmentOnly();
                         }
                     }
                 ]
