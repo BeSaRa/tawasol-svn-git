@@ -24,6 +24,7 @@ module.exports = function (app) {
                                                             mailNotificationService,
                                                             printService,
                                                             SentItemDepartmentInbox,
+                                                            $stateParams,
                                                             gridService) {
         'ngInject';
         var self = this;
@@ -1157,7 +1158,7 @@ module.exports = function (app) {
         self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
 
         self.openEmailItem = function () {
-            var emailItem = correspondenceService.getEmailItem(self.sentItemDepartmentInboxes);
+            var emailItem = correspondenceService.getEmailItem(self.sentItemDepartmentInboxes, $stateParams);
             emailItem ? self.viewDocument(emailItem) : null;
         };
         // to open Email item if it exists.
