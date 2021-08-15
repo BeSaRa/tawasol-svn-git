@@ -38,7 +38,7 @@ module.exports = function (app) {
             }
 
             correspondence
-                .viewFromQueue(self.gridActions, 'returnedCentralArchive', $event, true, function () {
+                .viewReturnedCentralArchiveDocument(self.gridActions, 'returnedCentralArchive', $event, false, function () {
                     self.reloadReturnedCentralArchive(self.grid.page);
                 })
                 .then(function () {

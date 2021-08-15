@@ -421,10 +421,6 @@ module.exports = function (app) {
                     return true;
                 }
             })
-            .getPageNameOverride('returnedCentralArchive', 'draftOutgoing', {
-                disableAll: function (model) {
-                    return true;
-                }
-            });
+            .getPageNameOverride('returnedCentralArchive', 'draftOutgoing');
     })
 };
