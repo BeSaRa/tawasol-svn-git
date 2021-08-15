@@ -972,8 +972,10 @@ module.exports = function (app) {
                     // Document is sent from central archive.
                     // Document is created by central archive for the receiver department.
                     // Document isn’t sent to multiple workflows.
+                    var info = model.getInfo();
                     return model.generalStepElm.fromCentralArchive &&
-                        !model.generalStepElm.sentToMultipleOus;
+                        !model.generalStepElm.sentToMultipleOus &&
+                        info.documentClass === 'incoming';
                 }
             },
             // Receive
