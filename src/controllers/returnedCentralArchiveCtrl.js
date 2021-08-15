@@ -95,7 +95,15 @@ module.exports = function (app) {
          * @param defer
          */
         self.forward = function (correspondence, $event, defer) {
-            correspondence.launchWorkFlow($event, 'forward', 'favorites')
+            var defaultTab = 'favorites';
+            if (correspondence && correspondence.hasContent()) {
+                defaultTab = {
+                    tab: 'registry_organizations',
+                    registryOU: correspondence.registryOU,
+                    ou: correspondence.ou || correspondence.registryOU
+                }
+            }
+            correspondence.launchWorkFlow($event, 'forward', defaultTab)
                 .then(function () {
                     self.reloadReturnedCentralArchive(self.grid.page)
                         .then(function () {
@@ -187,7 +195,7 @@ module.exports = function (app) {
                 showInView: false
             },
             // Forward
-          /*  {
+            {
                 type: 'action',
                 icon: 'share',
                 text: 'grid_action_forward',
@@ -198,7 +206,7 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     return true;
                 }
-            },*/
+            },
             // View Tracking Sheet (with sub menu)
             {
                 type: 'action',
