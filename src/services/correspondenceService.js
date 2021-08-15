@@ -5372,9 +5372,21 @@ module.exports = function (app) {
 
             var isCentralArchive = employeeService.getEmployee().inCentralArchive();
             var currentOUId = employeeService.getEmployee().getOUID();
-            correspondence = correspondence.isWorkItem() ? correspondence.generalStepElm : correspondence;
+            var ouId = _getDocumentOuId(correspondence);
 
-            return isCentralArchive && correspondence.ou && correspondence.ou !== currentOUId;
+            return isCentralArchive && ouId && ouId !== currentOUId;
+        }
+
+        function _getDocumentOuId(correspondence) {
+            var ouId = "";
+            if (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm && correspondence.isWorkItem()) { /* WorkItem */
+                ouId = correspondence.generalStepElm.ou;
+            } else if (correspondence.hasOwnProperty('ouId') && correspondence.ouId) { /* EventHistory */
+                ouId = correspondence.ouId;
+            } else {  /* Correspondence */
+                ouId = correspondence.ou;
+            }
+            return ouId;
         }
 
         self.sendEmailReminder = function (info, reason) {
