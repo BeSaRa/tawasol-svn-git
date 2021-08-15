@@ -4875,7 +4875,9 @@ module.exports = function (app) {
                 bindToController: true,
                 controller: 'sendEmailReminderPopCtrl',
                 escapeToClose: false,
-                correspondence: record.getInfo()
+                locals: {
+                    correspondence: record.getInfo()
+                }
             })
         };
         /**
@@ -5375,7 +5377,7 @@ module.exports = function (app) {
         }
 
         self.sendEmailReminder = function (info, reason) {
-            return $http.put(urlService.reminderEmail + '/' + correspondence.id,
+            return $http.put(urlService.reminderEmail + '/' + info.id,
                 {
                     vsId: info.vsId,
                     workObjectNumber: info.wobNumber,
