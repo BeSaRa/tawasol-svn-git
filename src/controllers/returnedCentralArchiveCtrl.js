@@ -112,6 +112,33 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Archive the returned item
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.archive = function (correspondence, $event, defer) {
+            correspondence.archiveDocument($event)
+                .then(function () {
+                    self.reloadReturnedCentralArchive(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
+                });
+        };
+
+        /**
+         * @description Archive for selected returned correspondence
+         * @param $event
+         */
+        self.archiveBulk = function ($event) {
+            correspondenceService
+                .archiveBulkCorrespondences(self.selectedReturnedArchiveItems, $event)
+                .then(function () {
+                    self.reloadReturnedCentralArchive(self.grid.page);
+                });
+        };
 
         /**
          * @description Array of actions that can be performed on grid
@@ -202,6 +229,18 @@ module.exports = function (app) {
                 shortcut: true,
                 sticky: true,
                 callback: self.forward,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return true;
+                }
+            },
+            // Archive
+            {
+                type: 'action',
+                icon: 'archive',
+                text: 'grid_action_archive',
+                shortcut: true,
+                callback: self.archive,
                 class: "action-green",
                 checkShow: function (action, model) {
                     return true;
