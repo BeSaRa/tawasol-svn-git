@@ -1710,7 +1710,7 @@ module.exports = function (app) {
                             popupNumber: generator.getPopupNumber(),
                             disableEverything: true,
                             pageName: 'none',
-                            reloadCallback:undefined
+                            reloadCallback: undefined
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1788,7 +1788,7 @@ module.exports = function (app) {
                             disableCorrespondence: disableCorrespondence,
                             disableEverything: false,
                             popupNumber: generator.getPopupNumber(),
-                            reloadCallback:undefined
+                            reloadCallback: undefined
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1847,7 +1847,7 @@ module.exports = function (app) {
                                 disableEverything: departmentIncoming,
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: 'none',
-                                reloadCallback:undefined
+                                reloadCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1910,7 +1910,7 @@ module.exports = function (app) {
                             disableEverything: departmentIncoming,
                             popupNumber: generator.getPopupNumber(),
                             pageName: 'none',
-                            reloadCallback:undefined
+                            reloadCallback: undefined
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -2126,7 +2126,7 @@ module.exports = function (app) {
                     content: information,
                     popupNumber: generator.getPopupNumber(),
                     editMode: !justView,
-                    reloadCallback:undefined
+                    reloadCallback: undefined
                 }
             });
         };
@@ -2441,14 +2441,14 @@ module.exports = function (app) {
                             return managerService
                                 .manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event)
                                 .then(function (result) {
-                                    return result.hasSite() ? _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers , reloadCallback) : null;
+                                    return result.hasSite() ? _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers, reloadCallback) : null;
                                 })
                         })
                 } else {
-                    return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers , reloadCallback);
+                    return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers, reloadCallback);
                 }
             }
-            return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers , reloadCallback);
+            return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers, reloadCallback);
 
         };
 
@@ -3916,7 +3916,7 @@ module.exports = function (app) {
                             disableCorrespondence: disableCorrespondence,
                             disableEverything: false,
                             popupNumber: generator.getPopupNumber(),
-                            reloadCallback:undefined
+                            reloadCallback: undefined
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -5372,8 +5372,9 @@ module.exports = function (app) {
 
             var isCentralArchive = employeeService.getEmployee().inCentralArchive();
             var currentOUId = employeeService.getEmployee().getOUID();
+            correspondence = correspondence.isWorkItem() ? correspondence.generalStepElm : correspondence;
 
-            return isCentralArchive && correspondence.ou !== currentOUId;
+            return isCentralArchive && correspondence.ou && correspondence.ou !== currentOUId;
         }
 
         self.sendEmailReminder = function (info, reason) {
