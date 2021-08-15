@@ -674,12 +674,11 @@ module.exports = function (app) {
              * @param queueName
              * @param $event
              * @param viewOnly
-             * @param returnToCentralArchiveEnabled
              * @param reloadCallback
              * @return {*}
              */
-            Correspondence.prototype.viewFromQueue = function (actions, queueName, $event, viewOnly, returnToCentralArchiveEnabled, reloadCallback) {
-                return viewDocumentService.viewQueueDocument(this, actions, queueName, $event, viewOnly, returnToCentralArchiveEnabled, reloadCallback);
+            Correspondence.prototype.viewFromQueue = function (actions, queueName, $event, viewOnly, reloadCallback) {
+                return viewDocumentService.viewQueueDocument(this, actions, queueName, $event, viewOnly, reloadCallback);
             };
             /**
              * @description view from queue as full view.

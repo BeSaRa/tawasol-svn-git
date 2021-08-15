@@ -288,10 +288,9 @@ module.exports = function (app) {
              * @param $event
              * @param pageName
              * @param viewOnly - to hide edit content button in delete pages
-             * @param returnToCentralArchiveEnabled
              * @param reloadCallback
              */
-            self.viewQueueDocument = function (correspondence, actions, pageName, $event, viewOnly, returnToCentralArchiveEnabled, reloadCallback) {
+            self.viewQueueDocument = function (correspondence, actions, pageName, $event, viewOnly, reloadCallback) {
                 var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : new Outgoing(correspondence).getInfo(),
                     disabled;
                 var desktop = new EditInDesktopCallback({
@@ -345,7 +344,6 @@ module.exports = function (app) {
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
                                 pageName: pageName,
-                                returnToCentralArchiveEnabled: returnToCentralArchiveEnabled,
                                 reloadCallback: reloadCallback
                             },
                             resolve: {

@@ -25,7 +25,6 @@ module.exports = function (app) {
         self.returnedArchiveItemsCopy = angular.copy(self.returnedArchiveItems);
         self.selectedReturnedArchiveItems = [];
         self.employeeService = employeeService;
-        self.returnToCentralArchive = rootEntity.getGlobalSettings().returnToCentralArchive;
 
         /**
          * @description View document
@@ -39,7 +38,7 @@ module.exports = function (app) {
             }
 
             correspondence
-                .viewFromQueue(self.gridActions, 'returnedCentralArchive', $event, true, self.returnToCentralArchive, function () {
+                .viewFromQueue(self.gridActions, 'returnedCentralArchive', $event, true, function () {
                     self.reloadReturnedCentralArchive(self.grid.page);
                 })
                 .then(function () {

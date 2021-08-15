@@ -802,10 +802,8 @@ module.exports = function (app) {
 
         self.onOrganizationChange = function (field, $event) {
             self.checkNullValues(field);
-            if (self.returnToCentralArchiveEnabled) {
-                var organization = _.find(self.organizations, {id: self.document.ou})
-                self.document.registryOU = organization.hasRegistry ? self.document.ou : organization.regouId;
-            }
+            var organization = _.find(self.organizations, {id: self.document.ou})
+            self.document.registryOU = organization.hasRegistry ? self.document.ou : organization.regouId;
         }
 
         $timeout(function () {

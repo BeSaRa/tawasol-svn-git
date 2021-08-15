@@ -532,12 +532,7 @@
                                         <span>{{lang.allow_managers_delegate_from_other_departments}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('outofofficeFromAllUsers')}}
                                     </md-switch>
                                 </md-input-container>
-                                <md-input-container flex>
-                                    <md-switch flex ng-model="ctrl.globalSetting.returnToCentralArchive"
-                                               aria-label="{{lang.return_to_central_archive}}">
-                                        <span>{{lang.return_to_central_archive}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('returnToCentralArchive')}}
-                                    </md-switch>
-                                </md-input-container>
+                                <span flex></span>
                             </div>
                             <div layout="row" class="p20">
                                 <!-- Document Security Schema -->
