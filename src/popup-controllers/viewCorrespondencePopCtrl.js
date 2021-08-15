@@ -125,9 +125,6 @@ module.exports = function (app) {
             }
         }
 
-        // set the slowConnectionMode when popup opens
-        _resetViewModeToggle(true);
-
         /**
          * @description Checks if toggle slow connection is enabled for entity from global settings and for user from preferences to switch views
          * @returns {*|boolean}
@@ -958,9 +955,9 @@ module.exports = function (app) {
             self.document_properties.$dirty = true;
         };
 
-        self.$onInit = function () {
+        /*self.$onInit = function () {
             self.hideSlowModeToggleButton = self.psPDFViewerEnabled && self.correspondence && self.correspondence.mimeType === 'application/pdf';
-        }
+        }*/
 
         self.saveTags = function () {
             documentTagService
@@ -995,6 +992,11 @@ module.exports = function (app) {
         });
 
         self.$onInit = function () {
+            // set the slowConnectionMode when popup opens
+            _resetViewModeToggle(true);
+
+            self.hideSlowModeToggleButton = self.psPDFViewerEnabled && self.correspondence && self.correspondence.mimeType === 'application/pdf';
+
             manageLaunchWorkflowService.clearLaunchData();
             self.model = angular.copy(self.correspondence);
             // set action to review/user-inbox/search will enable edit of security level
