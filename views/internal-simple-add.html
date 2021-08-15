@@ -58,7 +58,7 @@
                                 </div>
                                 <div layout="row">
                                     <md-button
-                                            ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)"
+                                            ng-if="ctrl.canSaveAndAnnotate()"
                                             ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, 'saveAndInsert', true)"
                                             ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised"
                                             ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">

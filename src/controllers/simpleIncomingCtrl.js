@@ -13,6 +13,7 @@ module.exports = function (app) {
                                                    // documentTypes,
                                                    officeWebAppService,
                                                    counterService,
+                                                   correspondenceService,
                                                    generator,
                                                    $stateParams,
                                                    // documentFiles,
@@ -259,6 +260,10 @@ module.exports = function (app) {
                 }
             }
         }
+
+        self.canSaveAndAnnotate = function () {
+            return self.hasPSPDFViewer && employeeService.hasPermissionTo(self.annotationPermission) && !correspondenceService.isLimitedCentralUnitAccess(self.incoming);
+        };
 
         self.saveAndAnnotateDocument = function ($event) {
             self.saveCorrespondence(null, false, true)

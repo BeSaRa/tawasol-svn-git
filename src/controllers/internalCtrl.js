@@ -286,6 +286,10 @@ module.exports = function (app) {
             }
         }
 
+        self.canSaveAndAnnotate = function () {
+            return self.hasPSPDFViewer && employeeService.hasPermissionTo(self.annotationPermission) && !correspondenceService.isLimitedCentralUnitAccess(self.internal);
+        };
+
         self.saveAndAnnotateDocument = function ($event) {
             self.saveCorrespondence(false, true).then(function () {
                 self.internal.openForAnnotation()

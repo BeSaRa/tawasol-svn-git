@@ -343,6 +343,10 @@ module.exports = function (app) {
             }
         }
 
+        self.canSaveAndAnnotate = function () {
+            return self.hasPSPDFViewer && employeeService.hasPermissionTo(self.annotationPermission) && !correspondenceService.isLimitedCentralUnitAccess(self.outgoing);
+        };
+
         self.saveAndAnnotateDocument = function ($event) {
             if (!_isReadyToSave('saveAndInsert', true)) {
                 toast.info(langService.get('check_required_fields'));
