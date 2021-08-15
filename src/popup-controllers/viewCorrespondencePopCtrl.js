@@ -501,12 +501,23 @@ module.exports = function (app) {
         self.saveAndSend = function ($event) {
             return self.saveCorrespondenceChanges($event, false)
                 .then(function (result) {
-                    var document = self.pageName === 'returnedCentralArchive' ? self.correspondence : self.workItem;
+                    var defaultTab = 'favorites';
+                    var document = self.workItem;
+                    if (self.pageName === 'returnedCentralArchive') {
+                        document = self.correspondence;
+                        if (document.hasContent()) {
+                            defaultTab = {
+                                tab: 'registry_organizations',
+                                registryOU: document.registryOU,
+                                ou: document.ou || document.registryOU
+                            }
+                        }
+                    }
 
                     if (document.isWorkItem()) {
-                        document.launchWorkFlow($event, 'forward', 'favorites', false, false, reloadCallback)
+                        document.launchWorkFlow($event, 'forward', defaultTab, false, false, reloadCallback)
                     } else {
-                        document.launchWorkFlow($event, 'forward', 'favorites', false, reloadCallback)
+                        document.launchWorkFlow($event, 'forward', defaultTab, false, reloadCallback)
                     }
                 })
         };
