@@ -14,7 +14,8 @@ module.exports = function (app) {
                                                     userClassificationViewPermissionService,
                                                     ApplicationUserLookup,
                                                     ApplicationUserView,
-                                                    organizationService) {
+                                                    organizationService,
+                                                    rootEntity) {
         'ngInject';
         var self = this;
         self.serviceName = 'applicationUserService';
@@ -301,7 +302,8 @@ module.exports = function (app) {
                 applicationUser = applicationUser ? applicationUser : employeeService.getEmployee();
                 var ouApplicationUser = employeeService.getCurrentOUApplicationUser();
                 var employee = employeeService.getEmployee();
-                var isManagerOfCurrentOu = organizationService.isManagerOfCurrentOu(employee);
+                self.globalSetting = rootEntity.returnRootEntity().settings;
+                var isManagerOfCurrentOu = self.globalSetting.outofofficeFromAllUsers && organizationService.isManagerOfCurrentOu(employee);
                 var resolveOuApplicationUsers = $q.defer();
                 return dialog
                     .showDialog({

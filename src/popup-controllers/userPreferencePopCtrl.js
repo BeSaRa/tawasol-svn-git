@@ -115,10 +115,9 @@ module.exports = function (app) {
         self.rootEntity = rootEntity;
         self.organizationsForAppUser = employeeService.getEmployee().ouList;
 
-        /**
-         * @description Current ou application user
-         */
-        self.isManagerOfCurrentOu = organizationService.isManagerOfCurrentOu(self.employee);
+
+        // Current ou application user
+        self.isManagerOfCurrentOu = self.globalSetting.outofofficeFromAllUsers && organizationService.isManagerOfCurrentOu(self.employee);
         self.ouApplicationUser = generator.interceptReceivedInstance('OUApplicationUser', angular.copy(employeeService.getCurrentOUApplicationUser()));
 
         // security levels for current OUApplicationUser
