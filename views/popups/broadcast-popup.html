@@ -36,7 +36,8 @@
                         </div>
                         <div flex ng-if="ctrl.employeeService.hasPermissionTo('BROADCAST_DOCUMENT_ALL')">
                             <md-switch aria-label="{{lang.broadcast_to_all}}"
-                                       ng-model="ctrl.broadcastToAll">
+                                       ng-model="ctrl.broadcastToAll"
+                                       ng-change="ctrl.toggleBroadcastToAll(broadcast_form)">
                                 <span>{{lang.broadcast_to_all}} : </span>
                                 {{ctrl.broadcastToAll ? lang.yes : lang.no }}
                             </md-switch>
@@ -51,7 +52,8 @@
                                            name="ouBroadcast" ng-model="ctrl.ouBroadcast"
                                            md-on-close="ctrl.clearSearchText('ou')"
                                            data-md-container-class="select-header-container sticky-search-bar"
-                                           ng-disabled="ctrl.broadcastToAll">
+                                           ng-disabled="ctrl.broadcastToAll"
+                                           ng-change="ctrl.onSelectBroadcast('ous')">
                                     <md-select-header class="select-header">
                                         <input ng-model="ctrl.ouSearchText"
                                                ng-keydown="ctrl.preventSearchKeyDown($event)"
@@ -71,6 +73,17 @@
                                     <div ng-message="required">{{lang.field_required}}</div>
                                 </div>
                             </md-input-container>
+                            <div flex>
+                                <md-switch aria-label="{{lang.broadcast_to_all_ous}}"
+                                           ng-model="ctrl.broadcastToAllOUs"
+                                           ng-change="ctrl.toggleAllBroadcast('ous')"
+                                           ng-disabled="ctrl.broadcastToAll">
+                                    <span>{{lang.broadcast_to_all_ous}} : </span>
+                                    {{ctrl.broadcastToAllOUs ? lang.yes : lang.no }}
+                                </md-switch>
+                            </div>
+                        </div>
+                        <div layout="row" flex>
                             <!-- Workflow Group -->
                             <md-input-container flex>
                                 <label for="workflowGroupBroadcast">{{lang.workflow_groups}}</label>
@@ -78,7 +91,8 @@
                                            multiple id="workflowGroupBroadcast"
                                            ng-required="!ctrl.ouBroadcast.length"
                                            name="workflowGroupBroadcast" ng-model="ctrl.wfGroupBroadcast"
-                                           ng-disabled="ctrl.broadcastToAll">
+                                           ng-disabled="ctrl.broadcastToAll"
+                                           ng-change="ctrl.onSelectBroadcast('wfgroups')">
                                     <md-option md-truncate
                                                ng-repeat="workflowGroup in ctrl.workflowGroups track by $index"
                                                ng-value="workflowGroup"
@@ -90,6 +104,15 @@
                                     <div ng-message="required">{{lang.field_required}}</div>
                                 </div>
                             </md-input-container>
+                            <div flex>
+                                <md-switch aria-label="{{lang.broadcast_to_all_wf}}"
+                                           ng-model="ctrl.broadcastToAllWF"
+                                           ng-change="ctrl.toggleAllBroadcast('wfgroups')"
+                                           ng-disabled="ctrl.broadcastToAll">
+                                    <span>{{lang.broadcast_to_all_wf}} : </span>
+                                    {{ctrl.broadcastToAllWF ? lang.yes : lang.no }}
+                                </md-switch>
+                            </div>
                         </div>
                         <div layout="row" flex>
                             <!-- Rank -->

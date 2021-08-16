@@ -36,6 +36,8 @@ module.exports = function (app) {
             self.actionSearchText = '';
             self.ouSearchText = '';
             self.broadcastToAll = false;
+            self.broadcastToAllOUs = false;
+            self.broadcastToAllWF = false;
             self.employeeService = employeeService;
             self.broadcastRecordType = {
                 organization: {
@@ -279,6 +281,43 @@ module.exports = function (app) {
             self.clearSearchText = function (fieldType) {
                 self[fieldType + 'SearchText'] = '';
             };
+
+            /***
+             * @description on toggle broadcast to all (organizations,wf groups)
+             * @param broadcastForm
+             */
+            self.toggleBroadcastToAll = function (broadcastForm) {
+                if (self.broadcastToAll) {
+                    self.ouBroadcast = self.wfGroupBroadcast = null;
+                    self.broadcastToAllOUs = self.broadcastToAllWF = false;
+                    broadcastForm.$setUntouched();
+                }
+            }
+
+            /***
+             * @description
+             * @param toggleAll
+             */
+            self.toggleAllBroadcast = function (toggleAll) {
+                if (toggleAll === 'ous') {
+                    self.ouBroadcast = null;
+                    self.ouBroadcast = self.broadcastToAllOUs ? self.organizations : null;
+                } else if (toggleAll === 'wfgroups') {
+                    self.wfGroupBroadcast = self.broadcastToAllWF ? self.workflowGroups : null;
+                }
+            }
+
+            /***
+             * @description
+             * @param toggleAll
+             */
+            self.onSelectBroadcast = function (toggleAll) {
+                if (toggleAll === 'ous') {
+                    self.broadcastToAllOUs = !!(self.ouBroadcast && self.ouBroadcast.length && self.ouBroadcast.length === self.organizations.length);
+                } else if (toggleAll === 'wfgroups') {
+                    self.broadcastToAllWF = !!(self.wfGroupBroadcast && self.wfGroupBroadcast.length && self.wfGroupBroadcast.length === self.workflowGroups.length);
+                }
+            }
 
             /**
              * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
