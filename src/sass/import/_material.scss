@@ -51,6 +51,12 @@ md-menu-item.selected > button:not([disabled]) {
 .md-button.selected:not([disabled]) {
   background-color: rgba(158, 158, 158, 0.2) !important;
 }
+
 md-radio-button .md-label {
   margin-left: 20px !important;
+}
+
+
+md-tabs.md-default-theme .md-tab.md-active, md-tabs .md-tab.md-active, md-tabs.md-default-theme .md-tab.md-active md-icon, md-tabs .md-tab.md-active md-icon, md-tabs.md-default-theme .md-tab.md-focused, md-tabs .md-tab.md-focused, md-tabs.md-default-theme .md-tab.md-focused md-icon, md-tabs .md-tab.md-focused md-icon {
+  color: rgb(63, 81, 181) !important;
 }
