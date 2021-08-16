@@ -234,7 +234,7 @@ module.exports = function (app) {
                     .then(function (reason) {
                         var items = _.map(sentItems, function (sentItem) {
                             return {
-                                wobNum: sentItem.getInfo().wobNumber,
+                                wobNum: sentItem.wfId,
                                 comment: reason
                             }
                         });
