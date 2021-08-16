@@ -56,6 +56,7 @@ module.exports = function (app) {
             self.oTPMobilityEnabled = false;
             self.signAnnotationSettings = '';
             self.searchDefaultView = 1;
+            self.userWFDistView = 1;
 
             var collectionResults = [
                 'reminderSmsPriority',
@@ -100,7 +101,8 @@ module.exports = function (app) {
                 'reminderSmsdays',
                 'reminderEmailDays',
                 'viewInboxAsGrid',
-                'searchDefaultView'
+                'searchDefaultView',
+                'userWFDistView'
             ];
 
             if (model)

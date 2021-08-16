@@ -394,11 +394,24 @@
                                                 {{searchDefaultView.getTranslatedName()}}
                                             </md-option>
                                         </md-select>
-                                        <div ng-messages="applicationUserForm.defaultDisplayLang.$error">
+                                        <div ng-messages="applicationUserForm.searchDefaultView.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
-                                    <span flex></span>
+                                    <!-- userWFDistView -->
+                                    <md-input-container flex>
+                                        <label for="userWFDistView">{{lang.sort_ous_based_on}}</label>
+                                        <md-select id="userWFDistView" name="userWFDistView" required
+                                                   ng-model="ctrl.applicationUser.userWFDistView">
+                                            <md-option ng-value="userWFDistView.lookupKey"
+                                                       ng-repeat="userWFDistView in ctrl.userDistWFViewList track by $index">
+                                                {{userWFDistView.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="applicationUserForm.userWFDistView.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
                                 </div>
                                 <div layout="row">
                                     <md-switch flex ng-model="ctrl.applicationUser.slowConnectionMode"

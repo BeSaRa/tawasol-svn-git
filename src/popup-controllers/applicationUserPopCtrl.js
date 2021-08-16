@@ -175,6 +175,7 @@ module.exports = function (app) {
         self.genders = lookupService.returnLookups(lookupService.gender);
         self.languages = lookupService.returnLookups(lookupService.language);
         self.searchDefaultViewList = lookupService.returnLookups(lookupService.searchDefaultView);
+        self.userDistWFViewList = lookupService.returnLookups(lookupService.userDistWFView);
 
         self.jobTitles = jobTitleService.jobTitles;
         self.ranks = rankService.ranks;

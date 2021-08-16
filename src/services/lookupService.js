@@ -36,7 +36,8 @@ module.exports = function (app) {
         self.taskState = 'taskState';
         self.attachmentPriority = 'attachmentPriority';
         self.digitalCertificateMode = 'digitalCertificate';
-        self.searchDefaultView = 'searchDefaultView'
+        self.searchDefaultView = 'searchDefaultView';
+        self.userDistWFView = 'userDistWFView';
 
         // this propertyConfiguration related to the property configurations Service.
         self.propertyConfigurations = {
@@ -91,7 +92,7 @@ module.exports = function (app) {
             var lookups = self.lookups.hasOwnProperty(lookupName) ? self.lookups[lookupName] : [];
             if (lookups.length && lookupName === self.documentClass) {
                 lookups = _.filter(lookups, function (lookup) {
-                    if(isDocumentSecurity)
+                    if (isDocumentSecurity)
                         return self.defaultDocumentClassesDocumentSecurity.indexOf(lookup.lookupStrKey.toLowerCase()) > -1;
                     return self.defaultDocumentClasses.indexOf(lookup.lookupStrKey.toLowerCase()) > -1;
                 });
@@ -224,7 +225,7 @@ module.exports = function (app) {
          * @returns {Array}
          */
         self.getAllPropertyConfigurations = function () {
-            var propConfigs = self.getPropertyConfigurations(), allPropertyConfigs =[];
+            var propConfigs = self.getPropertyConfigurations(), allPropertyConfigs = [];
             _.map(Object.keys(propConfigs), function (documentClass) {
                 allPropertyConfigs = allPropertyConfigs.concat(propConfigs[documentClass]);
                 return propConfigs;
