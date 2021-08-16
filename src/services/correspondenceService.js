@@ -5401,7 +5401,13 @@ module.exports = function (app) {
                 });
         }
 
-        self.getEmailItem = function (items, stateParams) {
+        /***
+         * @description get email items by (action,source,web num)
+         * @param items
+         * @param stateParams
+         * @returns {boolean|*}
+         */
+        self.getEmailItemByWobNum = function (items, stateParams) {
             var action = stateParams.action, source = stateParams.source,
                 wobNumber = stateParams['wob-num'], item;
 
@@ -5412,6 +5418,30 @@ module.exports = function (app) {
 
                 return !item ? (dialog.errorMessage(langService.get('work_item_not_found').change({
                     wobNumber: wobNumber
+                })).then(function () {
+                    return false;
+                })) : item;
+            }
+            return false;
+        }
+
+        /***
+         * @description get email items by (action,source,vsid)
+         * @param items
+         * @param stateParams
+         * @returns {boolean|*}
+         */
+        self.getEmailItemByVsId = function (items, stateParams) {
+            var action = stateParams.action, source = stateParams.source,
+                vsid = stateParams['vsid'], item;
+
+            if (action && action === 'open' && source && source === 'email' && vsid) {
+                item = _.find(items, function (workItem) {
+                    return workItem.generalStepElm.vsId === vsid;
+                });
+
+                return !item ? (dialog.errorMessage(langService.get('work_item_not_found').change({
+                    wobNumber: item.getInfo().wobNumber
                 })).then(function () {
                     return false;
                 })) : item;

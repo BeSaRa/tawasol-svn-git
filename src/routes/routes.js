@@ -1044,7 +1044,7 @@ module.exports = function (app) {
             })
             // incoming department inbox
             .state('app.department-inbox.incoming', {
-                url: '/incoming?action?source?wob-num',
+                url: '/incoming?action?source?vsid',
                 templateUrl: templateProvider.getView('department-inbox-incoming'),
                 controller: 'incomingDepartmentInboxCtrl',
                 controllerAs: 'ctrl',
@@ -1056,7 +1056,7 @@ module.exports = function (app) {
                     },
                     emailItem: function (incomingDepartmentInboxes, correspondenceService, $stateParams) {
                         'ngInject';
-                        return correspondenceService.getEmailItem(incomingDepartmentInboxes, $stateParams);
+                        return correspondenceService.getEmailItemByVsId(incomingDepartmentInboxes, $stateParams);
                     }
                 }
             })
@@ -1074,7 +1074,7 @@ module.exports = function (app) {
                     },
                     emailItem: function (returnedDepartmentInboxes, correspondenceService, $stateParams) {
                         'ngInject';
-                        return correspondenceService.getEmailItem(returnedDepartmentInboxes, $stateParams);
+                        return correspondenceService.getEmailItemByWobNum(returnedDepartmentInboxes, $stateParams);
                     }
                 }
             })
@@ -1092,7 +1092,7 @@ module.exports = function (app) {
                     },
                     emailItem: function (readyToExports, correspondenceService, $stateParams) {
                         'ngInject';
-                        return correspondenceService.getEmailItem(readyToExports, $stateParams);
+                        return correspondenceService.getEmailItemByWobNum(readyToExports, $stateParams);
                     }
                 }
             })
