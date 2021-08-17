@@ -1080,7 +1080,7 @@ module.exports = function (app) {
             })
             // ready to export
             .state('app.department-inbox.ready-to-export', {
-                url: '/ready-to-export?action?source?wob-num',
+                url: '/ready-to-export?action?source?vsid',
                 templateUrl: templateProvider.getView('department-inbox-ready-to-export'),
                 controller: 'readyToExportDepartmentInboxCtrl',
                 controllerAs: 'ctrl',
@@ -1092,7 +1092,7 @@ module.exports = function (app) {
                     },
                     emailItem: function (readyToExports, correspondenceService, $stateParams) {
                         'ngInject';
-                        return correspondenceService.getEmailItemByWobNum(readyToExports, $stateParams);
+                        return correspondenceService.getEmailItemByVsId(readyToExports, $stateParams);
                     }
                 }
             })
