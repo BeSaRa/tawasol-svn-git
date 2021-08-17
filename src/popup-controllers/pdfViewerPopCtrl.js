@@ -2511,6 +2511,10 @@ module.exports = function (app) {
         }
 
         function _findForwardAction() {
+            if (!self.generalStepElementView || !self.generalStepElementView.actions) {
+                return null;
+            }
+
             return _.find(self.generalStepElementView.actions, function (action) {
                 return action.hasOwnProperty('text') &&
                     (action.text.indexOf('grid_action_launch_distribution_workflow') > -1 ||

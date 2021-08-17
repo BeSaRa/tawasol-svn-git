@@ -378,6 +378,10 @@ module.exports = function (app) {
         }
 
         function _findForwardAction() {
+            if (!self.actions) {
+                return null;
+            }
+
             return _.find(self.actions, function (action) {
                 return action.hasOwnProperty('text') &&
                     (action.text.indexOf('grid_action_launch_distribution_workflow') > -1 ||
