@@ -41,8 +41,8 @@
                         md-whiteframe="3"
                         ng-class="{'md-sidenav-right':lang.current === 'en'}"
                         md-component-id="sideNav-simple-forward">
-                <div class="p20" scroll-directive>
-                    <simple-forward-directive work-item="ctrl.correspondence"
+                <div class="p020" layout="column" scroll-directive>
+                    <simple-forward-directive flex work-item="ctrl.correspondence"
                                               correspondence="ctrl.generalStepElementView.correspondence"
                                               comments="ctrl.comments"
                                               favorite-users="ctrl.favoriteUsers"
@@ -67,7 +67,8 @@
         </div>
         <div ng-if="ctrl.sequentialWF">
             <!--tooltip="{{ctrl.nextSeqStep.getTranslatedName()}}"-->
-            <md-button ng-if="!ctrl.isLaunchStep && ctrl.employeeService.hasPermissionTo('TERMINATE_SEQ_WF')" ng-disabled="ctrl.disableSaveButton"
+            <md-button ng-if="!ctrl.isLaunchStep && ctrl.employeeService.hasPermissionTo('TERMINATE_SEQ_WF')"
+                       ng-disabled="ctrl.disableSaveButton"
                        class="md-raised md-primary"
                        ng-click="ctrl.terminateSEQWF()">{{lang.terminate}}
             </md-button>

@@ -13,7 +13,8 @@
                             layout-fill="">
                 <div flex layout="row" layout-wrap="" layout-align="start center">
                     <md-radio-button
-                            ng-repeat="action in ctrl.favoriteWorkFlowActions | limitTo: ctrl.favorites.actions.limit"
+                            ng-class="{'display-none': !ctrl.inRange($index)}"
+                            ng-repeat="action in ctrl.favoriteWorkFlowActions"
                             ng-value="action" class="simple-padding">
                         <span>{{action.actionInfo.getTranslatedName()}}</span>
                     </md-radio-button>
@@ -28,7 +29,7 @@
         </span>
     </div>
     <!-- comments -->
-    <div id="comments">
+    <div id="comments-wrapper">
         <div layout="row">
             <!-- Comment -->
             <md-input-container flex>

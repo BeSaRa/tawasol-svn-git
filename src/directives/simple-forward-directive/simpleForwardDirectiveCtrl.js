@@ -25,20 +25,30 @@ module.exports = function (app) {
         self.comment = null;
         self.commentSearchText = '';
         self.favoritesLimit = 10;
+        self.favoriteUsers = [];
+        self.favoriteWorkFlowActions = []
+
+        self.favorites = {
+            users: {
+                total: self.favoriteUsers.length,
+            },
+            actions: {
+                total: self.favoriteWorkFlowActions.length,
+                expanded: false,
+                limit: self.favoritesLimit
+            }
+        };
 
         $timeout(function () {
             self.favoriteUsers = _mapWFUser(self.favoriteUsers);
             self.record = self.workItem || self.correspondence;
             self.actionKey = self.record.hasActiveSeqWF() ? 'launch' : 'forward';
-
             self.favorites = {
                 users: {
-                    total: self.favoriteUsers.length,
-                    expanded: false,
-                    limit: self.favoritesLimit
+                    total: self.favoriteUsers.length || 0,
                 },
                 actions: {
-                    total: self.favoriteWorkFlowActions.length,
+                    total: self.favoriteWorkFlowActions.length || 0,
                     expanded: false,
                     limit: self.favoritesLimit
                 }
@@ -163,6 +173,10 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadFavoriteActions();
                 })
+        }
+
+        self.inRange = function (index) {
+            return self.favorites.actions.expanded ? true : (index + 1) <= self.favorites.actions.limit
         }
 
     });
