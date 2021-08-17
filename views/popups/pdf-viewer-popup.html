@@ -20,7 +20,9 @@
             </md-button>
             <md-button ng-if="ctrl.showForwardAction"
                        ng-click="ctrl.toggleSimpleForward()"
-                       class="md-icon-button">
+                       class="md-icon-button"
+                       tooltip-direction="{{lang.current === 'ar'? 'right':'left'}}"
+                       tooltip="{{lang.get(ctrl.forwardAction.text)}}">
                 <md-icon md-svg-icon="share-all"></md-icon>
             </md-button>
             <md-button ng-if="ctrl.correspondence" ng-click="ctrl.closeDialog()"

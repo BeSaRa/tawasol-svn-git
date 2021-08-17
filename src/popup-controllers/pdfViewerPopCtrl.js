@@ -2325,6 +2325,7 @@ module.exports = function (app) {
          */
         self.$onInit = function () {
             PDFService.cookieAttachedTypeKey = employeeService.getEmployee().domainName + '_' + 'attached_data_type';
+            self.forwardAction = _findForwardAction();
             self.showForwardAction = self.checkShowForwardAction();
             _getNextStepFromSeqWF();
             if (self.nextSeqStep && (self.nextSeqStep.isAuthorizeAndSendStep() || _isLastStep())) {
@@ -2503,11 +2504,19 @@ module.exports = function (app) {
         }
 
         self.checkShowForwardAction = function () {
-            var forwardAction = _.find(self.generalStepElementView.actions, {text: 'grid_action_forward'});
-            if (!forwardAction || (forwardAction.hasOwnProperty('hide') && forwardAction.hide)) {
+            if (!self.forwardAction || (self.forwardAction.hasOwnProperty('hide') && self.forwardAction.hide)) {
                 return false;
             }
-            return forwardAction.checkShow(forwardAction, self.correspondence);
+            return self.forwardAction.checkShow(self.forwardAction, self.correspondence);
+        }
+
+        function _findForwardAction() {
+            return _.find(self.generalStepElementView.actions, function (action) {
+                return action.hasOwnProperty('text') &&
+                    (action.text.indexOf('grid_action_launch_distribution_workflow') > -1 ||
+                        action.text.indexOf('grid_action_forward') > -1 ||
+                        action.text.indexOf('grid_action_accept_launch_distribution_workflow') > -1)
+            });
         }
 
         /**

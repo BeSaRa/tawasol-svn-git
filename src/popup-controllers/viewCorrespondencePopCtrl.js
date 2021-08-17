@@ -371,17 +371,19 @@ module.exports = function (app) {
         }
 
         self.checkShowForwardAction = function () {
-            var forwardAction = _.find(self.actions, function (action) {
+            if (!self.forwardAction || (self.forwardAction.hasOwnProperty('hide') && self.forwardAction.hide)) {
+                return false;
+            }
+            return self.forwardAction.checkShow(self.forwardAction, self.correspondence);
+        }
+
+        function _findForwardAction() {
+            return _.find(self.actions, function (action) {
                 return action.hasOwnProperty('text') &&
                     (action.text.indexOf('grid_action_launch_distribution_workflow') > -1 ||
                         action.text.indexOf('grid_action_forward') > -1 ||
                         action.text.indexOf('grid_action_accept_launch_distribution_workflow') > -1)
             });
-
-            if (!forwardAction || (forwardAction.hasOwnProperty('hide') && forwardAction.hide)) {
-                return false;
-            }
-            return forwardAction.checkShow(forwardAction, self.correspondence);
         }
 
         self.closeCorrespondenceDialog = function () {
@@ -999,13 +1001,13 @@ module.exports = function (app) {
         self.$onInit = function () {
             // set the slowConnectionMode when popup opens
             _resetViewModeToggle(true);
-
             self.hideSlowModeToggleButton = self.psPDFViewerEnabled && self.correspondence && self.correspondence.mimeType === 'application/pdf';
 
             manageLaunchWorkflowService.clearLaunchData();
             self.model = angular.copy(self.correspondence);
             // set action to review/user-inbox/search will enable edit of security level
             self.action = correspondenceService.getSecurityLevelEnabledActionByScreenName();
+            self.forwardAction = _findForwardAction();
             self.showForwardAction = self.checkShowForwardAction();
 
             if (self.correspondence) {
