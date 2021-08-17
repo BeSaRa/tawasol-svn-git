@@ -43,7 +43,7 @@
                    ng-click="ctrl.toggleSimpleForward()"
                    class="md-icon-button"
                    tooltip-direction="{{lang.current === 'ar'? 'right':'left'}}"
-                   tooltip="{{lang.get(ctrl.forwardAction.text)}}">
+                   tooltip="{{ctrl.forwardAction.hasOwnProperty('textCallback')? lang.get(ctrl.forwardAction.textCallback(ctrl.correspondence)): lang.get(ctrl.forwardAction.text)}}">
             <md-icon md-svg-icon="share-all"></md-icon>
         </md-button>
         <md-button ng-if="!ctrl.correspondence" ng-click="ctrl.returnBackCorrespondenceInformation()"
