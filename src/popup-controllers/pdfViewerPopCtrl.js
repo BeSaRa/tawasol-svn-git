@@ -195,9 +195,7 @@ module.exports = function (app) {
                 type: "custom",
                 id: "bookmark-shortcut",
                 title: "Bookmarks",
-                icon: "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\">\n" +
-                    "    <path fill=\"currentColor\" d=\"M15,5A2,2 0 0,1 17,7V23L10,20L3,23V7C3,5.89 3.9,5 5,5H15M9,1H19A2,2 0 0,1 21,3V19L19,18.13V3H7A2,2 0 0,1 9,1Z\" />\n" +
-                    "</svg>",
+                icon: "./assets/images/bookmark.svg",
                 onPress: function () {
                     self.currentInstance.setViewState((state) => {
                         self.currentInstance.setToolbarItems(items => {
@@ -425,6 +423,18 @@ module.exports = function (app) {
             if (self.info.isAttachment && self.correspondence.isOfficial) {
                 toolbarInstance = toolbarInstance.filter(item => {
                     return item.type === 'custom' ? !_itemInOfficialExcludedList(item.id) : !_itemInOfficialExcludedList(item.type);
+                });
+            }
+
+            var isDownloadAllowed = true;
+            if (self.correspondence.isCorrespondenceApprovedBefore() && self.info.authorizeByAnnotation) {
+                isDownloadAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
+            }
+            isDownloadAllowed = isDownloadAllowed && employeeService.hasPermissionTo("DOWNLOAD_MAIN_DOCUMENT");
+
+            if (!isDownloadAllowed) {
+                toolbarInstance = toolbarInstance.filter(item => {
+                    return item.type !== 'export-pdf';
                 });
             }
 

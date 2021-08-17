@@ -33,7 +33,8 @@
                         flex frameborder="0"></iframe>
                 <pspdf-viewer-directive doc-url="ctrl.replyToViewURL"
                                         ng-if="ctrl.displayMainPSPDFViewer() && !ctrl.isLimitedCentralUnitAccess"
-                                        id="pdfViewer" class="iframe-main-document" flex></pspdf-viewer-directive>
+                                        id="pdfViewer" class="iframe-main-document" flex
+                                        correspondence="ctrl.document"></pspdf-viewer-directive>
             </div>
         </div>
     </md-dialog-content>

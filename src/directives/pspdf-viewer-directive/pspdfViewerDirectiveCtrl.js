@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('pspdfViewerDirectiveCtrl', function (PSPDFKit, PDFService , configurationService, rootEntity, employeeService, $timeout, $element, downloadService) {
+    app.controller('pspdfViewerDirectiveCtrl', function (PSPDFKit, PDFService, configurationService, rootEntity, employeeService, $timeout, $element, _) {
         'ngInject';
         var self = this;
         self.controllerName = 'pspdfViewerDirectiveCtrl';
@@ -17,7 +17,7 @@ module.exports = function (app) {
         var bookmarkButton = {
             type: "custom",
             id: "bookmark-shortcut",
-            title: "Export",
+            title: "Bookmarks",
             icon: "./assets/images/bookmark.svg",
             onPress: function () {
                 self.instance.setViewState((state) => {
@@ -41,19 +41,32 @@ module.exports = function (app) {
             });
             self.destroyInstance();
 
+            var defaultToolbar = angular.copy(PSPDFKit.defaultToolbarItems);
+
+            var isDownloadAllowed = true;
+            if (self.correspondence.isCorrespondenceApprovedBefore() && self.correspondence.getInfo().authorizeByAnnotation) {
+                isDownloadAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
+            }
+            isDownloadAllowed = isDownloadAllowed && employeeService.hasPermissionTo("DOWNLOAD_MAIN_DOCUMENT");
+
+            if (!isDownloadAllowed) {
+                defaultToolbar = defaultToolbar.concat(bookmarkButton).filter(item => {
+                    return item.type !== 'export-pdf';
+                });
+            }
 
             var configuration = {
                 baseUrl: (location.protocol + '//' + location.host + '/' + (configurationService.APP_CONTEXT ? configurationService.APP_CONTEXT + '/' : '')),
                 container: self.container,
                 printMode: PSPDFKit.PrintMode.EXPORT_PDF,
-                toolbarItems: PSPDFKit.defaultToolbarItems.concat(bookmarkButton),
+                toolbarItems: defaultToolbar,
                 document: typeof self.docUrl === 'object' ? self.docUrl.$$unwrapTrustedValue() : self.docUrl,
                 licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
                 initialViewState: initialViewState,
                 customFonts: PDFService.customFonts
             }
 
-            if(configurationService.PSPDF_LICENSE_KEY){
+            if (configurationService.PSPDF_LICENSE_KEY) {
                 delete configuration.licenseKey;
             }
 
