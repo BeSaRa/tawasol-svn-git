@@ -812,7 +812,7 @@ module.exports = function (app) {
             return self.searchByCriteria({
                 regOu: registryOuId,
                 includeChildOus: includeChildOus,
-                outOfOffice: false
+                outOfOffice: true
             }).then(function (result) {
                 return _filterProxy(_mapProxyUser(result), excludeApplicationUserId);
             })
