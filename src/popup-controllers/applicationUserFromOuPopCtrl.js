@@ -1085,7 +1085,7 @@ module.exports = function (app) {
                                 userOuPermissions: userOuPermissions
                             },
                             resolve: {
-                                permissions: function(roleService){
+                                permissions: function (roleService) {
                                     'ngInject';
                                     return roleService.getPermissionByGroup(null, true);
                                 },
@@ -1175,7 +1175,7 @@ module.exports = function (app) {
                         availableProxies: function (ouApplicationUserService) {
                             'ngInject';
                             return ouApplicationUserService
-                                .getAvailableProxies(null, true, ouApplicationUser.applicationUser.id)
+                                .getAvailableProxies(null, true, ouApplicationUser.applicationUser.id, true)
                                 .then(function (result) {
                                     return result;
                                 });

@@ -808,11 +808,11 @@ module.exports = function (app) {
          * @param includeChildOus
          * @param excludeApplicationUserId
          */
-        self.getAvailableProxies = function (registryOuId, includeChildOus, excludeApplicationUserId) {
+        self.getAvailableProxies = function (registryOuId, includeChildOus, excludeApplicationUserId,outOfOffice) {
             return self.searchByCriteria({
                 regOu: registryOuId,
                 includeChildOus: includeChildOus,
-                outOfOffice: true
+                outOfOffice: outOfOffice
             }).then(function (result) {
                 return _filterProxy(_mapProxyUser(result), excludeApplicationUserId);
             })

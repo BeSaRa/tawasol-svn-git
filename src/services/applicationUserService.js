@@ -388,7 +388,7 @@ module.exports = function (app) {
                             availableProxies: function (ouApplicationUserService) {
                                 'ngInject';
                                 return isManagerOfCurrentOu ? [] : resolveOuApplicationUsers.promise.then(function () {
-                                    return _getProxyUsers(ouApplicationUserService, applicationUser, ouApplicationUser);
+                                    return _getProxyUsers(ouApplicationUserService, applicationUser, ouApplicationUser, false);
                                 });
                             },
                             proxyOrganizations: function (organizationService) {
@@ -426,9 +426,9 @@ module.exports = function (app) {
             }
         };
 
-        function _getProxyUsers(ouApplicationUserService, applicationUser, ouApplicationUser) {
+        function _getProxyUsers(ouApplicationUserService, applicationUser, ouApplicationUser, outOfOffice) {
             return ouApplicationUserService
-                .getAvailableProxies(ouApplicationUser.getRegistryOUID(), true, applicationUser.id)
+                .getAvailableProxies(ouApplicationUser.getRegistryOUID(), true, applicationUser.id, outOfOffice)
                 .then(function (result) {
                     var proxyInfo = applicationUser.hasProxy() ? applicationUser.getProxyInformation() : null;
                     return applicationUser.hasProxy() ?
