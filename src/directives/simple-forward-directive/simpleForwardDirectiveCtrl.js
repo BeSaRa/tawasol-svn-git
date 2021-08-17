@@ -31,6 +31,8 @@ module.exports = function (app) {
         self.favorites = {
             users: {
                 total: self.favoriteUsers.length,
+                expanded: false,
+                limit: self.favoritesLimit
             },
             actions: {
                 total: self.favoriteWorkFlowActions.length,
@@ -46,6 +48,8 @@ module.exports = function (app) {
             self.favorites = {
                 users: {
                     total: self.favoriteUsers.length || 0,
+                    expanded: false,
+                    limit: self.favoritesLimit
                 },
                 actions: {
                     total: self.favoriteWorkFlowActions.length || 0,
