@@ -34,6 +34,7 @@ module.exports = function (app) {
         self.model = angular.copy(ouApplicationUser);
         //self.currentEmployee = employeeService.getEmployee();
         self.applicationUser = self.model.applicationUser;
+        self.applicationUserCopy = angular.copy(self.applicationUser);
         self.authorityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
         //proxy security levels for current ouApplication Users
         self.securityLevels = self.ouApplicationUser.getSecurityLevels();
@@ -89,7 +90,7 @@ module.exports = function (app) {
             if (!self.ouApplicationUser.proxyUser && !self.ouApplicationUser.proxyAuthorityLevels) {
                 self.applicationUser.outOfOffice = false;
             }
-        };
+        }
 
         /**
          * @description to check if the current user has valid proxy or not.
@@ -105,9 +106,6 @@ module.exports = function (app) {
                 self.calculatedMinProxyEndDate = null;
             }
         }
-
-        _checkProxyDate(self.ouApplicationUser);
-        _resetOutOfOfficeIfProxyUserAndAuthorityLevelsEmpty();
 
         /**
          * @description to check if the security level included for selected proxyUser.
@@ -191,6 +189,8 @@ module.exports = function (app) {
             self.ouApplicationUser.proxyAuthorityLevels = null;
             self.ouApplicationUser.proxyStartDate = null;
             self.ouApplicationUser.proxyEndDate = null;
+            self.calculatedMaxProxyStartDate = null;
+            self.calculatedMinProxyEndDate = null;
             self.filteredSecurityLevels = _.filter(self.securityLevels, self.isSecurityLevelInclude);
             if (!proxyUser) {
                 self.ouApplicationUser.proxyUser = null;
@@ -214,19 +214,18 @@ module.exports = function (app) {
          * @description Saves the ou application user data when not out of office
          */
         self.changeOutOfOffice = function () {
-            if (!self.applicationUser.outOfOffice) {
-                if (self.model.proxyUser) {
-                    //  self.ouApplicationUser.proxyUser = null;
-                    //  self.selectedProxyUser = null;
-                    self.ouApplicationUser.proxyStartDate = null;
-                    self.ouApplicationUser.proxyEndDate = null;
-                    //  self.ouApplicationUser.proxyAuthorityLevels = null;
-                    self.ouApplicationUser.viewProxyMessage = false;
-                    self.ouApplicationUser.proxyMessage = null;
-                }
+            if (!self.applicationUser.outOfOffice && self.model.proxyUser) {
+                self.ouApplicationUser.proxyUser = null;
+                self.selectedProxyUser = null;
+                self.ouApplicationUser.proxyStartDate = null;
+                self.ouApplicationUser.proxyEndDate = null;
+                self.ouApplicationUser.proxyAuthorityLevels = null;
+                self.ouApplicationUser.viewProxyMessage = false;
+                self.ouApplicationUser.proxyMessage = null;
+
+                self.calculatedMaxProxyStartDate = null;
+                self.calculatedMinProxyEndDate = null;
             }
-            /*if (!self.isOutOfOffice)
-                self.ouApplicationUser.applicationUser.outOfOffice = false;*/
         };
 
         /**
@@ -374,7 +373,42 @@ module.exports = function (app) {
             return !self.selectedProxyUser && self.selectedProxyUser === self.model.proxyUser;
         };
 
+
+        var _isOutOfOfficeUpdated = function () {
+            var newOutOfOffice = !!self.applicationUser.outOfOffice,
+                oldOutOfOffice = !!self.applicationUserCopy.outOfOffice,
+                newSelectedProxyUser = self.selectedProxyUser ? self.selectedProxyUser.id : 0,
+                oldSelectedProxyUser = self.model.getSelectedProxyId() || 0,
+                newAuthorityLevels = self.ouApplicationUser.proxyAuthorityLevels && self.ouApplicationUser.proxyAuthorityLevels.length > 0 ? generator.getResultFromSelectedCollection(self.ouApplicationUser.proxyAuthorityLevels, 'lookupKey') : -1,
+                oldAuthorityLevels = self.model.proxyAuthorityLevels && self.model.proxyAuthorityLevels.length > 0 ? generator.getResultFromSelectedCollection(self.model.proxyAuthorityLevels, 'lookupKey') : -1,
+                newProxyStartDate = self.ouApplicationUser.proxyStartDate ? moment(self.ouApplicationUser.proxyStartDate).startOf('day').valueOf() : '',
+                oldProxyStartDate = self.model.proxyStartDate ? moment(self.model.proxyStartDate).startOf('day').valueOf() : '',
+                newProxyEndDate = self.ouApplicationUser.proxyEndDate ? moment(self.ouApplicationUser.proxyEndDate).endOf('day').subtract(1, 'second').valueOf() : '',
+                oldProxyEndDate = self.model.proxyEndDate ? moment(self.model.proxyEndDate).endOf('day').subtract(1, 'second').valueOf() : '',
+                newViewProxyMessage = self.ouApplicationUser.viewProxyMessage || false,
+                oldViewProxyMessage = self.model.viewProxyMessage || false,
+                newMessage = self.ouApplicationUser.proxyMessage || '',
+                oldMessage = self.model.proxyMessage || '';
+
+            return !(newOutOfOffice === oldOutOfOffice
+                && newSelectedProxyUser === oldSelectedProxyUser
+                && newAuthorityLevels === oldAuthorityLevels
+                && newProxyStartDate === oldProxyStartDate
+                && newProxyEndDate === oldProxyEndDate
+                && newViewProxyMessage === oldViewProxyMessage
+                && newMessage === oldMessage);
+        }
+
+        self.isOutOfOfficeSaveDisabled = function () {
+            if (!self.outOfOfficeSettingsForm) {
+                return true;
+            }
+            return !_isOutOfOfficeUpdated();
+        }
+
         self.$onInit = function () {
+            _checkProxyDate(self.ouApplicationUser);
+            _resetOutOfOfficeIfProxyUserAndAuthorityLevelsEmpty();
             self.filteredSecurityLevels = _.filter(self.securityLevels, self.isSecurityLevelInclude);
 
             $timeout(function () {

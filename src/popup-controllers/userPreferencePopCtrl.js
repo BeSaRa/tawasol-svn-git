@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                       $timeout,
                                                       $templateRequest,
                                                       $templateCache,
+                                                      moment,
                                                       dialog,
                                                       langService,
                                                       applicationUser,
@@ -55,6 +56,7 @@ module.exports = function (app) {
                                                       predefinedActionService,
                                                       AppUserCertificate,
                                                       errorCode,
+                                                      ouApplicationUser,
                                                       proxyOrganizations) {
         'ngInject';
         var self = this;
@@ -120,7 +122,7 @@ module.exports = function (app) {
 
         // Current ou application user
         self.isManagerOfCurrentOu = self.globalSetting.outofofficeFromAllUsers && organizationService.isManagerOfCurrentOu(self.employee);
-        self.ouApplicationUser = generator.interceptReceivedInstance('OUApplicationUser', angular.copy(employeeService.getCurrentOUApplicationUser()));
+        self.ouApplicationUser = ouApplicationUser;// generator.interceptReceivedInstance('OUApplicationUser', angular.copy(employeeService.getCurrentOUApplicationUser()));
 
         // security levels for current OUApplicationUser
         self.securityLevels = self.ouApplicationUser.getSecurityLevels();
@@ -128,8 +130,9 @@ module.exports = function (app) {
         self.availableProxies = availableProxies;
         self.proxyOrganizations = proxyOrganizations;
 
-        self.ouApplicationUserCopy = angular.copy(self.employee);
-        self.selectedOrganization = self.isManagerOfCurrentOu ? self.ouApplicationUser.proxyOUId : null;
+        self.ouApplicationUserCopy = angular.copy(self.ouApplicationUser);
+        //if already proxy user is available, set organization if manager of current ou
+        self.selectedOrganization = self.ouApplicationUser.proxyOUId && self.isManagerOfCurrentOu ? self.ouApplicationUser.proxyOUId : null;
         self.notFound = {};
 
 
@@ -151,8 +154,7 @@ module.exports = function (app) {
             if (!self.ouApplicationUser.proxyUser && !self.ouApplicationUser.proxyAuthorityLevels) {
                 self.applicationUser.outOfOffice = false;
             }
-        };
-        _resetOutOfOfficeIfProxyUserAndAuthorityLevelsEmpty();
+        }
 
         /**
          * @description to check if the current user has valid proxy or not.
@@ -526,7 +528,6 @@ module.exports = function (app) {
                 });
         };
 
-        _checkProxyDate(self.ouApplicationUser);
 
         /**
          * @description Saves the ou application user data when not out of office
@@ -554,7 +555,7 @@ module.exports = function (app) {
 
 
         self.searchTextProxyUser = '';
-        self.proxyUserSearch = function (searchText) {
+        self.availableProxyUserSearch = function (searchText) {
             var results = self.availableProxies;
             if (searchText) {
                 results = _.filter(self.availableProxies, function (availableProxyUSer) {
@@ -572,6 +573,8 @@ module.exports = function (app) {
             self.ouApplicationUser.proxyAuthorityLevels = null;
             self.ouApplicationUser.proxyStartDate = null;
             self.ouApplicationUser.proxyEndDate = null;
+            self.calculatedMaxProxyStartDate = null;
+            self.calculatedMinProxyEndDate = null;
             self.filteredSecurityLevels = _.filter(self.securityLevels, self.isSecurityLevelInclude);
             if (!proxyUser) {
                 self.ouApplicationUser.proxyUser = null;
@@ -634,7 +637,7 @@ module.exports = function (app) {
          * @description Saves the ou application user data when not out of office
          */
         self.changeOutOfOffice = function () {
-            if (!self.applicationUser.outOfOffice) {
+            /*if (!self.applicationUser.outOfOffice) {
                 // terminate proxy user
                 ouApplicationUserService
                     .terminateProxyUser(self.ouApplicationUser)
@@ -652,7 +655,23 @@ module.exports = function (app) {
                             employeeService.setCurrentOUApplicationUser(self.ouApplicationUser);
                         }
                         employeeService.setCurrentEmployee(self.applicationUser);
+                        toast.success(langService.get('out_of_office_success'));
                     });
+            }*/
+
+
+            if (!self.applicationUser.outOfOffice && self.ouApplicationUserCopy.proxyUser) {
+                self.selectedOrganization = null;
+                self.ouApplicationUser.proxyUser = null;
+                self.selectedProxyUser = null;
+                self.ouApplicationUser.proxyStartDate = null;
+                self.ouApplicationUser.proxyEndDate = null;
+                self.ouApplicationUser.proxyAuthorityLevels = null;
+                self.ouApplicationUser.viewProxyMessage = false;
+                self.ouApplicationUser.proxyMessage = null;
+
+                self.calculatedMaxProxyStartDate = null;
+                self.calculatedMinProxyEndDate = null;
             }
         };
 
@@ -660,6 +679,9 @@ module.exports = function (app) {
          * @description Save the Application User out of office settings in the ouApplicationUser model
          */
         self.saveOutOfOfficeSettingsFromCtrl = function () {
+            if (self.isOutOfOfficeSaveDisabled()) {
+                return false;
+            }
             self.ouApplicationUser.proxyUser = self.selectedProxyUser;
 
             validationService
@@ -1665,17 +1687,57 @@ module.exports = function (app) {
             return !self.selectedProxyUser && self.selectedProxyUser === self.ouApplicationUserCopy.proxyUser;
         };
 
-        self.getProxyUsersByOU = function (event) {
+        var _isOutOfOfficeUpdated = function () {
+            var newOutOfOffice = !!self.applicationUser.outOfOffice,
+                oldOutOfOffice = !!self.model.outOfOffice,
+                newSelectedOrg = self.selectedOrganization || 0,
+                oldSelectedOrg = self.ouApplicationUserCopy.proxyOUId || 0,
+                newSelectedProxyUser = self.selectedProxyUser ? self.selectedProxyUser.id : 0,
+                oldSelectedProxyUser = self.ouApplicationUserCopy.getSelectedProxyId() || 0,
+                newAuthorityLevels = self.ouApplicationUser.proxyAuthorityLevels && self.ouApplicationUser.proxyAuthorityLevels.length > 0 ? generator.getResultFromSelectedCollection(self.ouApplicationUser.proxyAuthorityLevels, 'lookupKey') : -1,
+                oldAuthorityLevels = self.ouApplicationUserCopy.proxyAuthorityLevels && self.ouApplicationUserCopy.proxyAuthorityLevels.length > 0 ? generator.getResultFromSelectedCollection(self.ouApplicationUserCopy.proxyAuthorityLevels, 'lookupKey') : -1,
+                newProxyStartDate = self.ouApplicationUser.proxyStartDate ? moment(self.ouApplicationUser.proxyStartDate).startOf('day').valueOf() : '',
+                oldProxyStartDate = self.ouApplicationUserCopy.proxyStartDate ? moment(self.ouApplicationUserCopy.proxyStartDate).startOf('day').valueOf() : '',
+                newProxyEndDate = self.ouApplicationUser.proxyEndDate ? moment(self.ouApplicationUser.proxyEndDate).endOf('day').subtract(1, 'second').valueOf() : '',
+                oldProxyEndDate = self.ouApplicationUserCopy.proxyEndDate ? moment(self.ouApplicationUserCopy.proxyEndDate).endOf('day').subtract(1, 'second').valueOf() : '',
+                newViewProxyMessage = self.ouApplicationUser.viewProxyMessage || false,
+                oldViewProxyMessage = self.ouApplicationUserCopy.viewProxyMessage || false,
+                newMessage = self.ouApplicationUser.proxyMessage || '',
+                oldMessage = self.ouApplicationUserCopy.proxyMessage || '';
+
+            return !(newOutOfOffice === oldOutOfOffice
+                && newSelectedOrg === oldSelectedOrg
+                && newSelectedProxyUser === oldSelectedProxyUser
+                && newAuthorityLevels === oldAuthorityLevels
+                && newProxyStartDate === oldProxyStartDate
+                && newProxyEndDate === oldProxyEndDate
+                && newViewProxyMessage === oldViewProxyMessage
+                && newMessage === oldMessage);
+        }
+
+        self.isOutOfOfficeSaveDisabled = function () {
+            if (!self.outOfOfficeSettingsForm) {
+                return true;
+            }
+            return !_isOutOfOfficeUpdated();
+        }
+
+        self.getProxyUsersByOU = function ($event, clearSelection) {
             self.selectedProxyUser = null;
             self.ouApplicationUser.proxyAuthorityLevels = null;
             self.ouApplicationUser.proxyUser = null;
             self.filteredSecurityLevels = [];
             self.proxyUsers = [];
+            if (clearSelection) {
+                self.selectedOrganization = null;
+            }
 
-            ouApplicationUserService.getAvailableProxiesByOu(self.selectedOrganization, false, employeeService.getEmployee())
-                .then(result => {
-                    self.proxyUsers = result;
-                });
+            if (self.selectedOrganization) {
+                ouApplicationUserService.getAvailableProxiesByOu(self.selectedOrganization, false, employeeService.getEmployee())
+                    .then(result => {
+                        self.proxyUsers = result;
+                    });
+            }
         }
 
         function getSelectedProxyUser(proxyUsers) {
@@ -1706,6 +1768,8 @@ module.exports = function (app) {
         }
 
         self.$onInit = function () {
+            _checkProxyDate(self.ouApplicationUser);
+            _resetOutOfOfficeIfProxyUserAndAuthorityLevelsEmpty();
             setSelectedProxyUser().then(() => {
                 self.filteredSecurityLevels = _.filter(self.securityLevels, self.isSecurityLevelInclude);
             });

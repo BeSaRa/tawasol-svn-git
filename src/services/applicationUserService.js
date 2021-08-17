@@ -304,6 +304,7 @@ module.exports = function (app) {
                 var employee = employeeService.getEmployee();
                 self.globalSetting = rootEntity.returnRootEntity().settings;
                 var isManagerOfCurrentOu = self.globalSetting.outofofficeFromAllUsers && organizationService.isManagerOfCurrentOu(employee);
+                var resolveOrganizations = $q.defer();
                 var resolveOuApplicationUsers = $q.defer();
                 return dialog
                     .showDialog({
@@ -312,10 +313,13 @@ module.exports = function (app) {
                         controller: 'userPreferencePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
-                            applicationUser: applicationUser,
                             selectedTab: selectedTab
                         },
                         resolve: {
+                            applicationUser: function (applicationUserService) {
+                                'ngInject';
+                                return applicationUserService.loadApplicationUserById(applicationUser.id);
+                            },
                             jobTitles: function (jobTitleService) {
                                 'ngInject';
                                 return jobTitleService.getJobTitles();
@@ -331,7 +335,7 @@ module.exports = function (app) {
                             organizations: function (organizationService) {
                                 'ngInject';
                                 return organizationService.getOrganizations().then(function (result) {
-                                    resolveOuApplicationUsers.resolve(result);
+                                    resolveOrganizations.resolve(result);
                                     return result
                                 });
                             },
@@ -346,8 +350,9 @@ module.exports = function (app) {
                             ouApplicationUsers: function (ouApplicationUserService) {
                                 'ngInject';
                                 var defer = $q.defer();
-                                resolveOuApplicationUsers.promise.then(function () {
-                                    ouApplicationUserService.getOUApplicationUsersByUserId(applicationUser.id).then(function (result) {
+                                resolveOrganizations.promise.then(function () {
+                                    ouApplicationUserService.loadOUApplicationUsersByUserId(applicationUser.id).then(function (result) {
+                                        resolveOuApplicationUsers.resolve(result);
                                         defer.resolve(result);
                                     });
                                 });
@@ -387,7 +392,7 @@ module.exports = function (app) {
                             },
                             availableProxies: function (ouApplicationUserService) {
                                 'ngInject';
-                                return isManagerOfCurrentOu ? [] : resolveOuApplicationUsers.promise.then(function () {
+                                return isManagerOfCurrentOu ? [] : resolveOrganizations.promise.then(function () {
                                     return _getProxyUsers(ouApplicationUserService, applicationUser, ouApplicationUser, false);
                                 });
                             },
@@ -398,6 +403,15 @@ module.exports = function (app) {
                             predefinedActions: function (predefinedActionService) {
                                 'ngInject';
                                 return predefinedActionService.loadPredefinedActionsForUser();
+                            },
+                            ouApplicationUser: function () {
+                                'ngInject';
+                                return resolveOuApplicationUsers.promise.then(function (ouAppUsers) {
+                                    return _.find(ouAppUsers, function (ouAppUser) {
+                                        return ouAppUser.id === employeeService.getCurrentOUApplicationUser().id;
+                                    })
+                                });
+
                             }
                         }
                     });

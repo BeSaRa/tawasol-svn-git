@@ -24,7 +24,7 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
                                             <div ng-message="ANS">{{lang.arabic_number_space}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 80})}}</div>
                                         </div>
                                     </md-input-container>
                                     <!-- English Full Name -->
@@ -38,7 +38,7 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
                                             <div ng-message="ENS">{{lang.english_number_space}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 80})}}</div>
                                         </div>
                                     </md-input-container>
                                 </div>
@@ -68,7 +68,7 @@
                                         <div ng-messages="userPreferencesForm.domainName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:50})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 50})}}</div>
                                             <div ng-message="FILE_NET_USER">{{lang.english_number}}</div>
                                         </div>
                                     </md-input-container>
@@ -97,7 +97,7 @@
                                         <div ng-messages="userPreferencesForm.employeeNo.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="number">{{lang.numberonly}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:10})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 10})}}</div>
                                         </div>
                                     </md-input-container>
                                     <!-- Qatari Id -->
@@ -110,7 +110,7 @@
                                         <div ng-messages="userPreferencesForm.qid.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="number">{{lang.numberonly}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:11})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 11})}}</div>
                                         </div>
                                     </md-input-container>
                                 </div>
@@ -193,7 +193,7 @@
                                             <div ng-message="email">
                                                 {{lang.invalid_email}}
                                             </div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:50})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 50})}}</div>
                                         </div>
                                     </md-input-container>
                                     <!-- Mobile Number -->
@@ -205,9 +205,9 @@
                                         <div ng-messages="userPreferencesForm.mobile.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="phone_mobile">
-                                                {{lang.invalid_phone_mobile.change({phonemob:lang.mobile})}}
+                                                {{lang.invalid_phone_mobile.change({phonemob: lang.mobile})}}
                                             </div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:15})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 15})}}</div>
                                         </div>
                                     </md-input-container>
                                     <!-- Registered Mobile Number for OTP -->
@@ -268,11 +268,11 @@
                                                custom-validate-directive="number">
                                         <div ng-messages="userPreferencesForm.searchAmountLimit.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:5})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 5})}}</div>
                                             <div ng-message="number">{{lang.numberonly}}</div>
-                                            <div ng-message="min">{{lang.min_number.change({number:0})}}</div>
+                                            <div ng-message="min">{{lang.min_number.change({number: 0})}}</div>
                                             <div ng-message="max">
-                                                {{lang.max_number.change({number:ctrl.maxRowCount})}}
+                                                {{lang.max_number.change({number: ctrl.maxRowCount})}}
                                             </div>
                                         </div>
                                     </md-input-container>
@@ -328,8 +328,8 @@
                                                custom-validate-directive="number">
                                         <div ng-messages="userPreferencesForm.inboxRefreshInterval.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
-                                            <div ng-message="min">{{lang.min_number.change({number:4})}}</div>
-                                            <div ng-message="max">{{lang.max_number.change({number:61})}}</div>
+                                            <div ng-message="min">{{lang.min_number.change({number: 4})}}</div>
+                                            <div ng-message="max">{{lang.max_number.change({number: 61})}}</div>
                                             <div ng-message="number">{{lang.numberonly}}</div>
                                         </div>
                                     </md-input-container>
@@ -438,7 +438,8 @@
                                         </md-switch>
                                     </legend>
                                     <div class="full-width-fieldset">
-                                        <span class="red-text" ng-if="!ctrl.globalSetting.enableSMSNotification">{{lang.setting_disabled_by_admin}}</span>
+                                        <span class="red-text"
+                                              ng-if="!ctrl.globalSetting.enableSMSNotification">{{lang.setting_disabled_by_admin}}</span>
                                         <!-- New Item SMS and Priority -->
                                         <div layout="row">
                                             <!-- New Item SMS -->
@@ -467,7 +468,7 @@
                                                 <div ng-messages="userPreferencesForm.newItemSmspriority.$error">
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                     <div ng-message="number">{{lang.numberonly}}</div>
-                                                    <div ng-message="maxlength">{{lang.max_length.change({length:5})}}
+                                                    <div ng-message="maxlength">{{lang.max_length.change({length: 5})}}
                                                     </div>
                                                 </div>
                                             </md-input-container>
@@ -500,7 +501,7 @@
                                                 <div ng-messages="userPreferencesForm.deadlineSmspriority.$error">
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                     <div ng-message="number">{{lang.numberonly}}</div>
-                                                    <div ng-message="maxlength">{{lang.max_length.change({length:5})}}
+                                                    <div ng-message="maxlength">{{lang.max_length.change({length: 5})}}
                                                     </div>
                                                 </div>
                                             </md-input-container>
@@ -537,7 +538,7 @@
                                                         <div ng-message="required">{{lang.field_required}}</div>
                                                         <div ng-message="number">{{lang.numberonly}}</div>
                                                         <div ng-message="maxlength">
-                                                            {{lang.max_length.change({length:5})}}
+                                                            {{lang.max_length.change({length: 5})}}
                                                         </div>
                                                     </div>
                                                 </md-input-container>
@@ -554,7 +555,7 @@
                                                         <div ng-message="required">{{lang.field_required}}</div>
                                                         <div ng-message="number">{{lang.numberonly}}</div>
                                                         <div ng-message="maxlength">
-                                                            {{lang.max_length.change({length:5})}}
+                                                            {{lang.max_length.change({length: 5})}}
                                                         </div>
                                                     </div>
                                                 </md-input-container>
@@ -575,7 +576,8 @@
                                         </md-switch>
                                     </legend>
                                     <div class="full-width-fieldset">
-                                        <span class="red-text" ng-if="!ctrl.globalSetting.enableEmailNotification">{{lang.setting_disabled_by_admin}}</span>
+                                        <span class="red-text"
+                                              ng-if="!ctrl.globalSetting.enableEmailNotification">{{lang.setting_disabled_by_admin}}</span>
                                         <!-- New Item Email and Priority -->
                                         <div layout="row">
                                             <!-- New Item Email -->
@@ -605,7 +607,7 @@
                                                 <div ng-messages="userPreferencesForm.newItemEmailPriority.$error">
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                     <div ng-message="number">{{lang.numberonly}}</div>
-                                                    <div ng-message="maxlength">{{lang.max_length.change({length:5})}}
+                                                    <div ng-message="maxlength">{{lang.max_length.change({length: 5})}}
                                                     </div>
                                                 </div>
                                             </md-input-container>
@@ -639,7 +641,7 @@
                                                 <div ng-messages="userPreferencesForm.deadlineEmailPriority.$error">
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                     <div ng-message="number">{{lang.numberonly}}</div>
-                                                    <div ng-message="maxlength">{{lang.max_length.change({length:5})}}
+                                                    <div ng-message="maxlength">{{lang.max_length.change({length: 5})}}
                                                     </div>
                                                 </div>
                                             </md-input-container>
@@ -676,7 +678,7 @@
                                                         <div ng-message="required">{{lang.field_required}}</div>
                                                         <div ng-message="number">{{lang.numberonly}}</div>
                                                         <div ng-message="maxlength">
-                                                            {{lang.max_length.change({length:5})}}
+                                                            {{lang.max_length.change({length: 5})}}
                                                         </div>
                                                     </div>
                                                 </md-input-container>
@@ -694,7 +696,7 @@
                                                         <div ng-message="required">{{lang.field_required}}</div>
                                                         <div ng-message="number">{{lang.numberonly}}</div>
                                                         <div ng-message="maxlength">
-                                                            {{lang.max_length.change({length:5})}}
+                                                            {{lang.max_length.change({length: 5})}}
                                                         </div>
                                                     </div>
                                                 </md-input-container>
@@ -715,18 +717,19 @@
                                     <div class="full-width-fieldset">
                                         <div layout="row">
                                             <!-- Out Of Office -->
-                                            <md-switch flex ng-model="ctrl.applicationUser.outOfOffice"
+                                            <md-switch ng-model="ctrl.applicationUser.outOfOffice"
                                                        aria-label="{{lang.out_of_office_toggle_button}}"
                                                        ng-change="ctrl.changeOutOfOffice()">
                                                 <label>{{ctrl.ouApplicationUser.getOutOffOfficeTranslatedStatus(ctrl.applicationUser.outOfOffice)}}</label>
                                             </md-switch>
+                                            <span flex></span>
                                         </div>
                                         <div layout="row" ng-if="ctrl.isManagerOfCurrentOu">
                                             <!-- Organizations -->
                                             <md-input-container flex>
                                                 <label for="organization">{{lang.organization_unit}}</label>
                                                 <md-select id="organization" name="organization" required
-                                                           ng-change="ctrl.getProxyUsersByOU($event)"
+                                                           ng-change="ctrl.getProxyUsersByOU($event, false)"
                                                            aria-label="{{lang.organization_unit}}"
                                                            ng-model="ctrl.selectedOrganization"
                                                            md-on-close="ctrl.clearSearchText('inlineOU')"
@@ -737,14 +740,20 @@
                                                                placeholder="{{lang.search}}"
                                                                class="select-header-input">
                                                     </md-select-header>
+                                                    <md-option ng-value="null">{{lang.none}}</md-option>
                                                     <md-option
                                                             ng-repeat="organization in ctrl.proxyOrganizations | translatedNameFilter: ctrl.inlineOUSearchText : 'getNameByLanguageRegOUSection'"
                                                             ng-value="organization.id">
-                                        <span md-highlight-text="ctrl.inlineOUSearchText"
-                                              md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
+                                                        <span md-highlight-text="ctrl.inlineOUSearchText"
+                                                              md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
                                                     </md-option>
                                                 </md-select>
-                                                <div ng-messages="organizationAndUserForm.organization.$error">
+                                                <md-button ng-if="ctrl.selectedOrganization"
+                                                           ng-click="ctrl.getProxyUsersByOU($event, true)"
+                                                           class="md-icon-button cms-select-overlay-button">
+                                                    <md-icon md-svg-icon="close"></md-icon>
+                                                </md-button>
+                                                <div ng-messages="outOfOfficeSettingsForm.organization.$error">
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                 </div>
                                             </md-input-container>
@@ -769,11 +778,11 @@
                                                     <md-option ng-if="!ctrl.isCurrentUser(user)"
                                                                ng-value="user"
                                                                ng-repeat="user in ctrl.proxyUsers | translatedNameFilter: ctrl.inlineAppUserSearchText: 'getTranslatedApplicationUserName'">
-                                       <span md-highlight-text="ctrl.inlineAppUserSearchText"
-                                             md-highlight-flags="i">{{user.getTranslatedApplicationUserName()}}</span>
+                                                       <span md-highlight-text="ctrl.inlineAppUserSearchText"
+                                                             md-highlight-flags="i">{{user.getTranslatedApplicationUserName()}}</span>
                                                     </md-option>
                                                 </md-select>
-                                                <div ng-messages="organizationAndUserForm.applicationUser.$error">
+                                                <div ng-messages="outOfOfficeSettingsForm.selectedProxyUser.$error">
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                 </div>
                                             </md-input-container>
@@ -784,10 +793,10 @@
                                                              md-no-cache="true"
                                                              md-clear-button="true"
                                                              md-selected-item="ctrl.selectedProxyUser"
-                                                             md-search-text-change="ctrl.proxyUserSearch(ctrl.searchTextProxyUser)"
+                                                             md-search-text-change="ctrl.availableProxyUserSearch(ctrl.searchTextProxyUser)"
                                                              md-search-text="ctrl.searchTextProxyUser"
                                                              md-selected-item-change="ctrl.selectedProxyUserChange(item)"
-                                                             md-items="item in ctrl.proxyUserSearch(ctrl.searchTextProxyUser)"
+                                                             md-items="item in ctrl.availableProxyUserSearch(ctrl.searchTextProxyUser)"
                                                              md-item-text="item.getTranslatedName()"
                                                              md-min-length="0"
                                                              md-require-match
@@ -1495,10 +1504,11 @@
                    ng-click="ctrl.editApplicationUserFromCtrl()">{{lang.save}}
         </md-button>
         <md-button class="md-raised md-primary"
-                   ng-disabled="outOfOfficeSettingsForm.$invalid || ctrl.checkIfEmptyProxyUserChanged()"
+                   ng-disabled="ctrl.isOutOfOfficeSaveDisabled()"
                    ng-if="ctrl.selectedTab==='outOfOfficeSettings'"
                    ng-click="ctrl.saveOutOfOfficeSettingsFromCtrl()">{{lang.save}}
         </md-button>
+        <!--outOfOfficeSettingsForm.$invalid || ctrl.checkIfEmptyProxyUserChanged()"-->
         <md-button class="md-raised red-text" ng-click="ctrl.closeUserPreferencePopupFromCtrl()">
             {{lang.close}}
         </md-button>
