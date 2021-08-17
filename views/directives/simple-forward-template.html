@@ -81,9 +81,9 @@
         <div flex layout="row" layout-wrap="" ng-if="ctrl.favoriteUsers.length">
             <div ng-repeat="favoriteUser in ctrl.favoriteUsers | limitTo: ctrl.favorites.users.limit"
                  class="custom-chip" ng-class="{'font-bold':favoriteUser.checked}"
-                 ng-click="ctrl.toggleFavoriteUser(favoriteUser)">
-                <md-icon tooltip="{{lang.user}}"
-                         md-svg-icon="{{favoriteUser.checked?'account-check':'account'}}"></md-icon>
+                 ng-click="ctrl.toggleFavoriteUser(favoriteUser)"
+                 tooltip="{{favoriteUser.getTranslatedOrganizationName()}}">
+                <md-icon md-svg-icon="{{favoriteUser.checked?'account-check':'account'}}"></md-icon>
                 <span> {{favoriteUser.getTranslatedName()}}</span>
             </div>
         </div>
