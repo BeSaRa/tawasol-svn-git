@@ -1062,7 +1062,7 @@ module.exports = function (app) {
             })
             // returned department inbox
             .state('app.department-inbox.returned', {
-                url: '/returned?action?source?wob-num',
+                url: '/returned?action?source?vsid',
                 templateUrl: templateProvider.getView('department-inbox-returned'),
                 controller: 'returnedDepartmentInboxCtrl',
                 controllerAs: 'ctrl',
@@ -1074,7 +1074,7 @@ module.exports = function (app) {
                     },
                     emailItem: function (returnedDepartmentInboxes, correspondenceService, $stateParams) {
                         'ngInject';
-                        return correspondenceService.getEmailItemByWobNum(returnedDepartmentInboxes, $stateParams);
+                        return correspondenceService.getEmailItemByVsId(returnedDepartmentInboxes, $stateParams);
                     }
                 }
             })
