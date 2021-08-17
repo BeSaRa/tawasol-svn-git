@@ -371,7 +371,12 @@ module.exports = function (app) {
         }
 
         self.checkShowForwardAction = function () {
-            var forwardAction = _.find(self.actions, {text: 'grid_action_forward'});
+            var forwardAction = _.find(self.actions, function (action) {
+                return action.hasOwnProperty('text') &&
+                    (action.text.indexOf('grid_action_launch_distribution_workflow') > -1 ||
+                        action.text.indexOf('grid_action_forward') > -1 ||
+                        action.text.indexOf('grid_action_accept_launch_distribution_workflow') > -1)
+            });
 
             if (!forwardAction || (forwardAction.hasOwnProperty('hide') && forwardAction.hide)) {
                 return false;
