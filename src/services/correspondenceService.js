@@ -5392,8 +5392,8 @@ module.exports = function (app) {
         self.sendEmailReminder = function (info, reason) {
             return $http.put(urlService.reminderEmail + '/' + info.id,
                 {
-                    vsId: info.vsId,
-                    workObjectNumber: info.wobNumber,
+                    /*vsId: info.vsId,
+                    workObjectNumber: info.wobNumber,*/
                     comment: reason
                 })
                 .then(function (result) {
