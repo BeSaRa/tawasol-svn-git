@@ -752,10 +752,10 @@ module.exports = function (app) {
          */
         function _addUsersToSelectedGrid(users) {
             users = angular.isArray(users) ? users : [users];
-            var usersDoesNotHaveDocumentSecurityLevel = _getUsersDoesNotHaveDocumentSecurityLevel(users, 'securityLevel');
+            var restrictedUsers = _getUsersNotHaveDocumentSecurityLevel(users, 'securityLevel');
             // notify when user doesn't have security level of secret document
-            if (!self.correspondence.hasNormalOrPersonalPrivateSecurityLevel() && usersDoesNotHaveDocumentSecurityLevel.length) {
-                dialog.alertMessage(_prepareUserHasSecretSecurityLevelMessage(usersDoesNotHaveDocumentSecurityLevel));
+            if (restrictedUsers.length) {
+                dialog.alertMessage(_prepareUserHasSecretSecurityLevelMessage(restrictedUsers));
             }
 
             _.map(users, function (item) {
@@ -768,16 +768,17 @@ module.exports = function (app) {
         }
 
         /**
-         * @description
+         * @description show proxy message
          * @param proxies
          * @private
          */
         function _showProxyMessage(proxies) {
-            var proxyUsersNotHaveDocumentSecurityLevel = _getUsersDoesNotHaveDocumentSecurityLevel(proxies, 'proxyInfo.securityLevels');
-            if (proxyUsersNotHaveDocumentSecurityLevel && proxyUsersNotHaveDocumentSecurityLevel.length) {
-                dialog.alertMessage(_prepareProxyMessage(proxyUsersNotHaveDocumentSecurityLevel, false));
-            }
-            var proxyUsersHaveSecurityLevel = _.differenceBy(proxies, proxyUsersNotHaveDocumentSecurityLevel, 'proxyInfo.proxyDomain');
+            var restrictedUsers = _getUsersNotHaveDocumentSecurityLevel(proxies, 'proxyInfo.securityLevels');
+            restrictedUsers = _.map(restrictedUsers, 'users');
+            /*if (restrictedUsers && restrictedUsers.length) {
+                dialog.alertMessage(_prepareProxyMessage(restrictedUsers, false));
+            }*/
+            var proxyUsersHaveSecurityLevel = _.differenceBy(proxies, restrictedUsers, 'proxyInfo.proxyDomain');
             if (proxyUsersHaveSecurityLevel.length) {
                 dialog.alertMessage(_prepareProxyMessage(proxyUsersHaveSecurityLevel, true));
             }
@@ -810,22 +811,27 @@ module.exports = function (app) {
         }
 
         /**
-         * @description
-         * @param users
+         * @description prepare use has secret security level message
          * @returns {*}
          * @private
+         * @param items
          */
-        function _prepareUserHasSecretSecurityLevelMessage(users) {
+        function _prepareUserHasSecretSecurityLevelMessage(items) {
             var titleMessage = langService.get('users_can_not_view_secret_document');
 
             var titleTemplate = angular.element('<span class="validation-title">' + titleMessage + '</span> <br/>');
             titleTemplate.html(titleMessage);
 
-            var tableRows = _.map(users, function (user) {
-                return [user.arName, user.enName];
-            });
-
-            var table = tableGeneratorService.createTable([langService.get('arabic_name'), langService.get('english_name')], 'error-table');
+            var tableRows =
+                _.map(items, function (item) {
+                    var info = item.correspondence.getInfo();
+                    return _.map(item.users, function (user) {
+                        return [info.title, user.arName, user.enName];
+                    });
+                });
+            tableRows = tableRows.flat();
+            var table = tableGeneratorService.createTable(
+                [langService.get('subject'), langService.get('arabic_name'), langService.get('english_name')], 'error-table');
             table.createTableRows(tableRows);
 
             titleTemplate.append(table.getTable(true));
@@ -1687,18 +1693,35 @@ module.exports = function (app) {
                 });
         };
 
-        function _getUsersDoesNotHaveDocumentSecurityLevel(users, securityLevelProperty) {
+        function _getUsersNotHaveDocumentSecurityLevel(users, securityLevelProperty) {
+            self.correspondences = angular.isArray(self.correspondence) ? self.correspondence : [self.correspondence];
+            return _.filter(self.correspondences.map(function (correspondence) {
+                if (!correspondence.hasNormalOrPersonalPrivateSecurityLevel()) {
+                    var filteredUsers = _filterUsersBySecurityLevel(correspondence, users, securityLevelProperty);
+                    if (!filteredUsers.length) {
+                        return;
+                    }
+                    return {
+                        correspondence: correspondence,
+                        users: filteredUsers
+                    }
+                }
+            }), function (item) {
+                return typeof item !== 'undefined'
+            })
+        }
+
+        function _filterUsersBySecurityLevel(correspondence, users, securityLevelProperty) {
             return _.filter(users, function (user) {
                 var userSecurityLevels = generator.getSelectedCollectionFromResult(self.securityLevels, user[securityLevelProperty], 'lookupKey');
-
                 return _.every(userSecurityLevels, function (userSecurityLevel) {
-                    if (self.correspondence.hasOwnProperty('securityLevelLookup')) {
-                        return userSecurityLevel.lookupKey !== self.correspondence.securityLevelLookup.lookupKey
+                    if (correspondence.hasOwnProperty('securityLevelLookup')) {
+                        return userSecurityLevel.lookupKey !== correspondence.securityLevelLookup.lookupKey
                     } else {
-                        return userSecurityLevel.lookupKey !== self.correspondence.securityLevel.lookupKey
+                        return userSecurityLevel.lookupKey !== correspondence.securityLevel.lookupKey
                     }
                 });
-            })
+            });
         }
 
         self.showMessageCannotReturned = function () {
