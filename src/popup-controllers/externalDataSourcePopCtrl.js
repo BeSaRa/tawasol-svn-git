@@ -135,10 +135,8 @@ module.exports = function (app) {
                 return ou;
             });
 
-            // sort regOu-section
-            self.ouList = _.sortBy([].concat(regOus, sections), [function (ou) {
-                return ou.tempRegOUSection[langService.current + 'Name'].toLowerCase();
-            }]);
+            // sorting from BE based on user selection (alphabetical or by org structure)
+            return [].concat(regOus, sections);
         };
 
         self.saveExternalDataSource = function ($event) {

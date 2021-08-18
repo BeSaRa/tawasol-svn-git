@@ -118,9 +118,8 @@ module.exports = function (app) {
                 return item;
             });
 
-            return _.sortBy([].concat(regOus, groups), [function (ou) {
-                return ou.tempRegOUSection[langService.current + 'Name'].toLowerCase();
-            }]);
+            // sorting from BE based on user selection (alphabetical or by org structure)
+            return [].concat(regOus, groups);
         }
 
         function _isAnyAddSecurityLevel() {

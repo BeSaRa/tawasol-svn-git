@@ -109,10 +109,8 @@ module.exports = function (app) {
                 return item;
             });
 
-            // sort regOu-section
-            return _.sortBy([].concat(regOus, sections), [function (ou) {
-                return ou.display[langService.current + 'Name'].toLowerCase();
-            }]);
+            // sorting from BE based on user selection (alphabetical or by org structure)
+            return [].concat(regOus, sections);
         }
 
         /**

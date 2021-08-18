@@ -226,10 +226,8 @@ module.exports = function (app) {
                 return section;
             });
 
-            // sort regOu-section
-            return _.sortBy([].concat(regOus, sections), [function (ou) {
-                return ou.tempRegOUSection[langService.current + 'Name'].toLowerCase();
-            }]);
+            // sorting from BE based on user selection (alphabetical or by org structure)
+            return [].concat(regOus, sections);
         }
 
         self.classifications = [];
