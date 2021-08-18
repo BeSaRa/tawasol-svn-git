@@ -5390,12 +5390,7 @@ module.exports = function (app) {
         }
 
         self.sendEmailReminder = function (info, reason) {
-            return $http.put(urlService.reminderEmail + '/' + info.id,
-                {
-                    /*vsId: info.vsId,
-                    workObjectNumber: info.wobNumber,*/
-                    comment: reason
-                })
+            return $http.put(urlService.reminderEmail + '/' + info.id, reason)
                 .then(function (result) {
                     return result.data.rs;
                 });
