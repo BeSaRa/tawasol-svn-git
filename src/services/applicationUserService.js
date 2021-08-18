@@ -305,7 +305,6 @@ module.exports = function (app) {
                 self.globalSetting = rootEntity.returnRootEntity().settings;
                 var isManagerOfCurrentOu = self.globalSetting.outofofficeFromAllUsers && organizationService.isManagerOfCurrentOu(employee);
                 var resolveOrganizations = $q.defer();
-                var resolveOuApplicationUsers = $q.defer();
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -352,7 +351,6 @@ module.exports = function (app) {
                                 var defer = $q.defer();
                                 resolveOrganizations.promise.then(function () {
                                     ouApplicationUserService.loadOUApplicationUsersByUserId(applicationUser.id).then(function (result) {
-                                        resolveOuApplicationUsers.resolve(result);
                                         defer.resolve(result);
                                     });
                                 });
@@ -404,13 +402,9 @@ module.exports = function (app) {
                                 'ngInject';
                                 return predefinedActionService.loadPredefinedActionsForUser();
                             },
-                            ouApplicationUser: function () {
+                            ouApplicationUser: function (ouApplicationUserService) {
                                 'ngInject';
-                                return resolveOuApplicationUsers.promise.then(function (ouAppUsers) {
-                                    return _.find(ouAppUsers, function (ouAppUser) {
-                                        return ouAppUser.id === employeeService.getCurrentOUApplicationUser().id;
-                                    })
-                                });
+                                return ouApplicationUserService.loadOUApplicationUserByUserIdAndOUId(applicationUser.id,  ouApplicationUser.id)
 
                             }
                         }
