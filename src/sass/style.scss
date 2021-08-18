@@ -2465,6 +2465,13 @@ html.rtl {
     right: 50px;
   }
 
+  .flip-login {
+    .absolute-announcements.login-announcements {
+      left: 50px;
+      right: 450px;
+    }
+  }
+
   .absolute-read {
     position: absolute;
     left: auto !important;
@@ -2730,3 +2737,20 @@ md-chips.custom-chips {
 .display-none {
   display: none;
 }
+
+.flip-login {
+  #login-meta-wrapper {
+    order: 2;
+  }
+
+  #login-form-wrapper {
+    order: 1;
+  }
+
+
+  .absolute-announcements.login-announcements {
+    left: 450px;
+    right: 50px;
+  }
+}
+

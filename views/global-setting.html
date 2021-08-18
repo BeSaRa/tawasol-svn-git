@@ -252,6 +252,14 @@
                                     <span>{{lang.show_copyright}} : </span>{{
                                     ctrl.globalSetting.getTranslatedYesNo('showCopyrightText')}}
                                 </md-switch>
+                                <!-- flip login -->
+                                <md-switch flex ng-model="ctrl.globalSetting.flipLogin"
+                                           aria-label="{{lang.flip_login}}">
+                                    <span>{{lang.flip_login}} : </span>{{
+                                    ctrl.globalSetting.getTranslatedYesNo('flipLogin')}}
+                                </md-switch>
+                            </div>
+                            <div layout="row" class="p20">
                                 <!-- Default Application Theme -->
                                 <md-input-container flex>
                                     <label for="theme">{{lang.default_application_theme}}</label>
@@ -264,8 +272,8 @@
                                         <div ng-message="required">{{lang.field_required}}</div>
                                     </div>
                                 </md-input-container>
+                                <span flex></span>
                             </div>
-
                             <div layout="row" class="p20">
                                 <!-- Copyright Text -->
                                 <md-input-container flex>

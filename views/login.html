@@ -1,4 +1,4 @@
-<div id="login-page" layout="row">
+<div id="login-page" ng-class="{'flip-login':login.globalSettings.flipLogin}" layout="row">
     <div id="login-background" ng-class="{'flip-bg':login.flipBg}"></div>
     <div layout="column" login-background-directive flex ng-if="mediaSize('gt-sm')" ng-class="{'md':mediaSize('md')}"
          id="login-meta-wrapper">

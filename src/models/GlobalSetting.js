@@ -68,6 +68,7 @@ module.exports = function (app) {
             self.externalAuthorization = false;
             self.limitedCentralUnitAccess = false;
             self.outofofficeFromAllUsers = false;
+            self.flipLogin = false;
             //endregion
 
             // every model has required fields
