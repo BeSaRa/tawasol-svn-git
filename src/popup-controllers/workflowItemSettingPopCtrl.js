@@ -205,7 +205,7 @@ module.exports = function (app) {
         };
 
         self.isReadyForApprovalAvailable = function (workflowItem) {
-            if (self.isMultiCorrespondence || self.gridName !== 'selectedGrid') {
+            if (self.isMultiCorrespondence || self.fromPredefined || self.gridName !== 'selectedGrid') {
                 return false;
             }
             self.info = self.item.getInfo();

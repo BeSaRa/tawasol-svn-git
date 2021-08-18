@@ -385,7 +385,7 @@ module.exports = function (app) {
         };
 
         self.isReadyForApprovalAvailable = function (workflowItem) {
-            if (self.isMultiCorrespondence) {
+            if (self.isMultiCorrespondence || self.fromPredefined) {
                 return false;
             }
             self.info = self.item.getInfo();
