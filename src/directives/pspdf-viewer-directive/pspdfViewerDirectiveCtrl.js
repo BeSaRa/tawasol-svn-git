@@ -44,7 +44,7 @@ module.exports = function (app) {
             var defaultToolbar = angular.copy(PSPDFKit.defaultToolbarItems);
 
             var isDownloadAllowed = true;
-            if (self.correspondence.isCorrespondenceApprovedBefore() && self.correspondence.getInfo().authorizeByAnnotation) {
+            if (self.correspondence && self.correspondence.isCorrespondenceApprovedBefore() && self.correspondence.getInfo().authorizeByAnnotation) {
                 isDownloadAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
             }
             isDownloadAllowed = isDownloadAllowed && employeeService.hasPermissionTo("DOWNLOAD_MAIN_DOCUMENT");
