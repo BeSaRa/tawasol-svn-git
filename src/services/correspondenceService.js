@@ -5436,7 +5436,7 @@ module.exports = function (app) {
                 });
 
                 return !item ? (dialog.errorMessage(langService.get('work_item_not_found').change({
-                    wobNumber: item.getInfo().wobNumber
+                    wobNumber: vsid
                 })).then(function () {
                     return false;
                 })) : item;
