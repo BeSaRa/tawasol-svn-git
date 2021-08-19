@@ -334,7 +334,7 @@ module.exports = function (app) {
                 return this.workflowActionId === 15;
             }
             EventHistory.prototype.isSentToDepartmentOnly = function () {
-                return this.userToRegOuId !== null && this.userToId === null && this.userToOuId === null;
+                return this.userToRegOuId === null && this.userToOuId !== null;
             }
 
             // don't remove CMSModelInterceptor from last line
