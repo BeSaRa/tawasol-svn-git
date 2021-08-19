@@ -371,10 +371,13 @@ module.exports = function (app) {
         }
 
         self.checkShowForwardAction = function () {
-            if (!self.forwardAction || (self.forwardAction.hasOwnProperty('hide') && self.forwardAction.hide)) {
+            if (!self.forwardAction ||
+                (self.forwardAction.hasOwnProperty('hide') && self.forwardAction.hide) ||
+                self.forwardAction.hasOwnProperty('permissionKey') && !employeeService.hasPermissionTo(self.forwardAction.permissionKey)) {
                 return false;
             }
-            return self.forwardAction.checkShow(self.forwardAction, self.correspondence);
+
+            return self.forwardAction.checkShow(self.forwardAction, self.workItem || self.correspondence);
         }
 
         function _findForwardAction() {
