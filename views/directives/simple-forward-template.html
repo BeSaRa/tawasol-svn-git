@@ -10,7 +10,7 @@
         </div>
         <div flex layout="row" ng-if="ctrl.favoriteWorkFlowActions.length">
             <md-radio-group ng-model="ctrl.distWorkflowItem.action" aria-labelledby="favoriteWorkFlowActions"
-                            layout-fill="">
+                            layout-fill="" ng-change="ctrl.setBulkDistWorkflowItems()">
                 <div flex layout="row" layout-wrap="" layout-align="start center">
                     <md-radio-button
                             ng-class="{'display-none': !ctrl.inRange($index)}"

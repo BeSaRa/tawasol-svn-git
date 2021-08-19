@@ -99,7 +99,7 @@ module.exports = function (app) {
                 .setFavoriteAction(result.action)
         }
 
-        function _setBulkDistWorkflowItems() {
+        self.setBulkDistWorkflowItems = function () {
             _.map(self.selectedFavUsers, function (item, index) {
                 _setDistWorkflowItem(self.selectedFavUsers[index], self.distWorkflowItem);
             });
@@ -110,7 +110,7 @@ module.exports = function (app) {
          */
         self.onCommentChange = function () {
             self.distWorkflowItem.comments = self.comment.getComment();
-            _setBulkDistWorkflowItems();
+            self.setBulkDistWorkflowItems();
         };
 
         /**
@@ -152,7 +152,7 @@ module.exports = function (app) {
             favoriteUser.checked = !favoriteUser.checked;
             if (favoriteUser.checked) {
                 self.selectedFavUsers.push(favoriteUser);
-                _setBulkDistWorkflowItems();
+                self.setBulkDistWorkflowItems();
             } else {
                 var indexOfUser = _.findIndex(self.selectedFavUsers, {id: favoriteUser.id})
                 self.selectedFavUsers.splice(indexOfUser, 1)
