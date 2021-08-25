@@ -2257,7 +2257,8 @@ module.exports = function (app) {
                 headless: true,
                 instantJSON: operations.length ? null : instantJSON,
                 licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
-                customFonts: PDFService.customFonts
+                customFonts: PDFService.customFonts,
+                isAPStreamRendered: () => false
             }
 
 
@@ -2275,7 +2276,8 @@ module.exports = function (app) {
                     headless: true,
                     instantJSON: instantJSON,
                     licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
-                    customFonts: PDFService.customFonts
+                    customFonts: PDFService.customFonts,
+                    isAPStreamRendered: () => false
                 };
 
 
@@ -2369,7 +2371,8 @@ module.exports = function (app) {
                     populateInkSignatures: self.populateInkSignatures,
                     licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
                     annotationTooltipCallback: self.annotationTooltipCallback,
-                    customFonts: PDFService.customFonts
+                    customFonts: PDFService.customFonts,
+                    isAPStreamRendered: () => false
                 }
 
                 if (configurationService.PSPDF_LICENSE_KEY) {

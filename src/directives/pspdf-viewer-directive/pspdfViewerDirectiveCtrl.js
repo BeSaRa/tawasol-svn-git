@@ -63,7 +63,8 @@ module.exports = function (app) {
                 document: typeof self.docUrl === 'object' ? self.docUrl.$$unwrapTrustedValue() : self.docUrl,
                 licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
                 initialViewState: initialViewState,
-                customFonts: PDFService.customFonts
+                customFonts: PDFService.customFonts,
+                isAPStreamRendered: () => false
             }
 
             if (configurationService.PSPDF_LICENSE_KEY) {
