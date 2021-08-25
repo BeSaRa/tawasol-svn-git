@@ -404,8 +404,7 @@ module.exports = function (app) {
                             },
                             ouApplicationUser: function (ouApplicationUserService) {
                                 'ngInject';
-                                return ouApplicationUserService.loadOUApplicationUserByUserIdAndOUId(applicationUser.id,  ouApplicationUser.id)
-
+                                return ouApplicationUserService.loadOUApplicationUserByUserIdAndOUId(applicationUser.id,  ouApplicationUser.getOuId());
                             }
                         }
                     });
