@@ -409,7 +409,7 @@ module.exports = function (app) {
                     var currentOU = employeeService.getEmployee().userOrganization;
 
                     return employeeService.isCentralArchive() ? (organizationService.centralArchiveOrganizations().then(function (organizations) {
-                        if (employeeService.isCentralArchiveHasRegistry() && (_.map(organizations, 'id').indexOf(currentOU.id) === -1)) {
+                        if (employeeService.isCentralArchiveHasRegistry() && organizations && (_.map(organizations, 'id').indexOf(currentOU.id) === -1)) {
                             organizations.push(currentOU);
                         }
                         return organizations;
