@@ -15,7 +15,7 @@
                                               save-correspondence-changes="ctrl.saveCorrespondenceChanges"
                                               notify-callback="ctrl.actionClicked"></correspondence-view-action-directive>
         <div flex layout-align="center center" layout="row">
-            <span flex md-truncate class="font-bold text-center">{{::ctrl.correspondence.getTranslatedName()}}</span>
+            <span flex md-truncate class="font-bold text-center pb-5">{{::ctrl.correspondence.getTranslatedName()}}</span>
             <md-progress-circular ng-if="ctrl.loadingIndicatorService.loading" md-mode="indeterminate"
                                   md-diameter="30"></md-progress-circular>
         </div>
