@@ -54,9 +54,15 @@ module.exports = function (app) {
         // tomorrow
         self.tomorrow = (new Date()).setDate(self.today.getDate() + 1);
 
+        var _setProxyStartEndDatesString = function () {
+            self.ouApplicationUser.proxyStartDateString = self.ouApplicationUser.proxyStartDate ? generator.convertDateToString(self.ouApplicationUser.proxyStartDate) : '';
+            self.ouApplicationUser.proxyEndDateString = self.ouApplicationUser.proxyEndDate ? generator.convertDateToString(self.ouApplicationUser.proxyEndDate) : '';
+        }
+
         self.getMaxProxyStartDate = function () {
             var endDate = self.ouApplicationUser.proxyEndDate ? new Date(self.ouApplicationUser.proxyEndDate) : null;
             self.calculatedMaxProxyStartDate = endDate ? new Date(endDate.setDate(endDate.getDate() - 1)) : null;
+            _setProxyStartEndDatesString();
             return self.calculatedMaxProxyStartDate;
         };
         self.calculatedMaxProxyStartDate = self.ouApplicationUser.proxyEndDate ? self.getMaxProxyStartDate() : null;
@@ -64,6 +70,7 @@ module.exports = function (app) {
         self.getMinProxyEndDate = function () {
             var startDate = self.ouApplicationUser.proxyStartDate ? new Date(self.ouApplicationUser.proxyStartDate) : null;
             self.calculatedMinProxyEndDate = startDate ? new Date(startDate.setDate(startDate.getDate() + 1)) : null;
+            _setProxyStartEndDatesString();
             return self.calculatedMinProxyEndDate;
         };
         self.calculatedMinProxyEndDate = self.ouApplicationUser.proxyStartDate ? self.getMinProxyEndDate() : null;
@@ -189,6 +196,7 @@ module.exports = function (app) {
             self.ouApplicationUser.proxyAuthorityLevels = null;
             self.ouApplicationUser.proxyStartDate = null;
             self.ouApplicationUser.proxyEndDate = null;
+            _setProxyStartEndDatesString();
             self.calculatedMaxProxyStartDate = null;
             self.calculatedMinProxyEndDate = null;
             self.filteredSecurityLevels = _.filter(self.securityLevels, self.isSecurityLevelInclude);
@@ -225,6 +233,7 @@ module.exports = function (app) {
 
                 self.calculatedMaxProxyStartDate = null;
                 self.calculatedMinProxyEndDate = null;
+                _setProxyStartEndDatesString();
             }
         };
 
@@ -404,6 +413,20 @@ module.exports = function (app) {
                 return true;
             }
             return !_isOutOfOfficeUpdated();
+        }
+
+        self.openProxyStartDatePicker = function () {
+            $timeout(function () {
+                self.isProxyStartDateOpen = true;
+            });
+            self.isProxyStartDateOpen = false;
+        }
+
+        self.openProxyEndDatePicker = function () {
+            $timeout(function () {
+                self.isProxyEndDateOpen = true;
+            });
+            self.isProxyEndDateOpen = false;
         }
 
         self.$onInit = function () {

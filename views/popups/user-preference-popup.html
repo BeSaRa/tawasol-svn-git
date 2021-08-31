@@ -839,29 +839,50 @@
                                         </div>
                                         <div layout="row">
                                             <!-- Start Date -->
-                                            <md-input-container flex class="cms-datepicker">
+                                            <md-input-container flex>
                                                 <label for="proxyStartDate">{{lang.start_date}}</label>
-                                                <md-datepicker id="proxyStartDate" name="proxyStartDate"
-                                                               ng-required="ctrl.applicationUser.outOfOffice || ctrl.ouApplicationUser.proxyEndDate"
-                                                               md-min-date="ctrl.today"
-                                                               ng-model="ctrl.ouApplicationUser.proxyStartDate"
-                                                               ng-change="ctrl.getMinProxyEndDate()"
-                                                               md-max-date="ctrl.calculatedMaxProxyStartDate"></md-datepicker>
+                                                <input id="proxyStartDate" name="proxyStartDate"
+                                                       ng-required="ctrl.applicationUser.outOfOffice || ctrl.ouApplicationUser.proxyEndDate"
+                                                       ng-model="ctrl.ouApplicationUser.proxyStartDateString"
+                                                       readonly="true">
+                                                <md-button class="md-icon-button cms-input-overlay-button"
+                                                           ng-click="ctrl.openProxyStartDatePicker()">
+                                                    <md-icon md-svg-icon="calendar"></md-icon>
+                                                </md-button>
+                                                <md-input-container flex class="cms-datepicker cms-datepicker-invisible">
+                                                    <md-datepicker id="proxyStartDate_dp" name="proxyStartDate"
+                                                                   ng-required="ctrl.applicationUser.outOfOffice || ctrl.ouApplicationUser.proxyEndDate"
+                                                                   md-min-date="ctrl.today"
+                                                                   ng-model="ctrl.ouApplicationUser.proxyStartDate"
+                                                                   ng-change="ctrl.getMinProxyEndDate()"
+                                                                   md-max-date="ctrl.calculatedMaxProxyStartDate"
+                                                                   md-is-open="ctrl.isProxyStartDateOpen"></md-datepicker>
+                                                </md-input-container>
                                                 <!--md-max-date="ctrl.ouApplicationUser.proxyEndDate"-->
                                                 <div ng-messages="outOfOfficeSettingsForm.proxyStartDate.$error">
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                 </div>
                                             </md-input-container>
-
                                             <!-- End Date -->
-                                            <md-input-container flex class="cms-datepicker">
+                                            <md-input-container flex>
                                                 <label for="proxyEndDate">{{lang.end_date}}</label>
-                                                <md-datepicker id="proxyEndDate" name="proxyEndDate"
-                                                               ng-required="ctrl.applicationUser.outOfOffice || ctrl.ouApplicationUser.proxyStartDate"
-                                                               ng-model="ctrl.ouApplicationUser.proxyEndDate"
-                                                               md-min-date="ctrl.calculatedMinProxyEndDate"
-                                                               ng-change="ctrl.getMaxProxyStartDate()"
-                                                               ng-disabled="!ctrl.ouApplicationUser.proxyStartDate"></md-datepicker>
+                                                <input id="proxyEndDate" name="proxyEndDate"
+                                                       ng-required="ctrl.applicationUser.outOfOffice || ctrl.ouApplicationUser.proxyStartDate"
+                                                       ng-model="ctrl.ouApplicationUser.proxyEndDateString"
+                                                       readonly="true">
+                                                <md-button class="md-icon-button cms-input-overlay-button"
+                                                           ng-disabled="!ctrl.ouApplicationUser.proxyStartDate"
+                                                           ng-click="ctrl.openProxyEndDatePicker()">
+                                                    <md-icon md-svg-icon="calendar"></md-icon>
+                                                </md-button>
+                                                <md-input-container flex class="cms-datepicker cms-datepicker-invisible">
+                                                    <md-datepicker id="proxyEndDate_dp" name="proxyEndDate"
+                                                                   ng-required="ctrl.applicationUser.outOfOffice || ctrl.ouApplicationUser.proxyStartDate"
+                                                                   ng-model="ctrl.ouApplicationUser.proxyEndDate"
+                                                                   md-min-date="ctrl.calculatedMinProxyEndDate"
+                                                                   ng-change="ctrl.getMaxProxyStartDate()"
+                                                                   md-is-open="ctrl.isProxyEndDateOpen"></md-datepicker>
+                                                </md-input-container>
                                                 <!--md-min-date="ctrl.ouApplicationUser.proxyStartDate"-->
                                                 <div ng-messages="outOfOfficeSettingsForm.proxyEndDate.$error">
                                                     <div ng-message="required">{{lang.field_required}}</div>

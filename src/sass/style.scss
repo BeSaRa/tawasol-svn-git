@@ -2400,6 +2400,20 @@ md-dialog {
   }
 }
 
+.cms-datepicker-invisible {
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+html.rtl {
+  .cms-datepicker-invisible {
+    left: initial;
+    right: 0;
+  }
+}
+
 .md-subheader {
   .cms-subheader-text {
     //display: inline-block !important;
