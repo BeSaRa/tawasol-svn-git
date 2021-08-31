@@ -199,14 +199,17 @@ module.exports = function (app) {
 
             var info = followupSentItem.getInfo();
             info.wobNumber = null;
+            self.followupSentItemCopy = angular.copy(followupSentItem);
             correspondenceService.viewCorrespondence({
                 vsId: info.vsId,
                 docClassName: info.documentClass
             }, self.gridActions, checkIfEditPropertiesAllowed(followupSentItem, true), true)
                 .then(function () {
+                    self.followupSentItemCopy = null;
                     self.reloadFollowupEmployeeSentItems(self.grid.page);
                 })
                 .catch(function () {
+                    self.followupSentItemCopy = null;
                     self.reloadFollowupEmployeeSentItems(self.grid.page);
                 });
         };
@@ -222,11 +225,14 @@ module.exports = function (app) {
                 return;
             }
 
+            self.followupSentItemCopy = angular.copy(followupSentItem);
             followupSentItem.viewUserSentItem(self.gridActions, 'sentItem', $event)
                 .then(function () {
+                    self.followupSentItemCopy = null;
                     return self.reloadFollowupEmployeeSentItems(self.grid.page);
                 })
                 .catch(function () {
+                    self.followupSentItemCopy = null;
                     return self.reloadFollowupEmployeeSentItems(self.grid.page);
                 });
         };
@@ -528,6 +534,9 @@ module.exports = function (app) {
                         callback: self.sendReminderEmail,
                         class: "action-red",
                         checkShow: function (action, model) {
+                            if (!(model instanceof EventHistory)) {
+                                model = angular.copy(self.followupSentItemCopy);
+                            }
                             return !model.isTerminated() && !model.isApproved() && !model.isSentToDepartmentOnly();
                         }
                     }

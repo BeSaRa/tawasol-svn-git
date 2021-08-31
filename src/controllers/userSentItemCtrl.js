@@ -1126,6 +1126,9 @@ module.exports = function (app) {
                         callback: self.sendReminderEmail,
                         class: "action-red",
                         checkShow: function (action, model) {
+                            if (!(model instanceof EventHistory)) {
+                                model = angular.copy(self.userSentItemCopy);
+                            }
                             return !model.isTerminated() && !model.isApproved() && !model.isSentToDepartmentOnly();
                         }
                     }
