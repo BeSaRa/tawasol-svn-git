@@ -576,6 +576,10 @@ module.exports = function (app) {
         };
 
         self.selectedProxyUserChange = function (proxyUser) {
+            if (proxyUser && proxyUser.applicationUser.outOfOffice) {
+                toast.error(langService.get('can_not_select_out_of_office_user'));
+                return false;
+            }
             self.ouApplicationUser.proxyAuthorityLevels = null;
             self.ouApplicationUser.proxyStartDate = null;
             self.ouApplicationUser.proxyEndDate = null;
@@ -1724,7 +1728,8 @@ module.exports = function (app) {
         }
 
         self.isOutOfOfficeSaveDisabled = function () {
-            if (!self.outOfOfficeSettingsForm) {
+            if (self.outOfOfficeSettingsForm.$invalid ||
+                (self.selectedProxyUser && self.selectedProxyUser.applicationUser.outOfOffice)) {
                 return true;
             }
             return !_isOutOfOfficeUpdated();

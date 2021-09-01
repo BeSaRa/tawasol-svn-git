@@ -777,6 +777,8 @@
                                                     </md-select-header>
                                                     <md-option ng-if="!ctrl.isCurrentUser(user)"
                                                                ng-value="user"
+                                                               ng-disabled="user.applicationUser.outOfOffice"
+                                                               tooltip="{{user.applicationUser.outOfOffice ? lang.out_of_office : ''}}"
                                                                ng-repeat="user in ctrl.proxyUsers | translatedNameFilter: ctrl.inlineAppUserSearchText: 'getTranslatedApplicationUserName'">
                                                        <span md-highlight-text="ctrl.inlineAppUserSearchText"
                                                              md-highlight-flags="i">{{user.getTranslatedApplicationUserName()}}</span>
@@ -804,7 +806,7 @@
                                                              ng-if="!ctrl.isManagerOfCurrentOu">
                                                 <md-item-template>
                                                         <span md-highlight-text="ctrl.searchTextProxyUser"
-                                                              tooltip="{{item.getTranslatedName()}}"
+                                                              tooltip="{{item.applicationUser.outOfOffice ? lang.out_of_office : item.getTranslatedName()}}"
                                                               md-highlight-flags="i">{{item.getTranslatedName()}}</span>
                                                 </md-item-template>
                                                 <md-not-found>
@@ -849,7 +851,8 @@
                                                            ng-click="ctrl.openProxyStartDatePicker()">
                                                     <md-icon md-svg-icon="calendar"></md-icon>
                                                 </md-button>
-                                                <md-input-container flex class="cms-datepicker cms-datepicker-invisible">
+                                                <md-input-container flex
+                                                                    class="cms-datepicker cms-datepicker-invisible">
                                                     <md-datepicker id="proxyStartDate_dp" name="proxyStartDate"
                                                                    ng-required="ctrl.applicationUser.outOfOffice || ctrl.ouApplicationUser.proxyEndDate"
                                                                    md-min-date="ctrl.today"
@@ -875,7 +878,8 @@
                                                            ng-click="ctrl.openProxyEndDatePicker()">
                                                     <md-icon md-svg-icon="calendar"></md-icon>
                                                 </md-button>
-                                                <md-input-container flex class="cms-datepicker cms-datepicker-invisible">
+                                                <md-input-container flex
+                                                                    class="cms-datepicker cms-datepicker-invisible">
                                                     <md-datepicker id="proxyEndDate_dp" name="proxyEndDate"
                                                                    ng-required="ctrl.applicationUser.outOfOffice || ctrl.ouApplicationUser.proxyStartDate"
                                                                    ng-model="ctrl.ouApplicationUser.proxyEndDate"

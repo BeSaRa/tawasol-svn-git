@@ -32,7 +32,8 @@
                                              md-floating-label="{{lang.user_on_behalf}}">
                                 <md-item-template>
                                     <span md-highlight-text="ctrl.searchTextProxyUser" md-highlight-flags="i"
-                                          tooltip="{{item.getTranslatedName()}}">{{item.getTranslatedName()}}</span>
+                                          tooltip="{{item.applicationUser.outOfOffice ? lang.out_of_office : item.getTranslatedName()}}">
+                                        {{item.getTranslatedName()}}</span>
                                 </md-item-template>
                                 <md-not-found>
                                     {{lang.no_records_found_matching_search}}
