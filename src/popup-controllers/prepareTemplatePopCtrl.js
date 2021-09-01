@@ -3,6 +3,7 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'prepareTemplatePopCtrl';
+        self.templateSearchText = null;
 
         self.sendTemplateToPrepare = function (template) {
             dialog.hide(template);
