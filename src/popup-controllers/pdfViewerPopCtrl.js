@@ -427,7 +427,7 @@ module.exports = function (app) {
             }
 
             var isDownloadAllowed = true;
-            if (self.correspondence.isCorrespondenceApprovedBefore() && self.info.authorizeByAnnotation) {
+            if (!self.info.isAttachment && self.correspondence.isCorrespondenceApprovedBefore() && self.info.authorizeByAnnotation) {
                 isDownloadAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
             }
             isDownloadAllowed = isDownloadAllowed && employeeService.hasPermissionTo("DOWNLOAD_MAIN_DOCUMENT");
