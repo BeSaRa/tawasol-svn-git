@@ -1261,7 +1261,14 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.handleDeleteInkSignatureAnnotation = function (annotation) {
-            return applicationUserSignatureService.deleteUserInkSignature(annotation.customData.additionalData.vsId);
+            return applicationUserSignatureService
+                .deleteUserInkSignature(annotation.customData.additionalData.vsId)
+                .then(function () {
+                    self.populateInkSignatures().then(function (list) {
+                        console.log(list);
+                        self.currentInstance.setInkSignatures(list);
+                    })
+                });
         };
 
         self.generateReasonableSize = function (annotation) {
