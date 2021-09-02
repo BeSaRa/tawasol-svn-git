@@ -1246,7 +1246,7 @@ module.exports = function (app) {
                         .set('lineWidth', reasonableSize.lineWidth);
 
                     return self.currentInstance.getInkSignatures().then(function (signatures) {
-                        signatures = signatures.splice(signatures.size - 1, 1, self.latestInkAnnotation);
+                        signatures = signatures.splice(signatures.size - 1, 0, self.latestInkAnnotation);
                         return self.currentInstance.setInkSignatures(signatures).then(function () {
                             return self.currentInstance.update(self.latestInkAnnotation).then(function () {
                                 self.latestInkAnnotation = null;
