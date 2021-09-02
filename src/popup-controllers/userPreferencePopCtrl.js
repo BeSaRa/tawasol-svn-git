@@ -589,6 +589,8 @@ module.exports = function (app) {
             self.filteredSecurityLevels = _.filter(self.securityLevels, self.isSecurityLevelInclude);
             if (!proxyUser) {
                 self.ouApplicationUser.proxyUser = null;
+            } else if (proxyUser && !self.filteredSecurityLevels.length) {
+                toast.error('no_security_levels_available')
             }
         };
 
@@ -1728,8 +1730,8 @@ module.exports = function (app) {
         }
 
         self.isOutOfOfficeSaveDisabled = function () {
-            if (self.outOfOfficeSettingsForm.$invalid ||
-                (self.selectedProxyUser && self.selectedProxyUser.applicationUser.outOfOffice)) {
+            if (self.outOfOfficeSettingsForm && (self.outOfOfficeSettingsForm.$invalid ||
+                (self.selectedProxyUser && self.selectedProxyUser.applicationUser.outOfOffice))) {
                 return true;
             }
             return !_isOutOfOfficeUpdated();

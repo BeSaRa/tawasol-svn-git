@@ -822,7 +822,7 @@
                                             <md-input-container flex>
                                                 <label for="proxyAuthorityLevels">{{lang.authority_level}}</label>
                                                 <md-select multiple name="proxyAuthorityLevels"
-                                                           ng-required="ctrl.filteredSecurityLevels.length"
+                                                           ng-required="ctrl.selectedProxyUser"
                                                            ng-disabled="!ctrl.filteredSecurityLevels.length"
                                                            id="proxyAuthorityLevels"
                                                            ng-model="ctrl.ouApplicationUser.proxyAuthorityLevels"
