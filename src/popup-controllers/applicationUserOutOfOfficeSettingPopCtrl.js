@@ -207,7 +207,7 @@ module.exports = function (app) {
             if (!proxyUser) {
                 self.ouApplicationUser.proxyUser = null;
             } else if (proxyUser && !self.filteredSecurityLevels.length) {
-                toast.error('no_security_levels_available')
+                toast.error(langService.get('no_security_levels_available'));
             }
         };
 
