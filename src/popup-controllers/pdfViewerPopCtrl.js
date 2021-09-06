@@ -1336,7 +1336,7 @@ module.exports = function (app) {
                     // $cookies.get(PDFService.cookieAttachedTypeKey) ? self[$cookies.get(PDFService.cookieAttachedTypeKey)](null, null, updatedAnnotation) : self.addUserNameAndDateToDocument(null, null, updatedAnnotation);
                     self.addUserInfoToDocument(null, null, updatedAnnotation);
                 }
-                return self.currentInstance.updateAnnotation(updatedAnnotation);
+                return self.currentInstance.update(updatedAnnotation);
             }
         };
         /**
@@ -2183,7 +2183,7 @@ module.exports = function (app) {
             self.getDocumentAnnotations()
                 .then(function (annotations) {
                     annotations.forEach(function (annotation) {
-                        self.currentInstance.updateAnnotation(annotation.set('noView', false))
+                        self.currentInstance.update(annotation.set('noView', false))
                     });
                 });
         };
