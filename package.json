@@ -45,7 +45,7 @@
     "overlayscrollbars": "^1.6.0",
     "owl.carousel": "^2.3.4",
     "perfect-scrollbar": "^0.7.1",
-    "pspdfkit": "https://customers.pspdfkit.com/download/pspdfkit-web/nightly.tar.gz",
+    "pspdfkit": "^2021.5.2",
     "textangular": "^1.5.16",
     "tinycolor2": "^1.4.1",
     "uuid": "^8.3.0"
