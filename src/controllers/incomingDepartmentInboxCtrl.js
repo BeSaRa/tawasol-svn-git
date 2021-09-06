@@ -973,7 +973,8 @@ module.exports = function (app) {
                     // Document is created by central archive for the receiver department.
                     // Document isn’t sent to multiple workflows.
                     var info = model.getInfo();
-                    return model.generalStepElm.fromCentralArchive &&
+                    return rootEntity.getGlobalSettings().returnToCentralArchive &&
+                        model.generalStepElm.fromCentralArchive &&
                         !model.generalStepElm.sentToMultipleOus &&
                         info.documentClass === 'incoming';
                 }
