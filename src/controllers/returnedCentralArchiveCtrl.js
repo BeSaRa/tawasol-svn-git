@@ -302,7 +302,7 @@ module.exports = function (app) {
             return correspondenceService
                 .loadReturnedCentralArchive()
                 .then(function (result) {
-                    // counterService.loadCounters();
+                    counterService.loadCounters();
                     self.returnedArchiveItems = result;
                     self.returnedArchiveItems = angular.copy(self.returnedArchiveItems);
                     self.selectedReturnedArchiveItems = [];
