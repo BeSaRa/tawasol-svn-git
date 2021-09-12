@@ -834,6 +834,7 @@ module.exports = function (app) {
                             icon: 'message',
                             text: 'grid_action_send_email_reminder',
                             callback: self.sendReminderEmailToUser,
+                            showInView: false,
                             class: "action-green",
                             checkShow: function (action, model) {
                                 return true;
