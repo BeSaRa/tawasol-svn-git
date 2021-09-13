@@ -372,6 +372,15 @@
                     </div>
                 </md-input-container>
             </div>
+            <div layout="row" ng-if="ctrl.psPDFViewerEnabled">
+                <!-- Is official -->
+                <md-switch flex ng-model="ctrl.document.isOfficial"
+                           aria-label="{{lang.official_document}}"
+                           ng-disabled="!!ctrl.disableProperties">
+                    <label>{{lang.official_document}} :
+                        {{ctrl.document.getTranslatedYesNo('isOfficial')}}</label>
+                </md-switch>
+            </div>
         </div>
     </fieldset>
 </form>

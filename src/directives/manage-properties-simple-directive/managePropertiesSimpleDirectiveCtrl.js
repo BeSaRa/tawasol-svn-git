@@ -16,6 +16,7 @@ module.exports = function (app) {
                                                                     $stateParams,
                                                                     classificationService,
                                                                     gridService,
+                                                                    rootEntity,
                                                                     _,
                                                                     $rootScope) {
         'ngInject';
@@ -45,6 +46,7 @@ module.exports = function (app) {
 
         // required fields for the current document class
         self.required = {};
+        self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
 
         /**
          * @description Set the required for each field from property configuration
