@@ -174,6 +174,8 @@ module.exports = function (app) {
 
         self.genders = lookupService.returnLookups(lookupService.gender);
         self.languages = lookupService.returnLookups(lookupService.language);
+        self.seqWFEmailSettingsList = lookupService.returnLookups(lookupService.seqWFEmailSettings);
+
         self.jobTitles = jobTitleService.jobTitles;
         self.ranks = rankService.ranks;
         self.themes = themeService.themes;

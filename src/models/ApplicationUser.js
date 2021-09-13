@@ -57,6 +57,7 @@ module.exports = function (app) {
             self.signAnnotationSettings = '';
             self.searchDefaultView = 1;
             self.userWFDistView = 1;
+            self.seqWFEmailSettings = 0;
 
             var collectionResults = [
                 'reminderSmsPriority',

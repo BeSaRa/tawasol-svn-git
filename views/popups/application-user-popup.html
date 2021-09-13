@@ -749,6 +749,29 @@
                                         </div>
                                     </div>
                                 </fieldset>
+                                <!-- Seq WF Notification -->
+                                <fieldset>
+                                    <legend class="md-accent">{{lang.sequential_workflow}}</legend>
+                                    <div class="full-width-fieldset">
+                                        <div layout="row">
+                                            <md-input-container flex>
+                                                <label for="seqWFEmailSettings">{{lang.email_notification}}</label>
+                                                <md-select multiple name="seqWFEmailSettings" id="seqWFEmailSettings"
+                                                           ng-model-options="{trackBy: '$value.lookupKey'}"
+                                                           ng-model="ctrl.applicationUser.seqWFEmailSettings">
+                                                    <md-option ng-value="option"
+                                                               ng-repeat="option in ctrl.seqWFEmailSettingsList">
+                                                        {{option.getTranslatedName()}}
+                                                    </md-option>
+                                                </md-select>
+                                                <div ng-messages="userPreferencesForm.seqWFEmailSettings.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                </div>
+                                            </md-input-container>
+                                            <md-input-container flex></md-input-container>
+                                        </div>
+                                    </div>
+                                </fieldset>
                             </div>
                         </md-content>
                     </md-tab>

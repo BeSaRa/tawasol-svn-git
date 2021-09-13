@@ -72,6 +72,7 @@ module.exports = function (app) {
         self.userDistWFViewList = lookupService.returnLookups(lookupService.userDistWFView);
         //self.authorityLevels = lookupService.returnLookups(lookupService.securityLevel);
         self.authorityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
+        self.seqWFEmailSettingsList = lookupService.returnLookups(lookupService.seqWFEmailSettings);
 
         self.jobTitles = jobTitles;
         self.ranks = ranks;

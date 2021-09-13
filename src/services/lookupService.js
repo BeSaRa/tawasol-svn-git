@@ -38,6 +38,7 @@ module.exports = function (app) {
         self.digitalCertificateMode = 'digitalCertificate';
         self.searchDefaultView = 'searchDefaultView';
         self.userDistWFView = 'userDistWFView';
+        self.seqWFEmailSettings = 'seqEmailSettings';
 
         // this propertyConfiguration related to the property configurations Service.
         self.propertyConfigurations = {
