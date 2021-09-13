@@ -103,7 +103,11 @@ module.exports = function (app) {
 
         self.$onInit = function () {
             self.hideSlowModeToggleButton = self.psPDFViewerEnabled && self.document && self.document.mimeType === 'application/pdf';
-            self.isLimitedCentralUnitAccess = correspondenceService.isLimitedCentralUnitAccess(self.document);
+            if (self.typeOfDoc === 'external-import') {
+                self.isLimitedCentralUnitAccess = false;
+            } else {
+                self.isLimitedCentralUnitAccess = correspondenceService.isLimitedCentralUnitAccess(self.document);
+            }
         }
 
     });

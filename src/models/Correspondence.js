@@ -107,6 +107,7 @@ module.exports = function (app) {
             self.linkedExportedDocsList = [];
             self.isMigrated = false;
             self.seqWFId = null;
+            self.isOfficial = false;
             // azure
             self.azureResultItem = null;
             self.highlights = null;
@@ -176,6 +177,9 @@ module.exports = function (app) {
              */
             Correspondence.prototype.getTranslatedName = function () {
                 return this.docSubject;
+            };
+            Correspondence.prototype.getTranslatedYesNo = function (fieldName) {
+                return this[fieldName] ? langService.get('yes') : langService.get('no');
             };
 
             Correspondence.prototype.getNames = function () {

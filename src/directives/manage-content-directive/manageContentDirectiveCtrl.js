@@ -431,6 +431,7 @@ module.exports = function (app) {
                     self.document.externalImportData = importResult
                     self.isContentFileAttached = true;
                     self.templateOrFileName = 'external import file';
+                    self.document.isOfficial = true;
                 });
         };
 

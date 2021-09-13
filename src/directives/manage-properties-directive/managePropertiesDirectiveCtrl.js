@@ -12,6 +12,7 @@ module.exports = function (app) {
                                                               DocumentType,
                                                               $timeout,
                                                               toast,
+                                                              rootEntity,
                                                               _,
                                                               generator,
                                                               correspondenceService,
@@ -32,6 +33,7 @@ module.exports = function (app) {
             documentFileOptionFromInfo, documentSecurityLevelLookupKey;
         self.document = null;
         self.maxCreateDate = new Date();
+        self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
 
         // all priority level
         self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
