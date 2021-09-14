@@ -1713,11 +1713,7 @@ module.exports = function (app) {
             return _.filter(users, function (user) {
                 var userSecurityLevels = generator.getSelectedCollectionFromResult(self.securityLevels, user[securityLevelProperty], 'lookupKey');
                 return _.every(userSecurityLevels, function (userSecurityLevel) {
-                    if (correspondence.hasOwnProperty('securityLevelLookup')) {
-                        return userSecurityLevel.lookupKey !== correspondence.securityLevelLookup.lookupKey
-                    } else {
-                        return userSecurityLevel.lookupKey !== correspondence.securityLevel.lookupKey
-                    }
+                    return userSecurityLevel.lookupKey !== correspondence.securityLevel.id;
                 });
             });
         }

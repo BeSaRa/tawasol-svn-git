@@ -1351,8 +1351,9 @@ module.exports = function (app) {
             }
 
             Correspondence.prototype.hasNormalOrPersonalPrivateSecurityLevel = function () {
-                return this.hasOwnProperty('securityLevelLookup') &&
-                    (this.securityLevelLookup.lookupKey === 1 || this.securityLevelLookup.lookupKey === 4)
+                return this.securityLevel.hasOwnProperty('id') ?
+                    (this.securityLevel.id === 1 || this.securityLevel.id === 4) :
+                    (this.securityLevel === 1 || this.securityLevel === 4);
             }
 
             Correspondence.prototype.isLimitedCentralUnitAccess = function () {
