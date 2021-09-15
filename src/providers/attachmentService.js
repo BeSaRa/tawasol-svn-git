@@ -798,20 +798,21 @@ module.exports = function (app) {
                     priorityLevel = priorityLevel.hasOwnProperty('id') ? priorityLevel.id : priorityLevel;
                     searchTemplateUrl = searchTemplateUrl && searchTemplateUrl.hasOwnProperty('url') ? searchTemplateUrl.url : searchTemplateUrl;
 
-                    var variables = ['', 'token', 'vsId', 'attachmentType', 'securityLevel', 'attachmentName', 'updateActionStatus', 'exportStatus', 'priorityLevel', 'username', 'password', 'locale'].join('%2C:').change({
-                        token: tokenService.getToken(),
-                        vsId: correspondence.getInfo().vsId,
-                        attachmentType: attachmentType,
-                        securityLevel: securityLevel,
-                        attachmentName: attachment.documentTitle ? attachment.documentTitle : '',
-                        locale: langService.current,
-                        updateActionStatus: updateActionStatus,
-                        priorityLevel: priorityLevel,
-                        exportStatus: attachment.exportStatus,
-                        username: encodeURIComponent(userData.username),
-                        password: encodeURIComponent(userData.password)
-                    });
-                    searchTemplateUrl = searchTemplateUrl.replace('&mimeType', variables + '&mimeType');
+                    var urlReplaceString = searchTemplateUrl.indexOf('&mimeType') > -1 ? '&mimeType' : '&feature',
+                        variables = ['', 'token', 'vsId', 'attachmentType', 'securityLevel', 'attachmentName', 'updateActionStatus', 'exportStatus', 'priorityLevel', 'username', 'password', 'locale'].join('%2C:').change({
+                            token: tokenService.getToken(),
+                            vsId: correspondence.getInfo().vsId,
+                            attachmentType: attachmentType,
+                            securityLevel: securityLevel,
+                            attachmentName: attachment.documentTitle ? attachment.documentTitle : '',
+                            locale: langService.current,
+                            updateActionStatus: updateActionStatus,
+                            priorityLevel: priorityLevel,
+                            exportStatus: attachment.exportStatus,
+                            username: encodeURIComponent(userData.username),
+                            password: encodeURIComponent(userData.password)
+                        });
+                    searchTemplateUrl = searchTemplateUrl.replace(urlReplaceString, variables + urlReplaceString);
 
                     return dialog
                         .showDialog({
