@@ -478,7 +478,7 @@
                 <div flex ng-if="ctrl.psPDFViewerEnabled" class="cms-input-container">
                     <md-switch flex ng-model="ctrl.document.isOfficial"
                                aria-label="{{lang.official_document}}"
-                               ng-disabled="!!ctrl.disableProperties">
+                               ng-disabled="!!ctrl.disableProperties || (!!ctrl.document.vsId && !ctrl.employeeService.hasPermissionTo('EDIT_OFFICIAL_BOOK'))">
                         <label>{{lang.official_document}} :
                             {{ctrl.document.getTranslatedYesNo('isOfficial')}}</label>
                     </md-switch>

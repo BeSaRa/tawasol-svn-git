@@ -176,6 +176,22 @@ module.exports = function (app) {
             return (self.officialAttachmentExcludedList.indexOf(item) !== -1);
         }
 
+        function _isOfficialAttachment() {
+            return self.info.isAttachment && self.correspondence.isOfficial;
+        }
+
+        function _isOfficialDocument() {
+            return !self.info.isAttachment && self.correspondence.isOfficial;
+        }
+
+        function _hasAnnotateOfficialAttachmentPermission() {
+            return employeeService.hasPermissionTo('ANNOTATE_OFFICIAL_ATTACHMENT');
+        }
+
+        function _hasAnnotateOfficialDocumentPermission() {
+            return employeeService.hasPermissionTo('ANNOTATE_OFFICIAL_BOOK');
+        }
+
         /**
          * @description create custom buttons and attache it to  viewer toolbar.
          * @return {*}
@@ -325,9 +341,14 @@ module.exports = function (app) {
             };
 
             var buttonList = [];
-            if (!(self.info.isAttachment && self.correspondence.isOfficial && !employeeService.hasPermissionTo('ANNOTATE_OFFICIAL_ATTACHMENT'))) {
+            /*if (!(self.info.isAttachment && self.correspondence.isOfficial && !employeeService.hasPermissionTo('ANNOTATE_OFFICIAL_ATTACHMENT'))) {
+                buttonList = buttonList.concat([userInfoButton, userInfoNameButton, userInfoDateButton, userInfoJobTitleButton, configureUserInfoButton]);
+            }*/
+
+            if ((_isOfficialAttachment() && _hasAnnotateOfficialAttachmentPermission()) || (_isOfficialDocument() && _hasAnnotateOfficialDocumentPermission())) {
                 buttonList = buttonList.concat([userInfoButton, userInfoNameButton, userInfoDateButton, userInfoJobTitleButton, configureUserInfoButton]);
             }
+
             buttonList = buttonList.concat([printWithoutAnnotationButton, bookmarkButton]);
 
             // remove default print from toolbar
@@ -2351,13 +2372,15 @@ module.exports = function (app) {
                 self.notifyPreviousSteps = true;
             }
 
-            if ((!self.sequentialWF && self.info.docStatus >= 24) ||
-                (self.info.isAttachment && self.correspondence.isOfficial && !employeeService.hasPermissionTo('ANNOTATE_OFFICIAL_ATTACHMENT'))) {
+            if ((!self.sequentialWF && self.info.docStatus >= 24)
+                || (_isOfficialAttachment() && !_hasAnnotateOfficialAttachmentPermission())
+                || (_isOfficialDocument() && !_hasAnnotateOfficialDocumentPermission())
+            ) {
                 self.enableAttachUserInfo = false;
             }
 
             self.attachUserInfoToSignature = $cookies.get(cookieKey) ? JSON.parse($cookies.get(cookieKey)) : false;
-            if (self.info.isAttachment && self.correspondence.isOfficial && !employeeService.hasPermissionTo('ANNOTATE_OFFICIAL_ATTACHMENT')) {
+            if ((_isOfficialAttachment() && !_hasAnnotateOfficialAttachmentPermission()) || (_isOfficialDocument() && !_hasAnnotateOfficialDocumentPermission())) {
                 self.attachUserInfoToSignature = false;
             }
 
