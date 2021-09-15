@@ -108,6 +108,7 @@ module.exports = function (app) {
                 url: '/landing-page',
                 templateUrl: templateProvider.getView('landing-page'),
                 controller: 'landingPageCtrl',
+                permission: 'menu_item_dashboard',
                 controllerAs: 'ctrl'
             })
             // administration
