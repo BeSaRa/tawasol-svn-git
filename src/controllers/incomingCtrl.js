@@ -70,7 +70,7 @@ module.exports = function (app) {
         self.organizations = angular.copy(organizations);
         // in case of central archive.
         self.registryOrganizations = centralArchives;
-
+        self.receiveG2gOuId = null;
         self.templates = lookups.templates;
 
         self.documentInformation = null;
@@ -128,6 +128,7 @@ module.exports = function (app) {
 
             // depend on our discussion with Ahmed Abu Al Nasser.
             if (centralArchives) {
+                self.receiveG2gOuId = self.incoming.ou;
                 self.incoming.registryOU = null;
                 self.incoming.ou = null;
             }

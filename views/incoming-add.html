@@ -131,7 +131,9 @@
                                             document="ctrl.incoming"
                                             signatures-count="ctrl.incoming.signaturesCount"
                                             templates="ctrl.templates"
-                                            receive-document="ctrl.receive || ctrl.receiveG2G"></manage-content-directive>
+                                            receive-document="ctrl.receive || ctrl.receiveG2G"
+                                            receive-g2g-ou-id="ctrl.receiveG2gOuId"
+                                            receive-g2g="!!ctrl.receiveG2G"></manage-content-directive>
                                 </div>
                             </accordion-content>
                         </accordion-item>
@@ -151,6 +153,7 @@
                                                                  vs-id="ctrl.incoming.vsId"
                                                                  document-class="ctrl.incoming.docClassName"
                                                                  receive-g2g="!!ctrl.receiveG2G"
+                                                                 receive-g2g-ou-id="ctrl.receiveG2gOuId"
                                                                  receive="!!ctrl.receive">
                                     </manage-attachment-directive>
                                 </div>

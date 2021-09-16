@@ -615,9 +615,19 @@ module.exports = function (app) {
                 });
         };
 
+        function _checkReceiveG2G() {
+            return self.receiveG2g;
+        }
+
         self.$onInit = function () {
             self.isImportFromExDataSourceAllowed = false;
-            self.isLimitedCentralUnitAccess = angular.copy(self.document).isLimitedCentralUnitAccess();
+            if (_checkReceiveG2G()) {
+                self.receiveG2GDocumentCopy = angular.copy(self.document);
+                self.receiveG2GDocumentCopy.ou = self.receiveG2gOuId;
+                self.isLimitedCentralUnitAccess = self.receiveG2GDocumentCopy.isLimitedCentralUnitAccess();
+            } else {
+                self.isLimitedCentralUnitAccess = angular.copy(self.document).isLimitedCentralUnitAccess();
+            }
 
             if (rootEntity.returnRootEntity().rootEntity.importDataSourceStatus) {
                 userExternalDataSourceService.loadActiveUserExternalDataSources()

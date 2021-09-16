@@ -22,7 +22,9 @@ module.exports = function (app) {
                 viewUrl: '=?',
                 isSimpleAdd: '=?',
                 receiveDocument: '=?',
-                uploadedCallback: '=?'
+                uploadedCallback: '=?',
+                receiveG2g: '=?',
+                receiveG2gOuId: '=?',
             }
         }
     })

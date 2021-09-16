@@ -22,6 +22,7 @@ module.exports = function (app) {
                 linkedExportedAttachments: '=?',
                 receiveG2g: '=?',
                 receive: '=?',
+                receiveG2gOuId: '=?',
                 activeAttachment: '=?'
             }
         }

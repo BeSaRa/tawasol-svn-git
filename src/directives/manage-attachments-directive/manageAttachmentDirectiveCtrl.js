@@ -44,7 +44,13 @@ module.exports = function (app) {
             self.attachmentUpdateActions = lookupService.returnLookups(lookupService.attachmentUpdateAction);
             self.priorityLevels = lookupService.returnLookups(lookupService.attachmentPriority);
             self.getSortedData();
-            self.isLimitedCentralUnitAccess = correspondenceService.isLimitedCentralUnitAccess(self.document);
+            if (_checkReceiveG2G()) {
+                self.receiveG2GDocumentCopy = angular.copy(self.document);
+                self.receiveG2GDocumentCopy.ou = self.receiveG2gOuId;
+                self.isLimitedCentralUnitAccess = correspondenceService.isLimitedCentralUnitAccess(self.receiveG2GDocumentCopy);
+            } else {
+                self.isLimitedCentralUnitAccess = correspondenceService.isLimitedCentralUnitAccess(self.document);
+            }
         });
 
         // to hide buttons when one of the process work.
