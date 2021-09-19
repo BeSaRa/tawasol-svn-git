@@ -86,7 +86,8 @@ module.exports = function (app) {
                     documentClass: self.classDescription,
                     isAttachment: true,
                     vsId: self.vsId,
-                    securityLevel: self.securityLevel
+                    securityLevel: self.securityLevel,
+                    isOfficial: !!self.isOfficial
                 });
             };
 

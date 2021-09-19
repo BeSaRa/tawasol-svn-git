@@ -518,6 +518,17 @@ module.exports = function (app) {
             return false;
         }
 
+        function _getIsOfficial(correspondence) {
+            if (correspondence.hasOwnProperty('generalStepElm')) {
+                return !!correspondence.generalStepElm.isOfficial;
+            } else if (correspondence.hasOwnProperty('stepElm')) {
+                return !!correspondence.stepElm.isOfficial;
+            } else if (correspondence.hasOwnProperty('correspondence')) {
+                return !!correspondence.correspondence.isOfficial;
+            }
+            return false;
+        }
+
         /**
          * @description bulk message for any bulk actions.
          * @param result
@@ -609,7 +620,8 @@ module.exports = function (app) {
                 isAttachment: false,
                 hasActiveSeqWF: _getHasActiveSeqWF(correspondence),
                 signaturesCount: _getSignatureCount(correspondence),
-                authorizeByAnnotation: _getAuthorizeByAnnotation(correspondence)
+                authorizeByAnnotation: _getAuthorizeByAnnotation(correspondence),
+                isOfficial: _getIsOfficial(correspondence)
             });
         };
         /**

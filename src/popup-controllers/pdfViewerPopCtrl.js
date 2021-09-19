@@ -177,11 +177,11 @@ module.exports = function (app) {
         }
 
         function _isOfficialAttachment() {
-            return self.info.isAttachment && self.correspondence.isOfficial;
+            return self.info.isAttachment && self.info.isOfficial;
         }
 
         function _isOfficialDocument() {
-            return !self.info.isAttachment && self.correspondence.isOfficial;
+            return !self.info.isAttachment && self.info.isOfficial;
         }
 
         function _hasAnnotateOfficialAttachmentPermission() {
