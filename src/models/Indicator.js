@@ -626,7 +626,7 @@ module.exports = function (app) {
                     icon: self.getIndicatorIcons('isOfficial'),
                     tooltip: 'official_document',
                     legendText: function (indicator) {
-                        return '';
+                        return langService.get('official_document');
                     }
                 });
             };
