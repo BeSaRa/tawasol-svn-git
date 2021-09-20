@@ -340,12 +340,19 @@ module.exports = function (app) {
                 onPress: self.configureUserInfoAnnotation
             };
 
-            var buttonList = [];
+            var buttonList = [], canUseUserInfo = true;
             /*if (!(self.info.isAttachment && self.correspondence.isOfficial && !employeeService.hasPermissionTo('ANNOTATE_OFFICIAL_ATTACHMENT'))) {
                 buttonList = buttonList.concat([userInfoButton, userInfoNameButton, userInfoDateButton, userInfoJobTitleButton, configureUserInfoButton]);
             }*/
 
-            if ((_isOfficialAttachment() && _hasAnnotateOfficialAttachmentPermission()) || (_isOfficialDocument() && _hasAnnotateOfficialDocumentPermission())) {
+            // if official, check permission to show, otherwise show always
+            if (_isOfficialAttachment()) {
+                canUseUserInfo = _hasAnnotateOfficialAttachmentPermission();
+            } else if (_isOfficialDocument()) {
+                canUseUserInfo = _hasAnnotateOfficialDocumentPermission();
+            }
+
+            if (canUseUserInfo) {
                 buttonList = buttonList.concat([userInfoButton, userInfoNameButton, userInfoDateButton, userInfoJobTitleButton, configureUserInfoButton]);
             }
 
@@ -441,7 +448,7 @@ module.exports = function (app) {
 
             toolbarInstance = toolbarInstance.filter(item => item.type !== 'ink-eraser');
 
-            if (self.info.isAttachment && self.correspondence.isOfficial) {
+            if (_isOfficialAttachment() || _isOfficialDocument()) {
                 toolbarInstance = toolbarInstance.filter(item => {
                     return item.type === 'custom' ? !_itemInOfficialExcludedList(item.id) : !_itemInOfficialExcludedList(item.type);
                 });
