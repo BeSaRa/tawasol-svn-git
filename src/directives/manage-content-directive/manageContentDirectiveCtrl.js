@@ -36,6 +36,7 @@ module.exports = function (app) {
         self.document = null;
         self.editContent = false;
         self.propertyConfigurations = [];
+        self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
 
         self.required = {};
 
@@ -184,6 +185,7 @@ module.exports = function (app) {
                     if (result) {
                         self.documentInformation = self.lastTemplate;
                         self.templateOrFileName = templateOrFileName;
+                        self.document.isOfficial = false;
                         if (self.vsId && !self.fromDialog) {
                             correspondenceService
                                 .updateCorrespondenceWithContent(self.document, self.documentInformation)
@@ -217,6 +219,18 @@ module.exports = function (app) {
             return !self.displayPrepare && !self.receiveDocument && document.getInfo().isPaper;
         };
 
+        self.isOfficialDisabled = function () {
+            if (!self.psPDFViewerEnabled || !self.document.externalImportData) {
+                return true;
+            }
+            if (!self.document.vsId) {
+                return false;
+            }
+            // if new document, switch is enabled, otherwise check for permission
+            return !employeeService.hasPermissionTo('SIGN_OFFICIAL_BOOK');
+
+        };
+
         /**
          * @description start PrepareCorrespondence Template.
          * @param $event
@@ -238,6 +252,7 @@ module.exports = function (app) {
                         self.template = template;
                         self.uploadedCallback && self.uploadedCallback();
                         self.document.externalImportData = null;
+                        self.document.isOfficial = false;
                         if (self.isSimpleAdd) {
                             return self.getTrustViewUrl(template.getSubjectTitle(), $event);
                         } else {
@@ -252,9 +267,11 @@ module.exports = function (app) {
          * @param element
          */
         self.checkContentFile = function (contentFiles, element) {
+            self.document.externalImportData = null;
+            self.document.isOfficial = false;
+
             if (contentFiles.length) {
                 var info = self.document.getInfo();
-                self.document.externalImportData = null;
 
                 //Electronic Document - only word document is allowed
                 var allowedDocument = "wordDocument";
@@ -404,6 +421,8 @@ module.exports = function (app) {
             self.isContentFileAttached = false;
             self.simpleViewUrl = null;
             self.viewUrl = null;
+            self.document.externalImportData = null;
+            self.document.isOfficial = false;
         };
 
 

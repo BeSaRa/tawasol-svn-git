@@ -909,7 +909,8 @@ module.exports = function (app) {
             if (correspondence.hasVsId()) {
                 var url = _createUrlSchema(correspondence.vsId, correspondence.docClassName, 'user-ext-import-store/content')
                     + '?sourceId=' + correspondence.externalImportData.sourceId
-                    + '&paramValue=' + correspondence.externalImportData.identifier;
+                    + '&paramValue=' + correspondence.externalImportData.identifier
+                    + '&isOfficial=' + correspondence.isOfficial;
 
                 return $http.put(url, {})
                     .then(function (result) {
