@@ -42,7 +42,7 @@
             </md-button>
         </div>
         <!-- Is Official -->
-        <div flex ng-if="ctrl.canShowImportFromExDataSource(ctrl.document) && ctrl.psPDFViewerEnabled"
+        <div flex ng-if="ctrl.canShowImportFromExDataSource(ctrl.document) && ctrl.psPDFViewerEnabled && ctrl.document.externalImportData"
              class="cms-input-container">
             <md-switch flex ng-model="ctrl.document.isOfficial"
                        aria-label="{{lang.official_document}}"

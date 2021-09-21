@@ -39,6 +39,7 @@ module.exports = function (app) {
         self.ouSearchText = '';
 
         // current employee
+        self.employeeService = employeeService;
         self.employee = employeeService.getEmployee();
         // for sub organizations
         self.subOrganizations = [];
