@@ -1196,6 +1196,7 @@ module.exports = function (app) {
                     .then(function (generalStepElementView) {
                         generalStepElementView.actions = actions;
                         self.generalStepElm.isSeqWFBackward = generalStepElementView.generalStepElm.isSeqWFBackward;
+                        self.generalStepElm.isOfficial = generalStepElementView.correspondence.isOfficial;
                         if (seqWF) {
                             var step = _.find(seqWF.steps, function (step) {
                                 return step.id === generalStepElementView.generalStepElm.seqWFNextStepId;
