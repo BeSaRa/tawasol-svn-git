@@ -525,6 +525,8 @@ module.exports = function (app) {
                 return !!correspondence.stepElm.isOfficial;
             } else if (correspondence.hasOwnProperty('correspondence')) {
                 return !!correspondence.correspondence.isOfficial;
+            } else if (correspondence.hasOwnProperty('isOfficial')){
+                return !!correspondence.isOfficial;
             }
             return false;
         }
