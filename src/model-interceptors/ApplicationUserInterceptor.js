@@ -17,7 +17,11 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             model.loginName = model.domainName;
-            model.seqWFEmailSettings = !model.seqWFEmailSettings.length ? 0 : generator.getResultFromSelectedCollection(model.seqWFEmailSettings, 'lookupKey')
+            if (!generator.validRequired(model.seqWFEmailSettings) || !model.seqWFEmailSettings.length) {
+                model.seqWFEmailSettings = 0;
+            } else {
+                model.seqWFEmailSettings = generator.getResultFromSelectedCollection(model.seqWFEmailSettings, 'lookupKey')
+            }
 
             if (model.signature) {
                 delete model.signature;
