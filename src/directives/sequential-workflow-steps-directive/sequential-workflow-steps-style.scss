@@ -65,6 +65,10 @@
   &.step-past {
     background-color: green !important;
   }
+
+  &.step-terminated {
+    background-color: darkred !important;
+  }
 }
 
 .step-delete-item-button {

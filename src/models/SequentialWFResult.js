@@ -10,6 +10,7 @@ module.exports = function (app) {
             self.isOpenedForApproval = false;
             self.isAdHoc = false;
             self.backwardSeqWF = false;
+            self.terminated = false;
 
 
             // every model has required fields

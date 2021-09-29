@@ -47,7 +47,8 @@ module.exports = function (app) {
             inValidStep: {key: 'invalid_step', class: 'step-invalid'},
             pastStep: {key: 'previous_seq_step', class: 'step-past'},
             currentStep: {key: 'current_seq_step', class: 'step-current'},
-            futureStep: {key: 'next_seq_step', class: 'step-future'}
+            futureStep: {key: 'next_seq_step', class: 'step-future'},
+            terminatedStep: {key: 'terminated_seq_step', class: 'step-terminated'}
         };
 
         self.$generatorElement = $element.find('.step-layout-rows');
@@ -126,10 +127,6 @@ module.exports = function (app) {
 
             _setStepClass(element, stepAction, idx);
 
-            /*var titleText = '{{item.getTranslatedName()}}';
-            if (stepAction.getTranslatedUserAndOuName()) {
-                titleText += ' ({{item.getTranslatedUserAndOuName() }})'
-            }*/
             var titleText = _getStepText(stepAction);
 
             var title = angular.element('<span class="no-style" />', {'md-truncate': ''}).html(titleText);
@@ -512,7 +509,7 @@ module.exports = function (app) {
             // if (usageType = 'launch'), show current/future step
             // if (usageType = 'manage-steps') means we are using from admin screen, show valid/invalid steps
             // if (usageType = 'view-steps'), show past/current/future steps
-            // if (usageType = 'view-wf-status-steps'), show past/current/future steps
+            // if (usageType = 'view-wf-status-steps'), show past/current/future/terminated steps
             if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
                 self.stepLegendList.push(self.stepLegendClassList.currentStep);
                 self.stepLegendList.push(self.stepLegendClassList.futureStep);
@@ -535,6 +532,7 @@ module.exports = function (app) {
                 self.stepLegendList.push(self.stepLegendClassList.pastStep);
                 self.stepLegendList.push(self.stepLegendClassList.currentStep);
                 self.stepLegendList.push(self.stepLegendClassList.futureStep);
+                self.stepLegendList.push(self.stepLegendClassList.terminatedStep);
             }
         }
 
@@ -542,8 +540,8 @@ module.exports = function (app) {
             // if (usageType = 'launch'), first step is current, all other steps are future
             // if (usageType = 'manage-steps') means we are using from admin screen, steps are valid/invalid
             // if (usageType = 'view-steps'), steps are past/current/future
-            // if (usageType = 'view-wf-status-steps'), steps are past/current/future
-            var stepStatusClass = '';
+            // if (usageType = 'view-wf-status-steps'), steps are past/current/future/terminated
+            var stepStatusClass = '', docCurrentStep = null;
             if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
                 if (idx === 0) {
                     stepStatusClass = self.stepLegendClassList.currentStep.class;
@@ -574,7 +572,7 @@ module.exports = function (app) {
                     if (!stepAction.id) {
                         return;
                     }
-                    var docCurrentStep = _getStepById(self.correspondence.getSeqWFNextStepId());
+                    docCurrentStep = _getStepById(self.correspondence.getSeqWFNextStepId());
                     if (stepAction.itemOrder === docCurrentStep.itemOrder) {
                         stepStatusClass = self.stepLegendClassList.currentStep.class;
                     } else if (stepAction.itemOrder < docCurrentStep.itemOrder) {
@@ -584,16 +582,23 @@ module.exports = function (app) {
                     }
                 }
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFStatusSteps) {
-                var docCurrentStep = self.correspondence.getSeqWFCurrentStepId() ? _getStepById(self.correspondence.getSeqWFCurrentStepId()) : null;
+                var docCurrentStepId = self.correspondence.getSeqWFCurrentStepId();
+
+                docCurrentStep = docCurrentStepId ? _getStepById(docCurrentStepId) : null;
+
                 if (!docCurrentStep) {
                     stepStatusClass = self.stepLegendClassList.pastStep.class;
                 } else {
-                    if (stepAction.itemOrder === docCurrentStep.itemOrder) {
-                        stepStatusClass = self.stepLegendClassList.currentStep.class;
-                    } else if (stepAction.itemOrder < docCurrentStep.itemOrder) {
-                        stepStatusClass = self.stepLegendClassList.pastStep.class;
-                    } else if (stepAction.itemOrder > docCurrentStep.itemOrder) {
-                        stepStatusClass = self.stepLegendClassList.futureStep.class;
+                    if (stepAction.id === docCurrentStepId && self.correspondence.terminated) {
+                        stepStatusClass = self.stepLegendClassList.terminatedStep.class;
+                    } else {
+                        if (stepAction.itemOrder === docCurrentStep.itemOrder) {
+                            stepStatusClass = self.stepLegendClassList.currentStep.class;
+                        } else if (stepAction.itemOrder < docCurrentStep.itemOrder) {
+                            stepStatusClass = self.stepLegendClassList.pastStep.class;
+                        } else if (stepAction.itemOrder > docCurrentStep.itemOrder) {
+                            stepStatusClass = self.stepLegendClassList.futureStep.class;
+                        }
                     }
                 }
             }
