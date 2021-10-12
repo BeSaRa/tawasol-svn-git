@@ -112,7 +112,9 @@
                                         </td>
                                         <!--<td md-cell>{{g2gItem.senderForTrackingSheet}}</td>-->
                                         <td md-cell>{{g2gItem.comment}}</td>
-                                        <td md-cell>{{g2gItem.updatedByOrg.name}} - {{g2gItem.updatedByOrg.email}}</td>
+                                        <td md-cell>{{g2gItem.updatedByOrg.name}} - <a
+                                                ng-href="mailto:{{g2gItem.updatedByOrg.email}}">{{g2gItem.updatedByOrg.email}}</a>
+                                        </td>
                                         <td md-cell class="p-r0"
                                             ng-if="ctrl.selectedG2gItems.length < 2">
                                             <div layout-align="start center" flex ng-if="!ctrl.selectedG2gItems.length
