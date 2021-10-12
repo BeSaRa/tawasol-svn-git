@@ -383,7 +383,7 @@
             </div>
             <div layout="row">
                 <!-- File -->
-                <div flex ng-if="ctrl.checkStatus('fileId')">
+                <div flex ng-if="ctrl.checkMandatory('fileId')">
                     <md-input-container class="md-block">
                         <label for="fileId">{{lang.outgoing_file}}</label>
                         <md-select name="fileId"
@@ -436,7 +436,7 @@
             </div>
             <div layout="row">
                 <!-- File Code -->
-                <div flex ng-if="ctrl.checkStatus('fileCode')">
+                <div flex ng-if="ctrl.checkMandatory('fileCode')">
                     <md-input-container class="md-block">
                         <label for="fileCode">{{lang.outgoing_file_code}}</label>
                         <input name="fileCode"
@@ -453,7 +453,7 @@
             </div>
             <div layout="row">
                 <!-- File Serial -->
-                <div flex ng-if="ctrl.checkStatus('fileSerial')">
+                <div flex ng-if="ctrl.checkMandatory('fileSerial')">
                     <md-input-container class="md-block">
                         <label for="fileSerial">{{lang.outgoing_file_serial}}</label>
                         <input name="fileSerial"
