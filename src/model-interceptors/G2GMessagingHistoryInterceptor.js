@@ -127,6 +127,8 @@ module.exports = function (app) {
                 model.customSiteTypeInfo = g2gSiteTypeInfo;
             }
 
+            model.updatedByOrg = JSON.parse(model.updatedByOrg);
+
             return model;
         });
     })

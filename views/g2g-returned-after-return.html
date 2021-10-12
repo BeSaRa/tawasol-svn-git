@@ -79,6 +79,10 @@
                                             md-order-by="comment">
                                             <span>{{lang.comment}}</span>
                                         </th>
+                                        <th ng-if="!ctrl.selectedG2gItems.length" md-column
+                                            md-order-by="updatedByOrg.name">
+                                            <span>{{lang.returned_by}}</span>
+                                        </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column>
                                             <!-- Grid Actions -->
                                         </th>
@@ -108,6 +112,7 @@
                                         </td>
                                         <!--<td md-cell>{{g2gItem.senderForTrackingSheet}}</td>-->
                                         <td md-cell>{{g2gItem.comment}}</td>
+                                        <td md-cell>{{g2gItem.updatedByOrg.name}} - {{g2gItem.updatedByOrg.email}}</td>
                                         <td md-cell class="p-r0"
                                             ng-if="ctrl.selectedG2gItems.length < 2">
                                             <div layout-align="start center" flex ng-if="!ctrl.selectedG2gItems.length
