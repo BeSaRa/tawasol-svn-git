@@ -1256,7 +1256,8 @@ module.exports = function (app) {
                 .put((urlService.userInbox + '/' + workItem.wobNumber + '/reassign'), {
                     user: workItem.user,
                     comment: workItem.comment,
-                    appUserOUID: workItem.appUserOUID
+                    appUserOUID: workItem.appUserOUID,
+                    fromUserOUID: employeeService.getEmployee().getOUID()
                 })
                 .then(function (result) {
                     return result.data.rs;
@@ -1276,7 +1277,8 @@ module.exports = function (app) {
                         wobNum: workItem.getInfo().wobNumber,
                         comment: workItem.comment,
                         user: workItem.user,
-                        appUserOUID: workItem.appUserOUID
+                        appUserOUID: workItem.appUserOUID,
+                        fromUserOUID: employeeService.getEmployee().getOUID()
                     }
                 }))
                 .then(function (result) {
