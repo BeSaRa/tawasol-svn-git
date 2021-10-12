@@ -50,7 +50,8 @@ module.exports = function (app) {
                     return self.getSortingKey('mainSiteSubSiteString', 'Information');
                 },
                 comment: 'comment',
-                senderForTrackingSheet: 'senderForTrackingSheet'
+                senderForTrackingSheet: 'senderForTrackingSheet',
+                updatedByOrg: 'updatedByOrg.name'
             },
             searchText: '',
             searchCallback: function (grid) {
@@ -88,7 +89,8 @@ module.exports = function (app) {
                     'received_date',
                     'status',
                     'correspondence_sites',
-                    'comment'
+                    'comment',
+                    'updated_by'
                     //'returned_by'
                 ];
             printService

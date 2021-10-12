@@ -28,7 +28,10 @@ module.exports = function (app) {
                         return this.getTranslatedCorrespondenceSiteInfo();
                     },
                     comment: 'comment',
-                    returned_by: 'senderForTrackingSheet'
+                    returned_by: 'senderForTrackingSheet',
+                    updated_by: function () {
+                        return this.updatedByOrg.hasOwnProperty('name') ? this.updatedByOrg.name : this.updatedByOrg
+                    }
                 };
 
             self.refDocId = null;

@@ -81,7 +81,7 @@
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
                                             md-order-by="updatedByOrg.name">
-                                            <span>{{lang.returned_by}}</span>
+                                            <span>{{lang.updated_by}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column>
                                             <!-- Grid Actions -->
@@ -112,8 +112,7 @@
                                         </td>
                                         <!--<td md-cell>{{g2gItem.senderForTrackingSheet}}</td>-->
                                         <td md-cell>{{g2gItem.comment}}</td>
-                                        <td md-cell>{{g2gItem.updatedByOrg.name}} - <a
-                                                ng-href="mailto:{{g2gItem.updatedByOrg.email}}">{{g2gItem.updatedByOrg.email}}</a>
+                                        <td md-cell>{{g2gItem.updatedByOrg.name}}
                                         </td>
                                         <td md-cell class="p-r0"
                                             ng-if="ctrl.selectedG2gItems.length < 2">
