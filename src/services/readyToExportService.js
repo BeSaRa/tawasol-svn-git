@@ -406,45 +406,66 @@ module.exports = function (app) {
                         second: reason
                     })
                     .then(function (result) {
+                        let res = result.data.rs;
+                        if (!res) {
+                            throw new Error(res);
+                        }
                         return readyToExport;
+                    }).catch(function (error) {
+                        toast.error(langService.get('failed_exporting'));
+                        return $q.reject(error)
                     });
             };
 
-            /**
-             * @description Export ready to export item
-             * @param readyToExport
-             * @param exportOptions
-             */
-            self.exportReadyToExport = function (readyToExport, exportOptions) {
-                var info = readyToExport.getInfo(),
-                    url = urlService.exportReadyToExports.replace('{{vsId}}', info.vsId).replace('{{wobNum}}', info.wobNumber);
-                if (!readyToExport.isWorkItem()) {
-                    url = urlService.exportDocumentByVsId.replace('{{vsId}}', info.vsId);
-                }
-                return $http
-                    .put(url, generator.interceptSendInstance('ReadyToExportOption', exportOptions))
-                    .then(function () {
-                        return readyToExport;
-                    });
-            };
-            /**
-             * @description Export ready to export item with selective.
-             * @param readyToExport
-             * @param exportOptions
-             */
-            self.exportReadyToExportSelective = function (readyToExport, exportOptions) {
-                var info = readyToExport.getInfo(),
-                    url = urlService.selectiveExport.replace('{{vsId}}', info.vsId).replace('{{wobNum}}', info.wobNumber);
-                if (!readyToExport.isWorkItem()) {
-                    url = urlService.selectiveExportByVsId.replace('{{vsId}}', info.vsId);
-                }
-                exportOptions = generator.interceptSendInstance('PartialExportSelective', exportOptions);
-                return $http
-                    .put(url, exportOptions.exportItems)
-                    .then(function () {
-                        return readyToExport;
-                    });
-            };
+        /**
+         * @description Export ready to export item
+         * @param readyToExport
+         * @param exportOptions
+         */
+        self.exportReadyToExport = function (readyToExport, exportOptions) {
+            var info = readyToExport.getInfo(),
+                url = urlService.exportReadyToExports.replace('{{vsId}}', info.vsId).replace('{{wobNum}}', info.wobNumber);
+            if (!readyToExport.isWorkItem()) {
+                url = urlService.exportDocumentByVsId.replace('{{vsId}}', info.vsId);
+            }
+            return $http
+                .put(url, generator.interceptSendInstance('ReadyToExportOption', exportOptions))
+                .then(function (result) {
+                    let res = result.data.rs;
+                    if (!res) {
+                        throw new Error(res);
+                    }
+                    return readyToExport;
+                }).catch(function (error) {
+                    toast.error(langService.get('failed_exporting'));
+                    return $q.reject(error)
+                });
+        };
+        /**
+         * @description Export ready to export item with selective.
+         * @param readyToExport
+         * @param exportOptions
+         */
+        self.exportReadyToExportSelective = function (readyToExport, exportOptions) {
+            var info = readyToExport.getInfo(),
+                url = urlService.selectiveExport.replace('{{vsId}}', info.vsId).replace('{{wobNum}}', info.wobNumber);
+            if (!readyToExport.isWorkItem()) {
+                url = urlService.selectiveExportByVsId.replace('{{vsId}}', info.vsId);
+            }
+            exportOptions = generator.interceptSendInstance('PartialExportSelective', exportOptions);
+            return $http
+                .put(url, exportOptions.exportItems)
+                .then(function (result) {
+                    let res = result.data.rs;
+                    if (!res) {
+                        throw new Error(res);
+                    }
+                    return readyToExport;
+                }).catch(function (error) {
+                    toast.error(langService.get('failed_exporting'));
+                    return $q.reject(error)
+                });
+        };
 
             /**
              * @description Terminate bulk Ready To Export items
