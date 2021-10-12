@@ -127,7 +127,7 @@ module.exports = function (app) {
                 model.customSiteTypeInfo = g2gSiteTypeInfo;
             }
 
-            model.updatedByOrg = JSON.parse(model.updatedByOrg);
+            model.updatedByOrg = generator.isJsonString(model.updatedByOrg) ? JSON.parse(model.updatedByOrg) : model.updatedByOrg;
 
             return model;
         });
