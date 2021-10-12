@@ -381,6 +381,93 @@
                         {{ctrl.document.getTranslatedYesNo('isOfficial')}}</label>
                 </md-switch>
             </div>
+            <div layout="row">
+                <!-- File -->
+                <div flex ng-if="ctrl.checkStatus('fileId')">
+                    <md-input-container class="md-block">
+                        <label for="fileId">{{lang.outgoing_file}}</label>
+                        <md-select name="fileId"
+                                   id="fileId"
+                                   ng-change="ctrl.onFileChange(ctrl.document.fileId , outgoing_properties.fileId)"
+                                   ng-model="ctrl.document.fileId"
+                                   ng-disabled="!!ctrl.disableProperties"
+                                   ng-model-options="{trackBy: '$value.id'}"
+                                   ng-required="ctrl.checkMandatory('fileId')"
+                                   md-on-close="ctrl.clearSearchText('documentFile')"
+                                   data-md-container-class="select-header-container sticky-search-bar">
+                            <md-select-header class="select-header" layout="column">
+                                <div layout="row" flex class="size-100">
+                                    <input ng-model="ctrl.documentFileSearchText"
+                                           ng-keydown="ctrl.handleSearchKeyDown($event, 'documentFile')"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                    <md-button ng-if="ctrl.documentFileSearchText"
+                                               ng-click="ctrl.loadDocumentFilesRecords($event)"
+                                               class="select-header-icon md-icon-button"
+                                               tooltip="{{lang.load_more_records}}">
+                                        <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                    </md-button>
+                                </div>
+                                <div class="help-text-div" ng-if="ctrl.documentFileSearchText">
+                                    {{lang.press_enter_to_load_more_records}}
+                                </div>
+                            </md-select-header>
+                            <md-option ng-value="null">{{lang.none}}</md-option>
+                            <md-option ng-value="file.file"
+                                       ng-repeat="file in ctrl.documentFiles | translatedNameFilter: ctrl.documentFileSearchText:null:'file'">
+                            <span
+                                    md-highlight-text="ctrl.documentFileSearchText"
+                                    md-highlight-flags="i">{{file.file.getTranslatedName()}}</span>
+                            </md-option>
+                        </md-select>
+                        <!-- Add File -->
+                        <md-button class="md-icon-button cms-select-overlay-button"
+                                   tooltip="{{lang.outgoing_add_new_document_file}}"
+                                   ng-if="!ctrl.disableProperties && ctrl.employeeService.hasPermissionTo('MANAGE_FILES')"
+                                   ng-disabled="!!ctrl.disableProperties"
+                                   ng-click="ctrl.shortcut.addNewDocumentFile($event)">
+                            <md-icon md-svg-icon="plus"></md-icon>
+                        </md-button>
+                        <div ng-messages="outgoing_properties.fileId.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </div>
+            <div layout="row">
+                <!-- File Code -->
+                <div flex ng-if="ctrl.checkStatus('fileCode')">
+                    <md-input-container class="md-block">
+                        <label for="fileCode">{{lang.outgoing_file_code}}</label>
+                        <input name="fileCode"
+                               id="fileCode"
+                               ng-disabled="!!ctrl.disableProperties"
+                               ng-enter="ctrl.onFileCodeChanged()"
+                               ng-model="ctrl.document.fileCode"
+                               ng-required="ctrl.checkMandatory('fileCode')">
+                        <div ng-messages="outgoing_properties.fileCode.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </div>
+            <div layout="row">
+                <!-- File Serial -->
+                <div flex ng-if="ctrl.checkStatus('fileSerial')">
+                    <md-input-container class="md-block">
+                        <label for="fileSerial">{{lang.outgoing_file_serial}}</label>
+                        <input name="fileSerial"
+                               id="fileSerial"
+                               ng-disabled="!!ctrl.disableProperties"
+                               ng-model="ctrl.document.fileSerial"
+                               ng-required="ctrl.checkMandatory('fileSerial')">
+                        <div ng-messages="outgoing_properties.fileSerial.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                            <div ng-message="number">{{lang.numberonly}}</div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </div>
         </div>
     </fieldset>
 </form>

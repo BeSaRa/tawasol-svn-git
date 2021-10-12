@@ -59,7 +59,7 @@ module.exports = function (app) {
                 if (item.symbolicName.toLowerCase() === 'subclassification' && item.isMandatory) {
                     _forceSetMandatory('MainClassification');
                 }
-                self.required[item.symbolicName.toLowerCase()] = item.isMandatory;
+                self.required[item.symbolicName.toLowerCase()] = {isMandatory: item.isMandatory, status: item.status};
             });
         }
 
@@ -92,7 +92,11 @@ module.exports = function (app) {
         };
 
         self.checkMandatory = function (fieldName) {
-            return self.required[fieldName.toLowerCase()];
+            return self.required[fieldName.toLowerCase()] && self.required[fieldName.toLowerCase()].isMandatory
+        };
+
+        self.checkStatus = function (fieldName) {
+            return self.required[fieldName.toLowerCase()] && self.required[fieldName.toLowerCase()].status;
         };
 
         /**
