@@ -83,7 +83,8 @@ module.exports = function (app) {
                 ATTACHMENT_RESTRICTED_TO_MODIFY_AFTER_BOOK_AUTHORIZATION: 3035,
                 NO_DATA_IN_DATASOURCE: 1011,
                 SEARCH_OPERATION_FAILED: 2004,
-                BL_ERROR_UPDATE_GLOBAL_PROPERTY_CONFIG: 3079
+                BL_ERROR_UPDATE_GLOBAL_PROPERTY_CONFIG: 3079,
+                FAILED_DUPLICATE_EMPLOYEE_NUMBER: 1012
             },
             errorLangKeys = {
                 1001: 'no_records_found',
@@ -123,7 +124,8 @@ module.exports = function (app) {
                 14014: 'g2g_cant_return_as_already_received',
                 2004: 'search_operation_failed',
                 3035: 'attachment_restricted_to_modify_after_book_authorization',
-                3079: 'bl_error_update_global_property_config'
+                3079: 'bl_error_update_global_property_config',
+                1012:'failed_duplicate_employee_number'
             };
 
         return {

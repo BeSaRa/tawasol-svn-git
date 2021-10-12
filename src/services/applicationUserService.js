@@ -15,7 +15,9 @@ module.exports = function (app) {
                                                     ApplicationUserLookup,
                                                     ApplicationUserView,
                                                     organizationService,
-                                                    rootEntity) {
+                                                    rootEntity,
+                                                    errorCode,
+                                                    userSubscriptionService) {
         'ngInject';
         var self = this;
         self.serviceName = 'applicationUserService';
@@ -489,11 +491,15 @@ module.exports = function (app) {
                     })
                     .catch(function (error) {
                         //  console.log('addUserFail', error);
+                        if (error && errorCode.checkIf(error, 'FAILED_DUPLICATE_EMPLOYEE_NUMBER') === true) {
+                            dialog.errorMessage(generator.getTranslatedError(error));
+                        }
                         return $q.reject('addUserFail');
                     });
             }).catch(function (error) {
-                if (error === 'LDAP_USER_MISSING')
+                if (error === 'LDAP_USER_MISSING') {
                     dialog.errorMessage(langService.get('ldap_user_doesnot_exist_add_please'));
+                }
                 return $q.reject(false);
             });
         };
@@ -510,6 +516,11 @@ module.exports = function (app) {
                     generator.interceptSendInstance('ApplicationUser', applicationUser))
                 .then(function () {
                     return applicationUser;
+                }).catch(function (error) {
+                    if (error && errorCode.checkIf(error, 'FAILED_DUPLICATE_EMPLOYEE_NUMBER') === true) {
+                        dialog.errorMessage(generator.getTranslatedError(error));
+                    }
+                    return $q.reject(false);
                 });
         };
 
