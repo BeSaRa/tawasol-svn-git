@@ -21,7 +21,8 @@ module.exports = function (app) {
                                                      rootEntity,
                                                      downloadService,
                                                      ResolveDefer,
-                                                     FollowupBook) {
+                                                     FollowupBook,
+                                                     $timeout) {
             'ngInject';
             var self = this;
             self.controllerName = 'userFollowupBookCtrl';
@@ -391,41 +392,41 @@ module.exports = function (app) {
                     });
             };
 
-        /**
-         * @description Send SMS
-         * @param record
-         * @param $event
-         * @param defer
-         */
-        self.sendSMS = function (record, $event, defer) {
-            record
-                .openSendSMSDialog($event, null)
-                .then(function () {
-                    return self.reloadFollowupBooks(self.grid.page)
-                        .then(function (result) {
-                            new ResolveDefer(defer);
-                        });
-                });
-        };
-
-        /**
-         * @description Sends the reminder email to specific user
-         * @param record
-         * @param $event
-         * @param defer
-         */
-        self.sendReminderEmailToUser = function (record, $event, defer) {
-            record
-                .sendReminderEmail($event, null)
-                .then(function (result) {
-                    if (result) {
+            /**
+             * @description Send SMS
+             * @param record
+             * @param $event
+             * @param defer
+             */
+            self.sendSMS = function (record, $event, defer) {
+                record
+                    .openSendSMSDialog($event, null)
+                    .then(function () {
                         return self.reloadFollowupBooks(self.grid.page)
                             .then(function (result) {
                                 new ResolveDefer(defer);
                             });
-                    }
-                });
-        };
+                    });
+            };
+
+            /**
+             * @description Sends the reminder email to specific user
+             * @param record
+             * @param $event
+             * @param defer
+             */
+            self.sendReminderEmailToUser = function (record, $event, defer) {
+                record
+                    .sendReminderEmail($event, null)
+                    .then(function (result) {
+                        if (result) {
+                            return self.reloadFollowupBooks(self.grid.page)
+                                .then(function (result) {
+                                    new ResolveDefer(defer);
+                                });
+                        }
+                    });
+            };
 
             /**
              * @description Subscribe
@@ -490,42 +491,42 @@ module.exports = function (app) {
             };
 
 
-        /**
-         * @description Download Main Document
-         * @param record
-         * @param $event
-         */
-        self.downloadMainDocument = function (record, $event) {
-            record
-                .mainDocumentDownload($event);
-        };
+            /**
+             * @description Download Main Document
+             * @param record
+             * @param $event
+             */
+            self.downloadMainDocument = function (record, $event) {
+                record
+                    .mainDocumentDownload($event);
+            };
 
-        /**
-         * @description Download Composite Document
-         * @param record
-         * @param $event
-         */
-        self.downloadCompositeDocument = function (record, $event) {
-            record
-                .compositeDocumentDownload($event);
-        };
+            /**
+             * @description Download Composite Document
+             * @param record
+             * @param $event
+             */
+            self.downloadCompositeDocument = function (record, $event) {
+                record
+                    .compositeDocumentDownload($event);
+            };
 
-        /**
-         * @description download selected document
-         * @param record
-         * @param $event
-         */
-        self.downloadSelected = function (record, $event) {
-            downloadService.openSelectedDownloadDialog(record, $event);
-        };
+            /**
+             * @description download selected document
+             * @param record
+             * @param $event
+             */
+            self.downloadSelected = function (record, $event) {
+                downloadService.openSelectedDownloadDialog(record, $event);
+            };
 
-        /**
-         * @description merge and download
-         * @param record
-         */
-        self.mergeAndDownloadFullDocument = function (record) {
-            downloadService.mergeAndDownload(record);
-        };
+            /**
+             * @description merge and download
+             * @param record
+             */
+            self.mergeAndDownloadFullDocument = function (record) {
+                downloadService.mergeAndDownload(record);
+            };
 
             self.gridActions = [
                 // Document Information
@@ -912,7 +913,9 @@ module.exports = function (app) {
 
             self.searchCriteriaUsed = false;
             self.$onInit = function () {
-                self.toggleSidebarFolder();
+                $timeout(function () {
+                    self.toggleSidebarFolder();
+                });
                 _initSearchCriteria();
             };
         }

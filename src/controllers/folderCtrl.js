@@ -27,7 +27,8 @@ module.exports = function (app) {
                                            $scope,
                                            configurationService,
                                            sequentialWorkflowService,
-                                           printService) {
+                                           printService,
+                                           $timeout) {
         'ngInject';
         var self = this;
         self.controllerName = 'folderCtrl';
@@ -113,7 +114,6 @@ module.exports = function (app) {
         self.toggleSidebarFolder = function () {
             self.sidebarStatus = !self.sidebarStatus;
         };
-        self.toggleSidebarFolder();
 
         /**
          * @description get clicked folder content.
@@ -2107,6 +2107,12 @@ module.exports = function (app) {
             printService
                 .printData(records, headers, printTitle);
         }
+
+        self.$onInit = function () {
+            $timeout(function () {
+                self.toggleSidebarFolder();
+            });
+        };
 
         $scope.$on('$folder_deleted', function (event) {
             if (self.controllerName === 'folderCtrl') {
