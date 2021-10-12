@@ -771,6 +771,7 @@ module.exports = function (app) {
                 'label_document_type',
                 'creator',
                 'created_on',
+                'last_modifier',
                 'correspondence_sites'
             ];
 

@@ -43,7 +43,10 @@ module.exports = function (app) {
                         return this.lastModifierInfo.getTranslatedName();
                     },
                     deleted_on: 'lastModified',
-                    number_of_days: 'numberOfDays'
+                    number_of_days: 'numberOfDays',
+                    last_modifier: function () {
+                        return this.lastModifierInfo.getTranslatedName();
+                    }
                 };
             Correspondence.call(this);
             self.docClassName = 'Outgoing';

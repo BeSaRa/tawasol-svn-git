@@ -766,9 +766,10 @@ module.exports = function (app) {
                 'label_document_type',
                 'creator',
                 'created_on',
-                'correspondence_sites'
+                'last_modifier',
+                'correspondence_sites',
             ];
-
+            console.log(self.searchedIncomingDocuments);
             printService
                 .printData(self.searchedIncomingDocuments, headers, printTitle);
 

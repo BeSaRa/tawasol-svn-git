@@ -38,7 +38,10 @@ module.exports = function (app) {
                     deleted_by: function () {
                         return this.lastModifierInfo.getTranslatedName();
                     },
-                    deleted_on: 'lastModified'
+                    deleted_on: 'lastModified',
+                    last_modifier: function () {
+                        return this.lastModifierInfo.getTranslatedName();
+                    }
                 };
 
 

@@ -781,7 +781,8 @@ module.exports = function (app) {
                 'priority_level',
                 'label_document_type',
                 'creator',
-                'created_on'
+                'created_on',
+                'last_modifier'
             ];
 
             printService
