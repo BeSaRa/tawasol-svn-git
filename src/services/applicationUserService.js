@@ -754,17 +754,17 @@ module.exports = function (app) {
                 });
         };
 
-        self.exportApplicationUsers = function () {
+        self.exportApplicationUsers = function (withInfo) {
             var defer = $q.defer(),
                 urlTypeMap = {
                     pdf: {
-                        url: urlService.applicationUsers + '/export/pdf',
+                        url: urlService.applicationUsers + (withInfo ? '/export/info/pdf' : '/export/pdf'),
                         type: 'pdf',
                         text: 'PDF',
                         id: 1
                     },
                     excel: {
-                        url: urlService.applicationUsers + '/export/excel',
+                        url: urlService.applicationUsers + (withInfo ? '/export/info/excel' : '/export/excel'),
                         type: 'excel',
                         text: 'EXCEL',
                         id: 2

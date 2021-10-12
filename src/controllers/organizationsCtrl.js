@@ -12,6 +12,7 @@ module.exports = function (app) {
                                                   referencePlanNumberService,
                                                   contextHelpService,
                                                   $timeout,
+                                                  applicationUserService,
                                                   employeeService) {
         'ngInject';
         var self = this;
@@ -66,7 +67,6 @@ module.exports = function (app) {
         };
 
 
-
         function _checkOrganizationsNeedSync(organizations) {
             return _.some(organizations, function (org) {
                 return !org.isFnSynched;
@@ -102,6 +102,12 @@ module.exports = function (app) {
                     return result;
                 });
         };
+
+        self.exportApplicationUsers = function () {
+            applicationUserService.exportApplicationUsers(true).then(function (result) {
+                window.open(result);
+            })
+        }
 
         self.exportOrganizations = function () {
             organizationService
