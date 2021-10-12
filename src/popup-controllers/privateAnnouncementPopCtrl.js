@@ -206,7 +206,8 @@ module.exports = function (app) {
                 self.privateAnnouncement.subscribers.push({
                     "announcementType": 0,
                     "ouId": getOrganization.id,
-                    "withSubOus": self.subOU
+                    "withSubOus": self.subOU,
+                    "ldapPrefix": getOrganization.ldapPrefix
                 });
             }
             self.includedOrganization = null;
@@ -248,6 +249,26 @@ module.exports = function (app) {
             return children;
         };
 
+
+        /***
+         * @description get children and there child
+         * @param organization
+         */
+        self.getChildrenDeep = function (organization) {
+            var children = [];
+            // we don't have ldapPrefix for first time
+            if (!organization.hasOwnProperty('ldapPrefix')) {
+                organization = _.find(self.organizations, {'id': organization.ouId})
+            }
+            for (var i = 0; i < self.organizations.length; i++) {
+                if (self.organizations[i].ldapPrefix.startsWith(organization.ldapPrefix + '_')) {
+                    children.push(self.organizations[i]);
+                    self.getChildrenDeep(self.organizations[i]);
+                }
+            }
+            return children;
+        }
+
         self.getOrganizationARName = function (ouId) {
             return self.organizations.filter(function (organization) {
                 return organization.id === ouId;
@@ -265,9 +286,9 @@ module.exports = function (app) {
          * @param selectedOUId
          * @param $event
          */
-        self.openExcludeOrganizationDialog = function (selectedOUId, $event) {
+        self.openExcludeOrganizationDialog = function (selectedOU, $event) {
             var selectedOrganizationToExclude = [];
-            var getSubOrgUnits = self.getChildren(selectedOUId);
+            var getSubOrgUnits = self.getChildrenDeep(selectedOU);
 
             for (var i = 0; i < self.privateAnnouncement.subscribers.length; i++) {
                 var orgUnitsToExclude = getSubOrgUnits.filter(function (subscriber) {
@@ -305,7 +326,8 @@ module.exports = function (app) {
                                     "clientData": null,
                                     "ouId": result[index].id,
                                     "announcementType": 1,
-                                    "withSubOus": false
+                                    "withSubOus": false,
+                                    "ldapPrefix": result[index].ldapPrefix
                                 });
                             }
                         } else {
@@ -316,7 +338,8 @@ module.exports = function (app) {
                                 "clientData": null,
                                 "ouId": result[index].id,
                                 "announcementType": 1,
-                                "withSubOus": false
+                                "withSubOus": false,
+                                "ldapPrefix": result[index].ldapPrefix
                             });
                         }
                     }
