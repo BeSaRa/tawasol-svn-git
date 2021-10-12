@@ -54,6 +54,8 @@ module.exports = function (app) {
 
         // all registry organizations.
         self.organizations = organizations;
+        // all years from 2000 till current year.
+        self.years = _.range(2000, (new Date().getFullYear() + 1));
 
         self.classesMap = {
             1: 'outgoing',
@@ -255,16 +257,6 @@ module.exports = function (app) {
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.others.linkedDocSearch, self.grid.truncateSubject);
             }
-        };
-
-
-        self.years = function () {
-            var currentYear = new Date().getFullYear(), years = [];
-            var lastYearForRange = currentYear - 10;
-            while (lastYearForRange <= currentYear) {
-                years.push(currentYear--);
-            }
-            return years;
         };
 
         /**
