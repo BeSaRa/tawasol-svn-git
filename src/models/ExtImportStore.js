@@ -14,6 +14,7 @@ module.exports = function (app) {
             self.dataSourceJndi = null;
             self.sourceName = null;
             self.sourceIdentifier = null;
+            self.searchColumn = null;
             self.contentColumn = null;
             self.contentTypeColumn = null;
             self.metaDataColumns = []; //json string of metadata fields
@@ -29,6 +30,7 @@ module.exports = function (app) {
                 'dataSourceJndi',
                 'sourceName',
                 'sourceIdentifier',
+                'searchColumn',
                 'contentColumn',
                 'contentTypeColumn',
                 'metaDataColumns',

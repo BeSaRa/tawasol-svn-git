@@ -110,6 +110,21 @@
                                             <div ng-message="maxlength">{{lang.max_length.change({length: 50})}}</div>
                                         </div>
                                     </md-input-container>
+                                    <!-- Search Column -->
+                                    <md-input-container flex>
+                                        <label for="contentTypeColumn">{{lang.search_column}}</label>
+                                        <input name="searchColumn" id="searchColumn" required
+                                               custom-validate-directive="E1NS"
+                                               ng-model="ctrl.externalDataSource.searchColumn" maxlength="50">
+                                        <div ng-messages="externalDataSourceForm.searchColumn.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 50})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
                                     <!-- Status -->
                                     <div flex class="p020">
                                         <md-switch flex ng-model="ctrl.externalDataSource.status"
@@ -118,6 +133,7 @@
                                                 {{ctrl.externalDataSource.getTranslatedStatus()}}</label>
                                         </md-switch>
                                     </div>
+                                    <md-input-container flex></md-input-container>
                                 </div>
                                 <div layout="row">
                                     <!-- Metadata Columns -->

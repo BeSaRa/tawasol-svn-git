@@ -67,7 +67,7 @@ module.exports = function (app) {
         };
 
         self.viewContent = function ($event, metaData) {
-            userExternalDataSourceService.openContentDialog(self.selectedUserDataSource.extImportStore.id, self.identifier, metaData);
+            userExternalDataSourceService.openContentDialog(self.selectedUserDataSource.extImportStore.id, self.selectedUserDataSource.extImportStore.sourceIdentifier, metaData);
         };
 
         self.importData = function ($event) {
@@ -77,7 +77,7 @@ module.exports = function (app) {
             dialog.hide({
                 metaData: self.selectedMetaDatas[0],
                 sourceId: self.selectedUserDataSource.extImportStore.id,
-                identifier: self.identifier
+                identifier: self.selectedUserDataSource.extImportStore.sourceIdentifier
             });
         };
 

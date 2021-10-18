@@ -170,7 +170,7 @@ module.exports = function (app) {
                     return !result;
                 }, true)
                 .notifyFailure(function () {
-                    toast.show(langService.get('name_duplication_message'));
+                    toast.error(langService.get('name_duplication_message'));
                 })
                 .validate()
                 .then(function () {
@@ -204,7 +204,7 @@ module.exports = function (app) {
                     return !result;
                 }, true)
                 .notifyFailure(function () {
-                    toast.show(langService.get('name_duplication_message'));
+                    toast.error(langService.get('name_duplication_message'));
                 })
                 .validate()
                 .then(function () {
