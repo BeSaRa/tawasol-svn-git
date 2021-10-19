@@ -1157,6 +1157,12 @@ module.exports = function (app) {
                 });
             };
 
+            WorkItem.prototype.addToBroadcastFollowUp = function () {
+                return followUpUserService.addCorrespondenceToBroadcastFollowUp(this).then(function () {
+                    return counterService.loadCounters();
+                });
+            };
+
             WorkItem.prototype.addDocumentContentFile = function (content) {
                 if (!content)
                     throw Error('Need To Pass the Content for this work Item');

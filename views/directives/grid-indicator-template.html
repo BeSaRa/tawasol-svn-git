@@ -317,3 +317,12 @@
              tooltip="{{ctrl.langService.get(ctrl.record.externalSiteIndicator.tooltip)}}"
     ></md-icon>
 </span>
+<!-- Shared Book -->
+<span ng-if="ctrl.indicatorType === 'sharedFollowup'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.sharedFollowupIndicator}">
+    <md-icon ng-if="ctrl.record.sharedFollowupIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.sharedFollowupIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.sharedFollowupIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.sharedFollowupIndicator.tooltip)}}"
+    ></md-icon>
+</span>

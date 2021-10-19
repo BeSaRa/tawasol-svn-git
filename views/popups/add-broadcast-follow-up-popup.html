@@ -1,0 +1,170 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.add_to_my_direct_followup}}">
+    <popup-toolbar-directive
+            header-text="{{lang.broadcast_followup + ' : ' + ctrl.model.docSubject}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="followupForm" layout="column" force-dirty="true">
+                <div layout="row">
+                    <md-input-container flex>
+                        <label for="organization">{{lang.organization_unit}}</label>
+                        <md-select id="organization" name="organization"
+                                   ng-change="ctrl.getAppUsersForOU($event)"
+                                   aria-label="{{lang.organization_unit}}"
+                                   ng-model="ctrl.selectedOrganization"
+                                   md-on-close="ctrl.clearSearchText('ou')"
+                                   ng-model-options="{trackBy: '$value'}"
+                                   data-md-container-class="select-header-container sticky-search-bar">
+                            <md-select-header class="select-header">
+                                <input ng-model="ctrl.ouSearchText"
+                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                       placeholder="{{lang.search}}"
+                                       class="select-header-input">
+                            </md-select-header>
+                            <md-option
+                                    ng-repeat="organization in ctrl.organizations | translatedNameFilter: ctrl.ouSearchText : 'getNameByLanguageRegOUSection'"
+                                    ng-value="organization.id">
+                                        <span
+                                                md-highlight-text="ctrl.ouSearchText"
+                                                md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
+                            </md-option>
+                        </md-select>
+                        <div ng-messages="followupForm.organization.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label for="applicationUser">{{lang.select_user}}</label>
+                        <md-select name="applicationUser" id="applicationUser"
+                                   ng-required="true"
+                                   ng-disabled="!ctrl.selectedOrganization"
+                                   aria-label="{{lang.select_user}}"
+                                   ng-model="ctrl.selectedApplicationUser"
+                                   ng-model-options="{trackBy: '$value.ouUSerId'}"
+                                   md-on-close="ctrl.clearSearchText('appUser')"
+                                   data-md-container-class="select-header-container sticky-search-bar">
+                            <md-select-header class="select-header">
+                                <input ng-model="ctrl.appUserSearchText"
+                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                       placeholder="{{lang.search}}"
+                                       class="select-header-input">
+                            </md-select-header>
+                            <md-option ng-value="user" ng-if="!ctrl.isExistingRecord(user)"
+                                       ng-repeat="user in ctrl.applicationUsers | translatedNameFilter: ctrl.appUserSearchText">
+                                       <span md-highlight-text="ctrl.appUserSearchText"
+                                             md-highlight-flags="i">{{user.getTranslatedName()}}</span>
+                            </md-option>
+                        </md-select>
+                        <div ng-messages="followupForm.applicationUser.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                    <div>
+                        <md-button class="md-raised md-primary"
+                                   ng-disabled="!ctrl.selectedOrganization || !ctrl.selectedApplicationUser"
+                                   ng-click="ctrl.addToRecords($event)">
+                            {{lang.select}}
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row">
+                    <md-input-container flex class="cms-datepicker md-block">
+                        <label for="followupDate">{{lang.followup_date}}</label>
+                        <md-datepicker id="followupDate" name="followupDate"
+                                       ng-required="true" md-min-date="ctrl.minDate"
+                                       ng-model="ctrl.model.followupDate"></md-datepicker>
+                        <div ng-messages="followupForm.followupDate.$error">
+                            <div ng-message="valid">{{lang.invalid_date_format}}</div>
+                            <div ng-message="required">{{lang.field_required}}</div>
+                            <div ng-message="mindate">{{lang.date_should_be_more_than_equal.change({
+                                datevalue:
+                                ctrl.minDateString
+                            })}}
+                            </div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container flex></md-input-container>
+                </div>
+                <div layout="column">
+                    <div scroll-directive>
+                        <md-card md-whiteframe="3" class="card-overlay">
+                            <md-table-container>
+                                <div flex scroll-directive>
+                                    <table md-table ng-model="ctrl.selectedRecords"
+                                           md-progress="ctrl.grid.progress">
+                                        <thead md-head md-order="ctrl.grid.order"
+                                               md-on-reorder="ctrl.getSortedData">
+                                        <tr md-row>
+                                            <th colspan="6"
+                                                ng-if="ctrl.selectedRecords.length"
+                                                md-column>
+                                                <div layout="row" layout-align="start center">
+                                                    <span>{{ctrl.selectedRecords.length}} {{lang.items_selected}} </span>
+                                                    <span flex></span>
+                                                </div>
+                                            </th>
+                                            <th ng-if="!ctrl.selectedRecords.length"
+                                                md-column
+                                                md-order-by="{{ctrl.getSortingKey('ouInfo', 'Information')}}">
+                                                <span>{{lang.organization}}</span>
+                                            </th>
+                                            <th ng-if="!ctrl.selectedRecords.length"
+                                                md-column
+                                                md-order-by="{{ctrl.getSortingKey('userInfo', 'Information')}}">
+                                                <span>{{lang.user}}</span>
+                                            </th>
+                                            <th ng-if="!ctrl.selectedRecords.length"
+                                                md-column>
+                                                <span>{{lang.actions}}</span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                        <tr md-row md-select="record"
+                                            ng-repeat="record in ctrl.usersToFollowup | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                            <td md-cell>
+                                                {{record.ouInfo.getTranslatedName()}}
+                                            </td>
+                                            <td md-cell>
+                                                {{record.userInfo.getTranslatedName()}}
+                                            </td>
+                                            <td md-cell>
+                                                <div flex layout="row" layout-align="start center">
+                                                    <md-button class="md-icon-button"
+                                                               title="{{lang.delete}}"
+                                                               ng-click="ctrl.removeRecord($event, record)">
+                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                    </md-button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <md-table-pagination
+                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                        md-limit-options="ctrl.grid.limitOptions"
+                                        md-limit="ctrl.grid.limit"
+                                        md-page="ctrl.grid.page"
+                                        md-total="{{ctrl.usersToFollowup.length}}" md-page-select>
+                                </md-table-pagination>
+                            </md-table-container>
+                        </md-card>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary"
+                   ng-disabled="!ctrl.isValidFollowup()"
+                   ng-click="ctrl.saveToFollowUp()">
+            {{lang.save}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

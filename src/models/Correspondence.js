@@ -1112,6 +1112,12 @@ module.exports = function (app) {
                 });
             };
 
+            Correspondence.prototype.addToBroadcastFollowUp = function () {
+                return followUpUserService.addCorrespondenceToBroadcastFollowUp(this).then(function () {
+                    return counterService.loadCounters();
+                });
+            };
+
             /**
              * @description Check if correspondence has create reply permission
              * @param isSpecificVersion

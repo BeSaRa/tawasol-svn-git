@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                  urlService,
                                                  dialog,
                                                  FollowUpFolder,
+                                                 UserFollowupBookMulti,
                                                  generator,
                                                  moment,
                                                  langService,
@@ -81,6 +82,25 @@ module.exports = function (app) {
                         return errorCode.showErrorDialog(error);
                     });
             };
+
+            /**
+             * @description add broadcast follow up for document
+             * @param followUpData
+             * @returns {Promise}
+             */
+            self.saveBroadcastFollowup = function (followUpData) {
+                var data = new UserFollowupBookMulti({
+                    vsId: followUpData.vsId,
+                    docClassId: followUpData.docClassId,
+                    followupDate: followUpData.followupDate,
+                    userList: followUpData.userList
+                });
+                return $http
+                    .post(urlService.userFollowUp + '/broadcast-followup', generator.interceptSendInstance('UserFollowupBookMulti', data))
+                    .catch(function (error) {
+                        return errorCode.showErrorDialog(error);
+                    });
+            }
 
             /**
              * @description add follow up for document
@@ -417,6 +437,44 @@ module.exports = function (app) {
 
                                 });
                             }
+                        },
+                        organizationForSLA: function (employeeService, organizationService) {
+                            'ngInject';
+                            var ou = employeeService.getEmployee().userOrganization;
+                            if (ou.hasRegistry) {
+                                return ou;
+                            }
+                            return organizationService.loadOrganizationById(ou.getRegistryOUID());
+                        }
+                    }
+                })
+            };
+
+            /**
+             * @description open dialog for adding the document to broadcast follow up.
+             * @param correspondence
+             * @returns {promise}
+             */
+            self.addCorrespondenceToBroadcastFollowUp = function (correspondence) {
+                return dialog.showDialog({
+                    templateUrl: cmsTemplate.getPopup('add-broadcast-follow-up'),
+                    controller: 'broadcastFollowUpPopCtrl',
+                    controllerAs: 'ctrl',
+                    locals: {
+                        addToMyFollowup: false
+                    },
+                    resolve: {
+                        followUpOrganizations: function (organizationService) {
+                            'ngInject';
+                            return organizationService.getFollowUpOrganizations();
+                        },
+                        followUpData: function () {
+                            'ngInject';
+                            return self.prepareFollowUp(correspondence).then(function (data) {
+                                data.followupDate = data.followupDate ? generator.getDateObjectFromTimeStamp(data.followupDate) : null;
+                                return data;
+                            });
+
                         },
                         organizationForSLA: function (employeeService, organizationService) {
                             'ngInject';

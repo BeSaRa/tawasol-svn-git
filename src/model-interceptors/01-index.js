@@ -131,4 +131,5 @@ module.exports = function (app) {
     require('./UserExtImportStoreInterceptor')(app);
     require('./AzureSearchCriteriaInterceptor')(app);
     require('./FavoriteActionInterceptor')(app);
+    require('./UserFollowupBookMultiInterceptor')(app);
 };

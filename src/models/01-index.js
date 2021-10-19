@@ -207,5 +207,6 @@ module.exports = function (app) {
     require('./AzureSearchCriteria')(app);
     require('./CorrespondenceView')(app);
     require('./FavoriteAction')(app);
+    require('./UserFollowupBookMulti')(app);
 
 };

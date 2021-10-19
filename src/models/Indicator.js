@@ -680,6 +680,25 @@ module.exports = function (app) {
             };
 
             /**
+             * @description returns shared followup indicator and description
+             * @returns {Indicator}
+             */
+            Indicator.prototype.getSharedFollowupIndicator = function (isShared) {
+                if (!isShared) {
+                    return null;
+                }
+                return new Indicator({
+                    class: 'indicator',
+                    text: 'indicator_shared_followup',
+                    icon: self.getIndicatorIcons('sharedFollowup'),
+                    tooltip: 'indicator_shared_followup',
+                    legendText: function (indicator) {
+                        return langService.get('indicator_shared_followup');
+                    }
+                });
+            };
+
+            /**
              * @description Returns the difference in days and date status(passed/today/coming)
              * @param dateToCheck
              * @param iconType

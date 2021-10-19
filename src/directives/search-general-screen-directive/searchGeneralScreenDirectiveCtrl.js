@@ -1458,6 +1458,14 @@ module.exports = function (app) {
         };
 
         /**
+         * @description add workItem to broadcast FollowUp
+         * @param item
+         */
+        self.addToBroadcastFollowUp = function (item) {
+            item.addToBroadcastFollowUp();
+        };
+
+        /**
          * @description Shows the steps of sequential workflow
          * @param record
          * @param $event
@@ -1648,6 +1656,19 @@ module.exports = function (app) {
                         text: 'grid_action_to_employee_followup',
                         shortcut: true,
                         callback: self.addToEmployeeFollowUp,
+                        permissionKey: 'ADMIN_USER_FOLLOWUP_BOOKS',
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // add to broadcast follow up
+                    {
+                        type: 'action',
+                        icon: 'book-search-outline',
+                        text: 'grid_action_to_broadcast_followup',
+                        shortcut: true,
+                        callback: self.addToBroadcastFollowUp,
                         permissionKey: 'ADMIN_USER_FOLLOWUP_BOOKS',
                         class: "action-green",
                         checkShow: function (action, model) {
