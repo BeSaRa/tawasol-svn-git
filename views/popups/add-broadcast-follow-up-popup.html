@@ -1,6 +1,6 @@
 <md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
-           ng-attr-aria-label="{{lang.add_to_my_direct_followup}}">
+           ng-attr-aria-label="{{lang.broadcast_followup}}">
     <popup-toolbar-directive
             header-text="{{lang.broadcast_followup + ' : ' + ctrl.model.docSubject}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
@@ -60,7 +60,7 @@
                             <div ng-message="required">{{lang.field_required}}</div>
                         </div>
                     </md-input-container>
-                    <div>
+                    <div class="p10-0">
                         <md-button class="md-raised md-primary"
                                    ng-disabled="!ctrl.selectedOrganization || !ctrl.selectedApplicationUser"
                                    ng-click="ctrl.addToRecords($event)">

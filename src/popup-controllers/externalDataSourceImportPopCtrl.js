@@ -13,7 +13,7 @@ module.exports = function (app) {
 
         self.userExtDataSourcesList = [];
         self.selectedUserDataSource = null;
-        self.identifier = null;
+        self.searchText = null;
         self.metaDataKeysList = [];
         self.metaDataList = [];
         self.selectedMetaDatas = [];
@@ -38,11 +38,19 @@ module.exports = function (app) {
             self.metaDataList = $filter('orderBy')(self.metaDataList, self.metaDataGrid.order);
         };
 
-        self.isValidForm = function () {
-            return !!self.selectedUserDataSource && !!self.identifier;
+        var _getSourceIdentifierFromSelectedMetaData = function (){
+            return self.selectedMetaDatas[0][self.selectedUserDataSource.extImportStore.sourceIdentifier];
         }
 
-        self.getMetadata = function ($event) {
+        var _getExtDataSourceId = function (){
+            return self.selectedUserDataSource.extImportStore.id;
+        }
+
+        self.isValidForm = function () {
+            return !!self.selectedUserDataSource && !!self.searchText;
+        }
+
+        self.searchMetadata = function ($event) {
             if (!self.isValidForm()) {
                 return;
             }
@@ -50,7 +58,7 @@ module.exports = function (app) {
             self.metaDataKeysList = [];
             self.selectedMetaDatas = [];
 
-            userExternalDataSourceService.loadMetaData(self.selectedUserDataSource.extImportStore.id, self.identifier)
+            userExternalDataSourceService.loadMetaData(_getExtDataSourceId(), self.searchText)
                 .then(function (result) {
                     if (!result) {
                         return;
@@ -67,7 +75,7 @@ module.exports = function (app) {
         };
 
         self.viewContent = function ($event, metaData) {
-            userExternalDataSourceService.openContentDialog(self.selectedUserDataSource.extImportStore.id, self.selectedUserDataSource.extImportStore.sourceIdentifier, metaData);
+            userExternalDataSourceService.openContentDialog(_getExtDataSourceId(), _getSourceIdentifierFromSelectedMetaData(), metaData);
         };
 
         self.importData = function ($event) {
@@ -76,8 +84,8 @@ module.exports = function (app) {
             }
             dialog.hide({
                 metaData: self.selectedMetaDatas[0],
-                sourceId: self.selectedUserDataSource.extImportStore.id,
-                identifier: self.selectedUserDataSource.extImportStore.sourceIdentifier
+                sourceId: _getExtDataSourceId(),
+                identifier: _getSourceIdentifierFromSelectedMetaData()
             });
         };
 

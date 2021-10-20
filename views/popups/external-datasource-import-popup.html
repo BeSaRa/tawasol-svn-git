@@ -22,15 +22,15 @@
                             </div>
                         </md-input-container>
                         <md-input-container flex>
-                            <label for="identifier">{{lang.identifier}}</label>
-                            <input name="identifier" id="identifier" required
-                                   ng-model="ctrl.identifier">
-                            <div ng-messages="externalImportForm.identifier.$error">
+                            <label for="searchText">{{lang.search}}</label>
+                            <input name="searchText" id="searchText" required
+                                   ng-model="ctrl.searchText">
+                            <div ng-messages="externalImportForm.searchText.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
                         <div class="p10-0">
-                            <md-button ng-click="ctrl.getMetadata($event)"
+                            <md-button ng-click="ctrl.searchMetadata($event)"
                                        ng-disabled="!ctrl.isValidForm()"
                                        class="md-raised md-primary">
                                 {{lang.select}}

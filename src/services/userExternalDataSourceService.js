@@ -93,14 +93,14 @@ module.exports = function (app) {
         };
 
         /**
-         * @description load meta data by store id and identifier
+         * @description load meta data by store id and searchText
          * @returns {*}
          */
-        self.loadMetaData = function (storeId, identifier) {
-            if (!storeId || !identifier) {
+        self.loadMetaData = function (storeId, searchText) {
+            if (!storeId || !searchText) {
                 return $q.reject(null);
             }
-            return $http.get(urlService.userExternalDataSource + '/id/' + generator.getNormalizedValue(storeId) + '?paramValue=' + identifier)
+            return $http.get(urlService.userExternalDataSource + '/id/' + generator.getNormalizedValue(storeId) + '?paramValue=' + searchText)
                 .then(function (result) {
                     return result.data.rs;
                 })
@@ -113,18 +113,18 @@ module.exports = function (app) {
         };
 
         /**
-         * @description load meta data by store id and identifier
+         * @description load content by store id and identifier value
          * @returns {*}
          */
-        self.loadContent = function (storeId, identifier, asBlob) {
-            if (!storeId || !identifier) {
+        self.loadContent = function (storeId, identifierValue, asBlob) {
+            if (!storeId || !identifierValue) {
                 return $q.reject(null);
             }
             var options = {};
             if (asBlob) {
                 options.responseType = 'blob';
             }
-            return $http.get(urlService.userExternalDataSource + '/content/' + generator.getNormalizedValue(storeId) + '?paramValue=' + identifier, options)
+            return $http.get(urlService.userExternalDataSource + '/content/' + generator.getNormalizedValue(storeId) + '?paramValue=' + identifierValue, options)
                 .then(function (result) {
                     return asBlob ? result.data : result.data.rs;
                 });
@@ -149,8 +149,8 @@ module.exports = function (app) {
                 })
         }
 
-        self.openContentDialog = function (storeId, identifier, metaData) {
-            self.loadContent(storeId, identifier, false)
+        self.openContentDialog = function (storeId, identifierValue, metaData) {
+            self.loadContent(storeId, identifierValue, false)
                 .then(function (result) {
                     var data = {
                         metaData: metaData,
