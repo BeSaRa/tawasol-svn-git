@@ -20,7 +20,7 @@ module.exports = function (app) {
         self.model = followUpData;
 
         self.selectedOrganization = null;
-        self.selectedApplicationUser = null;
+        self.selectedApplicationUser = [];
         self.usersToFollowup = [];
         self.usersToFollowupCopy = angular.copy(self.usersToFollowup);
 
@@ -29,6 +29,7 @@ module.exports = function (app) {
         self.ouSearchText = '';
         self.appUserSearchText = '';
         self.inProgress = false;
+        self.allUsersSelected = false;
 
         self.minDate = new Date();
         //self.minDate.setDate(self.minDate.getDate() + 1);
@@ -122,7 +123,7 @@ module.exports = function (app) {
          * @description Get the Application Users for the selected Organization
          */
         self.getAppUsersForOU = function ($event) {
-            self.selectedApplicationUser = null;
+            self.selectedApplicationUser = [];
             self.inProgress = true;
 
             if (!self.selectedOrganization) {
@@ -139,17 +140,33 @@ module.exports = function (app) {
         };
 
         self.addToRecords = function () {
-            self.usersToFollowup.push(self.selectedApplicationUser);
+            self.usersToFollowup = self.usersToFollowup.concat(self.selectedApplicationUser);
             self.usersToFollowupCopy = angular.copy(self.usersToFollowup);
 
-            self.selectedApplicationUser = null;
+            self.selectedApplicationUser = [];
         };
+
+        /***
+         * @description
+         */
+        self.onSelectUser = function () {
+            self.allUsersSelected = !!(self.selectedApplicationUser && self.selectedApplicationUser.length &&
+                self.applicationUsers.length === (self.selectedApplicationUser.length + self.usersToFollowup.length));
+        }
+
+        self.toggleAllUsers = function () {
+            self.selectedApplicationUser = [];
+            self.selectedApplicationUser = self.allUsersSelected ? _.filter(self.applicationUsers, (user) => {
+                return !self.isExistingRecord(user);
+            }) : [];
+        }
 
         self.removeRecord = function ($event, user) {
             self.usersToFollowup = _.filter(self.usersToFollowup, function (item) {
                 return !(item.id === user.id && item.ouId === user.ouId);
             });
             self.usersToFollowupCopy = angular.copy(self.usersToFollowup);
+            self.allUsersSelected = false;
         };
 
         self.isExistingRecord = function (user) {
