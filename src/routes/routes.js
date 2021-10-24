@@ -1484,7 +1484,7 @@ module.exports = function (app) {
                 templateUrl: templateProvider.getView('central-archive-returned'),
                 controller: 'returnedCentralArchiveCtrl',
                 controllerAs: 'ctrl',
-                permission: 'menu_item_central_archive_ready_to_export',
+                permission: 'menu_item_archive_returned',
                 resolve: {
                     returnedArchiveItems: function (correspondenceService) {
                         'ngInject';

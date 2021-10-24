@@ -134,6 +134,10 @@ module.exports = function (app) {
             .addMenuPermission('menu_item_central_archive_ready_to_export', function (employee) {
                 return employee.userOrganization && employee.userOrganization.centralArchive;
             })
+            .addMenuPermission('menu_item_archive_returned', function (employee) {
+                var rootEntity = employee.getRootEntity();
+                return employee.userOrganization && employee.userOrganization.centralArchive && rootEntity.getGlobalSettings().returnToCentralArchive;
+            })
             .end()
             .addMenuPermissionGroup('menu_item_icn_archive')
             .addMenuPermission('menu_item_icn_archive_add', function () {
