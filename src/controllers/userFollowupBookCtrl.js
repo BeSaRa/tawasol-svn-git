@@ -258,12 +258,23 @@ module.exports = function (app) {
                 if (record.isTerminated()) {
                     return;
                 }
-                record.terminate(false, $event).then(function () {
-                    return self.reloadFollowupBooks(self.grid.page)
+                var deferTerminate = $q.defer();
+                if (record.isSharedFollowup()) {
+                    dialog.confirmMessage(langService.get('confirm_terminate_with_shared_followup'))
                         .then(function () {
-                            new ResolveDefer(defer);
+                            deferTerminate.resolve(true);
                         });
-                });
+                } else {
+                    deferTerminate.resolve(true);
+                }
+                deferTerminate.promise.then(function () {
+                    record.terminate(false, $event).then(function () {
+                        return self.reloadFollowupBooks(self.grid.page)
+                            .then(function (result) {
+                                new ResolveDefer(defer);
+                            });
+                    });
+                })
             };
 
             self.checkIfTerminateBulkAvailable = function () {
