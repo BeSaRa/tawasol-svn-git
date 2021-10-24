@@ -93,10 +93,10 @@
                                         <input name="employeeNo" id="employeeNo" required
                                                ng-disabled="true" ng-readonly="true"
                                                ng-model="ctrl.applicationUser.employeeNo" maxlength="10"
-                                               custom-validate-directive="number">
+                                               custom-validate-directive="EN">
                                         <div ng-messages="userPreferencesForm.employeeNo.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
-                                            <div ng-message="number">{{lang.numberonly}}</div>
+                                            <div ng-message="EN">{{lang.english_number}}</div>
                                             <div ng-message="maxlength">{{lang.max_length.change({length: 10})}}</div>
                                         </div>
                                     </md-input-container>
