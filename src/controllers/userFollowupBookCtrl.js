@@ -288,12 +288,54 @@ module.exports = function (app) {
              * @param $event
              */
             self.terminateBulk = function ($event) {
+                if (!self.selectedFollowupBooks.length) {
+                    return;
+                }
                 if (!self.checkIfTerminateBulkAvailable()) {
                     return;
                 }
-                followUpUserService.terminateBulkFollowup(self.selectedFollowupBooks).then(function () {
-                    return self.reloadFollowupBooks(self.grid.page);
+                var selectedItems = angular.copy(self.selectedFollowupBooks),
+                    sharedFollowupsBooks = [], notSharedFollowupBooks = [];
+
+                _.map(selectedItems, function (item) {
+                    if (item.isSharedFollowup()) {
+                        sharedFollowupsBooks.push(item);
+                    } else {
+                        notSharedFollowupBooks.push(item);
+                    }
+                    return item;
                 });
+                var terminateDefer = $q.defer();
+                if (sharedFollowupsBooks.length === 0) {
+                    terminateDefer.resolve(selectedItems);
+                } else {
+                    var buttonsMap = {
+                        terminate: {
+                            id: 1,
+                            key: 'terminate',
+                            langKey: 'terminate'
+                        },
+                        skipAndTerminate: {
+                            id: 2,
+                            key: 'skipAndTerminate',
+                            langKey: 'skip_and_terminate'
+                        }
+                    };
+                    dialog.confirmThreeButtonMessage(langService.get('confirm_terminate_selected_some_shared_followup'), '', langService.get(buttonsMap.terminate.langKey), langService.get(buttonsMap.skipAndTerminate.langKey), false, null, false)
+                        .then(function (result) {
+                            if (result.button === buttonsMap.skipAndTerminate.id) {
+                                terminateDefer.resolve(notSharedFollowupBooks);
+                            } else if (result.button === buttonsMap.terminate.id) {
+                                terminateDefer.resolve(selectedItems);
+                            }
+                        });
+                }
+
+                terminateDefer.promise.then(function (itemsToTerminate) {
+                    followUpUserService.terminateBulkFollowup(itemsToTerminate).then(function () {
+                        return self.reloadFollowupBooks(self.grid.page);
+                    });
+                })
             };
 
             /**
