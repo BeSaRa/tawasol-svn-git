@@ -642,7 +642,7 @@ module.exports = function (app) {
                     checkShow: function (action, model) {
                         model = _getOriginalFollowupBook(model);
 
-                        return !model.isTerminated();
+                        return !model.isTerminated() && !model.isSharedFollowup();
                     }
                 },
                 // Move To Folder
