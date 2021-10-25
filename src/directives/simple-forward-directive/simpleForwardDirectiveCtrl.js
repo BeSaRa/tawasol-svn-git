@@ -60,6 +60,7 @@ module.exports = function (app) {
         })
 
         self.launchDistributionCorrespondenceWorkFlow = function () {
+            self.setBulkDistWorkflowItems();
             self.distributionWF.setNormalUsers(_.filter(self.selectedFavUsers, _filterWFUsers));
 
             distributionWFService.startLaunchWorkflow(self.distributionWF, self.record, self.actionKey)
@@ -110,7 +111,7 @@ module.exports = function (app) {
          */
         self.onCommentChange = function () {
             self.distWorkflowItem.comments = self.comment.getComment();
-            self.setBulkDistWorkflowItems();
+            // self.setBulkDistWorkflowItems();
         };
 
         /**
@@ -152,7 +153,7 @@ module.exports = function (app) {
             favoriteUser.checked = !favoriteUser.checked;
             if (favoriteUser.checked) {
                 self.selectedFavUsers.push(favoriteUser);
-                self.setBulkDistWorkflowItems();
+                // self.setBulkDistWorkflowItems();
             } else {
                 var indexOfUser = _.findIndex(self.selectedFavUsers, {id: favoriteUser.id})
                 self.selectedFavUsers.splice(indexOfUser, 1)
