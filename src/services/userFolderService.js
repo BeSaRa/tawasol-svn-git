@@ -201,20 +201,7 @@ module.exports = function (app) {
                     .then(function () {
                         return self.deleteBulkUserFolders(userFolders)
                             .then(function (result) {
-                                /* var response = false;
-                                 if (result.length === userFolders.length) {
-                                     toast.error(langService.get("failed_delete_selected"));
-                                     response = false;
-                                 } else if (result.length) {
-                                     generator.generateFailedBulkActionRecords('delete_success_except_following', _.map(result, function (userFolder) {
-                                         return userFolder.getNames();
-                                     }));
-                                     response = true;
-                                 } else {
-                                     toast.success(langService.get("delete_success"));
-                                     response = true;
-                                 }
-                                 return response;*/
+
                             });
                     });
             }
