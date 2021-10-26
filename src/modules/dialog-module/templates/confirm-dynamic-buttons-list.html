@@ -1,0 +1,12 @@
+<div layout="column" class="dialog-alert-box">
+    <div scroll-directive class="dialog-content">
+        <img ng-if="!ctrl.hideIcon" class="dialog-image" src="../../../../assets/images/question.png"/>
+        <div class="dialog-paragraph" ng-bind-html="ctrl.content"></div>
+    </div>
+    <div class="dialog-footer button_message">
+        <button ng-repeat="item in ctrl.buttonsList track by $index"
+                class="button radius md-raised md-button md-ink-ripple {{item.cssClass}}"
+                ng-click="ctrl.buttonCallback(item)">{{item.text}}
+        </button>
+    </div>
+</div>

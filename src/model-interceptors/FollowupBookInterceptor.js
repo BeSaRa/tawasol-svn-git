@@ -27,6 +27,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
+            delete model.statusInfo;
             delete model.docClassIndicator;
             delete model.docDateString;
             delete model.actionDateString;
@@ -46,6 +47,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
+            model.statusInfo = model.statusInfo ? new Information(model.statusInfo) : new Information();
             model.docClassIndicator = model.getDocClassIndicator(generator.getDocumentClassName(model.docClassId));
             model.docDateString = generator.getDateFromTimeStamp(model.docDate);
             model.actionDateString = generator.getDateFromTimeStamp(model.actionDate);

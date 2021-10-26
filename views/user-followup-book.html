@@ -80,7 +80,7 @@
                                        md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
-                                        <th colspan="{{ctrl.selectedFollowupBooks.length > 1 ? 10 : 11}}"
+                                        <th colspan="{{ctrl.selectedFollowupBooks.length > 1 ? 12 : 13}}"
                                             ng-if="ctrl.selectedFollowupBooks.length" md-column>
                                             <div layout="row" layout-align="start center">
                                                 <span>{{ctrl.selectedFollowupBooks.length}} {{lang.items_selected}} </span>
@@ -119,6 +119,10 @@
                                         <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
                                             md-order-by="docSubject">
                                             <span>{{lang.subject}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('statusInfo', 'Information')}}">
+                                            <span>{{lang.followup_status}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
                                             md-order-by="docDate">
@@ -203,6 +207,7 @@
                                                   class="view-doc subject-internal"
                                                   tooltip="{{record.docSubject}}">{{record.docSubject}}</span>
                                         </td>
+                                        <td md-cell>{{record.statusInfo.getTranslatedName()}}</td>
                                         <td md-cell>{{record.docDateString}}</td>
                                         <td md-cell>{{record.actionDateString}}</td>
                                         <td md-cell class="td-data">
