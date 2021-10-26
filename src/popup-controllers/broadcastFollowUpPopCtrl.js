@@ -36,8 +36,10 @@ module.exports = function (app) {
         self.minDate.setHours(0, 0, 0, 0);
         self.minDateString = moment(self.minDate).format(generator.defaultDateFormat);
 
-        // set followupDate from organization SLA
+        // if no followupDate, set followupDate from organization SLA
+        if (!self.model.followupDate) {
             self.model.followupDate = generator.getFutureDate(organizationForSLA.sla[followUpData.priorityLevel]);
+        }
 
         var _mapRegOUSections = function () {
             // filter all regOU (has registry)
