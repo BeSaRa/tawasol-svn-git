@@ -930,6 +930,14 @@ module.exports = function (app) {
             return array;
         }
 
+        function getChildObjects(folder, array) {
+            for (var i = 0; i < folder.children.length; i++) {
+                array.push(folder.children[i]);
+                getChildObjects(folder.children[i], array);
+            }
+            return array;
+        }
+
         self.reloadUserFolders = function () {
             userFolderService
                 .getUserFoldersForApplicationUser()
@@ -957,8 +965,8 @@ module.exports = function (app) {
         };
 
         self.deleteFolder = function (folder, $event) {
-            var array = [folder.id];
-            getChildIds(folder, array);
+            var array = [folder];
+            getChildObjects(folder, array);
             userFolderService
                 .controllerMethod
                 .userFolderDeleteBulk(array.reverse(), $event)
