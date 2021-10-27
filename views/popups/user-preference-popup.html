@@ -1175,7 +1175,8 @@
                         </md-content>
                     </md-tab>
                     <!-- User Folders -->
-                    <md-tab label="{{lang.folders}}" ng-if="ctrl.showTab('folders')"
+                    <md-tab label="{{lang.folders}}"
+                            ng-if="ctrl.showTab('folders') && ctrl.employee.hasPermissionTo('FOLDERS_QUEUE')"
                             md-on-select="ctrl.setCurrentTab('folders')">
                         <md-content class="md-padding">
                             <div>

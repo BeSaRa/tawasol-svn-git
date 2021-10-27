@@ -1128,6 +1128,7 @@ module.exports = function (app) {
                         shortcut: false,
                         callback: self.addToFolder,
                         class: "action-green",
+                        permissionKey: 'FOLDERS_QUEUE',
                         hide: true,
                         disabled: function (model) {
                             return model.isLocked() && !model.isLockedByCurrentUser();

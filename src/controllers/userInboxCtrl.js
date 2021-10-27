@@ -1607,6 +1607,7 @@ module.exports = function (app) {
                         icon: 'folder-plus',
                         text: 'grid_action_to_folder',
                         callback: self.addToFolder,
+                        permissionKey: 'FOLDERS_QUEUE',
                         class: "action-green",
                         checkShow: function (action, model) {
                             return true;
