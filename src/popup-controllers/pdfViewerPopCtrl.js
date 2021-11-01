@@ -881,7 +881,13 @@ module.exports = function (app) {
             }).then(function (image) {
                 return self.convertImageToBlob(image);
             }).then(function (data) {
-                return self.createAnnotationFromBlob(data.blob, repeated, data.size, {type: AnnotationType.STAMP});
+                heightRatio = Math.min(configurationService.CUSTOM_STAMP_SIZE.height, data.size.height) / Math.max(configurationService.CUSTOM_STAMP_SIZE.height, data.size.height);
+                widthRatio = Math.min(configurationService.CUSTOM_STAMP_SIZE.width, data.size.width) / Math.max(configurationService.CUSTOM_STAMP_SIZE.width, data.size.width);
+
+                return self.createAnnotationFromBlob(data.blob, repeated, {
+                    width: widthRatio * data.size.width,
+                    height: heightRatio * data.size.height,
+                }, {type: AnnotationType.STAMP});
             }).then(function (annotations) {
                 return self.addAnnotationsToPDFDocument(annotations);
             }).then(function (annotations) {

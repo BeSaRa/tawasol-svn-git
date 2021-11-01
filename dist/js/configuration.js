@@ -33,6 +33,10 @@
                 .updateConfiguration('CHAT_BOT', {
                     URL: 'http://tawasolbot-b750.azurewebsites.net/chatbot.html?',
                     APPEND_TOKEN: true
+                })
+                .updateConfiguration('CUSTOM_STAMP_SIZE', {
+                    width: 112,
+                    height: 88
                 });
 
         });
