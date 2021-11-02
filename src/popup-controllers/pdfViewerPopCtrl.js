@@ -1124,7 +1124,7 @@ module.exports = function (app) {
                 .then(function (annotations) {
                     annotations.map(function (annotation) {
                         if (!_isSignature(annotation)) {
-                            annotation = annotation.set('noView', noPrintValue);
+                            annotation = annotation.set('noPrint', noPrintValue);
                         }
                         updatedAnnotations.push(self.currentInstance.update(annotation));
                     });
