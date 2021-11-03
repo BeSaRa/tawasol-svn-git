@@ -583,13 +583,15 @@ module.exports = function (app) {
                 }
             });
             usernameAnnotation = self.currentInstance.calculateFittingTextAnnotationBoundingBox(usernameAnnotation);
-
-            usernameAnnotation = usernameAnnotation.set('boundingBox', new PSPDFKit.Geometry.Rect({
-                left: annotation ? (annotation.boundingBox.left + annotation.boundingBox.width) : (pageInfo.width / 2) - usernameAnnotation.boundingBox.width,
-                top: (pageInfo.height / 2) - usernameAnnotation.boundingBox.height,
+            var pageRect = _getPageVisibleRect(self.currentInstance.viewState.currentPageIndex);
+            var rect = new PSPDFKit.Geometry.Rect({
+                left: annotation ? (annotation.boundingBox.left + annotation.boundingBox.width) : (pageRect.width / 2) - (usernameAnnotation.boundingBox.width / 2),
+                top: ((pageRect.height / 2) + pageRect.top) - (usernameAnnotation.boundingBox.height / 2),
                 width: usernameAnnotation.boundingBox.width,
-                height: usernameAnnotation.boundingBox.height,
-            }));
+                height: usernameAnnotation.boundingBox.height
+            });
+
+            usernameAnnotation = usernameAnnotation.set('boundingBox', rect);
 
             self.currentInstance.create(usernameAnnotation).then(annotations => {
                 self.selectAnnotation(annotations[0]);
@@ -619,13 +621,15 @@ module.exports = function (app) {
                 }
             });
             usernameAnnotation = self.currentInstance.calculateFittingTextAnnotationBoundingBox(usernameAnnotation);
-
-            usernameAnnotation = usernameAnnotation.set('boundingBox', new PSPDFKit.Geometry.Rect({
-                left: annotation ? (annotation.boundingBox.left + annotation.boundingBox.width) : (pageInfo.width / 2) - usernameAnnotation.boundingBox.width,
-                top: (pageInfo.height / 2) - usernameAnnotation.boundingBox.height,
+            var pageRect = _getPageVisibleRect(self.currentInstance.viewState.currentPageIndex);
+            var rect = new PSPDFKit.Geometry.Rect({
+                left: annotation ? (annotation.boundingBox.left + annotation.boundingBox.width) : (pageRect.width / 2) - (usernameAnnotation.boundingBox.width / 2),
+                top: ((pageRect.height / 2) + pageRect.top) - (usernameAnnotation.boundingBox.height / 2),
                 width: usernameAnnotation.boundingBox.width,
-                height: usernameAnnotation.boundingBox.height,
-            }));
+                height: usernameAnnotation.boundingBox.height
+            });
+
+            usernameAnnotation = usernameAnnotation.set('boundingBox', rect);
 
             self.currentInstance.create(usernameAnnotation).then(annotations => {
                 self.selectAnnotation(annotations[0]);
@@ -671,13 +675,15 @@ module.exports = function (app) {
                 }
             });
             infoAnnotation = self.currentInstance.calculateFittingTextAnnotationBoundingBox(infoAnnotation);
-
-            infoAnnotation = infoAnnotation.set('boundingBox', new PSPDFKit.Geometry.Rect({
-                left: annotation ? (annotation.boundingBox.left + annotation.boundingBox.width) : (pageInfo.width / 2) - infoAnnotation.boundingBox.width,
-                top: (pageInfo.height / 2) - infoAnnotation.boundingBox.height,
+            var pageRect = _getPageVisibleRect(self.currentInstance.viewState.currentPageIndex);
+            var rect = new PSPDFKit.Geometry.Rect({
+                left: annotation ? (annotation.boundingBox.left + annotation.boundingBox.width) : (pageRect.width / 2) - (infoAnnotation.boundingBox.width / 2),
+                top: ((pageRect.height / 2) + pageRect.top) - (infoAnnotation.boundingBox.height / 2),
                 width: infoAnnotation.boundingBox.width,
-                height: infoAnnotation.boundingBox.height,
-            }));
+                height: infoAnnotation.boundingBox.height
+            });
+
+            infoAnnotation = infoAnnotation.set('boundingBox', rect);
 
             self.currentInstance.create(infoAnnotation).then(annotations => {
                 self.selectAnnotation(annotations[0]);
@@ -728,7 +734,7 @@ module.exports = function (app) {
                     _setButtonCookies('addUserInfoToDocument');
                 }
 
-                var pageInfo = self.currentInstance.pageInfoForIndex(self.currentInstance.viewState.currentPageIndex);
+                // var pageInfo = self.currentInstance.pageInfoForIndex(self.currentInstance.viewState.currentPageIndex);
                 var userInfoAnnotation = new PSPDFKit.Annotations.TextAnnotation({
                     text: annotationTextItems.join('\r\n'),
                     pageIndex: self.currentInstance.viewState.currentPageIndex,
@@ -746,13 +752,15 @@ module.exports = function (app) {
                     }
                 });
                 userInfoAnnotation = self.currentInstance.calculateFittingTextAnnotationBoundingBox(userInfoAnnotation);
-
-                userInfoAnnotation = userInfoAnnotation.set('boundingBox', new PSPDFKit.Geometry.Rect({
-                    left: annotation ? (annotation.boundingBox.left + annotation.boundingBox.width) : (pageInfo.width / 2) - userInfoAnnotation.boundingBox.width,
-                    top: (pageInfo.height / 2) - userInfoAnnotation.boundingBox.height,
+                var pageRect = _getPageVisibleRect(self.currentInstance.viewState.currentPageIndex);
+                var rect = new PSPDFKit.Geometry.Rect({
+                    left: annotation ? (annotation.boundingBox.left + annotation.boundingBox.width) : (pageRect.width / 2) - (userInfoAnnotation.boundingBox.width / 2),
+                    top: ((pageRect.height / 2) + pageRect.top) - (userInfoAnnotation.boundingBox.height / 2),
                     width: userInfoAnnotation.boundingBox.width,
-                    height: userInfoAnnotation.boundingBox.height,
-                }));
+                    height: userInfoAnnotation.boundingBox.height
+                });
+
+                userInfoAnnotation = userInfoAnnotation.set('boundingBox', rect);
 
                 self.currentInstance.create(userInfoAnnotation).then(annotations => {
                     self.selectAnnotation(annotations[0]);
@@ -840,6 +848,8 @@ module.exports = function (app) {
             var isBarcode = !!(additionalData && additionalData.type === AnnotationType.BARCODE);
             return $q(function (resolve, reject) {
                 var imageAnnotations = [];
+                var pageRect = _getPageVisibleRect(self.currentInstance.viewState.currentPageIndex);
+
                 $q.all(attachments).then(function (attachmentIds) {
                     _.map(attachmentIds, function (attachmentId, index) {
                         imageAnnotations.push(new PSPDFKit.Annotations.ImageAnnotation({
@@ -851,8 +861,8 @@ module.exports = function (app) {
                                 id: uuidv4()
                             },
                             boundingBox: new PSPDFKit.Geometry.Rect({
-                                left: (pageInfo.width / 2) - (size ? (size.width / 2) : 50),
-                                top: isBarcode ? 50 : (pageInfo.height / 2) - (size ? (size.height / 2) : 50),
+                                left: (pageRect.width / 2) - (size ? size.width / 2 : 50),
+                                top: isBarcode ? 50 : ((pageRect.height / 2) + pageRect.top) - (size ? (size.height / 2) : 50),
                                 width: size ? size.width : 100,
                                 height: size ? size.height : 100,
                             })
@@ -1306,11 +1316,12 @@ module.exports = function (app) {
         };
 
         self.generateReasonableSize = function (annotation) {
-            var pageSize = self.currentInstance.pageInfoForIndex(self.currentInstance.viewState.currentPageIndex);
+            // var pageSize = self.currentInstance.pageInfoForIndex(self.currentInstance.viewState.currentPageIndex);
+            var pageRect = _getPageVisibleRect(self.currentInstance.viewState.currentPageIndex);
             var defaultWidth = configurationService.SIGNATURE_BOX_SIZE.width,
                 defaultHeight = configurationService.SIGNATURE_BOX_SIZE.height,
-                defaultLeft = (pageSize.width / 2) - (defaultWidth / 2),
-                defaultTop = (pageSize.height / 2) - (defaultHeight / 2);
+                defaultLeft = (pageRect.width / 2) - (defaultWidth / 2),
+                defaultTop = ((pageRect.height / 2) + pageRect.top) - (defaultHeight / 2);
 
             var widthRatio = defaultWidth / annotation.boundingBox.width,
                 heightRatio = defaultHeight / annotation.boundingBox.height,
@@ -2577,6 +2588,30 @@ module.exports = function (app) {
                         action.text.indexOf('grid_action_forward') > -1 ||
                         action.text.indexOf('grid_action_accept_launch_distribution_workflow') > -1)
             });
+        }
+
+        function _getPageVisibleRect(pageIndex) {
+            // Page DOM element
+            var pageEl = self.currentInstance.contentDocument.querySelector(
+                `.PSPDFKit-Page[data-page-index="${pageIndex}"]`
+            );
+            var pageBoundingClientRect = pageEl.getBoundingClientRect();
+            // Viewport DOM element
+            var viewportEl = self.currentInstance.contentDocument.querySelector(
+                ".PSPDFKit-Viewport"
+            );
+            // Toolbar DOM element, needs offsetting
+            var toolbarEl = self.currentInstance.contentDocument.querySelector(".PSPDFKit-Toolbar");
+            // Get visible page area in page units
+            return self.currentInstance.transformContentClientToPageSpace(
+                new PSPDFKit.Geometry.Rect({
+                    left: Math.max(pageBoundingClientRect.left, 0),
+                    top: Math.max(pageBoundingClientRect.top, toolbarEl.scrollHeight),
+                    width: Math.min(pageEl.clientWidth, viewportEl.clientWidth),
+                    height: Math.min(pageEl.clientHeight, viewportEl.clientHeight)
+                }),
+                pageIndex
+            );
         }
 
         /**
