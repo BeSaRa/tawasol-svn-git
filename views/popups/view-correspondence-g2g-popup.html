@@ -195,7 +195,7 @@
                         class="iframe-main-document"
                         ng-src="{{ctrl.viewURL}}" flex
                         frameborder="0"></iframe>
-                <pspdf-viewer-directive doc-url="ctrl.viewURL"
+                <pspdf-viewer-directive doc-url="ctrl.viewURL" correspondence="ctrl.correspondence"
                                         ng-if="ctrl.displayMainPSPDFViewer() && !ctrl.isLimitedCentralUnitAccess"
                                         id="pdfViewer" class="iframe-main-document" flex></pspdf-viewer-directive>
             </div>
