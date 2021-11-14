@@ -6,6 +6,7 @@ module.exports = function (app) {
         self.serviceName = 'contextHelpService';
 
         self.defaultHelpUrl = 'help/';
+        self.defaultVideoHelpUrl = 'help_videos/';
 
         self.currentHelpUrl = null;
         self.currentHelpID = null;
@@ -29,12 +30,13 @@ module.exports = function (app) {
                 .showDialog({
                     templateUrl: self.currentHelpUrl + '_' + langService.current + '_help.html',
                     targetEvent: $event || false,
-                    controller: function ($compile, $element, $timeout, configurationService) {
+                    controller: function ($compile, $scope, $element, $timeout, configurationService) {
                         if (!configurationService.G2G_QATAR_SOURCE) {
-                            var link = document.createElement('a');
-                            link.innerText = langService.get('explanation_video');
-                            link.href = 'help_videos/' + self.currentHelpID + '.mp4';
-                            link.target = "_blank";
+                            var scope = $scope.$new(true);
+                            scope.ctrl = {
+                                url: self.defaultVideoHelpUrl + self.currentHelpID + '.mp4'
+                            }
+                            var link = $compile(angular.element('<help-videos-directive url="ctrl.url">'))(scope);
                             $timeout(function () {
                                 angular.element($element[0].querySelector('md-content')).prepend(link);
                             })
