@@ -31,6 +31,8 @@ module.exports = function (app) {
                     templateUrl: self.currentHelpUrl + '_' + langService.current + '_help.html',
                     targetEvent: $event || false,
                     controller: function ($compile, $scope, $element, $timeout, configurationService) {
+                        'ngInject';
+
                         if (!configurationService.G2G_QATAR_SOURCE) {
                             var scope = $scope.$new(true);
                             scope.ctrl = {
