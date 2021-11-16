@@ -45,7 +45,10 @@ module.exports = function (app) {
                 return false;
             })
             .addMenuPermissions('menu_item_localization', ['MANAGE_GLOBAL_LOCALIZATION'])
-            .addMenuPermissions('menu_item_external_data_sources', ['CREATE_EXTERNAL_DATA_SOURCE'])
+            .addMenuPermissions('menu_item_external_data_sources', function (employee) {
+                var rootEntity = employee.getRootEntity();
+                return employee.hasPermissionTo('CREATE_EXTERNAL_DATA_SOURCE') && rootEntity.returnRootEntity().rootEntity.importDataSourceStatus;
+            })
             .addMenuPermissions('menu_item_administrators', function (employee) {
                 return employee.isSuperAdmin;
             })
