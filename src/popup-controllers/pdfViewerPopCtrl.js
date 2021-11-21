@@ -1133,17 +1133,19 @@ module.exports = function (app) {
             self.getDocumentAnnotations()
                 .then(function (annotations) {
                     annotations.map(function (annotation) {
-                        if (!_isSignature(annotation)) {
-                            annotation = annotation.set('noPrint', noPrintValue);
+                        if (!(annotation instanceof PSPDFKit.Annotations.WidgetAnnotation)) {
+                            if (!_isSignature(annotation)) {
+                                annotation = annotation.set('noPrint', noPrintValue);
+                            }
+                            updatedAnnotations.push(self.currentInstance.update(annotation));
                         }
-                        updatedAnnotations.push(self.currentInstance.update(annotation));
                     });
                     $q.all(updatedAnnotations)
                         .then(function () {
-                            //  self.currentInstance.save().then(function () {
-                            self.currentInstance.print(PSPDFKit.PrintMode.EXPORT_PDF);
-                            self.handleAfterPrint();
-                            // });
+                            self.currentInstance.save().then(function () {
+                                self.currentInstance.print(PSPDFKit.PrintMode.EXPORT_PDF);
+                                self.handleAfterPrint();
+                            });
                         }).catch(function (error) {
                         console.log(error);
                     });
@@ -2230,7 +2232,9 @@ module.exports = function (app) {
             self.getDocumentAnnotations()
                 .then(function (annotations) {
                     annotations.forEach(function (annotation) {
-                        self.currentInstance.update(annotation.set('noPrint', false))
+                        if (!(annotation instanceof PSPDFKit.Annotations.WidgetAnnotation)) {
+                            self.currentInstance.update(annotation.set('noPrint', false))
+                        }
                     });
                 });
         };
