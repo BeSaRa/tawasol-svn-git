@@ -1140,11 +1140,13 @@ module.exports = function (app) {
                     });
                     $q.all(updatedAnnotations)
                         .then(function () {
-                            self.currentInstance.save().then(function () {
-                                self.currentInstance.print(PSPDFKit.PrintMode.EXPORT_PDF);
-                                self.handleAfterPrint();
-                            });
-                        });
+                            //  self.currentInstance.save().then(function () {
+                            self.currentInstance.print(PSPDFKit.PrintMode.EXPORT_PDF);
+                            self.handleAfterPrint();
+                            // });
+                        }).catch(function (error) {
+                        console.log(error);
+                    });
                 })
         };
         /**
@@ -2228,7 +2230,7 @@ module.exports = function (app) {
             self.getDocumentAnnotations()
                 .then(function (annotations) {
                     annotations.forEach(function (annotation) {
-                        self.currentInstance.update(annotation.set('noView', false))
+                        self.currentInstance.update(annotation.set('noPrint', false))
                     });
                 });
         };
