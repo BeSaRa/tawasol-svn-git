@@ -2339,8 +2339,7 @@ module.exports = function (app) {
                 instantJSON: operations.length ? null : instantJSON,
                 licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
                 customFonts: PDFService.customFonts,
-                isAPStreamRendered: () => false,
-                disableWebAssemblyStreaming: true
+                isAPStreamRendered: () => false
             }
 
 
@@ -2456,8 +2455,7 @@ module.exports = function (app) {
                     licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
                     annotationTooltipCallback: self.annotationTooltipCallback,
                     customFonts: PDFService.customFonts,
-                    isAPStreamRendered: () => false,
-                    disableWebAssemblyStreaming: true
+                    isAPStreamRendered: () => false
                 }
 
                 if (configurationService.PSPDF_LICENSE_KEY) {
