@@ -1711,26 +1711,6 @@ module.exports = function (app) {
             }).catch(self.handleExceptions);
         };
 
-        /**
-         * description: workaround to fix the rotation signature issue in beIN
-         * @param instantJSON
-         * @returns {*&{annotations: unknown[]}}
-         */
-        function rotateImageAnnotationsWithPages(instantJSON) {
-            return {
-                ...instantJSON,
-                annotations: instantJSON.annotations.map((annotation) => {
-                    if (annotation.type === "pspdfkit/image") {
-                        return {
-                            ...annotation,
-                            rotation: self.currentInstance.pageInfoForIndex(annotation.pageIndex).rotation,
-                        };
-                    }
-
-                    return annotation;
-                }),
-            };
-        }
 
         /**
          * @description handle none signature save part
@@ -1740,7 +1720,7 @@ module.exports = function (app) {
                 delete instantJSON.pdfId;
                 instantJSON.skippedPdfObjectIds = _.difference(instantJSON.skippedPdfObjectIds, self.skippedPdfObjectIds);
                 var hasMySignature = await self.isDocumentHasCurrentUserSignature().catch(result => result);
-                instantJSON = rotateImageAnnotationsWithPages(instantJSON);
+                instantJSON = PDFService.rotateImageAnnotationsWithPages(instantJSON, self.currentInstance);
                 PDFService.applyAnnotationsOnPDFDocument(self.correspondence, AnnotationType.ANNOTATION, instantJSON, self.documentOperations, _getFlattenStatus(hasMySignature))
                     .then(function (pdfContent) {
                         self.savedPdfContent = pdfContent;
@@ -1971,6 +1951,7 @@ module.exports = function (app) {
                                 } else {
                                     self.currentInstance.exportInstantJSON().then(function (instantJSON) {
                                         delete instantJSON.pdfId;
+                                        instantJSON = PDFService.rotateImageAnnotationsWithPages(instantJSON, self.currentInstance);
                                         PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON, self.documentOperations, _getFlattenStatus()).then(function (pdfContent) {
                                             if (_isFromBackStep()) {
                                                 self.applyNextStepOnCorrespondence(pdfContent, null, true).catch(self.handleSeqExceptions);
@@ -1994,6 +1975,7 @@ module.exports = function (app) {
                         }
                         self.currentInstance.exportInstantJSON().then(function (instantJSON) {
                             delete instantJSON.pdfId;
+                            instantJSON = PDFService.rotateImageAnnotationsWithPages(instantJSON, self.currentInstance);
                             PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON, self.documentOperations, _getFlattenStatus()).then(function (pdfContent) {
                                 if (self.info.isPaper || _isElectronicAndAuthorizeByAnnotationBefore()) {
                                     self.applyNextStepOnCorrespondence(pdfContent, null, true).catch(self.handleSeqExceptions);

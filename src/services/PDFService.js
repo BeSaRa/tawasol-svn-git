@@ -172,6 +172,27 @@ module.exports = function (app) {
             });
         }
 
+        /**
+         * description: workaround to fix the rotation signature issue in beIN
+         * @param instantJSON
+         * @returns {*&{annotations: unknown[]}}
+         */
+        self.rotateImageAnnotationsWithPages = function (instantJSON, currentInstance) {
+            return {
+                ...instantJSON,
+                annotations: instantJSON.annotations.map((annotation) => {
+                    if (annotation.type === "pspdfkit/image") {
+                        return {
+                            ...annotation,
+                            rotation: currentInstance.pageInfoForIndex(annotation.pageIndex).rotation,
+                        };
+                    }
+
+                    return annotation;
+                }),
+            };
+        }
+
         function loadCustomFontPSPDF(fontFileName) {
             var url = 'assets/pspdf_fonts/' + fontFileName;
             return $http.get(url, {
