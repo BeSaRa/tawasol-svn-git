@@ -6,9 +6,12 @@ module.exports = function (app) {
                                                                 dialog,
                                                                 $scope,
                                                                 AnnotationType,
+                                                                tableGeneratorService,
+                                                                lookupService,
                                                                 $timeout,
                                                                 langService,
                                                                 record,
+                                                                moment,
                                                                 sequentialWorkflows,
                                                                 sequentialWorkflowService,
                                                                 rootEntity,
@@ -19,8 +22,10 @@ module.exports = function (app) {
         self.stepsUsageType = sequentialWorkflowService.stepsUsageTypes.launchWF;
         self.form = null;
         self.record = record;
+        self.correspondence = record;
         self.sequentialWorkflows = sequentialWorkflows;
         self.canAddSeqWF = rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo('ADD_SEQ_WF');
+        self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
 
         self.selectedSeqWF = null;
         self.seqWFSearchText = '';
@@ -95,7 +100,8 @@ module.exports = function (app) {
                 return false;
             }
 
-            if (self.selectedSeqWF.steps[0].isAuthorizeAndSendStep()) {
+            var firstStep = self.selectedSeqWF.steps[0];
+            if (firstStep.isAuthorizeAndSendStep()) {
                 self.record.openSequentialDocument(AnnotationType.SIGNATURE, self.selectedSeqWF)
                     .then(function () {
                         $rootScope.$emit('SEQ_LAUNCH_SUCCESS');
@@ -105,6 +111,9 @@ module.exports = function (app) {
                         console.log('ERROR  FORM LAUNCH', error);
                     });
             } else {
+                if (!!firstStep.proxyUserInfo) {
+                    _showProxyMessage([firstStep.proxyUserInfo]);
+                }
                 // cause no need any of those properties is case it is just send (pinCode , composite , ignoreMultiSignValidation)
                 var signatureModel = self.record.prepareSignatureModel(null, null, null);
                 signatureModel.setSeqWFId(self.selectedSeqWF.id);
@@ -180,5 +189,59 @@ module.exports = function (app) {
         self.closePopup = function () {
             dialog.cancel();
         };
+
+
+        self.getUsersDoesNotHaveDocumentSecurityLevel = function (proxyUsers) {
+            return _.filter(proxyUsers, function (proxyUser) {
+                var proxyUserSecurityLevels = generator.getSelectedCollectionFromResult(self.securityLevels, proxyUser.securityLevels, 'lookupKey');
+
+                return _.every(proxyUserSecurityLevels, function (userSecurityLevel) {
+                    if (self.correspondence.hasOwnProperty('securityLevelLookup')) {
+                        return userSecurityLevel.lookupKey !== self.correspondence.securityLevelLookup.lookupKey
+                    } else {
+                        return userSecurityLevel.lookupKey !== self.correspondence.securityLevel.lookupKey
+                    }
+                });
+            })
+        }
+
+        function _showProxyMessage(proxies) {
+            var proxyUsersNotHaveDocumentSecurityLevel = self.getUsersDoesNotHaveDocumentSecurityLevel(proxies);
+            if (proxyUsersNotHaveDocumentSecurityLevel && proxyUsersNotHaveDocumentSecurityLevel.length) {
+                dialog.alertMessage(_prepareProxyMessage(proxyUsersNotHaveDocumentSecurityLevel, false));
+            }
+            var proxyUsersHaveSecurityLevel = _.differenceBy(proxies, proxyUsersNotHaveDocumentSecurityLevel, 'proxyInfo.proxyDomain');
+            if (proxyUsersHaveSecurityLevel.length) {
+                dialog.alertMessage(_prepareProxyMessage(proxyUsersHaveSecurityLevel, true));
+            }
+        }
+
+        /**
+         * @description prepare proxy Message
+         * @param proxyUsers
+         * @param isDocumentHaveSecurityLevel
+         * @private
+         */
+        function _prepareProxyMessage(proxyUsers, isDocumentHaveSecurityLevel) {
+            var titleMessage = isDocumentHaveSecurityLevel ?
+                langService.get('proxy_user_message') :
+                langService.get('document_doesnot_have_security_level_as_delegated_user');
+
+            var titleTemplate = angular.element('<span class="validation-title">' + titleMessage + '</span> <br/>');
+            titleTemplate.html(titleMessage);
+
+            var firstStep = self.selectedSeqWF.steps[0];
+
+            var tableRows = _.map(proxyUsers, function (proxyUser) {
+                return [firstStep.toUserInfo.arName, firstStep.toUserInfo.enName, proxyUser.arName, proxyUser.enName, proxyUser.proxyDomain, moment(proxyUser.proxyStartDate).format('YYYY-MM-DD'), moment(proxyUser.proxyEndDate).format('YYYY-MM-DD'), proxyUser.proxyMessage];
+            });
+
+            var table = tableGeneratorService.createTable([langService.get('arabic_name'), langService.get('english_name'), langService.get('proxy_arabic_name'), langService.get('proxy_english_name'), langService.get('proxy_domain'), langService.get('start_date'), langService.get('end_date'), langService.get('proxy_message')], 'error-table');
+            table.createTableRows(tableRows);
+
+            titleTemplate.append(table.getTable(true));
+
+            return titleTemplate.html();
+        }
     });
 };

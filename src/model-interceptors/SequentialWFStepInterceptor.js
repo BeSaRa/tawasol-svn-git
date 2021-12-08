@@ -3,6 +3,7 @@ module.exports = function (app) {
                       sequentialWorkflowService,
                       generator,
                       Information,
+                      ProxyInfo,
                       AdminResultRelation) {
         'ngInject';
         var modelName = 'SequentialWFStep';
@@ -31,6 +32,7 @@ module.exports = function (app) {
             model.userIdAndOuId = model.getUserIdAndOuIdCombination(); // used in binding user in step popup. because it is binding to applicationUserId which will be multiple in ouApplicationUser list.
             model.toUserInfo = (model.toUserInfo && model.toUserInfo.id) ? new Information(model.toUserInfo) : model.toUserInfo;
             model.toOUInfo = (model.toOUInfo && model.toOUInfo.id) ? new AdminResultRelation(model.toOUInfo) : model.toOUInfo;
+            model.proxyUserInfo = (model.proxyUserInfo && model.proxyUserInfo.id) ? new ProxyInfo(model.proxyUserInfo) : model.proxyUserInfo;
             return model;
         });
 

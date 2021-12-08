@@ -25,6 +25,7 @@ module.exports = function (app) {
             self.uiOuId = null;  // selected regOu.
             self.toOUInfo = null;
             self.toUserInfo = null;
+            self.proxyUserInfo = null;
 
             self.userIdAndOuId = null; // combination of user and ouId. To be deleted before sending
             self.isSelectedForSubSeqWF = false;
