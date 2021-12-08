@@ -584,7 +584,7 @@ module.exports = function (app) {
          */
         self.isShowDocFullSerial = function () {
             if (!self.document.vsId && self.employee.isBacklogMode()) {
-                self.document.isMigrated = true;
+                // self.document.isMigrated = true;
                 return true;
             } else {
                 return self.employee.isBacklogMode() && self.document.isMigrated;
