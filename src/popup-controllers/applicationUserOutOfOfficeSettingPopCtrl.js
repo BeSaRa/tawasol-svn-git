@@ -436,6 +436,10 @@ module.exports = function (app) {
             self.isProxyEndDateOpen = false;
         }
 
+        self.resetProxyMessage = function ($event) {
+            self.ouApplicationUser.proxyMessage = null;
+        }
+
         self.$onInit = function () {
             _checkProxyDate(self.ouApplicationUser);
             _resetOutOfOfficeIfProxyUserAndAuthorityLevelsEmpty();
