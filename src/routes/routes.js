@@ -16,12 +16,12 @@ module.exports = function (app) {
 
 
         versionServiceProvider
-            .setVersionNumber('2.4.0')
-            .setBuildNumber('F#7804')
-            .setPrivateBuildNumber('F#7804');
-
+            .setVersionNumber('2.4.1')
+            .setBuildNumber('TK#7809')
+            .setPrivateBuildNumber('TK#7809');
 
         $urlRouterProvider.otherwise('/404');
+
         /**
          * md-datepicker settings for default date format
          * @param date
@@ -108,6 +108,7 @@ module.exports = function (app) {
                 url: '/landing-page',
                 templateUrl: templateProvider.getView('landing-page'),
                 controller: 'landingPageCtrl',
+                permission: 'menu_item_dashboard',
                 controllerAs: 'ctrl'
             })
             // administration
@@ -243,7 +244,7 @@ module.exports = function (app) {
                     },
                     organizations: function (organizationService) {
                         'ngInject';
-                        return organizationService.loadAllOrganizationsStructure();
+                        return organizationService.loadOrganizations(true);
                     },
                     organizationsHasRegistry: function (organizations) {
                         'ngInject';
@@ -1044,7 +1045,7 @@ module.exports = function (app) {
             })
             // incoming department inbox
             .state('app.department-inbox.incoming', {
-                url: '/incoming?action?source?wob-num',
+                url: '/incoming?action?source?vsid',
                 templateUrl: templateProvider.getView('department-inbox-incoming'),
                 controller: 'incomingDepartmentInboxCtrl',
                 controllerAs: 'ctrl',
@@ -1054,29 +1055,15 @@ module.exports = function (app) {
                         'ngInject';
                         return incomingDepartmentInboxService.loadIncomingDepartmentInboxes();
                     },
-                    emailItem: function (incomingDepartmentInboxes, langService, dialog, _, $stateParams) {
+                    emailItem: function (incomingDepartmentInboxes, correspondenceService, $stateParams) {
                         'ngInject';
-                        var action = $stateParams.action, source = $stateParams.source,
-                            wobNumber = $stateParams['wob-num'], item;
-
-                        if (action && action === 'open' && source && source === 'email' && wobNumber) {
-                            item = _.find(incomingDepartmentInboxes, function (workItem) {
-                                return workItem.generalStepElm.workObjectNumber === wobNumber;
-                            });
-
-                            return !item ? (dialog.errorMessage(langService.get('work_item_not_found').change({
-                                wobNumber: wobNumber
-                            })).then(function () {
-                                return false;
-                            })) : item;
-                        }
-                        return false;
+                        return correspondenceService.getEmailItemByVsId(incomingDepartmentInboxes, $stateParams);
                     }
                 }
             })
             // returned department inbox
             .state('app.department-inbox.returned', {
-                url: '/returned',
+                url: '/returned?action?source?vsid',
                 templateUrl: templateProvider.getView('department-inbox-returned'),
                 controller: 'returnedDepartmentInboxCtrl',
                 controllerAs: 'ctrl',
@@ -1085,12 +1072,16 @@ module.exports = function (app) {
                     returnedDepartmentInboxes: function (returnedDepartmentInboxService) {
                         'ngInject';
                         return returnedDepartmentInboxService.loadReturnedDepartmentInboxes();
+                    },
+                    emailItem: function (returnedDepartmentInboxes, correspondenceService, $stateParams) {
+                        'ngInject';
+                        return correspondenceService.getEmailItemByVsId(returnedDepartmentInboxes, $stateParams);
                     }
                 }
             })
             // ready to export
             .state('app.department-inbox.ready-to-export', {
-                url: '/ready-to-export',
+                url: '/ready-to-export?action?source?vsid',
                 templateUrl: templateProvider.getView('department-inbox-ready-to-export'),
                 controller: 'readyToExportDepartmentInboxCtrl',
                 controllerAs: 'ctrl',
@@ -1099,12 +1090,16 @@ module.exports = function (app) {
                     readyToExports: function (readyToExportService) {
                         'ngInject';
                         return readyToExportService.loadReadyToExports();
+                    },
+                    emailItem: function (readyToExports, correspondenceService, $stateParams) {
+                        'ngInject';
+                        return correspondenceService.getEmailItemByVsId(readyToExports, $stateParams);
                     }
                 }
             })
             // sent items
             .state('app.department-inbox.sent-items', {
-                url: '/sent-items',
+                url: '/sent-items?action?source?wob-num',
                 templateUrl: templateProvider.getView('department-inbox-sent-items'),
                 controller: 'sentItemDepartmentInboxCtrl',
                 controllerAs: 'ctrl',
@@ -1484,6 +1479,19 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_central_archive_ready_to_export'
             })
+            .state('app.central-archive.returned', {
+                url: '/returned',
+                templateUrl: templateProvider.getView('central-archive-returned'),
+                controller: 'returnedCentralArchiveCtrl',
+                controllerAs: 'ctrl',
+                permission: 'menu_item_archive_returned',
+                resolve: {
+                    returnedArchiveItems: function (correspondenceService) {
+                        'ngInject';
+                        return correspondenceService.loadReturnedCentralArchive();
+                    },
+                }
+            })
             // temporary route for reports
             .state('app.reports', {
                 url: '/reports/:menuId',
@@ -1712,6 +1720,20 @@ module.exports = function (app) {
                 controller: 'sequentialWorkflowCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_sequential_workflows'
+            })
+            .state('app.administration.external-data-sources', {
+                url: '/data-sources',
+                templateUrl: templateProvider.getView('external-data-sources'),
+                controller: 'externalDataSourcesCtrl',
+                controllerAs: 'ctrl',
+                permission: 'menu_item_external_data_sources'
+            })
+            .state('app.intelligence-search', {
+                url: '/intelligence-search',
+                templateUrl: templateProvider.getView('search-intelligence'),
+                controller: 'searchIntelligenceCtrl',
+                controllerAs: 'ctrl',
+                permission: 'menu_item_intelligence_search'
             })
 
     });

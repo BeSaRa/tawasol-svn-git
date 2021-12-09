@@ -68,11 +68,17 @@ module.exports = function (app) {
             ],
             SELECT_MAIN_SITE_IF_ONLY_ONE: true,
             SIGNATURE_BOX_SIZE: {width: 112, height: 47},
+            CUSTOM_STAMP_SIZE: {width: 112, height: 88},
             BARCODE_BOX_SIZE: {width: 108, height: 58},
             USER_INFO_ANNOTATION_IDS: {
                 date: 1,
                 jobTitle: 2,
                 username: 3
+            },
+            CHAT_BOT: {
+                ENABLED: true,
+                URL: 'http://tawasolbot-b750.azurewebsites.net/chatbot.html?',
+                APPEND_TOKEN: true
             }
         };
         var configurationServiceProvider = provider;

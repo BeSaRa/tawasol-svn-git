@@ -73,10 +73,10 @@
                         <label for="ou">{{lang.organization_unit}}</label>
                         <md-select name="ou"
                                    id="ou"
-                                   ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled()"
+                                   ng-disabled="(!!ctrl.disableProperties || ctrl.checkOrganizationDisabled())"
                                    ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
                                    ng-model="ctrl.document.ou"
-                                   ng-change="ctrl.checkNullValues(outgoing_properties.ou)"
+                                   ng-change="ctrl.onOrganizationChange(outgoing_properties.ou)"
                                    ng-required="ctrl.checkMandatory('ou')"
                                    md-on-close="ctrl.clearSearchText('ou')"
                                    data-md-container-class="select-header-container sticky-search-bar">
@@ -149,7 +149,7 @@
                 <div flex ng-if="ctrl.checkStatus('docDate')">
                     <md-input-container class="cms-datepicker md-block">
                         <label for="docDate">{{ctrl.document.hasDocumentClass('incoming') ? lang.incoming_date :
-                            lang.document_date }}</label>
+                                lang.document_date }}</label>
                         <md-datepicker name="docDate" id="docDate"
                                        ng-disabled="!!ctrl.disableProperties"
                                        ng-model="ctrl.document.docDate"
@@ -217,7 +217,7 @@
                 <div flex ng-if="ctrl.checkStatus('refDocDate') && ctrl.document.hasDocumentClass('incoming')">
                     <md-input-container class="cms-datepicker md-block">
                         <label for="refDocDate">{{ctrl.document.hasDocumentClass('incoming') ? lang.document_date :
-                            lang.incoming_date }}</label>
+                                lang.incoming_date }}</label>
                         <md-datepicker name="refDocDate" id="refDocDate"
                                        ng-disabled="!!ctrl.disableProperties"
                                        ng-model="ctrl.document.refDocDate"
@@ -473,6 +473,15 @@
                             <div ng-message="number">{{lang.numberonly}}</div>
                         </div>
                     </md-input-container>
+                </div>
+                <!-- Official Doc -->
+                <div flex ng-if="ctrl.document.addMethod && ctrl.document.hasActiveSeqWF()" class="cms-input-container">
+                    <md-switch flex ng-model="ctrl.document.isOfficial"
+                               aria-label="{{lang.official_document}}"
+                               ng-disabled="!ctrl.employeeService.hasPermissionTo('SIGN_OFFICIAL_BOOK')">
+                        <label>{{lang.official_document}} :
+                            {{ctrl.document.getTranslatedYesNo('isOfficial')}}</label>
+                    </md-switch>
                 </div>
                 <!-- directive: generate-remaining-search-div-directive -->
             </div>

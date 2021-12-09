@@ -10,6 +10,8 @@ module.exports = function (app) {
         self.langService = langService;
         LangWatcher($scope);
         self.employeeService = employeeService;
+        self.employee = employeeService.getEmployee();
+
         self.gridLegends = [
             'docClass', 'hasAttachment', 'hasLinkedDocuments', 'paperElectronic', 'securityLevel', 'priorityLevel',
             'followupStatus', 'isReassigned', 'siteFollowUpDueDate', 'siteFollowUpEnded', 'sequentialWF', 'conditionalApprove'

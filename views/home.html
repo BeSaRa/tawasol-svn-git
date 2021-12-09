@@ -10,4 +10,5 @@
         </div>
     </div>
     <sidebar-right-directive ng-if="ctrl.loadedComplete"></sidebar-right-directive>
+    <chat-bot-directive ng-if="body.rootEntity.isChatBotEnabled()"></chat-bot-directive>
 </div>

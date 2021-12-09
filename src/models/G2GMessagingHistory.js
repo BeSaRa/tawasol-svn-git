@@ -179,7 +179,8 @@ module.exports = function (app) {
                     docSubject: this.subject,
                     docStatus: 24,
                     docClassName: 'Outgoing',
-                    vsId: this.refDocId
+                    vsId: this.refDocId,
+                    securityLevel: this.securityLevel
                 });
                 return correspondenceService.openExportCorrespondenceDialog(correspondence, $event, true, this);
             };

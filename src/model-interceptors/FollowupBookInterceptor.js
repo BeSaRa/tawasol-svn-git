@@ -27,6 +27,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
+            delete model.statusInfo;
             delete model.docClassIndicator;
             delete model.docDateString;
             delete model.actionDateString;
@@ -38,6 +39,7 @@ module.exports = function (app) {
             delete model.securityLevelIndicator;
             delete model.priorityLevelLookup;
             delete model.priorityLevelIndicator;
+            delete model.sharedFollowupIndicator;
             delete model.statusIndicator;
             delete model.folderInfo;
             delete model.mainSiteSubSiteString;   // added in model when binding main-site-sub-site directive value in grid
@@ -45,11 +47,13 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
+            model.statusInfo = model.statusInfo ? new Information(model.statusInfo) : new Information();
             model.docClassIndicator = model.getDocClassIndicator(generator.getDocumentClassName(model.docClassId));
             model.docDateString = generator.getDateFromTimeStamp(model.docDate);
             model.actionDateString = generator.getDateFromTimeStamp(model.actionDate);
             model.followupDateString = generator.getDateFromTimeStamp(model.followupDate);
             model.followDateIndicator = model.getFollowupDateIndicator(model.followupDate);
+            model.sharedFollowupIndicator = model.getSharedFollowupIndicator();
             model.siteFollowUpDueDateIndicator = model.getSiteFollowupDueDateIndicator(); // this indicator is used to show followup date of book. its not showing info for correspondence site followup date
 
             /* if terminated followup book, show followup terminated indicator, not followup (past/today/future) indicator

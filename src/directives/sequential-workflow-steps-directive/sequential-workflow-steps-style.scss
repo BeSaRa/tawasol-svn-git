@@ -65,6 +65,10 @@
   &.step-past {
     background-color: green !important;
   }
+
+  &.step-terminated {
+    background-color: darkred !important;
+  }
 }
 
 .step-delete-item-button {
@@ -99,6 +103,10 @@
 }
 
 .add-row-button {
+  margin: 0 10px 10px 0;
+}
+
+.import-seq-steps {
   margin: 0 0 10px 0;
 }
 
@@ -131,5 +139,9 @@ html.rtl {
       margin-right: 10px;
       margin-left: 0;
     }
+  }
+
+  .add-row-button {
+    margin: 0 0 10px 10px;
   }
 }

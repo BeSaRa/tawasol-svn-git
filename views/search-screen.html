@@ -154,6 +154,11 @@
                                         <grid-indicator-directive record="searchedOutgoingDocument"
                                                                   indicator-type="sequentialWF"
                                                                   record-type="Correspondence"></grid-indicator-directive>
+                                        <!-- Sent To RegOU -->
+                                        <grid-indicator-directive record="searchedOutgoingDocument"
+                                                                  indicator-type="isTransferredDocumentIndicator"
+                                                                  record-type="correspondence">
+                                        </grid-indicator-directive>
                                         <span flex
                                               ng-class="{'indicator-content': searchedOutgoingDocument.followUpStatusIndicator}">
                                         <md-icon ng-if="searchedOutgoingDocument.followUpStatusIndicator"
@@ -193,8 +198,8 @@
                                     <td md-cell>{{searchedOutgoingDocument.createdOn}}</td>
                                     <td md-cell>{{searchedOutgoingDocument.lastModifierInfo.getTranslatedName()}}</td>
                                     <td md-cell class="td-data">
-                                        <main-site-sub-site-directive
-                                                item="searchedOutgoingDocument"></main-site-sub-site-directive>
+                                        <main-site-sub-site-directive item="searchedOutgoingDocument"
+                                                                      show-indicator="true"></main-site-sub-site-directive>
                                     </td>
                                     <td md-cell
                                         ng-if="ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length < 2">
@@ -500,6 +505,10 @@
                                         <grid-indicator-directive record="searchedIncomingDocument"
                                                                   indicator-type="sequentialWF"
                                                                   record-type="Correspondence"></grid-indicator-directive>
+                                        <!-- Sent To RegOU -->
+                                        <grid-indicator-directive record="searchedIncomingDocument"
+                                                                  indicator-type="isTransferredDocumentIndicator"
+                                                                  record-type="correspondence">
                                     </td>
                                     <td md-cell>
                                         <span class="serial-td">{{searchedIncomingDocument.docFullSerial}}</span>
@@ -532,8 +541,8 @@
                                     <td md-cell>{{searchedIncomingDocument.createdOn}}</td>
                                     <td md-cell>{{searchedIncomingDocument.lastModifierInfo.getTranslatedName()}}</td>
                                     <td md-cell class="td-data">
-                                        <main-site-sub-site-directive
-                                                item="searchedIncomingDocument"></main-site-sub-site-directive>
+                                        <main-site-sub-site-directive item="searchedIncomingDocument"
+                                                                      show-indicator="true"></main-site-sub-site-directive>
                                     </td>
                                     <td md-cell
                                         ng-if="ctrl.searchScreens.incoming.controller.selectedSearchedIncomingDocuments.length < 2">
@@ -685,6 +694,10 @@
                                         <grid-indicator-directive record="searchedOutgoingIncomingDocument"
                                                                   indicator-type="sequentialWF"
                                                                   record-type="Correspondence"></grid-indicator-directive>
+                                        <!-- Sent To RegOU -->
+                                        <grid-indicator-directive record="searchedOutgoingIncomingDocument"
+                                                                  indicator-type="isTransferredDocumentIndicator"
+                                                                  record-type="correspondence">
                                     </td>
                                     <td md-cell><span
                                             class="serial-td">{{searchedOutgoingIncomingDocument.docFullSerial}}</span>
@@ -720,8 +733,8 @@
                                     <td md-cell>{{searchedOutgoingIncomingDocument.createdOn}}</td>
                                     <td md-cell>{{searchedOutgoingIncomingDocument.lastModifierInfo.getTranslatedName()}}</td>
                                     <td md-cell class="td-data">
-                                        <main-site-sub-site-directive
-                                                item="searchedOutgoingIncomingDocument"></main-site-sub-site-directive>
+                                        <main-site-sub-site-directive item="searchedOutgoingIncomingDocument"
+                                                                      show-indicator="true"></main-site-sub-site-directive>
                                     </td>
                                     <td md-cell
                                         ng-if="ctrl.searchScreens.outgoingIncoming.controller.selectedSearchedOutgoingIncomingDocuments.length < 2">

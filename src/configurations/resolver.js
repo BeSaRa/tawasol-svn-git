@@ -114,32 +114,7 @@ module.exports = function (app) {
             .bulkResolveToState('app.administration.sequential-workflows', {
                 organizations: function (organizationService, employeeService, ouApplicationUserService, $q, _) {
                     'ngInject';
-                    var defer = $q.defer();
-                    if (employeeService.isSuperAdminUser() || employeeService.isSubAdminInCurrentOu()) {
-                        organizationService.loadAllOrganizationsStructure(true)
-                            .then(function (result) {
-                                defer.resolve(result);
-                            });
-                    } else {
-                        var ouList = angular.copy(employeeService.getEmployee().getExtraFields().ouList),
-                            regOuIndex = _.findIndex(ouList, function (item) {
-                                return item.id === employeeService.getEmployee().getRegistryOUID();
-                            });
-                        if (regOuIndex === -1) {
-                            employeeService.getEmployee().getRegistryOrganization()
-                                .then(function (result) {
-                                    ouList.push(result);
-                                    defer.resolve(ouList);
-                                })
-                        } else {
-                            defer.resolve(ouList);
-                        }
-                    }
-                    return defer.promise.then(function (organizations) {
-                        return _.filter(organizations, function (ou) {
-                            return !!ou.status && ou.hasRegistry;
-                        });
-                    });
+                    return organizationService.getOrganizationsForSeqWF();
                 }
             })
             .bulkResolveToState('app.administration.organizations', {
@@ -434,7 +409,7 @@ module.exports = function (app) {
                     var currentOU = employeeService.getEmployee().userOrganization;
 
                     return employeeService.isCentralArchive() ? (organizationService.centralArchiveOrganizations().then(function (organizations) {
-                        if (employeeService.isCentralArchiveHasRegistry() && (_.map(organizations, 'id').indexOf(currentOU.id) === -1)) {
+                        if (employeeService.isCentralArchiveHasRegistry() && organizations && (_.map(organizations, 'id').indexOf(currentOU.id) === -1)) {
                             organizations.push(currentOU);
                         }
                         return organizations;
@@ -731,6 +706,39 @@ module.exports = function (app) {
                     return vsId && source ? correspondenceService.loadCorrespondenceByVsIdClass(vsId, source) : false;
                 }
             })
+            .bulkResolveToState('app.intelligence-search', {
+                lookups: function (correspondenceService) {
+                    'ngInject';
+                    return correspondenceService.loadCorrespondenceLookups('common', true);
+                },
+                registryOrganizations: function (employeeService, langService, $q, _, organizationService) {
+                    'ngInject';
+
+                    function _sortResultByCurrentLang(result) {
+                        return _.sortBy(result, function (item) {
+                            return item[langService.current + 'Name'].toLowerCase();
+                        });
+                    }
+
+                    // if user has permission to search in all ou load all organizations and ignore role security
+                    if (employeeService.hasPermissionTo('SEARCH_IN_ALL_OU')) {
+                        return organizationService.loadOrganizations(employeeService.hasPermissionTo('SEARCH_IN_ALL_OU'))
+                            .then(function (result) {
+                                // to sort registry organizations after retrieve
+                                return _sortResultByCurrentLang(_.filter(result, function (organization) {
+                                    return organization.hasRegistry;
+                                }));
+                            });
+                    } else {
+                        return organizationService.getUserViewPermissionOusByUserId(employeeService.getEmployee().id)
+                            .then(function (result) {
+                                return _sortResultByCurrentLang(_.filter(result, function (organization) {
+                                    return organization.hasRegistry;
+                                }));
+                            });
+                    }
+                }
+            })
             .bulkResolveToState('app.administration.serials-screen', {
                 registryOrganizations: function (organizationService, _) {
                     'ngInject';
@@ -753,6 +761,12 @@ module.exports = function (app) {
                 followUpOrganizations: function (organizationService) {
                     'ngInject';
                     return organizationService.getFollowUpOrganizations();
+                }
+            })
+            .bulkResolveToState('app.administration.external-data-sources', {
+                externalDataSources: function (externalDataSourceService) {
+                    'ngInject';
+                    return externalDataSourceService.loadExternalDataSources();
                 }
             })
             .registerResolver();

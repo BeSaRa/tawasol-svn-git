@@ -58,6 +58,7 @@ module.exports = function (app) {
             .addPageName('folder')
             // Central Archive
             .addPageName('centralArchiveReadyToExport')
+            .addPageName('returnedCentralArchive')
             // Department Inbox
             .addPageName('departmentIncoming')
             .addPageName('departmentReturned')

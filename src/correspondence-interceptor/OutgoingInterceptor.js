@@ -42,7 +42,9 @@ module.exports = function (app) {
             }
 
             delete model.contentFile;
-
+            delete model.externalSiteIndicator;
+            delete model.internalSiteIndicator;
+            delete model.g2gSiteIndicator;
 
             return model;
         });
@@ -68,6 +70,10 @@ module.exports = function (app) {
             model.priorityLevelIndicator = (model.priorityLevelLookup && model.priorityLevelLookup.lookupKey !== 0) ? model.getPriorityLevelIndicator(model.priorityLevelLookup) : null;
 
             model.docClassIndicator = model.getDocClassIndicator();
+
+            model.externalSiteIndicator = model.getExternalSiteIndicator();
+            model.internalSiteIndicator = model.getInternalSiteIndicator();
+            model.g2gSiteIndicator = model.getG2GSiteIndicator();
 
             return model;
         });

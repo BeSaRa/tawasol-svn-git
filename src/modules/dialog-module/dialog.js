@@ -126,6 +126,45 @@ module.exports = function (app) {
             }
         }
 
+        function prepareDialogWithDynamicButtonsList(type, content, cancelButtonText, escapeToCancel, event, hideIcon, avoidStripEvent, buttonsList) {
+            buttonsList.push({
+                id: null,
+                type: 'CANCEL_BUTTON',
+                text: cancelButtonText || langService.get('cancel'),
+                cssClass: 'red-text'
+            });
+
+            if (!avoidStripEvent)
+                content = $sce.trustAsHtml(stripScripts(content));
+            else
+                content = $sce.trustAsHtml(content);
+            return {
+                template: getTemplate(type),
+                controller: function ($mdDialog) {
+                    'ngInject';
+                    var self = this;
+
+                    self.buttonCallback = function (button) {
+                        if (button.type === 'CANCEL_BUTTON') {
+                            $mdDialog.cancel();
+                        } else {
+                            $mdDialog.hide(button);
+                        }
+                    }
+                },
+                locals: {
+                    content: content,
+                    buttonsList: buttonsList,
+                    hideIcon: hideIcon || false
+                },
+                targetEvent: event || false,
+                escapeToClose: escapeToCancel || false,
+                controllerAs: 'ctrl',
+                bindToController: true,
+                multiple: true
+            }
+        }
+
         /**
          * alert dialog
          * @param content
@@ -219,6 +258,11 @@ module.exports = function (app) {
          */
         self.confirmThreeButtonMessage = function (content, cancelButtonText, button1Text, button2Text, escapeToCancel, event, hideIcon) {
             var dialog = prepareThreeButtonDialog('confirm-three-button', content, cancelButtonText, escapeToCancel, event, hideIcon, false, button1Text, button2Text);
+            return $mdDialog.show(dialog);
+        };
+
+        self.confirmMessageWithDynamicButtonsList = function (content, buttonsList, cancelButtonText, escapeToCancel, event, hideIcon) {
+            var dialog = prepareDialogWithDynamicButtonsList('confirm-dynamic-buttons-list', content, cancelButtonText, escapeToCancel, event, hideIcon, false, buttonsList);
             return $mdDialog.show(dialog);
         };
 

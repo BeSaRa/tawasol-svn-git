@@ -2,7 +2,7 @@
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            id="broadcastDialog" ng-attr-aria-label="{{lang.broadcast}}">
     <popup-toolbar-directive header-text="{{lang.broadcast}}"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive flex>
+    <md-dialog-content scroll-directive flex class="max-w-750">
         <div class="md-dialog-content cms-dialog-content">
             <div layout="column">
                 <form name="broadcast_form" autocomplete="off">
@@ -21,8 +21,9 @@
                                                placeholder="{{lang.search}}"
                                                class="select-header-input">
                                     </md-select-header>
-                                    <md-option ng-repeat="action in ctrl.actions | translatedNameFilter: ctrl.actionSearchText track by $index"
-                                               ng-value="action">
+                                    <md-option
+                                            ng-repeat="action in ctrl.actions | translatedNameFilter: ctrl.actionSearchText track by $index"
+                                            ng-value="action">
                                         <span
                                                 md-highlight-text="ctrl.actionSearchText"
                                                 md-highlight-flags="i">{{action.getTranslatedName()}}</span>
@@ -33,6 +34,14 @@
                                 </div>
                             </md-input-container>
                         </div>
+                        <div flex ng-if="ctrl.employeeService.hasPermissionTo('BROADCAST_DOCUMENT_ALL')">
+                            <md-switch aria-label="{{lang.broadcast_to_all}}"
+                                       ng-model="ctrl.broadcastToAll"
+                                       ng-change="ctrl.toggleBroadcastToAll(broadcast_form)">
+                                <span>{{lang.broadcast_to_all}} : </span>
+                                {{ctrl.broadcastToAll ? lang.yes : lang.no }}
+                            </md-switch>
+                        </div>
                         <div layout="row" flex>
                             <!-- Organization Unit -->
                             <md-input-container flex>
@@ -42,7 +51,9 @@
                                            ng-required="!ctrl.wfGroupBroadcast.length"
                                            name="ouBroadcast" ng-model="ctrl.ouBroadcast"
                                            md-on-close="ctrl.clearSearchText('ou')"
-                                           data-md-container-class="select-header-container sticky-search-bar">
+                                           data-md-container-class="select-header-container sticky-search-bar"
+                                           ng-disabled="ctrl.broadcastToAll"
+                                           ng-change="ctrl.onSelectBroadcast('ous')">
                                     <md-select-header class="select-header">
                                         <input ng-model="ctrl.ouSearchText"
                                                ng-keydown="ctrl.preventSearchKeyDown($event)"
@@ -62,13 +73,26 @@
                                     <div ng-message="required">{{lang.field_required}}</div>
                                 </div>
                             </md-input-container>
+                            <div flex>
+                                <md-switch aria-label="{{lang.broadcast_to_all_ous}}"
+                                           ng-model="ctrl.broadcastToAllOUs"
+                                           ng-change="ctrl.toggleAllBroadcast('ous')"
+                                           ng-disabled="ctrl.broadcastToAll">
+                                    <span>{{lang.broadcast_to_all_ous}} : </span>
+                                    {{ctrl.broadcastToAllOUs ? lang.yes : lang.no }}
+                                </md-switch>
+                            </div>
+                        </div>
+                        <div layout="row" flex>
                             <!-- Workflow Group -->
                             <md-input-container flex>
                                 <label for="workflowGroupBroadcast">{{lang.workflow_groups}}</label>
                                 <md-select ng-model-options="{trackBy: '$value.id'}"
                                            multiple id="workflowGroupBroadcast"
                                            ng-required="!ctrl.ouBroadcast.length"
-                                           name="workflowGroupBroadcast" ng-model="ctrl.wfGroupBroadcast">
+                                           name="workflowGroupBroadcast" ng-model="ctrl.wfGroupBroadcast"
+                                           ng-disabled="ctrl.broadcastToAll"
+                                           ng-change="ctrl.onSelectBroadcast('wfgroups')">
                                     <md-option md-truncate
                                                ng-repeat="workflowGroup in ctrl.workflowGroups track by $index"
                                                ng-value="workflowGroup"
@@ -80,13 +104,23 @@
                                     <div ng-message="required">{{lang.field_required}}</div>
                                 </div>
                             </md-input-container>
+                            <div flex>
+                                <md-switch aria-label="{{lang.broadcast_to_all_wf}}"
+                                           ng-model="ctrl.broadcastToAllWF"
+                                           ng-change="ctrl.toggleAllBroadcast('wfgroups')"
+                                           ng-disabled="ctrl.broadcastToAll">
+                                    <span>{{lang.broadcast_to_all_wf}} : </span>
+                                    {{ctrl.broadcastToAllWF ? lang.yes : lang.no }}
+                                </md-switch>
+                            </div>
                         </div>
                         <div layout="row" flex>
                             <!-- Rank -->
                             <md-input-container flex>
                                 <label for="selectedRank">{{lang.rank}}</label>
                                 <md-select id="selectedRank" name="selectedRank"
-                                           ng-model="ctrl.selectedRank">
+                                           ng-model="ctrl.selectedRank"
+                                           ng-disabled="ctrl.broadcastToAll">
                                     <md-option ng-value="null">{{lang.none}}</md-option>
                                     <md-option ng-if="rank.status" ng-value="rank"
                                                ng-repeat="rank in ctrl.ranks track by $index">
@@ -101,7 +135,8 @@
                             <md-input-container flex>
                                 <label for="selectedJobTitle">{{lang.job_title}}</label>
                                 <md-select id="selectedJobTitle" name="selectedJobTitle"
-                                           ng-model="ctrl.selectedJobTitle">
+                                           ng-model="ctrl.selectedJobTitle"
+                                           ng-disabled="ctrl.broadcastToAll">
                                     <md-option ng-value="null">{{lang.none}}</md-option>
                                     <md-option ng-if="jobTitle.status" ng-value="jobTitle"
                                                ng-repeat="jobTitle in ctrl.jobTitles track by $index">
@@ -244,7 +279,7 @@
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
         <md-button class="md-raised md-primary"
-                   ng-disabled="ctrl.checkDisabled()"
+                   ng-disabled="ctrl.checkDisabled() && !ctrl.broadcastToAll"
                    ng-click="ctrl.startBroadcast()">
             {{lang.broadcast}}
         </md-button>

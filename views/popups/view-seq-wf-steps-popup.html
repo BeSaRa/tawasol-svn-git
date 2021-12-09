@@ -16,6 +16,12 @@
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
         <md-button class="md-raised md-primary"
+                   ng-if="ctrl.canAddSubSeqWF"
+                   ng-disabled="!ctrl.isValidSubSeqWF()"
+                   ng-click="ctrl.saveAsSubSeqWF($event)">
+            {{lang.save_as_sub}}
+        </md-button>
+        <md-button class="md-raised md-primary"
                    ng-disabled="!ctrl.isValidSeqWF()"
                    ng-click="ctrl.saveSeqWF($event)">
             {{lang.save}}

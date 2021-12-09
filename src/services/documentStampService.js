@@ -346,6 +346,72 @@ module.exports = function (app) {
             });
         };
 
+        self.openKwtAlDiyarStampsDialog = function (workItem, event) {
+            return dialog.showDialog({
+                templateUrl: cmsTemplate.getPopup('custom-stamps'),
+                controller: function (_, stamps) {
+                    'ngInject';
+                    var ctrl = this;
+                    ctrl.rows = _.chunk(stamps, 4);
+                    ctrl.selectedStamp = null;
+                    ctrl.repeatOption = false;
+                    ctrl.inprogress = false;
+                    /**
+                     * @description to check if the given stamp selected or not.
+                     * @param stamp
+                     * @returns {null|boolean}
+                     */
+                    ctrl.isSelectedStamp = function (stamp) {
+                        return ctrl.selectedStamp && ctrl.selectedStamp.vsId === stamp.vsId;
+                    };
+                    /**
+                     * @description to make given stamp selected.
+                     * @param stamp
+                     */
+                    ctrl.setSelectedStamp = function (stamp) {
+                        ctrl.selectedStamp = stamp;
+                    };
+                    /**
+                     * @description add stamp and close the Stamps dialog.
+                     */
+                    ctrl.addStamp = function () {
+                        if (ctrl.inprogress) {
+                            return;
+                        }
+                        ctrl.inprogress = true;
+
+                        self.addKwtAlDiyarDigitalStamp(workItem, ctrl.selectedStamp)
+                            .then(function () {
+                                dialog.hide();
+                            });
+                    };
+                    /**
+                     * @description close Stamps dialog.
+                     */
+                    ctrl.closePopup = function () {
+                        dialog.cancel();
+                    }
+                },
+                controllerAs: 'ctrl',
+                resolve: {
+                    stamps: function (documentStampService) {
+                        'ngInject';
+                        return documentStampService.loadActiveStamps();
+                    }
+                }
+            })
+        };
+
+        self.addKwtAlDiyarDigitalStamp = function (workItem, stamp) {
+            var info = workItem.getInfo();
+            return $http.put(urlService.kwtDigitalStamp.change({
+                vsId: info.vsId,
+                stampVsId: stamp.vsId
+            }), null).then(function (result) {
+                return result.data.rs;
+            })
+        }
+
         /**
          * @description Create the shared method to the model.
          * @type {{delete: generator.delete, update: generator.update}}

@@ -10,9 +10,12 @@ module.exports = function (app) {
                                                  $q,
                                                  $timeout,
                                                  employeeService,
+                                                 contextHelpService,
                                                  emailItem) {
+        'ngInject';
         var self = this;
         self.controllerName = 'searchScreenCtrl';
+        contextHelpService.setHelpTo('search-screen');
         // to give the user the ability to collapse the accordion by clicking on it's label.
         self.labelCollapse = true;
         self.emailItem = emailItem;
@@ -115,7 +118,7 @@ module.exports = function (app) {
         self.reloadCurrentSearch = function () {
             self.searchScreens[self.selectedTabName].controller.reloadSearchCorrespondence()
                 .then(function () {
-                  //  console.log('Reloaded Complete ', self.selectedTabName);
+                    //  console.log('Reloaded Complete ', self.selectedTabName);
                 });
         };
         /**

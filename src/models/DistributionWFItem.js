@@ -69,6 +69,15 @@ module.exports = function (app) {
                 this.action = action;
                 return this;
             };
+            DistributionWFItem.prototype.setFavoriteAction = function (action) {
+                if (!action) {
+                    return false;
+                }
+                this.action = action;
+                this.action.id = action.actionId;
+                return this;
+            };
+
             DistributionWFItem.prototype.setSLADueDate = function (sLADueDate) {
                 this.sLADueDate = sLADueDate || null;
                 return this;
@@ -103,6 +112,10 @@ module.exports = function (app) {
             };
             DistributionWFItem.prototype.setSecureAction = function (isSecureAction) {
                 this.isSecureAction = isSecureAction;
+                return this;
+            };
+            DistributionWFItem.prototype.setReadyForApproval = function (isReadyForApproval) {
+                this.isReadyForApproval = isReadyForApproval;
                 return this;
             };
             DistributionWFItem.prototype.setSendRelatedDocs = function (isSendRelatedDocs) {

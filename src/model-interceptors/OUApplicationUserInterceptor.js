@@ -74,6 +74,8 @@ module.exports = function (app) {
             delete model.ouInfo;
             delete model.securityLevelsString;
             delete model.archiveSecurityLevelsString;
+            delete model.proxyStartDateString;
+            delete model.proxyEndDateString;
 
             return model;
         });
@@ -170,6 +172,9 @@ module.exports = function (app) {
                     if (typeof model.proxyAuthorityLevels !== "object") {
                         model.proxyAuthorityLevels = generator.getSelectedCollectionFromResult(securityLevels, model.proxyAuthorityLevels, 'lookupKey');
                     }
+                    model.proxyStartDateString = model.proxyStartDate ? generator.convertDateToString(model.proxyStartDate) : '';
+                    model.proxyEndDateString = model.proxyEndDate ? generator.convertDateToString(model.proxyEndDate) : '';
+
                     getDateFromUnixTimeStamp(model, ['proxyStartDate', 'proxyEndDate']);
                 }
 

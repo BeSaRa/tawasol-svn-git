@@ -15,6 +15,7 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             delete model.createReplyDisableDelete;
+            delete model.externalImportData;
             return model;
         });
 

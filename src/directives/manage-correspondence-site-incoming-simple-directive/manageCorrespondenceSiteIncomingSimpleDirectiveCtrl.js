@@ -75,53 +75,55 @@ module.exports = function (app) {
         }
 
         var _resetDefaultNeedReplyFollowupDate = function () {
-            if (self.correspondence) {
-                var priorityLevel = self.correspondence.getInfo().priorityLevel;
-                priorityLevel = priorityLevel.hasOwnProperty('lookupKey') ? priorityLevel.lookupKey : priorityLevel;
+            $timeout(function () {
+                if (self.correspondence) {
+                    var priorityLevel = self.correspondence.getInfo().priorityLevel;
+                    priorityLevel = priorityLevel.hasOwnProperty('lookupKey') ? priorityLevel.lookupKey : priorityLevel;
 
-                var slaOu = null;
-                // if paper outgoing or incoming and current ou is central archive, use selected registryOu as slaOu
-                if (_isShowRegistryUnit() && organizationForSLACentralArchive) {
-                    slaOu = organizationForSLACentralArchive;
-                } else {
-                    slaOu = organizationForSLA;
-                }
-
-                if (typeof priorityLevel !== 'undefined' && priorityLevel !== null) {
-                    var slaDays = null;
-                    // organization has sla property and sla has property as same as document priority level
-                    if (slaOu.hasOwnProperty('sla') && slaOu.sla && slaOu.sla.hasOwnProperty(priorityLevel)) {
-                        slaDays = slaOu.sla[priorityLevel];
-                    }
-                    // if no SLA days or its less than 1, use default number of days to followup date to be today
-                    if (!slaDays || slaDays < 1) {
-                        slaDays = angular.copy(defaultFollowupNumberOfDays);
-                    }
-                    defaultNeedReplyFollowupDate = generator.convertDateToString(generator.getFutureDate(slaDays));
-                }
-            }
-
-            // set followup date for all searched sites
-            if (self.subSites && self.subSites.length) {
-                _.map(self.subSites, function (site) {
-                    if (site.followupStatus && self.needReply(site.followupStatus)) {
-                        site.followupDate = new Date(defaultNeedReplyFollowupDate);
+                    var slaOu = null;
+                    // if paper outgoing or incoming and current ou is central archive, use selected registryOu as slaOu
+                    if (_isShowRegistryUnit() && organizationForSLACentralArchive) {
+                        slaOu = organizationForSLACentralArchive;
                     } else {
-                        site.followupDate = null;
+                        slaOu = organizationForSLA;
                     }
-                    return site;
-                })
-            }
 
-            if (self.isFollowupStatusMandatory) {
-                if (self.needReply(self.selectedSubSiteFollowUpStatus)) {
-                    self.selectedSubSiteFollowupDate = defaultNeedReplyFollowupDate;
+                    if (typeof priorityLevel !== 'undefined' && priorityLevel !== null) {
+                        var slaDays = null;
+                        // organization has sla property and sla has property as same as document priority level
+                        if (slaOu.hasOwnProperty('sla') && slaOu.sla && slaOu.sla.hasOwnProperty(priorityLevel)) {
+                            slaDays = slaOu.sla[priorityLevel];
+                        }
+                        // if no SLA days or its less than 1, use default number of days to followup date to be today
+                        if (!slaDays || slaDays < 1) {
+                            slaDays = angular.copy(defaultFollowupNumberOfDays);
+                        }
+                        defaultNeedReplyFollowupDate = generator.convertDateToString(generator.getFutureDate(slaDays));
+                    }
                 }
-                // this will set followup status and followup date to selected site
-                self.onSelectedSubSiteFollowupStatusChange(self.form);
-            }
 
-            return defaultNeedReplyFollowupDate;
+                // set followup date for all searched sites
+                if (self.subSites && self.subSites.length) {
+                    _.map(self.subSites, function (site) {
+                        if (site.followupStatus && self.needReply(site.followupStatus)) {
+                            site.followupDate = new Date(defaultNeedReplyFollowupDate);
+                        } else {
+                            site.followupDate = null;
+                        }
+                        return site;
+                    })
+                }
+
+                if (self.isFollowupStatusMandatory) {
+                    if (self.needReply(self.selectedSubSiteFollowUpStatus)) {
+                        self.selectedSubSiteFollowupDate = defaultNeedReplyFollowupDate;
+                    }
+                    // this will set followup status and followup date to selected site
+                    self.onSelectedSubSiteFollowupStatusChange(self.form);
+                }
+
+                return defaultNeedReplyFollowupDate;
+            })
         }
 
         /**
@@ -425,7 +427,7 @@ module.exports = function (app) {
 
         var _selectDefaultMainSiteAndGetSubSites = function () {
             if (self.selectedSiteType && self.mainSites && self.mainSites.length > 0) {
-                if (configurationService.SELECT_MAIN_SITE_IF_ONLY_ONE && self.mainSites.length === 1){
+                if (configurationService.SELECT_MAIN_SITE_IF_ONLY_ONE && self.mainSites.length === 1) {
                     self.selectedMainSite = self.mainSites[0];
                 } else if (self.selectedSiteType.lookupKey === 1) {
                     self.selectedMainSite = _.find(self.mainSites, function (site) {

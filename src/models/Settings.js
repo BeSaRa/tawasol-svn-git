@@ -43,7 +43,7 @@ module.exports = function (app) {
             Settings.prototype.isSlowConnectionMode = function () {
                 return this.slowConnectionMode;
             };
-            Settings.prototype.isAllowEditAfterFirstApprove = function(){
+            Settings.prototype.isAllowEditAfterFirstApprove = function () {
                 return this.allowEditAfterFirstApprove;
             };
 
@@ -54,6 +54,10 @@ module.exports = function (app) {
             Settings.prototype.isStampModuleEnabled = function () {
                 return this.stampModuleEnabled;
             };
+
+            Settings.prototype.isLimitedCentralUnitAccessEnabled = function () {
+                return this.limitedCentralUnitAccess;
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

@@ -202,5 +202,11 @@ module.exports = function (app) {
     require('./ApplicationUserView')(app);
     require('./OrganizationUnitView')(app);
     require('./BackStepOptions')(app);
+    require('./ExtImportStore')(app);
+    require('./UserExtImportStore')(app);
+    require('./AzureSearchCriteria')(app);
+    require('./CorrespondenceView')(app);
+    require('./FavoriteAction')(app);
+    require('./UserFollowupBookMulti')(app);
 
 };

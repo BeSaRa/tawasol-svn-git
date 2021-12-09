@@ -56,6 +56,8 @@ module.exports = function (app) {
             var newNode = new Node(ou);
             newNode.parent = node;
             newNode.depth = (node.depth + 1);
+            newNode.id = ou.id.toString();
+
             if (node._children) {
                 node.children = node._children;
             }
@@ -525,6 +527,7 @@ module.exports = function (app) {
         };
 
         self.openRightClickMenu = function (node) {
+            console.log('node', node);
             var event = d3.event;
             event.preventDefault();
             if ((!node.data.itIsRoot && !node.data.manageable) || node.data.itIsRoot && !employeeService.isSuperAdminUser()) {
@@ -553,6 +556,9 @@ module.exports = function (app) {
                                 renderNewNode(ou, node);
                             })
                             .catch(function (ou) {
+                                if (!ou.id) {
+                                    return;
+                                }
                                 if (ou.id !== Number(node.id)) {
                                     renderNewNode(ou, node);
                                 }

@@ -411,10 +411,11 @@ module.exports = function (app) {
              * @param tab
              * @param isDeptIncoming
              * @param fromSimplePopup
+             * @param reloadCallback
              * @returns {promise|*}
              */
-            WorkItem.prototype.launchWorkFlow = function ($event, action, tab, isDeptIncoming, fromSimplePopup) {
-                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming, null, fromSimplePopup);
+            WorkItem.prototype.launchWorkFlow = function ($event, action, tab, isDeptIncoming, fromSimplePopup, reloadCallback) {
+                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming, null, fromSimplePopup, [], reloadCallback);
             };
             WorkItem.prototype.launchWorkFlowFromPredefinedAction = function ($event, action, tab, isDeptIncoming, isDeptSent, actionMembers) {
                 return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming, isDeptSent, false, actionMembers);
@@ -561,14 +562,15 @@ module.exports = function (app) {
              * @param actions
              * @param queueName
              * @param $event
+             * @param reloadCallback
              * @returns {*}
              */
-            WorkItem.prototype.viewNewWorkItemDocument = function (actions, queueName, $event) {
+            WorkItem.prototype.viewNewWorkItemDocument = function (actions, queueName, $event, reloadCallback) {
                 var self = this, info = self.getInfo(), pdfViewerEnabled = rootEntity.hasPSPDFViewer();
                 if (pdfViewerEnabled && !info.isPaper && employeeService.getEmployee().isFirstViewForApproval && self.checkElectronicSignaturePermission() && self.generalStepElm.isMultiSignature) {
                     return self.openForAnnotation(true, info.docStatus < 23 ? 3 : 1, actions, true);
                 } else {
-                    return viewDocumentService.viewUserInboxDocument(this, actions, queueName, $event);
+                    return viewDocumentService.viewUserInboxDocument(this, actions, queueName, $event, false, reloadCallback);
                 }
             };
             /**
@@ -589,7 +591,12 @@ module.exports = function (app) {
              * @returns {*}
              */
             WorkItem.prototype.viewNewProxyDocument = function (actions, queueName, $event) {
-                return viewDocumentService.viewUserInboxProxyDocument(this, actions, queueName, $event);
+                var self = this, info = self.getInfo(), pdfViewerEnabled = rootEntity.hasPSPDFViewer();
+                if (pdfViewerEnabled && !info.isPaper && employeeService.getEmployee().isFirstViewForApproval && self.checkElectronicSignaturePermission() && self.generalStepElm.isMultiSignature) {
+                    return self.openForAnnotation(true, info.docStatus < 23 ? 3 : 1, actions, true);
+                } else {
+                    return viewDocumentService.viewUserInboxProxyDocument(this, actions, queueName, $event);
+                }
             };
             /**
              * @description view from group inbox documents as full view.
@@ -747,6 +754,10 @@ module.exports = function (app) {
 
             WorkItem.prototype.returnWorkItem = function ($event, ignoreMessage) {
                 return correspondenceService.returnWorkItem(this, $event, ignoreMessage);
+            };
+
+            WorkItem.prototype.returnWorkItemToCentralArchive = function ($event, ignoreMessage) {
+                return correspondenceService.returnWorkItemToCentralArchive(this, $event, ignoreMessage);
             };
 
             WorkItem.prototype.returnWorkItemFromCentralArchive = function ($event, ignoreMessage) {
@@ -1061,7 +1072,8 @@ module.exports = function (app) {
                     vsId: info.vsId,
                     securityLevel: new Information(self.securityLevel),
                     priorityLevel: new Information(self.priorityLevel),
-                    contentSize: true
+                    contentSize: true,
+                    externalImportData: self.externalImportData
                 }));
 
             };
@@ -1145,6 +1157,12 @@ module.exports = function (app) {
                 });
             };
 
+            WorkItem.prototype.addToBroadcastFollowUp = function () {
+                return followUpUserService.addCorrespondenceToBroadcastFollowUp(this).then(function () {
+                    return counterService.loadCounters();
+                });
+            };
+
             WorkItem.prototype.addDocumentContentFile = function (content) {
                 if (!content)
                     throw Error('Need To Pass the Content for this work Item');
@@ -1170,6 +1188,7 @@ module.exports = function (app) {
                     .then(function (generalStepElementView) {
                         // just to set the seqWFId from the real correspondence
                         self.generalStepElm.seqWFId = generalStepElementView.correspondence.seqWFId;
+                        self.generalStepElm.isOfficial = generalStepElementView.correspondence.isOfficial;
                         generalStepElementView.actions = actions;
                         self.fromUserInbox = true;
                         return correspondenceService.annotateCorrespondence(self, annotationType, null, null, displayInformation ? generalStepElementView : false);
@@ -1180,6 +1199,39 @@ module.exports = function (app) {
                 var self = this, info = this.getInfo(), step = null,
                     forApproval = employeeService.getEmployee().isFirstViewForApproval && !info.isPaper && info.docStatus < 23 && self.checkElectronicSignaturePermission();
                 return viewDocumentService.viewUserInboxDocument(self, actions, 'userInbox', null, true)
+                    .then(function (generalStepElementView) {
+                        generalStepElementView.actions = actions;
+                        self.generalStepElm.isSeqWFBackward = generalStepElementView.generalStepElm.isSeqWFBackward;
+                        self.generalStepElm.isOfficial = generalStepElementView.correspondence.isOfficial;
+                        if (seqWF) {
+                            var step = _.find(seqWF.steps, function (step) {
+                                return step.id === generalStepElementView.generalStepElm.seqWFNextStepId;
+                            });
+                            if (!step) {
+                                step = _.find(seqWF.steps, function (step) {
+                                    return step.itemOrder === 0;
+                                });
+                            }
+                            return correspondenceService.annotateCorrespondence(self, (forApproval && step.isAuthorizeAndSendStep() ? 3 : annotationType), null, seqWF, generalStepElementView);
+                        }
+                        return sequentialWorkflowService.loadSequentialWorkflowById(self.getSeqWFId()).then(function (seqWF) {
+                            var step = _.find(seqWF.steps, function (step) {
+                                return step.id === generalStepElementView.generalStepElm.seqWFNextStepId;
+                            });
+                            if (!step) {
+                                step = _.find(seqWF.steps, function (step) {
+                                    return step.itemOrder === 0;
+                                });
+                            }
+                            return correspondenceService.annotateCorrespondence(self, (forApproval && step.isAuthorizeAndSendStep() ? 3 : annotationType), null, seqWF, generalStepElementView);
+                        });
+                    });
+            };
+
+            WorkItem.prototype.openSequentialProxyDocument = function (annotationType, seqWF, actions) {
+                var self = this, info = this.getInfo(), step = null,
+                    forApproval = employeeService.getEmployee().isFirstViewForApproval && !info.isPaper && info.docStatus < 23 && self.checkElectronicSignaturePermission();
+                return viewDocumentService.viewUserInboxProxyDocument(self, actions, 'proxyMail', null, true)
                     .then(function (generalStepElementView) {
                         generalStepElementView.actions = actions;
                         self.generalStepElm.isSeqWFBackward = generalStepElementView.generalStepElm.isSeqWFBackward;
@@ -1364,6 +1416,12 @@ module.exports = function (app) {
             WorkItem.prototype.getExportedData = function () {
                 return exportData;
             };
+
+            WorkItem.prototype.hasNormalOrPersonalPrivateSecurityLevel = function () {
+                return this.securityLevel.hasOwnProperty('id') ?
+                    (this.securityLevel.id === 1 || this.securityLevel.id === 4) :
+                    (this.securityLevel === 1 || this.securityLevel === 4);
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

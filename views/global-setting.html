@@ -80,12 +80,12 @@
                                            ng-model="ctrl.globalSetting.searchAmount">
                                     <div ng-messages="globalSettingForm.searchAmount.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
-                                        <div ng-message="min">{{lang.min_number.change({number:0})}}</div>
+                                        <div ng-message="min">{{lang.min_number.change({number: 0})}}</div>
                                         <div ng-message="max">
-                                            {{lang.max_number.change({number:( ctrl.getMaxSearchAmountLimit() )})}}
+                                            {{lang.max_number.change({number: (ctrl.getMaxSearchAmountLimit())})}}
                                         </div>
                                         <div ng-message="number">{{lang.numberonly}}</div>
-                                        <div ng-message="maxlength">{{lang.max_length.change({length:5})}}</div>
+                                        <div ng-message="maxlength">{{lang.max_length.change({length: 5})}}</div>
                                     </div>
                                 </md-input-container>
                                 <!-- Limited max rows count of search operation -->
@@ -102,10 +102,10 @@
                                         <!--<div ng-message="min">
                                             {{lang.min_number.replace(":number",ctrl.globalSetting.searchAmount)}}
                                         </div>-->
-                                        <div ng-message="min">{{lang.min_number.change({number:49})}}</div>
-                                        <div ng-message="max">{{lang.max_number.change({number:501})}}</div>
+                                        <div ng-message="min">{{lang.min_number.change({number: 49})}}</div>
+                                        <div ng-message="max">{{lang.max_number.change({number: 501})}}</div>
                                         <div ng-message="number">{{lang.numberonly}}</div>
-                                        <div ng-message="maxlength">{{lang.max_length.change({length:3})}}</div>
+                                        <div ng-message="maxlength">{{lang.max_length.change({length: 3})}}</div>
                                     </div>
                                 </md-input-container>
                                 <!-- Inbox Refresh Interval -->
@@ -119,8 +119,8 @@
                                            ng-model="ctrl.globalSetting.inboxRefreshInterval">
                                     <div ng-messages="globalSettingForm.inboxRefreshInterval.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
-                                        <div ng-message="min">{{lang.min_number.change({number:4})}}</div>
-                                        <div ng-message="max">{{lang.max_number.change({number:61})}}</div>
+                                        <div ng-message="min">{{lang.min_number.change({number: 4})}}</div>
+                                        <div ng-message="max">{{lang.max_number.change({number: 61})}}</div>
                                         <div ng-message="number">{{lang.numberonly}}</div>
                                     </div>
                                 </md-input-container>
@@ -134,8 +134,8 @@
                                            ng-model="ctrl.globalSetting.sessionTimeout">
                                     <div ng-messages="globalSettingForm.sessionTimeout.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
-                                        <div ng-message="min">{{lang.min_number.change({number:1})}}</div>
-                                        <div ng-message="max">{{lang.max_number.change({number:61})}}</div>
+                                        <div ng-message="min">{{lang.min_number.change({number: 1})}}</div>
+                                        <div ng-message="max">{{lang.max_number.change({number: 61})}}</div>
                                         <div ng-message="number">{{lang.numberonly}}</div>
                                     </div>
                                 </md-input-container>
@@ -252,6 +252,14 @@
                                     <span>{{lang.show_copyright}} : </span>{{
                                     ctrl.globalSetting.getTranslatedYesNo('showCopyrightText')}}
                                 </md-switch>
+                                <!-- flip login -->
+                                <md-switch flex ng-model="ctrl.globalSetting.flipLogin"
+                                           aria-label="{{lang.flip_login}}">
+                                    <span>{{lang.flip_login}} : </span>{{
+                                    ctrl.globalSetting.getTranslatedYesNo('flipLogin')}}
+                                </md-switch>
+                            </div>
+                            <div layout="row" class="p20">
                                 <!-- Default Application Theme -->
                                 <md-input-container flex>
                                     <label for="theme">{{lang.default_application_theme}}</label>
@@ -264,8 +272,8 @@
                                         <div ng-message="required">{{lang.field_required}}</div>
                                     </div>
                                 </md-input-container>
+                                <span flex></span>
                             </div>
-
                             <div layout="row" class="p20">
                                 <!-- Copyright Text -->
                                 <md-input-container flex>
@@ -276,7 +284,7 @@
                                 </textarea>
                                     <div ng-messages="globalSettingForm.copyrightText.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
-                                        <div ng-message="maxlength">{{lang.max_length.change({length:50})}}</div>
+                                        <div ng-message="maxlength">{{lang.max_length.change({length: 50})}}</div>
                                     </div>
                                 </md-input-container>
                                 <!-- Login Page Additional Content -->
@@ -292,7 +300,7 @@
                             </textarea>
                                     <div ng-messages="globalSettingForm.loginAdditionalContent.$error" role="alert">
                                         <div ng-message="max">{{lang.too_long_text}}</div>
-                                        <div ng-message="maxlength">{{lang.max_length.change({length:500})}}</div>
+                                        <div ng-message="maxlength">{{lang.max_length.change({length: 500})}}</div>
                                     </div>
                                 </md-input-container>
                             </div>
@@ -306,9 +314,9 @@
                                            ng-model="ctrl.globalSetting.supportPhoneNo"/>
                                     <div ng-messages="globalSettingForm.supportPhoneNo.$error" role="alert">
                                         <div ng-message="phone_mobile">
-                                            {{lang.invalid_phone_mobile.change({phonemob:lang.phone})}}
+                                            {{lang.invalid_phone_mobile.change({phonemob: lang.phone})}}
                                         </div>
-                                        <div ng-message="maxlength">{{lang.max_length.change({length:15})}}</div>
+                                        <div ng-message="maxlength">{{lang.max_length.change({length: 15})}}</div>
                                     </div>
                                 </md-input-container>
                                 <!-- Support Email -->
@@ -319,7 +327,7 @@
                                            ng-model="ctrl.globalSetting.supportEmail"/>
                                     <div ng-messages="globalSettingForm.supportEmail.$error" role="alert">
                                         <div ng-message="email">{{lang.invalid_email}}</div>
-                                        <div ng-message="maxlength">{{lang.max_length.change({length:40})}}</div>
+                                        <div ng-message="maxlength">{{lang.max_length.change({length: 40})}}</div>
                                     </div>
                                 </md-input-container>
                             </div>
@@ -496,7 +504,7 @@
                                 <!-- Stamp Module Enabled -->
                                 <md-input-container flex>
                                     <md-switch flex ng-model="ctrl.globalSetting.stampModuleEnabled"
-                                               ng-disabled="!ctrl.hasPSPDFViewer"
+                                               ng-disabled="!ctrl.hasPSPDFViewer || !ctrl.kwtAlDiyarDigitalEnabled"
                                                aria-label="{{lang.enable_stamp_module}} ">
                                         <span>{{lang.enable_stamp_module}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('stampModuleEnabled')}}
                                     </md-switch>
@@ -518,7 +526,26 @@
                                         <span>{{lang.allow_edit_after_first_approve}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('allowEditAfterFirstApprove')}}
                                     </md-switch>
                                 </md-input-container>
-                                <span flex></span>
+                                <md-input-container flex>
+                                    <md-switch flex ng-model="ctrl.globalSetting.limitedCentralUnitAccess"
+                                               aria-label="{{lang.limited_central_archive_access}}">
+                                        <span>{{lang.limited_central_archive_access}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('limitedCentralUnitAccess')}}
+                                    </md-switch>
+                                </md-input-container>
+                            </div>
+                            <div layout="row" class="p20">
+                                <md-input-container flex>
+                                    <md-switch flex ng-model="ctrl.globalSetting.outofofficeFromAllUsers"
+                                               aria-label="{{lang.allow_managers_delegate_from_other_departments}}">
+                                        <span>{{lang.allow_managers_delegate_from_other_departments}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('outofofficeFromAllUsers')}}
+                                    </md-switch>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <md-switch flex ng-model="ctrl.globalSetting.returnToCentralArchive"
+                                               aria-label="{{lang.return_to_central_archive}}">
+                                        <span>{{lang.return_to_central_archive}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('returnToCentralArchive')}}
+                                    </md-switch>
+                                </md-input-container>
                             </div>
                             <div layout="row" class="p20">
                                 <!-- Document Security Schema -->
@@ -660,7 +687,12 @@
                                     </md-switch>
                                 </div>
                                 <div flex>
-
+                                    <!-- External Authorization -->
+                                    <md-switch ng-model="ctrl.globalSetting.externalAuthorization"
+                                               aria-label="{{lang.external_authorization}}">
+                                        <span>{{lang.external_authorization}} : </span>{{
+                                        ctrl.globalSetting.getTranslatedYesNo('externalAuthorization')}}
+                                    </md-switch>
                                 </div>
                             </div>
                         </div>
@@ -747,10 +779,10 @@
                                            ng-model="ctrl.globalSetting.sla">
                                     <div ng-messages="globalSettingForm.sla.$error">
                                         <div ng-message="min">
-                                            {{lang.should_greater_equal_min_limit.replace(':minlimit',1)}}
+                                            {{lang.should_greater_equal_min_limit.replace(':minlimit', 1)}}
                                         </div>
                                         <div ng-message="number">{{lang.numberonly}}</div>
-                                        <div ng-message="maxlength">{{lang.max_length.change({length:5})}}</div>
+                                        <div ng-message="maxlength">{{lang.max_length.change({length: 5})}}</div>
                                     </div>
                                 </md-input-container>
                             </div>
@@ -765,9 +797,9 @@
                                     <div ng-messages="globalSettingForm.deadlineReminderDays.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
                                         <div ng-message="min">
-                                            {{lang.should_greater_equal_min_limit.replace(':minlimit',1)}}
+                                            {{lang.should_greater_equal_min_limit.replace(':minlimit', 1)}}
                                         </div>
-                                        <div ng-message="maxlength">{{lang.max_length.change({length:5})}}</div>
+                                        <div ng-message="maxlength">{{lang.max_length.change({length: 5})}}</div>
                                         <div ng-message="number">{{lang.numberonly}}</div>
                                     </div>
                                 </md-input-container>

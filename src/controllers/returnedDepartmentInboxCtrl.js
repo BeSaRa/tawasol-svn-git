@@ -27,7 +27,8 @@ module.exports = function (app) {
                                                             correspondenceService,
                                                             favoriteDocumentsService,
                                                             mailNotificationService,
-                                                            gridService) {
+                                                            gridService,
+                                                            emailItem) {
         'ngInject';
         var self = this;
         /*
@@ -1165,7 +1166,7 @@ module.exports = function (app) {
                         isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
                     }
 
-                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model);
+                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model) && !correspondenceService.isLimitedCentralUnitAccess(model);
                 },
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
@@ -1232,7 +1233,7 @@ module.exports = function (app) {
                 text: 'grid_action_send',
                 shortcut: false,
                 checkShow: function (action, model) {
-                    return gridService.checkToShowMainMenuBySubMenu(action, model);
+                    return gridService.checkToShowMainMenuBySubMenu(action, model) && !correspondenceService.isLimitedCentralUnitAccess(model);
                 },
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
@@ -1435,6 +1436,12 @@ module.exports = function (app) {
 
         self.shortcutActions = gridService.getShortcutActions(self.gridActions);
         self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
+
+        self.openEmailItem = function () {
+            emailItem ? self.viewDocument(emailItem) : null;
+        };
+        // to open Email item if it exists.
+        self.openEmailItem();
 
         self.refreshGrid = function (time) {
             $timeout(function () {

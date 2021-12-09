@@ -28,6 +28,7 @@ module.exports = function (app) {
             self.proxyUserInfo = null;
 
             self.userIdAndOuId = null; // combination of user and ouId. To be deleted before sending
+            self.isSelectedForSubSeqWF = false;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array

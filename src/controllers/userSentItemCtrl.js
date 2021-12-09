@@ -26,6 +26,7 @@ module.exports = function (app) {
                                                  EventHistoryCriteria,
                                                  printService,
                                                  moment,
+                                                 _,
                                                  EventHistory) {
         'ngInject';
         var self = this;
@@ -222,8 +223,33 @@ module.exports = function (app) {
          * @param $event
          */
         self.recallBulkSentItems = function ($event) {
-            // console.log('recall bulk sent items : ', self.selectedUserSentItems);
+            dialog.confirmMessage(langService.get('confirm_multiple_recall'))
+                .then(function () {
+                    userSentItemService.recallMultipleSentItem(self.selectedUserSentItems, $event).then(function (result) {
+                        self.reloadUserSentItems(self.grid.page)
+                            .then(function () {
+                            });
+                    });
+                });
         };
+
+        /**
+         * @description
+         * @returns {boolean|*}
+         */
+        self.canShowRecallBulk = function () {
+            if (self.selectedUserSentItems.length > 20) {
+                return false;
+            }
+
+            return _.every(self.selectedUserSentItems, function (selectedSentItem) {
+                return (selectedSentItem.workflowActionId !== 9 &&
+                    selectedSentItem.actionType !== 3 &&
+                    selectedSentItem.wfId !== null &&
+                    selectedSentItem.wobNum !== null);
+            })
+
+        }
 
         /**
          * @description Reassign Bulk User Sent Items
@@ -450,6 +476,10 @@ module.exports = function (app) {
         self.sendSMS = function (userSentItem, $event) {
             //  console.log('sendSMS : ', userSentItem);
         };
+
+        self.sendReminderEmail = function (userSetItem, $event) {
+            userSetItem.openSendEmailReminderDialog($event);
+        }
 
         /**
          * @description Send Main Document Fax
@@ -957,7 +987,7 @@ module.exports = function (app) {
                         isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
                     }
 
-                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model);
+                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model) && !correspondenceService.isLimitedCentralUnitAccess(model);
                 },
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
@@ -1024,7 +1054,7 @@ module.exports = function (app) {
                 text: 'grid_action_send',
                 shortcut: false,
                 checkShow: function (action, model) {
-                    return gridService.checkToShowMainMenuBySubMenu(action, model);
+                    return gridService.checkToShowMainMenuBySubMenu(action, model) && !correspondenceService.isLimitedCentralUnitAccess(model);
                 },
                 permissionKey: [
                     "SEND_COMPOSITE_DOCUMENT_BY_EMAIL",
@@ -1085,6 +1115,22 @@ module.exports = function (app) {
                         class: "action-red",
                         checkShow: function (action, model) {
                             return true;
+                        }
+                    },
+                    // send reminder by email
+                    {
+                        type: 'action',
+                        icon: 'message',
+                        text: 'grid_action_send_reminder_email',
+                        shortcut: false,
+                        showInView: false,
+                        callback: self.sendReminderEmail,
+                        class: "action-red",
+                        checkShow: function (action, model) {
+                            if (!(model instanceof EventHistory)) {
+                                model = angular.copy(self.userSentItemCopy);
+                            }
+                            return !model.isTerminated() && !model.isApproved() && !model.isSentToDepartmentOnly();
                         }
                     }
                 ]

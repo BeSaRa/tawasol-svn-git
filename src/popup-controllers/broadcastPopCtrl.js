@@ -16,6 +16,7 @@ module.exports = function (app) {
                                                  correspondenceService,
                                                  WorkflowGroup,
                                                  Broadcast,
+                                                 employeeService,
                                                  errorCode) {
             'ngInject';
             var self = this;
@@ -34,7 +35,10 @@ module.exports = function (app) {
 
             self.actionSearchText = '';
             self.ouSearchText = '';
-
+            self.broadcastToAll = false;
+            self.broadcastToAllOUs = false;
+            self.broadcastToAllWF = false;
+            self.employeeService = employeeService;
             self.broadcastRecordType = {
                 organization: {
                     name: 'organization',
@@ -129,8 +133,8 @@ module.exports = function (app) {
                     return self.checkBroadcastRecordType(item, self.broadcastRecordType.organization);
                 }));
                 return !!_.find(addedOus, function (item) {
-                    item.rank = item.rank ? item.rank.lookupKey: null;
-                    item.jobTitle = item.jobTitle ? item.jobTitle.lookupKey: null;
+                    item.rank = item.rank ? item.rank.lookupKey : null;
+                    item.jobTitle = item.jobTitle ? item.jobTitle.lookupKey : null;
                     return item.itemId.id === ou.id
                         && item.rank === (self.selectedRank ? self.selectedRank.lookupKey : null)
                         && item.jobTitle === (self.selectedJobTitle ? self.selectedJobTitle.lookupKey : null);
@@ -142,8 +146,8 @@ module.exports = function (app) {
                     return self.checkBroadcastRecordType(item, self.broadcastRecordType.workflowGroup);
                 }));
                 return !!_.find(addedWFGroups, function (item) {
-                    item.rank = item.rank ? item.rank.lookupKey: null;
-                    item.jobTitle = item.jobTitle ? item.jobTitle.lookupKey: null;
+                    item.rank = item.rank ? item.rank.lookupKey : null;
+                    item.jobTitle = item.jobTitle ? item.jobTitle.lookupKey : null;
                     return item.itemId.id === wfGroup.id
                         && item.rank === (self.selectedRank ? self.selectedRank.lookupKey : null)
                         && item.jobTitle === (self.selectedJobTitle ? self.selectedJobTitle.lookupKey : null);
@@ -230,6 +234,14 @@ module.exports = function (app) {
              * @description broadcast all selected organizations and workflow group with selected action
              */
             self.startBroadcast = function () {
+                (self.broadcastToAll) ?
+                    dialog.confirmMessage(langService.get('confirm_broadcast_to_all'))
+                        .then(function () {
+                            _startBroadcast();
+                        }) : _startBroadcast();
+            };
+
+            function _startBroadcast() {
                 var broadcast = new Broadcast({
                     wfGroups: _.filter(self.addedOUAndWFGroupsToBroadcast, function (record) {
                         record = record.hasOwnProperty('itemId') ? record.itemId : record;
@@ -243,7 +255,7 @@ module.exports = function (app) {
                 });
 
                 return correspondenceService
-                    .broadcasting(broadcast, correspondence)
+                    .broadcasting(broadcast, correspondence, self.broadcastToAll)
                     .then(function (result) {
                         toast.success(langService.get('correspondence_broadcasted_successfully'));
                         dialog.hide(result);
@@ -253,7 +265,7 @@ module.exports = function (app) {
                             dialog.errorMessage(langService.get('no_user_to_broadcast'));
                         })
                     });
-            };
+            }
 
             /**
              * @description close broadcast popup
@@ -269,6 +281,43 @@ module.exports = function (app) {
             self.clearSearchText = function (fieldType) {
                 self[fieldType + 'SearchText'] = '';
             };
+
+            /***
+             * @description on toggle broadcast to all (organizations,wf groups)
+             * @param broadcastForm
+             */
+            self.toggleBroadcastToAll = function (broadcastForm) {
+                if (self.broadcastToAll) {
+                    self.ouBroadcast = self.wfGroupBroadcast = null;
+                    self.broadcastToAllOUs = self.broadcastToAllWF = false;
+                    broadcastForm.$setUntouched();
+                }
+            }
+
+            /***
+             * @description
+             * @param toggleAll
+             */
+            self.toggleAllBroadcast = function (toggleAll) {
+                if (toggleAll === 'ous') {
+                    self.ouBroadcast = null;
+                    self.ouBroadcast = self.broadcastToAllOUs ? self.organizations : null;
+                } else if (toggleAll === 'wfgroups') {
+                    self.wfGroupBroadcast = self.broadcastToAllWF ? self.workflowGroups : null;
+                }
+            }
+
+            /***
+             * @description
+             * @param toggleAll
+             */
+            self.onSelectBroadcast = function (toggleAll) {
+                if (toggleAll === 'ous') {
+                    self.broadcastToAllOUs = !!(self.ouBroadcast && self.ouBroadcast.length && self.ouBroadcast.length === self.organizations.length);
+                } else if (toggleAll === 'wfgroups') {
+                    self.broadcastToAllWF = !!(self.wfGroupBroadcast && self.wfGroupBroadcast.length && self.wfGroupBroadcast.length === self.workflowGroups.length);
+                }
+            }
 
             /**
              * @description Prevent the default dropdown behavior of keys inside the search box of dropdown

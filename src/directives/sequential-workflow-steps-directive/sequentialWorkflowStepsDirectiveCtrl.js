@@ -47,7 +47,8 @@ module.exports = function (app) {
             inValidStep: {key: 'invalid_step', class: 'step-invalid'},
             pastStep: {key: 'previous_seq_step', class: 'step-past'},
             currentStep: {key: 'current_seq_step', class: 'step-current'},
-            futureStep: {key: 'next_seq_step', class: 'step-future'}
+            futureStep: {key: 'next_seq_step', class: 'step-future'},
+            terminatedStep: {key: 'terminated_seq_step', class: 'step-terminated'}
         };
 
         self.$generatorElement = $element.find('.step-layout-rows');
@@ -78,7 +79,15 @@ module.exports = function (app) {
             if (_canDeleteRow(stepRow, idx)) {
                 row.append(self.createDeleteButton('row', idx));
             }
+            if (self.canAddSubSeqWF) {
+                row.append(self.createRowCheckBox(stepRow, idx))
+            }
             return row;
+        };
+
+        self.createRowCheckBox = function (stepRow, idx) {
+            return angular.element('<md-checkbox ng-if="ctrl.seqWF.stepRows[' + idx + ']" aria-label="check-box" ng-checked="ctrl.seqWF.stepRows[' + idx + '].isSelectedForSubSeqWF" ' +
+                ' class="sort-cancel check-box-with-no-padding" ng-model="ctrl.seqWF.stepRows[' + idx + '].isSelectedForSubSeqWF"></md-checkbox>')
         };
 
         self.deleteRow = function ($event) {
@@ -118,10 +127,6 @@ module.exports = function (app) {
 
             _setStepClass(element, stepAction, idx);
 
-            /*var titleText = '{{item.getTranslatedName()}}';
-            if (stepAction.getTranslatedUserAndOuName()) {
-                titleText += ' ({{item.getTranslatedUserAndOuName() }})'
-            }*/
             var titleText = _getStepText(stepAction);
 
             var title = angular.element('<span class="no-style" />', {'md-truncate': ''}).html(titleText);
@@ -217,6 +222,34 @@ module.exports = function (app) {
                 })
         };
 
+        self.isViewStepsUsageType = function () {
+            return self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps;
+        }
+
+        /**
+         * @description Imports the steps from existing sequential workflow
+         * @param $event
+         */
+        self.importStepsFromSeqWF = function ($event) {
+            sequentialWorkflowService.controllerMethod
+                .selectSubSequentialWorkflow($event)
+                .then(function (selectedSeqWF) {
+                    var docCurrentStep = _getStepById(self.correspondence.getSeqWFNextStepId());
+                    var indexToInsert = -1;
+                    if (docCurrentStep) {
+                        indexToInsert = docCurrentStep.itemOrder + 1;
+                    }
+
+                    var newSteps = _.map(angular.copy(selectedSeqWF.stepRows), function (item) {
+                        item.id = null;
+                        return item;
+                    });
+
+                    self.seqWF.stepRows.splice(indexToInsert, 0, ...newSteps);
+                    self.compileAll(self.seqWF.stepRows);
+                });
+        }
+
         function _updateStructure() {
             self.seqWF.stepRows = [];
             self.$generatorElement.children('.step-row').each(function (idx, row) {
@@ -251,6 +284,18 @@ module.exports = function (app) {
                 stepActionText = ' (' + stepRow.getTranslatedName() + ') ';
 
             if (self.usageType === sequentialWorkflowService.stepsUsageTypes.manageWFSteps) {
+                if (stepRow.itemOrder === 0) {
+                    titleText = stepActionText;
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepRow.getTranslatedUserAndOuName();
+                    }
+                } else {
+                    titleText = previousStepUser + stepActionText;
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepRow.getTranslatedUserAndOuName();
+                    }
+                }
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.selectSeqWF) {
                 if (stepRow.itemOrder === 0) {
                     titleText = stepActionText;
                     if (stepRow.getTranslatedUserAndOuName()) {
@@ -325,6 +370,18 @@ module.exports = function (app) {
                         titleText += stepIcon + stepRow.getTranslatedUserAndOuName();
                     }
                 }
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.selectSeqWF) {
+                if (stepRow.itemOrder === 0) {
+                    titleText = stepRow.getTranslatedName();
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepIcon + stepRow.getTranslatedUserAndOuName();
+                    }
+                } else {
+                    titleText = previousStepUserIcon + stepRow.getTranslatedName();
+                    if (stepRow.getTranslatedUserAndOuName()) {
+                        titleText += stepIcon + stepRow.getTranslatedUserAndOuName();
+                    }
+                }
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
                 if (stepRow.itemOrder === 0) {
                     titleText = (self.employee.getTranslatedName() + ' - ' + self.employee.getExtraFields().ouInfo.getTranslatedName()) + stepIcon + stepRow.getTranslatedName();
@@ -374,6 +431,8 @@ module.exports = function (app) {
             }
             if (self.usageType === sequentialWorkflowService.stepsUsageTypes.manageWFSteps) {
                 return true;
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.selectSeqWF) {
+                return false;
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
                 return (rowIndex > 0);
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
@@ -400,6 +459,8 @@ module.exports = function (app) {
             }
             if (self.usageType === sequentialWorkflowService.stepsUsageTypes.manageWFSteps) {
                 return true;
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.selectSeqWF) {
+                return false;
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
                 return (rowIndex > 0);
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
@@ -419,9 +480,14 @@ module.exports = function (app) {
         }
 
         function _checkIfStepViewOnly(seqWFStep) {
+            if (self.viewOnly) {
+                return true;
+            }
             var viewOnly = false;
             if (self.usageType === sequentialWorkflowService.stepsUsageTypes.manageWFSteps) {
                 viewOnly = false;
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.selectSeqWF) {
+                viewOnly = true;
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
                 viewOnly = true;
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
@@ -443,11 +509,14 @@ module.exports = function (app) {
             // if (usageType = 'launch'), show current/future step
             // if (usageType = 'manage-steps') means we are using from admin screen, show valid/invalid steps
             // if (usageType = 'view-steps'), show past/current/future steps
-            // if (usageType = 'view-wf-status-steps'), show past/current/future steps
+            // if (usageType = 'view-wf-status-steps'), show past/current/future/terminated steps
             if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
                 self.stepLegendList.push(self.stepLegendClassList.currentStep);
                 self.stepLegendList.push(self.stepLegendClassList.futureStep);
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.manageWFSteps) {
+                // self.stepLegendList.push(self.stepLegendClassList.validStep);
+                // self.stepLegendList.push(self.stepLegendClassList.inValidStep);
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.selectSeqWF) {
                 // self.stepLegendList.push(self.stepLegendClassList.validStep);
                 // self.stepLegendList.push(self.stepLegendClassList.inValidStep);
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps) {
@@ -463,6 +532,7 @@ module.exports = function (app) {
                 self.stepLegendList.push(self.stepLegendClassList.pastStep);
                 self.stepLegendList.push(self.stepLegendClassList.currentStep);
                 self.stepLegendList.push(self.stepLegendClassList.futureStep);
+                self.stepLegendList.push(self.stepLegendClassList.terminatedStep);
             }
         }
 
@@ -470,8 +540,8 @@ module.exports = function (app) {
             // if (usageType = 'launch'), first step is current, all other steps are future
             // if (usageType = 'manage-steps') means we are using from admin screen, steps are valid/invalid
             // if (usageType = 'view-steps'), steps are past/current/future
-            // if (usageType = 'view-wf-status-steps'), steps are past/current/future
-            var stepStatusClass = '';
+            // if (usageType = 'view-wf-status-steps'), steps are past/current/future/terminated
+            var stepStatusClass = '', docCurrentStep = null;
             if (self.usageType === sequentialWorkflowService.stepsUsageTypes.launchWF) {
                 if (idx === 0) {
                     stepStatusClass = self.stepLegendClassList.currentStep.class;
@@ -479,6 +549,12 @@ module.exports = function (app) {
                     stepStatusClass = self.stepLegendClassList.futureStep.class;
                 }
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.manageWFSteps) {
+                /*if (stepAction.isValidStep(self.seqWF)) {
+                    stepStatusClass = self.stepLegendClassList.validStep.class;
+                } else {
+                    stepStatusClass = self.stepLegendClassList.inValidStep.class;
+                }*/
+            } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.selectSeqWF) {
                 /*if (stepAction.isValidStep(self.seqWF)) {
                     stepStatusClass = self.stepLegendClassList.validStep.class;
                 } else {
@@ -496,7 +572,7 @@ module.exports = function (app) {
                     if (!stepAction.id) {
                         return;
                     }
-                    var docCurrentStep = _getStepById(self.correspondence.getSeqWFNextStepId());
+                    docCurrentStep = _getStepById(self.correspondence.getSeqWFNextStepId());
                     if (stepAction.itemOrder === docCurrentStep.itemOrder) {
                         stepStatusClass = self.stepLegendClassList.currentStep.class;
                     } else if (stepAction.itemOrder < docCurrentStep.itemOrder) {
@@ -506,16 +582,23 @@ module.exports = function (app) {
                     }
                 }
             } else if (self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFStatusSteps) {
-                var docCurrentStep = self.correspondence.getSeqWFCurrentStepId() ? _getStepById(self.correspondence.getSeqWFCurrentStepId()) : null;
+                var docCurrentStepId = self.correspondence.getSeqWFCurrentStepId();
+
+                docCurrentStep = docCurrentStepId ? _getStepById(docCurrentStepId) : null;
+
                 if (!docCurrentStep) {
                     stepStatusClass = self.stepLegendClassList.pastStep.class;
                 } else {
-                    if (stepAction.itemOrder === docCurrentStep.itemOrder) {
-                        stepStatusClass = self.stepLegendClassList.currentStep.class;
-                    } else if (stepAction.itemOrder < docCurrentStep.itemOrder) {
-                        stepStatusClass = self.stepLegendClassList.pastStep.class;
-                    } else if (stepAction.itemOrder > docCurrentStep.itemOrder) {
-                        stepStatusClass = self.stepLegendClassList.futureStep.class;
+                    if (stepAction.id === docCurrentStepId && self.correspondence.terminated) {
+                        stepStatusClass = self.stepLegendClassList.terminatedStep.class;
+                    } else {
+                        if (stepAction.itemOrder === docCurrentStep.itemOrder) {
+                            stepStatusClass = self.stepLegendClassList.currentStep.class;
+                        } else if (stepAction.itemOrder < docCurrentStep.itemOrder) {
+                            stepStatusClass = self.stepLegendClassList.pastStep.class;
+                        } else if (stepAction.itemOrder > docCurrentStep.itemOrder) {
+                            stepStatusClass = self.stepLegendClassList.futureStep.class;
+                        }
                     }
                 }
             }
@@ -532,6 +615,7 @@ module.exports = function (app) {
 
         self.$onInit = function () {
             $timeout(function () {
+                self.canAddSubSeqWF = self.usageType === sequentialWorkflowService.stepsUsageTypes.viewWFSteps && employeeService.hasPermissionTo('ADD_SEQ_WF');
                 self.compileAll(self.seqWF.stepRows);
 
                 _setStepLegend();

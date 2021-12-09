@@ -123,4 +123,8 @@ module.exports = function (app) {
     require('./pspdf-viewer-directive/01-index')(app);
     require('./sequential-workflow-steps-directive/01-index')(app);
     require('./viewer-sidebar-directive/01-index')(app);
+    require('./annotation-pattern-directive/01-index')(app);
+    require('./chat-bot-directive/01-index')(app);
+    require('./simple-forward-directive/01-index')(app);
+    require('./help-videos-directive/01-index')(app);
 };

@@ -43,6 +43,7 @@ module.exports = function (app) {
                                              rootEntity,
                                              configurationService,
                                              downloadService,
+                                             loadingIndicatorService,
                                              errorCode) {
         'ngInject';
         var self = this;
@@ -245,8 +246,7 @@ module.exports = function (app) {
                     if (self.outgoing.contentFile) {
                         return self.outgoing.addDocumentContentFile()
                             .then(function () {
-                                self.contentFileExist = !!(self.outgoing.hasOwnProperty('contentFile') && self.outgoing.contentFile);
-                                self.contentFileSizeExist = !!(self.contentFileExist && self.outgoing.contentFile.size);
+                                self.contentFileExist = true;
                                 saveCorrespondenceFinished(status, ignoreLaunch);
                             })
                     } else if (duplicateVersion && self.outgoing.hasContent() && self.outgoing.addMethod) {
@@ -254,12 +254,10 @@ module.exports = function (app) {
                             .attacheContentUrl(self.documentInformation)
                             .then(function () {
                                 self.contentFileExist = true;
-                                self.contentFileSizeExist = true;
                                 saveCorrespondenceFinished(status, ignoreLaunch);
                             });
                     } else {
                         self.contentFileExist = false;
-                        self.contentFileSizeExist = false;
                         saveCorrespondenceFinished(status, ignoreLaunch);
                         return true;
                     }
@@ -315,10 +313,14 @@ module.exports = function (app) {
             } else {
                 var successKey = 'outgoing_metadata_saved_success';
                 if (self.documentInformation) {
-                    self.outgoing.contentSize = 1;
+                    self.outgoing.contentSize = 1; // dummy content size
                     successKey = 'save_success'
-                } else if (self.outgoing.contentFile && self.outgoing.contentFile.size) {
-                    self.outgoing.contentSize = self.outgoing.contentFile.size;
+                } else if (self.outgoing.contentFile) {
+                    if (self.outgoing.externalImportData) {
+                        self.outgoing.contentSize = 1; // dummy content size
+                    } else {
+                        self.outgoing.contentSize = self.outgoing.contentFile.size;
+                    }
                     successKey = 'save_success';
                 }
                 self.requestCompleted = true;
@@ -333,13 +335,17 @@ module.exports = function (app) {
         };
 
         function _launchAfterSave() {
-            if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist))) {
+            if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && (!!self.documentInformationExist || !!self.contentFileExist)) {
                 dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
                     .then(function () {
                         self.docActionLaunchDistributionWorkflow(self.outgoing);
                     });
             }
         }
+
+        self.canSaveAndAnnotate = function () {
+            return self.hasPSPDFViewer && employeeService.hasPermissionTo(self.annotationPermission) && !correspondenceService.isLimitedCentralUnitAccess(self.outgoing);
+        };
 
         self.saveAndAnnotateDocument = function ($event) {
             if (!_isReadyToSave('saveAndInsert', true)) {
@@ -642,7 +648,7 @@ module.exports = function (app) {
         };
 
         var _hasContent = function () {
-            return (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+            return (!!self.documentInformationExist || !!self.contentFileExist);
         };
 
         var _hasSingleSignature = function (document) {
@@ -921,7 +927,6 @@ module.exports = function (app) {
             self.documentAction = null;
             self.documentInformationExist = false;
             self.contentFileExist = false;
-            self.contentFileSizeExist = false;
             self.editContent = false;
             self.document_properties.$setUntouched();
 
@@ -1007,6 +1012,30 @@ module.exports = function (app) {
                 return isValid;
             }
         };
+
+        /**
+         * @description open side view document
+         * @param $event
+         */
+        self.openSideViewDocument = function ($event) {
+            var correspondence, typeOfDoc;
+            if (replyTo && self.action === 'createReply') {
+                if ($stateParams.createAsAttachment === "true") {
+                    // attachment
+                    correspondence = self.outgoing.attachments[0];
+                    correspondence.classDescription = 'Outgoing';
+                    typeOfDoc = 'attachment';
+                } else {
+                    // linked document
+                    correspondence = self.outgoing.linkedDocs[0];
+                    typeOfDoc = 'linked-doc';
+                }
+
+                correspondenceService.openSideViewDocument(correspondence, self.viewUrl, typeOfDoc).then(function () {
+                    loadingIndicatorService.loading = false;
+                });
+            }
+        }
 
         self.$onInit = function () {
             if (self.employee.isBacklogMode()) {

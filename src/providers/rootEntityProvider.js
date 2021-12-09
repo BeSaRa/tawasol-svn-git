@@ -163,6 +163,9 @@ module.exports = function (app) {
                 },
                 isDocClassifierEnabled: function () {
                     return rootEntity && rootEntity.isDocClassifierEnabled();
+                },
+                isChatBotEnabled() {
+                    return rootEntity && rootEntity.isChatBotEnabled();
                 }
             };
         }

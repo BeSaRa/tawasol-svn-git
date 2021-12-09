@@ -17,6 +17,7 @@ module.exports = function (app) {
             if (typeof model.priorityLevel !== 'undefined' && model.priorityLevel !== null && model.priorityLevel !== '') {
                 model.priorityLevel = model.priorityLevel.hasOwnProperty('lookupKey') ? model.priorityLevel.lookupKey : model.priorityLevel;
             }
+            delete model.externalImportData;
             return model;
         });
 

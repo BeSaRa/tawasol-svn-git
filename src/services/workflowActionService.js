@@ -8,6 +8,8 @@ module.exports = function (app) {
                                                    dialog,
                                                    langService,
                                                    toast,
+                                                   employeeService,
+                                                   FavoriteAction,
                                                    cmsTemplate) {
         'ngInject';
         var self = this;
@@ -346,6 +348,51 @@ module.exports = function (app) {
             return $http.get(urlService.actionsDistributionWorkflow)
                 .then(function (result) {
                     return generator.interceptReceivedCollection('WorkflowAction', generator.generateCollection(result.data.rs, WorkflowAction, self._sharedMethods));
+                });
+        }
+
+        /**
+         * @description load favorite user actions
+         * @returns {*}
+         */
+        self.loadFavoriteActions = function () {
+            return $http.get(urlService.favoriteWFActions + '/active')
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('FavoriteAction', generator.generateCollection(result.data.rs, FavoriteAction, self._sharedMethods));
+                });
+        }
+
+        /**
+         * @description add/remove actions for user favorite
+         */
+        self.favoriteActions = function (actionIds) {
+            var userId = employeeService.getEmployee().id;
+            var favActions = _.map(actionIds, function (actionId, index) {
+                return {
+                    userId: userId,
+                    actionId: actionId,
+                    itemOrder: index + 1
+                }
+            })
+            return $http.post(urlService.favoriteWFActions + '/bulk/user-id/' + userId, favActions)
+        }
+
+        self.openAddUserFavoriteActionDialog = function (favActions, $event) {
+            return dialog
+                .showDialog({
+                    targetEvent: $event,
+                    templateUrl: cmsTemplate.getPopup('favorite-actions'),
+                    controller: 'favoriteActionsPopCtrl',
+                    controllerAs: 'ctrl',
+                    locals: {
+                        favActions: favActions,
+                    },
+                    resolve: {
+                        favoriteWFActions: function () {
+                            'ngInject';
+                            return self.loadWorkflowActions();
+                        }
+                    }
                 });
         }
     });

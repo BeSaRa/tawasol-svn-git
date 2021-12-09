@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.directive('manageLinkedDocumentDirective', function ($interval,cmsTemplate) {
+    app.directive('manageLinkedDocumentDirective', function ($interval, cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',

@@ -23,6 +23,7 @@ module.exports = function (app) {
                                                   sidebarService,
                                                   $mdMedia,
                                                   rootEntity,
+                                                  configurationService,
                                                   $scope) {
         'ngInject';
         var self = this;
@@ -30,6 +31,8 @@ module.exports = function (app) {
         self.controllerName = 'bodyDirectiveCtrl';
 
         self.loadingService = loadingIndicatorService;
+        self.rootEntity = rootEntity;
+
 
         self.isSidebarOpen = function () {
             return sidebarService.sidebarLoaded && $mdSidenav('main-sidebar').isLockedOpen();

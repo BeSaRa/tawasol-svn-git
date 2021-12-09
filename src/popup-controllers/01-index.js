@@ -156,4 +156,13 @@ module.exports = function (app) {
     require('./launchSequentialWorkflowPopCtrl')(app);
     require('./pdfViewerPopCtrl')(app);
     require('./seqBackStepPopCtrl')(app);
+    require('./viewSeqWfStepsPopCtrl')(app);
+    require('./selectSubSequentialWorkflowPopCtrl')(app);
+    require('./configureAnnotationPatternPopCtrl')(app);
+    require('./externalDataSourcePopCtrl')(app);
+    require('./externalDataSourceImportPopCtrl')(app);
+    require('./sendEmailReminderPopCtrl')(app);
+    require('./viewDocumentSideViewPopCtrl')(app);
+    require('./favoriteActionsPopCtrl')(app);
+    require('./broadcastFollowUpPopCtrl')(app);
 };

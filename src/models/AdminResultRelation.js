@@ -13,6 +13,7 @@ module.exports = function (app) {
             self.regouId = null;
             self.isPrivateRegistry = false;
             self.sla = null;
+            self.securityLevels = null;
             self.status = false;
 
 

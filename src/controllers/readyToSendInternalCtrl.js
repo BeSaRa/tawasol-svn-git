@@ -519,6 +519,14 @@ module.exports = function (app) {
         };
 
         /**
+         * @description add workItem to broadcast FollowUp
+         * @param item
+         */
+        self.addToBroadcastFollowUp = function (item) {
+            item.addToBroadcastFollowUp();
+        };
+
+        /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
          */
@@ -672,6 +680,19 @@ module.exports = function (app) {
                         checkShow: function (action, model) {
                             return true;
                         }
+                    },
+                    // add to broadcast follow up
+                    {
+                        type: 'action',
+                        icon: 'book-search-outline',
+                        text: 'grid_action_to_broadcast_followup',
+                        shortcut: true,
+                        callback: self.addToBroadcastFollowUp,
+                        permissionKey: 'ADMIN_USER_FOLLOWUP_BOOKS',
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     }
                 ]
             },
@@ -751,7 +772,8 @@ module.exports = function (app) {
                             return !info.isPaper
                                 && (info.documentClass !== 'incoming')
                                 && model.needApprove()
-                                && hasPermission;
+                                && hasPermission
+                                && !correspondenceService.isLimitedCentralUnitAccess(model);
                         }
                     }
                 ]

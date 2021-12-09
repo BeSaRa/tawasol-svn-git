@@ -290,3 +290,39 @@
              tooltip="{{ctrl.langService.get(ctrl.record.isOfficialIndicator.tooltip)}}"
     ></md-icon>
 </span>
+<!-- Internal Site -->
+<span ng-if="ctrl.indicatorType === 'internalSite'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.internalSiteIndicator}">
+    <md-icon ng-if="ctrl.record.internalSiteIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.internalSiteIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.internalSiteIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.internalSiteIndicator.tooltip)}}"
+    ></md-icon>
+</span>
+<!-- G2G Site -->
+<span ng-if="ctrl.indicatorType === 'g2gSite'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.g2gSiteIndicator}">
+    <md-icon ng-if="ctrl.record.g2gSiteIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.g2gSiteIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.g2gSiteIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.g2gSiteIndicator.tooltip)}}"
+    ></md-icon>
+</span>
+<!-- External Site -->
+<span ng-if="ctrl.indicatorType === 'externalSite'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.externalSiteIndicator}">
+    <md-icon ng-if="ctrl.record.externalSiteIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.externalSiteIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.externalSiteIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.externalSiteIndicator.tooltip)}}"
+    ></md-icon>
+</span>
+<!-- Shared Book -->
+<span ng-if="ctrl.indicatorType === 'sharedFollowup'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.sharedFollowupIndicator}">
+    <md-icon ng-if="ctrl.record.sharedFollowupIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.sharedFollowupIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.sharedFollowupIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.sharedFollowupIndicator.tooltip)}}"
+    ></md-icon>
+</span>

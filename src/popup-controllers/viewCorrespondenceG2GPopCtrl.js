@@ -160,11 +160,11 @@ module.exports = function (app) {
         };
 
         self.displayMainIframeViewer = function () {
-            return (!self.psPDFViewerEnabled || (self.psPDFViewerEnabled && self.isOfficeOnlineViewer(self.viewURL)));
+            return (!self.psPDFViewerEnabled || (self.psPDFViewerEnabled && self.isOfficeOnlineViewer(self.viewURL))) && !self.isLimitedCentralUnitAccess;
         };
 
         self.displayMainPSPDFViewer = function () {
-            return self.psPDFViewerEnabled && !self.isOfficeOnlineViewer(self.viewURL);
+            return self.psPDFViewerEnabled && !self.isOfficeOnlineViewer(self.viewURL) && !self.isLimitedCentralUnitAccess;
         };
 
         self.isOfficeOnlineViewer = function (url) {
@@ -173,6 +173,7 @@ module.exports = function (app) {
 
         self.$onInit = function () {
             self.hideSlowModeToggleButton = self.psPDFViewerEnabled && self.correspondence && self.correspondence.mimeType === 'application/pdf';
+            self.isLimitedCentralUnitAccess = correspondenceService.isLimitedCentralUnitAccess(self.correspondence);
         }
 
 

@@ -16,7 +16,8 @@ module.exports = function (app) {
             .addMenuPermissions('menu_item_document_stamps', function (employee) {
                 var rootEntity = employee.getRootEntity(),
                     globalSettings = rootEntity && rootEntity.getGlobalSettings();
-                if (!rootEntity || !rootEntity.hasPSPDFViewer() || !globalSettings) {
+                if (!rootEntity || !globalSettings ||
+                    (!rootEntity.hasPSPDFViewer() && !rootEntity.returnRootEntity().rootEntity.kwtAlDiyarDigitalEnabled)) {
                     return false;
                 }
                 return globalSettings.isStampModuleEnabled() && employee.hasPermissionTo('MANAGE_STAMPS');
@@ -44,6 +45,10 @@ module.exports = function (app) {
                 return false;
             })
             .addMenuPermissions('menu_item_localization', ['MANAGE_GLOBAL_LOCALIZATION'])
+            .addMenuPermissions('menu_item_external_data_sources', function (employee) {
+                var rootEntity = employee.getRootEntity();
+                return employee.hasPermissionTo('CREATE_EXTERNAL_DATA_SOURCE') && rootEntity.returnRootEntity().rootEntity.importDataSourceStatus;
+            })
             .addMenuPermissions('menu_item_administrators', function (employee) {
                 return employee.isSuperAdmin;
             })
@@ -132,6 +137,10 @@ module.exports = function (app) {
             .addMenuPermission('menu_item_central_archive_ready_to_export', function (employee) {
                 return employee.userOrganization && employee.userOrganization.centralArchive;
             })
+            .addMenuPermission('menu_item_archive_returned', function (employee) {
+                var rootEntity = employee.getRootEntity();
+                return employee.userOrganization && employee.userOrganization.centralArchive && rootEntity.getGlobalSettings().returnToCentralArchive;
+            })
             .end()
             .addMenuPermissionGroup('menu_item_icn_archive')
             .addMenuPermission('menu_item_icn_archive_add', function () {
@@ -155,6 +164,10 @@ module.exports = function (app) {
             .end()
             .addMenuPermissionGroup('menu_item_reports')
             .addMenuPermission('menu_item_reports_statistical_correspondence_report', 'CORRESPONDENCE_REPORT')
+            .addMenuPermission('menu_item_intelligence_search', function (employee) {
+                var rootEntity = employee.getRootEntity().returnRootEntity();
+                return employee.hasPermissionTo('MS_AZURE_COGNITIVE_SEARCH') && rootEntity.isAzureCognitiveSearchEnabled();
+            })
             .addMenuPermission('menu_item_reports_statistical_report', 'CORRESPONDENCE_SITE_REPORT')
             .addMenuPermission('menu_item_reports_documentary_report', 'WORKFLOW_OPERATION_REPORT')
             .addMenuPermission('menu_item_reports_followup_report', 'FOLLOWUP_REPORT')

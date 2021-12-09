@@ -69,7 +69,7 @@
                                             ng-if="ctrl.outgoing.addMethod">
                                         {{lang.outgoing_save_print_barcode}}
                                     </md-button>
-                                    <div ng-if="!ctrl.outgoing.addMethod && !ctrl.editContent">
+                                    <div ng-if="!ctrl.outgoing.addMethod && !ctrl.editContent && ctrl.employeeService.hasPermissionTo('COMPLETE_DRAFT_OUTGOING_DOCUMENTS')">
                                         <md-button
                                                 ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, 'saveAsDraft', true)"
                                                 ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
@@ -79,7 +79,7 @@
                                 </div>
                                 <div layout="row">
                                     <md-button
-                                            ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)"
+                                            ng-if="ctrl.canSaveAndAnnotate()"
                                             ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, 'saveAndInsert', true)"
                                             ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised"
                                             ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
@@ -162,6 +162,16 @@
                                                     simple-view-url="ctrl.simpleViewUrl"
                                                     is-simple-add="ctrl.simpleAdd"></manage-content-directive>
                                             <span flex></span>
+                                            <!-- open document in side view mode -->
+                                            <div class="icon-relative"
+                                                 ng-if="ctrl.action === 'createReply' && !ctrl.outgoing.addMethod">
+                                                <md-button tooltip="{{lang.side_view}}"
+                                                           class="md-raised md-icon-button"
+                                                           ng-click="ctrl.openSideViewDocument($event)"
+                                                           ng-disabled="(!ctrl.documentInformation || !ctrl.outgoing.contentFile) && !ctrl.simpleViewUrl">
+                                                    <md-icon md-svg-icon="view-split-vertical"></md-icon>
+                                                </md-button>
+                                            </div>
                                             <!-- Attachments -->
                                             <div class="icon-relative"
                                                  ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')">

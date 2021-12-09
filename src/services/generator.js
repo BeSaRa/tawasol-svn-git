@@ -777,7 +777,7 @@ module.exports = function (app) {
             modelType = modelType.toLowerCase();
             if (overrideSortingKey)
                 return property + '.' + overrideSortingKey;
-            else if (modelType === 'information' || modelType === 'documenttype' || modelType === 'workflowaction' || modelType === 'senderinfo' ||
+            else if (modelType === 'information' || modelType === 'adminresultrelation' || modelType === 'documenttype' || modelType === 'workflowaction' || modelType === 'senderinfo' ||
                 modelType === 'attachmenttype' || modelType === 'organization' || modelType === 'correspondencesite' || modelType === 'wforganization')
                 return property + '.' + (langService.current === 'ar' ? 'arName' : 'enName');
             else if (modelType === 'lookup')

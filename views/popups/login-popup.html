@@ -30,7 +30,7 @@
             <div layout="row">
                 <md-input-container flex>
                     <input name="username" md-autofocus required ng-model="login.credentials.username"
-                           placeholder="{{lang.username}}">
+                           placeholder="{{lang.username}}" dir="ltr">
                     <div ng-messages="login_form.username.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
@@ -38,9 +38,16 @@
             </div>
             <div layout="row">
                 <md-input-container flex>
-                    <input type="password" name="password" caps-lock-detection-directive required
-                           ng-model="login.credentials.password"
-                           placeholder="{{lang.password}}">
+                    <input type="{{login.passwordField.type}}" name="password" caps-lock-detection-directive required
+                           ng-model="login.credentials.password" class="input-btn-overlay-padding"
+                           placeholder="{{lang.password}}" dir="ltr">
+                    <md-button ng-click="login.toggleShowPassword($event)"
+                               tabindex="-1"
+                               class="cms-input-overlay-button md-icon-button"
+                               tooltip="{{lang[login.passwordField.langKey]}}"
+                               tooltip-direction="{{lang.current === 'en' ? 'left' : 'right'}}"">
+                        <md-icon md-svg-icon="{{login.passwordField.icon}}"></md-icon>
+                    </md-button>
                     <div ng-messages="login_form.password.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>

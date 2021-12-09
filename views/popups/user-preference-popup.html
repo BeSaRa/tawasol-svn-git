@@ -24,7 +24,7 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
                                             <div ng-message="ANS">{{lang.arabic_number_space}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 80})}}</div>
                                         </div>
                                     </md-input-container>
                                     <!-- English Full Name -->
@@ -38,7 +38,7 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
                                             <div ng-message="ENS">{{lang.english_number_space}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 80})}}</div>
                                         </div>
                                     </md-input-container>
                                 </div>
@@ -68,7 +68,7 @@
                                         <div ng-messages="userPreferencesForm.domainName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:50})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 50})}}</div>
                                             <div ng-message="FILE_NET_USER">{{lang.english_number}}</div>
                                         </div>
                                     </md-input-container>
@@ -93,11 +93,11 @@
                                         <input name="employeeNo" id="employeeNo" required
                                                ng-disabled="true" ng-readonly="true"
                                                ng-model="ctrl.applicationUser.employeeNo" maxlength="10"
-                                               custom-validate-directive="number">
+                                               custom-validate-directive="EN">
                                         <div ng-messages="userPreferencesForm.employeeNo.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
-                                            <div ng-message="number">{{lang.numberonly}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:10})}}</div>
+                                            <div ng-message="EN">{{lang.english_number}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 10})}}</div>
                                         </div>
                                     </md-input-container>
                                     <!-- Qatari Id -->
@@ -110,7 +110,7 @@
                                         <div ng-messages="userPreferencesForm.qid.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="number">{{lang.numberonly}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:11})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 11})}}</div>
                                         </div>
                                     </md-input-container>
                                 </div>
@@ -193,7 +193,7 @@
                                             <div ng-message="email">
                                                 {{lang.invalid_email}}
                                             </div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:50})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 50})}}</div>
                                         </div>
                                     </md-input-container>
                                     <!-- Mobile Number -->
@@ -205,9 +205,9 @@
                                         <div ng-messages="userPreferencesForm.mobile.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="phone_mobile">
-                                                {{lang.invalid_phone_mobile.change({phonemob:lang.mobile})}}
+                                                {{lang.invalid_phone_mobile.change({phonemob: lang.mobile})}}
                                             </div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:15})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 15})}}</div>
                                         </div>
                                     </md-input-container>
                                     <!-- Registered Mobile Number for OTP -->
@@ -268,11 +268,11 @@
                                                custom-validate-directive="number">
                                         <div ng-messages="userPreferencesForm.searchAmountLimit.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:5})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 5})}}</div>
                                             <div ng-message="number">{{lang.numberonly}}</div>
-                                            <div ng-message="min">{{lang.min_number.change({number:0})}}</div>
+                                            <div ng-message="min">{{lang.min_number.change({number: 0})}}</div>
                                             <div ng-message="max">
-                                                {{lang.max_number.change({number:ctrl.maxRowCount})}}
+                                                {{lang.max_number.change({number: ctrl.maxRowCount})}}
                                             </div>
                                         </div>
                                     </md-input-container>
@@ -286,7 +286,7 @@
                                                 {{lang[viewType.key]}}
                                             </md-option>
                                         </md-select>
-                                        <div ng-messages="applicationUserForm.viewInboxAsGrid.$error">
+                                        <div ng-messages="userPreferencesForm.viewInboxAsGrid.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
@@ -328,8 +328,8 @@
                                                custom-validate-directive="number">
                                         <div ng-messages="userPreferencesForm.inboxRefreshInterval.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
-                                            <div ng-message="min">{{lang.min_number.change({number:4})}}</div>
-                                            <div ng-message="max">{{lang.max_number.change({number:61})}}</div>
+                                            <div ng-message="min">{{lang.min_number.change({number: 4})}}</div>
+                                            <div ng-message="max">{{lang.max_number.change({number: 61})}}</div>
                                             <div ng-message="number">{{lang.numberonly}}</div>
                                         </div>
                                     </md-input-container>
@@ -352,6 +352,36 @@
                                             </md-option>
                                         </md-select>
                                         <div ng-messages="userPreferencesForm.defaultOUID.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <!-- Search Default View -->
+                                    <md-input-container flex>
+                                        <label for="searchDefaultView">{{lang.search_default_view}}</label>
+                                        <md-select id="searchDefaultView" name="searchDefaultView" required
+                                                   ng-model="ctrl.applicationUser.searchDefaultView">
+                                            <md-option ng-value="searchDefaultView.lookupKey"
+                                                       ng-repeat="searchDefaultView in ctrl.searchDefaultViewList track by $index">
+                                                {{searchDefaultView.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="userPreferencesForm.searchDefaultView.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <!-- userWFDistView -->
+                                    <md-input-container flex>
+                                        <label for="userWFDistView">{{lang.sort_ous_based_on}}</label>
+                                        <md-select id="userWFDistView" name="userWFDistView" required
+                                                   ng-model="ctrl.applicationUser.userWFDistView">
+                                            <md-option ng-value="userWFDistView.lookupKey"
+                                                       ng-repeat="userWFDistView in ctrl.userDistWFViewList track by $index">
+                                                {{userWFDistView.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="userPreferencesForm.userWFDistView.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
@@ -408,7 +438,8 @@
                                         </md-switch>
                                     </legend>
                                     <div class="full-width-fieldset">
-                                        <span class="red-text" ng-if="!ctrl.globalSetting.enableSMSNotification">{{lang.setting_disabled_by_admin}}</span>
+                                        <span class="red-text"
+                                              ng-if="!ctrl.globalSetting.enableSMSNotification">{{lang.setting_disabled_by_admin}}</span>
                                         <!-- New Item SMS and Priority -->
                                         <div layout="row">
                                             <!-- New Item SMS -->
@@ -437,7 +468,7 @@
                                                 <div ng-messages="userPreferencesForm.newItemSmspriority.$error">
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                     <div ng-message="number">{{lang.numberonly}}</div>
-                                                    <div ng-message="maxlength">{{lang.max_length.change({length:5})}}
+                                                    <div ng-message="maxlength">{{lang.max_length.change({length: 5})}}
                                                     </div>
                                                 </div>
                                             </md-input-container>
@@ -470,7 +501,7 @@
                                                 <div ng-messages="userPreferencesForm.deadlineSmspriority.$error">
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                     <div ng-message="number">{{lang.numberonly}}</div>
-                                                    <div ng-message="maxlength">{{lang.max_length.change({length:5})}}
+                                                    <div ng-message="maxlength">{{lang.max_length.change({length: 5})}}
                                                     </div>
                                                 </div>
                                             </md-input-container>
@@ -507,7 +538,7 @@
                                                         <div ng-message="required">{{lang.field_required}}</div>
                                                         <div ng-message="number">{{lang.numberonly}}</div>
                                                         <div ng-message="maxlength">
-                                                            {{lang.max_length.change({length:5})}}
+                                                            {{lang.max_length.change({length: 5})}}
                                                         </div>
                                                     </div>
                                                 </md-input-container>
@@ -524,7 +555,7 @@
                                                         <div ng-message="required">{{lang.field_required}}</div>
                                                         <div ng-message="number">{{lang.numberonly}}</div>
                                                         <div ng-message="maxlength">
-                                                            {{lang.max_length.change({length:5})}}
+                                                            {{lang.max_length.change({length: 5})}}
                                                         </div>
                                                     </div>
                                                 </md-input-container>
@@ -545,7 +576,8 @@
                                         </md-switch>
                                     </legend>
                                     <div class="full-width-fieldset">
-                                        <span class="red-text" ng-if="!ctrl.globalSetting.enableEmailNotification">{{lang.setting_disabled_by_admin}}</span>
+                                        <span class="red-text"
+                                              ng-if="!ctrl.globalSetting.enableEmailNotification">{{lang.setting_disabled_by_admin}}</span>
                                         <!-- New Item Email and Priority -->
                                         <div layout="row">
                                             <!-- New Item Email -->
@@ -575,7 +607,7 @@
                                                 <div ng-messages="userPreferencesForm.newItemEmailPriority.$error">
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                     <div ng-message="number">{{lang.numberonly}}</div>
-                                                    <div ng-message="maxlength">{{lang.max_length.change({length:5})}}
+                                                    <div ng-message="maxlength">{{lang.max_length.change({length: 5})}}
                                                     </div>
                                                 </div>
                                             </md-input-container>
@@ -609,7 +641,7 @@
                                                 <div ng-messages="userPreferencesForm.deadlineEmailPriority.$error">
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                     <div ng-message="number">{{lang.numberonly}}</div>
-                                                    <div ng-message="maxlength">{{lang.max_length.change({length:5})}}
+                                                    <div ng-message="maxlength">{{lang.max_length.change({length: 5})}}
                                                     </div>
                                                 </div>
                                             </md-input-container>
@@ -646,7 +678,7 @@
                                                         <div ng-message="required">{{lang.field_required}}</div>
                                                         <div ng-message="number">{{lang.numberonly}}</div>
                                                         <div ng-message="maxlength">
-                                                            {{lang.max_length.change({length:5})}}
+                                                            {{lang.max_length.change({length: 5})}}
                                                         </div>
                                                     </div>
                                                 </md-input-container>
@@ -664,11 +696,34 @@
                                                         <div ng-message="required">{{lang.field_required}}</div>
                                                         <div ng-message="number">{{lang.numberonly}}</div>
                                                         <div ng-message="maxlength">
-                                                            {{lang.max_length.change({length:5})}}
+                                                            {{lang.max_length.change({length: 5})}}
                                                         </div>
                                                     </div>
                                                 </md-input-container>
                                             </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <!-- Seq WF Notification -->
+                                <fieldset>
+                                    <legend class="md-accent">{{lang.sequential_workflow}}</legend>
+                                    <div class="full-width-fieldset">
+                                        <div layout="row">
+                                            <md-input-container flex>
+                                                <label for="seqWFEmailSettings">{{lang.email_notification}}</label>
+                                                <md-select multiple name="seqWFEmailSettings" id="seqWFEmailSettings"
+                                                           ng-model-options="{trackBy: '$value.lookupKey'}"
+                                                           ng-model="ctrl.applicationUser.seqWFEmailSettings">
+                                                    <md-option ng-value="option"
+                                                               ng-repeat="option in ctrl.seqWFEmailSettingsList">
+                                                        {{option.getTranslatedName()}}
+                                                    </md-option>
+                                                </md-select>
+                                                <div ng-messages="userPreferencesForm.seqWFEmailSettings.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                </div>
+                                            </md-input-container>
+                                            <md-input-container flex></md-input-container>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -682,141 +737,212 @@
                             <ng-form name="outOfOfficeSettingsForm" autocomplete="off">
                                 <div layout="column">
                                     <!-- Out of Office -->
-                                        <div class="full-width-fieldset">
-                                            <div layout="row">
-                                                <!-- Out Of Office -->
-                                                <md-switch flex ng-model="ctrl.applicationUser.outOfOffice"
-                                                           aria-label="{{lang.out_of_office_toggle_button}}"
-                                                           ng-change="ctrl.changeOutOfOffice()">
-                                                    <label>{{ctrl.ouApplicationUser.getOutOffOfficeTranslatedStatus(ctrl.applicationUser.outOfOffice)}}</label>
-                                                </md-switch>
-                                            </div>
-                                            <div layout="row">
-                                                <!-- User On Behalf / Proxy User -->
-                                                <!--<md-input-container flex>
-                                                    <label>{{lang.user_on_behalf}}</label>
-                                                    <md-select name="proxyUser" id="proxyUser"
-                                                               ng-required="ctrl.isOutOfOffice"
-                                                               ng-disabled="!ctrl.isOutOfOffice"
-                                                               md-selected-text="ctrl.getSelectedDelegatedUserText()"
-                                                               ng-model-options="{trackBy:'$value.id'}"
-                                                               ng-model="ctrl.selectedProxyUser">
-                                                        <md-option
-                                                                ng-if="!ctrl.currentUser(proxyUser)"
-                                                                ng-repeat="proxyUser in ctrl.availableProxies track by $index"
-                                                                ng-value="proxyUser">
-                                                            {{proxyUser.getTranslatedName()}}
-                                                        </md-option>
-                                                    </md-select>
-                                                    <div ng-messages="outOfOfficeSettingsForm.proxyUser.$error">
-                                                        <div ng-message="required">{{lang.field_required}}</div>
-                                                    </div>
-                                                </md-input-container>-->
-
-                                                <!-- User On Behalf / Proxy User -->
-                                                <md-autocomplete flex md-input-name="proxyUser" md-input-id="proxyUser"
-                                                                 md-no-cache="true"
-                                                                 md-clear-button="true"
-                                                                 md-selected-item="ctrl.selectedProxyUser"
-                                                                 md-search-text-change="ctrl.proxyUserSearch(ctrl.searchTextProxyUser)"
-                                                                 md-search-text="ctrl.searchTextProxyUser"
-                                                                 md-selected-item-change="ctrl.selectedProxyUserChange(item)"
-                                                                 md-items="item in ctrl.proxyUserSearch(ctrl.searchTextProxyUser)"
-                                                                 md-item-text="item.getTranslatedName()"
-                                                                 md-min-length="0"
-                                                                 md-require-match
-                                                                 md-floating-label="{{lang.user_on_behalf}}">
-                                                    <md-item-template>
+                                    <div class="full-width-fieldset">
+                                        <div layout="row">
+                                            <!-- Out Of Office -->
+                                            <md-switch ng-model="ctrl.applicationUser.outOfOffice"
+                                                       aria-label="{{lang.out_of_office_toggle_button}}"
+                                                       ng-change="ctrl.changeOutOfOffice()">
+                                                <label>{{ctrl.ouApplicationUser.getOutOffOfficeTranslatedStatus(ctrl.applicationUser.outOfOffice)}}</label>
+                                            </md-switch>
+                                            <span flex></span>
+                                        </div>
+                                        <div layout="row" ng-if="ctrl.isManagerOfCurrentOu">
+                                            <!-- Organizations -->
+                                            <md-input-container flex>
+                                                <label for="organization">{{lang.organization_unit}}</label>
+                                                <md-select id="organization" name="organization" required
+                                                           ng-change="ctrl.getProxyUsersByOU($event, false)"
+                                                           aria-label="{{lang.organization_unit}}"
+                                                           ng-model="ctrl.selectedOrganization"
+                                                           md-on-close="ctrl.clearSearchText('inlineOU')"
+                                                           data-md-container-class="select-header-container sticky-search-bar">
+                                                    <md-select-header class="select-header">
+                                                        <input ng-model="ctrl.inlineOUSearchText"
+                                                               ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                               placeholder="{{lang.search}}"
+                                                               class="select-header-input">
+                                                    </md-select-header>
+                                                    <md-option ng-value="null">{{lang.none}}</md-option>
+                                                    <md-option
+                                                            ng-repeat="organization in ctrl.proxyOrganizations | translatedNameFilter: ctrl.inlineOUSearchText : 'getNameByLanguageRegOUSection'"
+                                                            ng-value="organization.id">
+                                                        <span md-highlight-text="ctrl.inlineOUSearchText"
+                                                              md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
+                                                    </md-option>
+                                                </md-select>
+                                                <md-button ng-if="ctrl.selectedOrganization"
+                                                           ng-click="ctrl.getProxyUsersByOU($event, true)"
+                                                           class="md-icon-button cms-select-overlay-button">
+                                                    <md-icon md-svg-icon="close"></md-icon>
+                                                </md-button>
+                                                <div ng-messages="outOfOfficeSettingsForm.organization.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                </div>
+                                            </md-input-container>
+                                            <!-- Users -->
+                                            <md-input-container flex>
+                                                <label for="selectedProxyUser">{{lang.user_on_behalf}}</label>
+                                                <md-select name="selectedProxyUser" id="selectedProxyUser"
+                                                           ng-required="ctrl.selectedOrganization"
+                                                           ng-disabled="!ctrl.selectedOrganization"
+                                                           ng-change="ctrl.selectedProxyUserChange(ctrl.selectedProxyUser)"
+                                                           aria-label="{{lang.user_on_behalf}}"
+                                                           ng-model="ctrl.selectedProxyUser"
+                                                           ng-model-options="{trackBy: '$value.id'}"
+                                                           md-on-close="ctrl.clearSearchText('inlineAppUser')"
+                                                           data-md-container-class="select-header-container sticky-search-bar">
+                                                    <md-select-header class="select-header">
+                                                        <input ng-model="ctrl.inlineAppUserSearchText"
+                                                               ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                               placeholder="{{lang.search}}"
+                                                               class="select-header-input">
+                                                    </md-select-header>
+                                                    <md-option ng-if="!ctrl.isCurrentUser(user)"
+                                                               ng-value="user"
+                                                               ng-disabled="user.applicationUser.outOfOffice"
+                                                               tooltip="{{user.applicationUser.outOfOffice ? lang.out_of_office : ''}}"
+                                                               ng-repeat="user in ctrl.proxyUsers | translatedNameFilter: ctrl.inlineAppUserSearchText: 'getTranslatedApplicationUserName'">
+                                                       <span md-highlight-text="ctrl.inlineAppUserSearchText"
+                                                             md-highlight-flags="i">{{user.getTranslatedApplicationUserName()}}</span>
+                                                    </md-option>
+                                                </md-select>
+                                                <div ng-messages="outOfOfficeSettingsForm.selectedProxyUser.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                </div>
+                                            </md-input-container>
+                                        </div>
+                                        <div layout="row">
+                                            <!-- User On Behalf / Proxy User -->
+                                            <md-autocomplete flex md-input-name="proxyUser" md-input-id="proxyUser"
+                                                             md-no-cache="true"
+                                                             md-clear-button="true"
+                                                             md-selected-item="ctrl.selectedProxyUser"
+                                                             md-search-text-change="ctrl.availableProxyUserSearch(ctrl.searchTextProxyUser)"
+                                                             md-search-text="ctrl.searchTextProxyUser"
+                                                             md-selected-item-change="ctrl.selectedProxyUserChange(item)"
+                                                             md-items="item in ctrl.availableProxyUserSearch(ctrl.searchTextProxyUser)"
+                                                             md-item-text="item.getTranslatedName()"
+                                                             md-min-length="0"
+                                                             md-require-match
+                                                             md-floating-label="{{lang.user_on_behalf}}"
+                                                             ng-if="!ctrl.isManagerOfCurrentOu">
+                                                <md-item-template>
                                                         <span md-highlight-text="ctrl.searchTextProxyUser"
-                                                              tooltip="{{item.getTranslatedName()}}"
+                                                              tooltip="{{item.applicationUser.outOfOffice ? lang.out_of_office : item.getTranslatedName()}}"
                                                               md-highlight-flags="i">{{item.getTranslatedName()}}</span>
-                                                    </md-item-template>
-                                                    <md-not-found>
-                                                        {{lang.no_records_found_matching_search}}
-                                                    </md-not-found>
-                                                    <div ng-messages="outOfOfficeSettingsForm.proxyUser.$error">
-                                                        <div ng-message="required">{{lang.field_required}}</div>
-                                                        <div ng-message="md-require-match">{{lang.field_required}}</div>
-                                                    </div>
-                                                </md-autocomplete>
+                                                </md-item-template>
+                                                <md-not-found>
+                                                    {{lang.no_records_found_matching_search}}
+                                                </md-not-found>
+                                                <div ng-messages="outOfOfficeSettingsForm.proxyUser.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                    <div ng-message="md-require-match">{{lang.field_required}}</div>
+                                                </div>
+                                            </md-autocomplete>
 
-                                                <!-- Authority Levels -->
-                                                <md-input-container flex>
-                                                    <label for="proxyAuthorityLevels">{{lang.authority_level}}</label>
-                                                    <md-select multiple name="proxyAuthorityLevels"
-                                                               ng-required="ctrl.filteredSecurityLevels.length"
-                                                               ng-disabled="!ctrl.filteredSecurityLevels.length"
-                                                               id="proxyAuthorityLevels"
-                                                               ng-model="ctrl.ouApplicationUser.proxyAuthorityLevels"
-                                                               ng-model-options="{trackBy: '$value.id'}">
-                                                        <md-option
-                                                                ng-repeat="securityLevel in ctrl.filteredSecurityLevels track by $index"
-                                                                ng-value="securityLevel">
-                                                            {{securityLevel.getTranslatedName()}}
-                                                        </md-option>
-                                                    </md-select>
-                                                    <div ng-messages="outOfOfficeSettingsForm.proxyAuthorityLevels.$error">
-                                                        <div ng-message="required">{{lang.field_required}}</div>
-                                                    </div>
-                                                </md-input-container>
-                                            </div>
-                                            <div layout="row">
-                                                <!-- Start Date -->
-                                                <md-input-container flex class="cms-datepicker">
-                                                    <label for="proxyStartDate">{{lang.start_date}}</label>
-                                                    <md-datepicker id="proxyStartDate" name="proxyStartDate"
+                                            <!-- Authority Levels -->
+                                            <md-input-container flex>
+                                                <label for="proxyAuthorityLevels">{{lang.authority_level}}</label>
+                                                <md-select multiple name="proxyAuthorityLevels"
+                                                           ng-required="ctrl.selectedProxyUser"
+                                                           ng-disabled="!ctrl.filteredSecurityLevels.length"
+                                                           id="proxyAuthorityLevels"
+                                                           ng-model="ctrl.ouApplicationUser.proxyAuthorityLevels"
+                                                           ng-model-options="{trackBy: '$value.id'}">
+                                                    <md-option
+                                                            ng-repeat="securityLevel in ctrl.filteredSecurityLevels track by $index"
+                                                            ng-value="securityLevel">
+                                                        {{securityLevel.getTranslatedName()}}
+                                                    </md-option>
+                                                </md-select>
+                                                <div ng-messages="outOfOfficeSettingsForm.proxyAuthorityLevels.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                </div>
+                                            </md-input-container>
+                                            <span flex ng-if="ctrl.isManagerOfCurrentOu"></span>
+                                        </div>
+                                        <div layout="row">
+                                            <!-- Start Date -->
+                                            <md-input-container flex>
+                                                <label for="proxyStartDate">{{lang.start_date}}</label>
+                                                <input id="proxyStartDate" name="proxyStartDate"
+                                                       ng-required="ctrl.applicationUser.outOfOffice || ctrl.ouApplicationUser.proxyEndDate"
+                                                       ng-model="ctrl.ouApplicationUser.proxyStartDateString"
+                                                       readonly="true">
+                                                <md-button class="md-icon-button cms-input-overlay-button"
+                                                           ng-click="ctrl.openProxyStartDatePicker()">
+                                                    <md-icon md-svg-icon="calendar"></md-icon>
+                                                </md-button>
+                                                <md-input-container flex
+                                                                    class="cms-datepicker cms-datepicker-invisible">
+                                                    <md-datepicker id="proxyStartDate_dp" name="proxyStartDate"
                                                                    ng-required="ctrl.applicationUser.outOfOffice || ctrl.ouApplicationUser.proxyEndDate"
                                                                    md-min-date="ctrl.today"
                                                                    ng-model="ctrl.ouApplicationUser.proxyStartDate"
                                                                    ng-change="ctrl.getMinProxyEndDate()"
-                                                                   md-max-date="ctrl.calculatedMaxProxyStartDate"></md-datepicker>
-                                                    <!--md-max-date="ctrl.ouApplicationUser.proxyEndDate"-->
-                                                    <div ng-messages="outOfOfficeSettingsForm.proxyStartDate.$error">
-                                                        <div ng-message="required">{{lang.field_required}}</div>
-                                                    </div>
+                                                                   md-max-date="ctrl.calculatedMaxProxyStartDate"
+                                                                   md-is-open="ctrl.isProxyStartDateOpen"></md-datepicker>
                                                 </md-input-container>
-
-                                                <!-- End Date -->
-                                                <md-input-container flex class="cms-datepicker">
-                                                    <label for="proxyEndDate">{{lang.end_date}}</label>
-                                                    <md-datepicker id="proxyEndDate" name="proxyEndDate"
+                                                <!--md-max-date="ctrl.ouApplicationUser.proxyEndDate"-->
+                                                <div ng-messages="outOfOfficeSettingsForm.proxyStartDate.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                </div>
+                                            </md-input-container>
+                                            <!-- End Date -->
+                                            <md-input-container flex>
+                                                <label for="proxyEndDate">{{lang.end_date}}</label>
+                                                <input id="proxyEndDate" name="proxyEndDate"
+                                                       ng-required="ctrl.applicationUser.outOfOffice || ctrl.ouApplicationUser.proxyStartDate"
+                                                       ng-model="ctrl.ouApplicationUser.proxyEndDateString"
+                                                       readonly="true">
+                                                <md-button class="md-icon-button cms-input-overlay-button"
+                                                           ng-disabled="!ctrl.ouApplicationUser.proxyStartDate"
+                                                           ng-click="ctrl.openProxyEndDatePicker()">
+                                                    <md-icon md-svg-icon="calendar"></md-icon>
+                                                </md-button>
+                                                <md-input-container flex
+                                                                    class="cms-datepicker cms-datepicker-invisible">
+                                                    <md-datepicker id="proxyEndDate_dp" name="proxyEndDate"
                                                                    ng-required="ctrl.applicationUser.outOfOffice || ctrl.ouApplicationUser.proxyStartDate"
                                                                    ng-model="ctrl.ouApplicationUser.proxyEndDate"
                                                                    md-min-date="ctrl.calculatedMinProxyEndDate"
                                                                    ng-change="ctrl.getMaxProxyStartDate()"
-                                                                   ng-disabled="!ctrl.ouApplicationUser.proxyStartDate"></md-datepicker>
-                                                    <!--md-min-date="ctrl.ouApplicationUser.proxyStartDate"-->
-                                                    <div ng-messages="outOfOfficeSettingsForm.proxyEndDate.$error">
-                                                        <div ng-message="required">{{lang.field_required}}</div>
-                                                    </div>
+                                                                   md-is-open="ctrl.isProxyEndDateOpen"></md-datepicker>
                                                 </md-input-container>
-                                            </div>
-                                            <div layout="row">
-                                                <!-- View Proxy Message -->
-                                                <md-switch flex ng-model="ctrl.ouApplicationUser.viewProxyMessage"
-                                                           aria-label="{{lang.view_message_to_sender}}">
-                                                    <label>{{lang.view_message_to_sender}} :
-                                                        {{ctrl.ouApplicationUser.getTranslatedViewMessageToSender()}}</label>
-                                                </md-switch>
-                                                <!-- Out of office Message -->
-                                                <md-input-container flex
-                                                                    ng-if="ctrl.ouApplicationUser.viewProxyMessage">
-                                                    <label for="proxyMessage">{{lang.out_of_office_message}}</label>
-                                                    <textarea ng-model="ctrl.ouApplicationUser.proxyMessage"
-                                                              name="proxyMessage" id="proxyMessage" minlength="2"
-                                                              maxlength="265" required
-                                                              ng-required="ctrl.ouApplicationUser.viewProxyMessage">
-                                            </textarea>
-                                                    <div ng-messages="outOfOfficeSettingsForm.proxyMessage.$error">
-                                                        <div ng-message="required">{{lang.field_required}}</div>
-                                                        <div ng-message="minlength">{{lang.short}}</div>
-                                                        <div ng-message="maxlength">
-                                                            {{lang.max_length.change({length:300})}}
-                                                        </div>
-                                                    </div>
-                                                </md-input-container>
-                                            </div>
+                                                <!--md-min-date="ctrl.ouApplicationUser.proxyStartDate"-->
+                                                <div ng-messages="outOfOfficeSettingsForm.proxyEndDate.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                </div>
+                                            </md-input-container>
                                         </div>
+                                        <div layout="row">
+                                            <!-- View Proxy Message -->
+                                            <md-switch flex ng-model="ctrl.ouApplicationUser.viewProxyMessage"
+                                                       aria-label="{{lang.view_message_to_sender}}"
+                                                       ng-change="ctrl.resetProxyMessage($event)">
+                                                <label>{{lang.view_message_to_sender}} :
+                                                    {{ctrl.ouApplicationUser.getTranslatedViewMessageToSender()}}</label>
+                                            </md-switch>
+                                            <!-- Out of office Message -->
+                                            <md-input-container flex
+                                                                ng-if="ctrl.ouApplicationUser.viewProxyMessage">
+                                                <label for="proxyMessage">{{lang.out_of_office_message}}</label>
+                                                <textarea ng-model="ctrl.ouApplicationUser.proxyMessage"
+                                                          name="proxyMessage" id="proxyMessage" minlength="2"
+                                                          maxlength="265" required
+                                                          ng-required="ctrl.ouApplicationUser.viewProxyMessage">
+                                            </textarea>
+                                                <div ng-messages="outOfOfficeSettingsForm.proxyMessage.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                    <div ng-message="minlength">{{lang.short}}</div>
+                                                    <div ng-message="maxlength">
+                                                        {{lang.max_length.change({length: 300})}}
+                                                    </div>
+                                                </div>
+                                            </md-input-container>
+                                        </div>
+                                    </div>
                                 </div>
                             </ng-form>
                         </md-content>
@@ -999,7 +1125,8 @@
                                                             </th>
                                                             <th ng-if="!ctrl.selectedUserWorkflowGroups.length"
                                                                 md-column
-                                                                md-order-by="wfgroup.itemOrder"><span>{{lang.item_order}}</span>
+                                                                md-order-by="wfgroup.itemOrder">
+                                                                <span>{{lang.item_order}}</span>
                                                             </th>
                                                         </tr>
                                                         </thead>
@@ -1049,7 +1176,8 @@
                         </md-content>
                     </md-tab>
                     <!-- User Folders -->
-                    <md-tab label="{{lang.folders}}" ng-if="ctrl.showTab('folders')"
+                    <md-tab label="{{lang.folders}}"
+                            ng-if="ctrl.showTab('folders') && ctrl.employee.hasPermissionTo('FOLDERS_QUEUE')"
                             md-on-select="ctrl.setCurrentTab('folders')">
                         <md-content class="md-padding">
                             <div>
@@ -1111,7 +1239,7 @@
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                     <div ng-message="minlength">{{lang.short}}</div>
                                                     <div ng-message="maxlength">
-                                                        {{lang.max_length.change({length:80})}}
+                                                        {{lang.max_length.change({length: 80})}}
                                                     </div>
                                                 </div>
                                             </md-input-container>
@@ -1124,7 +1252,7 @@
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                     <div ng-message="minlength">{{lang.short}}</div>
                                                     <div ng-message="maxlength">
-                                                        {{lang.max_length.change({length:80})}}
+                                                        {{lang.max_length.change({length: 80})}}
                                                     </div>
                                                 </div>
                                             </md-input-container>
@@ -1359,8 +1487,11 @@
                                                            custom-validate-directive="ENSS" maxlength="15">
                                                     <div ng-messages="certificateForm.pinCode.$error">
                                                         <div ng-message="required">{{lang.field_required}}</div>
-                                                        <div ng-message="ENSS">{{lang.english_number_special_char}}</div>
-                                                        <div ng-message="maxlength">{{lang.max_length.change({length:15})}}</div>
+                                                        <div ng-message="ENSS">{{lang.english_number_special_char}}
+                                                        </div>
+                                                        <div ng-message="maxlength">
+                                                            {{lang.max_length.change({length: 15})}}
+                                                        </div>
                                                     </div>
                                                 </md-input-container>
                                                 <div>
@@ -1423,10 +1554,11 @@
                    ng-click="ctrl.editApplicationUserFromCtrl()">{{lang.save}}
         </md-button>
         <md-button class="md-raised md-primary"
-                   ng-disabled="outOfOfficeSettingsForm.$invalid || ctrl.checkIfEmptyProxyUserChanged()"
+                   ng-disabled="ctrl.isOutOfOfficeSaveDisabled()"
                    ng-if="ctrl.selectedTab==='outOfOfficeSettings'"
                    ng-click="ctrl.saveOutOfOfficeSettingsFromCtrl()">{{lang.save}}
         </md-button>
+        <!--outOfOfficeSettingsForm.$invalid || ctrl.checkIfEmptyProxyUserChanged()"-->
         <md-button class="md-raised red-text" ng-click="ctrl.closeUserPreferencePopupFromCtrl()">
             {{lang.close}}
         </md-button>

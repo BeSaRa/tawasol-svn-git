@@ -19,7 +19,9 @@ module.exports = function (app) {
                                                            attachmentService,
                                                            correspondenceService,
                                                            employeeService,
+                                                           userExternalDataSourceService,
                                                            $timeout,
+                                                           toast,
                                                            validationService,
                                                            documentTemplateService,
                                                            $stateParams) {
@@ -34,12 +36,15 @@ module.exports = function (app) {
         self.document = null;
         self.editContent = false;
         self.propertyConfigurations = [];
+        self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
 
         self.required = {};
 
         self.isDefaultEditModeBoth = (employeeService.getEmployee().getDefaultEditMode() === correspondenceService.documentEditModes.desktopOfficeOnline);
 
         self.simpleViewUrl = null;
+        self.viewUrl = null;
+        self.isLimitedCentralUnitAccess = false;
 
         LangWatcher($scope);
 
@@ -160,7 +165,8 @@ module.exports = function (app) {
                             if (information) {
                                 self.lastTemplate = information;
                                 self.signaturesCount = 1;
-                                return $sce.trustAsResourceUrl(information.viewURL);
+                                self.viewUrl = $sce.trustAsResourceUrl(information.viewURL);
+                                return self.viewUrl;
                             }
                             self.model = angular.copy(self.document);
                             self.model.classDescription = self.document.docClassName;
@@ -169,7 +175,8 @@ module.exports = function (app) {
                                 .then(function (result) {
                                     self.lastTemplate = result;
                                     self.signaturesCount = self.template.signaturesCount;
-                                    return $sce.trustAsResourceUrl(result.viewURL);
+                                    self.viewUrl = $sce.trustAsResourceUrl(result.viewURL);
+                                    return self.viewUrl;
                                 });
                         }
                     }
@@ -178,6 +185,7 @@ module.exports = function (app) {
                     if (result) {
                         self.documentInformation = self.lastTemplate;
                         self.templateOrFileName = templateOrFileName;
+                        self.document.isOfficial = false;
                         if (self.vsId && !self.fromDialog) {
                             correspondenceService
                                 .updateCorrespondenceWithContent(self.document, self.documentInformation)
@@ -201,6 +209,29 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Checks whether to show/hide import from external data source button
+         * @returns {boolean|*}
+         */
+        self.canShowImportFromExDataSource = function (document) {
+            if (!self.isImportFromExDataSourceAllowed) {
+                return false;
+            }
+            return !self.displayPrepare && !self.receiveDocument && document.getInfo().isPaper;
+        };
+
+        self.isOfficialDisabled = function () {
+            if (!self.psPDFViewerEnabled || !self.document.externalImportData) {
+                return true;
+            }
+            if (!self.document.vsId) {
+                return false;
+            }
+            // if new document, switch is enabled, otherwise check for permission
+            return !employeeService.hasPermissionTo('SIGN_OFFICIAL_BOOK');
+
+        };
+
+        /**
          * @description start PrepareCorrespondence Template.
          * @param $event
          */
@@ -220,6 +251,8 @@ module.exports = function (app) {
                     .then(function (template) {
                         self.template = template;
                         self.uploadedCallback && self.uploadedCallback();
+                        self.document.externalImportData = null;
+                        self.document.isOfficial = false;
                         if (self.isSimpleAdd) {
                             return self.getTrustViewUrl(template.getSubjectTitle(), $event);
                         } else {
@@ -234,8 +267,12 @@ module.exports = function (app) {
          * @param element
          */
         self.checkContentFile = function (contentFiles, element) {
+            self.document.externalImportData = null;
+            self.document.isOfficial = false;
+
             if (contentFiles.length) {
                 var info = self.document.getInfo();
+
                 //Electronic Document - only word document is allowed
                 var allowedDocument = "wordDocument";
                 //Paper Document - Check global settings for allowed types
@@ -383,6 +420,9 @@ module.exports = function (app) {
             self.contentFile = self.document.contentFile = null;
             self.isContentFileAttached = false;
             self.simpleViewUrl = null;
+            self.viewUrl = null;
+            self.document.externalImportData = null;
+            self.document.isOfficial = false;
         };
 
 
@@ -394,6 +434,24 @@ module.exports = function (app) {
                     result.file.name = result.file.name + '.pdf';
                     return self.checkContentFile([result.file]);
                 })
+        };
+
+        /**
+         * @description Opens dialog to import from external data sources
+         * @param $event
+         */
+        self.openExternalImportDialog = function ($event) {
+            userExternalDataSourceService.openExternalImportDialog($event)
+                .then(function (importResult) {
+                    if (!importResult) {
+                        return;
+                    }
+                    self.document.contentFile = {}; // set it empty just to pass the condition of showing file name
+                    self.document.externalImportData = importResult
+                    self.isContentFileAttached = true;
+                    self.templateOrFileName = 'external import file';
+                    self.document.isOfficial = true;
+                });
         };
 
         self.showEditContentInEditPopup = function () {
@@ -575,5 +633,28 @@ module.exports = function (app) {
                     return self.simpleViewUrl;
                 });
         };
+
+        function _checkReceiveG2G() {
+            return self.receiveG2g;
+        }
+
+        self.$onInit = function () {
+            self.isImportFromExDataSourceAllowed = false;
+            if (_checkReceiveG2G()) {
+                self.receiveG2GDocumentCopy = angular.copy(self.document);
+                self.receiveG2GDocumentCopy.ou = self.receiveG2gOuId;
+                self.isLimitedCentralUnitAccess = self.receiveG2GDocumentCopy.isLimitedCentralUnitAccess();
+            } else {
+                self.isLimitedCentralUnitAccess = angular.copy(self.document).isLimitedCentralUnitAccess();
+            }
+
+            if (rootEntity.returnRootEntity().rootEntity.importDataSourceStatus) {
+                userExternalDataSourceService.loadActiveUserExternalDataSources()
+                    .then(function (result) {
+                        self.isImportFromExDataSourceAllowed = result.length > 0;
+                        return result;
+                    });
+            }
+        }
     });
 };

@@ -39,7 +39,8 @@
         'ngInject';
         $mdIconProvider
             .defaultIconSet('assets/icon-set/mdi.svg')
-            .icon('add-filter', 'assets/icon-set/add-filter.svg');
+            .icon('add-filter', 'assets/icon-set/add-filter.svg')
+            .icon('import', 'assets/icon-set/import.svg');
         $compileProvider.debugInfoEnabled(false);
         // $qProvider.errorOnUnhandledRejections(false);
     });

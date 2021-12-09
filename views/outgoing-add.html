@@ -28,13 +28,14 @@
                                 {{lang.outgoing_save_print_barcode}}
                             </md-button>
                         </div>
-                        <div ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)">
+                        <div ng-if="ctrl.canSaveAndAnnotate()">
                             <md-button ng-disabled="!ctrl.isSaveValid('saveAndInsert', true)"
                                        ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised">
                                 {{lang.save_and_insert}}
                             </md-button>
                         </div>
-                        <div ng-if="(!ctrl.outgoing.addMethod && ctrl.duplicateVersion) || (!ctrl.outgoing.addMethod && !ctrl.editContent)">
+                        <div ng-if="ctrl.employeeService.hasPermissionTo('COMPLETE_DRAFT_OUTGOING_DOCUMENTS') &&
+                         ((!ctrl.outgoing.addMethod && ctrl.duplicateVersion) || (!ctrl.outgoing.addMethod && !ctrl.editContent))">
                             <md-button ng-disabled="!ctrl.isSaveValid('saveAsDraft', true)"
                                        ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
                                 {{lang.outgoing_save_draft}}
@@ -153,7 +154,19 @@
                                             vs-id="ctrl.outgoing.vsId"
                                             document="ctrl.outgoing"
                                             signatures-count="ctrl.outgoing.signaturesCount"
-                                            templates="ctrl.templates"></manage-content-directive>
+                                            templates="ctrl.templates"
+                                            view-url="ctrl.viewUrl"></manage-content-directive>
+                                    <span flex></span>
+                                    <!-- open document in side view mode -->
+                                    <div class="icon-relative"
+                                         ng-if="ctrl.action === 'createReply' && !ctrl.outgoing.addMethod">
+                                        <md-button tooltip="{{lang.side_view}}"
+                                                   class="md-raised md-icon-button"
+                                                   ng-click="ctrl.openSideViewDocument($event)"
+                                                   ng-disabled="(!ctrl.documentInformation || !ctrl.outgoing.contentFile) && !ctrl.viewUrl">
+                                            <md-icon md-svg-icon="view-split-vertical"></md-icon>
+                                        </md-button>
+                                    </div>
                                 </div>
                             </accordion-content>
                         </accordion-item>
@@ -259,13 +272,14 @@
                                 {{lang.outgoing_save_print_barcode}}
                             </md-button>
                         </div>
-                        <div ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)">
+                        <div ng-if="ctrl.canSaveAndAnnotate()">
                             <md-button ng-disabled="!ctrl.isSaveValid('saveAndInsert', true)"
                                        ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised">
                                 {{lang.save_and_insert}}
                             </md-button>
                         </div>
-                        <div ng-if="(!ctrl.outgoing.addMethod && ctrl.duplicateVersion) || (!ctrl.outgoing.addMethod && !ctrl.editContent)">
+                        <div ng-if="ctrl.employeeService.hasPermissionTo('COMPLETE_DRAFT_OUTGOING_DOCUMENTS') &&
+                                    ((!ctrl.outgoing.addMethod && ctrl.duplicateVersion) || (!ctrl.outgoing.addMethod && !ctrl.editContent))">
                             <md-button ng-disabled="!ctrl.isSaveValid('saveAsDraft', true)"
                                        ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
                                 {{lang.outgoing_save_draft}}

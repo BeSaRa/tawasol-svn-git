@@ -168,7 +168,7 @@ module.exports = function (app) {
 
         function _createNewSearchCriteria() {
             return new GeneralSearch({
-                registryOU: self.employee.getRegistryOUID(),
+                registryOU: self.employee.loginDepartmentSearchView() ? self.employee.getRegistryOUID() : null,
                 originality: 1,
                 year: new Date().getFullYear(),
                 docDateFrom: generator.convertDateToString(new Date(self.maxCreateDate.getFullYear(), 0, 1, 0, 0, 0, 0)),
@@ -1458,6 +1458,14 @@ module.exports = function (app) {
         };
 
         /**
+         * @description add workItem to broadcast FollowUp
+         * @param item
+         */
+        self.addToBroadcastFollowUp = function (item) {
+            item.addToBroadcastFollowUp();
+        };
+
+        /**
          * @description Shows the steps of sequential workflow
          * @param record
          * @param $event
@@ -1653,6 +1661,19 @@ module.exports = function (app) {
                         checkShow: function (action, model) {
                             return true;
                         }
+                    },
+                    // add to broadcast follow up
+                    {
+                        type: 'action',
+                        icon: 'book-search-outline',
+                        text: 'grid_action_to_broadcast_followup',
+                        shortcut: true,
+                        callback: self.addToBroadcastFollowUp,
+                        permissionKey: 'ADMIN_USER_FOLLOWUP_BOOKS',
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     }
                 ]
             },
@@ -1782,7 +1803,10 @@ module.exports = function (app) {
                 class: "action-green",
                 hide: true,
                 checkShow: function (action, model) {
-                    return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION) && !model.isTerminatedSEQ();
+                    return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() &&
+                        employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION) &&
+                        !model.isTerminatedSEQ() &&
+                        !correspondenceService.isLimitedCentralUnitAccess(model);
                 }
             },
             // Print Barcode
@@ -1950,7 +1974,7 @@ module.exports = function (app) {
                         isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
                     }
 
-                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model);
+                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model) && !correspondenceService.isLimitedCentralUnitAccess(model);
                 },
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
@@ -2017,7 +2041,7 @@ module.exports = function (app) {
                 text: 'grid_action_send',
                 shortcut: false,
                 checkShow: function (action, model) {
-                    return gridService.checkToShowMainMenuBySubMenu(action, model);
+                    return gridService.checkToShowMainMenuBySubMenu(action, model) && !correspondenceService.isLimitedCentralUnitAccess(model);
                 },
                 permissionKey: [
                     "SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL",

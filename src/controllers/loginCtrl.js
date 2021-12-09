@@ -46,6 +46,25 @@ module.exports = function (app) {
         // concat public and global announcements
         self.announcements = self.publicAnnouncements.concat(self.globalAnnouncements);
 
+        self.passwordFieldMap = {
+            password: {
+                type: 'password',
+                icon: 'eye',
+                langKey: 'show_hide_password'
+            },
+            text: {
+                type: 'text',
+                icon: 'eye-off',
+                langKey: 'show_hide_password'
+            }
+        };
+        self.passwordField = self.passwordFieldMap.password;
+
+        self.toggleShowPassword = function ($event) {
+            $event.preventDefault();
+            self.passwordField = self.passwordField.type === 'password' ? self.passwordFieldMap.text : self.passwordFieldMap.password;
+        };
+
         function checkIfLogoutBySession() {
             if ($cookies.get(authenticationService.logoutBySessionsKey)) {
                 $cookies.remove(authenticationService.logoutBySessionsKey);

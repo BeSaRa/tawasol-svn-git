@@ -79,6 +79,7 @@ module.exports = function (app) {
                                                    encryptionService,
                                                    AdminResultRelation,
                                                    TawasolStamp,
+                                                   CorrespondenceView,
                                                    TawasolDocument,
                                                    SequentialWFResult) {
         'ngInject';
@@ -89,6 +90,7 @@ module.exports = function (app) {
         util.inherits(Internal, Correspondence);
         util.inherits(Incoming, Correspondence);
         util.inherits(General, Correspondence);
+        util.inherits(CorrespondenceView, Correspondence);
         util.inherits(GeneralStepElementView, WorkItem);
         // for partial export
         util.inherits(PartialExportCollection, PartialExport);
@@ -143,6 +145,12 @@ module.exports = function (app) {
             desktopOfficeOnline: 0,
             officeOnline: 1,
             desktop: 2
+        };
+
+        self.siteTypesStartsMap = {
+            INTERNAL: 1,
+            EXTERNAL: 2,
+            G2G: 3
         };
 
         self.urlServiceByDocumentClass = {
@@ -510,6 +518,19 @@ module.exports = function (app) {
             return false;
         }
 
+        function _getIsOfficial(correspondence) {
+            if (correspondence.hasOwnProperty('generalStepElm')) {
+                return !!correspondence.generalStepElm.isOfficial;
+            } else if (correspondence.hasOwnProperty('stepElm')) {
+                return !!correspondence.stepElm.isOfficial;
+            } else if (correspondence.hasOwnProperty('correspondence')) {
+                return !!correspondence.correspondence.isOfficial;
+            } else if (correspondence.hasOwnProperty('isOfficial')){
+                return !!correspondence.isOfficial;
+            }
+            return false;
+        }
+
         /**
          * @description bulk message for any bulk actions.
          * @param result
@@ -601,7 +622,8 @@ module.exports = function (app) {
                 isAttachment: false,
                 hasActiveSeqWF: _getHasActiveSeqWF(correspondence),
                 signaturesCount: _getSignatureCount(correspondence),
-                authorizeByAnnotation: _getAuthorizeByAnnotation(correspondence)
+                authorizeByAnnotation: _getAuthorizeByAnnotation(correspondence),
+                isOfficial: _getIsOfficial(correspondence)
             });
         };
         /**
@@ -858,6 +880,10 @@ module.exports = function (app) {
          */
         self.saveDocumentContentFile = function (correspondence, content) {
             if (correspondence.hasVsId()) {
+                // if data is imported from external source
+                if (correspondence.externalImportData) {
+                    return self.saveDocumentContentFileFromExternalSource(correspondence);
+                }
                 var form = new FormData();
                 form.append('content', content ? content : correspondence.contentFile);
                 return $http.post(_createUrlSchema(correspondence.vsId, correspondence.docClassName, 'content'), form, {
@@ -865,6 +891,30 @@ module.exports = function (app) {
                         'Content-Type': undefined
                     }
                 })
+                    .then(function (result) {
+                        correspondence.vsId = result.data.rs;
+                        return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
+                    }).catch(function (error) {
+                        if (errorCode.checkIf(error, 'ERROR_UPLOAD_FILE') === true) {
+                            dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
+                            return $q.reject(error);
+                        }
+                        return $q.reject(self.getTranslatedError(error));
+                    });
+            }
+        };
+        /**
+         * @description add content file into document from external source.
+         * @param correspondence
+         */
+        self.saveDocumentContentFileFromExternalSource = function (correspondence) {
+            if (correspondence.hasVsId()) {
+                var url = _createUrlSchema(correspondence.vsId, correspondence.docClassName, 'user-ext-import-store/content')
+                    + '?sourceId=' + correspondence.externalImportData.sourceId
+                    + '&paramValue=' + correspondence.externalImportData.identifier
+                    + '&isOfficial=' + correspondence.isOfficial;
+
+                return $http.put(url, {})
                     .then(function (result) {
                         correspondence.vsId = result.data.rs;
                         return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
@@ -1603,7 +1653,8 @@ module.exports = function (app) {
                             disableCorrespondence: disableCorrespondence,
                             popupNumber: generator.getPopupNumber(),
                             disableEverything: !!departmentIncoming,
-                            pageName: 'none'
+                            pageName: 'none',
+                            reloadCallback: undefined
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1675,7 +1726,8 @@ module.exports = function (app) {
                             disableCorrespondence: true,
                             popupNumber: generator.getPopupNumber(),
                             disableEverything: true,
-                            pageName: 'none'
+                            pageName: 'none',
+                            reloadCallback: undefined
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1752,7 +1804,8 @@ module.exports = function (app) {
                             disableProperties: disableProperties,
                             disableCorrespondence: disableCorrespondence,
                             disableEverything: false,
-                            popupNumber: generator.getPopupNumber()
+                            popupNumber: generator.getPopupNumber(),
+                            reloadCallback: undefined
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1810,7 +1863,8 @@ module.exports = function (app) {
                                 disableCorrespondence: disableCorrespondence,
                                 disableEverything: departmentIncoming,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName: 'none'
+                                pageName: 'none',
+                                reloadCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1872,7 +1926,8 @@ module.exports = function (app) {
                             disableCorrespondence: disableCorrespondence,
                             disableEverything: departmentIncoming,
                             popupNumber: generator.getPopupNumber(),
-                            pageName: 'none'
+                            pageName: 'none',
+                            reloadCallback: undefined
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -2023,6 +2078,54 @@ module.exports = function (app) {
         };
 
         /**
+         * @description open side view document
+         * @param replyTo (attachment or linked document)
+         * @param viewUrl
+         * @param typeOfDoc
+         */
+        self.openSideViewDocument = function (replyTo, viewUrl, typeOfDoc) {
+            var info = typeof replyTo.getInfo === 'function' ? replyTo.getInfo() : _createInstance(replyTo).getInfo();
+            var url = typeOfDoc === 'attachment' ?
+                _createUrlSchema(info.vsId, info.documentClass, 'attachment/with-content') :
+                _createUrlSchema(info.vsId, info.documentClass, 'with-content');
+
+            return $http.get(url)
+                .then(function (result) {
+                    var documentClass = result.data.rs.metaData.classDescription;
+                    result.data.rs.metaData = typeOfDoc === 'attachment' ?
+                        generator.generateInstance(result.data.rs.metaData, Attachment) :
+                        generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
+                    return result.data.rs;
+                })
+                .then(function (result) {
+                    generator.addPopupNumber();
+                    result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                    if (result.content.hasOwnProperty('editURL') && result.content.editURL) {
+                        result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
+                    }
+                    return dialog.showDialog({
+                        templateUrl: cmsTemplate.getPopup('view-document-side-view'),
+                        controller: 'viewDocumentSideViewPopCtrl',
+                        controllerAs: 'ctrl',
+                        bindToController: true,
+                        escapeToCancel: false,
+                        locals: {
+                            document: result.metaData,
+                            content: result.content,
+                            viewUrl: viewUrl,
+                            typeOfDoc: typeOfDoc
+                        }
+                    }).then(function () {
+                        generator.removePopupNumber();
+                        return true;
+                    }).catch(function () {
+                        generator.removePopupNumber();
+                        return false;
+                    });
+                });
+        };
+
+        /**
          * to use it just inside edit after approved.
          * @param information
          * @param justView
@@ -2039,7 +2142,8 @@ module.exports = function (app) {
                     correspondence: false,
                     content: information,
                     popupNumber: generator.getPopupNumber(),
-                    editMode: !justView
+                    editMode: !justView,
+                    reloadCallback: undefined
                 }
             });
         };
@@ -2139,16 +2243,23 @@ module.exports = function (app) {
                 })
         };
 
-        self.broadcasting = function (broadcast, correspondence) {
+        self.broadcasting = function (broadcast, correspondence, broadcastToAll) {
             var info = correspondence.getInfo(), url = [info.documentClass, 'vsid', info.vsId, 'broadcast'];
             // workItem =>  /vsid/{vsid}/wob-num/{wobNum}/broadcast
             // correspondence => /vsid/{vsid}/broadcast
             if (info.isWorkItem()) {
                 url.splice(-1, 0, 'wob-num', info.wobNumber);
             }
-            return $http.put(_createCorrespondenceWFSchema(url), generator.interceptSendInstance('Broadcast', broadcast)).then(function (result) {
-                return result;
-            });
+
+            var requestBody = generator.interceptSendInstance('Broadcast', broadcast);
+            if (broadcastToAll) {
+                requestBody = {broadcastToAll: broadcastToAll, action: requestBody.action}
+            }
+
+            return $http.put(_createCorrespondenceWFSchema(url), requestBody)
+                .then(function (result) {
+                    return result;
+                });
         };
 
         function _broadcast(correspondence, $event) {
@@ -2231,7 +2342,7 @@ module.exports = function (app) {
             });
         };
 
-        function _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers) {
+        function _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers, reloadCallback) {
             var multi = angular.isArray(correspondence) && correspondence.length > 1;
             action = action || 'forward';
             var errorMessage = [];
@@ -2251,7 +2362,8 @@ module.exports = function (app) {
                         isDeptSent: isDeptSent,
                         fromSimplePopup: fromSimplePopup,
                         predefinedActionMembers: predefinedActionMembers,
-                        fromQuickSend: (predefinedActionMembers && predefinedActionMembers.length > 0)
+                        fromQuickSend: (predefinedActionMembers && predefinedActionMembers.length > 0),
+                        reloadCallback: reloadCallback
                     },
                     resolve: {
                         favoritesUsers: function (distributionWFService) {
@@ -2327,9 +2439,10 @@ module.exports = function (app) {
          * @param isDeptSent
          * @param fromSimplePopup
          * @param predefinedActionMembers
+         * @param reloadCallback
          * @returns {promise|*}
          */
-        self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers) {
+        self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers, reloadCallback) {
             var normalCorrespondence = false;
             if (!isDeptSent) {
                 normalCorrespondence = angular.isArray(correspondence) ? !correspondence[0].isWorkItem() : !correspondence.isWorkItem();
@@ -2345,14 +2458,14 @@ module.exports = function (app) {
                             return managerService
                                 .manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event)
                                 .then(function (result) {
-                                    return result.hasSite() ? _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers) : null;
+                                    return result.hasSite() ? _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers, reloadCallback) : null;
                                 })
                         })
                 } else {
-                    return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers);
+                    return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers, reloadCallback);
                 }
             }
-            return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers);
+            return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers, reloadCallback);
 
         };
 
@@ -3763,7 +3876,8 @@ module.exports = function (app) {
                             disableEverything: departmentIncoming,
                             popupNumber: generator.getPopupNumber(),
                             fullScreen: true,
-                            viewerActions: actions.viewerActions
+                            viewerActions: actions.viewerActions,
+                            reloadCallback:undefined
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -3818,7 +3932,8 @@ module.exports = function (app) {
                             disableProperties: disableProperties,
                             disableCorrespondence: disableCorrespondence,
                             disableEverything: false,
-                            popupNumber: generator.getPopupNumber()
+                            popupNumber: generator.getPopupNumber(),
+                            reloadCallback: undefined
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -4763,6 +4878,25 @@ module.exports = function (app) {
             })
         };
 
+
+        /**
+         *@description open send email reminder dialog
+         * @param record
+         * @param $event
+         */
+        self.openSendEmailReminderDialog = function (record, $event) {
+            return dialog.showDialog({
+                templateUrl: cmsTemplate.getPopup('send-email-reminder'),
+                controllerAs: 'ctrl',
+                targetEvent: $event || false,
+                bindToController: true,
+                controller: 'sendEmailReminderPopCtrl',
+                escapeToClose: false,
+                locals: {
+                    correspondence: record.getInfo()
+                }
+            })
+        };
         /**
          * @description send fax
          * @param document
@@ -5189,7 +5323,181 @@ module.exports = function (app) {
                 var securityLevelsIds = _.map(userSecurityLevels, 'lookupKey');
                 return securityLevelsIds.indexOf(result.data.rs) !== -1 ? $q.resolve(userSecurityLevels[securityLevelsIds.indexOf(result.data.rs)]) : $q.reject(result.data.rs);
             });
+        };
+
+        self.isInternalSite = function (subSiteId) {
+            if (!subSiteId) {
+                return false;
+            }
+            return _.startsWith(('' + subSiteId).toString(), self.siteTypesStartsMap.INTERNAL);
+        };
+
+        self.isExternalSite = function (subSiteId) {
+            if (!subSiteId) {
+                return false;
+            }
+            return _.startsWith(('' + subSiteId).toString(), self.siteTypesStartsMap.EXTERNAL);
+        };
+
+        self.isG2GSite = function (subSiteId) {
+            if (!subSiteId) {
+                return false;
+            }
+            return _.startsWith(('' + subSiteId).toString(), self.siteTypesStartsMap.G2G);
+        };
+
+        self.innovationSearch = function (criteria) {
+            return $http.post(
+                _createUrlSchema(null, null, 'search/azure-cognitive'),
+                generator.interceptSendInstance('AzureSearchCriteria', criteria)
+            ).then(function (result) {
+                result.data.rs.first = self.interceptReceivedCollectionBasedOnEachDocumentClass(result.data.rs.first);
+                // result.data.rs.second = generator.interceptReceivedInstance('', result.data.rs.second);
+                return result.data.rs;
+            });
         }
+
+        self.innovationAutoComplete = function (text) {
+            return $http.get(
+                _createUrlSchema(null, null, 'search/azure-cognitive-auto-complete'),
+                {
+                    params: {criteria: text}
+                }
+            ).then(function (result) {
+                return result.data.rs.value;
+            }).catch(function (error) {
+                if (errorCode.checkIf(error, 'SEARCH_OPERATION_FAILED') === true) {
+                    toast.error(langService.get('max_length').change({length: 30}));
+                    return $q.reject(error);
+                }
+            })
+        }
+
+        self.isLimitedCentralUnitAccess = function (correspondence) {
+            if (!correspondence) { //|| !correspondence.hasVsId()
+                return false;
+            }
+
+            var isLimitedCentralUnitAccessEnabled = rootEntity.getGlobalSettings().isLimitedCentralUnitAccessEnabled();
+            var info = correspondence.getInfo();
+            var securityLevel = (info.securityLevel.hasOwnProperty('lookupKey')) ? info.securityLevel.lookupKey : info.securityLevel;
+
+            // if security level normal or not enabled from global settings
+            if (info.documentClass === "internal" || securityLevel === 1 || !isLimitedCentralUnitAccessEnabled) {
+                return false;
+            }
+
+            var isCentralArchive = employeeService.getEmployee().inCentralArchive();
+            var currentOUId = employeeService.getEmployee().getOUID();
+            var ouId = _getDocumentOuId(correspondence);
+
+            return isCentralArchive && ouId && ouId !== currentOUId;
+        }
+
+        function _getDocumentOuId(correspondence) {
+            var ouId = "";
+            if (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm && correspondence.isWorkItem()) { /* WorkItem */
+                ouId = correspondence.generalStepElm.ou;
+            } else if (correspondence.hasOwnProperty('ouId') && correspondence.ouId) { /* EventHistory */
+                ouId = correspondence.ouId;
+            } else {  /* Correspondence */
+                ouId = correspondence.ou;
+            }
+            return ouId;
+        }
+
+        self.sendEmailReminder = function (info, reason) {
+            return $http.put(urlService.reminderEmail + '/' + info.id, reason)
+                .then(function (result) {
+                    return result.data.rs;
+                });
+        }
+
+        /***
+         * @description get email items by (action,source,web num)
+         * @param items
+         * @param stateParams
+         * @returns {boolean|*}
+         */
+        self.getEmailItemByWobNum = function (items, stateParams) {
+            var action = stateParams.action, source = stateParams.source,
+                wobNumber = stateParams['wob-num'], item;
+
+            if (action && action === 'open' && source && source === 'email' && wobNumber) {
+                item = _.find(items, function (workItem) {
+                    return workItem.generalStepElm.workObjectNumber === wobNumber;
+                });
+
+                return !item ? (dialog.errorMessage(langService.get('work_item_not_found').change({
+                    wobNumber: wobNumber
+                })).then(function () {
+                    return false;
+                })) : item;
+            }
+            return false;
+        }
+
+        /***
+         * @description get email items by (action,source,vsid)
+         * @param items
+         * @param stateParams
+         * @returns {boolean|*}
+         */
+        self.getEmailItemByVsId = function (items, stateParams) {
+            var action = stateParams.action, source = stateParams.source,
+                vsid = stateParams['vsid'], item;
+
+            if (action && action === 'open' && source && source === 'email' && vsid) {
+                item = _.find(items, function (workItem) {
+                    return workItem.generalStepElm.vsId === vsid;
+                });
+
+                return !item ? (dialog.errorMessage(langService.get('work_item_not_found').change({
+                    wobNumber: vsid
+                })).then(function () {
+                    return false;
+                })) : item;
+            }
+            return false;
+        }
+
+        /**
+         * @description Load the returned central archive items from server.
+         * @returns {Promise|returnedArchiveItems}
+         */
+        self.loadReturnedCentralArchive = function () {
+            return $http.get(urlService.returnedArchive).then(function (result) {
+                return self.interceptReceivedCollectionBasedOnEachDocumentClass(result.data.rs);
+            }).catch(function (error) {
+                return [];
+            });
+        };
+
+        /**
+         * @description Return work item To Central Archive.
+         * @param workItem
+         * @param $event
+         * @param ignoreMessage
+         */
+        self.returnWorkItemToCentralArchive = function (workItem, $event, ignoreMessage) {
+            var info = workItem.getInfo();
+            return self.showReasonDialog('return_reason', $event)
+                .then(function (reason) {
+                    return $http
+                        .put(urlService.departmentInboxes + "/return-to-central-archive", {
+                            workObjectNumber: info.wobNumber,
+                            comment: reason,
+                            vsId: info.vsId
+                        })
+                        .then(function () {
+                            if (!ignoreMessage) {
+                                toast.success(langService.get("return_specific_success").change({name: workItem.getNames()}));
+                            }
+                            return workItem;
+                        });
+                });
+
+        };
 
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);

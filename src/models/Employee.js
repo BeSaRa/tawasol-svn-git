@@ -64,6 +64,9 @@ module.exports = function (app) {
             self.subAdminOuList = [];
             self.isFirstViewForApproval = false;
             self.oTPMobilityEnabled = false;
+            self.signAnnotationSettings = '';
+            self.searchDefaultView = 1;
+            self.userWFDistView = 1;
 
             var collectionResults = [
                 'reminderSmsPriority',
@@ -380,6 +383,10 @@ module.exports = function (app) {
                 return this.pinCodePrompt;
             };
 
+            Employee.prototype.loginDepartmentSearchView = function () {
+                return this.searchDefaultView === 2;
+            }
+
             /**
              * @description check if the current proxy user for the employee inside the given collection of proxyUsers.
              * @param collectionOfProxyUsers
@@ -449,6 +456,18 @@ module.exports = function (app) {
                 return Number(this.id + '' + this.getOUID());
             };
 
+            Employee.prototype.setSignAnnotationSettings = function (value) {
+                if (typeof value === 'string') {
+                    this.signAnnotationSettings = value;
+                } else {
+                    this.signAnnotationSettings = JSON.stringify(value);
+                }
+                return this;
+            };
+
+            Employee.prototype.getSignAnnotationSettings = function () {
+                return this.signAnnotationSettings;
+            };
 
             CMSModelInterceptor.runEvent('Employee', 'init', this);
 

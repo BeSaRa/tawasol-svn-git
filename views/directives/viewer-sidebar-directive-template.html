@@ -23,7 +23,7 @@
                                          class="{{quickAction.class}}"></md-icon>
                             </md-button>
                             <span ng-if="ctrl.isShowActionCount(quickAction)"
-                                  class="counter blue">{{quickAction.count()}}</span>
+                                  class="counter blue">{{quickAction.count(quickAction, ctrl.workItem)}}</span>
                         </div>
                     </div>
                 </li>
@@ -46,12 +46,15 @@
                         <li layout-align="start center" layout="row"
                             ng-repeat="attachment in ctrl.correspondence.attachments track by $index"
                             ng-if="!attachment.isAnnotation">
-                            <a flex href="#" ng-click="ctrl.showAttachment(attachment , $index , $event)">
+                            <a flex href="#" ng-click="ctrl.showAttachment(attachment , $index , $event)"
+                               ng-if="!ctrl.isLimitedCentralUnitAccess">
                                 {{attachment.getTranslatedName()}}
                             </a>
+                            <span flex ng-if="ctrl.isLimitedCentralUnitAccess">{{attachment.getTranslatedName()}}</span>
                             <md-button title="{{lang.annotate_document}}"
                                        ng-click="ctrl.openAnnotateAttachment(attachment , $event)"
-                                       class="md-icon-button view-icon-button">
+                                       class="md-icon-button view-icon-button"
+                                       ng-if="!ctrl.isLimitedCentralUnitAccess">
                                 <md-icon md-svg-icon="draw"></md-icon>
                             </md-button>
                             <grid-indicator-directive record="attachment"
@@ -72,12 +75,15 @@
                         <li layout-align="start center" layout="row"
                             ng-repeat="attachment in ctrl.correspondence.attachments track by $index"
                             ng-if="attachment.isAnnotation">
-                            <a flex href="#" ng-click="ctrl.showAttachment(attachment , $index , $event)">
+                            <a flex href="#" ng-click="ctrl.showAttachment(attachment , $index , $event)"
+                               ng-if="!ctrl.isLimitedCentralUnitAccess">
                                 {{attachment.getTranslatedName()}}
                             </a>
+                            <span flex ng-if="ctrl.isLimitedCentralUnitAccess">{{attachment.getTranslatedName()}}</span>
                             <md-button title="{{lang.annotate_document}}"
                                        ng-click="ctrl.openAnnotateAttachment(attachment , $event)"
-                                       class="md-icon-button view-icon-button">
+                                       class="md-icon-button view-icon-button"
+                                       ng-if="!ctrl.isLimitedCentralUnitAccess">
                                 <md-icon md-svg-icon="draw"></md-icon>
                             </md-button>
                             <grid-indicator-directive record="attachment"
@@ -105,7 +111,9 @@
                         <li layout-align="start center" layout="row"
                             ng-repeat="doc in ctrl.correspondence.linkedDocs track by $index">
                             <a flex href="#"
-                               ng-click="ctrl.showLinkedDocument(doc , $index ,  $event, false)">{{doc.getTranslatedName()}}</a>&nbsp;&nbsp;
+                               ng-click="ctrl.showLinkedDocument(doc , $index ,  $event, false)"
+                               ng-if="!ctrl.isLimitedCentralUnitAccess">{{doc.getTranslatedName()}}</a>&nbsp;&nbsp;
+                            <span flex ng-if="ctrl.isLimitedCentralUnitAccess">{{doc.getTranslatedName()}}</span>
                             <md-button class="md-icon-button view-icon-button"
                                        ng-if="ctrl.employeeService.hasPermissionTo('VIEW_DOCUMENT\'S_TRACKING_SHEET')"
                                        tooltip="{{lang.grid_action_view_tracking_sheet}}"

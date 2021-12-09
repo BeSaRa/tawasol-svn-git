@@ -11,6 +11,8 @@ module.exports = function (app) {
                                                    UserSearchCriteria,
                                                    cmsTemplate,
                                                    dialog,
+                                                   errorCode,
+                                                   langService,
                                                    _) {
         'ngInject';
         var self = this;
@@ -327,7 +329,7 @@ module.exports = function (app) {
          * @param correspondence
          * @param action
          */
-        self.startLaunchWorkflow = function (distributionWF, correspondence , action) {
+        self.startLaunchWorkflow = function (distributionWF, correspondence, action) {
             if (angular.isArray(correspondence))
                 return self.startLaunchWorkflowBulk(distributionWF, correspondence);
             var info = correspondence.getInfo(),
@@ -338,6 +340,15 @@ module.exports = function (app) {
                 .then(function (result) {
                     _emptyDistributionWFData();
                     return result.data.rs;
+                })
+                .catch(function (error) {
+                    if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                        var info = self.correspondence.getInfo();
+                        dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
+                        return $q.reject(false);
+                    } else {
+                        return errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
+                    }
                 })
         };
         /**
@@ -444,7 +455,7 @@ module.exports = function (app) {
         };
 
 
-        self.openEscalationUserDialog = function (distWorkflowItem, $event,organizationGroups) {
+        self.openEscalationUserDialog = function (distWorkflowItem, $event, organizationGroups) {
             return dialog.showDialog({
                 templateUrl: cmsTemplate.getPopup('select-escalation-user'),
                 controller: 'selectEscalationUserPopCtrl',
@@ -453,7 +464,7 @@ module.exports = function (app) {
                 targetEvent: $event,
                 locals: {
                     escalationUserId: distWorkflowItem.escalationUserId,
-                    organizationGroups : organizationGroups
+                    organizationGroups: organizationGroups
                 }
             })
         };

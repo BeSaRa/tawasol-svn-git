@@ -37,20 +37,30 @@ module.exports = function (app) {
 
             InternalSearch.prototype.prepareApproved = function () {
                 model = this;
-                if (model.approvers || model.approveDateFrom) {
+                if (model.approvers || (model.approveDateFrom && model.approveDateTo)) {
+                    var fromDate = angular.copy(model.approveDateFrom);
+                    fromDate = fromDate ? new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate(), 0, 0, 0, 0) : null;
                     var toDate = angular.copy(model.approveDateTo);
                     toDate = toDate ? new Date(toDate.getFullYear(), toDate.getMonth(), toDate.getDate(), 23, 59, 59, 999) : null;
                     model.approvers = angular.toJson({
                         userId: (model.approvers) ? model.approvers.applicationUser.id : null,
                         userOuId: (model.approvers) ? model.approvers.ouid.id : null,
                         approveDate: {
-                            first: generator.getTimeStampFromDate(model.approveDateFrom),
+                            first: generator.getTimeStampFromDate(fromDate),
                             second: generator.getTimeStampFromDate(toDate)
                         }
                     });
                 }
                 return model;
             };
+
+            InternalSearch.prototype.hasValidApproveDateRange = function () {
+                var model = this, isValid = false;
+                if ((model.approveDateFrom && model.approveDateTo) || (!model.approveDateFrom && !model.approveDateTo)) {
+                    isValid = true;
+                }
+                return isValid;
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

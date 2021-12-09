@@ -71,7 +71,9 @@
                                 </td>
                                 <td md-cell>
                                     <div flex layout="column">
-                                        <md-button tooltip="{{lang.print}}" ng-click="ctrl.printExportedDocument(item)"
+                                        <md-button tooltip="{{lang.print}}"
+                                                   ng-if="ctrl.canPrint(item)"
+                                                   ng-click="ctrl.printExportedDocument(item)"
                                                    class="md-icon-button">
                                             <md-icon md-svg-icon="printer"></md-icon>
                                         </md-button>

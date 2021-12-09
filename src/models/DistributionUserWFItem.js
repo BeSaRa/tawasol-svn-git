@@ -7,11 +7,13 @@ module.exports = function (app) {
             self.toUserDomain = null;
             self.appUserOUID = null;
             self.toUserId = null;
+            self.isReadyForApproval = false;
             // will delete before send to backend
             self.arOUName = null;
             self.enOUName = null;
             self.proxyInfo = null;
             self.sendRelatedDocs = rootEntity.getGlobalSettings().allowSendWFRelatedBook;
+            self.securityLevel = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -52,7 +54,8 @@ module.exports = function (app) {
                     .setSendEmail(user.sendEmail)
                     .setEscalationStatus(user.escalationStatus)
                     .setEscalationUser(user.escalationUserId)
-                    .setEscalationUserOUId(user.escalationUserId);
+                    .setEscalationUserOUId(user.escalationUserId)
+                    .setSecurityLevel(user.securityLevel);
             };
 
             DistributionUserWFItem.prototype.mapFromPredefinedActionMemberUser = function (user, forLaunch) {
@@ -117,6 +120,10 @@ module.exports = function (app) {
                 this.enOUName = enOUName;
                 return this;
             };
+            DistributionUserWFItem.prototype.setSecurityLevel = function (securityLevel) {
+                this.securityLevel = securityLevel;
+                return this;
+            }
 
             DistributionUserWFItem.prototype.isUserOutOfOffice = function () {
                 return this.proxyInfo && this.proxyInfo.outOfOffice && this.proxyInfo.proxyEndDate >= Date.now() && this.proxyInfo.proxyStartDate <= Date.now();

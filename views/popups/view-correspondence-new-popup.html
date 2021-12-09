@@ -12,9 +12,10 @@
                                               correspondence="ctrl.correspondence"
                                               g2g-item-copy="ctrl.g2gItemCopy"
                                               edit-mode="ctrl.editMode"
-                                              save-correspondence-changes="ctrl.saveCorrespondenceChanges"></correspondence-view-action-directive>
+                                              save-correspondence-changes="ctrl.saveCorrespondenceChanges"
+                                              notify-callback="ctrl.actionClicked"></correspondence-view-action-directive>
         <div flex layout-align="center center" layout="row">
-            <span flex md-truncate class="font-bold text-center">{{::ctrl.correspondence.getTranslatedName()}}</span>
+            <span flex md-truncate class="font-bold text-center pb-5">{{::ctrl.correspondence.getTranslatedName()}}</span>
             <md-progress-circular ng-if="ctrl.loadingIndicatorService.loading" md-mode="indeterminate"
                                   md-diameter="30"></md-progress-circular>
         </div>
@@ -37,6 +38,13 @@
         </md-button>
         <md-button ng-click="ctrl.toggleFullScreen()" class="md-icon-button">
             <md-icon md-svg-icon="{{ctrl.fullScreen ? 'fullscreen-exit': 'fullscreen'}}"></md-icon>
+        </md-button>
+        <md-button ng-if="ctrl.showForwardAction"
+                   ng-click="ctrl.toggleSimpleForward()"
+                   class="md-icon-button"
+                   tooltip-direction="{{lang.current === 'ar'? 'right':'left'}}"
+                   tooltip="{{ctrl.forwardAction.hasOwnProperty('textCallback')? lang.get(ctrl.forwardAction.textCallback(ctrl.correspondence)): lang.get(ctrl.forwardAction.text)}}">
+            <md-icon md-svg-icon="share-all"></md-icon>
         </md-button>
         <md-button ng-if="!ctrl.correspondence" ng-click="ctrl.returnBackCorrespondenceInformation()"
                    class="md-icon-button">
@@ -67,7 +75,8 @@
                                         source-form="ctrl.document_properties"
                                         document="ctrl.correspondence"
                                         disable-properties="ctrl.disableProperties"
-                                        action="ctrl.action">
+                                        action="ctrl.action"
+                                        registry-organizations="ctrl.centralArchives">
                                 </manage-properties-directive>
                             </accordion-content>
                         </accordion-item>
@@ -212,7 +221,7 @@
                         <!-- Quick Actions -->
                         <li>
                             <div class="viewer-actions" layout="row" ng-repeat="chunk in ctrl.stickyActionsChunk">
-                                <div ng-repeat="quickAction in chunk track by $index"
+                                <div ng-repeat="quickAction in chunk"
                                      ng-class="{'icon-relative':ctrl.isShowActionCount(quickAction)}">
                                     <!-- ng-if="ctrl.isShowViewerAction(quickAction)"-->
                                     <md-button
@@ -226,7 +235,7 @@
                                         ></md-icon>
                                     </md-button>
                                     <span ng-if="ctrl.isShowActionCount(quickAction)"
-                                          class="counter blue">{{quickAction.count()}}</span>
+                                          class="counter blue">{{quickAction.count(quickAction, ctrl.workItem)}}</span>
                                 </div>
                             </div>
                         </li>
@@ -250,12 +259,16 @@
                                     layout-align="start center" layout="row"
                                     ng-repeat="attachment in ctrl.correspondence.attachments track by $index"
                                     ng-if="!attachment.isAnnotation">
-                                    <a flex href="#" ng-click="ctrl.showAttachment(attachment , $index , $event)">
+                                    <a flex href="#" ng-click="ctrl.showAttachment(attachment , $index , $event)"
+                                       ng-if="!ctrl.isLimitedCentralUnitAccess">
                                         {{attachment.getTranslatedName()}}
                                     </a>
+                                    <span flex
+                                          ng-if="ctrl.isLimitedCentralUnitAccess">{{attachment.getTranslatedName()}}</span>
                                     <md-button class="md-icon-button view-icon-button"
                                                tooltip="{{lang.open_in_new_popup}}" tooltip-direction="right"
-                                               ng-click="ctrl.showAttachment(attachment , $index , $event , false , true)">
+                                               ng-click="ctrl.showAttachment(attachment , $index , $event , false , true)"
+                                               ng-if="!ctrl.isLimitedCentralUnitAccess">
                                         <md-icon md-svg-icon="open-in-new"></md-icon>
                                     </md-button>
                                     <grid-indicator-directive record="attachment"
@@ -285,12 +298,16 @@
                                     layout-align="start center" layout="row"
                                     ng-repeat="attachment in ctrl.correspondence.attachments track by $index"
                                     ng-if="attachment.isAnnotation">
-                                    <a flex href="#" ng-click="ctrl.showAttachment(attachment , $index , $event)">
+                                    <a flex href="#" ng-click="ctrl.showAttachment(attachment , $index , $event)"
+                                       ng-if="!ctrl.isLimitedCentralUnitAccess">
                                         {{attachment.getTranslatedName()}}
                                     </a>
+                                    <span flex
+                                          ng-if="ctrl.isLimitedCentralUnitAccess">{{attachment.getTranslatedName()}}</span>
                                     <md-button class="md-icon-button view-icon-button"
                                                tooltip="{{lang.open_in_new_popup}}" tooltip-direction="right"
-                                               ng-click="ctrl.showAttachment(attachment , $index , $event , false , true)">
+                                               ng-click="ctrl.showAttachment(attachment , $index , $event , false , true)"
+                                               ng-if="!ctrl.isLimitedCentralUnitAccess">
                                         <md-icon md-svg-icon="open-in-new"></md-icon>
                                     </md-button>
                                     <grid-indicator-directive record="attachment"
@@ -318,10 +335,14 @@
                                 <li ng-class="{'selected':ctrl.checkSelected($index , 'linkedDocs')}"
                                     layout-align="start center" layout="row"
                                     ng-repeat="doc in ctrl.correspondence.linkedDocs track by $index">
-                                    <a flex href="#" ng-click="ctrl.showLinkedDocument(doc , $index ,  $event, false)">{{doc.getTranslatedName()}}</a>
+                                    <a flex href="#" ng-click="ctrl.showLinkedDocument(doc , $index ,  $event, false)"
+                                       ng-if="!ctrl.isLimitedCentralUnitAccess">{{doc.getTranslatedName()}}</a>
+                                    <span flex
+                                          ng-if="ctrl.isLimitedCentralUnitAccess">{{doc.getTranslatedName()}}</span>
                                     <md-button class="md-icon-button view-icon-button"
                                                tooltip="{{lang.open_in_new_popup}}" tooltip-direction="right"
-                                               ng-click="ctrl.showLinkedDocument(doc, $index ,  $event , true)">
+                                               ng-click="ctrl.showLinkedDocument(doc, $index ,  $event , true)"
+                                               ng-if="!ctrl.isLimitedCentralUnitAccess">
                                         <md-icon md-svg-icon="open-in-new"></md-icon>
                                     </md-button>
                                     &nbsp;&nbsp;
@@ -388,7 +409,22 @@
                     </ul>
                 </div>
             </md-sidenav>
+            <md-sidenav id="simple-forward" ng-if="ctrl.simpleForward && ctrl.correspondence"
+                        md-whiteframe="3"
+                        ng-class="{'md-sidenav-right':lang.current === 'en'}"
+                        md-component-id="sideNav-simple-forward">
+                <div class="p020" layout="column" scroll-directive>
+                    <simple-forward-directive flex correspondence="ctrl.correspondence"
+                                              work-item="ctrl.workItem"
+                                              comments="ctrl.comments"
+                                              favorite-users="ctrl.favoriteUsers"
+                                              favorite-work-flow-actions="ctrl.favoriteWFActions"></simple-forward-directive>
+                </div>
+            </md-sidenav>
             <div id="iframe-parent" layout="column" class="relative" flex>
+                <div layout="column" layout-margin ng-if="ctrl.isLimitedCentralUnitAccess">
+                    <span class="red-text font-bold">{{lang.archive_secure_document_content}}</span>
+                </div>
                 <div ng-if="ctrl.content.desktop && ctrl.content.desktop.overlay"
                      ng-click="ctrl.reloadMainDocument($event)" layout="column" layout-align="center center"
                      id="overlay-to-reload-document">
@@ -403,7 +439,7 @@
                         class="iframe-main-document"
                         ng-src="{{ctrl.viewURL}}" flex
                         frameborder="0"></iframe>
-                <pspdf-viewer-directive doc-url="ctrl.viewURL"
+                <pspdf-viewer-directive correspondence="ctrl.correspondence" doc-url="ctrl.viewURL"
                                         ng-if="ctrl.displayMainPSPDFViewer()"
                                         id="pdfViewer" class="iframe-main-document" flex></pspdf-viewer-directive>
                 <iframe ng-if="ctrl.mainDocument && ctrl.editMode" id="iframe-main-document"
@@ -435,7 +471,7 @@
                         <md-icon md-svg-icon="chevron-left"></md-icon>
                     </md-button>
                 </div>
-                <pspdf-viewer-directive doc-url="ctrl.secondURL"
+                <pspdf-viewer-directive doc-url="ctrl.secondURL" correspondence="ctrl.correspondence"
                                         ng-if="ctrl.displaySecondPSPDFViewer()"
                                         id="attachment-linked-docs-viewer" class="iframe-main-document"
                                         flex></pspdf-viewer-directive>
@@ -466,7 +502,8 @@
                 {{lang.save_with_comment}}
             </md-button>
         </div>
-        <div ng-if="ctrl.pageName === 'userInbox' && ctrl.editContentFrom !== 'editContentFromGrid' && ctrl.correspondence && !ctrl.correspondence.viewVersion && !ctrl.disableEverything">
+        <div ng-if="ctrl.pageName === 'returnedCentralArchive' || (ctrl.pageName === 'userInbox' &&
+                   ctrl.editContentFrom !== 'editContentFromGrid' && ctrl.correspondence && !ctrl.correspondence.viewVersion && !ctrl.disableEverything)">
             <md-button class="md-raised md-primary" ng-click="ctrl.saveAndSend($event, false)"
                        ng-disabled="!ctrl.document_properties.$dirty">{{lang.save_and_send}}
             </md-button>
