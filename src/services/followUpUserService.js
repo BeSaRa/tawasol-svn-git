@@ -6,12 +6,9 @@ module.exports = function (app) {
                                                  toast,
                                                  cmsTemplate,
                                                  _,
-                                                 helper,
                                                  urlService,
-                                                 printService,
                                                  dialog,
                                                  FollowUpFolder,
-                                                 UserFollowupBookMulti,
                                                  generator,
                                                  moment,
                                                  langService,
@@ -84,25 +81,6 @@ module.exports = function (app) {
                         return errorCode.showErrorDialog(error);
                     });
             };
-
-            /**
-             * @description add broadcast follow up for document
-             * @param followUpData
-             * @returns {Promise}
-             */
-            self.saveBroadcastFollowup = function (followUpData) {
-                var data = new UserFollowupBookMulti({
-                    vsId: followUpData.vsId,
-                    docClassId: followUpData.docClassId,
-                    followupDate: followUpData.followupDate,
-                    userList: followUpData.userList
-                });
-                return $http
-                    .post(urlService.userFollowUp + '/broadcast-followup', generator.interceptSendInstance('UserFollowupBookMulti', data))
-                    .catch(function (error) {
-                        return errorCode.showErrorDialog(error);
-                    });
-            }
 
             /**
              * @description add follow up for document
@@ -439,44 +417,6 @@ module.exports = function (app) {
 
                                 });
                             }
-                        },
-                        organizationForSLA: function (employeeService, organizationService) {
-                            'ngInject';
-                            var ou = employeeService.getEmployee().userOrganization;
-                            if (ou.hasRegistry) {
-                                return ou;
-                            }
-                            return organizationService.loadOrganizationById(ou.getRegistryOUID());
-                        }
-                    }
-                })
-            };
-
-            /**
-             * @description open dialog for adding the document to broadcast follow up.
-             * @param correspondence
-             * @returns {promise}
-             */
-            self.addCorrespondenceToBroadcastFollowUp = function (correspondence) {
-                return dialog.showDialog({
-                    templateUrl: cmsTemplate.getPopup('add-broadcast-follow-up'),
-                    controller: 'broadcastFollowUpPopCtrl',
-                    controllerAs: 'ctrl',
-                    locals: {
-                        addToMyFollowup: false
-                    },
-                    resolve: {
-                        followUpOrganizations: function (organizationService) {
-                            'ngInject';
-                            return organizationService.getFollowUpOrganizations();
-                        },
-                        followUpData: function () {
-                            'ngInject';
-                            return self.prepareFollowUp(correspondence).then(function (data) {
-                                data.followupDate = data.followupDate ? generator.getDateObjectFromTimeStamp(data.followupDate) : null;
-                                return data;
-                            });
-
                         },
                         organizationForSLA: function (employeeService, organizationService) {
                             'ngInject';
@@ -843,72 +783,7 @@ module.exports = function (app) {
                 }
             };
 
-            self.printUserFollowup = function (heading, recordsCriteria) {
-                var buttonsList = [
-                    printService.printButtonTypes.pdf,
-                    printService.printButtonTypes.excel,
-                    printService.printButtonTypes.word
-                ];
-                dialog.confirmMessageWithDynamicButtonsList(langService.get('select_file_type_to_print_download'), buttonsList, '')
-                    .then(function (exportOption) {
-                        recordsCriteria.forPrinting = true;
-                        var errorMessage = langService.get('error_export_to_file').change({format: exportOption.text}),
-                            printCriteria = {
-                                criteria: generator.interceptSendInstance('FollowupBookCriteria', recordsCriteria),
-                                reportTitle: heading.subject.value,
-                                exportType: exportOption.type
-                            };
-
-                        $http.post(urlService.userFollowUp + '/print', printCriteria)
-                            .then(function (result) {
-                                var physicalPath = result.data.rs;
-                                if (!physicalPath) {
-                                    toast.error(errorMessage);
-                                    return $q.reject(errorMessage)
-                                } else {
-                                    return $http.get(physicalPath, {
-                                        responseType: 'blob'
-                                    }).then(function (result) {
-                                        return {
-                                            url: window.URL.createObjectURL(result.data),
-                                            blob: result.data,
-                                            physicalPath: physicalPath
-                                        };
-                                    });
-                                }
-                            })
-                            .then(function (file) {
-                                var oldIframe = document.getElementById('iframe-print');
-                                oldIframe ? oldIframe.parentNode.removeChild(oldIframe) : null;
-
-                                if (exportOption.type === 'excel') {
-                                    window.open(file.physicalPath, '_blank');
-                                    return;
-                                }
-
-                                if (helper.browser.isIE()) {
-                                    window.navigator.msSaveOrOpenBlob(file.blob);
-                                } else if (helper.browser.isFirefox()) {
-                                    window.open(file.physicalPath, '_blank');
-                                } else {
-                                    var iframe = document.createElement('iframe');
-                                    iframe.id = 'iframe-print';
-                                    iframe.onload = function (ev) {
-                                        iframe.contentWindow.focus();
-                                        iframe.contentWindow.print();
-
-                                    };
-                                    iframe.src = file.url;
-                                    document.body.appendChild(iframe);
-                                }
-                            })
-                            .catch(function () {
-                                toast.error(errorMessage);
-                            });
-                    });
-            }
-
-            self.printUserFollowup1 = function (heading, criteria) {
+            self.printUserFollowup = function (heading, criteria) {
                 dialog.confirmThreeButtonMessage(langService.get('select_file_type_to_print_download'), '', langService.get('web_print'), 'WORD')
                     .then(function (confirmResult) {
                         criteria.forPrinting = true;

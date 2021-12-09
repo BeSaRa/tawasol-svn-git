@@ -243,11 +243,7 @@ module.exports = function (app) {
                 distributionWF.setReceivedRegOUs(regOus);
             }
             distributionWFService.startLaunchWorkflow(distributionWF, record)
-                .then(function (result) {
-                    if (!result) {
-                        self.disableReply = false;
-                        return;
-                    }
+                .then(function () {
                     toast.success(langService.get('launch_success_distribution_workflow'));
                     dialog.hide();
                 }).catch(function () {
@@ -492,8 +488,10 @@ module.exports = function (app) {
                 sections = sections.concat(centralArchiveOUs);
             }
 
-            // sorting from BE based on user selection (alphabetical or by org structure)
-            return [].concat(regOus, sections);
+            // sort regOu-section
+            return _.sortBy([].concat(regOus, sections), [function (ou) {
+                return ou.tempRegOUSection[langService.current + 'Name'].toLowerCase();
+            }]);
         }
 
         /**

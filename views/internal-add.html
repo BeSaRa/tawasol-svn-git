@@ -30,13 +30,13 @@
                                 {{lang.internal_save_print_barcode}}
                             </md-button>
                         </div>
-                        <div ng-if="ctrl.canSaveAndAnnotate()">
+                        <div ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)">
                             <md-button ng-disabled="!ctrl.isSaveValid('saveAndInsert', true)"
                                        ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised">
                                 {{lang.save_and_insert}}
                             </md-button>
                         </div>
-                        <div ng-if="!ctrl.internal.addMethod && ctrl.employeeService.hasPermissionTo('DRAFT_INTERNAL')">
+                        <div ng-if="!ctrl.internal.addMethod">
                             <md-button ng-disabled="!ctrl.isSaveValid('saveAsDraft', true)"
                                        ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
                                 {{lang.internal_save_draft}}
@@ -126,18 +126,7 @@
                                             vs-id="ctrl.internal.vsId"
                                             document="ctrl.internal"
                                             signatures-count="ctrl.internal.signaturesCount"
-                                            view-url="ctrl.viewUrl"
                                             templates="ctrl.templates"></manage-content-directive>
-                                    <span flex></span>
-                                    <!-- open document in side view mode -->
-                                    <div class="icon-relative" ng-if="ctrl.action === 'replyTo' && !ctrl.internal.addMethod">
-                                        <md-button tooltip="{{lang.side_view}}"
-                                                   class="md-raised md-icon-button"
-                                                   ng-click="ctrl.openSideViewDocument($event)"
-                                                   ng-disabled="(!ctrl.documentInformation || !ctrl.internal.contentFile) && !ctrl.viewUrl">
-                                            <md-icon md-svg-icon="view-split-vertical"></md-icon>
-                                        </md-button>
-                                    </div>
                                 </div>
                             </accordion-content>
                         </accordion-item>
@@ -245,13 +234,13 @@
                                 {{lang.internal_save_print_barcode}}
                             </md-button>
                         </div>
-                        <div ng-if="ctrl.canSaveAndAnnotate()">
+                        <div ng-if="ctrl.hasPSPDFViewer && ctrl.employeeService.hasPermissionTo(ctrl.annotationPermission)">
                             <md-button ng-disabled="!ctrl.isSaveValid('saveAndInsert', true)"
                                        ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised">
                                 {{lang.save_and_insert}}
                             </md-button>
                         </div>
-                        <div ng-if="!ctrl.internal.addMethod && ctrl.employeeService.hasPermissionTo('DRAFT_INTERNAL')">
+                        <div ng-if="!ctrl.internal.addMethod">
                             <md-button ng-disabled="!ctrl.isSaveValid('saveAsDraft', true)"
                                        ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
                                 {{lang.internal_save_draft}}

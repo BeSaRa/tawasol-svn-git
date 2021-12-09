@@ -61,8 +61,10 @@ module.exports = function (app) {
                 return section;
             });
 
-            // sorting from BE based on user selection (alphabetical or by org structure)
-            return [].concat(regOus, sections)
+            // sort regOu-section
+            return _.sortBy([].concat(regOus, sections), [function (ou) {
+                return ou.tempRegOUSection[langService.current + 'Name'].toLowerCase();
+            }]);
         };
         self.organizations = _mapRegOUSections();
 

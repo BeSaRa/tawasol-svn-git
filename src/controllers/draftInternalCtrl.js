@@ -788,8 +788,7 @@ module.exports = function (app) {
                             return !info.isPaper
                                 && (info.documentClass !== 'incoming')
                                 && model.needApprove()
-                                && hasPermission
-                                && !correspondenceService.isLimitedCentralUnitAccess(model);
+                                && hasPermission;
                         }
                     },
                 ]

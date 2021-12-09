@@ -78,8 +78,6 @@ module.exports = function (app) {
             delete model.conditionalApproveExportDate;
             delete model.conditionalApproveComment;
             delete model.recordGridName;
-            delete model.externalImportData;
-            delete model.generalStepElm.externalImportData;
             return model;
         });
 

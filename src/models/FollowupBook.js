@@ -40,8 +40,6 @@ module.exports = function (app) {
             self.userOUID = null;
             self.userOuInfo = null;
             self.vsId = null;
-            self.queueId = null;
-
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
@@ -135,10 +133,6 @@ module.exports = function (app) {
                 return indicator.getFollowUpDateIndicator(followupDate);
             };
 
-            FollowupBook.prototype.getSharedFollowupIndicator = function () {
-                return indicator.getSharedFollowupIndicator(this.isSharedFollowup());
-            };
-
             FollowupBook.prototype.getSiteFollowupEndedIndicator = function ($event) {
                 // if status is false, book is terminated, show indicator
                 if (!this.status) {
@@ -163,10 +157,6 @@ module.exports = function (app) {
             FollowupBook.prototype.isTerminated = function () {
                 // if terminated, status = false, otherwise true
                 return !this.status;
-            };
-
-            FollowupBook.prototype.isSharedFollowup = function () {
-                return this.queueId !== null;
             };
 
             FollowupBook.prototype.terminate = function (ignoreMessage, $event) {

@@ -566,7 +566,6 @@ module.exports = function (app) {
             return self;
         };
 
-
         $timeout(function () {
             CMSModelInterceptor.runEvent('downloadService', 'init', self);
         }, 100);

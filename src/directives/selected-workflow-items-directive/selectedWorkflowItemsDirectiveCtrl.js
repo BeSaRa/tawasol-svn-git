@@ -21,7 +21,6 @@ module.exports = function (app) {
         self.workflowItems = [];
         // selected workflow items
         self.selectedWorkflowItems = [];
-        self.isMultiCorrespondence = false;
 
         self.gridName = 'selectedGrid';
 
@@ -33,7 +32,6 @@ module.exports = function (app) {
         $timeout(function () {
             if (self.item) {
                 self.isWorkItem = angular.isArray(self.item) ? false : self.item.isWorkItem();
-                self.isMultiCorrespondence = angular.isArray(self.item);
             }
         });
 
@@ -83,10 +81,6 @@ module.exports = function (app) {
                 .setEscalationUser(result.escalationUserId)
                 .setEscalationUserOUId(result.escalationUserId)
                 .setForwardSenderActionAndComment(result.forwardSenderActionAndComment);
-
-            if (distWorkflowItem.isUser() && self.actionKey === 'forward' && !self.isMultiCorrespondence) {
-                distWorkflowItem.setReadyForApproval(!!result.isReadyForApproval);
-            }
 
             if (self.fromPredefined) {
                 if (!self.isSLADueDateDisabled(distWorkflowItem)) {
@@ -215,9 +209,7 @@ module.exports = function (app) {
                     fromPredefined: self.fromPredefined,
                     item: self.item,
                     isWorkItem: self.isWorkItem,
-                    hiddenForwardSenderInfo: self.hiddenForwardSenderInfo,
-                    actionKey: self.actionKey,
-                    isMultiCorrespondence: self.isMultiCorrespondence
+                    hiddenForwardSenderInfo: self.hiddenForwardSenderInfo
                 }
             })
         };
@@ -382,17 +374,6 @@ module.exports = function (app) {
                     // reload comments to use in user preference
                     userCommentService.loadUserComments();
                 })
-        };
-
-        self.isReadyForApprovalAvailable = function (workflowItem) {
-            if (self.isMultiCorrespondence || self.fromPredefined) {
-                return false;
-            }
-            self.info = self.item.getInfo();
-            if (!self.info || !self.actionKey || self.actionKey !== 'forward' || !workflowItem.isUser()) {
-                return false;
-            }
-            return self.info.needToApprove() && !self.info.hasActiveSeqWF && self.globalSettings.externalAuthorization;
         };
 
     });

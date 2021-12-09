@@ -24,7 +24,6 @@ module.exports = function (app) {
         self.disabled = false;
         // by default the client pagination true
         self.clientPagination = true;
-        self.employee = employeeService.getEmployee();
 
         self.page = 1;
 
@@ -448,15 +447,6 @@ module.exports = function (app) {
                 icon: 'arrow-down'
             }
         ];
-
-        self.isShowActionCount = function (action, record) {
-            var count = action.hasOwnProperty('count') ? action.count : null;
-
-            if (count && typeof count === 'function') {
-                count = count(action, record);
-            }
-            return !!generator.validRequired(count);
-        };
 
         self.getSortedMagazineData = function () {
             self.sortOrder = self.sortOrder && self.sortOrder.hasOwnProperty('value') ? self.sortOrder.value() : self.sortOrder;

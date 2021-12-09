@@ -8,7 +8,6 @@ module.exports = function (app) {
                                                           dialog,
                                                           langService,
                                                           toast,
-                                                          errorCode,
                                                           cmsTemplate) {
         'ngInject';
         var self = this;
@@ -177,10 +176,7 @@ module.exports = function (app) {
                     return true;
                 })
                 .catch(function (error) {
-                    if (errorCode.checkIf(error, 'BL_ERROR_UPDATE_GLOBAL_PROPERTY_CONFIG') === true) {
-                        dialog.errorMessage(generator.getTranslatedError(error));
-                    }
-                    return $q.rejects();
+                    return false;
                 });
         };
 

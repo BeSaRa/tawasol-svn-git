@@ -1096,11 +1096,6 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                    var hasPermission = employeeService.hasPermissionTo("TERMINATE_SEQ_WF");
-                    if (model.hasActiveSeqWF()) {
-                        return hasPermission;
-                    }
-
                     return true;
                 }
             },
@@ -1128,7 +1123,6 @@ module.exports = function (app) {
                         shortcut: false,
                         callback: self.addToFolder,
                         class: "action-green",
-                        permissionKey: 'FOLDERS_QUEUE',
                         hide: true,
                         disabled: function (model) {
                             return model.isLocked() && !model.isLockedByCurrentUser();
@@ -1548,7 +1542,7 @@ module.exports = function (app) {
                         isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
                     }
 
-                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model) && !correspondenceService.isLimitedCentralUnitAccess(model);
+                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
@@ -1615,7 +1609,7 @@ module.exports = function (app) {
                 text: 'grid_action_send',
                 shortcut: false,
                 checkShow: function (action, model) {
-                    return gridService.checkToShowMainMenuBySubMenu(action, model) && !correspondenceService.isLimitedCentralUnitAccess(model);
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL",

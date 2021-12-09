@@ -293,10 +293,6 @@ module.exports = function (app) {
                 return correspondenceService.openSendFaxDialog(this, $event);
             };
 
-            EventHistory.prototype.openSendEmailReminderDialog = function ($event) {
-                return correspondenceService.openSendEmailReminderDialog(this, $event);
-            };
-
             EventHistory.prototype.canSendByFax = function () {
                 return rootEntity.returnRootEntity().rootEntity.faxEnabled;
             };
@@ -327,15 +323,6 @@ module.exports = function (app) {
                 var info = this.getInfo();
                 downloadService.getCompositeDocumentEmailContent(info.vsId, info.docClassId);
             };
-            EventHistory.prototype.isTerminated = function () {
-                return this.workflowActionId === 9
-            }
-            EventHistory.prototype.isApproved = function () {
-                return this.workflowActionId === 15;
-            }
-            EventHistory.prototype.isSentToDepartmentOnly = function () {
-                return this.userToRegOuId === null && this.userToOuId !== null && this.userToId === null;
-            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

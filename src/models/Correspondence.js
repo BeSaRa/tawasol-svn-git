@@ -6,7 +6,6 @@ module.exports = function (app) {
                                             langService,
                                             counterService,
                                             queueStatusService,
-                                            PSPDFKit,
                                             $q,
                                             dialog,
                                             moment,
@@ -25,7 +24,6 @@ module.exports = function (app) {
                                             SignDocumentModel,
                                             sequentialWorkflowService,
                                             encryptionService,
-                                            arabicNormalizerService,
                                             cmsTemplate) {
         'ngInject';
         return function Correspondence(model) {
@@ -107,13 +105,6 @@ module.exports = function (app) {
             self.linkedExportedDocsList = [];
             self.isMigrated = false;
             self.seqWFId = null;
-            self.isOfficial = false;
-            // azure
-            self.azureResultItem = null;
-            self.highlights = null;
-            self.transfered = false;
-
-            self.externalImportData = null; // set the value from external data source import popup. used in upload content
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -177,9 +168,6 @@ module.exports = function (app) {
              */
             Correspondence.prototype.getTranslatedName = function () {
                 return this.docSubject;
-            };
-            Correspondence.prototype.getTranslatedYesNo = function (fieldName) {
-                return this[fieldName] ? langService.get('yes') : langService.get('no');
             };
 
             Correspondence.prototype.getNames = function () {
@@ -486,18 +474,6 @@ module.exports = function (app) {
                 return indicator.getIsBroadcastedIndicator(this.isBroadcasted());
             };
 
-            Correspondence.prototype.getIsTransferredDocumentIndicator = function () {
-                return indicator.getIsTransferredDocumentIndicator(this.isTransferredDocument());
-            };
-
-            /**
-             * @description Checks if the document is transferred
-             * @returns {boolean}
-             */
-            Correspondence.prototype.isTransferredDocument = function () {
-                return this.transfered;
-            };
-
             Correspondence.prototype.getSequentialWFIndicator = function () {
                 return indicator.getSequentialWFIndicator();
             };
@@ -628,8 +604,8 @@ module.exports = function (app) {
             Correspondence.prototype.hasDocumentClass = function (documentClass) {
                 return this.getInfo().documentClass.toLowerCase() === documentClass.toLowerCase();
             };
-            Correspondence.prototype.launchWorkFlow = function ($event, action, tab, isDeptIncoming, reloadCallback) {
-                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming, null, null, [], reloadCallback);
+            Correspondence.prototype.launchWorkFlow = function ($event, action, tab, isDeptIncoming) {
+                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming);
             };
             Correspondence.prototype.launchWorkFlowFromPredefinedAction = function ($event, action, tab, isDeptIncoming, isDeptSent, actionMembers) {
                 return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming, isDeptSent, false, actionMembers);
@@ -683,20 +659,6 @@ module.exports = function (app) {
             Correspondence.prototype.viewFromQueue = function (actions, queueName, $event, viewOnly) {
                 return viewDocumentService.viewQueueDocument(this, actions, queueName, $event, viewOnly);
             };
-
-            /**
-             * @description view from queue as full view.
-             * @param actions
-             * @param queueName
-             * @param $event
-             * @param viewOnly
-             * @param reloadCallback
-             * @return {*}
-             */
-            Correspondence.prototype.viewReturnedCentralArchiveDocument = function (actions, queueName, $event, viewOnly, reloadCallback) {
-                return viewDocumentService.viewReturnedCentralArchiveDocument(this, actions, queueName, $event, viewOnly, reloadCallback);
-            };
-
             /**
              * @description view from queue as full view.
              * @param actions
@@ -892,64 +854,6 @@ module.exports = function (app) {
                 return this.internalG2G;
             };
 
-            Correspondence.prototype.hasExternalSite = function () {
-                var info = this.getInfo();
-                if (info.documentClass === 'internal') {
-                    return false;
-                } else if (info.documentClass === 'outgoing') {
-                    return !!(_.find([].concat(this.sitesInfoTo, this.sitesInfoCC), function (item) {
-                        return correspondenceService.isExternalSite(item.subSiteId);
-                    }));
-                } else if (info.documentClass === 'incoming') {
-                    if (this.site && this.site.subSiteId) {
-                        return correspondenceService.isExternalSite(this.site.subSiteId);
-                    }
-                    return false;
-                }
-            }
-            Correspondence.prototype.hasG2GSite = function () {
-                var info = this.getInfo();
-                if (info.documentClass === 'internal') {
-                    return false;
-                } else if (info.documentClass === 'outgoing') {
-                    return !!(_.find([].concat(this.sitesInfoTo, this.sitesInfoCC), function (item) {
-                        return correspondenceService.isG2GSite(item.subSiteId);
-                    }));
-                } else if (info.documentClass === 'incoming') {
-                    if (this.site && this.site.subSiteId) {
-                        return correspondenceService.isG2GSite(this.site.subSiteId);
-                    }
-                    return false;
-                }
-            }
-            Correspondence.prototype.hasInternalSite = function () {
-                var info = this.getInfo();
-                if (info.documentClass === 'internal') {
-                    return false;
-                } else if (info.documentClass === 'outgoing') {
-                    return !!(_.find([].concat(this.sitesInfoTo, this.sitesInfoCC), function (item) {
-                        return correspondenceService.isInternalSite(item.subSiteId);
-                    }));
-                } else if (info.documentClass === 'incoming') {
-                    if (this.site && this.site.subSiteId) {
-                        return correspondenceService.isInternalSite(this.site.subSiteId);
-                    }
-                    return false;
-                }
-            }
-
-            Correspondence.prototype.getExternalSiteIndicator = function () {
-                return this.hasExternalSite() ? indicator.getExternalSiteIndicator() : null;
-            };
-
-            Correspondence.prototype.getInternalSiteIndicator = function () {
-                return this.hasInternalSite() ? indicator.getInternalSiteIndicator() : null;
-            };
-
-            Correspondence.prototype.getG2GSiteIndicator = function () {
-                return this.hasG2GSite() ? indicator.getG2GSiteIndicator() : null;
-            };
-
             Correspondence.prototype.loadThumbnails = function () {
                 return correspondenceService.loadDocumentThumbnails(this);
             };
@@ -1108,12 +1012,6 @@ module.exports = function (app) {
 
             Correspondence.prototype.addToUserFollowUp = function () {
                 return followUpUserService.addCorrespondenceToEmployeeFollowUp(this).then(function () {
-                    return counterService.loadCounters();
-                });
-            };
-
-            Correspondence.prototype.addToBroadcastFollowUp = function () {
-                return followUpUserService.addCorrespondenceToBroadcastFollowUp(this).then(function () {
                     return counterService.loadCounters();
                 });
             };
@@ -1281,6 +1179,7 @@ module.exports = function (app) {
                 } else if (info.isPaper && info.documentClass === 'incoming') {
                     return employeeService.hasPermissionTo('EDIT_INCOMING’S_CONTENT');
                 }
+                console.log('user cannot Annotate', info);
                 return false;
             };
             Correspondence.prototype.getAuthorizeByAnnotationStatus = function () {
@@ -1297,78 +1196,9 @@ module.exports = function (app) {
                 return !info.isPaper && info.docStatus !== 21;
             };
 
-
-            Correspondence.prototype.getLinesHighlights = function (keyword) {
-                function hasAnyKeyword(word, keyWords) {
-                    return keyWords.some(function (key) {
-                        return word.indexOf(key) !== -1;
-                    });
-                }
-
-                if (!keyword) {
-                    return null;
-                }
-                var words = Array.from(new Set(keyword.split(" ").filter(Boolean))).map(item => item.toLowerCase());
-                var keywords = [];
-
-                words.forEach(word => {
-                    var normalized = arabicNormalizerService.normalize(word, ' ');
-                    if (normalized !== word) {
-                        keywords.push(normalized);
-                    }
-                    keywords.push(word);
-                })
-
-
-                var self = this
-                self.highlights = [];
-
-                self.azureResultItem.forEach(item => {
-                    var highlightedWords = [];
-                    item.lines.forEach(function (line) {
-                        if (hasAnyKeyword(line.lineString.toLowerCase(), keywords)) {
-                            highlightedWords = highlightedWords.concat(line.words.filter(function (word) {
-                                return hasAnyKeyword(word.wordstring.toLowerCase(), keywords);
-                            }).map(function (word) {
-                                let [left, top, width, height] = word.boundingBox.split(',').map(item => Number(item));
-                                return {
-                                    left: (left * 100) / item.imgW,
-                                    top: (top * 100) / item.imgH,
-                                    width: (width * 100) / item.imgW,
-                                    height: (height * 100) / item.imgH
-                                }
-                            }))
-                        }
-                    });
-
-                    if (highlightedWords.length) {
-                        self.highlights.push({
-                            pageIndex: item.pageNum - 1,
-                            reacts: highlightedWords,
-                            dimensions: {
-                                width: item.imgW,
-                                height: item.imgH,
-                                dpi: [item.dpiX, item.dpiY]
-                            }
-                        })
-                    }
-                });
-                return self.highlights;
-            }
-
-            Correspondence.prototype.hasNormalOrPersonalPrivateSecurityLevel = function () {
-                return this.securityLevel.hasOwnProperty('id') ?
-                    (this.securityLevel.id === 1 || this.securityLevel.id === 4) :
-                    (this.securityLevel === 1 || this.securityLevel === 4);
-            }
-
-            Correspondence.prototype.isLimitedCentralUnitAccess = function () {
-                return correspondenceService.isLimitedCentralUnitAccess(this);
-            }
-
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Correspondence', 'init', this);
         }
-    });
+    })
 };

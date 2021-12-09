@@ -1318,41 +1318,5 @@
     "sort_order": 3,
     "active": true,
     "sort_value": 0
-  },
-  {
-    "ID": 123,
-    "lang_key": "menu_item_external_data_sources",
-    "icon": "source-repository",
-    "parent": 8,
-    "link": "#external-data-sources",
-    "state": "app.administration.external-data-sources",
-    "icon_type": "font",
-    "sort_order": 3,
-    "active": true,
-    "sort_value": 0
-  },
-  {
-    "ID": 124,
-    "lang_key": "menu_item_intelligence_search",
-    "icon": "layers-search-outline",
-    "parent": null,
-    "link": "#intelligence-search",
-    "state": "app.intelligence-search",
-    "icon_type": "font",
-    "sort_order": 9,
-    "active": true,
-    "sort_value": 0
-  },
-  {
-    "ID": 125,
-    "lang_key": "menu_item_archive_returned",
-    "icon": "archive",
-    "parent": 80,
-    "link": "#central-archive-returned",
-    "state": "app.central-archive.returned",
-    "icon_type": "font",
-    "sort_order": 9,
-    "active": true,
-    "sort_value": 0
   }
 ]

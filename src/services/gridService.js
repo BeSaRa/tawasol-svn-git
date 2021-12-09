@@ -78,8 +78,7 @@ module.exports = function (app) {
             },
             centralArchive: {
                 readyToExport: 'caReadyToExport',
-                sentItem: 'caSent',
-                returned: 'caReturned'
+                sentItem: 'caSent'
             },
             search: {
                 outgoing: 'searchOut',
@@ -122,8 +121,7 @@ module.exports = function (app) {
                 organization: 'organization',
                 serialNumbers: 'serialNumbers',
                 documentStamp: 'docStamp',
-                sequentialWF: 'seqWF',
-                externalDataSources: 'extDataSources'
+                sequentialWF: 'seqWF'
             },
             others: {
                 linkedDoc: 'linkedDoc',
@@ -934,7 +932,7 @@ module.exports = function (app) {
                 incoming: 'arrow-down-bold-box',
                 internal: 'recycle',
                 paperDocument: 'file-document',
-                electronicDocument: 'tablet',
+                electronicDocument: 'tablet',//cellphone-dock';
                 exportViaCentralArchive: 'archive',
                 linkedExportedDoc: 'link',
                 dueDate: 'calendar',
@@ -962,11 +960,7 @@ module.exports = function (app) {
                 comments: 'comment-account-outline',
                 date: 'calendar-today',
                 sequentialWF: 'view-sequential',
-                isOfficial: 'clipboard-check',
-                externalSite: 'arrow-top-right-bold-outline',
-                internalSite: 'arrow-bottom-left-bold-outline',
-                g2gSite: 'file-cloud',
-                sharedFollowup: 'file-star-outline'
+                isOfficial: 'clipboard-check'
             }
         };
     });

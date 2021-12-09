@@ -174,9 +174,6 @@ module.exports = function (app) {
 
         self.genders = lookupService.returnLookups(lookupService.gender);
         self.languages = lookupService.returnLookups(lookupService.language);
-        self.searchDefaultViewList = lookupService.returnLookups(lookupService.searchDefaultView);
-        self.userDistWFViewList = lookupService.returnLookups(lookupService.userDistWFView);
-        self.seqWFEmailSettingsList = lookupService.returnLookups(lookupService.seqWFEmailSettings);
 
         self.jobTitles = jobTitleService.jobTitles;
         self.ranks = rankService.ranks;
@@ -227,8 +224,10 @@ module.exports = function (app) {
                 return section;
             });
 
-            // sorting from BE based on user selection (alphabetical or by org structure)
-            return [].concat(regOus, sections);
+            // sort regOu-section
+            return _.sortBy([].concat(regOus, sections), [function (ou) {
+                return ou.tempRegOUSection[langService.current + 'Name'].toLowerCase();
+            }]);
         }
 
         self.classifications = [];
@@ -1044,7 +1043,7 @@ module.exports = function (app) {
                         availableProxies: function (ouApplicationUserService) {
                             'ngInject';
                             return ouApplicationUserService
-                                .getAvailableProxies(null, true, ouApplicationUser.applicationUser.id, true)
+                                .getAvailableProxies(null, true, ouApplicationUser.applicationUser.id)
                                 .then(function (result) {
                                     return result
                                 })

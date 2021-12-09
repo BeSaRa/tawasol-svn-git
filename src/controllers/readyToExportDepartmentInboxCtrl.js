@@ -32,8 +32,7 @@ module.exports = function (app) {
                                                                  $timeout,
                                                                  errorCode,
                                                                  rootEntity,
-                                                                 configurationService,
-                                                                 emailItem) {
+                                                                 configurationService) {
         'ngInject';
         var self = this;
         /*
@@ -793,9 +792,8 @@ module.exports = function (app) {
          * @description Edit After Approve
          * @param model
          * @param $event
-         * @param defer
          */
-        self.editAfterApprove = function (model, $event, defer) {
+        self.editAfterApprove = function (model, $event) {
             if (model.isLocked() && !model.isLockedByCurrentUser()) {
                 dialog.infoMessage(generator.getBookLockMessage(model, null));
                 return;
@@ -815,8 +813,6 @@ module.exports = function (app) {
                                 vsId: info.vsId,
                                 action: 'editAfterApproved'
                             });
-
-                            new ResolveDefer(defer);
                         })
                         .catch(function () {
                             dialog.errorMessage(langService.get('error_messages'));
@@ -1242,9 +1238,7 @@ module.exports = function (app) {
                 class: "action-green",
                 sticky: true,
                 checkShow: function (action, model) {
-                    return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() &&
-                        employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION) &&
-                        !correspondenceService.isLimitedCentralUnitAccess(model);
+                    return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION);
                 }
             },
             // Add To Favorite
@@ -1348,7 +1342,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.editAfterApprove,
                 class: "action-green",
-                showInView: true,
+                showInView: false,
                 permissionKey: "EDIT_OUTGOING_CONTENT",
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
@@ -1508,7 +1502,7 @@ module.exports = function (app) {
                 icon: 'send',
                 text: 'grid_action_send',
                 checkShow: function (action, model) {
-                    return gridService.checkToShowMainMenuBySubMenu(action, model) && !correspondenceService.isLimitedCentralUnitAccess(model);
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "SEND_COMPOSITE_DOCUMENT_BY_EMAIL",
@@ -1632,7 +1626,7 @@ module.exports = function (app) {
                         isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
                     }
 
-                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model) && !correspondenceService.isLimitedCentralUnitAccess(model);
+                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
@@ -1823,12 +1817,6 @@ module.exports = function (app) {
 
         self.shortcutActions = gridService.getShortcutActions(self.gridActions);
         self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
-
-        self.openEmailItem = function () {
-            emailItem ? self.viewDocument(emailItem) : null;
-        };
-        // to open Email item if it exists.
-        self.openEmailItem();
 
         self.refreshGrid = function (time) {
             $timeout(function () {

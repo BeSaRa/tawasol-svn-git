@@ -283,7 +283,7 @@ module.exports = function (app) {
             _.map(langKeys, function (langKey) {
                 translate.push(self.get(langKey));
             });
-            return translate.join(' ');
+            return translate.join('');
         };
 
         self.getByLangKey = function (langKey, lang, ignoreError) {

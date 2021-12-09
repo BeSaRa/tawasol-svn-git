@@ -225,60 +225,6 @@ module.exports = function (app) {
                     });
             };
 
-
-            /**
-             * @description recall multiple sent items again to user inbox.
-             */
-            self.recallMultipleSentItem = function (sentItems, $event, ignoreMessage) {
-                return self.showReasonDialog('recall_reason', $event)
-                    .then(function (reason) {
-                        var items = _.map(sentItems, function (sentItem) {
-                            return {
-                                wobNum: sentItem.wfId,
-                                comment: reason
-                            }
-                        });
-                        return $http.put(urlService.bulkRecallSentItems, items).then(function (result) {
-                            return _bulkMessages(result, sentItems, ignoreMessage, 'failed_recall_selected', 'selected_recall_success', 'following_records_failed_to_recall');
-                        }).catch(function (error) {
-                            console.log('error recall', error);
-                        });
-                    })
-            }
-
-            /**
-             * @description bulk message for any bulk actions.
-             * @param result
-             * @param collection
-             * @param ignoreMessage
-             * @param errorMessage
-             * @param successMessage
-             * @param failureSomeMessage
-             * @returns {*}
-             * @private
-             */
-            function _bulkMessages(result, collection, ignoreMessage, errorMessage, successMessage, failureSomeMessage) {
-                var failureCollection = [];
-                var currentIndex = 0;
-                _.map(result.data.rs, function (value) {
-                    if (!value)
-                        failureCollection.push(collection[currentIndex]);
-                    currentIndex++;
-                });
-                if (!ignoreMessage) {
-                    if (failureCollection.length === collection.length) {
-                        toast.error(langService.get(errorMessage));
-                    } else if (failureCollection.length) {
-                        generator.generateFailedBulkActionRecords(failureSomeMessage, _.map(failureCollection, function (item) {
-                            return item.getTranslatedName();
-                        }));
-                    } else {
-                        toast.success(langService.get(successMessage));
-                    }
-                }
-                return collection;
-            }
-
             /* /!**
               * @description Gets the information about workItem view status
               * @param workflowId

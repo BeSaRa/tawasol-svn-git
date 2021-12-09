@@ -66,45 +66,43 @@ module.exports = function (app) {
         }
 
         var _resetDefaultNeedReplyFollowupDate = function () {
-            $timeout(function () {
-                if (self.correspondence) {
-                    var priorityLevel = self.correspondence.getInfo().priorityLevel;
-                    priorityLevel = (priorityLevel.hasOwnProperty('lookupKey') ? priorityLevel.lookupKey : priorityLevel);
+            if (self.correspondence) {
+                var priorityLevel = self.correspondence.getInfo().priorityLevel;
+                priorityLevel = (priorityLevel.hasOwnProperty('lookupKey') ? priorityLevel.lookupKey : priorityLevel);
 
-                    var slaOu = null;
-                    // if paper outgoing or incoming and current ou is central archive, use selected registryOu as slaOu
-                    if (_isShowRegistryUnit() && organizationForSLACentralArchive) {
-                        slaOu = organizationForSLACentralArchive;
-                    } else {
-                        slaOu = organizationForSLA;
+                var slaOu = null;
+                // if paper outgoing or incoming and current ou is central archive, use selected registryOu as slaOu
+                if (_isShowRegistryUnit() && organizationForSLACentralArchive) {
+                    slaOu = organizationForSLACentralArchive;
+                } else {
+                    slaOu = organizationForSLA;
+                }
+                if (slaOu && typeof priorityLevel !== 'undefined' && priorityLevel !== null) {
+                    var slaDays = null;
+                    // organization has sla property and sla has property as same as document priority level
+                    if (slaOu.hasOwnProperty('sla') && slaOu.sla && slaOu.sla.hasOwnProperty(priorityLevel)) {
+                        slaDays = slaOu.sla[priorityLevel];
                     }
-                    if (slaOu && typeof priorityLevel !== 'undefined' && priorityLevel !== null) {
-                        var slaDays = null;
-                        // organization has sla property and sla has property as same as document priority level
-                        if (slaOu.hasOwnProperty('sla') && slaOu.sla && slaOu.sla.hasOwnProperty(priorityLevel)) {
-                            slaDays = slaOu.sla[priorityLevel];
-                        }
-                        // if no SLA days or its less than 1, use default number of days to followup date to be today
-                        if (!slaDays || slaDays < 1) {
-                            slaDays = angular.copy(defaultFollowupNumberOfDays);
-                        }
-                        defaultNeedReplyFollowupDate = generator.getFutureDate(slaDays);
+                    // if no SLA days or its less than 1, use default number of days to followup date to be today
+                    if (!slaDays || slaDays < 1) {
+                        slaDays = angular.copy(defaultFollowupNumberOfDays);
                     }
+                    defaultNeedReplyFollowupDate = generator.getFutureDate(slaDays);
                 }
+            }
 
 
-                self.followUpStatusDate = defaultNeedReplyFollowupDate;
-                self.followUpStatusDate_DL = defaultNeedReplyFollowupDate;
+            self.followUpStatusDate = defaultNeedReplyFollowupDate;
+            self.followUpStatusDate_DL = defaultNeedReplyFollowupDate;
 
-                // set followup date for all searched sites
-                if (self.subSearchResultCopy && self.subSearchResultCopy.length) {
-                    self.onFollowupStatusChange(self.followupStatus, true);
-                }
-                if (self.subSearchResult_DL_Copy && self.subSearchResult_DL_Copy.length) {
-                    self.onFollowupStatusChange_DL(self.followupStatus_DL, true);
-                }
-                return defaultNeedReplyFollowupDate;
-            })
+            // set followup date for all searched sites
+            if (self.subSearchResultCopy && self.subSearchResultCopy.length) {
+                self.onFollowupStatusChange(self.followupStatus, true);
+            }
+            if (self.subSearchResult_DL_Copy && self.subSearchResult_DL_Copy.length) {
+                self.onFollowupStatusChange_DL(self.followupStatus_DL, true);
+            }
+            return defaultNeedReplyFollowupDate;
         };
 
         /**
@@ -1176,7 +1174,7 @@ module.exports = function (app) {
 
         var _selectDefaultMainSiteAndGetSubSites = function () {
             if (self.selectedSiteTypeSimple && self.mainSites && self.mainSites.length > 0) {
-                if (configurationService.SELECT_MAIN_SITE_IF_ONLY_ONE && self.mainSites.length === 1) {
+                if (configurationService.SELECT_MAIN_SITE_IF_ONLY_ONE && self.mainSites.length === 1){
                     self.selectedMainSiteSimple = self.mainSites[0];
                 } else if (self.selectedSiteTypeSimple.lookupKey === 1) {
                     self.selectedMainSiteSimple = _.find(self.mainSites, function (site) {
@@ -1189,7 +1187,7 @@ module.exports = function (app) {
 
         var _selectDefaultMainSiteAndGetSubSitesAdvanced = function () {
             if (self.selectedSiteTypeAdvanced && self.mainSites && self.mainSites.length > 0) {
-                if (configurationService.SELECT_MAIN_SITE_IF_ONLY_ONE && self.mainSites.length === 1) {
+                if (configurationService.SELECT_MAIN_SITE_IF_ONLY_ONE && self.mainSites.length === 1){
                     self.selectedMainSiteAdvanced = self.mainSites[0];
                 } else if (self.selectedSiteTypeAdvanced.lookupKey === 1) {
                     self.selectedMainSiteAdvanced = _.find(self.mainSites, function (site) {

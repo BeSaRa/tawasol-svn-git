@@ -7,7 +7,7 @@ module.exports = function (app) {
         self.activeAttachment = null;
 
         self.closeDocumentAttachments = function () {
-            if (!self.activeAttachment) {
+            if(!self.activeAttachment) {
                 dialog.cancel(self.attachments);
             } else {
                 dialog.confirmMessage(langService.get('confirm_unsaved_changes'))

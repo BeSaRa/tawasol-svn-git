@@ -3,7 +3,7 @@
            ng-attr-aria-label="{{lang.icn_import}}" layout="column">
     <div layout="row" layout-align="start center">
         <div flex layout-align="center center" layout="row">
-            <span flex md-truncate class="font-bold text-center pb-5">{{lang.icn_import}} - {{::ctrl.correspondence.getTranslatedName()}}</span>
+            <span flex md-truncate class="font-bold text-center">{{lang.icn_import}} - {{::ctrl.correspondence.getTranslatedName()}}</span>
             <md-progress-circular ng-if="ctrl.loadingIndicatorService.loading" md-mode="indeterminate"
                                   md-diameter="30"></md-progress-circular>
         </div>

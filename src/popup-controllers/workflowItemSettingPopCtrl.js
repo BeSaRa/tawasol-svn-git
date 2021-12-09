@@ -149,8 +149,8 @@ module.exports = function (app) {
          * @description Checks if SLA Due date is disabled
          * @returns {boolean}
          */
-        self.isSLADueDateDisabled = function () {
-            return distWorkflowItem.getWorkflowItemType().toLowerCase() === 'groupmail';
+        self.isSLADueDateDisabled = function(){
+          return distWorkflowItem.getWorkflowItemType().toLowerCase() === 'groupmail';
         };
 
         /**
@@ -202,17 +202,6 @@ module.exports = function (app) {
                     .setComments(self.distWorkflowItem.forwardSenderActionAndComment ? self.item.generalStepElm.comments : null)
                     .setAction(self.distWorkflowItem.forwardSenderActionAndComment ? self.item.action : null);
             }
-        };
-
-        self.isReadyForApprovalAvailable = function (workflowItem) {
-            if (self.isMultiCorrespondence || self.fromPredefined || self.gridName !== 'selectedGrid') {
-                return false;
-            }
-            self.info = self.item.getInfo();
-            if (!self.info || !self.actionKey || self.actionKey !== 'forward' || !workflowItem.isUser()) {
-                return false;
-            }
-            return self.info.needToApprove() && !self.info.hasActiveSeqWF && self.globalSettings.externalAuthorization;
-        };
+        }
     });
 };

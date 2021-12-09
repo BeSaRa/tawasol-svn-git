@@ -24,7 +24,6 @@ module.exports = function (app) {
                                                             mailNotificationService,
                                                             printService,
                                                             SentItemDepartmentInbox,
-                                                            $stateParams,
                                                             gridService) {
         'ngInject';
         var self = this;
@@ -166,7 +165,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.recallBulk = function ($event) {
-            //  console.log('recall bulk : ', $event);
+          //  console.log('recall bulk : ', $event);
         };
 
         /**
@@ -346,7 +345,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTasks = function (sentItemDepartmentInbox, $event) {
-            // console.log('manage tasks : ', sentItemDepartmentInbox)
+           // console.log('manage tasks : ', sentItemDepartmentInbox)
         };
 
         /**
@@ -441,7 +440,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendSMS = function (sentItemDepartmentInbox, $event) {
-            //  console.log('Send sms : ', sentItemDepartmentInbox);
+          //  console.log('Send sms : ', sentItemDepartmentInbox);
         };
 
         /**
@@ -943,7 +942,7 @@ module.exports = function (app) {
                         isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
                     }
 
-                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model) && !correspondenceService.isLimitedCentralUnitAccess(model);
+                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
@@ -1010,7 +1009,7 @@ module.exports = function (app) {
                 text: 'grid_action_send',
                 shortcut: false,
                 checkShow: function (action, model) {
-                    return gridService.checkToShowMainMenuBySubMenu(action, model) && !correspondenceService.isLimitedCentralUnitAccess(model);
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL",
@@ -1156,13 +1155,6 @@ module.exports = function (app) {
 
         self.shortcutActions = gridService.getShortcutActions(self.gridActions);
         self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
-
-        self.openEmailItem = function () {
-            var emailItem = correspondenceService.getEmailItemByWobNum(self.sentItemDepartmentInboxes, $stateParams);
-            emailItem ? self.viewDocument(emailItem) : null;
-        };
-        // to open Email item if it exists.
-        self.openEmailItem();
 
     });
 };

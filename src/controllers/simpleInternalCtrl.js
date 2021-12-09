@@ -194,11 +194,14 @@ module.exports = function (app) {
                     if (self.internal.contentFile) {
                         return self.internal.addDocumentContentFile()
                             .then(function () {
-                                self.contentFileExist = true;
+                                self.contentFileExist = !!(self.internal.hasOwnProperty('contentFile') && self.internal.contentFile);
+                                self.contentFileSizeExist = !!(self.contentFileExist && self.internal.contentFile.size);
+
                                 saveCorrespondenceFinished(status, ignoreLaunch);
                             })
                     } else {
                         self.contentFileExist = false;
+                        self.contentFileSizeExist = false;
                         saveCorrespondenceFinished(status, ignoreLaunch);
                         return true;
                     }
@@ -240,14 +243,10 @@ module.exports = function (app) {
             } else {
                 var successKey = 'internal_metadata_saved_success';
                 if (self.documentInformation) {
-                    self.internal.contentSize = 1; // dummy content size
+                    self.internal.contentSize = 1;
                     successKey = 'save_success';
-                } else if (self.internal.contentFile) {
-                    if (self.internal.externalImportData) {
-                        self.internal.contentSize = 1; // dummy content size
-                    } else {
-                        self.internal.contentSize = self.internal.contentFile.size;
-                    }
+                } else if (self.internal.contentFile && self.internal.contentFile.size) {
+                    self.internal.contentSize = self.internal.contentFile.size;
                     successKey = 'save_success';
                 }
 
@@ -270,10 +269,6 @@ module.exports = function (app) {
                     });
             }
         }
-
-        self.canSaveAndAnnotate = function () {
-            return self.hasPSPDFViewer && employeeService.hasPermissionTo(self.annotationPermission) && !correspondenceService.isLimitedCentralUnitAccess(self.internal);
-        };
 
         self.saveAndAnnotateDocument = function ($event) {
             self.saveCorrespondence(false, true).then(function () {
@@ -512,7 +507,7 @@ module.exports = function (app) {
             self.documentAction.callback(self.internal, $event);
         };
         var _hasContent = function () {
-            return (!!self.documentInformationExist || !!self.contentFileExist);
+            return (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
         };
 
         var _hasSingleSignature = function (document) {
@@ -741,6 +736,7 @@ module.exports = function (app) {
             self.documentAction = null;
             self.documentInformationExist = false;
             self.contentFileExist = false;
+            self.contentFileSizeExist = false;
 
             self.document_properties.$setUntouched();
 
@@ -837,8 +833,9 @@ module.exports = function (app) {
             if (!form) {
                 return true;
             }
-            return form.$invalid || self.saveInProgress
-                || ((self.documentInformationExist || self.contentFileExist) && !(self.documentInformation || self.internal.contentFile))
+            return form.$invalid
+                || self.saveInProgress || ((self.documentInformationExist
+                    || (self.contentFileExist && self.contentFileSizeExist)) && !(self.documentInformation || self.internal.contentFile))
         };
 
         /**
@@ -888,37 +885,6 @@ module.exports = function (app) {
             if (!angular.element('#document-viewer').length)
                 angular.element('#iframe-inject-area').append($compile(iframe)($scope));
         };
-
-        /**
-         * @description open side view document
-         * @param $event
-         */
-        self.openSideViewDocument = function ($event) {
-            var correspondence, typeOfDoc;
-            if (replyTo && self.action === 'replyTo') {
-                if ($stateParams.createAsAttachment === "true") {
-                    // attachment
-                    correspondence = self.internal.attachments[0];
-                    correspondence.classDescription = 'Internal';
-                    typeOfDoc = 'attachment';
-                } else {
-                    // linked document
-                    correspondence = self.internal.linkedDocs[0];
-                    typeOfDoc = 'linked-doc';
-                }
-
-                angular.element('iframe#document-viewer').remove();
-                var defer = $q.defer();
-                loadingIndicatorService.loading = true;
-                $timeout(function () {
-                    correspondenceService.openSideViewDocument(correspondence, self.simpleViewUrl, typeOfDoc).then(function () {
-                        self.injectIframe();
-                        loadingIndicatorService.loading = false;
-                        defer.resolve(true);
-                    });
-                }, configurationService.OFFICE_ONLINE_DELAY);
-            }
-        }
 
         $rootScope.$on('SEQ_LAUNCH_SUCCESS', function () {
             self.resetAddCorrespondence();

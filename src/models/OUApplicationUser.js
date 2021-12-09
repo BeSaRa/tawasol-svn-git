@@ -33,8 +33,6 @@ module.exports = function (app) {
             self.wfsecurity = null;
             self.ouViewPermissionList = null;
             self.archiveSecurityLevels = null;
-            self.proxyStartDateString = '';
-            self.proxyEndDateString = '';
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array

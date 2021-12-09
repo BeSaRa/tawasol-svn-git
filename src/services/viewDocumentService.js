@@ -258,8 +258,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
-                                pageName: pageName,
-                                reloadCallback: undefined
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -322,10 +321,6 @@ module.exports = function (app) {
                             disabled.disableProperties = true;
                         }
 
-                        if (correspondence.highlights) {
-                            result.metaData.highlights = correspondence.highlights;
-                        }
-
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
@@ -342,8 +337,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
-                                pageName: pageName,
-                                reloadCallback: undefined
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -416,8 +410,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
-                                pageName: pageName,
-                                reloadCallback: undefined
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -501,8 +494,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
-                                pageName: pageName,
-                                reloadCallback: undefined
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -531,9 +523,8 @@ module.exports = function (app) {
              * @param $event
              * @param pageName
              * @param getGeneralStepElementView
-             * @param reloadCallback
              */
-            self.viewUserInboxDocument = function (workItem, actions, pageName, $event, getGeneralStepElementView, reloadCallback) {
+            self.viewUserInboxDocument = function (workItem, actions, pageName, $event, getGeneralStepElementView) {
                 var info = typeof workItem.getInfo === 'function' ? workItem.getInfo() : new WorkItem(workItem).getInfo();
                 var disabled = _checkDisabled(pageName, workItem);
 
@@ -575,7 +566,6 @@ module.exports = function (app) {
                                 disableEverything: disabled.disableAll,
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: pageName,
-                                reloadCallback: reloadCallback
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -649,8 +639,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: false,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName: pageName,
-                                reloadCallback: undefined
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -690,9 +679,8 @@ module.exports = function (app) {
              * @param actions
              * @param $event
              * @param pageName
-             * @param getGeneralStepElementView
              */
-            self.viewUserInboxProxyDocument = function (workItem, actions, pageName, $event, getGeneralStepElementView) {
+            self.viewUserInboxProxyDocument = function (workItem, actions, pageName, $event) {
                 var info = typeof workItem.getInfo === 'function' ? workItem.getInfo() : new WorkItem(workItem).getInfo();
                 var disabled = _checkDisabled(pageName, workItem);
 
@@ -712,11 +700,6 @@ module.exports = function (app) {
                     })
                     .then(function (generalStepElementView) {
                         generalStepElementView.documentViewInfo.desktop = desktop;
-                        generalStepElementView.allInternalSites = workItem.allInternalSites;
-                        if (getGeneralStepElementView) {
-                            return generalStepElementView;
-                        }
-
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
@@ -734,8 +717,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: false,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName: pageName,
-                                reloadCallback: undefined
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -810,8 +792,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName: pageName,
-                                reloadCallback: undefined
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -900,8 +881,7 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName: pageName,
-                                reloadCallback: undefined
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -967,8 +947,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName: pageName,
-                                reloadCallback: undefined
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1046,8 +1025,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName: pageName,
-                                reloadCallback: undefined
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1135,8 +1113,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
-                                pageName: pageName,
-                                reloadCallback: undefined
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1212,8 +1189,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: false,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName: pageName,
-                                reloadCallback: undefined
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1302,8 +1278,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
-                                pageName: pageName,
-                                reloadCallback: undefined
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1375,8 +1350,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
-                                pageName: pageName,
-                                reloadCallback: undefined
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1442,8 +1416,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName: pageName,
-                                reloadCallback: undefined
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1557,8 +1530,7 @@ module.exports = function (app) {
                                 disableProperties: true,
                                 disableCorrespondence: true,
                                 g2gItemCopy: g2gItemCopy,
-                                pageName: pageName,
-                                reloadCallback: undefined
+                                pageName: pageName
                             }
                         }).then(function (result) {
                             generator.removePopupNumber();
@@ -1635,8 +1607,7 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 g2gItemCopy: g2gItemCopy,
-                                pageName: pageName,
-                                reloadCallback: undefined
+                                pageName: pageName
                             }
                         }).then(function (result) {
                             generator.removePopupNumber();
@@ -1649,105 +1620,6 @@ module.exports = function (app) {
                     .catch(function (error) {
                         errorCode.checkIf(error, 'G2G_ERROR_FETCH_SENT_OR_RETURN_BOOK', function () {
                             dialog.errorMessage(langService.get('g2g_error_fetch_sent_return_book'));
-                        });
-                    });
-            };
-
-            /**
-             * @description Open the view popup for queues
-             * @param correspondence
-             * @param actions
-             * @param $event
-             * @param pageName
-             * @param viewOnly - to hide edit content button in delete pages
-             * @param reloadCallback
-             */
-            self.viewReturnedCentralArchiveDocument = function (correspondence, actions, pageName, $event, viewOnly, reloadCallback) {
-                var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : new Outgoing(correspondence).getInfo(),
-                    disabled;
-                var desktop = new EditInDesktopCallback({
-                    url: _createUrlSchema(info.vsId, info.documentClass, 'with-content'),
-                    type: 'correspondence'
-                });
-                return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))
-                    .then(function (result) {
-                        var documentClass = result.data.rs.metaData.classDescription;
-                        result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
-                        return result.data.rs;
-                    }).catch(function (error) {
-                        if (errorCode.checkIf(error, 'DOCUMENT_HAS_BEEN_DELETED') === true) {
-                            dialog.errorMessage(langService.get('document_has_been_deleted'));
-                            return $q.reject('documentDeleted');
-                        }
-                        return $q.reject(error);
-                    })
-                    .then(function (result) {
-                        result.metaData.viewVersion = viewOnly;
-                        result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
-                        if (result.content.hasOwnProperty('editURL') && result.content.editURL) {
-                            result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
-                        }
-                        result.content.desktop = desktop;
-                        disabled = _checkDisabled(pageName, result.metaData);
-
-                        if (disabled.disableAll) {
-                            disabled.disableSites = true;
-                            disabled.disableProperties = true;
-                        }
-
-                        if (correspondence.highlights) {
-                            result.metaData.highlights = correspondence.highlights;
-                        }
-
-                        generator.addPopupNumber();
-                        return dialog.showDialog({
-                            templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
-                            controller: 'viewCorrespondencePopCtrl',
-                            controllerAs: 'ctrl',
-                            bindToController: true,
-                            escapeToCancel: false,
-                            locals: {
-                                correspondence: result.metaData,
-                                content: result.content,
-                                actions: actions,
-                                workItem: false,
-                                disableProperties: disabled.disableProperties,
-                                disableCorrespondence: disabled.disableSites,
-                                popupNumber: generator.getPopupNumber(),
-                                disableEverything: disabled.disableAll,
-                                pageName: pageName,
-                                reloadCallback: reloadCallback
-                            },
-                            resolve: {
-                                organizations: function (organizationService) {
-                                    'ngInject';
-                                    return organizationService.loadOrganizations(true);
-                                },
-                                lookups: function (correspondenceService) {
-                                    'ngInject';
-                                    return correspondenceService.loadCorrespondenceLookups(info.documentClass);
-                                },
-                                centralArchives: function ($q, employeeService, organizationService) {
-                                    'ngInject';
-                                    var currentOU = employeeService.getEmployee().userOrganization;
-                                    if (employeeService.isCentralArchive()) {
-                                       return (organizationService.centralArchiveOrganizations().then(function (organizations) {
-                                            if (employeeService.isCentralArchiveHasRegistry() && (_.map(organizations, 'id').indexOf(currentOU.id) === -1)) {
-                                                organizations.push(currentOU);
-                                            }
-
-                                            return organizations;
-                                        }));
-                                    }
-                                    return false;
-                                }
-                            }
-                        }).then(function () {
-                            generator.removePopupNumber();
-                            return true;
-                        }).catch(function () {
-                            generator.removePopupNumber();
-                            return false;
                         });
                     });
             };

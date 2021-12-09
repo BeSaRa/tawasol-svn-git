@@ -384,36 +384,6 @@
                                     <md-input-container flex ng-if="!ctrl.editMode"></md-input-container>
                                 </div>
                                 <div layout="row">
-                                    <!-- Search Default View -->
-                                    <md-input-container flex>
-                                        <label for="searchDefaultView">{{lang.search_default_view}}</label>
-                                        <md-select id="searchDefaultView" name="searchDefaultView" required
-                                                   ng-model="ctrl.applicationUser.searchDefaultView">
-                                            <md-option ng-value="searchDefaultView.lookupKey"
-                                                       ng-repeat="searchDefaultView in ctrl.searchDefaultViewList track by $index">
-                                                {{searchDefaultView.getTranslatedName()}}
-                                            </md-option>
-                                        </md-select>
-                                        <div ng-messages="applicationUserForm.searchDefaultView.$error">
-                                            <div ng-message="required">{{lang.field_required}}</div>
-                                        </div>
-                                    </md-input-container>
-                                    <!-- userWFDistView -->
-                                    <md-input-container flex>
-                                        <label for="userWFDistView">{{lang.sort_ous_based_on}}</label>
-                                        <md-select id="userWFDistView" name="userWFDistView" required
-                                                   ng-model="ctrl.applicationUser.userWFDistView">
-                                            <md-option ng-value="userWFDistView.lookupKey"
-                                                       ng-repeat="userWFDistView in ctrl.userDistWFViewList track by $index">
-                                                {{userWFDistView.getTranslatedName()}}
-                                            </md-option>
-                                        </md-select>
-                                        <div ng-messages="applicationUserForm.userWFDistView.$error">
-                                            <div ng-message="required">{{lang.field_required}}</div>
-                                        </div>
-                                    </md-input-container>
-                                </div>
-                                <div layout="row">
                                     <md-switch flex ng-model="ctrl.applicationUser.slowConnectionMode"
                                                ng-disabled="!ctrl.globalSetting.slowConnectionMode"
                                                aria-label="{{lang.slow_connection_mode}}">
@@ -746,29 +716,6 @@
                                                     </div>
                                                 </md-input-container>
                                             </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <!-- Seq WF Notification -->
-                                <fieldset>
-                                    <legend class="md-accent">{{lang.sequential_workflow}}</legend>
-                                    <div class="full-width-fieldset">
-                                        <div layout="row">
-                                            <md-input-container flex>
-                                                <label for="seqWFEmailSettings">{{lang.email_notification}}</label>
-                                                <md-select multiple name="seqWFEmailSettings" id="seqWFEmailSettings"
-                                                           ng-model-options="{trackBy: '$value.lookupKey'}"
-                                                           ng-model="ctrl.applicationUser.seqWFEmailSettings">
-                                                    <md-option ng-value="option"
-                                                               ng-repeat="option in ctrl.seqWFEmailSettingsList">
-                                                        {{option.getTranslatedName()}}
-                                                    </md-option>
-                                                </md-select>
-                                                <div ng-messages="userPreferencesForm.seqWFEmailSettings.$error">
-                                                    <div ng-message="required">{{lang.field_required}}</div>
-                                                </div>
-                                            </md-input-container>
-                                            <md-input-container flex></md-input-container>
                                         </div>
                                     </div>
                                 </fieldset>

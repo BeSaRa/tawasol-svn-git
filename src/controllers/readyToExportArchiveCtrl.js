@@ -30,12 +30,10 @@ module.exports = function (app) {
                                                          $timeout,
                                                          errorCode,
                                                          rootEntity,
-                                                         configurationService,
-                                                         documentStampService) {
+                                                         configurationService) {
         'ngInject';
         var self = this;
         self.controllerName = 'readyToExportArchiveCtrl';
-        self.rootEntity = rootEntity.returnRootEntity().rootEntity;
 
         /*
          IT WILL ALWAYS GET OUTGOING DOCUMENTS ONLY
@@ -539,7 +537,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
-            //  console.log('manageReadyToExportTasks : ', readyToExport);
+          //  console.log('manageReadyToExportTasks : ', readyToExport);
         };
 
         /**
@@ -620,7 +618,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
-            //  console.log('viewReadyToExportDirectLinkedDocuments : ', readyToExport);
+          //  console.log('viewReadyToExportDirectLinkedDocuments : ', readyToExport);
         };
 
         /**
@@ -633,7 +631,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
-            //  console.log('viewReadyToExportCompleteLinkedDocuments : ', readyToExport);
+          //  console.log('viewReadyToExportCompleteLinkedDocuments : ', readyToExport);
         };
 
         /**
@@ -694,9 +692,8 @@ module.exports = function (app) {
          * @description Edit After Approve
          * @param workItem
          * @param $event
-         * @param defer
          */
-        self.editAfterApprove = function (workItem, $event, defer) {
+        self.editAfterApprove = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
@@ -716,8 +713,6 @@ module.exports = function (app) {
                                 vsId: info.vsId,
                                 action: 'editAfterApproved'
                             });
-
-                            new ResolveDefer(defer);
                         })
                         .catch(function () {
                             dialog.errorMessage(langService.get('error_messages'));
@@ -738,13 +733,6 @@ module.exports = function (app) {
             workItem.barcodePrint($event);
         };
 
-
-        self.addKwtAlDiyarDigitalStamp = function (workItem, $event) {
-            documentStampService.openKwtAlDiyarStampsDialog(workItem, $event)
-                .then(function (result) {
-                    toast.success(langService.get('success_add_digital_stamp'));
-                })
-        }
 
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
             var info = model.getInfo();
@@ -1122,9 +1110,7 @@ module.exports = function (app) {
                 class: "action-green",
                 sticky: true,
                 checkShow: function (action, model) {
-                    return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() &&
-                        employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION) &&
-                        !correspondenceService.isLimitedCentralUnitAccess(model);
+                    return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION);
                 }
             },
             // Add To Favorite
@@ -1202,20 +1188,6 @@ module.exports = function (app) {
                     return employeeService.hasPermissionTo('ICN_ENTRY_TEMPLATE');
                 }
             },
-            {
-                type: 'action',
-                icon: 'postage-stamp',
-                text: 'grid_action_add_stamp',
-                shortcut: true,
-                permissionKey: 'ADD_STAMP',
-                sticky: true,
-                callback: self.addKwtAlDiyarDigitalStamp,
-                class: 'action-green',
-                checkShow: function (action, model) {
-                    var info = model.getInfo();
-                    return !info.isPaper && self.rootEntity.kwtAlDiyarDigitalEnabled;
-                }
-            },
             // Print Barcode
             {
                 type: 'action',
@@ -1255,7 +1227,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.editAfterApprove,
                 class: "action-green",
-                showInView: true,
+                showInView: false,
                 hide: true,
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
@@ -1416,7 +1388,7 @@ module.exports = function (app) {
                 icon: 'send',
                 text: 'grid_action_send',
                 checkShow: function (action, model) {
-                    return gridService.checkToShowMainMenuBySubMenu(action, model) && !model.isBroadcasted() && !correspondenceService.isLimitedCentralUnitAccess(model);
+                    return gridService.checkToShowMainMenuBySubMenu(action, model) && !model.isBroadcasted();
                 },
                 permissionKey: [
                     "SEND_COMPOSITE_DOCUMENT_BY_EMAIL",
@@ -1502,7 +1474,7 @@ module.exports = function (app) {
                         isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
                     }
 
-                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model) && !correspondenceService.isLimitedCentralUnitAccess(model);
+                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",

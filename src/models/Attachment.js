@@ -77,7 +77,7 @@ module.exports = function (app) {
                 return indicator.getIsLinkedExportedDocIndicator();
             };
             Attachment.prototype.getIsOfficialIndicator = function () {
-                return this.isOfficial ? indicator.getIsOfficialIndicator() : null;
+                return indicator.getIsOfficialIndicator();
             };
 
             Attachment.prototype.getInfo = function () {
@@ -86,8 +86,7 @@ module.exports = function (app) {
                     documentClass: self.classDescription,
                     isAttachment: true,
                     vsId: self.vsId,
-                    securityLevel: self.securityLevel,
-                    isOfficial: !!self.isOfficial
+                    securityLevel: self.securityLevel
                 });
             };
 

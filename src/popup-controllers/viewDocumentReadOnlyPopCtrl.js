@@ -15,7 +15,7 @@ module.exports = function (app) {
         self.loadingIndicatorService = loadingIndicatorService;
         self.employeeService = employeeService;
         self.slowConnectionEnabled = false; // set it to false so that it will open normally.
-        if (!(self.typeOfDoc === 'otp-doc' || self.typeOfDoc === 'external-import')) {
+        if (self.typeOfDoc !== 'otp-doc') {
             self.slowConnectionEnabled = !!employeeService.getEmployee().isSlowConnectionMode();
         }
 
@@ -30,7 +30,7 @@ module.exports = function (app) {
          * @returns {*|boolean}
          */
         self.isShowSlowConnectionVisible = function () {
-            if (self.typeOfDoc === 'otp-doc' || self.typeOfDoc === 'external-import') {
+            if (self.typeOfDoc === 'otp-doc') {
                 return false;
             }
             return rootEntity.getGlobalSettings() && rootEntity.getGlobalSettings().isSlowConnectionMode()
@@ -61,7 +61,7 @@ module.exports = function (app) {
          * @description Toggles the view mode for the attachment
          */
         self.toggleSlowConnectionMode = function ($event) {
-            if (self.typeOfDoc === 'otp-doc' || self.typeOfDoc === 'external-import' || !rootEntity.getGlobalSettings().isSlowConnectionMode()) {
+            if (self.typeOfDoc === 'otp-doc' || !rootEntity.getGlobalSettings().isSlowConnectionMode()) {
                 return _getOriginalMainDocContent();
             }
 
@@ -90,11 +90,11 @@ module.exports = function (app) {
         };
 
         self.displayMainIframeViewer = function () {
-            return (!self.psPDFViewerEnabled || (self.psPDFViewerEnabled && self.isOfficeOnlineViewer(self.viewURL))) && !self.isLimitedCentralUnitAccess;
+            return (!self.psPDFViewerEnabled || (self.psPDFViewerEnabled && self.isOfficeOnlineViewer(self.viewURL)));
         };
 
         self.displayMainPSPDFViewer = function () {
-            return self.psPDFViewerEnabled && !self.isOfficeOnlineViewer(self.viewURL) && !self.isLimitedCentralUnitAccess;
+            return self.psPDFViewerEnabled && !self.isOfficeOnlineViewer(self.viewURL);
         };
 
         self.isOfficeOnlineViewer = function (url) {
@@ -103,11 +103,6 @@ module.exports = function (app) {
 
         self.$onInit = function () {
             self.hideSlowModeToggleButton = self.psPDFViewerEnabled && self.document && self.document.mimeType === 'application/pdf';
-            if (self.typeOfDoc === 'external-import') {
-                self.isLimitedCentralUnitAccess = false;
-            } else {
-                self.isLimitedCentralUnitAccess = correspondenceService.isLimitedCentralUnitAccess(self.document);
-            }
         }
 
     });

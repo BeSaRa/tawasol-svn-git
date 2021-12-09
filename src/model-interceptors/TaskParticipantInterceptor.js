@@ -19,9 +19,6 @@ module.exports = function (app) {
                 model.dueDate = model.dueDate + ' ' + (model.endTime ? model.endTime + ':00' : '23:30:00');
                 model.startDate = moment(model.startDate).toDate();
                 model.dueDate = moment(model.dueDate).toDate();
-            } else {
-                model.startDate = moment(model.startDate).startOf('day');
-                model.dueDate = moment(moment(model.dueDate).endOf('day')).subtract(1, 'hours');
             }
 
             model.completionDate = model.taskState === 2 ? null : (model.completionDate ? model.completionDate : new Date());

@@ -201,7 +201,20 @@ module.exports = function (app) {
                     .then(function () {
                         return self.deleteBulkUserFolders(userFolders)
                             .then(function (result) {
-
+                                var response = false;
+                                if (result.length === userFolders.length) {
+                                    toast.error(langService.get("failed_delete_selected"));
+                                    response = false;
+                                } else if (result.length) {
+                                    generator.generateFailedBulkActionRecords('delete_success_except_following', _.map(result, function (userFolder) {
+                                        return userFolder.getNames();
+                                    }));
+                                    response = true;
+                                } else {
+                                    toast.success(langService.get("delete_success"));
+                                    response = true;
+                                }
+                                return response;
                             });
                     });
             }
@@ -260,7 +273,15 @@ module.exports = function (app) {
                 url: urlService.userFolders + '/bulk',
                 data: bulkIds
             }).then(function (result) {
-                return generator.getBulkActionResponse(result, userFolders, false, 'failed_delete_selected', 'delete_success', 'delete_success_except_following', 'id');
+                result = result.data.rs;
+                var failedUserFolders = [];
+                _.map(result, function (value, key) {
+                    if (!value)
+                        failedUserFolders.push(key);
+                });
+                return _.filter(userFolders, function (userFolder) {
+                    return (failedUserFolders.indexOf(userFolder.id) > -1);
+                });
             });
         };
 

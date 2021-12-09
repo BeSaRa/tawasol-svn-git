@@ -15,7 +15,7 @@
                                               edit-mode="ctrl.editMode"
                                               save-correspondence-changes="ctrl.saveCorrespondenceChanges"></correspondence-view-action-directive>
         <div flex layout-align="center center" layout="row">
-            <span flex md-truncate class="font-bold text-center pb-5">{{::ctrl.correspondence.getTranslatedName()}}</span>
+            <span flex md-truncate class="font-bold text-center">{{::ctrl.correspondence.getTranslatedName()}}</span>
             <md-progress-circular ng-if="ctrl.loadingIndicatorService.loading" md-mode="indeterminate"
                                   md-diameter="30"></md-progress-circular>
         </div>
@@ -207,15 +207,12 @@
                 </div>
             </md-sidenav>
             <div id="iframe-parent" layout="column" class="relative" flex>
-                <div layout="column" layout-margin ng-if="ctrl.isLimitedCentralUnitAccess">
-                    <span class="red-text font-bold">{{lang.archive_secure_document_content}}</span>
-                </div>
                 <iframe id="iframe-main-document" ng-if="ctrl.displayMainIframeViewer()"
                         ng-src="{{ctrl.viewURL}}" flex
                         class="iframe-main-document"
                         frameborder="0"></iframe>
 
-                <pspdf-viewer-directive doc-url="ctrl.viewURL" correspondence="ctrl.correspondence"
+                <pspdf-viewer-directive doc-url="ctrl.viewURL"
                                         ng-if="ctrl.displayMainPSPDFViewer()"
                                         id="pdfViewer" class="iframe-main-document" flex></pspdf-viewer-directive>
 

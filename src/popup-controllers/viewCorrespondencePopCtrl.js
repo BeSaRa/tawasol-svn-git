@@ -27,11 +27,7 @@ module.exports = function (app) {
                                                           generator,
                                                           rootEntity,
                                                           $filter,
-                                                          reloadCallback,
                                                           manageLaunchWorkflowService,
-                                                          distributionWFService,
-                                                          workflowActionService,
-                                                          userCommentService,
                                                           documentTagService) {
         'ngInject';
         var self = this;
@@ -39,7 +35,6 @@ module.exports = function (app) {
         self.fullScreen = true;
         self.validation = false;
         self.detailsReady = false;
-        self.simpleForward = false;
         self.employeeService = employeeService;
         self.mainDocument = true;
         self.secondURL = null;
@@ -54,8 +49,7 @@ module.exports = function (app) {
         self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
 
         self.hideSlowModeToggleButton = false;
-        self.isLimitedCentralUnitAccess = false;
-        self.showForwardAction = true;
+
         self.excludedManagePopupsFromGrids = [
             // 'departmentIncoming',
             'g2gIncoming',
@@ -65,6 +59,7 @@ module.exports = function (app) {
         ];
 
         self.viewURL = '';
+
 
         self.isOfficeOnlineViewer = function (url) {
             return url && url.$$unwrapTrustedValue().indexOf('.aspx') !== -1;
@@ -125,6 +120,9 @@ module.exports = function (app) {
             }
         }
 
+        // set the slowConnectionMode when popup opens
+        _resetViewModeToggle(true);
+
         /**
          * @description Checks if toggle slow connection is enabled for entity from global settings and for user from preferences to switch views
          * @returns {*|boolean}
@@ -141,22 +139,19 @@ module.exports = function (app) {
         };
 
         self.displayMainIframeViewer = function () {
-            return ((self.isTheMainDocumentInView() && !self.psPDFViewerEnabled) || (self.isTheMainDocumentInView() && self.psPDFViewerEnabled && self.isOfficeOnlineViewer(self.viewURL)))
-                && self.correspondence && !self.isLimitedCentralUnitAccess;
+            return ((self.isTheMainDocumentInView() && !self.psPDFViewerEnabled) || (self.isTheMainDocumentInView() && self.psPDFViewerEnabled && self.isOfficeOnlineViewer(self.viewURL))) && self.correspondence;
         };
 
         self.displayMainPSPDFViewer = function () {
-            return self.isTheMainDocumentInView() && self.psPDFViewerEnabled && !self.isOfficeOnlineViewer(self.viewURL)
-                && self.correspondence && !self.isLimitedCentralUnitAccess;
+            return self.isTheMainDocumentInView() && self.psPDFViewerEnabled && !self.isOfficeOnlineViewer(self.viewURL) && self.correspondence;
         };
 
         self.displaySecondIframeViewer = function () {
-            return (!self.mainDocument && !self.psPDFViewerEnabled) || (!self.mainDocument && self.psPDFViewerEnabled && self.isOfficeOnlineViewer(self.secondURL))
-                && !self.isLimitedCentralUnitAccess;
+            return (!self.mainDocument && !self.psPDFViewerEnabled) || (!self.mainDocument && self.psPDFViewerEnabled && self.isOfficeOnlineViewer(self.secondURL));
         };
 
         self.displaySecondPSPDFViewer = function () {
-            return !self.mainDocument && self.psPDFViewerEnabled && !self.isOfficeOnlineViewer(self.secondURL) && !self.isLimitedCentralUnitAccess;
+            return !self.mainDocument && self.psPDFViewerEnabled && !self.isOfficeOnlineViewer(self.secondURL);
         };
         /**
          * @description Toggles the view mode for the document/attachment/linked doc
@@ -290,7 +285,7 @@ module.exports = function (app) {
         };
 
         self.isEditContentDisabled = function () {
-            if (self.editMode || correspondenceService.isLimitedCentralUnitAccess(self.correspondence)) {
+            if (self.editMode) {
                 return true;
             } else if (!self.correspondence.isCorrespondenceApprovedBefore()) {
                 return false;
@@ -341,57 +336,6 @@ module.exports = function (app) {
         self.toggleFullScreen = function () {
             self.fullScreen = !self.fullScreen;
         };
-
-        /**
-         * @description toggle simple forward
-         */
-        self.toggleSimpleForward = function () {
-            if (typeof self.favoriteUsers === 'undefined' && typeof self.favoriteWFActions === 'undefined' && typeof self.comments === 'undefined') {
-                $q.all([
-                    distributionWFService.loadFavorites('users'),
-                    workflowActionService.loadFavoriteActions(),
-                    userCommentService.loadUserCommentsForDistribution()
-                ]).then(function (result) {
-                    self.favoriteUsers = result[0];
-                    self.favoriteWFActions = result[1];
-                    self.comments = result[2];
-
-                    _toggleSimpleForward()
-                });
-            } else {
-                _toggleSimpleForward()
-            }
-        }
-
-        function _toggleSimpleForward() {
-            self.simpleForward = true;
-            $timeout(function () {
-                $mdSidenav('sideNav-simple-forward').toggle();
-            }, 100);
-        }
-
-        self.checkShowForwardAction = function () {
-            if (!self.forwardAction ||
-                (self.forwardAction.hasOwnProperty('hide') && self.forwardAction.hide) ||
-                self.forwardAction.hasOwnProperty('permissionKey') && !employeeService.hasPermissionTo(self.forwardAction.permissionKey)) {
-                return false;
-            }
-
-            return self.forwardAction.checkShow(self.forwardAction, self.workItem || self.correspondence);
-        }
-
-        function _findForwardAction() {
-            if (!self.actions) {
-                return null;
-            }
-
-            return _.find(self.actions, function (action) {
-                return action.hasOwnProperty('text') &&
-                    (action.text.indexOf('grid_action_launch_distribution_workflow') > -1 ||
-                        action.text.indexOf('grid_action_forward') > -1 ||
-                        action.text.indexOf('grid_action_accept_launch_distribution_workflow') > -1)
-            });
-        }
 
         self.closeCorrespondenceDialog = function () {
             if (self.workItem) {
@@ -512,24 +456,8 @@ module.exports = function (app) {
         self.saveAndSend = function ($event) {
             return self.saveCorrespondenceChanges($event, false)
                 .then(function (result) {
-                    var defaultTab = 'favorites';
-                    var document = self.workItem;
-                    if (self.pageName === 'returnedCentralArchive') {
-                        document = self.correspondence;
-                        if (document.hasContent()) {
-                            defaultTab = {
-                                tab: 'registry_organizations',
-                                registryOU: document.registryOU,
-                                ou: document.ou || document.registryOU
-                            }
-                        }
-                    }
-
-                    if (document.isWorkItem()) {
-                        document.launchWorkFlow($event, 'forward', defaultTab, false, false, reloadCallback)
-                    } else {
-                        document.launchWorkFlow($event, 'forward', defaultTab, false, reloadCallback)
-                    }
+                    dialog.hide(true);
+                    self.workItem.launchWorkFlow($event, 'forward', 'favorites');
                 })
         };
 
@@ -623,12 +551,7 @@ module.exports = function (app) {
             });
         }
 
-        self.showAttachment = function (attachment, $index, $event, slowConnectionToggledByUser, popup) {
-            if (correspondenceService.isLimitedCentralUnitAccess(self.correspondence)) {
-                toast.error(langService.get('archive_secure_document_content'))
-                return false;
-            }
-
+        self.showAttachment = function (attachment, $index, $event, slowConnectionToggledByUser , popup) {
             if (!slowConnectionToggledByUser) {
                 _resetViewModeToggle();
             }
@@ -644,7 +567,7 @@ module.exports = function (app) {
                 attachmentService
                     .viewAttachment(attachment, self.correspondence.classDescription, !popup)
                     .then(function (result) {
-                        if (popup) {
+                        if(popup){
                             return;
                         }
                         _changeSecondURL(result, 'attachments', $index);
@@ -658,11 +581,6 @@ module.exports = function (app) {
         };
 
         self.showLinkedDocument = function (linkedDoc, $index, $event, popup, slowConnectionToggledByUser) {
-            if (correspondenceService.isLimitedCentralUnitAccess(self.correspondence)) {
-                toast.error(langService.get('archive_secure_document_content'))
-                return false;
-            }
-
             if (!slowConnectionToggledByUser) {
                 _resetViewModeToggle();
             }
@@ -759,12 +677,11 @@ module.exports = function (app) {
 
         self.isShowActionCount = function (action) {
             var record = self.workItem || self.correspondence;
-            var count = action.hasOwnProperty('count') ? action.count : null;
-
-            if (count && typeof count === 'function') {
-                count = count(action, record);
+            if (record.getInfo().documentClass !== 'outgoing') {
+                return false;
+            } else if (action.hasOwnProperty('count')) {
+                return true;
             }
-            return !!generator.validRequired(count);
         };
 
         /**
@@ -809,7 +726,6 @@ module.exports = function (app) {
                     var record = (self.workItem || self.correspondence);
                     record.gridAction = action;
 
-                    self.actionClicked(action);
                     if (action.hasOwnProperty('params') && action.params) {
                         action.callback(record, action.params, $event, defer, additionalData);
                     } else {
@@ -969,9 +885,9 @@ module.exports = function (app) {
             self.document_properties.$dirty = true;
         };
 
-        /*self.$onInit = function () {
+        self.$onInit = function () {
             self.hideSlowModeToggleButton = self.psPDFViewerEnabled && self.correspondence && self.correspondence.mimeType === 'application/pdf';
-        }*/
+        }
 
         self.saveTags = function () {
             documentTagService
@@ -1006,19 +922,12 @@ module.exports = function (app) {
         });
 
         self.$onInit = function () {
-            // set the slowConnectionMode when popup opens
-            _resetViewModeToggle(true);
-            self.hideSlowModeToggleButton = self.psPDFViewerEnabled && self.correspondence && self.correspondence.mimeType === 'application/pdf';
-
             manageLaunchWorkflowService.clearLaunchData();
             self.model = angular.copy(self.correspondence);
             // set action to review/user-inbox/search will enable edit of security level
             self.action = correspondenceService.getSecurityLevelEnabledActionByScreenName();
-            self.forwardAction = _findForwardAction();
-            self.showForwardAction = self.checkShowForwardAction();
 
             if (self.correspondence) {
-                self.isLimitedCentralUnitAccess = correspondenceService.isLimitedCentralUnitAccess(self.correspondence);
                 self.info = self.correspondence.getInfo();
                 if (self.correspondence.defaultModeIfEditing === correspondenceService.documentEditModes.officeOnline) {
                     self.editContentFrom = 'editContentFromGrid';
@@ -1044,13 +953,6 @@ module.exports = function (app) {
                 self.excludedManagePopupsFromGrids.push("departmentIncoming");
             }
             filterStickyActions();
-        }
-
-        self.actionClicked = function (action) {
-            if (self.content.desktop && action.text === 'grid_action_add_stamp') {
-                self.content.desktop.overlay = true;
-                self.editMode = true;
-            }
         }
 
         self.isExternalOrG2GInCentralArchive = function () {

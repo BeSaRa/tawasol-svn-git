@@ -15,7 +15,6 @@ module.exports = function (app) {
             delete model.centralArchiveIndicator;
             delete model.privateRegOuIndicator;
             delete model.notSyncOuIndicator;
-            delete model.tempRegOUSection;
             return model;
         });
 

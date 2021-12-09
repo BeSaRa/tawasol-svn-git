@@ -420,7 +420,6 @@ module.exports = function (app) {
                 disableAll: function (model) {
                     return true;
                 }
-            })
-            .getPageNameOverride('returnedCentralArchive', 'draftOutgoing');
+            });
     })
 };

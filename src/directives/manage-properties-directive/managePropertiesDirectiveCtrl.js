@@ -20,7 +20,6 @@ module.exports = function (app) {
                                                               classificationService,
                                                               OUClassification,
                                                               Classification,
-                                                              $state,
                                                               $rootScope) {
         'ngInject';
         var self = this;
@@ -453,7 +452,7 @@ module.exports = function (app) {
 
         self.checkOrganizationDisabled = function () {
             // if no document provided or still the controller prepare the instance.
-            if (!self.document || $state.current.name.indexOf('central-archive.returned') > -1)
+            if (!self.document)
                 return false;
             // disable organization when edit mode for any case || if in add mode and the current employee not in central archive organization.
             if ((self.document.hasVsId() && $stateParams.action !== 'receiveg2g') || !self.employee.inCentralArchive()) {
@@ -489,7 +488,7 @@ module.exports = function (app) {
             })
         }
 
-        function _broadcastSelectedRegOu() {
+        function _broadcastSelectedRegOu(){
             var selectedOu = _findRegistryOuById(self.document.registryOU);
             $rootScope.$broadcast('$RegistryOuChanged', selectedOu);
         }
@@ -498,7 +497,6 @@ module.exports = function (app) {
          * @description on registry change.
          * @param organizationId
          * @param field
-         * @param resetOu
          */
         self.onRegistryChange = function (organizationId, field, resetOu) {
             self.checkNullValues(field);
@@ -579,9 +577,8 @@ module.exports = function (app) {
                     value: 'file'
                 }];
 
-            if (!self.document.hasVsId() || $stateParams.action === 'editAfterApproved' || $stateParams.action === 'editAfterExport' ||
-                $stateParams.action === 'reply' || $stateParams.action === 'duplicateVersion' || $stateParams.action === 'receiveg2g' ||
-                $stateParams.action === 'receive' || $state.current.name.indexOf('central-archive.returned') > -1) {
+            if (!self.document.hasVsId() || $stateParams.action === 'editAfterApproved' || $stateParams.action === 'editAfterExport'
+                || $stateParams.action === 'reply' || $stateParams.action === 'duplicateVersion' || $stateParams.action === 'receiveg2g' || $stateParams.action === 'receive') {
                 for (var f = 0; f < fields.length; f++) {
                     var field = fields[f], options = _.get(self, field.options);
                     if (self.checkStatus(field.name) && self.checkMandatory(field.name) && options && options.length) {
@@ -802,12 +799,6 @@ module.exports = function (app) {
                 field.$setValidity('required', false);
             }
         };
-
-        self.onOrganizationChange = function (field, $event) {
-            self.checkNullValues(field);
-            var organization = _.find(self.organizations, {id: self.document.ou})
-            self.document.registryOU = organization.hasRegistry ? self.document.ou : organization.regouId;
-        }
 
         $timeout(function () {
             self.sourceForm = $scope.outgoing_properties;

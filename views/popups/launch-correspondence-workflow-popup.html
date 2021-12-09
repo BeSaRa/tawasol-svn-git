@@ -144,7 +144,6 @@
                                     organization-groups="ctrl.organizationGroupsCopy"
                                     from-predefined="false"
                                     item="ctrl.correspondence"
-                                    action-key="ctrl.actionKey"
                                     hidden-forward-sender-info="ctrl.isHiddenForwardSenderInfo()"></selected-workflow-items-directive>
                         </div>
                         <!-- Users -->
@@ -246,7 +245,6 @@
                                     organization-groups="ctrl.organizationGroupsCopy"
                                     from-predefined="false"
                                     item="ctrl.correspondence"
-                                    action-key="ctrl.actionKey"
                                     hidden-forward-sender-info="ctrl.isHiddenForwardSenderInfo()"></selected-workflow-items-directive>
                         </div>
                         <!-- Private Users -->
@@ -300,7 +298,6 @@
                                     organization-groups="ctrl.organizationGroupsCopy"
                                     from-predefined="false"
                                     item="ctrl.correspondence"
-                                    action-key="ctrl.actionKey"
                                     hidden-forward-sender-info="ctrl.isHiddenForwardSenderInfo()"></selected-workflow-items-directive>
                         </div>
                         <!-- Managers -->
@@ -354,7 +351,6 @@
                                     organization-groups="ctrl.organizationGroupsCopy"
                                     from-predefined="false"
                                     item="ctrl.correspondence"
-                                    action-key="ctrl.actionKey"
                                     hidden-forward-sender-info="ctrl.isHiddenForwardSenderInfo()"></selected-workflow-items-directive>
                         </div>
                         <!-- Vice Managers -->
@@ -408,7 +404,6 @@
                                     organization-groups="ctrl.organizationGroupsCopy"
                                     from-predefined="false"
                                     item="ctrl.correspondence"
-                                    action-key="ctrl.actionKey"
                                     hidden-forward-sender-info="ctrl.isHiddenForwardSenderInfo()"></selected-workflow-items-directive>
                         </div>
                         <!-- Head of government entities -->
@@ -462,7 +457,6 @@
                                     organization-groups="ctrl.organizationGroupsCopy"
                                     from-predefined="false"
                                     item="ctrl.correspondence"
-                                    action-key="ctrl.actionKey"
                                     hidden-forward-sender-info="ctrl.isHiddenForwardSenderInfo()"></selected-workflow-items-directive>
                         </div>
                         <!-- Workflow Groups -->
@@ -512,7 +506,6 @@
                                     organization-groups="ctrl.organizationGroupsCopy"
                                     from-predefined="false"
                                     item="ctrl.correspondence"
-                                    action-key="ctrl.actionKey"
                                     hidden-forward-sender-info="ctrl.isHiddenForwardSenderInfo()"></selected-workflow-items-directive>
                         </div>
                         <!-- Organization Units -->
@@ -562,7 +555,6 @@
                                     organization-groups="ctrl.organizationGroupsCopy"
                                     from-predefined="false"
                                     item="ctrl.correspondence"
-                                    action-key="ctrl.actionKey"
                                     hidden-forward-sender-info="ctrl.isHiddenForwardSenderInfo()"></selected-workflow-items-directive>
                         </div>
                     </div>
@@ -572,8 +564,6 @@
     </md-dialog-content>
     <!-- Buttons and info -->
     <md-dialog-actions class="cms-dialog-actions">
-        <span flex ng-if="ctrl.showMessageCannotReturned()"
-              class="red-text">{{lang.get('multiple_workflows_can_not_be_returned')}}</span>
         <md-button class="md-raised md-primary" ng-click="ctrl.launchDistributionCorrespondenceWorkFlow()"
                    ng-disabled="ctrl.disableSend">
             {{lang.get(ctrl.textButton)}}

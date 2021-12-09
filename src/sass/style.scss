@@ -1689,7 +1689,7 @@ tr.unread-row, tr.current-version {
   }
 }
 
-span.indicator-content {
+.indicator-td span.indicator-content {
   min-width: 18px;
   min-height: 18px;
   height: 18px;
@@ -1844,22 +1844,6 @@ span.indicator-content {
   z-index: 61;
 }
 
-#simple-forward {
-  background-color: rgb(250, 250, 250);
-  max-width: 100%;
-  width: 30% !important;
-}
-
-.custom-chip {
-  border: 1px solid #cccccc;
-  background: #eee;
-  cursor: pointer;
-  border-radius: 5px;
-  white-space: nowrap;
-  padding: 5px;
-  margin: 3px;
-}
-
 .ps .textarea-height,
 .textarea-height {
   max-height: 104px !important;
@@ -1877,10 +1861,6 @@ span.indicator-content {
 
 .hint.hint-reference {
   bottom: -7px;
-}
-
-.hint.hint-reference-xl {
-  bottom: -12px;
 }
 
 .page-404-header {
@@ -2400,20 +2380,6 @@ md-dialog {
   }
 }
 
-.cms-datepicker-invisible {
-  visibility: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-html.rtl {
-  .cms-datepicker-invisible {
-    left: initial;
-    right: 0;
-  }
-}
-
 .md-subheader {
   .cms-subheader-text {
     //display: inline-block !important;
@@ -2477,13 +2443,6 @@ html.rtl {
   .absolute-announcements.login-announcements {
     left: 450px;
     right: 50px;
-  }
-
-  .flip-login {
-    .absolute-announcements.login-announcements {
-      left: 50px;
-      right: 450px;
-    }
   }
 
   .absolute-read {
@@ -2716,11 +2675,6 @@ md-chips.custom-chips {
   left: 10px;
 }
 
-#search-facets {
-  width: 250px;
-  max-width: 250px;
-}
-
 .toolbar-ou-search {
   margin: 0px !important;
   padding: 10px !important;
@@ -2735,46 +2689,4 @@ md-chips.custom-chips {
   }
 }
 
-#search-facets {
-  width: 250px;
-  max-width: 250px;
-}
 
-.subject.small-screen {
-  max-width: 150px !important;
-
-  .subject-internal {
-    max-width: 150px !important;
-  }
-}
-
-.display-none {
-  display: none;
-}
-
-.flip-login {
-  #login-meta-wrapper {
-    order: 2;
-  }
-
-  #login-form-wrapper {
-    order: 1;
-  }
-
-
-  .absolute-announcements.login-announcements {
-    left: 450px;
-    right: 50px;
-  }
-}
-
-html.rtl {
-  .pb-5 {
-    padding-bottom: 5px;
-  }
-}
-
-.max-w-750 {
-  width: 750px !important;
-  max-width: 750px !important;
-}

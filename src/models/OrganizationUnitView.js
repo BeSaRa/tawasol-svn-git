@@ -73,20 +73,6 @@ module.exports = function (app) {
                 return this[language + 'Name'];
             };
 
-            OrganizationUnitView.prototype.getTranslatedNameRegOUSection = function () {
-                if (this.tempRegOUSection) {
-                    return this.tempRegOUSection[langService.current + 'Name']
-                }
-                return this[langService.current + 'Name'];
-            };
-
-            OrganizationUnitView.prototype.getNameByLanguageRegOUSection = function (language) {
-                if (this.tempRegOUSection) {
-                    return this.tempRegOUSection[language + 'Name']
-                }
-                return this[language + 'Name'];
-            };
-
             /**
              * @description Get the status of organization as Active or Inactive instead of true or false.
              * @returns {string}

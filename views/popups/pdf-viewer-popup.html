@@ -8,22 +8,15 @@
                                                   work-item="ctrl.correspondence"
                                                   correspondence="ctrl.generalStepElementView.correspondence"
                                                   g2g-item-copy="ctrl.g2gItemCopy"></correspondence-view-action-directive>
-            <span flex md-truncate class="font-bold text-center pb-5">{{::ctrl.correspondence.getTranslatedName()}}</span>
-            <md-switch ng-if="ctrl.enableAttachUserInfo" ng-change="ctrl.onAttachToggleChange()"
-                       ng-model="ctrl.attachUserInfoToSignature">
-                <label>{{lang.get('attach_user_info_to_sign')}}</label>
+            <span flex md-truncate class="font-bold text-center">{{::ctrl.correspondence.getTranslatedName()}}</span>
+            <md-switch ng-if="ctrl.enableAttachUsernameAndDate" ng-change="ctrl.onAttachToggleChange()"
+                       ng-model="ctrl.attacheUsernameAndDateToSignature">
+                <label>{{lang.get('attach_name_and_date_to_signature')}}</label>
             </md-switch>
             <md-button class="md-raised md-primary"
                        ng-if="ctrl.employeeCanEditContent()"
                        ng-click="ctrl.toggleCorrespondenceEditMode()">
                 {{lang.edit_content}}
-            </md-button>
-            <md-button ng-if="ctrl.showForwardAction"
-                       ng-click="ctrl.toggleSimpleForward()"
-                       class="md-icon-button"
-                       tooltip-direction="{{lang.current === 'ar'? 'right':'left'}}"
-                       tooltip="{{ctrl.forwardAction.hasOwnProperty('textCallback')? lang.get(ctrl.forwardAction.textCallback(ctrl.correspondence)): lang.get(ctrl.forwardAction.text)}}">
-                <md-icon md-svg-icon="share-all"></md-icon>
             </md-button>
             <md-button ng-if="ctrl.correspondence" ng-click="ctrl.closeDialog()"
                        class="md-icon-button">
@@ -38,19 +31,6 @@
                                       work-item="ctrl.correspondence"
                                       correspondence="ctrl.generalStepElementView.correspondence"></viewer-sidebar-directive>
             <div id="pdf-viewer" layout="column" class="relative" flex></div>
-
-            <md-sidenav id="simple-forward" ng-if="ctrl.simpleForward && ctrl.correspondence"
-                        md-whiteframe="3"
-                        ng-class="{'md-sidenav-right':lang.current === 'en'}"
-                        md-component-id="sideNav-simple-forward">
-                <div class="p020" layout="column" scroll-directive>
-                    <simple-forward-directive flex work-item="ctrl.correspondence"
-                                              correspondence="ctrl.generalStepElementView.correspondence"
-                                              comments="ctrl.comments"
-                                              favorite-users="ctrl.favoriteUsers"
-                                              favorite-work-flow-actions="ctrl.favoriteWFActions"></simple-forward-directive>
-                </div>
-            </md-sidenav>
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
@@ -69,8 +49,7 @@
         </div>
         <div ng-if="ctrl.sequentialWF">
             <!--tooltip="{{ctrl.nextSeqStep.getTranslatedName()}}"-->
-            <md-button ng-if="!ctrl.isLaunchStep && ctrl.employeeService.hasPermissionTo('TERMINATE_SEQ_WF')"
-                       ng-disabled="ctrl.disableSaveButton"
+            <md-button ng-if="!ctrl.isLaunchStep" ng-disabled="ctrl.disableSaveButton"
                        class="md-raised md-primary"
                        ng-click="ctrl.terminateSEQWF()">{{lang.terminate}}
             </md-button>

@@ -258,23 +258,12 @@ module.exports = function (app) {
                 if (record.isTerminated()) {
                     return;
                 }
-                var deferTerminate = $q.defer();
-                if (record.isSharedFollowup()) {
-                    dialog.confirmMessage(langService.get('confirm_terminate_with_shared_followup'))
+                record.terminate(false, $event).then(function () {
+                    return self.reloadFollowupBooks(self.grid.page)
                         .then(function () {
-                            deferTerminate.resolve(true);
+                            new ResolveDefer(defer);
                         });
-                } else {
-                    deferTerminate.resolve(true);
-                }
-                deferTerminate.promise.then(function () {
-                    record.terminate(false, $event).then(function () {
-                        return self.reloadFollowupBooks(self.grid.page)
-                            .then(function (result) {
-                                new ResolveDefer(defer);
-                            });
-                    });
-                })
+                });
             };
 
             self.checkIfTerminateBulkAvailable = function () {
@@ -288,54 +277,12 @@ module.exports = function (app) {
              * @param $event
              */
             self.terminateBulk = function ($event) {
-                if (!self.selectedFollowupBooks.length) {
-                    return;
-                }
                 if (!self.checkIfTerminateBulkAvailable()) {
                     return;
                 }
-                var selectedItems = angular.copy(self.selectedFollowupBooks),
-                    sharedFollowupsBooks = [], notSharedFollowupBooks = [];
-
-                _.map(selectedItems, function (item) {
-                    if (item.isSharedFollowup()) {
-                        sharedFollowupsBooks.push(item);
-                    } else {
-                        notSharedFollowupBooks.push(item);
-                    }
-                    return item;
+                followUpUserService.terminateBulkFollowup(self.selectedFollowupBooks).then(function () {
+                    return self.reloadFollowupBooks(self.grid.page);
                 });
-                var terminateDefer = $q.defer();
-                if (sharedFollowupsBooks.length === 0) {
-                    terminateDefer.resolve(selectedItems);
-                } else {
-                    var buttonsMap = {
-                        terminate: {
-                            id: 1,
-                            key: 'terminate',
-                            langKey: 'terminate'
-                        },
-                        skipAndTerminate: {
-                            id: 2,
-                            key: 'skipAndTerminate',
-                            langKey: 'skip_and_terminate'
-                        }
-                    };
-                    dialog.confirmThreeButtonMessage(langService.get('confirm_terminate_selected_some_shared_followup'), '', langService.get(buttonsMap.terminate.langKey), langService.get(buttonsMap.skipAndTerminate.langKey), false, null, false)
-                        .then(function (result) {
-                            if (result.button === buttonsMap.skipAndTerminate.id) {
-                                terminateDefer.resolve(notSharedFollowupBooks);
-                            } else if (result.button === buttonsMap.terminate.id) {
-                                terminateDefer.resolve(selectedItems);
-                            }
-                        });
-                }
-
-                terminateDefer.promise.then(function (itemsToTerminate) {
-                    followUpUserService.terminateBulkFollowup(itemsToTerminate).then(function () {
-                        return self.reloadFollowupBooks(self.grid.page);
-                    });
-                })
             };
 
             /**
@@ -684,7 +631,7 @@ module.exports = function (app) {
                     checkShow: function (action, model) {
                         model = _getOriginalFollowupBook(model);
 
-                        return !model.isTerminated() && !model.isSharedFollowup();
+                        return !model.isTerminated();
                     }
                 },
                 // Move To Folder
@@ -739,7 +686,7 @@ module.exports = function (app) {
                             isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
                         }
 
-                        return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model) && !correspondenceService.isLimitedCentralUnitAccess(model);
+                        return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model);
                     },
                     permissionKey: [
                         "DOWNLOAD_MAIN_DOCUMENT",
@@ -879,7 +826,7 @@ module.exports = function (app) {
                             callback: self.sendSMS,
                             class: "action-green",
                             checkShow: function (action, model) {
-                                return !correspondenceService.isLimitedCentralUnitAccess(model);
+                                return true;
                             }
                         },
                         // send reminder email to user
@@ -888,7 +835,6 @@ module.exports = function (app) {
                             icon: 'message',
                             text: 'grid_action_send_email_reminder',
                             callback: self.sendReminderEmailToUser,
-                            showInView: false,
                             class: "action-green",
                             checkShow: function (action, model) {
                                 return true;

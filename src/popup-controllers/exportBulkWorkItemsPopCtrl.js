@@ -38,10 +38,6 @@ module.exports = function (app) {
             return canExport;
         };
 
-        self.canPrint = function(record){
-            return !correspondenceService.isLimitedCentralUnitAccess(record);
-        }
-
         self.canExportRelatedData = function (type) {
             return self.settings.canExport(canExportOptions[type]);
         };

@@ -35,21 +35,6 @@ module.exports = function (app) {
                 return self[fieldName] ? langService.get('yes') : langService.get('no');
             };
 
-            IncomingSearch.prototype.hasValidRefDocDateRange = function () {
-                var model = this, isValid = false;
-                if ((model.refDocDateFrom && model.refDocDateTo) || (!model.refDocDateFrom && !model.refDocDateTo)) {
-                    isValid = true;
-                }
-                return isValid;
-            };
-
-            IncomingSearch.prototype.hasValidFollowUpDateRange = function () {
-                var model = this, isValid = false;
-                if ((model.followUpFrom && model.followUpTo) || (!model.followUpFrom && !model.followUpTo)) {
-                    isValid = true;
-                }
-                return isValid;
-            };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

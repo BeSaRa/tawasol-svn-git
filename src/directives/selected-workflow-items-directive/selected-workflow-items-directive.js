@@ -1,6 +1,6 @@
 module.exports = function (app) {
     require('./selected-workflow-items-style.scss');
-    app.directive('selectedWorkflowItemsDirective', function ($timeout, cmsTemplate) {
+    app.directive('selectedWorkflowItemsDirective', function ($timeout,cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
@@ -15,11 +15,10 @@ module.exports = function (app) {
                 workflowComments: '=',
                 deleteCallback: '=',
                 deleteBulkCallback: '=',
-                organizationGroups: '=',
+                organizationGroups : '=',
                 fromPredefined: '=',
                 item: '=',
-                hiddenForwardSenderInfo: '=',
-                actionKey: '='
+                hiddenForwardSenderInfo: '='
             }
         }
     })

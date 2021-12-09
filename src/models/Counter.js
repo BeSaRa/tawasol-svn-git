@@ -29,8 +29,7 @@ module.exports = function (app) {
                     'menu_item_my_followup',
                     'menu_item_g2g',
                     'menu_item_government_inbox',
-                    'menu_item_government_returned_mail',
-                    'menu_item_archive_returned'
+                    'menu_item_government_returned_mail'
                 ],
                 maps = {
                     menu_item_outgoing: [
@@ -149,14 +148,10 @@ module.exports = function (app) {
                         'groupMail'
                     ],
                     menu_item_central_archive_mail: [
-                        'readyToExportCentralArchive',
-                        'returnedMailCentralArchive'
+                        'readyToExportCentralArchive'
                     ],
                     menu_item_central_archive_ready_to_export: [
                         'readyToExportCentralArchive'
-                    ],
-                    menu_item_archive_returned: [
-                        'returnedMailCentralArchive'
                     ],
                     menu_item_folders: [
                         'foldersCount'

@@ -128,7 +128,4 @@ module.exports = function (app) {
     require('./annotationLogService')(app);
     require('./manageLaunchWorkflowService')(app);
     require('./ssoService')(app);
-    require('./arabicNormalizerService')(app);
-    require('./externalDataSourceService')(app);
-    require('./userExternalDataSourceService')(app);
 };

@@ -808,31 +808,15 @@ module.exports = function (app) {
          * @param includeChildOus
          * @param excludeApplicationUserId
          */
-        self.getAvailableProxies = function (registryOuId, includeChildOus, excludeApplicationUserId,outOfOffice) {
+        self.getAvailableProxies = function (registryOuId, includeChildOus, excludeApplicationUserId) {
             return self.searchByCriteria({
                 regOu: registryOuId,
-                includeChildOus: includeChildOus,
-                outOfOffice: outOfOffice
-            }).then(function (result) {
-                return _filterProxy(_mapProxyUser(result), excludeApplicationUserId);
-            })
-        };
-
-        /**
-         * @description get available proxy users for given organization.
-         * @param ouId
-         * @param includeChildOus
-         * @param excludeApplicationUserId
-         */
-        self.getAvailableProxiesByOu = function (ouId, includeChildOus, excludeApplicationUserId) {
-            return self.searchByCriteria({
-                ou: ouId,
                 includeChildOus: includeChildOus,
                 outOfOffice: false
             }).then(function (result) {
                 return _filterProxy(_mapProxyUser(result), excludeApplicationUserId);
             })
-        }
+        };
 
         /**
          * @description Updates the manager proxy before user want to set out of office

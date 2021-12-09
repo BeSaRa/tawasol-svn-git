@@ -108,13 +108,6 @@ module.exports = function (app) {
             RootEntity.prototype.getRootEntityIdentifier = function () {
                 return this.rootEntity.identifier;
             }
-            RootEntity.prototype.isChatBotEnabled = function () {
-                return self.rootEntity.hasOwnProperty('chatbotEnabled') && !!self.rootEntity.chatbotEnabled;
-            }
-            RootEntity.prototype.isAzureCognitiveSearchEnabled = function () {
-                return self.rootEntity.hasOwnProperty('azureCognitiveSearchEnabled') && !!self.rootEntity.azureCognitiveSearchEnabled;
-            };
-
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

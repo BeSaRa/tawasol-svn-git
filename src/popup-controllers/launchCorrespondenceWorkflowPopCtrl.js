@@ -43,9 +43,7 @@ module.exports = function (app) {
                                                                     rootEntity,
                                                                     SentItemDepartmentInbox,
                                                                     lookupService,
-                                                                    reloadCallback,
-                                                                    manageLaunchWorkflowService,
-                                                                    $state) {
+                                                                    manageLaunchWorkflowService) {
         'ngInject';
         var self = this;
         self.controllerName = 'launchCorrespondenceWorkflowPopCtrl';
@@ -56,8 +54,6 @@ module.exports = function (app) {
         self.rootEntity = rootEntity;
         self.canMinimize = false;
         self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
-        self.isCentralArchive = employeeService.getEmployee().inCentralArchive();
-
 
         /**
          * get multi info in case the correspondence array.
@@ -104,6 +100,7 @@ module.exports = function (app) {
             return approvedStatus;
         }
 
+        // cannot_send_to_multi
         self.actionKey = actionKey;
         // selected_document_has_not_approved_document
         self.multi = multi;
@@ -617,8 +614,10 @@ module.exports = function (app) {
                 sections = sections.concat(centralArchiveOUs);
             }
 
-            // sorting from BE based on user selection (alphabetical or by org structure)
-            return _.map([].concat(regOus, sections), function (item) {
+            // sort regOu-section
+            return _.map(_.sortBy([].concat(regOus, sections), [function (ou) {
+                return ou.tempRegOUSection[langService.current + 'Name'].toLowerCase();
+            }]), function (item) {
                 item.toOUId = 'g' + item.toOUId;
                 return item;
             });
@@ -750,12 +749,6 @@ module.exports = function (app) {
          */
         function _addUsersToSelectedGrid(users) {
             users = angular.isArray(users) ? users : [users];
-            var restrictedUsers = _getUsersNotHaveDocumentSecurityLevel(users, 'securityLevel');
-            // notify when user doesn't have security level of secret document
-            if (restrictedUsers.length) {
-                dialog.alertMessage(_prepareUserHasSecretSecurityLevelMessage(restrictedUsers));
-            }
-
             _.map(users, function (item) {
                 if (!item.escalationStatus) {
                     item.escalationStatus = currentOUEscalationProcess;
@@ -766,17 +759,16 @@ module.exports = function (app) {
         }
 
         /**
-         * @description show proxy message
+         * @description
          * @param proxies
          * @private
          */
         function _showProxyMessage(proxies) {
-            var restrictedUsers = _getUsersNotHaveDocumentSecurityLevel(proxies, 'proxyInfo.securityLevels');
-            restrictedUsers = _.map(restrictedUsers, 'users');
-            /*if (restrictedUsers && restrictedUsers.length) {
-                dialog.alertMessage(_prepareProxyMessage(restrictedUsers, false));
-            }*/
-            var proxyUsersHaveSecurityLevel = _.differenceBy(proxies, restrictedUsers, 'proxyInfo.proxyDomain');
+            var proxyUsersNotHaveDocumentSecurityLevel = self.getUsersDoesNotHaveDocumentSecurityLevel(proxies);
+            if (proxyUsersNotHaveDocumentSecurityLevel && proxyUsersNotHaveDocumentSecurityLevel.length) {
+                dialog.alertMessage(_prepareProxyMessage(proxyUsersNotHaveDocumentSecurityLevel, false));
+            }
+            var proxyUsersHaveSecurityLevel = _.differenceBy(proxies, proxyUsersNotHaveDocumentSecurityLevel, 'proxyInfo.proxyDomain');
             if (proxyUsersHaveSecurityLevel.length) {
                 dialog.alertMessage(_prepareProxyMessage(proxyUsersHaveSecurityLevel, true));
             }
@@ -785,7 +777,6 @@ module.exports = function (app) {
         /**
          * @description prepare proxy Message
          * @param proxyUsers
-         * @param isDocumentHaveSecurityLevel
          * @private
          */
         function _prepareProxyMessage(proxyUsers, isDocumentHaveSecurityLevel) {
@@ -801,35 +792,6 @@ module.exports = function (app) {
             });
 
             var table = tableGeneratorService.createTable([langService.get('arabic_name'), langService.get('english_name'), langService.get('proxy_arabic_name'), langService.get('proxy_english_name'), langService.get('proxy_domain'), langService.get('start_date'), langService.get('end_date'), langService.get('proxy_message')], 'error-table');
-            table.createTableRows(tableRows);
-
-            titleTemplate.append(table.getTable(true));
-
-            return titleTemplate.html();
-        }
-
-        /**
-         * @description prepare use has secret security level message
-         * @returns {*}
-         * @private
-         * @param items
-         */
-        function _prepareUserHasSecretSecurityLevelMessage(items) {
-            var titleMessage = langService.get('users_can_not_view_secret_document');
-
-            var titleTemplate = angular.element('<span class="validation-title">' + titleMessage + '</span> <br/>');
-            titleTemplate.html(titleMessage);
-
-            var tableRows =
-                _.map(items, function (item) {
-                    var info = item.correspondence.getInfo();
-                    return _.map(item.users, function (user) {
-                        return [info.title, user.arName, user.enName];
-                    });
-                });
-            tableRows = tableRows.flat();
-            var table = tableGeneratorService.createTable(
-                [langService.get('subject'), langService.get('arabic_name'), langService.get('english_name')], 'error-table');
             table.createTableRows(tableRows);
 
             titleTemplate.append(table.getTable(true));
@@ -1263,8 +1225,7 @@ module.exports = function (app) {
                     fromPredefined: false,
                     item: self.correspondence,
                     isWorkItem: angular.isArray(self.correspondence) ? false : self.correspondence.isWorkItem(),
-                    hiddenForwardSenderInfo: self.isHiddenForwardSenderInfo(),
-                    actionKey: self.actionKey
+                    hiddenForwardSenderInfo: self.isHiddenForwardSenderInfo()
                 }
             })
         };
@@ -1505,25 +1466,18 @@ module.exports = function (app) {
                     self.distributionWF.setIsSeqWFLaunch(typeof self.correspondence.getSeqWFId !== "undefined" ? !!self.correspondence.getSeqWFId() : false);
 
                     distributionWFService.startLaunchWorkflow(self.distributionWF, self.correspondence, self.actionKey)
-                        .then(function (result) {
-                            if (!result) {
-                                self.disableSend = false;
-                                return;
-                            }
+                        .then(function () {
                             toast.success(langService.get('launch_success_distribution_workflow'));
                             dialog.hide();
-
-                            reloadCallback && reloadCallback();
                         }).catch(function (error) {
                         self.disableSend = false;
-                        /*if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                        if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                             var info = self.correspondence.getInfo();
                             dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                             return false;
                         } else {
-                           errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
-                            return false;
-                        }*/
+                            return errorCode.showErrorDialog(error, null, generator.getTranslatedError(error));
+                        }
                     });
                 }).catch(function () {
                     self.disableSend = false;
@@ -1691,40 +1645,19 @@ module.exports = function (app) {
                 });
         };
 
-        function _getUsersNotHaveDocumentSecurityLevel(users, securityLevelProperty) {
-            self.correspondences = angular.isArray(self.correspondence) ? self.correspondence : [self.correspondence];
-            return _.filter(self.correspondences.map(function (correspondence) {
-                if (!correspondence.hasNormalOrPersonalPrivateSecurityLevel()) {
-                    var filteredUsers = _filterUsersBySecurityLevel(correspondence, users, securityLevelProperty);
-                    if (!filteredUsers.length) {
-                        return;
+        self.getUsersDoesNotHaveDocumentSecurityLevel = function (proxyUsers) {
+            return _.filter(proxyUsers, function (proxyUser) {
+                var proxyUserSecurityLevels = generator.getSelectedCollectionFromResult(self.securityLevels, proxyUser.proxyInfo.securityLevels, 'lookupKey');
+
+                return _.every(proxyUserSecurityLevels, function (userSecurityLevel) {
+                    if (self.correspondence.hasOwnProperty('securityLevelLookup')) {
+                        return userSecurityLevel.lookupKey !== self.correspondence.securityLevelLookup.lookupKey
+                    } else {
+                        return userSecurityLevel.lookupKey !== self.correspondence.securityLevel.lookupKey
                     }
-                    return {
-                        correspondence: correspondence,
-                        users: filteredUsers
-                    }
-                }
-            }), function (item) {
-                return typeof item !== 'undefined'
+                });
             })
         }
 
-        function _filterUsersBySecurityLevel(correspondence, users, securityLevelProperty) {
-            return _.filter(users, function (user) {
-                var userSecurityLevels = generator.getSelectedCollectionFromResult(self.securityLevels, user[securityLevelProperty], 'lookupKey');
-                return _.every(userSecurityLevels, function (userSecurityLevel) {
-                    return userSecurityLevel.lookupKey !== correspondence.securityLevel.id;
-                });
-            });
-        }
-
-        self.showMessageCannotReturned = function () {
-            var pages = ['app.outgoing.add', 'app.outgoing.simple-add', 'app.outgoing.review', 'app.outgoing.ready-to-send',
-                'app.incoming.add', 'app.incoming.simple-add', 'app.incoming.review', 'app.incoming.ready-to-send'];
-
-            return self.selectedWorkflowItems.length > 1 &&
-                self.isCentralArchive &&
-                pages.indexOf($state.current.name) !== -1;
-        }
     });
 };

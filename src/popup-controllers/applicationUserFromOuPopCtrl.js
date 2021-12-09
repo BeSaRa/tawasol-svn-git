@@ -174,8 +174,6 @@ module.exports = function (app) {
 
         self.genders = lookupService.returnLookups(lookupService.gender);
         self.languages = lookupService.returnLookups(lookupService.language);
-        self.seqWFEmailSettingsList = lookupService.returnLookups(lookupService.seqWFEmailSettings);
-
         self.jobTitles = jobTitleService.jobTitles;
         self.ranks = rankService.ranks;
         self.themes = themeService.themes;
@@ -225,8 +223,10 @@ module.exports = function (app) {
                 return section;
             });
 
-            // sorting from BE based on user selection (alphabetical or by org structure)
-            return [].concat(regOus, sections);
+            // sort regOu-section
+            return _.sortBy([].concat(regOus, sections), [function (ou) {
+                return ou.tempRegOUSection[langService.current + 'Name'].toLowerCase();
+            }]);
         }
 
         self.viewInboxAsOptions = [
@@ -1085,7 +1085,7 @@ module.exports = function (app) {
                                 userOuPermissions: userOuPermissions
                             },
                             resolve: {
-                                permissions: function (roleService) {
+                                permissions: function(roleService){
                                     'ngInject';
                                     return roleService.getPermissionByGroup(null, true);
                                 },
@@ -1175,7 +1175,7 @@ module.exports = function (app) {
                         availableProxies: function (ouApplicationUserService) {
                             'ngInject';
                             return ouApplicationUserService
-                                .getAvailableProxies(null, true, ouApplicationUser.applicationUser.id, true)
+                                .getAvailableProxies(null, true, ouApplicationUser.applicationUser.id)
                                 .then(function (result) {
                                     return result;
                                 });

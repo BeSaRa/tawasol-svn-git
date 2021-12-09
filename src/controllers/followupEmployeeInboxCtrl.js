@@ -997,7 +997,7 @@ module.exports = function (app) {
                         isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
                     }
 
-                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model) && !correspondenceService.isLimitedCentralUnitAccess(model);
+                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
@@ -1065,7 +1065,7 @@ module.exports = function (app) {
                 shortcut: false,
                 showInViewOnly: true,
                 checkShow: function (action, model) {
-                    return gridService.checkToShowMainMenuBySubMenu(action, model) && !correspondenceService.isLimitedCentralUnitAccess(model);
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL",

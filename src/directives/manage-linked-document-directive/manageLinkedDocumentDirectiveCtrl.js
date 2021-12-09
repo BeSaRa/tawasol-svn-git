@@ -87,20 +87,10 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-
-            if (correspondence.isLimitedCentralUnitAccess()) {
-                dialog.infoMessage(langService.get('archive_secure_document_content'));
-                return;
-            }
             correspondenceService.viewCorrespondence(correspondence, [], true, true);
         };
 
-        var _saveLinkedDocs = function (linkedDocs) {
-            if (!self.vsId) {
-                toast.success(langService.get('success_messages'));
-                return;
-            }
-
+        var _saveLinkedDocs = function(linkedDocs){
             var document = new self.models[self.documentClass.toLowerCase()]({
                 linkedDocs: angular.copy(linkedDocs),
                 vsId: self.vsId,
@@ -195,6 +185,7 @@ module.exports = function (app) {
                     });
                     _saveLinkedDocs(angular.copy(self.linkedDocs));
                     self.selectedCorrespondences = [];
+                    //toast.success(langService.get('delete_success'));
                 })
         };
 
@@ -212,7 +203,7 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.checkBulkDelete = function () {
-            return _.every(self.selectedCorrespondences, function (correspondence) {
+            return  _.every(self.selectedCorrespondences, function (correspondence) {
                 return self.checkIfReplyToAction(correspondence);
             })
         }

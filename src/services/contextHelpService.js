@@ -6,10 +6,8 @@ module.exports = function (app) {
         self.serviceName = 'contextHelpService';
 
         self.defaultHelpUrl = 'help/';
-        self.defaultVideoHelpUrl = 'help_videos/';
 
         self.currentHelpUrl = null;
-        self.currentHelpID = null;
 
         self.excludedControllers = [
             'documentsNotifyDirectiveCtrl'
@@ -19,7 +17,6 @@ module.exports = function (app) {
             if (excludeMe) {
                 return;
             }
-            self.currentHelpID = helpID;
             self.currentHelpUrl = self.defaultHelpUrl + helpID;
         };
         /**
@@ -29,22 +26,7 @@ module.exports = function (app) {
             return dialog
                 .showDialog({
                     templateUrl: self.currentHelpUrl + '_' + langService.current + '_help.html',
-                    targetEvent: $event || false,
-                    controller: function ($compile, $scope, $element, $timeout, configurationService) {
-                        'ngInject';
-
-                        if (!configurationService.G2G_QATAR_SOURCE) {
-                            var scope = $scope.$new(true);
-                            scope.ctrl = {
-                                url: self.defaultVideoHelpUrl + self.currentHelpID + '.mp4'
-                            }
-                            var link = $compile(angular.element('<help-videos-directive url="ctrl.url">'))(scope);
-                            $timeout(function () {
-                                angular.element($element[0].querySelector('md-content')).prepend(link);
-                            })
-                        }
-                    },
-                    controllerAs: "ctrl"
+                    targetEvent: $event || false
                 })
                 .then(function () {
 

@@ -125,7 +125,6 @@ module.exports = function (app) {
                                       tokenService,
                                       langService,
                                       errorCode,
-                                      CorrespondenceInfo,
                                       authenticationService) {
                 'ngInject';
                 var self = this;
@@ -225,21 +224,26 @@ module.exports = function (app) {
                  * @return {Promise|Attachment}
                  */
                 self.addAttachment = function (document, attachment, callback) {
-                    var info = document instanceof CorrespondenceInfo ? document : document.getInfo(),
-                        promise = null;
-                    if (!!attachment.externalImportData) {
-                        promise = _addAttachmentFromExternalSource(document, attachment, callback);
-                    } else {
-                        promise = _addAttachmentFromSystem(document, attachment, callback);
-                    }
-
-                    return promise.then(function (result) {
+                    var url = _generateAttachmentUrl(document);
+                    return $http({
+                        url: url,
+                        method: 'POST',
+                        data: generator.interceptSendInstance('Attachment', attachment),
+                        headers: {'Content-Type': undefined},
+                        uploadEventHandlers: {
+                            progress: function (e) {
+                                if (callback) {
+                                    callback(Math.floor((e.loaded * 100 / e.total)))
+                                }
+                            }
+                        }
+                    }).then(function (result) {
                         attachment.vsId = result.data.rs;
                         attachment.createdBy = _getEmployeeDomainName();
-                        attachment.isDeletable = self.checkAttachmentIsDeletable(info, attachment);
+                        attachment.isDeletable = self.checkAttachmentIsDeletable(document, attachment);
                         attachment = generator.generateInstance(attachment, Attachment, self._sharedMethods);
                         attachment = generator.interceptReceivedInstance('Attachment', attachment);
-                        return attachment;
+                        return attachment;//generator.generateInstance(attachment, Attachment, self._sharedMethods);
                     })
                         .catch(function (error) {
                             if (errorCode.checkIf(error, 'ERROR_UPLOAD_FILE') === true) {
@@ -253,60 +257,6 @@ module.exports = function (app) {
                             return $q.reject(error);
                         });
                 };
-
-                /**
-                 * @description add new attachment from system
-                 * @param document
-                 * @param attachment
-                 * @param callback
-                 * @return {Promise|Attachment}
-                 */
-                var _addAttachmentFromSystem = function (document, attachment, callback) {
-                    var info = document instanceof CorrespondenceInfo ? document : document.getInfo(),
-                        url = _generateAttachmentUrl(info);
-
-                    return $http({
-                        url: url,
-                        method: 'POST',
-                        data: generator.interceptSendInstance('Attachment', attachment),
-                        headers: {'Content-Type': undefined},
-                        uploadEventHandlers: {
-                            progress: function (e) {
-                                if (callback) {
-                                    callback(Math.floor((e.loaded * 100 / e.total)))
-                                }
-                            }
-                        }
-                    });
-                };
-
-                /**
-                 * @description add new attachment from external source
-                 * @param document
-                 * @param attachment
-                 * @param callback
-                 * @return {Promise|Attachment}
-                 */
-                var _addAttachmentFromExternalSource = function (document, attachment, callback) {
-                    var info = document instanceof CorrespondenceInfo ? document : document.getInfo(),
-                        url = _generateAttachmentUrl(info);
-
-                    url += '/user-ext-import-store?sourceId=' + attachment.externalImportData.sourceId + '&paramValue=' + attachment.externalImportData.identifier;
-
-                    return $http({
-                        url: url,
-                        method: 'POST',
-                        data: generator.interceptSendInstance('Attachment', attachment),
-                        uploadEventHandlers: {
-                            progress: function (e) {
-                                if (callback) {
-                                    callback(Math.floor((e.loaded * 100 / e.total)))
-                                }
-                            }
-                        }
-                    });
-                };
-
                 /**
                  * add attachment to exists document
                  * @param vsId
@@ -395,40 +345,7 @@ module.exports = function (app) {
                  * @return {Promise|Attachment}
                  */
                 self.updateAttachment = function (document, attachment, callback) {
-                    var info = document instanceof CorrespondenceInfo ? document : document.getInfo(),
-                        promise = null;
-                    if (!!attachment.externalImportData) {
-                        promise = _updateAttachmentFromExternalSource(document, attachment, callback);
-                    } else {
-                        promise = _updateAttachmentFromSystem(document, attachment, callback);
-                    }
-
-                    return promise.then(function (result) {
-                        attachment.isDeletable = self.checkAttachmentIsDeletable(info, attachment);
-                        attachment = generator.generateInstance(attachment, Attachment, self._sharedMethods);
-                        attachment = generator.interceptReceivedInstance('Attachment', attachment);
-                        return attachment;
-                    })
-                        .catch(function (error) {
-                            if (errorCode.checkIf(error, 'ERROR_UPLOAD_FILE') === true) {
-                                dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
-                                return $q.reject(error);
-                            } else if (errorCode.checkIf(error, 'CANNOT_EXPORT_TOO_MANY_ATTACHMENTS_OR_LINKED_DOCUMENTS') === true) {
-                                dialog.errorMessage(generator.getTranslatedError(error));
-                                return $q.reject(error);
-                            } else if (errorCode.checkIf(error, 'ATTACHMENT_RESTRICTED_TO_MODIFY_AFTER_BOOK_AUTHORIZATION') === true) {
-                                dialog.errorMessage(langService.get('attachment_restricted_to_modify_after_book_authorization'));
-                                return $q.reject(error);
-                            }
-
-                            return $q.reject(error);
-                        });
-                };
-
-                var _updateAttachmentFromSystem = function (document, attachment, callback) {
-                    var info = document instanceof CorrespondenceInfo ? document : document.getInfo(),
-                        url = _generateAttachmentUrl(info) + '/update';
-
+                    var url = _generateAttachmentUrl(document) + '/update';
                     return $http({
                         url: url,
                         method: 'POST',
@@ -441,28 +358,24 @@ module.exports = function (app) {
                                 }
                             }
                         }
-                    });
-                }
-                var _updateAttachmentFromExternalSource = function (document, attachment, callback) {
-                    var info = document instanceof CorrespondenceInfo ? document : document.getInfo(),
-                        url = _generateAttachmentUrl(info);
-
-                    url += '/user-ext-import-store?sourceId=' + attachment.externalImportData.sourceId + '&paramValue=' + attachment.externalImportData.identifier;
-                    url += '&withProtect=true';
-
-                    return $http({
-                        url: url,
-                        method: 'PUT',
-                        data: generator.interceptSendInstance('Attachment', attachment),
-                        uploadEventHandlers: {
-                            progress: function (e) {
-                                if (callback) {
-                                    callback(Math.floor((e.loaded * 100 / e.total)))
-                                }
+                    }).then(function (result) {
+                        attachment.isDeletable = self.checkAttachmentIsDeletable(document, attachment);
+                        attachment = generator.generateInstance(attachment, Attachment, self._sharedMethods);
+                        attachment = generator.interceptReceivedInstance('Attachment', attachment);
+                        return attachment;
+                    })
+                        .catch(function (error) {
+                            if (errorCode.checkIf(error, 'ERROR_UPLOAD_FILE') === true) {
+                                dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
+                                return $q.reject(error);
+                            } else if (errorCode.checkIf(error, 'CANNOT_EXPORT_TOO_MANY_ATTACHMENTS_OR_LINKED_DOCUMENTS') === true) {
+                                dialog.errorMessage(generator.getTranslatedError(error));
+                                return $q.reject(error);
                             }
-                        }
-                    });
-                }
+
+                            return $q.reject(error);
+                        });
+                };
 
                 /**
                  * @description delete given classification.
@@ -798,21 +711,20 @@ module.exports = function (app) {
                     priorityLevel = priorityLevel.hasOwnProperty('id') ? priorityLevel.id : priorityLevel;
                     searchTemplateUrl = searchTemplateUrl && searchTemplateUrl.hasOwnProperty('url') ? searchTemplateUrl.url : searchTemplateUrl;
 
-                    var urlReplaceString = searchTemplateUrl.indexOf('&mimeType') > -1 ? '&mimeType' : '&feature',
-                        variables = ['', 'token', 'vsId', 'attachmentType', 'securityLevel', 'attachmentName', 'updateActionStatus', 'exportStatus', 'priorityLevel', 'username', 'password', 'locale'].join('%2C:').change({
-                            token: tokenService.getToken(),
-                            vsId: correspondence.getInfo().vsId,
-                            attachmentType: attachmentType,
-                            securityLevel: securityLevel,
-                            attachmentName: attachment.documentTitle ? attachment.documentTitle : '',
-                            locale: langService.current,
-                            updateActionStatus: updateActionStatus,
-                            priorityLevel: priorityLevel,
-                            exportStatus: attachment.exportStatus,
-                            username: encodeURIComponent(userData.username),
-                            password: encodeURIComponent(userData.password)
-                        });
-                    searchTemplateUrl = searchTemplateUrl.replace(urlReplaceString, variables + urlReplaceString);
+                    var variables = ['', 'token', 'vsId', 'attachmentType', 'securityLevel', 'attachmentName', 'updateActionStatus', 'exportStatus', 'priorityLevel', 'username', 'password', 'locale'].join('%2C:').change({
+                        token: tokenService.getToken(),
+                        vsId: correspondence.getInfo().vsId,
+                        attachmentType: attachmentType,
+                        securityLevel: securityLevel,
+                        attachmentName: attachment.documentTitle ? attachment.documentTitle : '',
+                        locale: langService.current,
+                        updateActionStatus: updateActionStatus,
+                        priorityLevel: priorityLevel,
+                        exportStatus: attachment.exportStatus,
+                        username: encodeURIComponent(userData.username),
+                        password: encodeURIComponent(userData.password)
+                    });
+                    searchTemplateUrl = searchTemplateUrl.replace('&mimeType', variables + '&mimeType');
 
                     return dialog
                         .showDialog({

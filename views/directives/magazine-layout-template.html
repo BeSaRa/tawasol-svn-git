@@ -60,7 +60,7 @@
                             <md-icon md-svg-icon="folder-move"
                                      class="action-green"></md-icon>
                         </md-button>
-                        <md-button class="md-icon-button" ng-if="ctrl.employee.hasPermissionTo('FOLDERS_QUEUE')"
+                        <md-button class="md-icon-button" ng-if="!ctrl.moveToFolderBulk"
                                    aria-label="{{lang.inbox_add_to_folder}}"
                                    tooltip="{{lang.inbox_add_to_folder}}"
                                    ng-click="ctrl.addToFolderUserInboxBulk($event)">
@@ -220,17 +220,12 @@
                 </div>
                 <div layout="column" layout-align="center center">
                     <div class="magazine-fix-actions">
-                        <span ng-repeat="quickAction in ctrl.quickActions track by $index"
-                              ng-if="ctrl.isShowQuickAction(quickAction, workItem)"
-                              ng-class="{'icon-relative':ctrl.isShowActionCount(quickAction,workItem)}">
-                            <md-button ng-click="ctrl.callbackQuickAction(quickAction, workItem, $event)"
-                                       class="md-icon-button magazine-button">
+                        <span ng-repeat="quickAction in ctrl.quickActions track by $index" ng-if="ctrl.isShowQuickAction(quickAction, workItem)">
+                            <md-button ng-click="ctrl.callbackQuickAction(quickAction, workItem, $event)" class="md-icon-button magazine-button">
                             <md-icon md-svg-icon="{{quickAction.icon}}" class="cursor-pointer {{quickAction.class}}"
                                      tooltip="{{ctrl.getQuickActionText(quickAction, workItem ,  true)}}"
                                      tooltip-direction="{{lang.current === 'en' ? 'left': 'right'}}"></md-icon>
                             </md-button>
-                             <span ng-if="ctrl.isShowActionCount(quickAction,workItem)"
-                                   class="counter magazine-counter blue">{{quickAction.count(quickAction, workItem)}}</span>
                         </span>
                     </div>
                 </div>

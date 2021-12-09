@@ -17,7 +17,6 @@ module.exports = function (app) {
             }
             model.relatedUsers = null;
 
-            delete model.checked;
             return model;
         });
 

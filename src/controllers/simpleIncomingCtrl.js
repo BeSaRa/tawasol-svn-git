@@ -13,7 +13,6 @@ module.exports = function (app) {
                                                    // documentTypes,
                                                    officeWebAppService,
                                                    counterService,
-                                                   correspondenceService,
                                                    generator,
                                                    $stateParams,
                                                    // documentFiles,
@@ -161,12 +160,16 @@ module.exports = function (app) {
                 if (self.incoming.contentFile) {
                     return self.incoming.addDocumentContentFile()
                         .then(function () {
-                            self.contentFileExist = true;
+                            self.contentFileExist = !!(self.incoming.hasOwnProperty('contentFile') && self.incoming.contentFile);
+                            self.contentFileSizeExist = !!(self.contentFileExist && self.incoming.contentFile.size);
+
                             saveCorrespondenceFinished(status, ignoreLaunch);
                             return true;
                         })
                 } else {
                     self.contentFileExist = false;
+                    self.contentFileSizeExist = false;
+
                     saveCorrespondenceFinished(status, ignoreLaunch);
                     return true;
                 }
@@ -226,14 +229,10 @@ module.exports = function (app) {
             } else {
                 var successKey = 'incoming_metadata_saved_success';
                 if (self.documentInformation) {
-                    self.incoming.contentSize = 1; // dummy content size
+                    self.incoming.contentSize = 1;
                     successKey = 'save_success';
-                } else if (self.incoming.contentFile) {
-                    if (self.incoming.externalImportData) {
-                        self.incoming.contentSize = 1; // dummy content size
-                    } else {
-                        self.incoming.contentSize = self.incoming.contentFile.size;
-                    }
+                } else if (self.incoming.contentFile && self.incoming.contentFile.size) {
+                    self.incoming.contentSize = self.incoming.contentFile.size;
                     successKey = 'save_success';
                 }
 
@@ -252,7 +251,7 @@ module.exports = function (app) {
             if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')) {
                 if (centralArchives && self.incoming.hasContent()) {
                     self.docActionLaunchDistributionWorkflow(self.incoming, false);
-                } else if (!!self.documentInformationExist || !!self.contentFileExist) {
+                } else if (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist)) {
                     dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
                         .then(function () {
                             self.docActionLaunchDistributionWorkflow(self.incoming);
@@ -260,10 +259,6 @@ module.exports = function (app) {
                 }
             }
         }
-
-        self.canSaveAndAnnotate = function () {
-            return self.hasPSPDFViewer && employeeService.hasPermissionTo(self.annotationPermission) && !correspondenceService.isLimitedCentralUnitAccess(self.incoming);
-        };
 
         self.saveAndAnnotateDocument = function ($event) {
             self.saveCorrespondence(null, false, true)
@@ -487,7 +482,7 @@ module.exports = function (app) {
         };
 
         var _hasContent = function () {
-            return (!!self.documentInformationExist || !!self.contentFileExist);
+            return (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
         };
 
         self.visibilityArray = [];
@@ -656,6 +651,7 @@ module.exports = function (app) {
             self.documentAction = null;
             self.documentInformationExist = false;
             self.contentFileExist = false;
+            self.contentFileSizeExist = false;
             self.document_properties.$setUntouched();
 
             self.simpleViewUrl = null;

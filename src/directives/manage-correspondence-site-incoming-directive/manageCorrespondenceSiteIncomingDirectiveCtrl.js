@@ -99,39 +99,37 @@ module.exports = function (app) {
         }
 
         var _resetDefaultNeedReplyFollowupDate = function () {
-            $timeout(function (){
-                if (self.correspondence) {
-                    var priorityLevel = self.correspondence.getInfo().priorityLevel;
-                    priorityLevel = priorityLevel.hasOwnProperty('lookupKey') ? priorityLevel.lookupKey : priorityLevel;
+            if (self.correspondence) {
+                var priorityLevel = self.correspondence.getInfo().priorityLevel;
+                priorityLevel = priorityLevel.hasOwnProperty('lookupKey') ? priorityLevel.lookupKey : priorityLevel;
 
-                    var slaOu = null;
-                    // if paper outgoing or incoming and current ou is central archive, use selected registryOu as slaOu
-                    if (_isShowRegistryUnit() && organizationForSLACentralArchive) {
-                        slaOu = organizationForSLACentralArchive;
-                    } else {
-                        slaOu = organizationForSLA;
-                    }
-                    if (typeof priorityLevel !== 'undefined' && priorityLevel !== null) {
-                        var slaDays = null;
-                        // organization has sla property and sla has property as same as document priority level
-                        if (slaOu.hasOwnProperty('sla') && slaOu.sla && slaOu.sla.hasOwnProperty(priorityLevel)) {
-                            slaDays = slaOu.sla[priorityLevel];
-                        }
-                        // if no SLA days or its less than 1, use default number of days to followup date to be today
-                        if (!slaDays || slaDays < 1) {
-                            slaDays = angular.copy(defaultFollowupNumberOfDays);
-                        }
-                        defaultNeedReplyFollowupDate = generator.getFutureDate(slaDays);
-                    }
+                var slaOu = null;
+                // if paper outgoing or incoming and current ou is central archive, use selected registryOu as slaOu
+                if (_isShowRegistryUnit() && organizationForSLACentralArchive) {
+                    slaOu = organizationForSLACentralArchive;
+                } else {
+                    slaOu = organizationForSLA;
                 }
-
-
-                // set followup date for all searched sites
-                if (self.subSearchResultCopy && self.subSearchResultCopy.length) {
-                    self.onFollowupStatusChange(self.followupStatus);
+                if (typeof priorityLevel !== 'undefined' && priorityLevel !== null) {
+                    var slaDays = null;
+                    // organization has sla property and sla has property as same as document priority level
+                    if (slaOu.hasOwnProperty('sla') && slaOu.sla && slaOu.sla.hasOwnProperty(priorityLevel)) {
+                        slaDays = slaOu.sla[priorityLevel];
+                    }
+                    // if no SLA days or its less than 1, use default number of days to followup date to be today
+                    if (!slaDays || slaDays < 1) {
+                        slaDays = angular.copy(defaultFollowupNumberOfDays);
+                    }
+                    defaultNeedReplyFollowupDate = generator.getFutureDate(slaDays);
                 }
-                return defaultNeedReplyFollowupDate;
-            })
+            }
+
+
+            // set followup date for all searched sites
+            if (self.subSearchResultCopy && self.subSearchResultCopy.length) {
+                self.onFollowupStatusChange(self.followupStatus);
+            }
+            return defaultNeedReplyFollowupDate;
         };
 
         /**

@@ -15,7 +15,6 @@ module.exports = function (app) {
                                                     ApplicationUserLookup,
                                                     ApplicationUserView,
                                                     organizationService,
-                                                    rootEntity,
                                                     errorCode,
                                                     userSubscriptionService) {
         'ngInject';
@@ -303,10 +302,7 @@ module.exports = function (app) {
             manageUserPreference: function (applicationUser, selectedTab, $event) {
                 applicationUser = applicationUser ? applicationUser : employeeService.getEmployee();
                 var ouApplicationUser = employeeService.getCurrentOUApplicationUser();
-                var employee = employeeService.getEmployee();
-                self.globalSetting = rootEntity.returnRootEntity().settings;
-                var isManagerOfCurrentOu = self.globalSetting.outofofficeFromAllUsers && organizationService.isManagerOfCurrentOu(employee);
-                var resolveOrganizations = $q.defer();
+                var resolveOuApplicationUsers = $q.defer();
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -314,13 +310,10 @@ module.exports = function (app) {
                         controller: 'userPreferencePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
+                            applicationUser: applicationUser,
                             selectedTab: selectedTab
                         },
                         resolve: {
-                            applicationUser: function (applicationUserService) {
-                                'ngInject';
-                                return applicationUserService.loadApplicationUserById(applicationUser.id);
-                            },
                             jobTitles: function (jobTitleService) {
                                 'ngInject';
                                 return jobTitleService.getJobTitles();
@@ -336,7 +329,7 @@ module.exports = function (app) {
                             organizations: function (organizationService) {
                                 'ngInject';
                                 return organizationService.getOrganizations().then(function (result) {
-                                    resolveOrganizations.resolve(result);
+                                    resolveOuApplicationUsers.resolve(result);
                                     return result
                                 });
                             },
@@ -351,8 +344,8 @@ module.exports = function (app) {
                             ouApplicationUsers: function (ouApplicationUserService) {
                                 'ngInject';
                                 var defer = $q.defer();
-                                resolveOrganizations.promise.then(function () {
-                                    ouApplicationUserService.loadOUApplicationUsersByUserId(applicationUser.id).then(function (result) {
+                                resolveOuApplicationUsers.promise.then(function () {
+                                    ouApplicationUserService.getOUApplicationUsersByUserId(applicationUser.id).then(function (result) {
                                         defer.resolve(result);
                                     });
                                 });
@@ -392,21 +385,13 @@ module.exports = function (app) {
                             },
                             availableProxies: function (ouApplicationUserService) {
                                 'ngInject';
-                                return isManagerOfCurrentOu ? [] : resolveOrganizations.promise.then(function () {
-                                    return _getProxyUsers(ouApplicationUserService, applicationUser, ouApplicationUser, false);
+                                return resolveOuApplicationUsers.promise.then(function () {
+                                    return _getProxyUsers(ouApplicationUserService, applicationUser, ouApplicationUser);
                                 });
-                            },
-                            proxyOrganizations: function (organizationService) {
-                                'ngInject';
-                                return isManagerOfCurrentOu ? organizationService.loadAllActiveOrganizations() : [];
                             },
                             predefinedActions: function (predefinedActionService) {
                                 'ngInject';
                                 return predefinedActionService.loadPredefinedActionsForUser();
-                            },
-                            ouApplicationUser: function (ouApplicationUserService) {
-                                'ngInject';
-                                return ouApplicationUserService.loadOUApplicationUserByUserIdAndOUId(applicationUser.id,  ouApplicationUser.getOuId());
                             }
                         }
                     });
@@ -435,9 +420,9 @@ module.exports = function (app) {
             }
         };
 
-        function _getProxyUsers(ouApplicationUserService, applicationUser, ouApplicationUser, outOfOffice) {
+        function _getProxyUsers(ouApplicationUserService, applicationUser, ouApplicationUser) {
             return ouApplicationUserService
-                .getAvailableProxies(ouApplicationUser.getRegistryOUID(), true, applicationUser.id, outOfOffice)
+                .getAvailableProxies(ouApplicationUser.getRegistryOUID(), true, applicationUser.id)
                 .then(function (result) {
                     var proxyInfo = applicationUser.hasProxy() ? applicationUser.getProxyInformation() : null;
                     return applicationUser.hasProxy() ?
@@ -582,7 +567,7 @@ module.exports = function (app) {
             applicationUserId = applicationUserId instanceof ApplicationUser ? applicationUserId.id : applicationUserId;
             return _.find(self.applicationUsers, function (applicationUser) {
                 return Number(applicationUser.id) === Number(applicationUserId);
-            }) || applicationUserId;
+            });
         };
 
         /**

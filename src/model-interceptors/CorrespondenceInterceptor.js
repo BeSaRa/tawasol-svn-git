@@ -145,7 +145,6 @@ module.exports = function (app) {
             delete model.tagsIndicator;
             delete model.followUpStatusIndicator;
             delete model.dueDateStatusIndicator;
-            delete model.isTransferredDocumentIndicator;
             delete model.docClassIndicator;
             // delete model.linkedAttachmenstList;
             delete model.attachmentList;
@@ -183,12 +182,6 @@ module.exports = function (app) {
             delete model.recordGridName;
             delete model.hasSequentialWFIndicator;
             delete model.docDateTemp;
-            delete model.externalImportData;
-            delete model.externalSiteIndicator;
-            delete model.internalSiteIndicator;
-            delete model.g2gSiteIndicator;
-            delete model.azureResultItem;
-            delete model.highlights;
             return model;
         });
 
@@ -250,7 +243,6 @@ module.exports = function (app) {
             model.securityLevelIndicator = model.securityLevel ? model.getSecurityLevelIndicator(model.securityLevel) : null;
             model.priorityLevelIndicator = model.priorityLevel ? model.getPriorityLevelIndicator(model.priorityLevel) : null;
             model.attachmentsIndicator = model.attachments && model.attachments.length ? model.getAttachmentsIndicator() : null;
-            model.isTransferredDocumentIndicator = model.getIsTransferredDocumentIndicator();
 
             if (model.tags && !angular.isArray(model.tags)) {
                 model.tags = angular.fromJson(model.tags);

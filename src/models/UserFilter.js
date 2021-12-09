@@ -19,7 +19,6 @@ module.exports = function (app) {
             self.sortOptionId = null;
             self.status = true;
             self.filterCriteria = {};
-            self.asProxy = null;
             // not related to the model.
             self.ui = {
                 // DocType(document class) equals
@@ -116,9 +115,6 @@ module.exports = function (app) {
                 key_24: {
                     value: null
                 },
-                key_25: {
-                    value: null
-                },
                 // anonymous properties - to be removed when sending
                 key_linkedAttachments: {
                     value: null
@@ -140,7 +136,7 @@ module.exports = function (app) {
                 }
             };
             // this is available keys for the current ui model
-            var availableKeys = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
+            var availableKeys = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -314,8 +310,6 @@ module.exports = function (app) {
                     }
                     self.ui.key_5.value = JSON.stringify(self.ui.key_5.value);
                 }
-                self.ui.key_25.value = (self.ui.key_25.value === null) ? null : self.ui.key_25.value;
-
 
                 self.filterCriteria = self.filterCriteria || {};
                 _.map(availableKeys, function (number) {

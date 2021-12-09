@@ -10,8 +10,7 @@ module.exports = function (app) {
             templateUrl: cmsTemplate.getDirective('pspdf-viewer-directive-template.html'),
             scope: {
                 docUrl: '=',
-                excludedPermissions: '=',
-                correspondence: '='
+                excludedPermissions: '='
             },
             link: function (scope, element, attrs, ctrl) {
                 scope.$on('$destroy', function () {

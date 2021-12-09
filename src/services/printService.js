@@ -12,33 +12,6 @@ module.exports = function (app) {
         var self = this;
         self.serviceName = 'printService';
 
-        self.printButtonTypes = {
-            pdf: {
-                id: 1,
-                type: 'pdf',
-                text: 'PDF',
-                cssClass: ''
-            },
-            excel: {
-                id: 2,
-                type: 'excel',
-                text: 'EXCEL',
-                cssClass: ''
-            },
-            word: {
-                id: 3,
-                type: 'word',
-                text: 'WORD',
-                cssClass: ''
-            },
-            csv: {
-                id: 4,
-                type: 'csv',
-                text: 'CSV',
-                cssClass: ''
-            }
-        };
-
         var _prepareExportedData = function (records, tableHeaders, title) {
             var record = records[0],
                 exportedData = record.getExportedData(),

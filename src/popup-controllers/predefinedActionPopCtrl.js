@@ -492,8 +492,10 @@ module.exports = function (app) {
                 sections = sections.concat(centralArchiveOUs);
             }
 
-            // sorting from BE based on user selection (alphabetical or by org structure)
-            return _.map([].concat(regOus, sections), function (item) {
+            // sort regOu-section
+            return _.map(_.sortBy([].concat(regOus, sections), [function (ou) {
+                return ou.tempRegOUSection[langService.current + 'Name'].toLowerCase();
+            }]), function (item) {
                 item.toOUId = 'g' + item.toOUId;
                 return item;
             });

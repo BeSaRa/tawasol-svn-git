@@ -69,13 +69,11 @@
                                         <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column
                                             md-order-by="createdOn">
                                             <span>{{lang.created_on}}</span></th>
-                                        <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length && ctrl.isOverdueSearch()"
-                                            md-column
+                                        <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length && ctrl.isOverdueSearch()" md-column
                                             md-order-by="{{ctrl.getSortingKey('mainSiteSubSiteString','Information')}}">
                                             <span>{{lang.correspondence_sites}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length && ctrl.isOverdueSearch()"
-                                            md-column
+                                        <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length && ctrl.isOverdueSearch()" md-column
                                             md-order-by="numberOfDays">
                                             <span>{{lang.number_of_days}}</span>
                                         </th>
@@ -131,14 +129,10 @@
                                         </td>
                                         <td md-cell>{{quickSearch.priorityLevel.getTranslatedName()}}</td>
                                         <td md-cell>{{quickSearch.docType.getTranslatedName()}}</td>
-                                        <td md-cell>
-                                            {{ctrl.isOverdueSearch() ? quickSearch.creatorInfo.getTranslatedName() : quickSearch.createdBy
-                                            }}
-                                        </td>
+                                        <td md-cell>{{ctrl.isOverdueSearch() ? quickSearch.creatorInfo.getTranslatedName() : quickSearch.createdBy }}</td>
                                         <td md-cell>{{quickSearch.createdOn}}</td>
                                         <td ng-if="ctrl.isOverdueSearch()" md-cell class="td-data">
-                                            <main-site-sub-site-directive item="quickSearch"
-                                                                          show-indicator="true"></main-site-sub-site-directive>
+                                            <main-site-sub-site-directive item="quickSearch"></main-site-sub-site-directive>
                                         </td>
                                         <td md-cell ng-if="ctrl.isOverdueSearch()">{{quickSearch.numberOfDays}}</td>
                                         <td md-cell ng-if="ctrl.selectedQuickSearchCorrespondence.length < 2">
@@ -151,13 +145,11 @@
                                         </td>
                                     </tr>
                                     <tr md-row ng-if="!ctrl.quickSearchCorrespondence.length">
-                                        <td md-cell colspan="{{ctrl.isOverdueSearch()? 10:8}}"
-                                            class="red-text text-center">{{lang.no_records_found}}
+                                        <td md-cell colspan="{{ctrl.isOverdueSearch()? 10:8}}" class="red-text text-center">{{lang.no_records_found}}
                                         </td>
                                     </tr>
                                     <tr md-row ng-if="ctrl.quickSearchCorrespondence.length && !searchResults.length">
-                                        <td md-cell colspan="{{ctrl.isOverdueSearch()? 10:8}}"
-                                            class="red-text text-center">
+                                        <td md-cell colspan="{{ctrl.isOverdueSearch()? 10:8}}" class="red-text text-center">
                                             {{lang.no_records_found_matching_search}}
                                         </td>
                                     </tr>

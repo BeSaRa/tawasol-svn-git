@@ -20,7 +20,6 @@ module.exports = function (app) {
             self.hasActiveSeqWF = null;
             self.signaturesCount = null;
             self.authorizeByAnnotation = null;
-            self.isOfficial = false;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];

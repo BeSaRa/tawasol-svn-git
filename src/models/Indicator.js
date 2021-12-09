@@ -616,7 +616,7 @@ module.exports = function (app) {
             };
 
             /**
-             * @description returns is official of attachment indicator and description
+             * @description returns is official of attachment
              * @returns {Indicator}
              */
             Indicator.prototype.getIsOfficialIndicator = function () {
@@ -626,74 +626,7 @@ module.exports = function (app) {
                     icon: self.getIndicatorIcons('isOfficial'),
                     tooltip: 'official_document',
                     legendText: function (indicator) {
-                        return langService.get('official_document');
-                    }
-                });
-            };
-
-            /**
-             * @description returns external site indicator and description
-             * @returns {Indicator}
-             */
-            Indicator.prototype.getExternalSiteIndicator = function () {
-                return new Indicator({
-                    class: 'indicator',
-                    text: 'indicator_external_site',
-                    icon: self.getIndicatorIcons('externalSite'),
-                    tooltip: 'indicator_external_site',
-                    legendText: function (indicator) {
-                        return langService.get('indicator_external_site');
-                    }
-                });
-            };
-
-            /**
-             * @description returns internal site indicator and description
-             * @returns {Indicator}
-             */
-            Indicator.prototype.getInternalSiteIndicator = function () {
-                return new Indicator({
-                    class: 'indicator',
-                    text: 'indicator_internal_site',
-                    icon: self.getIndicatorIcons('internalSite'),
-                    tooltip: 'indicator_internal_site',
-                    legendText: function (indicator) {
-                        return langService.get('indicator_internal_site');
-                    }
-                });
-            };
-
-            /**
-             * @description returns g2g site indicator and description
-             * @returns {Indicator}
-             */
-            Indicator.prototype.getG2GSiteIndicator = function () {
-                return new Indicator({
-                    class: 'indicator',
-                    text: 'indicator_g2g_site',
-                    icon: self.getIndicatorIcons('g2gSite'),
-                    tooltip: 'indicator_g2g_site',
-                    legendText: function (indicator) {
-                        return langService.get('indicator_g2g_site');
-                    }
-                });
-            };
-
-            /**
-             * @description returns shared followup indicator and description
-             * @returns {Indicator}
-             */
-            Indicator.prototype.getSharedFollowupIndicator = function (isShared) {
-                if (!isShared) {
-                    return null;
-                }
-                return new Indicator({
-                    class: 'indicator',
-                    text: 'indicator_shared_followup',
-                    icon: self.getIndicatorIcons('sharedFollowup'),
-                    tooltip: 'indicator_shared_followup',
-                    legendText: function (indicator) {
-                        return langService.get('indicator_shared_followup');
+                        return '';
                     }
                 });
             };

@@ -28,15 +28,12 @@
     <md-dialog-content layout="column" flex scroll-directive>
         <div layout="row" layout-fill flex>
             <div id="iframe-parent" layout="column" class="relative" flex>
-                <div layout="column" layout-margin ng-if="ctrl.isLimitedCentralUnitAccess">
-                    <span class="red-text font-bold">{{lang.archive_secure_document_content}}</span>
-                </div>
-                <iframe ng-if="ctrl.displayMainIframeViewer() && !ctrl.isLimitedCentralUnitAccess" id="iframe-main-document"
+                <iframe ng-if="ctrl.displayMainIframeViewer()" id="iframe-main-document"
                         class="iframe-main-document"
                         ng-src="{{ctrl.viewURL}}" flex
                         frameborder="0"></iframe>
-                <pspdf-viewer-directive doc-url="ctrl.viewURL" correspondence="ctrl.document"
-                                        ng-if="ctrl.displayMainPSPDFViewer() && !ctrl.isLimitedCentralUnitAccess"
+                <pspdf-viewer-directive doc-url="ctrl.viewURL"
+                                        ng-if="ctrl.displayMainPSPDFViewer()"
                                         id="pdfViewer" class="iframe-main-document" flex></pspdf-viewer-directive>
             </div>
         </div>

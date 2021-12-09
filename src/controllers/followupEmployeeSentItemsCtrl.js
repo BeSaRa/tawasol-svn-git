@@ -199,17 +199,14 @@ module.exports = function (app) {
 
             var info = followupSentItem.getInfo();
             info.wobNumber = null;
-            self.followupSentItemCopy = angular.copy(followupSentItem);
             correspondenceService.viewCorrespondence({
                 vsId: info.vsId,
                 docClassName: info.documentClass
             }, self.gridActions, checkIfEditPropertiesAllowed(followupSentItem, true), true)
                 .then(function () {
-                    self.followupSentItemCopy = null;
                     self.reloadFollowupEmployeeSentItems(self.grid.page);
                 })
                 .catch(function () {
-                    self.followupSentItemCopy = null;
                     self.reloadFollowupEmployeeSentItems(self.grid.page);
                 });
         };
@@ -225,14 +222,11 @@ module.exports = function (app) {
                 return;
             }
 
-            self.followupSentItemCopy = angular.copy(followupSentItem);
             followupSentItem.viewUserSentItem(self.gridActions, 'sentItem', $event)
                 .then(function () {
-                    self.followupSentItemCopy = null;
                     return self.reloadFollowupEmployeeSentItems(self.grid.page);
                 })
                 .catch(function () {
-                    self.followupSentItemCopy = null;
                     return self.reloadFollowupEmployeeSentItems(self.grid.page);
                 });
         };
@@ -310,10 +304,6 @@ module.exports = function (app) {
         self.mergeAndDownloadFullDocument = function (followupSentItem) {
             downloadService.mergeAndDownload(followupSentItem);
         };
-
-        self.sendReminderEmail = function (followupSentItem, $event) {
-            followupSentItem.openSendEmailReminderDialog($event);
-        }
 
         /**
          * @description Array of actions that can be performed on grid
@@ -413,7 +403,7 @@ module.exports = function (app) {
                         isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
                     }
 
-                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model) && !correspondenceService.isLimitedCentralUnitAccess(model);
+                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
@@ -513,36 +503,6 @@ module.exports = function (app) {
                 callback: self.viewTrackingSheet,
                 params: ['view_tracking_sheet', 'tabs']
             },
-            // Send
-            {
-                type: 'action',
-                icon: 'send',
-                text: 'grid_action_send',
-                shortcut: false,
-                checkShow: function (action, model) {
-                    return gridService.checkToShowMainMenuBySubMenu(action, model);
-                },
-                permissionKey: [],
-                checkAnyPermission: true,
-                subMenu: [
-                    // send reminder by email
-                    {
-                        type: 'action',
-                        icon: 'message',
-                        text: 'grid_action_send_reminder_email',
-                        shortcut: false,
-                        showInView: false,
-                        callback: self.sendReminderEmail,
-                        class: "action-red",
-                        checkShow: function (action, model) {
-                            if (!(model instanceof EventHistory)) {
-                                model = angular.copy(self.followupSentItemCopy);
-                            }
-                            return !model.isTerminated() && !model.isApproved() && !model.isSentToDepartmentOnly();
-                        }
-                    }
-                ]
-            }
         ];
 
         self.getEmployeeForFollowupEmployeeSentItems = function ($event) {

@@ -15,7 +15,6 @@ module.exports = function (app) {
                                                        downloadService,
                                                        employeeService,
                                                        SequentialWFResult,
-                                                       organizationService,
                                                        errorCode) {
         'ngInject';
         var self = this;
@@ -33,8 +32,7 @@ module.exports = function (app) {
             launchWF: 'launch',
             manageWFSteps: 'manage-steps',
             viewWFSteps: 'view-steps',
-            viewWFStatusSteps: 'view-wf-status-steps',
-            selectSeqWF: 'select-seq-wf'
+            viewWFStatusSteps: 'view-wf-status-steps'
         };
 
         self.workflowStepActionTypes = {
@@ -99,17 +97,6 @@ module.exports = function (app) {
                 });
         };
 
-        self.loadSubSequentialWorkflowsByRegOu = function (regOuId) {
-            if (!regOuId) {
-                return $q.reject('MISSING_REGISTRY_ORGANIZATION');
-            }
-            var url = urlService.sequentialWorkflow + '/sub-workflows/reg-ou/' + generator.getNormalizedValue(regOuId, 'id');
-            return $http.get(url)
-                .then(function (result) {
-                    return generator.interceptReceivedCollection('SequentialWF', generator.generateCollection(result.data.rs, SequentialWF, self._sharedMethods));
-                });
-        }
-
         /**
          * @description Contains methods for CRUD operations for sequential workflow
          */
@@ -135,22 +122,18 @@ module.exports = function (app) {
                                 /*creatorId: employeeService.getEmployee().id,
                                 creatorOUId: employeeService.getEmployee().getOUID()*/
                             }),
-                            defaultDocClass: (generator.validRequired(docClassId) ? docClassId : null),
-                            allowChangeOu: false,
-                            organizations: []
+                            defaultDocClass: (generator.validRequired(docClassId) ? docClassId : null)
                         }
                     });
             },
             /**
              * @description Opens popup to add new sequential workflow as copy of given record
-             * @param $event
              * @param sequentialWorkflow
              * @param regOuId
              * @param adHoc
-             * @param subSeqWF
-             * @param allowChangeOu
+             * @param $event
              */
-            sequentialWorkflowCopy: function ($event, sequentialWorkflow, regOuId, adHoc, subSeqWF, allowChangeOu) {
+            sequentialWorkflowCopy: function (sequentialWorkflow, regOuId, adHoc, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -160,8 +143,7 @@ module.exports = function (app) {
                         locals: {
                             editMode: false,
                             viewOnly: false,
-                            defaultDocClass: (adHoc || regOuId) ? sequentialWorkflow.docClassID : null,
-                            allowChangeOu: allowChangeOu
+                            defaultDocClass: adHoc ? sequentialWorkflow.docClassID : null
                         },
                         resolve: {
                             sequentialWorkflow: function () {
@@ -170,27 +152,15 @@ module.exports = function (app) {
                                     .then(function (newSequentialWF) {
                                         newSequentialWF.id = null;
                                         newSequentialWF.regOUId = regOuId ? generator.getNormalizedValue(regOuId, 'id') : null;
-                                        // replace steps with selected steps if adding sub sequential workflow
-                                        if (subSeqWF) {
-                                            newSequentialWF.steps = _.filter(angular.copy(sequentialWorkflow.stepRows), 'isSelectedForSubSeqWF');
-                                        }
                                         newSequentialWF.steps = _.map(newSequentialWF.steps, function (step) {
                                             step.id = null;
                                             return step;
                                         });
                                         newSequentialWF.isAdhoc = adHoc;
-                                        newSequentialWF.isSubWorkflow = subSeqWF;
                                         newSequentialWF.stepRows = angular.copy(newSequentialWF.steps);
 
                                         return newSequentialWF;
                                     });
-                            },
-                            organizations: function (){
-                                'ngInject';
-                                if (!allowChangeOu){
-                                    return [];
-                                }
-                                return organizationService.getOrganizationsForSeqWF();
                             }
                         }
                     });
@@ -210,9 +180,7 @@ module.exports = function (app) {
                         locals: {
                             editMode: true,
                             viewOnly: false,
-                            defaultDocClass: null,
-                            allowChangeOu: false,
-                            organizations: []
+                            defaultDocClass: null
                         },
                         resolve: {
                             sequentialWorkflow: function () {
@@ -237,9 +205,7 @@ module.exports = function (app) {
                         locals: {
                             editMode: true,
                             viewOnly: true,
-                            defaultDocClass: null,
-                            allowChangeOu: false,
-                            organizations: []
+                            defaultDocClass: null
                         },
                         resolve: {
                             sequentialWorkflow: function () {
@@ -287,6 +253,11 @@ module.exports = function (app) {
             sequentialWorkflowStepEdit: function (sequentialWorkflow, sequentialWorkflowStep, viewOnly, $event) {
                 var step = angular.copy(sequentialWorkflowStep),
                     defer = $q.defer();
+
+                /*// if new step and seqWF is internal, set organization to selected regOu as WF will be inside organization only
+                if (!sequentialWorkflowStep.id && sequentialWorkflow.isInternalSeqWF()) {
+                    step.uiOuId = sequentialWorkflow.regOUId;
+                }*/
 
                 // if not view only, proceed
                 // otherwise, load seqWF by id and use it as record and use step from it
@@ -369,31 +340,7 @@ module.exports = function (app) {
                         });
                 });
             },
-            /**
-             * @description Opens the dialog to select sub sequential workflow
-             * @param $event
-             * @param regOuId
-             * @returns {*}
-             */
-            selectSubSequentialWorkflow: function ($event, regOuId) {
-                return dialog
-                    .showDialog({
-                        templateUrl: cmsTemplate.getPopup('select-sub-sequential-workflow'),
-                        controller: 'selectSubSequentialWorkflowPopCtrl',
-                        controllerAs: 'ctrl',
-                        targetEvent: $event,
-                        locals: {
-                            allowDelete: true,
-                            allowEdit: true
-                        },
-                        resolve: {
-                            sequentialWorkflows: function (employeeService) {
-                                'ngInject';
-                                return self.loadSubSequentialWorkflowsByRegOu(regOuId || employeeService.getEmployee().getRegistryOUID());
-                            }
-                        }
-                    });
-            }
+
         };
 
         /**
@@ -622,7 +569,6 @@ module.exports = function (app) {
             var info = correspondence.getInfo(), addAttachment = false;
             var INSTANT_JSON = await pdfInstance.exportInstantJSON();
             delete INSTANT_JSON.pdfId;
-            INSTANT_JSON = PDFService.rotateImageAnnotationsWithPages(INSTANT_JSON, pdfInstance);
             return PDFService.applyAnnotationsOnPDFDocument(correspondence, AnnotationType.ANNOTATION, INSTANT_JSON, documentOperations)
                 .then(function (pdfContent) {
                     var formData = new FormData();

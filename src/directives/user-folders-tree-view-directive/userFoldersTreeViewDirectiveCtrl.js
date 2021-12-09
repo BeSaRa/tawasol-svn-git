@@ -47,22 +47,14 @@ module.exports = function (app) {
             return array;
         }
 
-        function getChildObjects(folder, array) {
-            for (var i = 0; i < folder.children.length; i++) {
-                array.push(folder.children[i]);
-                getChildObjects(folder.children[i], array);
-            }
-            return array;
-        }
-
         /**
          * @description Delete user folder and sub folders
          * @param folders
          * @param $event
          */
         self.removeUserFolder = function (folders, $event) {
-            var array = [folders];
-            getChildObjects(folders, array);
+            var array = [folders.id];
+            getChildIds(folders, array);
             // if user followup folder or normal folder
             if (self.followup) {
                 followUpUserService

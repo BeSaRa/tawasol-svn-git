@@ -1306,10 +1306,7 @@ module.exports = function (app) {
                     });
             }
 
-            workItem
-                .viewNewWorkItemDocument(self.gridActions, 'userInbox', $event, function () {
-                    self.reloadUserInboxes(self.grid.page);
-                })
+            workItem.viewNewWorkItemDocument(self.gridActions, 'userInbox', $event)
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page);
                 })
@@ -1396,15 +1393,6 @@ module.exports = function (app) {
         self.addToEmployeeFollowUp = function (item) {
             item.addToUserFollowUp();
         };
-
-        /**
-         * @description add workItem to broadcast FollowUp
-         * @param item
-         */
-        self.addToBroadcastFollowUp = function (item) {
-            item.addToBroadcastFollowUp();
-        };
-
         /**
          * @description annotate document
          * @param workItem
@@ -1558,11 +1546,6 @@ module.exports = function (app) {
                 sticky: true,
                 stickyIndex: 1,
                 checkShow: function (action, model) {
-                    var hasPermission = employeeService.hasPermissionTo("TERMINATE_SEQ_WF");
-                    if (model.hasActiveSeqWF()) {
-                        return hasPermission;
-                    }
-
                     return true;
                 }
             },
@@ -1577,10 +1560,7 @@ module.exports = function (app) {
                 sticky: true,
                 stickyIndex: 1,
                 checkShow: function (action, model) {
-                    return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() &&
-                        employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION) &&
-                        !model.isTerminatedSEQ() &&
-                        !correspondenceService.isLimitedCentralUnitAccess(model);
+                    return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() && employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION) && !model.isTerminatedSEQ();
                 }
             },
             // Add To
@@ -1607,7 +1587,6 @@ module.exports = function (app) {
                         icon: 'folder-plus',
                         text: 'grid_action_to_folder',
                         callback: self.addToFolder,
-                        permissionKey: 'FOLDERS_QUEUE',
                         class: "action-green",
                         checkShow: function (action, model) {
                             return true;
@@ -1657,19 +1636,6 @@ module.exports = function (app) {
                         text: 'grid_action_to_employee_followup',
                         shortcut: true,
                         callback: self.addToEmployeeFollowUp,
-                        permissionKey: 'ADMIN_USER_FOLLOWUP_BOOKS',
-                        class: "action-green",
-                        checkShow: function (action, model) {
-                            return true;
-                        }
-                    },
-                    // add to broadcast follow up
-                    {
-                        type: 'action',
-                        icon: 'book-search-outline',
-                        text: 'grid_action_to_broadcast_followup',
-                        shortcut: true,
-                        callback: self.addToBroadcastFollowUp,
                         permissionKey: 'ADMIN_USER_FOLLOWUP_BOOKS',
                         class: "action-green",
                         checkShow: function (action, model) {
@@ -1982,15 +1948,6 @@ module.exports = function (app) {
                         stickyIndex: 3,
                         checkShow: function (action, model) {
                             return true;
-                        },
-                        count: function (action, model) {
-                            var info = model.getInfo();
-                            // we do filter here because we can't get the updated count of workItem inside correspondence popup
-                            var selectedWorkItem = _.find(self.userInboxes, function (item) {
-                                return item.generalStepElm.workObjectNumber === info.wobNumber;
-                            });
-
-                            return selectedWorkItem.generalStepElm.commentsNO;
                         }
                     },
                     // Tasks
@@ -2101,7 +2058,7 @@ module.exports = function (app) {
                         isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
                     }
 
-                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model) && !correspondenceService.isLimitedCentralUnitAccess(model);
+                    return isAllowed && gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
@@ -2165,8 +2122,7 @@ module.exports = function (app) {
                 icon: 'send',
                 text: 'grid_action_send',
                 checkShow: function (action, model) {
-                    return gridService.checkToShowMainMenuBySubMenu(action, model) && !model.isBroadcasted() &&
-                        !correspondenceService.isLimitedCentralUnitAccess(model);
+                    return gridService.checkToShowMainMenuBySubMenu(action, model) && !model.isBroadcasted();
                 },
                 permissionKey: [
                     "SEND_COMPOSITE_DOCUMENT_BY_EMAIL",
@@ -2479,8 +2435,7 @@ module.exports = function (app) {
                                 && !info.isPaper
                                 && (info.documentClass !== 'incoming')
                                 && model.needApprove()
-                                && hasPermission
-                                && !correspondenceService.isLimitedCentralUnitAccess(model);
+                                && hasPermission;
                         }
                     }
                 ]

@@ -22,7 +22,6 @@ module.exports = function (app) {
             self.regOUId = null;
             self.docClassID = null;
             self.isAdhoc = null;
-            self.isSubWorkflow = false;
             self.steps = [];
 
             // temporary properties

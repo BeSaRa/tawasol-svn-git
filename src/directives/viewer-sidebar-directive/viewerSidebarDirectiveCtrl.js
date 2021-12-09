@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('viewerSidebarDirectiveCtrl', function ($scope, AnnotationType, $state, viewTrackingSheetService, correspondenceService, attachmentService, employeeService, $q, dialog, manageLaunchWorkflowService, LangWatcher, $filter, langService, gridService, generator) {
+    app.controller('viewerSidebarDirectiveCtrl', function ($scope, AnnotationType, $state, viewTrackingSheetService, correspondenceService, attachmentService, employeeService, $q, dialog, manageLaunchWorkflowService, LangWatcher, $filter, langService, gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewerSidebarDirectiveCtrl';
@@ -161,12 +161,11 @@ module.exports = function (app) {
 
         self.isShowActionCount = function (action) {
             var record = self.workItem || self.correspondence;
-            var count = action.hasOwnProperty('count') ? action.count : null;
-
-            if (count && typeof count === 'function') {
-                count = count(action, record);
+            if (record.getInfo().documentClass !== 'outgoing') {
+                return false;
+            } else if (action.hasOwnProperty('count')) {
+                return true;
             }
-            return !!generator.validRequired(count);
         };
 
         self.showAttachment = function (attachment, $index, $event, slowConnectionToggledByUser) {
@@ -235,9 +234,6 @@ module.exports = function (app) {
 
         self.$onInit = function () {
             filterStickyActions();
-            if (self.correspondence) {
-                self.isLimitedCentralUnitAccess = correspondenceService.isLimitedCentralUnitAccess(self.correspondence);
-            }
         }
     });
 };
