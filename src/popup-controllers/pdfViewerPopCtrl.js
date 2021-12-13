@@ -1909,14 +1909,23 @@ module.exports = function (app) {
                 .then(logAnnotations ? function (result) {
                     self.disableSaveButton = false;
                     toast.success(langService.get('launch_sequential_workflow_success'));
-                    if (isOutOfOffice) {
-                        dialog.hide();
-                    }
                     self.sendAnnotationLogs(function () {
-                        dialog.hide({
-                            content: self.savedPdfContent,
-                            action: PDFViewer.SEQ_LAUNCHED
-                        });
+                        if (isOutOfOffice) {
+                            console.log('CALLED');
+                            $timeout(function () {
+                                dialog.hide();
+                                dialog.hide({
+                                    content: self.savedPdfContent,
+                                    action: PDFViewer.SEQ_LAUNCHED
+                                });
+                            }, 2000)
+                        } else {
+                            dialog.hide({
+                                content: self.savedPdfContent,
+                                action: PDFViewer.SEQ_LAUNCHED
+                            });
+                        }
+
                     }, function (error) {
                         toast.error('ERROR While Sending the log to Server', error);
                     });
