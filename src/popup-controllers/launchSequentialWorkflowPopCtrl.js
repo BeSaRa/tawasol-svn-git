@@ -233,7 +233,9 @@ module.exports = function (app) {
             var firstStep = self.selectedSeqWF.steps[0];
 
             var tableRows = _.map(proxyUsers, function (proxyUser) {
-                return [firstStep.toUserInfo.arName, firstStep.toUserInfo.enName, proxyUser.arName, proxyUser.enName, proxyUser.proxyDomain, moment(proxyUser.proxyStartDate).format('YYYY-MM-DD'), moment(proxyUser.proxyEndDate).format('YYYY-MM-DD'), proxyUser.proxyMessage];
+                var proxyStartDate = proxyUser.proxyStartDate ? moment(proxyUser.proxyStartDate).format('YYYY-MM-DD') : null;
+                var proxyEndDate = proxyUser.proxyEndDate ? moment(proxyUser.proxyEndDate).format('YYYY-MM-DD') : null;
+                return [firstStep.toUserInfo.arName, firstStep.toUserInfo.enName, proxyUser.arName, proxyUser.enName, proxyUser.proxyDomain, proxyStartDate, proxyEndDate, proxyUser.proxyMessage];
             });
 
             var table = tableGeneratorService.createTable([langService.get('arabic_name'), langService.get('english_name'), langService.get('proxy_arabic_name'), langService.get('proxy_english_name'), langService.get('proxy_domain'), langService.get('start_date'), langService.get('end_date'), langService.get('proxy_message')], 'error-table');

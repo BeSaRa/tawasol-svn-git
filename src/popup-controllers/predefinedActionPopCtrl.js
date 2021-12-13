@@ -620,7 +620,9 @@ module.exports = function (app) {
             titleTemplate.html(langService.get('proxy_user_message'));
 
             var tableRows = _.map(proxyUsers, function (user) {
-                return [user.arName, user.enName, user.proxyInfo.arName, user.proxyInfo.enName, user.proxyInfo.proxyDomain, moment(user.proxyInfo.proxyStartDate).format('YYYY-MM-DD'), moment(user.proxyInfo.proxyEndDate).format('YYYY-MM-DD'), user.proxyInfo.proxyMessage];
+                var proxyStartDate = user.proxyInfo.proxyStartDate ? moment(user.proxyInfo.proxyStartDate).format('YYYY-MM-DD') : null;
+                var proxyEndDate = user.proxyInfo.proxyEndDate ? moment(user.proxyInfo.proxyEndDate).format('YYYY-MM-DD') : null;
+                return [user.arName, user.enName, user.proxyInfo.arName, user.proxyInfo.enName, user.proxyInfo.proxyDomain, proxyStartDate, proxyEndDate, user.proxyInfo.proxyMessage];
             });
 
             var table = tableGeneratorService.createTable([langService.get('arabic_name'), langService.get('english_name'), langService.get('proxy_arabic_name'), langService.get('proxy_english_name'), langService.get('proxy_domain'), langService.get('start_date'), langService.get('end_date'), langService.get('proxy_message')], 'error-table');
