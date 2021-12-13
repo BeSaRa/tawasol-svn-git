@@ -17,7 +17,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            model.lastModifiedFormatted = generator.getDateFromTimeStamp(model.createdOn, true);
+            model.lastModifiedFormatted = generator.getDateFromTimeStamp(model.lastModified, true);
             model.lastModifierInfo = new Information(model.lastModifierInfo);
             //index++;
             //model.virtualVersionNumber = index;
