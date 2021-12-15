@@ -269,7 +269,7 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            viewCallback(correspondence, false, [], $event, true);
+            viewCallback(correspondence, $event);
         };
         /**
          * @description send selected correspondences to parent controller

@@ -407,7 +407,7 @@ module.exports = function (app) {
         var invalidFields = [];
         self.validateCorrespondence = function () {
             invalidFields = [];
-            if (self.document_properties.$invalid) {
+            if (self.document_properties && self.document_properties.$invalid) {
                 invalidFields.push('document_properties');
             }
             if (self.checkDisabled()) {
