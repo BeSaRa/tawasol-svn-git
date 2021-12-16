@@ -1419,7 +1419,7 @@ module.exports = function (app) {
 
             WorkItem.prototype.hasNormalOrPersonalPrivateSecurityLevel = function () {
                 return this.securityLevel.hasOwnProperty('id') ?
-                    (this.securityLevel.id === 1 || this.securityLevel.id === 4) :
+                    (this.securityLevel.lookupKey === 1 || this.securityLevel.lookupKey === 4) :
                     (this.securityLevel === 1 || this.securityLevel === 4);
             }
 
