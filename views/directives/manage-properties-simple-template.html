@@ -1,5 +1,5 @@
-<form name="outgoing_properties">
-    <fieldset class="field-set-hidden">
+<div layout="column" class="p20">
+    <form name="outgoing_properties">
         <div layout="column">
             <div layout="row">
                 <!-- Correspondence registry (If show registry unit)-->
@@ -192,7 +192,7 @@
                 <!-- Date -->
                 <md-input-container flex>
                     <label for="docDate">{{ctrl.document.hasDocumentClass('incoming') ? lang.incoming_date :
-                        lang.document_date
+                            lang.document_date
                         }} ({{ctrl.defaultDateFormat}})</label>
                     <input aria-label="docDate" id="docDate"
                            tooltip="{{lang.document_date}}"
@@ -211,8 +211,10 @@
                     <div ng-messages="outgoing_properties.docDate.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                         <div ng-message="Date">{{lang.dateonly}}</div>
-                        <div ng-message="maxDate">{{lang.date_should_be_less_than_equal.change({datevalue:
-                            ctrl.maxCreateDate})}}
+                        <div ng-message="maxDate">{{lang.date_should_be_less_than_equal.change({
+                            datevalue:
+                            ctrl.maxCreateDate
+                        })}}
                         </div>
                     </div>
                 </md-input-container>
@@ -221,7 +223,7 @@
                 <!-- refDocDate (date of referenced document) -->
                 <md-input-container flex>
                     <label for="refDocDate">{{ctrl.document.hasDocumentClass('incoming') ? lang.document_date :
-                        lang.incoming_date }} ({{ctrl.defaultDateFormat}})</label>
+                            lang.incoming_date }} ({{ctrl.defaultDateFormat}})</label>
                     <input aria-label="refDocDate" id="refDocDate"
                            tooltip="{{lang.incoming_date}}"
                            type="text" name="refDocDate"
@@ -238,8 +240,10 @@
                     <div ng-messages="outgoing_properties.refDocDate.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                         <div ng-message="Date">{{lang.dateonly}}</div>
-                        <div ng-message="maxDate">{{lang.date_should_be_less_than_equal.change({datevalue:
-                            ctrl.getMaxRefDocDateErrorMsg()})}}
+                        <div ng-message="maxDate">{{lang.date_should_be_less_than_equal.change({
+                            datevalue:
+                                    ctrl.getMaxRefDocDateErrorMsg()
+                        })}}
                         </div>
                     </div>
                 </md-input-container>
@@ -469,5 +473,5 @@
                 </div>
             </div>
         </div>
-    </fieldset>
-</form>
+    </form>
+</div>
