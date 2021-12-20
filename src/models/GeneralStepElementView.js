@@ -158,6 +158,9 @@ module.exports = function (app) {
             GeneralStepElementView.prototype.getSeqWFNextStepId = function(){
                 return this.generalStepElm.seqWFNextStepId;
             };
+            GeneralStepElementView.prototype.getSeqWFBackStepId = function () {
+                return this.generalStepElm.seqWFBackStepId;
+            }
 
             /**
              * @description Checks if correspondence already has any active sequential workflow

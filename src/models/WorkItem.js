@@ -444,6 +444,9 @@ module.exports = function (app) {
             WorkItem.prototype.getSeqWFNextStepId = function () {
                 return this.generalStepElm.seqWFNextStepId;
             };
+            WorkItem.prototype.getSeqWFBackStepId = function () {
+                return this.generalStepElm.seqWFBackStepId;
+            }
 
             /**
              * @description Show seqWF status

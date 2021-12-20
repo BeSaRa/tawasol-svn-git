@@ -88,7 +88,7 @@ module.exports = function (app) {
         self.sequentialWF = sequentialWF;
 
         self.nextSeqStep = null;
-        self.previousSeqStep = null;
+        self.backSeqStep = null;
         self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
 
         self.isLaunchStep = false;
@@ -159,9 +159,10 @@ module.exports = function (app) {
             }
         }
 
-        function _getPreviousStepFromSeqWF() {
+        function _getBackStepFromSeqWF() {
             if (self.checkCanSendBack() && self.correspondence instanceof WorkItem) {
-                self.previousSeqStep = _getStepById(self.correspondence.getSeqWFCurrentStepId());
+                self.backSeqStep = _getStepById(self.correspondence.getSeqWFBackStepId());
+                console.log('backSeqStep', self.backSeqStep);
             }
         }
 
@@ -2042,14 +2043,13 @@ module.exports = function (app) {
                     }
                 })
                 .then(function (backStepOptions) {
-                    if (!!self.previousSeqStep && !!self.previousSeqStep.proxyUserInfo) {
-                        _showProxyMessage([self.previousSeqStep.proxyUserInfo], self.previousSeqStep).then(function () {
+                    if (!!self.backSeqStep && !!self.backSeqStep.proxyUserInfo) {
+                        _showProxyMessage([self.backSeqStep.proxyUserInfo], self.backSeqStep).then(function () {
                             _startBackStepValidation(backStepOptions);
                         });
                     } else {
                         _startBackStepValidation(backStepOptions);
                     }
-
                 }).catch(function () {
                     self.disableSaveButton = false;
                 });
@@ -2439,7 +2439,7 @@ module.exports = function (app) {
             self.forwardAction = _findForwardAction();
             self.showForwardAction = self.checkShowForwardAction();
             _getNextStepFromSeqWF();
-            _getPreviousStepFromSeqWF();
+            _getBackStepFromSeqWF();
             if (self.nextSeqStep && (self.nextSeqStep.isAuthorizeAndSendStep() || _isLastStep())) {
                 self.notifyPreviousSteps = true;
             }
