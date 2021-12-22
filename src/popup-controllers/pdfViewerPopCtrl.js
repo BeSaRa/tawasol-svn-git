@@ -1904,31 +1904,18 @@ module.exports = function (app) {
          * @param pdfContent
          * @param signatureModel
          * @param logAnnotations
-         * @param isOutOfOffice
          */
-        self.applyNextStepOnCorrespondence = function (pdfContent, signatureModel, logAnnotations, isOutOfOffice) {
+        self.applyNextStepOnCorrespondence = function (pdfContent, signatureModel, logAnnotations) {
             signatureModel = signatureModel ? signatureModel : self.correspondence.prepareSignatureModel(null, null, null);
             return self.applyNextStep(pdfContent, signatureModel)
                 .then(logAnnotations ? function (result) {
                     self.disableSaveButton = false;
                     toast.success(langService.get('launch_sequential_workflow_success'));
                     self.sendAnnotationLogs(function () {
-                        if (isOutOfOffice) {
-                            console.log('CALLED');
-                            $timeout(function () {
-                                dialog.hide();
-                                dialog.hide({
-                                    content: self.savedPdfContent,
-                                    action: PDFViewer.SEQ_LAUNCHED
-                                });
-                            }, 2000)
-                        } else {
-                            dialog.hide({
-                                content: self.savedPdfContent,
-                                action: PDFViewer.SEQ_LAUNCHED
-                            });
-                        }
-
+                        dialog.hide({
+                            content: self.savedPdfContent,
+                            action: PDFViewer.SEQ_LAUNCHED
+                        });
                     }, function (error) {
                         toast.error('ERROR While Sending the log to Server', error);
                     });
@@ -1951,10 +1938,17 @@ module.exports = function (app) {
             }
 
             if (!!self.nextSeqStep.proxyUserInfo) {
-                _showProxyMessage([self.nextSeqStep.proxyUserInfo]);
+                _showProxyMessage([self.nextSeqStep.proxyUserInfo]).then(function () {
+                    _startNextStepValidation();
+                });
+            } else {
+                _startNextStepValidation();
             }
+        };
 
+        function _startNextStepValidation() {
             self.disableSaveButton = true;
+
             self.getDocumentAnnotations(true)
                 .then(function ({annotations, bookmarks}) {
                     self.newAnnotations = annotations;
@@ -1966,10 +1960,10 @@ module.exports = function (app) {
                                     self.getPDFContentForCurrentDocument()
                                         .then(function (pdfContent) {
                                             if (_isFromBackStep()) {
-                                                self.applyNextStepOnCorrespondence(pdfContent, null, true, !!self.nextSeqStep.proxyUserInfo).catch(self.handleSeqExceptions);
+                                                self.applyNextStepOnCorrespondence(pdfContent, null, true).catch(self.handleSeqExceptions);
                                             } else {
                                                 self.correspondence.handlePinCodeAndComposite().then(function (signatureModel) {
-                                                    self.applyNextStepOnCorrespondence(pdfContent, signatureModel, true, !!self.nextSeqStep.proxyUserInfo).catch(self.handleSeqExceptions);
+                                                    self.applyNextStepOnCorrespondence(pdfContent, signatureModel, true).catch(self.handleSeqExceptions);
                                                 }).catch(self.handleExceptions);
                                             }
                                         });
@@ -1979,10 +1973,10 @@ module.exports = function (app) {
                                         instantJSON = PDFService.rotateImageAnnotationsWithPages(instantJSON, self.currentInstance);
                                         PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON, self.documentOperations, _getFlattenStatus()).then(function (pdfContent) {
                                             if (_isFromBackStep()) {
-                                                self.applyNextStepOnCorrespondence(pdfContent, null, true, !!self.nextSeqStep.proxyUserInfo).catch(self.handleSeqExceptions);
+                                                self.applyNextStepOnCorrespondence(pdfContent, null, true).catch(self.handleSeqExceptions);
                                             } else {
                                                 self.correspondence.handlePinCodeAndComposite().then(function (signatureModel) {
-                                                    self.applyNextStepOnCorrespondence(pdfContent, signatureModel, true, !!self.nextSeqStep.proxyUserInfo).catch(self.handleSeqExceptions);
+                                                    self.applyNextStepOnCorrespondence(pdfContent, signatureModel, true).catch(self.handleSeqExceptions);
                                                 }).catch(self.handleExceptions);
                                             }
                                         });
@@ -1996,24 +1990,24 @@ module.exports = function (app) {
                     } else { // else nextSeqStep.isAuthorizeAndSendStep()
                         var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations, self.documentOperations, self.oldBookmarks, self.newBookmarks);
                         if (!hasChanges.length) {
-                            return self.applyNextStepOnCorrespondence(null, null, false, !!self.nextSeqStep.proxyUserInfo).catch(self.handleSeqExceptions);
+                            return self.applyNextStepOnCorrespondence(null).catch(self.handleSeqExceptions);
                         }
                         self.currentInstance.exportInstantJSON().then(function (instantJSON) {
                             delete instantJSON.pdfId;
                             instantJSON = PDFService.rotateImageAnnotationsWithPages(instantJSON, self.currentInstance);
                             PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON, self.documentOperations, _getFlattenStatus()).then(function (pdfContent) {
                                 if (self.info.isPaper || _isElectronicAndAuthorizeByAnnotationBefore()) {
-                                    self.applyNextStepOnCorrespondence(pdfContent, null, true, !!self.nextSeqStep.proxyUserInfo).catch(self.handleSeqExceptions);
+                                    self.applyNextStepOnCorrespondence(pdfContent, null, true).catch(self.handleSeqExceptions);
                                 } else {
                                     self.handleSaveAnnotationAsAttachment(pdfContent, function () {
-                                        return self.applyNextStepOnCorrespondence(null, null, false, !!self.nextSeqStep.proxyUserInfo).catch(self.handleSeqExceptions);
+                                        return self.applyNextStepOnCorrespondence(null).catch(self.handleSeqExceptions);
                                     });
                                 }
                             });
                         });
                     } // end nextSeqStep.isAuthorizeAndSendStep()
                 }); //end getDocumentAnnotations
-        };
+        }
 
         self.startBackStepValidation = function () {
             self.launchAfterSave = false;
@@ -2667,11 +2661,11 @@ module.exports = function (app) {
         function _showProxyMessage(proxies) {
             var proxyUsersNotHaveDocumentSecurityLevel = self.getUsersDoesNotHaveDocumentSecurityLevel(proxies);
             if (proxyUsersNotHaveDocumentSecurityLevel && proxyUsersNotHaveDocumentSecurityLevel.length) {
-                dialog.alertMessage(_prepareProxyMessage(proxyUsersNotHaveDocumentSecurityLevel, false));
+                return dialog.alertMessage(_prepareProxyMessage(proxyUsersNotHaveDocumentSecurityLevel, false));
             }
             var proxyUsersHaveSecurityLevel = _.differenceBy(proxies, proxyUsersNotHaveDocumentSecurityLevel, 'proxyInfo.proxyDomain');
             if (proxyUsersHaveSecurityLevel.length) {
-                dialog.alertMessage(_prepareProxyMessage(proxyUsersHaveSecurityLevel, true));
+                return dialog.alertMessage(_prepareProxyMessage(proxyUsersHaveSecurityLevel, true));
             }
         }
 
