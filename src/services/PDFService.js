@@ -175,12 +175,13 @@ module.exports = function (app) {
         /**
          * description: workaround to fix the rotation signature issue in beIN
          * @param instantJSON
+         * @param currentInstance
          * @returns {*&{annotations: unknown[]}}
          */
         self.rotateImageAnnotationsWithPages = function (instantJSON, currentInstance) {
             return {
                 ...instantJSON,
-                annotations: instantJSON.annotations.map((annotation) => {
+                annotations: !instantJSON.annotations ? [] : instantJSON.annotations.map((annotation) => {
                     if (annotation.type === "pspdfkit/image") {
                         return {
                             ...annotation,
