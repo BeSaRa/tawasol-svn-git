@@ -88,6 +88,7 @@ module.exports = function (app) {
         self.sequentialWF = sequentialWF;
 
         self.nextSeqStep = null;
+        self.previousSeqStep = null;
         self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
 
         self.isLaunchStep = false;
@@ -155,6 +156,12 @@ module.exports = function (app) {
                     console.log('It Is launch SEQ , Correspondence ');
                     self.isLaunchStep = true
                 }
+            }
+        }
+
+        function _getPreviousStepFromSeqWF() {
+            if (self.checkCanSendBack() && self.correspondence instanceof WorkItem) {
+                self.previousSeqStep = _getStepById(self.correspondence.getSeqWFCurrentStepId());
             }
         }
 
@@ -2035,31 +2042,41 @@ module.exports = function (app) {
                     }
                 })
                 .then(function (backStepOptions) {
-                    self.getDocumentAnnotations(true).then(function ({annotations, bookmarks}) {
-                        self.newAnnotations = annotations;
-                        self.newBookmarks = bookmarks;
-                        var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations, self.documentOperations, self.oldBookmarks, self.newBookmarks);
-                        if (self.info.isPaper || self.info.docStatus >= 23) {
-                            if (!hasChanges.length) {
-                                return self.performSendBackStep(backStepOptions, true, hasChanges.length);
-                            }
-                            return dialog.confirmMessage(langService.get('confirm_annotation_save_on_content'))
-                                .then(function () {
-                                    return self.performSendBackStep(backStepOptions, false, hasChanges.length);
-                                })
-                                .catch(function () {
-                                    return self.performSendBackStep(backStepOptions, true, hasChanges.length);
-                                });
-                        } else {
-                            return self.performSendBackStep(backStepOptions, false, hasChanges.length);
-                        }
-                    });
-
+                    if (!!self.previousSeqStep) {
+                        _showProxyMessage([self.previousSeqStep.proxyUserInfo]).then(function () {
+                            _startBackStepValidation(backStepOptions);
+                        });
+                    } else {
+                        _startBackStepValidation(backStepOptions);
+                    }
 
                 }).catch(function () {
                     self.disableSaveButton = false;
                 });
         };
+
+        function _startBackStepValidation(backStepOptions) {
+            self.getDocumentAnnotations(true).then(function ({annotations, bookmarks}) {
+                self.newAnnotations = annotations;
+                self.newBookmarks = bookmarks;
+                var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations, self.documentOperations, self.oldBookmarks, self.newBookmarks);
+                if (self.info.isPaper || self.info.docStatus >= 23) {
+                    if (!hasChanges.length) {
+                        return self.performSendBackStep(backStepOptions, true, hasChanges.length);
+                    }
+                    return dialog.confirmMessage(langService.get('confirm_annotation_save_on_content'))
+                        .then(function () {
+                            return self.performSendBackStep(backStepOptions, false, hasChanges.length);
+                        })
+                        .catch(function () {
+                            return self.performSendBackStep(backStepOptions, true, hasChanges.length);
+                        });
+                } else {
+                    return self.performSendBackStep(backStepOptions, false, hasChanges.length);
+                }
+            });
+        }
+
         /**
          * @description perform back step action
          * @param backStepOptions
@@ -2422,6 +2439,7 @@ module.exports = function (app) {
             self.forwardAction = _findForwardAction();
             self.showForwardAction = self.checkShowForwardAction();
             _getNextStepFromSeqWF();
+            _getPreviousStepFromSeqWF();
             if (self.nextSeqStep && (self.nextSeqStep.isAuthorizeAndSendStep() || _isLastStep())) {
                 self.notifyPreviousSteps = true;
             }
