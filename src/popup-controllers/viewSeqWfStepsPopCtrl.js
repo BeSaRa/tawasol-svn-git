@@ -74,7 +74,10 @@ module.exports = function (app) {
             sequentialWorkflowService.updateSequentialWorkflow(self.sequentialWF)
                 .then(function (result) {
                     toast.success(langService.get('edit_success').change({name: result.getNames()}));
-                    dialog.hide('SEQ_WF_UPDATED');
+                    sequentialWorkflowService.loadSequentialWorkflowById(self.sequentialWF)
+                        .then(sequentialWF => {
+                            dialog.hide(sequentialWF);
+                        });
                 });
         };
 

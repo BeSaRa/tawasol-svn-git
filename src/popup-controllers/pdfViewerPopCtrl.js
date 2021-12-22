@@ -1828,6 +1828,9 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 bindToController: true,
                 controller: 'viewSeqWfStepsPopCtrl'
+            }).then(function (sequentialWF) {
+                self.sequentialWF = sequentialWF;
+                _getNextStepFromSeqWF();
             })
         };
 
