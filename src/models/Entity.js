@@ -53,6 +53,7 @@ module.exports = function (app) {
             self.psPDFEnabled = false;
             self.psPDFLicenseKey = null;
             self.kwtAlDiyarDigitalEnabled = false;
+            self.icnBulkEnabled = false;
 
             // azureCognitiveSearch
             self.azureCognitiveSearchEnabled = false;

@@ -525,7 +525,7 @@ module.exports = function (app) {
                 return !!correspondence.stepElm.isOfficial;
             } else if (correspondence.hasOwnProperty('correspondence')) {
                 return !!correspondence.correspondence.isOfficial;
-            } else if (correspondence.hasOwnProperty('isOfficial')){
+            } else if (correspondence.hasOwnProperty('isOfficial')) {
                 return !!correspondence.isOfficial;
             }
             return false;
@@ -4961,10 +4961,11 @@ module.exports = function (app) {
         self.openICNArchiveDialog = function (correspondence, options, entryTemplate, $event) {
             var info = correspondence.getInfo(),
                 archiveIcnUrl = urlService.correspondence + '/' + info.documentClass + '/' + info.vsId + '/archive-icn',
-                entryTemplateUrl = entryTemplate.hasOwnProperty('menuItem') ? entryTemplate.menuItem : entryTemplate,
+                menuItem = entryTemplate.hasOwnProperty('menuItem') ? entryTemplate.menuItem : entryTemplate,
                 userData = authenticationService.getUserData();
 
-            entryTemplateUrl = entryTemplateUrl && entryTemplateUrl.hasOwnProperty('url') ? entryTemplateUrl.url : entryTemplateUrl;
+            var entryTemplateUrl = menuItem && menuItem.hasOwnProperty('url') ? menuItem.url : menuItem;
+            archiveIcnUrl = menuItem && menuItem.isBulk ? (archiveIcnUrl + '?bulk=' + menuItem.isBulk) : archiveIcnUrl;
             return $http.put(archiveIcnUrl, options)
                 .then(function (result) {
                     //var variables = '%2C:docId%2C:vsId%2C:refVsId%2C:locale'.change({

@@ -24,7 +24,7 @@
                                         <div ng-messages="dynamicMenuItemForm.arName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 80})}}</div>
                                             <div ng-message="ANS">{{lang.arabic_number_space}}</div>
                                         </div>
                                     </md-input-container>
@@ -36,7 +36,7 @@
                                         <div ng-messages="dynamicMenuItemForm.enName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 80})}}</div>
                                             <div ng-message="ENS">{{lang.english_number_space}}</div>
                                         </div>
                                     </md-input-container>
@@ -54,7 +54,8 @@
                                     </md-input-container>
                                     <md-input-container flex>
                                         <label for="menuType">{{lang.menu_item_type}}</label>
-                                        <md-select id="menuType" ng-model="ctrl.dynamicMenuItem.menuType">
+                                        <md-select id="menuType" ng-model="ctrl.dynamicMenuItem.menuType"
+                                                   ng-change="ctrl.onMenuTypeChange($event)">
                                             <md-option ng-value="menuType.lookupKey"
                                                        ng-repeat="menuType in ctrl.menuTypes">
                                                 {{menuType.getTranslatedName()}}
@@ -63,19 +64,29 @@
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
-                                    <div flex class="p20">
+                                    <div flex>
                                         <md-switch ng-model="ctrl.dynamicMenuItem.status" aria-label="{{lang.status}}">
                                             <label>{{lang.status}} :
                                                 {{ctrl.dynamicMenuItem.getTranslatedStatus()}}</label>
                                         </md-switch>
                                     </div>
-                                    <div flex class="p20">
+                                    <div flex>
                                         <md-switch ng-model="ctrl.dynamicMenuItem.isGlobal"
                                                    aria-label="{{lang.global}}">
                                             <label>{{lang.global}} :
                                                 {{ctrl.dynamicMenuItem.getTranslatedGlobal()}}</label>
                                         </md-switch>
                                     </div>
+                                </div>
+                                <div layout="row">
+                                    <div flex ng-if="ctrl.dynamicMenuItem.isICNEntryTemplate()">
+                                        <md-switch ng-model="ctrl.dynamicMenuItem.isBulk"
+                                                   aria-label="{{lang.icn_bulk_enabled}}">
+                                            <label>{{lang.icn_bulk_enabled}} :
+                                                {{ctrl.dynamicMenuItem.getTranslatedIsBulk()}}</label>
+                                        </md-switch>
+                                    </div>
+                                    <div flex></div>
                                 </div>
                             </div>
                         </md-content>

@@ -21,7 +21,7 @@
                                         <div ng-messages="entityForm.identifier.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:10})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 10})}}</div>
                                             <div ng-message="E">{{lang.english_only}}</div>
                                         </div>
                                     </md-input-container>
@@ -35,7 +35,7 @@
                                         <div ng-messages="entityForm.arName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 80})}}</div>
                                             <div ng-message="ANS">{{lang.arabic_number_space}}</div>
                                         </div>
                                     </md-input-container>
@@ -47,7 +47,7 @@
                                         <div ng-messages="entityForm.enName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 80})}}</div>
                                             <div ng-message="ENS">{{lang.english_number_space}}</div>
                                         </div>
                                     </md-input-container>
@@ -60,7 +60,7 @@
                                                custom-validate-directive="ANS">
                                         <div ng-messages="entityForm.appArName.$error">
                                             <div ng-message="minlength">{{lang.short}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:20})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 20})}}</div>
                                             <div ng-message="ANS">{{lang.arabic_number_space}}</div>
                                         </div>
                                     </md-input-container>
@@ -71,7 +71,7 @@
                                                custom-validate-directive="ENS">
                                         <div ng-messages="entityForm.appEnName.$error">
                                             <div ng-message="minlength">{{lang.short}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:20})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 20})}}</div>
                                             <div ng-message="ENS">{{lang.english_number_space}}</div>
                                         </div>
                                     </md-input-container>
@@ -95,7 +95,7 @@
                                                ng-model="ctrl.entity.helpUrl">
                                         <div ng-messages="entityForm.helpUrl.$error">
                                             <div ng-message="url">{{lang.url_only}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:500})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 500})}}</div>
                                         </div>
                                     </md-input-container>
                                 </div>
@@ -121,6 +121,11 @@
                                         </md-switch>
                                     </div>
                                     <div flex>
+                                        <md-switch ng-model="ctrl.entity.icnBulkEnabled"
+                                                   aria-label="{{lang.icn_bulk_enabled}}">
+                                            <label>{{lang.icn_bulk_enabled}} :
+                                                {{ctrl.entity.getTranslatedYesNo('icnBulkEnabled')}}</label>
+                                        </md-switch>
                                     </div>
                                 </div>
                             </div>
@@ -143,7 +148,7 @@
                                             <div ng-messages="entityForm.cmUserName.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
                                                 <div ng-message="minlength">{{lang.short}}</div>
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:50})}}
+                                                <div ng-message="maxlength">{{lang.max_length.change({length: 50})}}
                                                 </div>
                                                 <div ng-message="FILE_NET_USER">{{lang.english_number}}</div>
                                             </div>
@@ -159,7 +164,7 @@
                                                 <div ng-messages="entityForm.cmPassword.$error">
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                     <div ng-message="minlength">{{lang.short}}</div>
-                                                    <div ng-message="maxlength">{{lang.max_length.change({length:50})}}
+                                                    <div ng-message="maxlength">{{lang.max_length.change({length: 50})}}
                                                     </div>
                                                 </div>
                                                 <div class="help-text-div"
@@ -184,7 +189,7 @@
                                             <div ng-messages="entityForm.cmEJBaddress.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
                                                 <!--<div ng-message="url|ip">{{lang.invalid_address}}</div>-->
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:500})}}
+                                                <div ng-message="maxlength">{{lang.max_length.change({length: 500})}}
                                                 </div>
                                             </div>
                                             <div class="hint" ng-if="ctrl.entity.isSSO">{{lang.ejb_address_sso}}</div>
@@ -198,7 +203,7 @@
                                             <div ng-messages="entityForm.cmStanza.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
                                                 <div ng-message="minlength">{{lang.short}}</div>
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:20})}}
+                                                <div ng-message="maxlength">{{lang.max_length.change({length: 20})}}
                                                 </div>
                                             </div>
                                         </md-input-container>
@@ -213,7 +218,7 @@
                                             <div ng-messages="entityForm.osName.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
                                                 <div ng-message="minlength">{{lang.short}}</div>
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:20})}}
+                                                <div ng-message="maxlength">{{lang.max_length.change({length: 20})}}
                                                 </div>
                                             </div>
                                         </md-input-container>
@@ -226,7 +231,7 @@
                                             <div ng-messages="entityForm.peRouterName.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
                                                 <div ng-message="minlength">{{lang.short}}</div>
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:20})}}
+                                                <div ng-message="maxlength">{{lang.max_length.change({length: 20})}}
                                                 </div>
                                             </div>
                                         </md-input-container>
@@ -257,7 +262,7 @@
                                             <div ng-messages="entityForm.cmsDatabaseName.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
                                                 <div ng-message="minlength">{{lang.short}}</div>
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:30})}}
+                                                <div ng-message="maxlength">{{lang.max_length.change({length: 30})}}
                                                 </div>
                                             </div>
                                         </md-input-container>
@@ -268,7 +273,7 @@
                                             <div ng-messages="entityForm.cmsDataSourceName.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
                                                 <div ng-message="minlength">{{lang.short}}</div>
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:30})}}
+                                                <div ng-message="maxlength">{{lang.max_length.change({length: 30})}}
                                                 </div>
                                             </div>
                                         </md-input-container>
@@ -287,7 +292,7 @@
                                             <div ng-messages="entityForm.maipServiceURL.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
                                                 <div ng-message="url">{{lang.url_only}}</div>
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:500})}}
+                                                <div ng-message="maxlength">{{lang.max_length.change({length: 500})}}
                                                 </div>
                                             </div>
                                         </md-input-container>
@@ -308,7 +313,7 @@
                                                    ng-model="ctrl.entity.smtpServerAddress" maxlength="20">
                                             <div ng-messages="entityForm.smtpServerAddress.$error">
                                                 <!--<div ng-message="url|ip">{{lang.invalid_server_address}}</div>-->
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:20})}}
+                                                <div ng-message="maxlength">{{lang.max_length.change({length: 20})}}
                                                 </div>
                                             </div>
                                         </md-input-container>
@@ -321,7 +326,7 @@
                                                    custom-validate-directive="EN">
                                             <div ng-messages="entityForm.smtpUserName.$error">
                                                 <div ng-message="minlength">{{lang.short}}</div>
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:50})}}
+                                                <div ng-message="maxlength">{{lang.max_length.change({length: 50})}}
                                                 </div>
                                                 <div ng-message="EN">{{lang.english_number}}</div>
                                             </div>
@@ -338,7 +343,7 @@
                                             <div ng-messages="entityForm.smtpPassword.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
                                                 <div ng-message="minlength">{{lang.short}}</div>
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:50})}}
+                                                <div ng-message="maxlength">{{lang.max_length.change({length: 50})}}
                                                 </div>
                                             </div>
                                             <div class="help-text-div"
@@ -355,7 +360,7 @@
                                                    ng-model="ctrl.entity.smtpFromEmail">
                                             <div ng-messages="entityForm.smtpFromEmail.$error">
                                                 <div ng-message="email">{{lang.invalid_email}}</div>
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:50})}}
+                                                <div ng-message="maxlength">{{lang.max_length.change({length: 50})}}
                                                 </div>
                                             </div>
                                         </md-input-container>
@@ -369,7 +374,7 @@
                                                    ng-disabled="!ctrl.entity.smtpServerAddress">
                                             <div ng-messages="entityForm.smtpSubject.$error">
                                                 <div ng-message="minlength">{{lang.short}}</div>
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:20})}}
+                                                <div ng-message="maxlength">{{lang.max_length.change({length: 20})}}
                                                 </div>
                                             </div>
                                         </md-input-container>
@@ -408,7 +413,7 @@
                                                    ng-model="ctrl.entity.rightFaxFolder" maxlength="500">
                                             <div ng-messages="entityForm.rightFaxFolder.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:500})}}
+                                                <div ng-message="maxlength">{{lang.max_length.change({length: 500})}}
                                                 </div>
                                             </div>
                                         </md-input-container>
@@ -458,7 +463,8 @@
                                                 <th ng-if="!ctrl.selectedLDAPs.length" md-column
                                                     md-order-by="isDefault"><span>{{lang.default_ldap}}</span>
                                                 </th>
-                                                <th ng-if="!ctrl.selectedLDAPs.length" md-column md-order-by=""><span>{{lang.actions}}</span>
+                                                <th ng-if="!ctrl.selectedLDAPs.length" md-column md-order-by="">
+                                                    <span>{{lang.actions}}</span>
                                                 </th>
                                             </tr>
                                             </thead>

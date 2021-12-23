@@ -24,6 +24,7 @@ module.exports = function (app) {
 
         self.entryTemplates = icnEntryTemplates;
         self.settings = rootEntity.getGlobalSettings();
+        self.rootEntity = rootEntity.returnRootEntity().rootEntity;
         self.selectedEntryTemplate = null;
 
         // partial exported list
@@ -58,6 +59,17 @@ module.exports = function (app) {
          * @description export workItem
          */
         self.archiveCorrespondence = function ($event) {
+            if (self.rootEntity.icnBulkEnabled && self.selectedEntryTemplate.menuItem.isBulk) {
+                dialog.confirmMessage(langService.get('confirm_icn_bulk_archive'))
+                    .then(function () {
+                        _archiveCorrespondence($event);
+                    });
+            } else {
+                _archiveCorrespondence($event);
+            }
+        };
+
+        function _archiveCorrespondence($event) {
             correspondenceService
                 .openICNArchiveDialog(correspondence, self.validateExportOption(self.model), self.selectedEntryTemplate, $event)
                 .then(function (result) {
@@ -66,7 +78,7 @@ module.exports = function (app) {
                         dialog.hide(true);
                     }
                 });
-        };
+        }
 
         // validate before send to export
         self.validateExportOption = function (exportOption) {

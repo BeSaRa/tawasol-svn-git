@@ -11,6 +11,7 @@ module.exports = function (app) {
                                                           generator,
                                                           dialog,
                                                           langService,
+                                                          rootEntity,
                                                           dynamicMenuItem) {
         'ngInject';
         var self = this;
@@ -18,6 +19,7 @@ module.exports = function (app) {
         self.editMode = editMode;
         self.dynamicMenuItem = angular.copy(dynamicMenuItem);
         self.model = angular.copy(dynamicMenuItem);
+        self.rootEntity = rootEntity.returnRootEntity().rootEntity;
 
         self.relatedFields = [
             'menuType',
@@ -182,5 +184,9 @@ module.exports = function (app) {
         self.reloadSubDynamicMenuItems = function () {
             self.dynamicMenuItem.loadSubDynamicMenuItems();
         };
+
+        self.onMenuTypeChange = function ($event) {
+            self.dynamicMenuItem.isBulk = self.dynamicMenuItem.isICNEntryTemplate() ? self.model.isBulk : false;
+        }
     });
 };

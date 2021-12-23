@@ -1,18 +1,5 @@
 module.exports = function (app) {
-    app.controller('dynamicMenuItemPopCtrl', function (dynamicMenuItemService,
-                                                       _,
-                                                       editMode,
-                                                       toast,
-                                                       errorCode,
-                                                       lookupService,
-                                                       validationService,
-                                                       gridService,
-                                                       generator,
-                                                       tabIndex,
-                                                       layoutService,
-                                                       dialog,
-                                                       langService,
-                                                       dynamicMenuItem) {
+    app.controller('dynamicMenuItemPopCtrl', function (dynamicMenuItemService, _, editMode, toast, errorCode, lookupService, validationService, gridService, generator, tabIndex, layoutService, dialog, langService, dynamicMenuItem) {
         'ngInject';
         var self = this;
         self.controllerName = 'dynamicMenuItemPopCtrl';
@@ -141,7 +128,7 @@ module.exports = function (app) {
                         });
                 })
                 .catch(function (result) {
-                   // console.log(result);
+                    // console.log(result);
                 });
         };
 
@@ -225,8 +212,7 @@ module.exports = function (app) {
                 .catch(function (error) {
                     errorCode.checkIf(error, 'CAN_NOT_DELETE_LOOKUP', function () {
                         dialog.errorMessage(langService.get('cannot_delete_lookup').change({
-                            lookup: langService.get('label_document_type'),
-                            used: langService.get('other_places')
+                            lookup: langService.get('label_document_type'), used: langService.get('other_places')
                         }), null, null, $event);
                     });
                 });
@@ -265,5 +251,9 @@ module.exports = function (app) {
                         });
                 });
         };
+
+        self.onMenuTypeChange = function ($event) {
+            self.dynamicMenuItem.isBulk = self.dynamicMenuItem.isICNEntryTemplate() ? self.model.isBulk : false;
+        }
     });
 };

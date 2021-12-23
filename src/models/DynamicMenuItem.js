@@ -23,9 +23,9 @@ module.exports = function (app) {
             self.isGlobal = true;
             self.itemOrder = null;
             self.menuType = 1;
-
             self.parentInfo = null;
             self.childCount = null;
+            self.isBulk = false;
 
             self.children = [];
             self.parsedURLParams = {};
@@ -114,6 +114,9 @@ module.exports = function (app) {
             DynamicMenuItem.prototype.getTranslatedGlobal = function () {
                 return this.isGlobal ? langService.get('yes') : langService.get('no');
             };
+            DynamicMenuItem.prototype.getTranslatedIsBulk = function () {
+                return this.isBulk ? langService.get('yes') : langService.get('no');
+            }
             DynamicMenuItem.prototype.loadSubDynamicMenuItems = function () {
                 var self = this;
                 return dynamicMenuItemService
@@ -336,6 +339,11 @@ module.exports = function (app) {
                 return menuType === dynamicMenuItemService.dynamicMenuItemsTypes.icnSearchTemplate
                     || menuType === dynamicMenuItemService.dynamicMenuItemsTypes.icnEntryTemplate;
             };
+            DynamicMenuItem.prototype.isICNEntryTemplate = function () {
+                var menuType = this.menuType && this.menuType.hasOwnProperty('lookupKey') ? this.menuType.lookupKey : this.menuType;
+                // icnEntryTemplate = 3
+                return menuType === dynamicMenuItemService.dynamicMenuItemsTypes.icnEntryTemplate;
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
