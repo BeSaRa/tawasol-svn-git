@@ -112,25 +112,33 @@ module.exports = function (app) {
                     });
             } else {
                 if (!!firstStep.proxyUserInfo) {
-                    _showProxyMessage([firstStep.proxyUserInfo]);
+                    _showProxyMessage([firstStep.proxyUserInfo]).then(function () {
+                        _launchSeqWF($event, terminateAllWFS);
+                    })
+                } else {
+                    _launchSeqWF($event, terminateAllWFS);
                 }
-                // cause no need any of those properties is case it is just send (pinCode , composite , ignoreMultiSignValidation)
-                var signatureModel = self.record.prepareSignatureModel(null, null, null);
-                signatureModel.setSeqWFId(self.selectedSeqWF.id);
-                sequentialWorkflowService.launchSeqWFCorrespondence(self.record, signatureModel, null, true, terminateAllWFS)
-                    .then(function (result) {
-                        if (result === 'ERROR_MULTI_USER') {
-                            return dialog.confirmMessage(langService.get('workflow_in_multi_user_inbox'))
-                                .then(function () {
-                                    self.launchSeqWF($event, true);
-                                })
-                        }
-                        $rootScope.$emit('SEQ_LAUNCH_SUCCESS');
-                        toast.success(langService.get('launch_sequential_workflow_success'));
-                        dialog.hide(true);
-                    });
+
             }
         };
+
+        function _launchSeqWF($event, terminateAllWFS) {
+            // cause no need any of those properties is case it is just send (pinCode , composite , ignoreMultiSignValidation)
+            var signatureModel = self.record.prepareSignatureModel(null, null, null);
+            signatureModel.setSeqWFId(self.selectedSeqWF.id);
+            sequentialWorkflowService.launchSeqWFCorrespondence(self.record, signatureModel, null, true, terminateAllWFS)
+                .then(function (result) {
+                    if (result === 'ERROR_MULTI_USER') {
+                        return dialog.confirmMessage(langService.get('workflow_in_multi_user_inbox'))
+                            .then(function () {
+                                self.launchSeqWF($event, true);
+                            })
+                    }
+                    $rootScope.$emit('SEQ_LAUNCH_SUCCESS');
+                    toast.success(langService.get('launch_sequential_workflow_success'));
+                    dialog.hide(true);
+                });
+        }
 
         /**
          * @description Opens dialog for add new ad-hoc sequential workflow and then send
@@ -208,11 +216,11 @@ module.exports = function (app) {
         function _showProxyMessage(proxies) {
             var proxyUsersNotHaveDocumentSecurityLevel = self.getUsersDoesNotHaveDocumentSecurityLevel(proxies);
             if (proxyUsersNotHaveDocumentSecurityLevel && proxyUsersNotHaveDocumentSecurityLevel.length) {
-                dialog.alertMessage(_prepareProxyMessage(proxyUsersNotHaveDocumentSecurityLevel, false));
+                return dialog.alertMessage(_prepareProxyMessage(proxyUsersNotHaveDocumentSecurityLevel, false));
             }
             var proxyUsersHaveSecurityLevel = _.differenceBy(proxies, proxyUsersNotHaveDocumentSecurityLevel, 'proxyInfo.proxyDomain');
             if (proxyUsersHaveSecurityLevel.length) {
-                dialog.alertMessage(_prepareProxyMessage(proxyUsersHaveSecurityLevel, true));
+                return dialog.alertMessage(_prepareProxyMessage(proxyUsersHaveSecurityLevel, true));
             }
         }
 
