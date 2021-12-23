@@ -93,9 +93,10 @@ module.exports = function (app) {
          * @description Launches the sequential workflow
          * @param $event
          * @param terminateAllWFS
+         * @param ignoreProxyMessage
          * @returns {boolean}
          */
-        self.launchSeqWF = function ($event, terminateAllWFS) {
+        self.launchSeqWF = function ($event, terminateAllWFS, ignoreProxyMessage) {
             if (!self.isValidForm()) {
                 return false;
             }
@@ -111,7 +112,8 @@ module.exports = function (app) {
                         console.log('ERROR  FORM LAUNCH', error);
                     });
             } else {
-                if (!!firstStep.proxyUserInfo) {
+                debugger
+                if (!!firstStep.proxyUserInfo && !ignoreProxyMessage) {
                     _showProxyMessage([firstStep.proxyUserInfo]).then(function () {
                         _launchSeqWF($event, terminateAllWFS);
                     })
@@ -131,7 +133,7 @@ module.exports = function (app) {
                     if (result === 'ERROR_MULTI_USER') {
                         return dialog.confirmMessage(langService.get('workflow_in_multi_user_inbox'))
                             .then(function () {
-                                self.launchSeqWF($event, true);
+                                self.launchSeqWF($event, true, true);
                             })
                     }
                     $rootScope.$emit('SEQ_LAUNCH_SUCCESS');
