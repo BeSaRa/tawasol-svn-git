@@ -89,6 +89,26 @@
                                                        ng-model="ctrl.criteria.lastWorkingDate"></md-datepicker>
                                     </md-input-container>
                                 </div>
+                                <div layout="row">
+                                    <!-- HR OU Name -->
+                                    <md-input-container flex>
+                                        <label for="hrOUName">{{lang.organization_unit}}</label>
+                                        <input name="hrOUName" id="hrOUName"
+                                               ng-model="ctrl.criteria.hrOUName">
+                                    </md-input-container>
+                                    <!-- Job Title -->
+                                    <md-input-container flex>
+                                        <label for="jobTitle">{{lang.job_title}}</label>
+                                        <input name="jobTitle" id="jobTitle"
+                                               ng-model="ctrl.criteria.jobTitle">
+                                    </md-input-container>
+                                    <!-- Job Rank -->
+                                    <md-input-container flex>
+                                        <label for="jobRank">{{lang.job_rank}}</label>
+                                        <input name="jobRank" id="jobRank"
+                                               ng-model="ctrl.criteria.jobRank">
+                                    </md-input-container>
+                                </div>
                             </div>
                         </md-content>
                     </md-tab>

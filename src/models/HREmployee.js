@@ -6,16 +6,19 @@ module.exports = function (app) {
             var self = this;
             self.qId = null;
             self.arName = null;
-            self.enName =  null;
+            self.enName = null;
             self.joiningDate = null;
             self.lastWorkingDate = null;
             self.status = false;
             self.gender = null;
-            self.mobile=  null;
-            self.email= null;
+            self.mobile = null;
+            self.email = null;
             self.employeeNo = null;
             self.domainName = null;
             self.nationality = null;
+            self.hrOUName = null;
+            self.jobRank = null;
+            self.jobTitle = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array

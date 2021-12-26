@@ -21,6 +21,9 @@ module.exports = function (app) {
             // will be used by backend but will not be returned
             self.sendSMS = false;
             self.smsTemplateId = null;
+            self.xJobRank = null;
+            self.xJobTitle = null;
+            self.xOU = null;
 
             // ['name', 'mobileNumber', 'description', 'email', 'address', 'typeId'];
             // every model has required fields
@@ -58,9 +61,9 @@ module.exports = function (app) {
                         },
                         nationality: {
                             required: false,
-                            customValidation : {
+                            customValidation: {
                                 type: 'AES',
-                                message : 'arabic_english_space'
+                                message: 'arabic_english_space'
                             },
                             fieldIdentifier: 'nationality'
                         },
@@ -159,6 +162,18 @@ module.exports = function (app) {
                         address: {
                             required: false,
                             fieldIdentifier: 'address'
+                        },
+                        xJobRank: {
+                            required: false,
+                            fieldIdentifier: 'jobRank'
+                        },
+                        xJobTitle: {
+                            required: false,
+                            fieldIdentifier: 'jobTitle'
+                        },
+                        xOU: {
+                            required: false,
+                            fieldIdentifier: 'ou'
                         }
                     },
                     COMPANY: {

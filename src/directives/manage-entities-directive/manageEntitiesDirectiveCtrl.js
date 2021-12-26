@@ -88,7 +88,10 @@ module.exports = function (app) {
             address: 'entities_address',
             fullNameAr: 'entities_full_arabic_name',
             fullNameEn: 'entities_full_english_name',
-            nationality: 'entities_nationality'
+            nationality: 'entities_nationality',
+            xJobRank: 'job_rank',
+            xJobTitle: 'job_title',
+            xOU: 'organization_unit'
         };
 
         function _currentFields(entityType) {

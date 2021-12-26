@@ -26,7 +26,10 @@ module.exports = function (app) {
                 fullNameEn: model.enName,
                 nationality: model.nationality,
                 employeeNum: model.employeeNo.toString(),
-                typeId: entityTypeService.getEntityTypeById(model.typeId)
+                typeId: entityTypeService.getEntityTypeById(model.typeId),
+                xJobRank: model.jobRank,
+                xJobTitle: model.jobTitle,
+                xOU: model.hrOUName
             });
 
             if (oldModel.attachDomainName) {
