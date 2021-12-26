@@ -1715,7 +1715,7 @@ module.exports = function (app) {
             return _.filter(users, function (user) {
                 var userSecurityLevels = generator.getSelectedCollectionFromResult(self.securityLevels, user[securityLevelProperty], 'lookupKey');
                 return _.every(userSecurityLevels, function (userSecurityLevel) {
-                    return userSecurityLevel.lookupKey !== correspondence.securityLevel.id;
+                    return userSecurityLevel.lookupKey !== correspondence.getSecurityLevelLookup().lookupKey;
                 });
             });
         }
