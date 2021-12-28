@@ -112,7 +112,6 @@ module.exports = function (app) {
                         console.log('ERROR  FORM LAUNCH', error);
                     });
             } else {
-                debugger
                 if (!!firstStep.proxyUserInfo && !ignoreProxyMessage) {
                     _showProxyMessage([firstStep.proxyUserInfo]).then(function () {
                         _launchSeqWF($event, terminateAllWFS);
