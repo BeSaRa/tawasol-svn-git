@@ -2042,7 +2042,7 @@ module.exports = function (app) {
                     }
                 })
                 .then(function (backStepOptions) {
-                    if (!!self.previousSeqStep && self.previousSeqStep.proxyUserInfo) {
+                    if (!!self.previousSeqStep && !!self.previousSeqStep.proxyUserInfo) {
                         _showProxyMessage([self.previousSeqStep.proxyUserInfo]).then(function () {
                             _startBackStepValidation(backStepOptions);
                         });
