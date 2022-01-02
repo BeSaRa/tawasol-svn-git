@@ -1945,7 +1945,7 @@ module.exports = function (app) {
             }
 
             if (!!self.nextSeqStep.proxyUserInfo) {
-                _showProxyMessage([self.nextSeqStep.proxyUserInfo]).then(function () {
+                _showProxyMessage([self.nextSeqStep.proxyUserInfo], self.nextSeqStep).then(function () {
                     _startNextStepValidation();
                 });
             } else {
@@ -2043,7 +2043,7 @@ module.exports = function (app) {
                 })
                 .then(function (backStepOptions) {
                     if (!!self.previousSeqStep && !!self.previousSeqStep.proxyUserInfo) {
-                        _showProxyMessage([self.previousSeqStep.proxyUserInfo]).then(function () {
+                        _showProxyMessage([self.previousSeqStep.proxyUserInfo], self.previousSeqStep).then(function () {
                             _startBackStepValidation(backStepOptions);
                         });
                     } else {
@@ -2676,24 +2676,25 @@ module.exports = function (app) {
             })
         }
 
-        function _showProxyMessage(proxies) {
+        function _showProxyMessage(proxies, seqStep) {
             var proxyUsersNotHaveDocumentSecurityLevel = self.getUsersDoesNotHaveDocumentSecurityLevel(proxies);
             if (proxyUsersNotHaveDocumentSecurityLevel && proxyUsersNotHaveDocumentSecurityLevel.length) {
-                return dialog.alertMessage(_prepareProxyMessage(proxyUsersNotHaveDocumentSecurityLevel, false));
+                return dialog.alertMessage(_prepareProxyMessage(seqStep, proxyUsersNotHaveDocumentSecurityLevel, false));
             }
             var proxyUsersHaveSecurityLevel = _.differenceBy(proxies, proxyUsersNotHaveDocumentSecurityLevel, 'proxyInfo.proxyDomain');
             if (proxyUsersHaveSecurityLevel.length) {
-                return dialog.alertMessage(_prepareProxyMessage(proxyUsersHaveSecurityLevel, true));
+                return dialog.alertMessage(_prepareProxyMessage(seqStep, proxyUsersHaveSecurityLevel, true));
             }
         }
 
         /**
          * @description prepare proxy Message
+         * @param seqStep
          * @param proxyUsers
          * @param isDocumentHaveSecurityLevel
          * @private
          */
-        function _prepareProxyMessage(proxyUsers, isDocumentHaveSecurityLevel) {
+        function _prepareProxyMessage(seqStep, proxyUsers, isDocumentHaveSecurityLevel) {
             var titleMessage = isDocumentHaveSecurityLevel ?
                 langService.get('proxy_user_message') :
                 langService.get('document_doesnot_have_security_level_as_delegated_user');
@@ -2704,7 +2705,7 @@ module.exports = function (app) {
             var tableRows = _.map(proxyUsers, function (proxyUser) {
                 var proxyStartDate = proxyUser.proxyStartDate ? moment(proxyUser.proxyStartDate).format('YYYY-MM-DD') : null;
                 var proxyEndDate = proxyUser.proxyEndDate ? moment(proxyUser.proxyEndDate).format('YYYY-MM-DD') : null;
-                return [self.nextSeqStep.toUserInfo.arName, self.nextSeqStep.toUserInfo.enName, proxyUser.arName, proxyUser.enName, proxyUser.proxyDomain, proxyStartDate, proxyEndDate, proxyUser.proxyMessage];
+                return [seqStep.toUserInfo.arName, seqStep.toUserInfo.enName, proxyUser.arName, proxyUser.enName, proxyUser.proxyDomain, proxyStartDate, proxyEndDate, proxyUser.proxyMessage];
             });
 
             var table = tableGeneratorService.createTable([langService.get('arabic_name'), langService.get('english_name'), langService.get('proxy_arabic_name'), langService.get('proxy_english_name'), langService.get('proxy_domain'), langService.get('start_date'), langService.get('end_date'), langService.get('proxy_message')], 'error-table');
