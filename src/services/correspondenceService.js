@@ -4965,9 +4965,7 @@ module.exports = function (app) {
                 userData = authenticationService.getUserData();
 
             var entryTemplateUrl = menuItem && menuItem.hasOwnProperty('url') ? menuItem.url : menuItem;
-            if (menuItem && menuItem.isBulk) {
-                options.BULK = menuItem.isBulk;
-            }
+            archiveIcnUrl = menuItem && menuItem.isBulk ? (archiveIcnUrl + '?bulk=' + menuItem.isBulk) : archiveIcnUrl;
             return $http.put(archiveIcnUrl, options)
                 .then(function (result) {
                     //var variables = '%2C:docId%2C:vsId%2C:refVsId%2C:locale'.change({

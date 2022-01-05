@@ -59,26 +59,23 @@ module.exports = function (app) {
          * @description export workItem
          */
         self.archiveCorrespondence = function ($event) {
-            if (self.rootEntity.icnBulkEnabled && self.selectedEntryTemplate.menuItem.isBulk) {
+            if (self.selectedEntryTemplate.menuItem.isBulk) {
                 dialog.confirmMessage(langService.get('confirm_icn_bulk_archive'))
                     .then(function () {
-                        _archiveCorrespondence($event);
+                        toast.success(langService.get("archive_specific_success").change({name: correspondence.getTranslatedName()}));
                     });
             } else {
-                _archiveCorrespondence($event);
+                correspondenceService
+                    .openICNArchiveDialog(correspondence, self.validateExportOption(self.model), self.selectedEntryTemplate, $event)
+                    .then(function (result) {
+                        if (result === 'icnArchiveSuccess') {
+                            toast.success(langService.get("archive_specific_success").change({name: correspondence.getTranslatedName()}));
+                            dialog.hide(true);
+                        }
+                    });
             }
         };
 
-        function _archiveCorrespondence($event) {
-            correspondenceService
-                .openICNArchiveDialog(correspondence, self.validateExportOption(self.model), self.selectedEntryTemplate, $event)
-                .then(function (result) {
-                    if (result === 'icnArchiveSuccess') {
-                        toast.success(langService.get("archive_specific_success").change({name: correspondence.getTranslatedName()}));
-                        dialog.hide(true);
-                    }
-                });
-        }
 
         // validate before send to export
         self.validateExportOption = function (exportOption) {
