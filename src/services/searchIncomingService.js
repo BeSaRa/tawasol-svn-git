@@ -49,7 +49,7 @@ module.exports = function (app) {
          */
         self.searchIncomingDocuments = function (model, properties) {
             var criteria = generator.interceptSendInstance('SearchIncoming', model);
-            var ignoredPropertyConfiguration = ["FromRegOUId", "ToRegOUId"];
+            var ignoredPropertyConfiguration = ["FromRegOUId", "ToRegOUId", "Content"];
             criteria = _checkPropertyConfiguration(criteria, properties, ignoredPropertyConfiguration);
             return $http
                 .post(urlService.searchDocument.change({searchType: 'incoming'}),
@@ -69,7 +69,7 @@ module.exports = function (app) {
          */
         self.searchForDocuments = function (model, properties) {
             var criteria = generator.interceptSendInstance('SearchIncoming', model);
-            var ignoredPropertyConfiguration = ["FromRegOUId", "ToRegOUId"];
+            var ignoredPropertyConfiguration = ["FromRegOUId", "ToRegOUId", "Content"];
             criteria = _checkPropertyConfiguration(criteria, properties, ignoredPropertyConfiguration);
             return $http
                 .post(urlService.searchDocument.change({searchType: 'incoming'}),

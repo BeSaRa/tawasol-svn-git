@@ -49,7 +49,7 @@ module.exports = function (app) {
          */
         self.searchOutgoingDocuments = function (model, properties) {
             var criteria = generator.interceptSendInstance('SearchOutgoing', model);
-            var ignoredPropertyConfiguration = ["FromRegOUId", "ToRegOUId", "ExportDate"];
+            var ignoredPropertyConfiguration = ["FromRegOUId", "ToRegOUId", "ExportDate", "Content"];
             criteria = _checkPropertyConfiguration(criteria, properties, ignoredPropertyConfiguration);
 
             return $http
@@ -70,7 +70,7 @@ module.exports = function (app) {
          */
         self.searchForDocuments = function (model, properties) {
             var criteria = generator.interceptSendInstance('SearchOutgoing', model);
-            var ignoredPropertyConfiguration = ["FromRegOUId", "ToRegOUId", "ExportDate"];
+            var ignoredPropertyConfiguration = ["FromRegOUId", "ToRegOUId", "ExportDate", "Content"];
             criteria = _checkPropertyConfiguration(criteria, properties, ignoredPropertyConfiguration);
 
             return $http

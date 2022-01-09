@@ -729,6 +729,15 @@
                                 </md-not-found>
                             </md-autocomplete>
                         </div>
+                        <div flex="25" layout="row">
+                            <md-input-container class="restrict-max" flex>
+                                <label for="content">{{lang.content}}</label>
+                                <input name="content"
+                                       id="content"
+                                       ng-model="ctrl.searchCriteria.content"
+                                       type="text">
+                            </md-input-container>
+                        </div>
                     </div>
                     <div ng-if="ctrl.checkFieldStatus('docNotes')" layout="row">
                         <div flex layout="row">

@@ -21,11 +21,19 @@ module.exports = function (app) {
             return value;
         }
 
-        function _checkPropertyConfiguration(model, properties) {
+        function _checkPropertyConfiguration(model, properties, ignoredProperties) {
             var criteria = {};
             _.map(properties, function (item) {
                 criteria[item.symbolicName] = _findProperty(item.symbolicName.toLowerCase(), model);
             });
+
+            //add ignored properties
+            if (ignoredProperties && ignoredProperties.length) {
+                _.map(ignoredProperties, function (item) {
+                    criteria[item] = _findProperty(item.toLowerCase(), model);
+                });
+            }
+
             return criteria;
         }
 
@@ -37,8 +45,8 @@ module.exports = function (app) {
          */
         self.searchInternalDocuments = function (model, properties) {
             var criteria = generator.interceptSendInstance('SearchInternal', model);
-
-            criteria = _checkPropertyConfiguration(criteria, properties);
+            var ignoredPropertyConfiguration = ["Content"];
+            criteria = _checkPropertyConfiguration(criteria, properties, ignoredPropertyConfiguration);
 
             return $http
                 .post(urlService.searchDocument.change({searchType: 'internal'}),
@@ -58,7 +66,8 @@ module.exports = function (app) {
          */
         self.searchForDocuments = function (model, properties) {
             var criteria = generator.interceptSendInstance('SearchInternal', model);
-            criteria = _checkPropertyConfiguration(criteria, properties);
+            var ignoredPropertyConfiguration = ["Content"];
+            criteria = _checkPropertyConfiguration(criteria, properties, ignoredPropertyConfiguration);
             return $http
                 .post(urlService.searchDocument.change({searchType: 'internal'}),
                     generator.interceptSendInstance('SearchCriteria', criteria))
