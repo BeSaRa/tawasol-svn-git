@@ -337,6 +337,12 @@ module.exports = function (app) {
                 return name;
             };
 
+            LinkedObject.prototype.isEmployeeType = function () {
+                var typeId = this.typeId.hasOwnProperty('lookupKey') ? this.typeId.lookupKey : this.typeId;
+
+                return typeId === 0;
+            }
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('LinkedObject', 'init', this);

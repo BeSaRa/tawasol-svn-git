@@ -4945,7 +4945,18 @@ module.exports = function (app) {
                                         return !!menu.menuItem.status;
                                     })
                                 });
-                        }
+                        },
+                        employeesLinkedEntity: function (correspondenceService) {
+                            'ngInject';
+                            var info = correspondence.getInfo();
+                            if (!info.vsId) {
+                                return [];
+                            }
+
+                            return correspondenceService.getLinkedEntitiesByVsIdClass(info.vsId, info.documentClass).then(function (linkedEntities) {
+                                return linkedEntities.filter(linkedEntity => linkedEntity.isEmployeeType());
+                            });
+                        },
                     }
                 });
         };
@@ -4955,17 +4966,20 @@ module.exports = function (app) {
          * @param correspondence
          * @param options
          * @param entryTemplate
+         * @param isBulkEmployees
          * @param $event
          * @returns {promise}
          */
-        self.openICNArchiveDialog = function (correspondence, options, entryTemplate, $event) {
+        self.icnArchiveCorrespondence = function (correspondence, options, entryTemplate, isBulkEmployees, $event) {
             var info = correspondence.getInfo(),
                 archiveIcnUrl = urlService.correspondence + '/' + info.documentClass + '/' + info.vsId + '/archive-icn',
                 menuItem = entryTemplate.hasOwnProperty('menuItem') ? entryTemplate.menuItem : entryTemplate,
                 userData = authenticationService.getUserData();
 
             var entryTemplateUrl = menuItem && menuItem.hasOwnProperty('url') ? menuItem.url : menuItem;
-            archiveIcnUrl = menuItem && menuItem.isBulk ? (archiveIcnUrl + '?bulk=' + menuItem.isBulk) : archiveIcnUrl;
+            if (menuItem && menuItem.isBulk && isBulkEmployees) {
+                archiveIcnUrl = archiveIcnUrl + '?bulk=' + menuItem.isBulk;
+            }
             return $http.put(archiveIcnUrl, options)
                 .then(function (result) {
                     //var variables = '%2C:docId%2C:vsId%2C:refVsId%2C:locale'.change({
@@ -4978,7 +4992,7 @@ module.exports = function (app) {
                         password: encodeURIComponent(userData.password)
                     });
                     entryTemplateUrl = entryTemplateUrl.replace('&mimeType', variables + '&mimeType');
-                    return _showICNArchiveDialog(correspondence, entryTemplateUrl, $event)
+                    return isBulkEmployees ? $q.resolve('icnArchiveSuccess') : _showICNArchiveDialog(correspondence, entryTemplateUrl, $event)
                 });
         };
 

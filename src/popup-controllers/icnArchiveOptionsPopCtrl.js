@@ -11,6 +11,7 @@ module.exports = function (app) {
                                                          dialog,
                                                          correspondenceService,
                                                          icnEntryTemplates,
+                                                         employeesLinkedEntity,
                                                          langService) {
         'ngInject';
         var self = this;
@@ -23,6 +24,7 @@ module.exports = function (app) {
         delete self.model.ATTACHMENT_LINKED_DOCS;
 
         self.entryTemplates = icnEntryTemplates;
+        self.employeesLinkedEntity = employeesLinkedEntity;
         self.settings = rootEntity.getGlobalSettings();
         self.rootEntity = rootEntity.returnRootEntity().rootEntity;
         self.selectedEntryTemplate = null;
@@ -59,22 +61,27 @@ module.exports = function (app) {
          * @description export workItem
          */
         self.archiveCorrespondence = function ($event) {
-            if (self.selectedEntryTemplate.menuItem.isBulk) {
+            const isBulkEmployees = self.employeesLinkedEntity.leading > 1;
+            if (self.selectedEntryTemplate.menuItem.isBulk && isBulkEmployees) {
                 dialog.confirmMessage(langService.get('confirm_icn_bulk_archive'))
                     .then(function () {
-                        toast.success(langService.get("archive_specific_success").change({name: correspondence.getTranslatedName()}));
+                        _archiveCorrespondence(isBulkEmployees, $event);
                     });
             } else {
-                correspondenceService
-                    .openICNArchiveDialog(correspondence, self.validateExportOption(self.model), self.selectedEntryTemplate, $event)
-                    .then(function (result) {
-                        if (result === 'icnArchiveSuccess') {
-                            toast.success(langService.get("archive_specific_success").change({name: correspondence.getTranslatedName()}));
-                            dialog.hide(true);
-                        }
-                    });
+                _archiveCorrespondence(false, $event);
             }
         };
+
+        function _archiveCorrespondence(isBulkEmployees, $event) {
+            correspondenceService
+                .icnArchiveCorrespondence(correspondence, self.validateExportOption(self.model), self.selectedEntryTemplate, isBulkEmployees, $event)
+                .then(function (result) {
+                    if (result === 'icnArchiveSuccess') {
+                        toast.success(langService.get("archive_specific_success").change({name: correspondence.getTranslatedName()}));
+                        dialog.hide(true);
+                    }
+                });
+        }
 
 
         // validate before send to export
