@@ -6,7 +6,7 @@
             urlServiceProvider
                 .setEnvironment('trunk')
                 .setBaseUrl('fix', 'http://100.100.3.220:9080/CMSServicesFix/service')
-                .setBaseUrl('trunk', 'http://100.100.3.220:9080/CMSServices/service')
+                .setBaseUrl('trunk', 'http://100.100.3.220:5001/CMSServices/service')
                 .setBaseUrl('stage', 'http://MDPS-FNWEB01/CMSServices/service')
                 .setBaseUrl('testFixpack', 'http://100.100.3.162:9080/CMSServices/service')
                 .setBaseUrl('testFeatures', 'http://eblaepm.no-ip.org:9080/CMSServices/service')
