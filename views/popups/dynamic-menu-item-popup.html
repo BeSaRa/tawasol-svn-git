@@ -54,8 +54,7 @@
                                     </md-input-container>
                                     <md-input-container flex>
                                         <label for="menuType">{{lang.menu_item_type}}</label>
-                                        <md-select id="menuType" ng-model="ctrl.dynamicMenuItem.menuType"
-                                                   ng-change="ctrl.onMenuTypeChange($event)">
+                                        <md-select id="menuType" ng-model="ctrl.dynamicMenuItem.menuType">
                                             <md-option ng-value="menuType.lookupKey"
                                                        ng-repeat="menuType in ctrl.menuTypes">
                                                 {{menuType.getTranslatedName()}}
@@ -78,7 +77,7 @@
                                         </md-switch>
                                     </div>
                                 </div>
-                                <div layout="row">
+                                <!--<div layout="row">
                                     <div flex
                                          ng-if="ctrl.rootEntity.icnBulkEnabled && ctrl.dynamicMenuItem.isICNEntryTemplate()">
                                         <md-switch ng-model="ctrl.dynamicMenuItem.isBulk"
@@ -88,7 +87,7 @@
                                         </md-switch>
                                     </div>
                                     <div flex></div>
-                                </div>
+                                </div>-->
                             </div>
                         </md-content>
                     </md-tab>

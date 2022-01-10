@@ -185,8 +185,8 @@ module.exports = function (app) {
             self.dynamicMenuItem.loadSubDynamicMenuItems();
         };
 
-        self.onMenuTypeChange = function ($event) {
+        /*self.onMenuTypeChange = function ($event) {
             self.dynamicMenuItem.isBulk = self.dynamicMenuItem.isICNEntryTemplate() ? self.model.isBulk : false;
-        }
+        }*/
     });
 };
