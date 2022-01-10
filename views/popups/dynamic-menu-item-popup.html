@@ -79,7 +79,8 @@
                                     </div>
                                 </div>
                                 <div layout="row">
-                                    <div flex ng-if="ctrl.dynamicMenuItem.isICNEntryTemplate()">
+                                    <div flex
+                                         ng-if="ctrl.rootEntity.icnBulkEnabled && ctrl.dynamicMenuItem.isICNEntryTemplate()">
                                         <md-switch ng-model="ctrl.dynamicMenuItem.isBulk"
                                                    aria-label="{{lang.icn_bulk_enabled}}">
                                             <label>{{lang.icn_bulk_enabled}} :

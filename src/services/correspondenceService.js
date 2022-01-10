@@ -4977,8 +4977,8 @@ module.exports = function (app) {
                 userData = authenticationService.getUserData();
 
             var entryTemplateUrl = menuItem && menuItem.hasOwnProperty('url') ? menuItem.url : menuItem;
-            if (menuItem && menuItem.isBulk && isBulkEmployees) {
-                archiveIcnUrl = archiveIcnUrl + '?bulk=' + menuItem.isBulk;
+            if (rootEntity.returnRootEntity().rootEntity && isBulkEmployees) {
+                archiveIcnUrl = archiveIcnUrl + '?bulk=' + true;
             }
             return $http.put(archiveIcnUrl, options)
                 .then(function (result) {

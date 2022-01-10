@@ -10,11 +10,13 @@ module.exports = function (app) {
                                                     langService,
                                                     gridService,
                                                     lookupService,
+                                                    rootEntity,
                                                     contextHelpService) {
         'ngInject';
         var self = this;
         self.controllerName = 'dynamicMenuItemCtrl';
         contextHelpService.setHelpTo('dynamic-menu-items');
+        self.rootEntity = rootEntity.returnRootEntity().rootEntity;
 
         /**
          * @description All document  types

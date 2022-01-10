@@ -61,11 +61,11 @@ module.exports = function (app) {
          * @description export workItem
          */
         self.archiveCorrespondence = function ($event) {
-            const isBulkEmployees = self.employeesLinkedEntity.leading > 1;
-            if (self.selectedEntryTemplate.menuItem.isBulk && isBulkEmployees) {
+            var isBulkEmployees = self.employeesLinkedEntity.length > 1;
+            if (self.rootEntity.icnBulkEnabled && isBulkEmployees) {
                 dialog.confirmMessage(langService.get('confirm_icn_bulk_archive'))
                     .then(function () {
-                        _archiveCorrespondence(isBulkEmployees, $event);
+                        _archiveCorrespondence(true, $event);
                     });
             } else {
                 _archiveCorrespondence(false, $event);
