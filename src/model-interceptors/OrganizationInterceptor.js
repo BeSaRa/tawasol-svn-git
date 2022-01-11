@@ -10,6 +10,7 @@ module.exports = function (app) {
                       ouClassificationService,
                       ReferencePlanItemStartSerial,
                       ouCorrespondenceSiteService,
+                      Organization,
                       lookupService) {
         'ngInject';
         var ids = [
@@ -79,7 +80,7 @@ module.exports = function (app) {
             delete model.centralArchiveIndicator;
             delete model.privateRegOuIndicator;
             delete model.notSyncOuIndicator;
-
+            delete  model.regouInfo;
             return model;
         });
 
@@ -122,7 +123,8 @@ module.exports = function (app) {
                     model.sla[level.lookupKey] = number;
                 });
             }
-
+        model.regouInfo =model.regouInfo ? new Organization(model.regouInfo): model.regouInfo;
+ 
             return model;
         });
 

@@ -24,7 +24,7 @@ module.exports = function (app) {
         self.employee = employeeService.getEmployee();
         self.themeService = themeService;
         self.ouSearchText = null;
-
+     
         self.toggleSidebar = function (sidebarId) {
             $mdSidenav(sidebarId).toggle();
             if (sidebarId === 'right-sidebar' && !self.themeService.themes.length) {
@@ -116,5 +116,12 @@ module.exports = function (app) {
         self.showSearchOuInput = function ($event) {
             return self.employee.ouList.length > 10;
         }
+
+        self.currentUserOrganization= function(){
+            var ou =  self.employee.ouList.find(ou => {
+                 return ou.id === self.employee.userOrganization.id;
+             });
+             return ou.hasRegistry ? ou.getTranslatedName() : ou.regouInfo.getTranslatedName() + ' - ' + ou.getTranslatedName();         
+         }
     });
 };

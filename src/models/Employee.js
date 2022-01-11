@@ -181,6 +181,7 @@ module.exports = function (app) {
 
             Employee.prototype.setOuList = function (ouList) {
                 this.ouList = generator.generateCollection(ouList, Organization);
+                this.ouList = generator.interceptReceivedCollection('Organization',this.ouList)
                 return this;
             };
 

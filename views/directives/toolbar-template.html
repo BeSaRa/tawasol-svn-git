@@ -18,7 +18,8 @@
                     <md-menu flex md-position-mode="{{toolbar.getPositionMode($event)}}">
                         <md-button ng-click="toolbar.openUserOrganizationMenu($mdMenu)">
                             <div layout="row" flex layout-align="start center">
-                                {{toolbar.employee.userOrganization.getTranslatedName()}}
+                                <!-- {{toolbar.employee.userOrganization.getTranslatedName()}} -->
+                                {{toolbar.currentUserOrganization()}}
                                 <md-icon md-svg-icon="chevron-down"></md-icon>
                             </div>
                         </md-button>
@@ -33,7 +34,8 @@
                             <md-menu-item ng-if="!toolbar.isCurrentOrganization(organization)"
                                           ng-repeat="organization in toolbar.employee.ouList | filter: toolbar.ouSearchText track by $index">
                                 <md-button ng-click="toolbar.switchOrganization(organization)">
-                                    {{organization.getTranslatedName()}}
+                                    <span ng-if="organization.hasRegistry">{{organization.getTranslatedName()}}</span>
+                                    <span ng-if="!organization.hasRegistry">{{organization.regouInfo.getTranslatedName()}} - {{organization.getTranslatedName()}}</span>
                                 </md-button>
                             </md-menu-item>
                         </md-menu-content>
