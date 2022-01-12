@@ -132,4 +132,5 @@ module.exports = function (app) {
     require('./AzureSearchCriteriaInterceptor')(app);
     require('./FavoriteActionInterceptor')(app);
     require('./UserFollowupBookMultiInterceptor')(app);
+    require('./ManualDeliveryReportInterceptor')(app);
 };

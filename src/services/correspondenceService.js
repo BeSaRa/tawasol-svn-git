@@ -81,6 +81,7 @@ module.exports = function (app) {
                                                    TawasolStamp,
                                                    CorrespondenceView,
                                                    TawasolDocument,
+                                                   ManualDeliveryReport,
                                                    SequentialWFResult) {
         'ngInject';
         var self = this, managerService, correspondenceStorageService;
@@ -5513,6 +5514,50 @@ module.exports = function (app) {
                 });
 
         };
+
+        /**
+         *
+         * @param correspondence
+         * @param $event
+         * @returns {*}
+         */
+        self.openManualDeliveryReportDialog = function (correspondence, $event) {
+            return dialog.showDialog({
+                templateUrl: cmsTemplate.getPopup('manual-delivery-report'),
+                controller: 'manualDeliveryReportPopCtrl',
+                controllerAs: 'ctrl',
+                bindToController: true,
+                locals: {
+                    correspondence: correspondence
+                },
+                resolve: {
+                    manualDeliveryReports: function () {
+                        'ngInject';
+                        return self.getManualDeliveryReport(correspondence);
+                    }
+                }
+            });
+        }
+
+        self.getManualDeliveryReport = function (correspondence) {
+            var info = correspondence.getInfo();
+            return $http.get(urlService.messagingHistory + '/manual/vsid/' + info.vsId)
+                .then(function (result) {
+                    var model = generator.generateCollection(result.data.rs, ManualDeliveryReport);
+                    return generator.interceptReceivedCollection('ManualDeliveryReport', model);
+                });
+        }
+
+        self.addManualDeliveryReport = function (correspondence, manualDelivery) {
+            var info = correspondence.getInfo();
+            return $http.put(urlService.messagingHistory + '/manual/vsid/' + info.vsId,
+                generator.interceptSendCollection('ManualDeliveryReport', manualDelivery))
+                .then(function (result) {
+                    return result.data.rs;
+                }).catch(function (error) {
+                    return false;
+                })
+        }
 
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);

@@ -208,5 +208,6 @@ module.exports = function (app) {
     require('./CorrespondenceView')(app);
     require('./FavoriteAction')(app);
     require('./UserFollowupBookMulti')(app);
+    require('./ManualDeliveryReport')(app);
 
 };

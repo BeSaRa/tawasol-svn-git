@@ -165,4 +165,5 @@ module.exports = function (app) {
     require('./viewDocumentSideViewPopCtrl')(app);
     require('./favoriteActionsPopCtrl')(app);
     require('./broadcastFollowUpPopCtrl')(app);
+    require('./manualDeliveryReportPopCtrl')(app);
 };

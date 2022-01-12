@@ -146,6 +146,10 @@ module.exports = function (app) {
                 correspondenceService = this.getCorrespondenceService();
                 return correspondenceService.openSendFaxDialog(this, $event);
             };
+            Outgoing.prototype.openManualDeliveryReportDialog = function ($event) {
+                correspondenceService = this.getCorrespondenceService();
+                return correspondenceService.openManualDeliveryReportDialog(this, $event);
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

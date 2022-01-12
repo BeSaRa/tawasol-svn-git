@@ -1,0 +1,109 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           id="broadcastDialog" ng-attr-aria-label="{{lang.manual_delivery_report}}">
+    <popup-toolbar-directive header-text="{{lang.manual_delivery_report}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex class="max-w-750">
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="manualDeliveryReportForm" autocomplete="off">
+                <div layout="column">
+                    <md-card class="card-overlay">
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table multiple md-row-select
+                                       ng-model="ctrl.selectedManualDeliveryReports">
+                                    <thead md-head md-order="ctrl.grid.order"
+                                           md-on-reorder="ctrl.getSortedData">
+                                    <tr md-row>
+                                        <th colspan="6" class="table-selector-header"
+                                            ng-if="ctrl.selectedManualDeliveryReports.length" md-column>
+                                            <div layout="row" layout-align="start center">
+                                                <span>{{ctrl.selectedManualDeliveryReports.length}} {{lang.items_selected}} </span>
+                                                <span flex></span>
+                                            </div>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedManualDeliveryReports.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('mainSiteInfo','Information')}}">
+                                            {{lang.main_site}}
+                                        </th>
+                                        <th ng-if="!ctrl.selectedManualDeliveryReports.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('subSiteInfo','Information')}}">
+                                            {{lang.sub_site}}
+                                        </th>
+                                        <th ng-if="!ctrl.selectedManualDeliveryReports.length" md-column>
+                                            {{lang.delivery_date}}
+                                        </th>
+                                        <th ng-if="!ctrl.selectedManualDeliveryReports.length" md-column>
+                                            {{lang.received_by}}
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row
+                                        ng-repeat="record in ctrl.manualDeliveryReports | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index"
+                                        md-select="record">
+                                        <td md-cell>
+                                            {{record.mainSiteInfo.getTranslatedName()}}
+                                        </td>
+                                        <td md-cell>
+                                            {{record.subSiteInfo.getTranslatedName()}}
+                                        </td>
+                                        <td md-cell>
+                                            <md-datepicker id="deliveryDate" name="deliveryDate"
+                                                           ng-required md-min-date="ctrl.exportDate"
+                                                           md-max-date="ctrl.today"
+                                                           ng-model="record.deliveryDate"></md-datepicker>
+                                        </td>
+                                        <td md-cell>
+                                            <md-input-container flex class="md-block" md-no-float>
+                                                <input id="receivedByOrg" name="receivedByOrg"
+                                                       placeholder="{{lang.received_by}}"
+                                                       ng-model="record.receivedByOrg"/>
+                                            </md-input-container>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit"
+                                    md-page="ctrl.grid.page"
+                                    md-total="{{ctrl.manualDeliveryReports.length}}" md-page-select>
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                    <!-- comment -->
+                    <div flex layout="row">
+                        <md-input-container flex>
+                            <label for="comment"> {{lang.type_your_comment}}</label>
+                            <textarea rows="5" id="comment" name="comment" class="cms-comment"
+                                      ng-model="ctrl.comment"
+                                      maxlength="2000" md-maxlength="2000"></textarea>
+                            <div ng-messages="manualDeliveryReportForm.comment.$error">
+                                <div ng-message="maxlength">{{lang.max_length.change({length: 2000})}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div flex layout="row">
+                        <!-- with notification -->
+                        <md-checkbox ng-model="ctrl.withNotification"
+                                     aria-label="withNotification">
+                            <span>{{lang.with_notification}}</span>
+                        </md-checkbox>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary"
+                   ng-disabled="!ctrl.selectedManualDeliveryReports.length"
+                   ng-click="ctrl.saveManualDeliveryReport()">
+            {{lang.save}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

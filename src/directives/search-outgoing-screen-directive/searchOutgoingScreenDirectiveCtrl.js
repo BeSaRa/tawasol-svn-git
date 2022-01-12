@@ -1316,6 +1316,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description
+         */
+        self.manualDeliveryReport = function (searchedOutgoingDocument, $event) {
+            searchedOutgoingDocument.openManualDeliveryReportDialog($event);
+        }
+
+        /**
          * @description Remove single correspondence
          * @param correspondence
          * @param $event
@@ -1732,6 +1739,19 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     return !model.needApprove() && (model.getSecurityLevelLookup().lookupKey !== 4)
                         && !model.hasActiveSeqWF();
+                }
+            },
+            // Manual Delivery Report
+            {
+                type: 'action',
+                icon: 'truck-delivery',
+                text: 'manual_delivery_report',
+                callback: self.manualDeliveryReport,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return (employeeService.hasPermissionTo('OPEN_DEPARTMENT’S_READY_TO_EXPORT_QUEUE') || self.employee.inCentralArchive()) &&
+                        (info.docStatus === 25 || info.docStatus === 26) && model.hasExternalSite;
                 }
             },
             // Remove
