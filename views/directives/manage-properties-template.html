@@ -483,6 +483,20 @@
                             {{ctrl.document.getTranslatedYesNo('isOfficial')}}</label>
                     </md-switch>
                 </div>
+
+                <!-- received By Info -->
+                <!-- --ctrl.document.hasVsId()-->
+                <div flex ng-if="ctrl.isShowReceivedByInfo()">
+                    <md-input-container class="md-block">
+                        <label for="receivedByInfo">{{lang.received_by}}</label>
+                            <input name="receivedByInfo"
+                                   id="receivedByInfo"
+                                   ng-disabled="true"
+                                   ng-value="ctrl.document.receivedByInfo.getTranslatedName()"
+                                   ng-model="ctrl.document.receivedByInfo">
+                    </md-input-container>
+                </div>
+
                 <!-- directive: generate-remaining-search-div-directive -->
             </div>
             <div layout="row" ng-if="ctrl.checkStatus('docNotes')">

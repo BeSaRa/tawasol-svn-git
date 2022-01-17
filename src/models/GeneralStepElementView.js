@@ -1,17 +1,17 @@
 module.exports = function (app) {
     app.factory('GeneralStepElementView', function (CMSModelInterceptor,
-                                                    _,
-                                                    generator,
-                                                    moment,
-                                                    WorkItem,
-                                                    langService,
-                                                    Outgoing,
-                                                    Internal,
-                                                    Incoming,
-                                                    Information,
-                                                    $sce,
-                                                    sequentialWorkflowService,
-                                                    employeeService) {
+        _,
+        generator,
+        moment,
+        WorkItem,
+        langService,
+        Outgoing,
+        Internal,
+        Incoming,
+        Information,
+        $sce,
+        sequentialWorkflowService,
+        employeeService) {
         'ngInject';
         return function GeneralStepElementView(model) {
             var self = this, correspondenceService,
@@ -78,6 +78,9 @@ module.exports = function (app) {
                 });
                 var className = self.correspondence.classDescription;
                 self.correspondence = new documentClassMap[className.toLowerCase()](self.correspondence);
+                if (className.toLowerCase === 'incoming') {
+                    self.correspondence.receivedByInfo = new Information(self.correspondence.receivedByInfo);
+                }
                 self.correspondence = generator.interceptReceivedInstance(['Correspondence', className, 'View' + className], self.correspondence);
                 self.generalStepElm = self.stepElm;
                 self.documentViewInfo.viewURL = $sce.trustAsResourceUrl(self.documentViewInfo.viewURL);

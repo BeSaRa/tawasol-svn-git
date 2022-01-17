@@ -794,6 +794,10 @@ module.exports = function (app) {
             }
         };
 
+        self.isShowReceivedByInfo = function () {
+            return self.document.hasDocumentClass('incoming') && self.document.docStatus >= 22;
+        };
+
         self.checkNullValues = function (field) {
             if (!field)
                 return;
