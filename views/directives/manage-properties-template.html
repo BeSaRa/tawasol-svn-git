@@ -41,7 +41,7 @@
                         <label for="ou">{{lang.organization_unit}}</label>
                         <md-select name="ou"
                                    id="ou"
-                                   ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled()"
+                                   ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled() || ctrl.checkAllowedEditProperties('ou')"
                                    ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
                                    ng-model="ctrl.document.ou"
                                    ng-change="ctrl.checkNullValues(outgoing_properties.ou)"
@@ -73,7 +73,7 @@
                         <label for="ou">{{lang.organization_unit}}</label>
                         <md-select name="ou"
                                    id="ou"
-                                   ng-disabled="(!!ctrl.disableProperties || ctrl.checkOrganizationDisabled())"
+                                   ng-disabled="(!!ctrl.disableProperties || ctrl.checkOrganizationDisabled() || ctrl.checkAllowedEditProperties('ou'))"
                                    ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
                                    ng-model="ctrl.document.ou"
                                    ng-change="ctrl.onOrganizationChange(outgoing_properties.ou)"
@@ -151,7 +151,7 @@
                         <label for="docDate">{{ctrl.document.hasDocumentClass('incoming') ? lang.incoming_date :
                                 lang.document_date }}</label>
                         <md-datepicker name="docDate" id="docDate"
-                                       ng-disabled="!!ctrl.disableProperties"
+                                       ng-disabled="!!ctrl.disableProperties || ctrl.checkAllowedEditProperties('docDate')"
                                        ng-model="ctrl.document.docDate"
                                        ng-change="ctrl.checkIncomingDateValid()"
                                        md-max-date="ctrl.maxCreateDate"
@@ -172,7 +172,7 @@
                         <label for="docFullSerial">{{lang.serial_number}}</label>
                         <input name="docFullSerial" id="docFullSerial"
                                ng-required="ctrl.isShowDocFullSerial()"
-                               ng-disabled="!!ctrl.disableProperties"
+                               ng-disabled="!!ctrl.disableProperties || ctrl.checkAllowedEditProperties('docFullSerial')"
                                ng-model="ctrl.document.docFullSerial">
                         <div ng-messages="outgoing_properties.docFullSerial.$error">
                             <div ng-message="required">{{lang.field_required}}</div>
@@ -186,7 +186,7 @@
                         <label for="refDocNumber">{{lang.document_number}}</label>
                         <input name="refDocNumber" id="refDocNumber"
                                ng-required="ctrl.checkMandatory('refDocNumber')"
-                               ng-disabled="!!ctrl.disableProperties || ctrl.checkDepartmentalReceived() || ctrl.checkG2gReceived()"
+                               ng-disabled="!!ctrl.disableProperties || ctrl.checkDepartmentalReceived() || ctrl.checkG2gReceived() || ctrl.checkAllowedEditProperties('refDocNumber')"
                                ng-model="ctrl.document.refDocNumber">
                         <div ng-messages="outgoing_properties.refDocNumber.$error">
                             <div ng-message="required">{{lang.field_required}}</div>
@@ -199,7 +199,7 @@
                     <md-input-container class="md-block">
                         <label for="type">{{lang.type}}</label>
                         <md-select name="type" id="type"
-                                   ng-disabled="!!ctrl.disableProperties"
+                                   ng-disabled="!!ctrl.disableProperties || ctrl.checkAllowedEditProperties('internalDocType')"
                                    ng-model="ctrl.document.internalDocType"
                                    ng-required="ctrl.checkMandatory('internalDocType')"
                                    required>
@@ -242,7 +242,7 @@
                                   id="docSubject"
                                   maxlength="1000"
                                   md-maxlength="1000"
-                                  ng-disabled="!!ctrl.disableProperties"
+                                  ng-disabled="!!ctrl.disableProperties || ctrl.checkAllowedEditProperties('docSubject')"
                                   ng-model="ctrl.document.docSubject"
                                   ng-required="ctrl.checkMandatory('docSubject')"></textarea>
                         <div ng-messages="outgoing_properties.docSubject.$error">
@@ -259,7 +259,7 @@
                         <label for="mainClassification">{{lang.outgoing_main_classification}}</label>
                         <md-select name="mainClassification"
                                    id="mainClassification"
-                                   ng-disabled="!!ctrl.disableProperties"
+                                   ng-disabled="!!ctrl.disableProperties || ctrl.checkAllowedEditProperties('mainClassification')"
                                    ng-model="ctrl.document.mainClassification"
                                    ng-model-options="{trackBy: '$value.id'}"
                                    ng-required="ctrl.checkMandatory('mainClassification')"
@@ -301,7 +301,7 @@
                     <md-input-container class="md-block">
                         <label for="subClassification">{{lang.outgoing_sub_classification}}</label>
                         <md-select
-                                ng-disabled="!!ctrl.disableProperties || !ctrl.document.mainClassification"
+                                ng-disabled="!!ctrl.disableProperties || !ctrl.document.mainClassification || ctrl.checkAllowedEditProperties('subClassification')"
                                 name="subClassification"
                                 id="subClassification"
                                 ng-model-options="{trackBy: '$value.id'}"
@@ -346,7 +346,7 @@
                         <label for="priorityLevel">{{lang.outgoing_priority_level}}</label>
                         <md-select name="priorityLevel"
                                    id="priorityLevel"
-                                   ng-disabled="!!ctrl.disableProperties"
+                                   ng-disabled="!!ctrl.disableProperties || ctrl.checkAllowedEditProperties('priorityLevel')"
                                    ng-model="ctrl.document.priorityLevel"
                                    ng-model-options="{trackBy: '$value.id'}"
                                    ng-required="ctrl.checkMandatory('priorityLevel')">
@@ -366,7 +366,7 @@
                         <label for="docType">{{lang.outgoing_document_type}}</label>
                         <md-select name="docType"
                                    id="docType"
-                                   ng-disabled="!!ctrl.disableProperties"
+                                   ng-disabled="!!ctrl.disableProperties || ctrl.checkAllowedEditProperties('docType')"
                                    ng-model="ctrl.document.docType"
                                    ng-change="ctrl.checkNullValues(outgoing_properties.docType)"
                                    ng-model-options="{trackBy: '$value.id'}"
@@ -381,7 +381,7 @@
                         <md-button class="md-icon-button cms-select-overlay-button"
                                    tooltip="{{lang.add_new_document_type}}"
                                    ng-if="!ctrl.disableProperties && ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT_TYPE')"
-                                   ng-disabled="!!ctrl.disableProperties"
+                                   ng-disabled="!!ctrl.disableProperties || ctrl.checkAllowedEditProperties('docType')"
                                    ng-click="ctrl.shortcut.addNewDocumentType($event)">
                             <md-icon md-svg-icon="plus"></md-icon>
                         </md-button>
@@ -401,7 +401,7 @@
                                    id="fileId"
                                    ng-change="ctrl.onFileChange(ctrl.document.fileId , outgoing_properties.fileId)"
                                    ng-model="ctrl.document.fileId"
-                                   ng-disabled="!!ctrl.disableProperties"
+                                   ng-disabled="!!ctrl.disableProperties || ctrl.checkAllowedEditProperties('fileId')"
                                    ng-model-options="{trackBy: '$value.id'}"
                                    ng-required="ctrl.checkMandatory('fileId')"
                                    md-on-close="ctrl.clearSearchText('documentFile')"
@@ -435,7 +435,7 @@
                         <md-button class="md-icon-button cms-select-overlay-button"
                                    tooltip="{{lang.outgoing_add_new_document_file}}"
                                    ng-if="!ctrl.disableProperties && ctrl.employeeService.hasPermissionTo('MANAGE_FILES')"
-                                   ng-disabled="!!ctrl.disableProperties"
+                                   ng-disabled="!!ctrl.disableProperties || ctrl.checkAllowedEditProperties('fileId')"
                                    ng-click="ctrl.shortcut.addNewDocumentFile($event)">
                             <md-icon md-svg-icon="plus"></md-icon>
                         </md-button>
@@ -450,7 +450,7 @@
                         <label for="fileCode">{{lang.outgoing_file_code}}</label>
                         <input name="fileCode"
                                id="fileCode"
-                               ng-disabled="!!ctrl.disableProperties"
+                               ng-disabled="!!ctrl.disableProperties || ctrl.checkAllowedEditProperties('fileCode')"
                                ng-enter="ctrl.onFileCodeChanged()"
                                ng-model="ctrl.document.fileCode"
                                ng-required="ctrl.checkMandatory('fileCode')">
@@ -465,7 +465,7 @@
                         <label for="fileSerial">{{lang.outgoing_file_serial}}</label>
                         <input name="fileSerial"
                                id="fileSerial"
-                               ng-disabled="!!ctrl.disableProperties"
+                               ng-disabled="!!ctrl.disableProperties || ctrl.checkAllowedEditProperties('fileSerial')"
                                ng-model="ctrl.document.fileSerial"
                                ng-required="ctrl.checkMandatory('fileSerial')">
                         <div ng-messages="outgoing_properties.fileSerial.$error">
@@ -478,7 +478,7 @@
                 <div flex ng-if="ctrl.document.addMethod && ctrl.document.hasActiveSeqWF()" class="cms-input-container">
                     <md-switch flex ng-model="ctrl.document.isOfficial"
                                aria-label="{{lang.official_document}}"
-                               ng-disabled="!ctrl.employeeService.hasPermissionTo('SIGN_OFFICIAL_BOOK')">
+                               ng-disabled="!ctrl.employeeService.hasPermissionTo('SIGN_OFFICIAL_BOOK') || ctrl.checkAllowedEditProperties('isOfficial')">
                         <label>{{lang.official_document}} :
                             {{ctrl.document.getTranslatedYesNo('isOfficial')}}</label>
                     </md-switch>
@@ -506,7 +506,7 @@
                         <label for="docNotes">{{lang.properties_notes}}</label>
                         <textarea ng-required="ctrl.checkMandatory('docNotes')" name="docNotes" id="docNotes"
                                   ng-model="ctrl.document.docNotes" rows="5"
-                                  ng-disabled="!!ctrl.disableProperties"></textarea>
+                                  ng-disabled="!!ctrl.disableProperties || ctrl.checkAllowedEditProperties('docNotes')"></textarea>
                     </md-input-container>
                 </div>
             </div>

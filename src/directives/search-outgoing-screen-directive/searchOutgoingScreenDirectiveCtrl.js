@@ -160,6 +160,7 @@ module.exports = function (app) {
         self.tagsSearchText = '';
         // registry ous came from bindings.
         self.availableRegistryOrganizations = [];
+        self.allowedEditProperties = rootEntity.getAllowedEditProperties();
 
         var noneLookup = new Lookup({
             defaultEnName: langService.getByLangKey('none', 'en'),
@@ -1224,7 +1225,8 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondence.viewFromQueue(self.gridActions, 'searchOutgoing', $event)
+            var allowedEditProperties = self.isAllowedEditProperties(correspondence) ? self.allowedEditProperties : null;
+            correspondence.viewFromQueue(self.gridActions, 'searchOutgoing', $event, false, allowedEditProperties)
                 .then(function () {
                     return self.reloadSearchCorrespondence(self.grid.page);
                 })
@@ -1368,6 +1370,8 @@ module.exports = function (app) {
             if (info.docStatus !== 25 && employeeService.getEmployee()
                 && (generator.getNormalizedValue(model.registryOU, 'id') === employeeService.getEmployee().getRegistryOUID())) {
                 hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+            } else if (self.isAllowedEditProperties(model)) {
+                hasPermission = true;
             }
             //If approved outgoing electronic, don't allow to edit
             else if (info.docStatus >= 24 && !info.isPaper) {
@@ -1400,8 +1404,8 @@ module.exports = function (app) {
          */
         self.editProperties = function (correspondence, $event) {
             var info = correspondence.getInfo();
-            managerService
-                .manageDocumentProperties(info.vsId, info.documentClass, info.title, $event)
+            var allowedEditProperties = self.isAllowedEditProperties(correspondence) ? self.allowedEditProperties : null;
+            managerService.manageDocumentProperties(info.vsId, info.documentClass, info.title, $event, allowedEditProperties)
                 .finally(function (e) {
                     self.reloadSearchCorrespondence(self.grid.page)
                         .then(function () {
@@ -1443,6 +1447,13 @@ module.exports = function (app) {
         self.showSeqWFSteps = function (record, $event) {
             record.showSeqWFStatusSteps($event)
         };
+
+        self.isAllowedEditProperties = function (model) {
+            var info = model.getInfo();
+            return info.docStatus >= 24 &&
+                self.allowedEditProperties && self.allowedEditProperties.length && info.documentClass === "outgoing" &&
+                employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") && employeeService.hasPermissionTo("EDIT_OUTGOING_AFTER_EXPORT");
+        }
 
         self.gridActions = [
             // Document Information

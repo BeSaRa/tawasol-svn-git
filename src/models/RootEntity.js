@@ -114,6 +114,9 @@ module.exports = function (app) {
             RootEntity.prototype.isAzureCognitiveSearchEnabled = function () {
                 return self.rootEntity.hasOwnProperty('azureCognitiveSearchEnabled') && !!self.rootEntity.azureCognitiveSearchEnabled;
             };
+            RootEntity.prototype.getAllowedEditProperties = function () {
+                return self.rootEntity.allowedEditProperties ? JSON.parse(self.rootEntity.allowedEditProperties) : self.rootEntity.allowedEditProperties;
+            }
 
 
             // don't remove CMSModelInterceptor from last line

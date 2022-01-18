@@ -32,6 +32,7 @@ module.exports = function (app) {
                                                           distributionWFService,
                                                           workflowActionService,
                                                           userCommentService,
+                                                          allowedEditProperties,
                                                           documentTagService) {
         'ngInject';
         var self = this;

@@ -678,10 +678,11 @@ module.exports = function (app) {
              * @param queueName
              * @param $event
              * @param viewOnly
+             * @param allowedEditProperties
              * @return {*}
              */
-            Correspondence.prototype.viewFromQueue = function (actions, queueName, $event, viewOnly) {
-                return viewDocumentService.viewQueueDocument(this, actions, queueName, $event, viewOnly);
+            Correspondence.prototype.viewFromQueue = function (actions, queueName, $event, viewOnly, allowedEditProperties) {
+                return viewDocumentService.viewQueueDocument(this, actions, queueName, $event, viewOnly, allowedEditProperties);
             };
 
             /**

@@ -483,6 +483,18 @@ module.exports = function (app) {
             return (self.document.hasVsId() && $stateParams.action === 'receiveg2g');
         };
 
+        /**
+         * @description disable if allowed edit properties not in list
+         * @param property
+         * @returns {boolean}
+         */
+        self.checkAllowedEditProperties = function (property) {
+            if (self.action && self.action.toLowerCase() === 'search-screen' && self.allowedEditProperties) {
+                return self.allowedEditProperties.findIndex(prop => prop.toLowerCase() === property.toLowerCase()) === -1;
+            }
+            return false;
+        }
+
         function _findRegistryOuById(id) {
             return _.find(self.registryOrganizations, function (item) {
                 return item.id === generator.getNormalizedValue(id, 'id');

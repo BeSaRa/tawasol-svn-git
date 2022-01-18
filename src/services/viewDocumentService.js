@@ -259,7 +259,8 @@ module.exports = function (app) {
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
                                 pageName: pageName,
-                                reloadCallback: undefined
+                                reloadCallback: undefined,
+                                allowedEditProperties: false
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -288,8 +289,9 @@ module.exports = function (app) {
              * @param $event
              * @param pageName
              * @param viewOnly - to hide edit content button in delete pages
+             * @param allowedEditProperties
              */
-            self.viewQueueDocument = function (correspondence, actions, pageName, $event, viewOnly) {
+            self.viewQueueDocument = function (correspondence, actions, pageName, $event, viewOnly, allowedEditProperties) {
                 var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : new Outgoing(correspondence).getInfo(),
                     disabled;
                 var desktop = new EditInDesktopCallback({
@@ -343,7 +345,8 @@ module.exports = function (app) {
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
                                 pageName: pageName,
-                                reloadCallback: undefined
+                                reloadCallback: undefined,
+                                allowedEditProperties: allowedEditProperties || false
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -417,7 +420,8 @@ module.exports = function (app) {
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
                                 pageName: pageName,
-                                reloadCallback: undefined
+                                reloadCallback: undefined,
+                                allowedEditProperties: false
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -502,7 +506,8 @@ module.exports = function (app) {
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
                                 pageName: pageName,
-                                reloadCallback: undefined
+                                reloadCallback: undefined,
+                                allowedEditProperties: false
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -575,7 +580,8 @@ module.exports = function (app) {
                                 disableEverything: disabled.disableAll,
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: pageName,
-                                reloadCallback: reloadCallback
+                                reloadCallback: reloadCallback,
+                                allowedEditProperties: false
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -650,7 +656,8 @@ module.exports = function (app) {
                                 disableEverything: false,
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: pageName,
-                                reloadCallback: undefined
+                                reloadCallback: undefined,
+                                allowedEditProperties: false
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -735,7 +742,8 @@ module.exports = function (app) {
                                 disableEverything: false,
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: pageName,
-                                reloadCallback: undefined
+                                reloadCallback: undefined,
+                                allowedEditProperties: false
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -811,7 +819,8 @@ module.exports = function (app) {
                                 disableEverything: disabled.disableAll,
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: pageName,
-                                reloadCallback: undefined
+                                reloadCallback: undefined,
+                                allowedEditProperties: false
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -901,7 +910,8 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: pageName,
-                                reloadCallback: undefined
+                                reloadCallback: undefined,
+                                allowedEditProperties: false
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -968,7 +978,8 @@ module.exports = function (app) {
                                 disableEverything: disabled.disableAll,
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: pageName,
-                                reloadCallback: undefined
+                                reloadCallback: undefined,
+                                allowedEditProperties: false
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1047,7 +1058,8 @@ module.exports = function (app) {
                                 disableEverything: disabled.disableAll,
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: pageName,
-                                reloadCallback: undefined
+                                reloadCallback: undefined,
+                                allowedEditProperties: false
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1136,7 +1148,8 @@ module.exports = function (app) {
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
                                 pageName: pageName,
-                                reloadCallback: undefined
+                                reloadCallback: undefined,
+                                allowedEditProperties: false
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1213,7 +1226,8 @@ module.exports = function (app) {
                                 disableEverything: false,
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: pageName,
-                                reloadCallback: undefined
+                                reloadCallback: undefined,
+                                allowedEditProperties: false
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1303,7 +1317,8 @@ module.exports = function (app) {
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
                                 pageName: pageName,
-                                reloadCallback: undefined
+                                reloadCallback: undefined,
+                                allowedEditProperties: false
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1376,7 +1391,8 @@ module.exports = function (app) {
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
                                 pageName: pageName,
-                                reloadCallback: undefined
+                                reloadCallback: undefined,
+                                allowedEditProperties: false
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1443,7 +1459,8 @@ module.exports = function (app) {
                                 disableEverything: disabled.disableAll,
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: pageName,
-                                reloadCallback: undefined
+                                reloadCallback: undefined,
+                                allowedEditProperties: false
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1558,7 +1575,8 @@ module.exports = function (app) {
                                 disableCorrespondence: true,
                                 g2gItemCopy: g2gItemCopy,
                                 pageName: pageName,
-                                reloadCallback: undefined
+                                reloadCallback: undefined,
+                                allowedEditProperties: false
                             }
                         }).then(function (result) {
                             generator.removePopupNumber();
@@ -1636,7 +1654,8 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 g2gItemCopy: g2gItemCopy,
                                 pageName: pageName,
-                                reloadCallback: undefined
+                                reloadCallback: undefined,
+                                allowedEditProperties: false
                             }
                         }).then(function (result) {
                             generator.removePopupNumber();
@@ -1716,7 +1735,8 @@ module.exports = function (app) {
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
                                 pageName: pageName,
-                                reloadCallback: reloadCallback
+                                reloadCallback: reloadCallback,
+                                allowedEditProperties: false
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1731,7 +1751,7 @@ module.exports = function (app) {
                                     'ngInject';
                                     var currentOU = employeeService.getEmployee().userOrganization;
                                     if (employeeService.isCentralArchive()) {
-                                       return (organizationService.centralArchiveOrganizations().then(function (organizations) {
+                                        return (organizationService.centralArchiveOrganizations().then(function (organizations) {
                                             if (employeeService.isCentralArchiveHasRegistry() && (_.map(organizations, 'id').indexOf(currentOU.id) === -1)) {
                                                 organizations.push(currentOU);
                                             }

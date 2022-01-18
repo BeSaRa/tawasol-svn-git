@@ -166,6 +166,9 @@ module.exports = function (app) {
                 },
                 isChatBotEnabled() {
                     return rootEntity && rootEntity.isChatBotEnabled();
+                },
+                getAllowedEditProperties() {
+                    return rootEntity.getAllowedEditProperties();
                 }
             };
         }

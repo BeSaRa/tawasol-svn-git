@@ -20,7 +20,8 @@ module.exports = function (app) {
                 receiveG2g: '=?',
                 isNewDocument: '=?',
                 action: '=?',
-                forceDirty: '=?'
+                forceDirty: '=?',
+                allowedEditProperties: '=?'
             }
         }
     })

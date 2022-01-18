@@ -14,6 +14,7 @@ module.exports = function (app) {
                                                     justView,
                                                     documentFileService,
                                                     documentTypeService,
+                                                    generator,
                                                     managerService) {
         'ngInject';
 

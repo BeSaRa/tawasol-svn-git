@@ -58,6 +58,7 @@ module.exports = function (app) {
             // azureCognitiveSearch
             self.azureCognitiveSearchEnabled = false;
             self.chatbotEnabled = false;
+            self.allowedEditProperties = null;
             self.allowDownloadWithoutWatermark = false;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array

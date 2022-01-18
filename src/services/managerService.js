@@ -259,9 +259,10 @@ module.exports = function (app) {
          * @param documentClass
          * @param documentSubject
          * @param $event
+         * @param allowedEditProperties
          * @return {promise}
          */
-        self.manageDocumentProperties = function (vsId, documentClass, documentSubject, $event) {
+        self.manageDocumentProperties = function (vsId, documentClass, documentSubject, $event, allowedEditProperties) {
             var defer = $q.defer(), deferCorrespondence = $q.defer();
             var document = null,
                 // set action to review/user-inbox/search will enable edit of security level
@@ -278,7 +279,8 @@ module.exports = function (app) {
                     bindToController: true,
                     locals: {
                         fromDialog: true,
-                        action: action
+                        action: action,
+                        allowedEditProperties: allowedEditProperties || false
                     },
                     resolve: {
                         documentProperties: function () {
