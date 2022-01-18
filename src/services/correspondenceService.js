@@ -1655,7 +1655,8 @@ module.exports = function (app) {
                             popupNumber: generator.getPopupNumber(),
                             disableEverything: !!departmentIncoming,
                             pageName: 'none',
-                            reloadCallback: undefined
+                            reloadCallback: undefined,
+                            allowedEditProperties: false
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1728,7 +1729,8 @@ module.exports = function (app) {
                             popupNumber: generator.getPopupNumber(),
                             disableEverything: true,
                             pageName: 'none',
-                            reloadCallback: undefined
+                            reloadCallback: undefined,
+                            allowedEditProperties: false
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1806,7 +1808,8 @@ module.exports = function (app) {
                             disableCorrespondence: disableCorrespondence,
                             disableEverything: false,
                             popupNumber: generator.getPopupNumber(),
-                            reloadCallback: undefined
+                            reloadCallback: undefined,
+                            allowedEditProperties: false
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1865,7 +1868,8 @@ module.exports = function (app) {
                                 disableEverything: departmentIncoming,
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: 'none',
-                                reloadCallback: undefined
+                                reloadCallback: undefined,
+                                allowedEditProperties: false
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1928,7 +1932,8 @@ module.exports = function (app) {
                             disableEverything: departmentIncoming,
                             popupNumber: generator.getPopupNumber(),
                             pageName: 'none',
-                            reloadCallback: undefined
+                            reloadCallback: undefined,
+                            allowedEditProperties: false
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -2144,7 +2149,8 @@ module.exports = function (app) {
                     content: information,
                     popupNumber: generator.getPopupNumber(),
                     editMode: !justView,
-                    reloadCallback: undefined
+                    reloadCallback: undefined,
+                    allowedEditProperties: false
                 }
             });
         };
@@ -2364,7 +2370,8 @@ module.exports = function (app) {
                         fromSimplePopup: fromSimplePopup,
                         predefinedActionMembers: predefinedActionMembers,
                         fromQuickSend: (predefinedActionMembers && predefinedActionMembers.length > 0),
-                        reloadCallback: reloadCallback
+                        reloadCallback: reloadCallback,
+                        allowedEditProperties: false
                     },
                     resolve: {
                         favoritesUsers: function (distributionWFService) {
@@ -3934,7 +3941,8 @@ module.exports = function (app) {
                             disableCorrespondence: disableCorrespondence,
                             disableEverything: false,
                             popupNumber: generator.getPopupNumber(),
-                            reloadCallback: undefined
+                            reloadCallback: undefined,
+                            allowedEditProperties: false
                         },
                         resolve: {
                             organizations: function (organizationService) {
