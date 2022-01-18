@@ -44,6 +44,7 @@ module.exports = function (app) {
                                              configurationService,
                                              downloadService,
                                              loadingIndicatorService,
+                                             isInternal,
                                              errorCode) {
         'ngInject';
         var self = this;
@@ -57,6 +58,7 @@ module.exports = function (app) {
 
         self.hasPSPDFViewer = rootEntity.hasPSPDFViewer();
         self.annotationPermission = configurationService.ANNOTATE_DOCUMENT_PERMISSION;
+        self.isInternalOutgoingEnabled = rootEntity.isInternalOutgoingEnabled();
 
         // validation for accordion
         self.validation = true;
@@ -129,6 +131,9 @@ module.exports = function (app) {
             self.action = 'editAfterReturnG2G';
         }
 
+        if (self.isInternalOutgoingEnabled) {
+            self.outgoing.isInternal = isInternal;
+        }
 
         self.preventPropagation = function ($event) {
             $event.stopPropagation();
@@ -921,6 +926,10 @@ module.exports = function (app) {
                 toSitesList: []
             });
 
+            if (self.isInternalOutgoingEnabled) {
+                self.outgoing.isInternal = isInternal;
+            }
+
             self.emptySubSites = true;
             self.emptySiteSearch = true;
             self.documentInformation = null;
@@ -1051,6 +1060,14 @@ module.exports = function (app) {
                 });
             }
         };
+
+        self.checkPassCorrespondenceSites = function () {
+            // first site type shouldn't be internal if adding external outgoing
+            if (self.isInternalOutgoingEnabled && !self.outgoing.isInternal) {
+                return !!self.outgoing.sitesInfoTo.length && !self.outgoing.sitesInfoTo[0].siteType.isInternalSiteType();
+            }
+            return !!self.outgoing.sitesInfoTo.length
+        }
 
         $rootScope.$on('SEQ_LAUNCH_SUCCESS', function () {
             self.resetAddCorrespondence();

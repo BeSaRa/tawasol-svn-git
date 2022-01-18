@@ -25,6 +25,7 @@ module.exports = function (app) {
                                       sequentialWorkflowService,
                                       encryptionService,
                                       _,
+                                      configurationService,
                                       Lookup) {
         'ngInject';
 
@@ -1058,6 +1059,14 @@ module.exports = function (app) {
                 }
             };
 
+            WorkItem.prototype.checkIfInternalSiteTypeWhenCreateReply = function () {
+                var info = this.getInfo();
+                if (info.documentClass === 'incoming') {
+                    return configurationService.INTERNAL_CORRESPONDENCE_SITES_TYPE === this.generalStepElm.siteType;
+                }
+                return false;
+            }
+
             WorkItem.prototype.createDocumentTask = function ($event) {
                 return taskService
                     .controllerMethod
@@ -1424,6 +1433,14 @@ module.exports = function (app) {
                 return this.securityLevel.hasOwnProperty('id') ?
                     (this.securityLevel.lookupKey === 1 || this.securityLevel.lookupKey === 4) :
                     (this.securityLevel === 1 || this.securityLevel === 4);
+            }
+            WorkItem.prototype.getIsInternalOutgoingIndicator = function () {
+                var info = this.getInfo();
+                return info.documentClass === 'outgoing' ? indicator.getIsInternalOutgoingIndicator(this.isInternalOutgoing()) : false;
+            };
+            WorkItem.prototype.isInternalOutgoing = function () {
+                var info = this.getInfo();
+                return info.documentClass === 'outgoing' && this.generalStepElm.hasOwnProperty('isInternal') && this.generalStepElm.isInternal;
             }
 
             // don't remove CMSModelInterceptor from last line

@@ -43,6 +43,7 @@ module.exports = function (app) {
         self.controllerName = 'readyToExportDepartmentInboxCtrl';
         self.employeeService = employeeService;
         contextHelpService.setHelpTo('department-inbox-ready-to-export');
+        self.isInternalOutgoingEnabled = rootEntity.isInternalOutgoingEnabled();
 
         /**
          * @description All ready To Exports
@@ -807,10 +808,11 @@ module.exports = function (app) {
             });
             dialog.confirmMessage(list.getList(), null, null, $event)
                 .then(function () {
+                    var page = (self.isInternalOutgoingEnabled && model.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
                     correspondenceStorageService
                         .runEditAfter('Approved', model)
                         .then(function () {
-                            $state.go('app.outgoing.add', {
+                            $state.go(page, {
                                 wobNum: info.wobNumber,
                                 vsId: info.vsId,
                                 action: 'editAfterApproved'
@@ -929,7 +931,12 @@ module.exports = function (app) {
             return workItem
                 .duplicateVersion($event)
                 .then(function () {
-                    $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
+                    if (info.documentClass.toLowerCase() === 'outgoing') {
+                        var page = (self.isInternalOutgoingEnabled && workItem.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
+                    } else {
+                        page = 'app.' + info.documentClass.toLowerCase() + '.add'
+                    }
+                    $state.go(page, {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
                         wobNum: info.wobNumber
@@ -951,6 +958,11 @@ module.exports = function (app) {
             return workItem
                 .duplicateSpecificVersion($event)
                 .then(function () {
+                    if (info.documentClass.toLowerCase() === 'outgoing') {
+                        var page = (self.isInternalOutgoingEnabled && workItem.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
+                    } else {
+                        page = 'app.' + info.documentClass.toLowerCase() + '.add'
+                    }
                     $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
                         vsId: info.vsId,
                         action: 'duplicateVersion',

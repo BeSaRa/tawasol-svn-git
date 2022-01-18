@@ -48,6 +48,8 @@ module.exports = function (app) {
         // selected followup Status.
         self.followupStatus = null;
         self.isFollowupStatusMandatory = false;
+        self.isInternalOutgoingEnabled = rootEntity.isInternalOutgoingEnabled();
+        self.isSiteTypesDisabled = false;
 
         var followupStatusWithoutReply = _.find(self.followUpStatuses, function (status) {
                 return status.lookupStrKey === 'WITHOUT_REPLY';
@@ -143,6 +145,7 @@ module.exports = function (app) {
 
             self.mainSites = [];
             self.mainSitesCopy = angular.copy(self.mainSites);
+            _setSitesTypeIfInternalOutgoingActive();
         });
 
         self.selectedSiteTypeSimple = null;
@@ -410,6 +413,7 @@ module.exports = function (app) {
                         self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
                         self.subSearchResult_DL = _.filter(self.subSearchResult_DL_Copy, _filterSubSites);
                         self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
+                        _setSitesTypeIfInternalOutgoingActive();
                     });
                 })
         };
@@ -435,6 +439,7 @@ module.exports = function (app) {
                         self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
                         self.subSearchResult_DL = _.filter(self.subSearchResult_DL_Copy, _filterSubSites);
                         self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
+                        _setSitesTypeIfInternalOutgoingActive();
                     });
                 });
         };
@@ -921,6 +926,7 @@ module.exports = function (app) {
                         }
                         self.subSearchResult_DL = _.filter(self.subSearchResult_DL_Copy, _filterSubSites);
                         self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
+                        _setSitesTypeIfInternalOutgoingActive();
                     });
                 });
         };
@@ -1055,6 +1061,8 @@ module.exports = function (app) {
                 self.selectedSimpleSub = null;
                 self.simpleSubSiteResultSearchText = '';
             }
+
+            //  _setSitesTypeIfInternalOutgoingActive();
         });
 
         function _initPriorityLevelWatch() {
@@ -1063,6 +1071,40 @@ module.exports = function (app) {
             }, function (value) {
                 _resetDefaultNeedReplyFollowupDate();
             });
+        }
+
+        function _setSitesTypeIfInternalOutgoingActive() {
+            if (self.isInternalOutgoingEnabled && self.correspondenceSiteTypes && self.correspondence) {
+                self.correspondenceSiteTypes.map(siteType => {
+                    if (!self.correspondence.hasOwnProperty('isInternal')) {
+                        return siteType;
+                    }
+                    // if adding internal outgoing disable all site types except internal
+                    if (self.correspondence.isInternal && !siteType.isInternalSiteType()) {
+                        siteType.disabled = true;
+                        if (self.isSimpleCorrespondenceSiteSearchType && !self.disableCorrespondence) {
+                            self.selectedSiteTypeSimple = _getTypeByLookupKey(configurationService.INTERNAL_CORRESPONDENCE_SITES_TYPE);
+                            self.onSiteTypeSimpleChange(null);
+                        } else if (!self.isSimpleCorrespondenceSiteSearchType && !self.disableCorrespondence) {
+                            self.selectedSiteTypeAdvanced = _getTypeByLookupKey(configurationService.INTERNAL_CORRESPONDENCE_SITES_TYPE);
+                            self.onSiteTypeChangeAdvanced(null);
+                        }
+                    }
+
+                    // if adding external outgoing enable only g2g and external site types
+                    else if (!self.correspondence.isInternal &&
+                        (!self.sitesInfoTo.length || (self.sitesInfoTo.length && self.sitesInfoTo[0].siteType.isInternalSiteType()))) {
+                        if (!siteType.isGovernmentSiteType() && !siteType.isExternalSiteType()) {
+                            siteType.disabled = true;
+                            self.emptySiteSearch = true;
+                        }
+                    } else {
+                        siteType.disabled = false;
+                    }
+
+                    return siteType;
+                });
+            }
         }
 
         self.getSortingKey = function (property, modelType) {
@@ -1267,6 +1309,8 @@ module.exports = function (app) {
                     // just in case document is not passed to directive, avoid check for priority level
                     if (self.correspondence) {
                         _initPriorityLevelWatch();
+                        // to disable site type control if adding internal outgoing
+                        self.isSiteTypesDisabled = self.correspondence.hasOwnProperty('isInternal') && self.correspondence.isInternal;
                     }
                     _checkFollowupStatusMandatory();
                 });

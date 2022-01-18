@@ -18,6 +18,7 @@ module.exports = function (app) {
                                                  viewDeliveryReportService,
                                                  printService,
                                                  gridService,
+                                                 _,
                                                  G2GMessagingHistory) {
         'ngInject';
         var self = this;

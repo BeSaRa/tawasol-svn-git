@@ -32,8 +32,8 @@
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column>
-                                        <!-- Read/Unread Indicator -->
-                                    </th>
+                                            <!-- Read/Unread Indicator -->
+                                        </th>
                                         <th colspan="{{ctrl.selectedIncomingDepartmentInboxes.length > 1 ? 9 : 10}}"
                                             ng-if="ctrl.selectedIncomingDepartmentInboxes.length" md-column>
                                             <div layout="row" layout-align="start center">
@@ -139,6 +139,10 @@
                                                                       record="incomingDepartmentInbox"
                                                                       indicator-type="priorityLevel">
                                             </grid-indicator-directive>
+                                            <!-- Is Internal -->
+                                            <grid-indicator-directive record="incomingDepartmentInbox"
+                                                                      indicator-type="isInternalOutgoing"
+                                                                      record-type="WorkItem"></grid-indicator-directive>
                                         </td>
                                         <td md-cell>
                                             <span class="serial-td">{{incomingDepartmentInbox.generalStepElm.docFullSerial}}</span>
@@ -175,10 +179,12 @@
                                         <td md-cell>
                                             <div layout="row">
                                                 {{incomingDepartmentInbox.sender.getTranslatedName()}}
-                                                <grid-indicator-directive ng-if="incomingDepartmentInbox.generalStepElm.isReassigned" record="incomingDepartmentInbox"
-                                                                          indicator-type="comments"
-                                                                          class="p0p5"
-                                                                          record-type="WorkItem"></grid-indicator-directive>
+                                                <grid-indicator-directive
+                                                        ng-if="incomingDepartmentInbox.generalStepElm.isReassigned"
+                                                        record="incomingDepartmentInbox"
+                                                        indicator-type="comments"
+                                                        class="p0p5"
+                                                        record-type="WorkItem"></grid-indicator-directive>
                                             </div>
                                         </td>
                                         <td md-cell class="td-data">

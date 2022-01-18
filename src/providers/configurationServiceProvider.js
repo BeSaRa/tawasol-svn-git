@@ -8,6 +8,7 @@ module.exports = function (app) {
             SCANNER_HTTP_PORTS: [49732/*, 49733, 49734*/],
             CORRESPONDENCE_SITES_TYPES_LOOKUPS: [1 /* internal sites */, 3 /* g2g sites */, 5 /* internal g2g sites */],
             G2G_CORRESPONDENCE_SITES_TYPE: 3,
+            INTERNAL_CORRESPONDENCE_SITES_TYPE: 1,
             OFFICE_ONLINE_DELAY: 3000,
             DEFAULT_START_TASK_TIME: '08:00',
             DEFAULT_SEND_LINK_TIME: '20:00',

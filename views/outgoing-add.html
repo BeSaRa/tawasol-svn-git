@@ -110,8 +110,8 @@
                             </accordion-content>
                         </accordion-item>
                         <!-- Correspondence Sites -->
-                        <accordion-item fail-when="!ctrl.outgoing.sitesInfoTo.length"
-                                        pass-when="!!ctrl.outgoing.sitesInfoTo.length">
+                        <accordion-item fail-when="!ctrl.checkPassCorrespondenceSites()"
+                                        pass-when="ctrl.checkPassCorrespondenceSites()">
                             <accordion-title>
                                 <md-icon md-svg-icon="arrange-send-backward"></md-icon>
                                 <span>{{lang.manage_correspondence_sites}}</span>

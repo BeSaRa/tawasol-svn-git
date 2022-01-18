@@ -39,6 +39,7 @@ module.exports = function (app) {
         contextHelpService.setHelpTo('department-inbox-returned');
         // employee service to check the permission in html
         self.employeeService = employeeService;
+        self.isInternalOutgoingEnabled = rootEntity.isInternalOutgoingEnabled();
 
         /**
          * @description All returned department inbox items
@@ -538,11 +539,12 @@ module.exports = function (app) {
             });
             dialog.confirmMessage(list.getList(), null, null, $event)
                 .then(function () {
+                    var page = (self.isInternalOutgoingEnabled && returnedDepartmentInbox.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
                     correspondenceStorageService
                         .runEditAfter('Export', returnedDepartmentInbox)
                         .then(function () {
                             dialog.hide();
-                            $state.go('app.outgoing.add', {
+                            $state.go(page, {
                                 wobNum: info.wobNumber,
                                 vsId: info.vsId,
                                 action: 'editAfterExport'

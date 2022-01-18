@@ -846,6 +846,14 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_add_outgoing'
             })
+            // add-outgoing
+            .state('app.outgoing.add-internal', {
+                url: '/internalAdd?vsId?wobNum?action?createAsAttachment?sourceDocClass?addMethod?versionNumber',
+                templateUrl: templateProvider.getView('outgoing-add'),
+                controller: 'outgoingCtrl',
+                controllerAs: 'ctrl',
+                permission: 'menu_item_internal_outgoing_add'
+            })
             // add simple outgoing
             .state('app.outgoing.simple-add', {
                 url: '/simpleAdd?vsId?wobNum?action?createAsAttachment?sourceDocClass?addMethod?versionNumber',
@@ -853,6 +861,14 @@ module.exports = function (app) {
                 controller: 'simpleOutgoingCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_outgoing_simple_add'
+            })
+            // add simple outgoing internal
+            .state('app.outgoing.simple-add-internal', {
+                url: '/simpleInternalAdd?vsId?wobNum?action?createAsAttachment?sourceDocClass?addMethod?versionNumber',
+                templateUrl: templateProvider.getView('outgoing-simple-add'),
+                controller: 'simpleOutgoingCtrl',
+                controllerAs: 'ctrl',
+                permission: 'menu_item_internal_outgoing_simple_add'
             })
             // prepare outgoing
             .state('app.outgoing.prepare', {
@@ -1447,7 +1463,7 @@ module.exports = function (app) {
                 templateUrl: templateProvider.getView('group-inbox'),
                 controller: 'groupInboxCtrl',
                 controllerAs: 'ctrl',
-                permission: 'menu_item_group_inbox'
+                permission: 'menu_item_group_inbox',
             })
             .state('app.inbox.folders', {
                 url: '/folders?folder',

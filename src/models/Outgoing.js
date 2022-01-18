@@ -4,6 +4,7 @@ module.exports = function (app) {
                                       Site,
                                       Correspondence,
                                       queueStatusService,
+                                      _,
                                       Indicator) {
         'ngInject';
         return function Outgoing(model) {
@@ -59,6 +60,7 @@ module.exports = function (app) {
             self.isComposite = false;
             self.fromEditOnDesktop = false;
             self.distListId = null;
+            self.isInternal = false;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
@@ -111,6 +113,9 @@ module.exports = function (app) {
             Outgoing.prototype.getPriorityLevelIndicator = function (priorityLevel) {
                 return indicator.getPriorityLevelIndicator(priorityLevel);
             };
+            Outgoing.prototype.getIsInternalOutgoingIndicator = function () {
+                return this.isInternal ? indicator.getIsInternalOutgoingIndicator(this.isInternal) : null;
+            };
 
             Outgoing.prototype.partialExport = function ($event, ignoreMessage) {
                 correspondenceService = this.getCorrespondenceService();
@@ -149,6 +154,9 @@ module.exports = function (app) {
             Outgoing.prototype.openManualDeliveryReportDialog = function ($event) {
                 correspondenceService = this.getCorrespondenceService();
                 return correspondenceService.openManualDeliveryReportDialog(this, $event);
+            }
+            Outgoing.prototype.isInternalOutgoing = function () {
+                return this.isInternal;
             }
 
             // don't remove CMSModelInterceptor from last line

@@ -45,6 +45,7 @@ module.exports = function (app) {
             delete model.externalSiteIndicator;
             delete model.internalSiteIndicator;
             delete model.g2gSiteIndicator;
+            delete model.isInternalOutgoingIndicator;
             delete model.hasExternalSite;
 
             return model;
@@ -75,6 +76,7 @@ module.exports = function (app) {
             model.externalSiteIndicator = model.getExternalSiteIndicator();
             model.internalSiteIndicator = model.getInternalSiteIndicator();
             model.g2gSiteIndicator = model.getG2GSiteIndicator();
+            model.isInternalOutgoingIndicator = model.getIsInternalOutgoingIndicator();
             model.hasExternalSite = model.hasExternalSite();
 
             return model;

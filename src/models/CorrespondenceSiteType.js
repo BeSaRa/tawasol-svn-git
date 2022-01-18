@@ -14,6 +14,8 @@ module.exports = function (app) {
             self.parent = null;
             self.itemOrder = 1;
             self.category = null;
+            self.disabled = false;
+
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [
@@ -63,6 +65,9 @@ module.exports = function (app) {
             CorrespondenceSiteType.prototype.isGovernmentSiteType = function () {
                 return configurationService.G2G_CORRESPONDENCE_SITES_TYPE === this.lookupKey;
             };
+            CorrespondenceSiteType.prototype.isInternalSiteType = function () {
+                return configurationService.INTERNAL_CORRESPONDENCE_SITES_TYPE === this.lookupKey;
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

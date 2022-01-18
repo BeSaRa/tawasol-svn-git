@@ -13,7 +13,8 @@
                         <md-select id="siteTypeSimple" ng-model="ctrl.selectedSiteTypeSimple"
                                    ng-change="ctrl.onSiteTypeSimpleChange($event)"
                                    md-on-close="ctrl.clearSearchText('siteTypeSimple')"
-                                   data-md-container-class="select-header-container sticky-search-bar">
+                                   data-md-container-class="select-header-container sticky-search-bar"
+                                    ng-disabled="ctrl.isSiteTypesDisabled">
                             <md-select-header class="select-header">
                                 <input ng-model="ctrl.siteTypeSimpleSearchText"
                                        ng-keydown="ctrl.preventSearchKeyDown($event)"
@@ -21,7 +22,7 @@
                                        class="select-header-input">
                             </md-select-header>
                             <md-option ng-value="null">{{lang.none}}</md-option>
-                            <md-option ng-value="type"
+                            <md-option ng-value="type" ng-disabled="type.disabled"
                                        ng-repeat="type in ctrl.correspondenceSiteTypes | translatedNameFilter:ctrl.siteTypeSimpleSearchText">
                                 <span md-highlight-text="ctrl.siteTypeSimpleSearchText"
                                       md-highlight-flags="i">{{type.getTranslatedName()}}</span>
@@ -33,7 +34,7 @@
                         <label for="mainSiteSimple">{{lang.main_site}}</label>
                         <md-select id="mainSiteSimple" ng-model="ctrl.selectedMainSiteSimple"
                                    ng-model-options="{trackBy: '$value.id'}"
-                                   ng-disabled="!ctrl.selectedSiteTypeSimple || !ctrl.selectedSiteTypeSimple.id"
+                                   ng-disabled="!ctrl.selectedSiteTypeSimple || !ctrl.selectedSiteTypeSimple.id || ctrl.isSiteTypesDisabled"
                                    ng-change="ctrl.onMainSiteChangeSimple($event)"
                                    md-on-close="ctrl.clearSearchText('mainSiteSimple')"
                                    data-md-container-class="select-header-container sticky-search-bar">
@@ -74,7 +75,8 @@
                         <md-select id="siteTypeAdvanced" ng-model="ctrl.selectedSiteTypeAdvanced"
                                    ng-change="ctrl.onSiteTypeChangeAdvanced($event)"
                                    md-on-close="ctrl.clearSearchText('siteTypeAdvanced')"
-                                   data-md-container-class="select-header-container sticky-search-bar">
+                                   data-md-container-class="select-header-container sticky-search-bar"
+                                   ng-disabled="ctrl.isSiteTypesDisabled">
                             <md-select-header class="select-header">
                                 <input ng-model="ctrl.siteTypeAdvancedSearchText"
                                        ng-keydown="ctrl.preventSearchKeyDown($event)"
@@ -82,7 +84,7 @@
                                        class="select-header-input">
                             </md-select-header>
                             <md-option ng-value="null">{{lang.none}}</md-option>
-                            <md-option ng-value="type"
+                            <md-option ng-value="type" ng-disabled="type.disabled"
                                        ng-repeat="type in ctrl.correspondenceSiteTypes | translatedNameFilter: ctrl.siteTypeAdvancedSearchText">
                                 <span
                                         md-highlight-text="ctrl.siteTypeAdvancedSearchText"
@@ -97,7 +99,8 @@
                                    ng-model-options="{trackBy: '$value.id'}"
                                    ng-change="ctrl.onMainSiteChangeAdvanced($event)"
                                    md-on-close="ctrl.clearSearchText('mainSiteAdvanced')"
-                                   data-md-container-class="select-header-container sticky-search-bar">
+                                   data-md-container-class="select-header-container sticky-search-bar"
+                                   ng-disabled="ctrl.isSiteTypesDisabled">
                             <md-select-header class="select-header" layout="column">
                                 <div layout="row" flex class="size-100">
                                     <input ng-model="ctrl.mainSiteAdvancedSearchText"
@@ -545,7 +548,7 @@
                                         </td>
                                         <td md-cell>
                                             <div layout="row"><span
-                                                    flex>{{site.followupEndDate|date:'yyyy-MM-dd'}}</span></div>
+                                                    flex>{{site.followupEndDate | date:'yyyy-MM-dd'}}</span></div>
                                         </td>
                                         <td md-cell>
                                             <div flex layout="row" layout-align="start center"
@@ -692,7 +695,7 @@
                                         </td>
                                         <td md-cell>
                                             <div layout="row"><span
-                                                    flex>{{site.followupEndDate|date:'yyyy-MM-dd'}}</span></div>
+                                                    flex>{{site.followupEndDate | date:'yyyy-MM-dd'}}</span></div>
                                         </td>
                                         <td md-cell>
                                             <div flex layout="row" layout-align="start center"
@@ -792,7 +795,7 @@
                                                     <md-button ng-click="$mdMenu.open()"
                                                                ng-disabled="!!ctrl.disableCorrespondence">
                                                         {{ctrl.followupStatus_DL.getTranslatedName() ||
-                                                        lang.sites_follow_up_status}}
+                                                    lang.sites_follow_up_status}}
                                                     </md-button>
                                                     <md-menu-content width="3">
                                                         <md-menu-item ng-repeat="status in ctrl.followUpStatuses">
@@ -837,7 +840,7 @@
                                                     <md-button ng-click="$mdMenu.open()"
                                                                ng-disabled="!!ctrl.disableCorrespondence">
                                                         {{ctrl.followupStatus_DL.getTranslatedName() ||
-                                                        lang.sites_follow_up_status}}
+                                                    lang.sites_follow_up_status}}
                                                     </md-button>
                                                     <md-menu-content width="3">
                                                         <md-menu-item ng-repeat="status in ctrl.followUpStatuses">
@@ -938,7 +941,7 @@
                                                             <md-button ng-click="$mdMenu.open()"
                                                                        ng-disabled="!!ctrl.disableCorrespondence">
                                                                 {{site.followupStatus.getTranslatedName() ||
-                                                                lang.sites_follow_up_status}}
+                                                            lang.sites_follow_up_status}}
                                                             </md-button>
                                                             <md-menu-content width="3">
                                                                 <md-menu-item
@@ -1023,7 +1026,7 @@
                                                 <md-menu>
                                                     <md-button ng-click="$mdMenu.open()">
                                                         {{ctrl.sitesInfoToFollowupStatus.getTranslatedName() ||
-                                                        lang.sites_follow_up_status}}
+                                                    lang.sites_follow_up_status}}
                                                     </md-button>
                                                     <md-menu-content width="3">
                                                         <md-menu-item ng-repeat="status in ctrl.followUpStatuses">
@@ -1108,12 +1111,13 @@
                                             </div>
                                         </td>
                                         <td md-cell>
-                                            <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
+                                            <div layout="row"><span
+                                                    flex>{{site.followupDate | date:'yyyy-MM-dd'}}</span>
                                             </div>
                                         </td>
                                         <td md-cell>
                                             <div layout="row"><span
-                                                    flex>{{site.followupEndDate|date:'yyyy-MM-dd'}}</span></div>
+                                                    flex>{{site.followupEndDate | date:'yyyy-MM-dd'}}</span></div>
                                         </td>
                                         <td md-cell>
                                             <div flex layout="row" layout-align="start center"
@@ -1159,7 +1163,7 @@
                                                 <md-menu>
                                                     <md-button ng-click="$mdMenu.open()">
                                                         {{ctrl.sitesInfoCCFollowupStatus.getTranslatedName() ||
-                                                        lang.sites_follow_up_status}}
+                                                    lang.sites_follow_up_status}}
                                                     </md-button>
                                                     <md-menu-content width="3">
                                                         <md-menu-item ng-repeat="status in ctrl.followUpStatuses">
@@ -1245,12 +1249,13 @@
                                             </div>
                                         </td>
                                         <td md-cell>
-                                            <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
+                                            <div layout="row"><span
+                                                    flex>{{site.followupDate | date:'yyyy-MM-dd'}}</span>
                                             </div>
                                         </td>
                                         <td md-cell>
                                             <div layout="row"><span
-                                                    flex>{{site.followupEndDate|date:'yyyy-MM-dd'}}</span></div>
+                                                    flex>{{site.followupEndDate | date:'yyyy-MM-dd'}}</span></div>
                                         </td>
                                         <td md-cell>
                                             <div flex layout="row" layout-align="start center"
@@ -1344,11 +1349,11 @@
                                 </div>
                             </td>
                             <td md-cell>
-                                <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
+                                <div layout="row"><span flex>{{site.followupDate | date:'yyyy-MM-dd'}}</span>
                                 </div>
                             </td>
                             <td md-cell>
-                                <div layout="row"><span flex>{{site.followupEndDate|date:'yyyy-MM-dd'}}</span></div>
+                                <div layout="row"><span flex>{{site.followupEndDate | date:'yyyy-MM-dd'}}</span></div>
                             </td>
                         </tr>
                         </tbody>
@@ -1424,11 +1429,11 @@
                                 </div>
                             </td>
                             <td md-cell>
-                                <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
+                                <div layout="row"><span flex>{{site.followupDate | date:'yyyy-MM-dd'}}</span>
                                 </div>
                             </td>
                             <td md-cell>
-                                <div layout="row"><span flex>{{site.followupEndDate|date:'yyyy-MM-dd'}}</span></div>
+                                <div layout="row"><span flex>{{site.followupEndDate | date:'yyyy-MM-dd'}}</span></div>
                             </td>
                         </tr>
                         </tbody>

@@ -22,6 +22,7 @@ module.exports = function (app) {
                                                   ResolveDefer,
                                                   correspondenceService,
                                                   mailNotificationService,
+                                                  rootEntity,
                                                   gridService) {
         'ngInject';
         var self = this;
@@ -38,6 +39,8 @@ module.exports = function (app) {
          */
         self.draftOutgoings = draftOutgoings;
         self.draftOutgoingsCopy = angular.copy(self.draftOutgoings);
+        self.isInternalOutgoingEnabled = rootEntity.isInternalOutgoingEnabled();
+
 
         /**
          * @description Contains the selected draft outgoing mails
@@ -426,7 +429,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.security = function (draftOutgoing, $event) {
-           // console.log('security : ', draftOutgoing);
+            // console.log('security : ', draftOutgoing);
         };
 
         /**
@@ -532,10 +535,11 @@ module.exports = function (app) {
          */
         self.duplicateCurrentVersion = function (correspondence, $event) {
             var info = correspondence.getInfo();
+            var page = (self.isInternalOutgoingEnabled && correspondence.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
             return correspondence
                 .duplicateVersion($event)
                 .then(function () {
-                    $state.go('app.outgoing.add', {
+                    $state.go(page, {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
                         wobNum: info.wobNumber
@@ -550,10 +554,11 @@ module.exports = function (app) {
          */
         self.duplicateVersion = function (correspondence, $event) {
             var info = correspondence.getInfo();
+            var page = (self.isInternalOutgoingEnabled && correspondence.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
             return correspondence
                 .duplicateSpecificVersion($event)
                 .then(function () {
-                    $state.go('app.outgoing.add', {
+                    $state.go(page, {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
                         wobNum: info.wobNumber

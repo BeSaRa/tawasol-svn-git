@@ -1307,10 +1307,15 @@ module.exports = function (app) {
          */
         self.duplicateCurrentVersion = function (correspondence, $event) {
             var info = correspondence.getInfo();
+            if (info.documentClass.toLowerCase() === 'outgoing') {
+                var page = (self.isInternalOutgoingEnabled && correspondence.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
+            } else {
+                page = 'app.' + info.documentClass.toLowerCase() + '.add'
+            }
             return correspondence
                 .duplicateVersion($event)
                 .then(function () {
-                    $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
+                    $state.go(page, {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
                         wobNum: info.wobNumber
@@ -1325,10 +1330,15 @@ module.exports = function (app) {
          */
         self.duplicateVersion = function (correspondence, $event) {
             var info = correspondence.getInfo();
+            if (info.documentClass.toLowerCase() === 'outgoing') {
+                var page = (self.isInternalOutgoingEnabled && correspondence.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
+            } else {
+                page = 'app.' + info.documentClass.toLowerCase() + '.add'
+            }
             return correspondence
                 .duplicateSpecificVersion($event)
                 .then(function () {
-                    $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
+                    $state.go(page, {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
                         wobNum: info.wobNumber

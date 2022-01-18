@@ -326,3 +326,12 @@
              tooltip="{{ctrl.langService.get(ctrl.record.sharedFollowupIndicator.tooltip)}}"
     ></md-icon>
 </span>
+<!-- Is Internal (Outgoing) -->
+<span ng-if="ctrl.indicatorType === 'isInternalOutgoing'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.isInternalOutgoingIndicator}">
+    <md-icon ng-if="ctrl.record.isInternalOutgoingIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.isInternalOutgoingIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.isInternalOutgoingIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.isInternalOutgoingIndicator.tooltip)}}"
+    ></md-icon>
+</span>

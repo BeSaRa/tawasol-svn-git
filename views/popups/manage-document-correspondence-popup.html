@@ -6,6 +6,8 @@
     <md-dialog-content scroll-directive flex>
         <div>
             <manage-correspondence-sites-directive
+                    empty-site-search="ctrl.emptySiteSearch"
+                    empty-sub-records="ctrl.emptySubSites"
                     ng-if="ctrl.documentClass.toLowerCase()==='outgoing'"
                     vs-id="ctrl.correspondence.vsId"
                     document-class="ctrl.correspondence.docClassName"

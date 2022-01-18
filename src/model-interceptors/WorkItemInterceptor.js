@@ -80,6 +80,7 @@ module.exports = function (app) {
             delete model.recordGridName;
             delete model.externalImportData;
             delete model.generalStepElm.externalImportData;
+            delete model.isInternalOutgoingIndicator;
             return model;
         });
 
@@ -140,6 +141,8 @@ module.exports = function (app) {
                 model.conditionalApproveComment = model.generalStepElm.comments;
             }
             model.setMainSiteSubSiteString();
+            model.isInternalOutgoingIndicator = model.getIsInternalOutgoingIndicator();
+
             return model;
         });
 

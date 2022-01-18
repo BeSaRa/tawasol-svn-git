@@ -25,6 +25,7 @@ module.exports = function (app) {
                                                            printService,
                                                            EventHistoryCriteria,
                                                            mailNotificationService,
+                                                           _,
                                                            gridService) {
         'ngInject';
         var self = this;

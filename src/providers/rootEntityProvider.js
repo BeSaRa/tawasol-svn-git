@@ -169,6 +169,9 @@ module.exports = function (app) {
                 },
                 getAllowedEditProperties() {
                     return rootEntity.getAllowedEditProperties();
+                },
+                isInternalOutgoingEnabled() {
+                    return rootEntity && rootEntity.isInternalOutgoingEnabled() && employeeService.hasPermissionTo('ADD_INTERNAL_OUTGOING');
                 }
             };
         }

@@ -699,6 +699,23 @@ module.exports = function (app) {
             };
 
             /**
+             * @description Returns the is internal outgoing record indicator and description
+             * @returns {Indicator}
+             * @param isInternal
+             */
+            Indicator.prototype.getIsInternalOutgoingIndicator = function (isInternal) {
+                return isInternal ? new Indicator({
+                    class: 'indicator',
+                    text: 'indicator_internal_outgoing',
+                    icon: self.getIndicatorIcons('outgoingInternal'),
+                    tooltip: 'indicator_internal_outgoing',
+                    legendText: function (indicator) {
+                        return '';
+                    }
+                }) : false;
+            };
+
+            /**
              * @description Returns the difference in days and date status(passed/today/coming)
              * @param dateToCheck
              * @param iconType

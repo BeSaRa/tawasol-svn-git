@@ -259,6 +259,127 @@ module.exports = function (app) {
                                 return false;
                             });
                         });
+                },
+                isInternal: function ($q) {
+                    'ngInject';
+                    return $q.resolve(false);
+                }
+            })
+            .bulkResolveToState('app.outgoing.add-internal', {
+                organizations: function (organizationService) {
+                    'ngInject';
+                    return organizationService.loadOrganizations(true);
+                },
+                replyTo: function ($timeout, $stateParams, correspondenceService) {
+                    'ngInject';
+                    var vsId = $stateParams.vsId, wobNum = $stateParams.wobNum, action = $stateParams.action,
+                        createAsAttachment = $stateParams.createAsAttachment === "true",
+                        sourceDocClass = $stateParams.sourceDocClass, targetDocClass = 'outgoing',
+                        addMethod = $stateParams.addMethod,
+                        versionNumber = $stateParams.versionNumber;
+
+                    if (action !== 'reply')
+                        return $timeout(function () {
+                            return false;
+                        });
+
+                    if (wobNum || vsId) {
+                        return correspondenceService.createReplyForDocument(sourceDocClass, targetDocClass, wobNum, vsId, createAsAttachment, versionNumber)
+                            .then(function (outgoing) {
+                                if (!createAsAttachment) {
+                                    outgoing.linkedDocs = [outgoing.linkedDocList[0]];
+                                } else {
+                                    outgoing.linkedAttachmenstList[0].createReplyDisableDelete = true;
+                                    outgoing.attachments = [outgoing.linkedAttachmenstList[0]];
+                                }
+
+                                outgoing.docDate = new Date();
+                                outgoing.createdOn = new Date();
+                                outgoing.addMethod = Number(addMethod);
+                                outgoing.sitesInfoTo = angular.copy(outgoing.sitesToList); //[result.site];
+                                outgoing.classDescription = 'Outgoing';
+                                return outgoing
+                            });
+                    } else {
+                        return $timeout(function () {
+                            return false;
+                        })
+                    }
+                },
+                editAfterApproved: function ($timeout, $stateParams, correspondenceStorageService, correspondenceService) {
+                    'ngInject';
+                    var vsId = $stateParams.vsId, workItem = $stateParams.wobNum, action = $stateParams.action;
+                    if (action !== 'editAfterApproved') {
+                        return $timeout(function () {
+                            return false;
+                        })
+                    }
+                    return correspondenceStorageService
+                        .getCorrespondence('approved')
+                        .catch(function () {
+                            return $timeout(function () {
+                                return false;
+                            });
+                        });
+                },
+                editAfterExport: function ($timeout, $stateParams, correspondenceStorageService) {
+                    'ngInject';
+                    var vsId = $stateParams.vsId, workItem = $stateParams.wobNum, action = $stateParams.action;
+                    if (action !== 'editAfterExport') {
+                        return $timeout(function () {
+                            return false;
+                        })
+                    }
+                    return correspondenceStorageService
+                        .getCorrespondence('export')
+                        .catch(function () {
+                            return $timeout(function () {
+                                return false;
+                            });
+                        });
+                },
+                duplicateVersion: function ($timeout, $stateParams, correspondenceStorageService) {
+                    'ngInject';
+                    var action = $stateParams.action;
+                    if (action !== 'duplicateVersion') {
+                        return $timeout(function () {
+                            return false;
+                        })
+                    }
+                    return correspondenceStorageService
+                        .getCorrespondence('duplicate')
+                        .catch(function () {
+                            return $timeout(function () {
+                                return false;
+                            });
+                        });
+                },
+                centralArchives: function ($q, organizations, employeeService, organizationService) {
+                    'ngInject';
+                    return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
+                },
+                editAfterReturnG2G: function ($q, $timeout, $stateParams, correspondenceStorageService) {
+                    'ngInject';
+                    var action = $stateParams.action;
+
+                    var actions = ['recallAndForwardG2G', 'editAfterReturnG2G'];
+                    if (actions.indexOf(action) === -1) {
+                        return $timeout(function () {
+                            return false;
+                        });
+                    }
+
+                    return correspondenceStorageService
+                        .getCorrespondence(action)
+                        .catch(function () {
+                            return $timeout(function () {
+                                return false;
+                            });
+                        });
+                },
+                isInternal: function ($q) {
+                    'ngInject';
+                    return $q.resolve(true);
                 }
             })
             .bulkResolveToState('app.outgoing.simple-add', {
@@ -337,6 +458,92 @@ module.exports = function (app) {
                 centralArchives: function ($q, organizations, employeeService, organizationService) {
                     'ngInject';
                     return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
+                },
+                isInternal: function ($q) {
+                    'ngInject';
+                    return $q.resolve(false);
+                }
+            })
+            .bulkResolveToState('app.outgoing.simple-add-internal', {
+                organizations: function (organizationService) {
+                    'ngInject';
+                    return organizationService.loadOrganizations(true);
+                },
+                replyTo: function ($timeout, $stateParams, correspondenceService) {
+                    'ngInject';
+                    var vsId = $stateParams.vsId, wobNum = $stateParams.wobNum, action = $stateParams.action,
+                        createAsAttachment = $stateParams.createAsAttachment === "true",
+                        sourceDocClass = $stateParams.sourceDocClass, targetDocClass = 'outgoing',
+                        addMethod = $stateParams.addMethod,
+                        versionNumber = $stateParams.versionNumber;
+
+                    if (action !== 'reply')
+                        return $timeout(function () {
+                            return false;
+                        });
+
+                    if (wobNum || vsId) {
+                        return correspondenceService.createReplyForDocument(sourceDocClass, targetDocClass, wobNum, vsId, createAsAttachment, versionNumber)
+                            .then(function (outgoing) {
+                                if (!createAsAttachment) {
+                                    outgoing.linkedDocs = [outgoing.linkedDocList[0]];
+                                } else {
+                                    outgoing.linkedAttachmenstList[0].createReplyDisableDelete = true;
+                                    outgoing.attachments = [outgoing.linkedAttachmenstList[0]];
+                                }
+                                outgoing.docDate = new Date();
+                                outgoing.createdOn = new Date();
+                                outgoing.addMethod = Number(addMethod);
+                                outgoing.sitesInfoTo = angular.copy(outgoing.sitesToList); //[result.site];
+                                outgoing.classDescription = 'Outgoing';
+                                outgoing.isComposite = false;
+                                return outgoing;
+                            });
+                    } else {
+                        return $timeout(function () {
+                            return false;
+                        })
+                    }
+                },
+                editAfterApproved: function ($timeout, $stateParams, correspondenceStorageService, correspondenceService) {
+                    'ngInject';
+                    var vsId = $stateParams.vsId, workItem = $stateParams.wobNum, action = $stateParams.action;
+                    if (action !== 'editAfterApproved') {
+                        return $timeout(function () {
+                            return false;
+                        })
+                    }
+                    return correspondenceStorageService
+                        .getCorrespondence('approved')
+                        .catch(function () {
+                            return $timeout(function () {
+                                return false;
+                            });
+                        });
+                },
+                editAfterExport: function ($timeout, $stateParams, correspondenceStorageService, correspondenceService) {
+                    'ngInject';
+                    var vsId = $stateParams.vsId, workItem = $stateParams.wobNum, action = $stateParams.action;
+                    if (action !== 'editAfterExport') {
+                        return $timeout(function () {
+                            return false;
+                        })
+                    }
+                    return correspondenceStorageService
+                        .getCorrespondence('export')
+                        .catch(function () {
+                            return $timeout(function () {
+                                return false;
+                            });
+                        });
+                },
+                centralArchives: function ($q, organizations, employeeService, organizationService) {
+                    'ngInject';
+                    return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
+                },
+                isInternal: function ($q) {
+                    'ngInject';
+                    return $q.resolve(true);
                 }
             })
             .bulkResolveToState('app.incoming.add', {

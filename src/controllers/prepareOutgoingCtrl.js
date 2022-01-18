@@ -19,6 +19,7 @@ module.exports = function (app) {
                                                     broadcastService,
                                                     ResolveDefer,
                                                     $state,
+                                                    rootEntity,
                                                     gridService) {
         'ngInject';
         var self = this;
@@ -27,6 +28,7 @@ module.exports = function (app) {
 
         // employee service to check the permission in html
         self.employeeService = employeeService;
+        self.isInternalOutgoingEnabled = rootEntity.isInternalOutgoingEnabled();
 
         contextHelpService.setHelpTo('outgoing-prepare');
         /**
@@ -343,10 +345,11 @@ module.exports = function (app) {
          */
         self.duplicateCurrentVersion = function (correspondence, $event) {
             var info = correspondence.getInfo();
+            var page = (self.isInternalOutgoingEnabled && correspondence.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
             return correspondence
                 .duplicateVersion($event)
                 .then(function () {
-                    $state.go('app.outgoing.add', {
+                    $state.go(page, {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
                         wobNum: info.wobNumber
@@ -361,10 +364,11 @@ module.exports = function (app) {
          */
         self.duplicateVersion = function (correspondence, $event) {
             var info = correspondence.getInfo();
+            var page = (self.isInternalOutgoingEnabled && correspondence.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
             return correspondence
                 .duplicateSpecificVersion($event)
                 .then(function () {
-                    $state.go('app.outgoing.add', {
+                    $state.go(page, {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
                         wobNum: info.wobNumber
@@ -468,7 +472,7 @@ module.exports = function (app) {
                 class: "action-red",
                 hide: true,
                 checkShow: function (action, model) {
-                    return  !model.hasActiveSeqWF();
+                    return !model.hasActiveSeqWF();
                 }
             },
             // View Tracking Sheet

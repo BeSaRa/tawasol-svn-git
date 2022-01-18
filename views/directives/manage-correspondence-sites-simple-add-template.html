@@ -8,7 +8,8 @@
                            ng-change="ctrl.onSiteTypeChange($event)"
                            md-on-close="ctrl.clearSearchText('siteType')"
                            ng-model-options="{trackBy: '$value.lookupKey'}"
-                           data-md-container-class="select-header-container sticky-search-bar">
+                           data-md-container-class="select-header-container sticky-search-bar"
+                           ng-disabled="ctrl.isSiteTypesDisabled">
                     <md-select-header class="select-header">
                         <input ng-model="ctrl.siteTypeSearchText"
                                ng-keydown="ctrl.preventSearchKeyDown($event)"
@@ -16,7 +17,7 @@
                                class="select-header-input">
                     </md-select-header>
                     <md-option ng-value="null">{{lang.none}}</md-option>
-                    <md-option ng-value="type"
+                    <md-option ng-value="type" ng-disabled="type.disabled"
                                ng-repeat="type in ctrl.correspondenceSiteTypes | translatedNameFilter:ctrl.siteTypeSearchText">
                 <span md-highlight-text="ctrl.siteTypeSearchText"
                       md-highlight-flags="i">{{type.getTranslatedName()}}</span>
@@ -28,7 +29,7 @@
                 <label for="mainSite">{{lang.main_site}}</label>
                 <md-select id="mainSite" ng-model="ctrl.selectedMainSite"
                            ng-model-options="{trackBy: '$value.id'}"
-                           ng-disabled="!ctrl.selectedSiteType || !ctrl.selectedSiteType.id"
+                           ng-disabled="!ctrl.selectedSiteType || !ctrl.selectedSiteType.id || ctrl.isSiteTypesDisabled"
                            ng-change="ctrl.getSubSites(true)"
                            md-on-close="ctrl.clearSearchText('mainSite')"
                            data-md-container-class="select-header-container sticky-search-bar">
@@ -97,7 +98,8 @@
                            ng-change="ctrl.onSiteTypeChange($event)"
                            md-on-close="ctrl.clearSearchText('siteType')"
                            ng-model-options="{trackBy: '$value.lookupKey'}"
-                           data-md-container-class="select-header-container sticky-search-bar">
+                           data-md-container-class="select-header-container sticky-search-bar"
+                           ng-disabled="ctrl.isSiteTypesDisabled">
                     <md-select-header class="select-header">
                         <input ng-model="ctrl.siteTypeSearchText"
                                ng-keydown="ctrl.preventSearchKeyDown($event)"
@@ -105,7 +107,7 @@
                                class="select-header-input">
                     </md-select-header>
                     <md-option ng-value="null">{{lang.none}}</md-option>
-                    <md-option ng-value="type"
+                    <md-option ng-value="type" ng-disabled="type.disabled"
                                ng-repeat="type in ctrl.correspondenceSiteTypes | translatedNameFilter:ctrl.siteTypeSearchText">
                 <span md-highlight-text="ctrl.siteTypeSearchText"
                       md-highlight-flags="i">{{type.getTranslatedName()}}</span>
@@ -210,7 +212,8 @@
             </div>
         </md-input-container>
         <!-- Followup Date -->
-        <md-input-container class="exclude-margin" flex ng-if="ctrl.isFollowupStatusMandatory && ctrl.needReply(ctrl.selectedSubSiteFollowUpStatus)">
+        <md-input-container class="exclude-margin" flex
+                            ng-if="ctrl.isFollowupStatusMandatory && ctrl.needReply(ctrl.selectedSubSiteFollowUpStatus)">
             <label for="followupDate">{{lang.sites_follow_up_status_date}} ({{ctrl.defaultDateFormat}})</label>
             <input aria-label="followupDate" id="followupDate"
                    tooltip="{{lang.sites_follow_up_status_date}}"
@@ -226,13 +229,17 @@
             <div ng-messages="corrSiteForm.followupDate.$error">
                 <div ng-message="required">{{lang.field_required}}</div>
                 <div ng-message="Date">{{lang.invalid_date_format}}</div>
-                <div ng-message="minDate">{{lang.date_should_be_more_than_equal.change({datevalue:
-                    ctrl.minFollowupDate})}}
+                <div ng-message="minDate">{{lang.date_should_be_more_than_equal.change({
+                    datevalue:
+                    ctrl.minFollowupDate
+                })}}
                 </div>
             </div>
         </md-input-container>
         <br/>
-        <md-button ng-disabled="!ctrl.selectedSubSite || (ctrl.needReply(ctrl.selectedSubSiteFollowUpStatus) && !ctrl.selectedSubSiteFollowupDate)" ng-click="ctrl.showMore(corrSiteForm, $event)" class="md-raised">
+        <md-button
+                ng-disabled="!ctrl.selectedSubSite || (ctrl.needReply(ctrl.selectedSubSiteFollowUpStatus) && !ctrl.selectedSubSiteFollowupDate)"
+                ng-click="ctrl.showMore(corrSiteForm, $event)" class="md-raised">
             {{lang.extra_sites}} ({{ctrl.sitesInfoLength}})
         </md-button>
     </form>

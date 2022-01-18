@@ -966,7 +966,8 @@ module.exports = function (app) {
                 externalSite: 'arrow-top-right-bold-outline',
                 internalSite: 'arrow-bottom-left-bold-outline',
                 g2gSite: 'file-cloud',
-                sharedFollowup: 'file-star-outline'
+                sharedFollowup: 'file-star-outline',
+                outgoingInternal: 'recycle'
             }
         };
     });

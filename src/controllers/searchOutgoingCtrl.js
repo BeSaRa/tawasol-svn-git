@@ -37,9 +37,10 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchOutgoingCtrl';
-        contextHelpService.setHelpTo('search-outgoing' , ignoreHelp);
+        contextHelpService.setHelpTo('search-outgoing', ignoreHelp);
         // employee service to check the permission in html
         self.employeeService = employeeService;
+        self.isInternalOutgoingEnabled = rootEntity.isInternalOutgoingEnabled();
 
         self.searchOutgoing = new OutgoingSearch({dummySearchDocClass: 'outgoing'});
         self.searchOutgoingModel = angular.copy(self.searchOutgoing);
@@ -218,7 +219,7 @@ module.exports = function (app) {
          * @description Saves the search criteria
          */
         self.saveSearch = function () {
-          //  console.log('save search');
+            //  console.log('save search');
         };
 
         self.globalSetting = rootEntity.returnRootEntity().settings;
@@ -427,7 +428,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTasks = function (searchedOutgoingDocument, $event) {
-         //   console.log('manage tasks for searched outgoing document : ', searchedOutgoingDocument);
+            //   console.log('manage tasks for searched outgoing document : ', searchedOutgoingDocument);
         };
 
         /**
@@ -591,7 +592,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.createCopy = function (searchedOutgoingDocument, $event) {
-           // console.log('create copy for searched outgoing document : ', searchedOutgoingDocument);
+            // console.log('create copy for searched outgoing document : ', searchedOutgoingDocument);
         };
 
         /**
@@ -685,10 +686,11 @@ module.exports = function (app) {
          */
         self.duplicateCurrentVersion = function (correspondence, $event) {
             var info = correspondence.getInfo();
+            var page = (self.isInternalOutgoingEnabled && correspondence.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
             return correspondence
                 .duplicateVersion($event)
                 .then(function () {
-                    $state.go('app.outgoing.add', {
+                    $state.go(page, {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
                         wobNum: info.wobNumber
@@ -703,10 +705,11 @@ module.exports = function (app) {
          */
         self.duplicateVersion = function (correspondence, $event) {
             var info = correspondence.getInfo();
+            var page = (self.isInternalOutgoingEnabled && correspondence.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
             return correspondence
                 .duplicateSpecificVersion($event)
                 .then(function () {
-                    $state.go('app.outgoing.add', {
+                    $state.go(page, {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
                         wobNum: info.wobNumber

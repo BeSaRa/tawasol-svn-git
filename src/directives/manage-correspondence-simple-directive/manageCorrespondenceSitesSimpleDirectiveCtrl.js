@@ -72,6 +72,9 @@ module.exports = function (app) {
         self.selectedSubSiteFollowUpStatus = angular.copy(followupStatusWithoutReply);
         self.selectedSubSiteFollowupDate = null;
         self.isFollowupStatusMandatory = false;
+        self.isInternalOutgoingEnabled = rootEntity.isInternalOutgoingEnabled();
+        self.isSiteTypesDisabled = false;
+
 
         function _isShowRegistryUnit() {
             return (employeeService.getEmployee().inCentralArchive() && self.correspondence.getInfo().isPaper);
@@ -191,8 +194,33 @@ module.exports = function (app) {
                     });
 
                 });
+            } else if (self.isInternalOutgoingEnabled) {
+                _setSitesTypeIfInternalOutgoingActive();
             }
         });
+
+        function _setSitesTypeIfInternalOutgoingActive() {
+            if (self.isInternalOutgoingEnabled && self.correspondenceSiteTypes) {
+                self.correspondenceSiteTypes.map(siteType => {
+                    if (!self.correspondence.hasOwnProperty('isInternal')) {
+                        return siteType;
+                    }
+                    // if adding internal outgoing disable all site types except internal
+                    if (self.correspondence.isInternal && !siteType.isInternalSiteType()) {
+                        siteType.disabled = true;
+                        // only internal correspondence site will be selected by default
+                        self.selectedSiteType = _getTypeByLookupKey(configurationService.INTERNAL_CORRESPONDENCE_SITES_TYPE);
+                        self.onSiteTypeChange(null);
+                    }
+                    // if adding external outgoing enable only g2g and external site types
+                    else if (!self.correspondence.isInternal && !siteType.isGovernmentSiteType() && !siteType.isExternalSiteType()) {
+                        siteType.disabled = true;
+                        self.emptySiteSearch = true;
+                    }
+                    return siteType;
+                });
+            }
+        }
 
         // get the main sites for selected correspondence site type
         self.subRecords = _concatCorrespondenceSites(true);
@@ -710,6 +738,8 @@ module.exports = function (app) {
                 self.subSiteSearchText = '';
                 self.emptySiteSearch = false;
             }
+
+            // _setSitesTypeIfInternalOutgoingActive();
         });
 
 
@@ -814,6 +844,8 @@ module.exports = function (app) {
                         // just in case document is not passed to directive, avoid check for priority level
                         if (self.correspondence) {
                             _initPriorityLevelWatch();
+                            // to disable site type control if adding internal outgoing
+                            self.isSiteTypesDisabled = self.correspondence.hasOwnProperty('isInternal') && self.correspondence.isInternal;
                         }
                         _checkFollowupStatusMandatory();
                     });

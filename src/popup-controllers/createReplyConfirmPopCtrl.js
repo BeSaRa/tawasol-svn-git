@@ -6,6 +6,8 @@ module.exports = function (app) {
                                                    employeeService,
                                                    generator,
                                                    _,
+                                                   rootEntity,
+                                                   configurationService,
                                                    gridService) {
         'ngInject';
         var self = this;
@@ -21,6 +23,7 @@ module.exports = function (app) {
         self.showGrid = false;
         self.selectedVersions = [];
         self.allowDuplicateAction = false;
+        self.isInternalOutgoingEnabled = rootEntity.isInternalOutgoingEnabled();
 
         var permissions = {
             outgoingPaper: 'OUTGOING_PAPER',
@@ -50,8 +53,13 @@ module.exports = function (app) {
             {id: 1, key: 'advanced'}
         ];
         self.replyTypeOptions = [
-            {id: 0, key: 'reply_outgoing'},
-            {id: 1, key: 'reply_internal'}
+            {id: 0, key: 'reply_outgoing', show: true},
+            {id: 1, key: 'reply_internal', show: true},
+            {
+                id: 2,
+                key: 'reply_outgoing_internal',
+                show: self.isInternalOutgoingEnabled && self.record.checkIfInternalSiteTypeWhenCreateReply()
+            }
         ];
         self.createAsOptions = [
             {
@@ -108,19 +116,32 @@ module.exports = function (app) {
                 generator.generateErrorFields('check_this_fields', [self.validateLabels.addMethod]);
                 return;
             }
-
             var info = self.record.getInfo(),
                 page,
                 pages = {
                     outgoingAdd: 'app.outgoing.add',
+                    outgoingAddInternal: 'app.outgoing.add-internal',
                     outgoingSimpleAdd: 'app.outgoing.simple-add',
+                    outgoingSimpleAddInternal: 'app.outgoing.simple-add-internal',
                     internalAdd: 'app.internal.add',
                     internalSimpleAdd: 'app.internal.simple-add'
                 };
             if (self.replyForm === 0) {
-                page = self.replyType === 0 ? pages.outgoingSimpleAdd : pages.internalSimpleAdd;
+                if (self.replyType === 0) {
+                    page = pages.outgoingSimpleAdd;
+                } else if (self.replyType === 1) {
+                    page = pages.internalSimpleAdd;
+                } else if (self.isInternalOutgoingEnabled && self.replyType === 2) {
+                    page = pages.outgoingSimpleAdd
+                }
             } else {
-                page = self.replyType === 0 ? pages.outgoingAdd : pages.internalAdd;
+                if (self.replyType === 0) {
+                    page = pages.outgoingAdd;
+                } else if (self.replyType === 1) {
+                    page = pages.internalAdd;
+                } else if (self.isInternalOutgoingEnabled && self.replyType === 2) {
+                    page = pages.outgoingAdd
+                }
             }
             dialog.hide();
             $state.go(page, {

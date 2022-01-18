@@ -44,6 +44,7 @@ module.exports = function (app) {
                                                    _,
                                                    rootEntity,
                                                    downloadService,
+                                                   isInternal,
                                                    errorCode) {
         'ngInject';
         var self = this;
@@ -55,6 +56,8 @@ module.exports = function (app) {
         self.employee = employeeService.getEmployee();
 
         self.hasPSPDFViewer = rootEntity.hasPSPDFViewer();
+
+        self.isInternalOutgoingEnabled = rootEntity.isInternalOutgoingEnabled();
         self.annotationPermission = configurationService.ANNOTATE_DOCUMENT_PERMISSION;
 
         // validation for accordion
@@ -121,6 +124,10 @@ module.exports = function (app) {
             self.action = 'editAfterExport';
         }
 
+        if (self.isInternalOutgoingEnabled) {
+            self.outgoing.isInternal = isInternal;
+        }
+
         self.followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
 
         /**
@@ -181,7 +188,7 @@ module.exports = function (app) {
             }
             self.checkCentralArchive();
             $timeout(function () {
-                if (self.document_properties){
+                if (self.document_properties) {
                     generator.validateRequiredSelectFields(self.document_properties, true);
                 }
             });
@@ -196,7 +203,7 @@ module.exports = function (app) {
             return self.isSaveValid(self.document_properties, actionType, isContentRequired);
         }
 
-        self.saveDocument = function(status, ignoreLaunch){
+        self.saveDocument = function (status, ignoreLaunch) {
             self.saveInProgress = true;
             // loadingIndicatorService.loading = true;
             if (status && !self.documentInformation) {
@@ -335,7 +342,7 @@ module.exports = function (app) {
                     self.outgoing.contentSize = 1; // dummy content size
                     successKey = 'save_success'
                 } else if (self.outgoing.contentFile) {
-                    if (self.outgoing.externalImportData){
+                    if (self.outgoing.externalImportData) {
                         self.outgoing.contentSize = 1; // dummy content size
                     } else {
                         self.outgoing.contentSize = self.outgoing.contentFile.size;
@@ -944,6 +951,9 @@ module.exports = function (app) {
                 ccSitesList: [],
                 toSitesList: []
             });
+            if (self.isInternalOutgoingEnabled) {
+                self.outgoing.isInternal = isInternal;
+            }
 
             self.emptySubSites = true;
             self.emptySiteSearch = true;

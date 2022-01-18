@@ -72,6 +72,14 @@ module.exports = function (app) {
             .addMenuPermissionGroup('menu_item_outgoing')
             .addMenuPermission('menu_item_add_outgoing', 'ADD_NEW_OUTGOING')
             .addMenuPermission('menu_item_outgoing_simple_add', 'ADD_NEW_OUTGOING')
+            .addMenuPermission('menu_item_internal_outgoing_add', function (employee) {
+                var rootEntity = employee.getRootEntity().returnRootEntity();
+                return rootEntity.isInternalOutgoingEnabled() && employee.hasPermissionTo('ADD_INTERNAL_OUTGOING');
+            })
+            .addMenuPermission('menu_item_internal_outgoing_simple_add', function (employee) {
+                var rootEntity = employee.getRootEntity().returnRootEntity();
+                return rootEntity.isInternalOutgoingEnabled() && employee.hasPermissionTo('ADD_INTERNAL_OUTGOING');
+            })
             .addMenuPermission('menu_item_outgoing_prepare', 'PREPARE_OUTGOING_DOCUMENTS')
             .addMenuPermission('menu_item_outgoing_draft', 'COMPLETE_DRAFT_OUTGOING_DOCUMENTS')
             .addMenuPermission('menu_item_outgoing_review', 'REVIEW_OUTGOING_DOCUMENTS')

@@ -100,6 +100,9 @@ module.exports = function (app) {
             RootEntity.prototype.hasPSPDFViewer = function () {
                 return self.rootEntity.hasOwnProperty('psPDFEnabled') && !!self.rootEntity.psPDFEnabled;
             };
+            RootEntity.prototype.isInternalOutgoingEnabled = function () {
+                return self.rootEntity.hasOwnProperty('allowInternalOutgoing') && !!self.rootEntity.allowInternalOutgoing;
+            }
 
             RootEntity.prototype.isDocClassifierEnabled = function () {
                 return self.rootEntity.hasOwnProperty('docClassifierEnabled') && !!self.rootEntity.docClassifierEnabled;

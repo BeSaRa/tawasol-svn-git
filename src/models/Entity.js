@@ -58,6 +58,7 @@ module.exports = function (app) {
             // azureCognitiveSearch
             self.azureCognitiveSearchEnabled = false;
             self.chatbotEnabled = false;
+            self.isInternalEnabled = false;
             self.allowedEditProperties = null;
             self.allowDownloadWithoutWatermark = false;
             // every model has required fields

@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                                     langService,
                                                                     _,
                                                                     $state,
+                                                                    rootEntity,
                                                                     correspondence) {
         'ngInject';
         var self = this;
@@ -13,6 +14,9 @@ module.exports = function (app) {
         self.correspondence = correspondence;
 
         self.model = angular.copy(correspondence);
+        self.emptySubSites = true;
+        self.emptySiteSearch = true;
+        self.isInternalOutgoingEnabled = rootEntity.isInternalOutgoingEnabled();
 
 
         if (self.correspondence.getInfo().documentClass === 'outgoing') {
@@ -37,6 +41,11 @@ module.exports = function (app) {
             var i, record;
             if (self.documentClass.toLowerCase() === 'outgoing') {
                 if (self.correspondence.hasSiteTO()) {
+                    // first site type shouldn't be internal if adding external outgoing
+                    if (self.isInternalOutgoingEnabled && !self.correspondence.isInternal &&
+                        self.correspondence.sitesInfoTo[0].siteType.isInternalSiteType()) {
+                        return true;
+                    }
                     var inValidSitesCount = 0;
                     for (i = 0; i < self.correspondence.sitesInfoTo.length; i++) {
                         record = self.correspondence.sitesInfoTo[i];
