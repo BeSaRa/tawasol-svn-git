@@ -1,22 +1,23 @@
 module.exports = function (app) {
     app.service('downloadService', function (urlService,
-                                             $http,
-                                             CMSModelInterceptor,
-                                             AnnotationType,
-                                             $q,
-                                             tokenService,
-                                             helper,
-                                             langService,
-                                             toast,
-                                             $timeout,
-                                             dialog,
-                                             cmsTemplate,
-                                             rootEntity,
-                                             generator,
-                                             $stateParams,
-                                             errorCode,
-                                             Information,
-                                             $sce) {
+        $http,
+        CMSModelInterceptor,
+        AnnotationType,
+        $q,
+        tokenService,
+        helper,
+        langService,
+        toast,
+        $timeout,
+        dialog,
+        cmsTemplate,
+        rootEntity,
+        generator,
+        $stateParams,
+        errorCode,
+        Information,
+        $sce,
+        employeeService) {
         'ngInject';
         var self = this;
         self.serviceName = 'downloadService';
@@ -31,25 +32,38 @@ module.exports = function (app) {
              */
             mainDocumentDownload: function (record, $event, ignoreMAIP) {
                 var info = record.getInfo();
-                return self.selectMAIPLabels(ignoreMAIP)
-                    .then(function (selectedLabel) {
-                        var labelId = null;
-                        if (!!selectedLabel && typeof selectedLabel === 'string') {
-                            // download with labelId
-                            labelId = selectedLabel;
+                let permission = 'DOWNLOAD_' + info.documentClass.toUpperCase() + '_WITHOUT_WATERMARK';
+                if (_isAllowDownloadWithoutWatermark() && employeeService.hasPermissionTo(permission)) {
+                    var buttonsList = [
+                        {
+                            id: 1,
+                            type: "yes",
+                            text: "yes",
+                            value: true,
+                            cssClass: ""
+                        },
+                        {
+                            id: 2,
+                            type: "no",
+                            text: "no",
+                            value: false,
+                            cssClass: ""
                         }
-                        return self.downloadMainDocument(info.vsId, info.docClassId, labelId).then(function (result) {
-                            window.open(result);
-                            //generator.checkIfBrowserPopupBlocked(window);
-                            return true;
+                    ];
+
+                    dialog.confirmMessageWithDynamicButtonsList(langService.get('do_you_want_to_download_without_watermark'), buttonsList, '')
+                        .then(function (selectedLabel) {
+                            _mainDocumentDownload(info,ignoreMAIP, selectedLabel.value);
+                        })
+                        .catch(function () {
+                            toast.error(errorMessage);
                         });
-                    }).catch(function (error) {
-                        errorCode.checkIf(error, 'NOT_ENOUGH_CERTIFICATES', function () {
-                            dialog.errorMessage(generator.getTranslatedError(error) || langService.get('certificate_missing'));
-                            //dialog.errorMessage(langService.get('certificate_missing'))
-                        });
-                        return false;
-                    })
+
+                } else {
+                    _mainDocumentDownload(info,ignoreMAIP, false);
+                }
+
+
             },
             /**
              * @description Download Composite Document
@@ -135,6 +149,10 @@ module.exports = function (app) {
             return rootEntity.returnRootEntity().rootEntity.isMAIPEnabled;
         };
 
+        var _isAllowDownloadWithoutWatermark  = function () {
+            return rootEntity.returnRootEntity().rootEntity.allowDownloadWithoutWatermark;
+        };
+
         var _generateQueryString = function (queryStringOptions) {
             var queryString = '?', keys = Object.keys(queryStringOptions), key, valid = false;
             for (var i = 0; i < keys.length; i++) {
@@ -146,6 +164,28 @@ module.exports = function (app) {
             }
             return queryString.substring(0, queryString.length - 1);
         };
+        
+        function _mainDocumentDownload(info, ignoreMAIP ,isWithoutWatermark) {
+            return self.selectMAIPLabels(ignoreMAIP)
+                .then(function (selectedLabel) {
+                    var labelId = null;
+                    if (!!selectedLabel && typeof selectedLabel === 'string') {
+                        // download with labelId
+                        labelId = selectedLabel;
+                    }
+                    return self.downloadMainDocument(info.vsId, info.docClassId, labelId, isWithoutWatermark).then(function (result) {
+                        window.open(result);
+                        //generator.checkIfBrowserPopupBlocked(window);
+                        return true;
+                    });
+                }).catch(function (error) {
+                    errorCode.checkIf(error, 'NOT_ENOUGH_CERTIFICATES', function () {
+                        dialog.errorMessage(generator.getTranslatedError(error) || langService.get('certificate_missing'));
+                        //dialog.errorMessage(langService.get('certificate_missing'))
+                    });
+                    return false;
+                })
+        }
 
         /**
          * @description Opens the dialog to select maip label
@@ -220,11 +260,12 @@ module.exports = function (app) {
         /**
          * @description download main document from server
          */
-        self.downloadMainDocument = function (vsId, docClassId, labelId) {
+        self.downloadMainDocument = function (vsId, docClassId, labelId, withoutWatermark) {
             var queryString = _generateQueryString({
                 //'tawasol-auth-header': tokenService.getToken(),
                 'labelId': labelId,
-                'docClassId': docClassId
+                'docClassId': docClassId,
+                'without-watermark': withoutWatermark
             });
             return $http
                 .get(urlService.downloadDocument + '/' + vsId + queryString)
@@ -238,10 +279,10 @@ module.exports = function (app) {
          */
         self.getMainDocumentContentAsPDF = function (vsId, labelId) {
             var queryString = _generateQueryString({
-                    //'tawasol-auth-header': tokenService.getToken(),
-                    'labelId': labelId,
-                    'with-protection': true
-                }),
+                //'tawasol-auth-header': tokenService.getToken(),
+                'labelId': labelId,
+                'with-protection': true
+            }),
                 url = urlService.downloadDocumentContentPDF.replace('{vsId}', vsId) + queryString;
             return $http.get(url, {
                 responseType: 'blob'
@@ -256,10 +297,10 @@ module.exports = function (app) {
          */
         self.getAttachmentContentAsPDF = function (vsId, labelId) {
             var queryString = _generateQueryString({
-                    //'tawasol-auth-header': tokenService.getToken(),
-                    'labelId': labelId,
-                    'with-protection': true
-                }),
+                //'tawasol-auth-header': tokenService.getToken(),
+                'labelId': labelId,
+                'with-protection': true
+            }),
                 url = urlService.downloadAttachmentContentPDF.replace('{vsId}', vsId) + queryString;
             return $http.get(url, {
                 responseType: 'blob'
@@ -518,8 +559,8 @@ module.exports = function (app) {
                     includeAll: true
                 }
             }).then(function (result) {
-                    window.open(result.data.rs, '_blank');
-                }
+                window.open(result.data.rs, '_blank');
+            }
             ).catch(function (error) {
                 errorCode.checkIf(error, 'NOT_ENOUGH_CERTIFICATES', function () {
                     dialog.errorMessage(generator.getTranslatedError(error) || langService.get('certificate_missing'));

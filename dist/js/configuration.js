@@ -28,7 +28,7 @@
                 // just for test
                 .updateConfiguration('ENABLE_ACTIVE_SENDER_LINKS', false)
                 // Evaluation license PSPDF
-                .updateConfiguration('PSPDF_LICENSE_KEY', false) //true = evaluation version, false = production version
+                .updateConfiguration('PSPDF_LICENSE_KEY', true) //true = evaluation version, false = production version
                 // Cahtbot Configurations
                 .updateConfiguration('CHAT_BOT', {
                     URL: 'http://tawasolbot-b750.azurewebsites.net/chatbot.html?',
