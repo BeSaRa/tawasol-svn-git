@@ -577,6 +577,15 @@ module.exports = function (app) {
                     return viewDocumentService.viewUserInboxDocument(this, actions, queueName, $event, false, reloadCallback);
                 }
             };
+            /***
+             * @description view document before approve as signed document with draft watermark             * @param actions
+             * @param queueName
+             * @param $event
+             * @returns {*}
+             */
+            WorkItem.prototype.viewDocumentAsApproved = function (actions, queueName, $event) {
+                return viewDocumentService.viewDocumentAsApproved(this, actions, queueName, $event);
+            }
             /**
              * @description Opens the new viewer for approved internal items
              * @param actions

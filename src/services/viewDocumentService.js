@@ -1772,6 +1772,38 @@ module.exports = function (app) {
                     });
             };
 
+            /***
+             * @description open document before approve as signed document with draft watermark
+             * @param correspondence
+             * @param actions
+             * @param pageName
+             * @param $event
+             */
+            self.viewDocumentAsApproved = function (correspondence, actions, pageName, $event) {
+                var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : _createInstance(correspondence).getInfo();
+
+                return $http.get(_createUrlSchema(null, info.documentClass, 'preview/vsid/' + info.vsId))
+                    .then(function (result) {
+                        result = result.data.rs;
+                        result.viewURL = $sce.trustAsResourceUrl(result.viewURL);
+                        if (result.hasOwnProperty('editURL') && result.editURL) {
+                            result.editURL = $sce.trustAsResourceUrl(result.editURL);
+                        }
+                        return dialog.showDialog({
+                            templateUrl: cmsTemplate.getPopup('view-document-readonly'),
+                            controller: 'viewDocumentReadOnlyPopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                document: correspondence,
+                                content: result,
+                                typeOfDoc: 'as-approved'
+                            }
+                        });
+                    });
+            }
+
             self.setGeneralStepElementView = function (factory) {
                 GeneralStepElementView = factory;
                 return self;

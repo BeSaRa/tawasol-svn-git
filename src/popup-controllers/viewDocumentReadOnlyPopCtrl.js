@@ -15,7 +15,7 @@ module.exports = function (app) {
         self.loadingIndicatorService = loadingIndicatorService;
         self.employeeService = employeeService;
         self.slowConnectionEnabled = false; // set it to false so that it will open normally.
-        if (!(self.typeOfDoc === 'otp-doc' || self.typeOfDoc === 'external-import')) {
+        if (!(self.typeOfDoc === 'otp-doc' || self.typeOfDoc === 'external-import' || self.typeOfDoc === 'as-approved')) {
             self.slowConnectionEnabled = !!employeeService.getEmployee().isSlowConnectionMode();
         }
 
@@ -30,7 +30,7 @@ module.exports = function (app) {
          * @returns {*|boolean}
          */
         self.isShowSlowConnectionVisible = function () {
-            if (self.typeOfDoc === 'otp-doc' || self.typeOfDoc === 'external-import') {
+            if (self.typeOfDoc === 'otp-doc' || self.typeOfDoc === 'external-import' || self.typeof === 'as-approved') {
                 return false;
             }
             return rootEntity.getGlobalSettings() && rootEntity.getGlobalSettings().isSlowConnectionMode()
@@ -61,7 +61,8 @@ module.exports = function (app) {
          * @description Toggles the view mode for the attachment
          */
         self.toggleSlowConnectionMode = function ($event) {
-            if (self.typeOfDoc === 'otp-doc' || self.typeOfDoc === 'external-import' || !rootEntity.getGlobalSettings().isSlowConnectionMode()) {
+            if (self.typeOfDoc === 'otp-doc' || self.typeOfDoc === 'external-import' || self.typeOfDoc === 'as-approved' ||
+                !rootEntity.getGlobalSettings().isSlowConnectionMode()) {
                 return _getOriginalMainDocContent();
             }
 
@@ -103,7 +104,7 @@ module.exports = function (app) {
 
         self.$onInit = function () {
             self.hideSlowModeToggleButton = self.psPDFViewerEnabled && self.document && self.document.mimeType === 'application/pdf';
-            if (self.typeOfDoc === 'external-import') {
+            if (self.typeOfDoc === 'external-import' || self.typeOfDoc === 'as-approved') {
                 self.isLimitedCentralUnitAccess = false;
             } else {
                 self.isLimitedCentralUnitAccess = correspondenceService.isLimitedCentralUnitAccess(self.document);

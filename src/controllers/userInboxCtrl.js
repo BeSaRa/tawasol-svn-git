@@ -1329,6 +1329,15 @@ module.exports = function (app) {
         };
 
         /**
+         * @description open document before approve as signed document with draft watermark
+         * @param workItem
+         * @param $event
+         */
+        self.viewDocumentAsApproved = function (workItem, $event) {
+            workItem.viewDocumentAsApproved(self.gridActions, 'userInbox', $event);
+        }
+
+        /**
          * @description get document versions
          * @param workItem
          * @param $event
@@ -1471,7 +1480,8 @@ module.exports = function (app) {
                 showInView: false,
                 permissionKey: [
                     'VIEW_DOCUMENT',
-                    'VIEW_DOCUMENT_VERSION'
+                    'VIEW_DOCUMENT_VERSION',
+                    'VIEW_OUTGOING_BEFORE_AUTHORIZATION'
                 ],
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
@@ -1546,6 +1556,20 @@ module.exports = function (app) {
                                 return false;
                             }
                             return !info.isPaper && info.needToApprove();
+                        }
+                    },
+                    // view as signed
+                    {
+                        type: 'action',
+                        icon: 'book-open-outline',
+                        text: 'grid_action_view_document_as_approved',
+                        shortcut: true,
+                        callback: self.viewDocumentAsApproved,
+                        permissionKey: "VIEW_OUTGOING_BEFORE_AUTHORIZATION",
+                        class: "action-green",
+                        showInView: false,
+                        checkShow: function (action, model) {
+                            return !model.hasDocumentClass('incoming') && model.needApprove() && !model.hasActiveSeqWF();
                         }
                     }
                 ]

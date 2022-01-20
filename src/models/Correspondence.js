@@ -729,6 +729,16 @@ module.exports = function (app) {
             Correspondence.prototype.viewFavoriteDocument = function (actions, queueName, $event) {
                 return viewDocumentService.viewFavoriteDocument(this, actions, queueName, $event);
             };
+            /***
+             * @description view document before approve as signed document with draft watermark
+             * @param actions
+             * @param queueName
+             * @param $event
+             * @returns {*}
+             */
+            Correspondence.prototype.viewDocumentAsApproved = function (actions, queueName, $event) {
+                return viewDocumentService.viewDocumentAsApproved(this, actions, queueName, $event);
+            }
 
             Correspondence.prototype.manageDocumentComments = function ($event) {
                 var info = this.getInfo();
