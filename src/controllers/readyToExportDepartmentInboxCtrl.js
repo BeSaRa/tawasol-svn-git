@@ -927,12 +927,12 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-            var info = workItem.getInfo();
+            var info = workItem.getInfo(), page;
             return workItem
                 .duplicateVersion($event)
                 .then(function () {
                     if (info.documentClass.toLowerCase() === 'outgoing') {
-                        var page = (self.isInternalOutgoingEnabled && workItem.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
+                        page = (self.isInternalOutgoingEnabled && workItem.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
                     } else {
                         page = 'app.' + info.documentClass.toLowerCase() + '.add'
                     }
@@ -954,12 +954,12 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-            var info = workItem.getInfo();
+            var info = workItem.getInfo(), page;
             return workItem
                 .duplicateSpecificVersion($event)
                 .then(function () {
                     if (info.documentClass.toLowerCase() === 'outgoing') {
-                        var page = (self.isInternalOutgoingEnabled && workItem.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
+                        page = (self.isInternalOutgoingEnabled && workItem.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
                     } else {
                         page = 'app.' + info.documentClass.toLowerCase() + '.add'
                     }

@@ -76,6 +76,7 @@ module.exports = function (app) {
         self.selectedTab = 0;
         self.selectedGridType = 'inbox';
         self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
+        self.isInternalOutgoingEnabled = rootEntity.isInternalOutgoingEnabled();
 
         self.changeCriteria = function () {
             var local = angular.copy(self.searchModel);
@@ -1344,12 +1345,17 @@ module.exports = function (app) {
          * @param defer
          */
         self.duplicateCurrentVersion = function (workItem, $event, defer) {
-            var info = workItem.getInfo();
+            var info = workItem.getInfo(), page;
+            if (info.documentClass.toLowerCase() === 'outgoing') {
+                page = (self.isInternalOutgoingEnabled && workItem.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
+            } else {
+                page = 'app.' + info.documentClass.toLowerCase() + '.add'
+            }
             return workItem
                 .duplicateVersion($event)
                 .then(function () {
                     new ResolveDefer(defer);
-                    $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
+                    $state.go(page, {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
                         wobNum: info.wobNumber
@@ -1364,12 +1370,17 @@ module.exports = function (app) {
          * @return {*}
          */
         self.duplicateVersion = function (workItem, $event, defer) {
-            var info = workItem.getInfo();
+            var info = workItem.getInfo(), page;
+            if (info.documentClass.toLowerCase() === 'outgoing') {
+                page = (self.isInternalOutgoingEnabled && workItem.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
+            } else {
+                page = 'app.' + info.documentClass.toLowerCase() + '.add'
+            }
             return workItem
                 .duplicateSpecificVersion($event)
                 .then(function () {
                     new ResolveDefer(defer);
-                    $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
+                    $state.go(page, {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
                         wobNum: info.wobNumber

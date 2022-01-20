@@ -1299,9 +1299,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.duplicateCurrentVersion = function (correspondence, $event) {
-            var info = correspondence.getInfo();
+            var info = correspondence.getInfo(), page;
             if (info.documentClass.toLowerCase() === 'outgoing') {
-                var page = (self.isInternalOutgoingEnabled && correspondence.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
+                page = (self.isInternalOutgoingEnabled && correspondence.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
             } else {
                 page = 'app.' + info.documentClass.toLowerCase() + '.add'
             }
@@ -1322,9 +1322,9 @@ module.exports = function (app) {
          * @return {*}
          */
         self.duplicateVersion = function (correspondence, $event) {
-            var info = correspondence.getInfo();
+            var info = correspondence.getInfo(), page;
             if (info.documentClass.toLowerCase() === 'outgoing') {
-                var page = (self.isInternalOutgoingEnabled && correspondence.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
+                page = (self.isInternalOutgoingEnabled && correspondence.isInternalOutgoing()) ? 'app.outgoing.add-internal' : 'app.outgoing.add';
             } else {
                 page = 'app.' + info.documentClass.toLowerCase() + '.add'
             }
