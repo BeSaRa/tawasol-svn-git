@@ -1731,7 +1731,7 @@ module.exports = function (app) {
                 delete instantJSON.pdfId;
                 instantJSON.skippedPdfObjectIds = _.difference(instantJSON.skippedPdfObjectIds, self.skippedPdfObjectIds);
                 var hasMySignature = await self.isDocumentHasCurrentUserSignature().catch(result => result);
-                instantJSON = PDFService.rotateImageAnnotationsWithPages(instantJSON, self.currentInstance);
+
                 PDFService.applyAnnotationsOnPDFDocument(self.correspondence, AnnotationType.ANNOTATION, instantJSON, self.documentOperations, _getFlattenStatus(hasMySignature))
                     .then(function (pdfContent) {
                         self.savedPdfContent = pdfContent;
@@ -1977,7 +1977,7 @@ module.exports = function (app) {
                                 } else {
                                     self.currentInstance.exportInstantJSON().then(function (instantJSON) {
                                         delete instantJSON.pdfId;
-                                        instantJSON = PDFService.rotateImageAnnotationsWithPages(instantJSON, self.currentInstance);
+
                                         PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON, self.documentOperations, _getFlattenStatus()).then(function (pdfContent) {
                                             if (_isFromBackStep()) {
                                                 self.applyNextStepOnCorrespondence(pdfContent, null, true).catch(self.handleSeqExceptions);
@@ -2001,7 +2001,7 @@ module.exports = function (app) {
                         }
                         self.currentInstance.exportInstantJSON().then(function (instantJSON) {
                             delete instantJSON.pdfId;
-                            instantJSON = PDFService.rotateImageAnnotationsWithPages(instantJSON, self.currentInstance);
+
                             PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON, self.documentOperations, _getFlattenStatus()).then(function (pdfContent) {
                                 if (self.info.isPaper || _isElectronicAndAuthorizeByAnnotationBefore()) {
                                     self.applyNextStepOnCorrespondence(pdfContent, null, true).catch(self.handleSeqExceptions);

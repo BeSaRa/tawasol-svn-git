@@ -622,7 +622,7 @@ module.exports = function (app) {
             var info = correspondence.getInfo(), addAttachment = false;
             var INSTANT_JSON = await pdfInstance.exportInstantJSON();
             delete INSTANT_JSON.pdfId;
-            INSTANT_JSON = PDFService.rotateImageAnnotationsWithPages(INSTANT_JSON, pdfInstance);
+
             return PDFService.applyAnnotationsOnPDFDocument(correspondence, AnnotationType.ANNOTATION, INSTANT_JSON, documentOperations)
                 .then(function (pdfContent) {
                     var formData = new FormData();
