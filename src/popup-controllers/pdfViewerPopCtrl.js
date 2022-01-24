@@ -162,7 +162,6 @@ module.exports = function (app) {
         function _getBackStepFromSeqWF() {
             if (self.checkCanSendBack() && self.correspondence instanceof WorkItem) {
                 self.backSeqStep = _getStepById(self.correspondence.getSeqWFBackStepId());
-                console.log('backSeqStep', self.backSeqStep);
             }
         }
 
