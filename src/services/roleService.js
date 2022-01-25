@@ -144,6 +144,7 @@ module.exports = function (app) {
                 }
             }
             return defer.promise.then(function (permissions) {
+                self.permissionListFromAppUserView = permissions;
                 var permissionByGroupEN = {};
                 var permissionByGroupAR = {};
                 var groups = lookupService.returnLookups(lookupService.permissionGroup);

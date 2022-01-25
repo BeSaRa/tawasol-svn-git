@@ -18,6 +18,10 @@ module.exports = function (app) {
                                                   contextHelpService,
                                                   rootEntity,
                                                   dialog,
+                                                  employeeService,
+                                                  permissions,
+                                                  roleService,
+                                                  $filter,
                                                   _) {
         'ngInject';
         var self = this;
@@ -58,6 +62,8 @@ module.exports = function (app) {
         self.thumbnailModes = lookupService.returnLookups(lookupService.thumbnailMode);
         self.languages = lookupService.returnLookups(lookupService.language);
         self.digitalCertificateModesList = lookupService.returnLookups(lookupService.digitalCertificateMode);
+        self.employeeService = employeeService;
+        self.permissionsList = permissions
 
         self.loginLogoExtensions = ['.png'];
         self.bannerLogoExtensions = ['.png'];
@@ -77,6 +83,33 @@ module.exports = function (app) {
             {key: 'export_by_group', value: true}
         ];
 
+        self.search = ''; // permission search
+        self.permissions = {};
+        self.totalPermissionsCount = 0;
+
+        // for the first time the controller initialize
+        self.permissions = _getPermissions(langService.current);
+
+        _.map(self.permissions, function (keys) {
+            _.map(keys, function (permissionsArr) {
+                _.map(permissionsArr, function (value) {
+                    if (value)
+                        self.totalPermissionsCount++;
+                })
+            })
+        });
+        // for any change happened in language rebuild the permissions with the current corrected key.
+        langService.listeningToChange(_getPermissions);
+        _mapSelectedExcludedPermissions();
+
+        function _mapSelectedExcludedPermissions() {
+            if (self.employeeService.isSuperAdminUser()) {
+                self.globalSetting.excludedPermissionList = _.filter(roleService.permissionListFromAppUserView, function (permission) {
+                    return (self.globalSetting.excludedPermissionList.indexOf(permission.id) > -1);
+                });
+            }
+        }
+
         /**
          * @description Contains the list of tabs that can be shown
          * @type {string[]}
@@ -90,7 +123,8 @@ module.exports = function (app) {
             'workflownotification',
             'upload',
             'barcodeSettings',
-            'watermarkSettings'
+            'watermarkSettings',
+            'limitPrivileges'
         ];
 
         self.showTab = function (tabName) {
@@ -372,5 +406,121 @@ module.exports = function (app) {
         self.onChangeIsDigitalCertificate = function ($event) {
             self.globalSetting.digitalCertificateMode = null;
         };
+
+        self.permissionsExists = function (item) {
+            var i;
+            for (i = 0; i < self.globalSetting.excludedPermissionList.length; i++) {
+                if (self.globalSetting.excludedPermissionList[i].id === item.id) {
+                    return true;
+                }
+            }
+        };
+        self.selectPermissions = function (item) {
+            if (item) {
+                var idx = false;
+                var i;
+                var index;
+                for (i = 0; i < self.globalSetting.excludedPermissionList.length; i++) {
+                    if (self.globalSetting.excludedPermissionList[i].id === item.id) {
+                        idx = true;
+                        index = i;
+                    }
+                }
+                if (idx) {
+                    self.globalSetting.excludedPermissionList.splice(index, 1);
+                } else {
+                    self.globalSetting.excludedPermissionList.push(item);
+                }
+            }
+        };
+
+        self.selectAllGroupPermissions = function (allGroupPermissions, key) {
+            for (var i = 0; i < allGroupPermissions.length; i++) {
+                for (var j = 0; j < allGroupPermissions[i].length; j++) {
+                    //(function () {
+                    if (allGroupPermissions[i][j]) {
+                        var isPermissionExist = _.filter(self.globalSetting.excludedPermissionList, function (permission) {
+                            return allGroupPermissions[i][j].id === permission.id;
+                        })[0];
+                        //on click event get previous value of checkbox (true/false)
+                        if (!self[key]) {
+                            if (!isPermissionExist) {
+                                self.globalSetting.excludedPermissionList.push(allGroupPermissions[i][j]);
+                            }
+                        } else {
+                            if (isPermissionExist) {
+                                var indexOfPermission = _.findIndex(self.globalSetting.excludedPermissionList, function (x) {
+                                    return x.id === isPermissionExist.id;
+                                });
+                                self.globalSetting.excludedPermissionList.splice(indexOfPermission, 1);
+                            }
+                        }
+                    }
+                    //})();
+                }
+            }
+        };
+
+        self.selectParentCheckbox = function (allGroupPermissions, key) {
+            var count = 0;
+            for (var i = 0; i < allGroupPermissions.length; i++) {
+                for (var j = 0; j < allGroupPermissions[i].length; j++) {
+                    if (allGroupPermissions[i][j]) {
+                        var isPermissionExist = _.filter(self.globalSetting.excludedPermissionList, function (permission) {
+                            return allGroupPermissions[i][j].id === permission.id;
+                        })[0];
+                        if (!isPermissionExist) {
+                            return false;
+                        } else {
+                            count = i;
+                        }
+                    }
+                }
+            }
+            if ((count + 1) === allGroupPermissions.length) {
+                return true;
+            }
+        }
+
+
+        function _getPermissions(current) {
+            return current === 'en' ? self.permissionsList[0] : self.permissionsList[1];
+        }
+
+        self.searchChanges = function () {
+            self.permissions = $filter('permissionFilter')(_getPermissions(langService.current), self.search);
+        };
+
+        self.isIndeterminate = function () {
+            return (self.globalSetting.excludedPermissionList.length !== 0 && self.globalSetting.excludedPermissionList.length !== self.totalPermissionsCount);
+        };
+
+        self.isChecked = function () {
+            return self.globalSetting.excludedPermissionList.length === self.totalPermissionsCount;
+        };
+
+        /**
+         * @description parent checkbox
+         */
+        self.toggleAll = function () {
+            if (self.isChecked()) {
+                self.globalSetting.excludedPermissionList = [];
+            } else {
+                for (var key in self.permissions) {
+                    var permission = self.permissions[key];
+                    for (var i = 0; i < permission.length; i++) {
+                        for (var j = 0; j < permission[i].length; j++) {
+                            if (permission[i][j]) {
+                                var customRolePermissionIds = _.map(self.globalSetting.excludedPermissionList, "id");
+                                if (customRolePermissionIds.indexOf(permission[i][j]['id']) === -1) {
+                                    self.globalSetting.excludedPermissionList.push(permission[i][j]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
     });
 };

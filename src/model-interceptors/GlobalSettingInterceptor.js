@@ -4,6 +4,7 @@ module.exports = function (app) {
                       generator,
                       BarcodeSetting,
                       applicationUserService,
+                      employeeService,
                       themeService,
                       _) {
         'ngInject';
@@ -15,9 +16,13 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
+            debugger
             model.theme = themeService.getThemeById(model.theme);
             model.securityLevels = generator.getResultFromSelectedCollection(model.securityLevels, 'lookupKey');
             model.excludedUsersFromAudit = (model.excludedUsersFromAudit && model.excludedUsersFromAudit.length) ? JSON.stringify(_.map(model.excludedUsersFromAudit, 'id')) : JSON.stringify([]);
+            if (employeeService.isSuperAdminUser()) {
+                model.excludedPermissionList = (model.excludedPermissionList && model.excludedPermissionList.length) ? JSON.stringify(_.map(model.excludedPermissionList, 'id')) : JSON.stringify([]);
+            }
             model.fileType = angular.toJson(model.fileType);
             model.barcodeElements = model.barcodeElements.mapSend();
             model.excludedConversionFileTypes = JSON.stringify(model.excludedConversionFileTypes);
@@ -41,6 +46,7 @@ module.exports = function (app) {
             } catch (e) {
                 model.barcodeElements = new BarcodeSetting();
             }
+            model.excludedPermissionList = model.excludedPermissionList ? JSON.parse(model.excludedPermissionList) : [];
             return model;
         });
 

@@ -70,6 +70,7 @@ module.exports = function (app) {
             self.outofofficeFromAllUsers = false;
             self.flipLogin = false;
             self.returnToCentralArchive = false;
+            self.excludedPermissionList = [];
 
             //endregion
 

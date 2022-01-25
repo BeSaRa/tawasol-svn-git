@@ -576,7 +576,11 @@ module.exports = function (app) {
                     documentSecurity: function (documentSecurityService, globalSetting) {
                         'ngInject';
                         return documentSecurityService.loadDocumentSecurity();
-                    }
+                    },
+                    permissions: function (roleService, employeeService) {
+                        'ngInject';
+                        return employeeService.isSuperAdminUser() ? roleService.getPermissionByGroup() : [];
+                    },
                 }
             })
             //global-localizations-lookups

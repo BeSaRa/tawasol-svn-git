@@ -86,6 +86,7 @@
                                     <div flex layout="row"
                                          ng-repeat="permissionArr in permissionHeading track by $index">
                                         <md-checkbox ng-if="permission!==null"
+                                                     ng-disabled="permission.excluded"
                                                      ng-repeat="permission in permissionArr track by $index"
                                                      ng-checked="ctrl.customRolePermissionsExists(permission)"
                                                      ng-click="ctrl.selectPermissions(permission)"

@@ -17,6 +17,7 @@ module.exports = function (app) {
                                                     organizationService,
                                                     rootEntity,
                                                     errorCode,
+                                                    roleService,
                                                     userSubscriptionService) {
         'ngInject';
         var self = this;
@@ -406,7 +407,7 @@ module.exports = function (app) {
                             },
                             ouApplicationUser: function (ouApplicationUserService) {
                                 'ngInject';
-                                return ouApplicationUserService.loadOUApplicationUserByUserIdAndOUId(applicationUser.id,  ouApplicationUser.getOuId());
+                                return ouApplicationUserService.loadOUApplicationUserByUserIdAndOUId(applicationUser.id, ouApplicationUser.getOuId());
                             }
                         }
                     });

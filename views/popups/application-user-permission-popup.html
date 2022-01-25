@@ -33,13 +33,14 @@
                     <div flex layout="row"
                          ng-repeat="permissionArr in permissionHeading track by $index">
                         <md-checkbox ng-if="permission!==null"
+                                     ng-disabled="permission.excluded"
                                      ng-repeat="permission in permissionArr track by $index"
                                      ng-checked="ctrl.userOUPermissionsExists(permission)"
                                      ng-click="ctrl.toggleUserOuPermission(permission)"
                                      flex aria-label="{{permission.arName}}">
                                 <span md-highlight-text="ctrl.search"
-                                      md-highlight-flags="i">{{lang.current==='en'? permission.enName
-                                      :permission.arName}}</span>
+                                      md-highlight-flags="i">{{lang.current === 'en' ? permission.enName
+                                        : permission.arName}}</span>
                         </md-checkbox>
 
                         <div flex ng-if="permission===null" class="emptyPermissionCheckboxMargin"

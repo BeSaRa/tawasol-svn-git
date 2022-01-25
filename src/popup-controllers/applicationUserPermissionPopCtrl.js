@@ -1,25 +1,26 @@
 module.exports = function (app) {
     app.controller('applicationUserPermissionPopCtrl', function (_,
-                                                                     toast,
-                                                                     configurationService,
-                                                                     $rootScope,
-                                                                     layoutService,
-                                                                     validationService,
-                                                                     dynamicMenuItemService,
-                                                                     $filter,
-                                                                     generator,
-                                                                     dialog,
-                                                                     tokenService,
-                                                                     employeeService,
-                                                                     langService,
-                                                                     counterService,
-                                                                     ouApplicationUser,
-                                                                     permissions,
-                                                                     userOuPermissions,
-                                                                     userMenuItems,
-                                                                     dynamicMenuItems,
-                                                                     ouApplicationUserService,
-                                                                     UserOuPermission) {
+                                                                 toast,
+                                                                 configurationService,
+                                                                 $rootScope,
+                                                                 layoutService,
+                                                                 validationService,
+                                                                 dynamicMenuItemService,
+                                                                 $filter,
+                                                                 generator,
+                                                                 dialog,
+                                                                 tokenService,
+                                                                 employeeService,
+                                                                 langService,
+                                                                 counterService,
+                                                                 ouApplicationUser,
+                                                                 permissions,
+                                                                 userOuPermissions,
+                                                                 userMenuItems,
+                                                                 dynamicMenuItems,
+                                                                 ouApplicationUserService,
+                                                                 UserMenuItem,
+                                                                 UserOuPermission) {
         'ngInject';
         var self = this;
         self.controllerName = 'applicationUserPermissionPopCtrl';
@@ -47,16 +48,16 @@ module.exports = function (app) {
             landingPagePermissionId = _getPermissionIdByPermissionKey('LANDING_PAGE');
 
 
-        if (dynamicMenuItems && _excludeICNTemplates(dynamicMenuItems).length ) {
+        if (dynamicMenuItems && _excludeICNTemplates(dynamicMenuItems).length) {
             self.permissionsList[0][langService.getKey('private_menu_items', 'en')] = _.chunk(_convertMenuItems(_excludeICNTemplates(dynamicMenuItems)), 3);
             self.permissionsList[1][langService.getKey('private_menu_items', 'ar')] = _.chunk(_convertMenuItems(_excludeICNTemplates(dynamicMenuItems)), 3);
         }
 
-        if (dynamicMenuItems && _getICNEntryTemplates(dynamicMenuItems).length){
+        if (dynamicMenuItems && _getICNEntryTemplates(dynamicMenuItems).length) {
             self.permissionsList[0][langService.getKey('icn_entry_template', 'en')] = _.chunk(_convertMenuItems(_getICNEntryTemplates(dynamicMenuItems)), 3);
             self.permissionsList[1][langService.getKey('icn_entry_template', 'ar')] = _.chunk(_convertMenuItems(_getICNEntryTemplates(dynamicMenuItems)), 3);
         }
-        if (dynamicMenuItems && _getICNSearchTemplates(dynamicMenuItems).length){
+        if (dynamicMenuItems && _getICNSearchTemplates(dynamicMenuItems).length) {
             self.permissionsList[0][langService.getKey('icn_search_template', 'en')] = _.chunk(_convertMenuItems(_getICNSearchTemplates(dynamicMenuItems)), 3);
             self.permissionsList[1][langService.getKey('icn_search_template', 'ar')] = _.chunk(_convertMenuItems(_getICNSearchTemplates(dynamicMenuItems)), 3);
         }
@@ -73,13 +74,13 @@ module.exports = function (app) {
         }
 
         function _getICNSearchTemplates(menuItems) {
-            return _.filter(menuItems , function (item) {
+            return _.filter(menuItems, function (item) {
                 return item.menuItem.menuType === configurationService.ICN_SEARCH_TEMPLATE_MENU_TYPE;
             });
         }
 
         function _getICNEntryTemplates(menuItems) {
-            return _.filter(menuItems , function (item) {
+            return _.filter(menuItems, function (item) {
                 return item.menuItem.menuType === configurationService.ICN_ENTRY_TEMPLATE_MENU_TYPE;
             });
         }
@@ -91,9 +92,14 @@ module.exports = function (app) {
             });
         }
 
-
+        self.excludedUserOuPermissions = [];
         self.userOuPermissions = userOuPermissions;
-        self.userOuPermissionsIds = _.map(userOuPermissions, 'permissionId');
+        self.userOuPermissionsIds = _.map(userOuPermissions, (userPermission) => {
+            if (userPermission && userPermission.permission.excluded) {
+                self.excludedUserOuPermissions.push(userPermission);
+            }
+            return userPermission.permissionId;
+        });
 
         if (userMenuItems.length) {
             self.userOuPermissionsIds = self.userOuPermissionsIds.concat(_.map(_convertMenuItems(userMenuItems), 'id'))
@@ -116,12 +122,12 @@ module.exports = function (app) {
         // for the first time the controller initialize
         self.permissions = _getPermissions(langService.current);
 
-
         _.map(self.permissions, function (keys) {
             _.map(keys, function (permissionsArr) {
                 _.map(permissionsArr, function (value) {
-                    if (value)
+                    if (value && ((value.hasOwnProperty('excluded') && !value.excluded) || value instanceof UserMenuItem)) {
                         self.totalPermissionsCount++;
+                    }
                 })
             })
         });
@@ -240,7 +246,7 @@ module.exports = function (app) {
         self.selectAllGroupPermissions = function (allGroupPermissions, key) {
             for (var i = 0; i < allGroupPermissions.length; i++) {
                 for (var j = 0; j < allGroupPermissions[i].length; j++) {
-                    if (allGroupPermissions[i][j]) {
+                    if (allGroupPermissions[i][j] && !allGroupPermissions[i][j].excluded) {
                         var isPermissionExist = _.filter(self.userOuPermissionsIds, function (permissionId) {
                             return allGroupPermissions[i][j].id === permissionId;
                         })[0];
@@ -266,7 +272,7 @@ module.exports = function (app) {
             var count = 0;
             for (var i = 0; i < allGroupPermissions.length; i++) {
                 for (var j = 0; j < allGroupPermissions[i].length; j++) {
-                    if (allGroupPermissions[i][j]) {
+                    if (allGroupPermissions[i][j] && !allGroupPermissions[i][j].excluded) {
                         var isPermissionExist = _.filter(self.userOuPermissionsIds, function (permissionId) {
                             return allGroupPermissions[i][j].id === permissionId;
                         })[0];
@@ -290,32 +296,41 @@ module.exports = function (app) {
         langService.listeningToChange(_getPermissions);
 
         self.isIndeterminate = function () {
-            return (self.userOuPermissionsIds.length !== 0 && self.userOuPermissionsIds.length !== self.totalPermissionsCount);
+            var userOuPermissions = self.userOuPermissionsIds.length - self.excludedUserOuPermissions.length;
+            return (userOuPermissions !== 0 && userOuPermissions !== self.totalPermissionsCount);
         };
 
         self.isChecked = function () {
-            return self.userOuPermissionsIds.length === self.totalPermissionsCount;
+            var userOuPermissions = self.userOuPermissionsIds.length - self.excludedUserOuPermissions.length;
+            return userOuPermissions === self.totalPermissionsCount;
         };
 
         /**
          * @description parent checkbox
          */
         self.toggleAll = function () {
-            if (self.isChecked()) {
-                self.userOuPermissionsIds = [];
+            var userOuPermissionsIdsCopy = angular.copy(self.userOuPermissionsIds);
+            if (self.isChecked() && employeeService.isSuperAdminUser()) {
+                userOuPermissionsIdsCopy = [];
             } else {
                 for (var key in self.permissions) {
                     var permission = self.permissions[key];
                     for (var i = 0; i < permission.length; i++) {
                         for (var j = 0; j < permission[i].length; j++) {
-                            if (permission[i][j]) {
-                                if (self.userOuPermissionsIds.indexOf(permission[i][j]['id']) === -1)
-                                    self.userOuPermissionsIds.push(permission[i][j]['id']);
+                            if (permission[i][j] && !permission[i][j].excluded) {
+                                var indexOfPermission = userOuPermissionsIdsCopy.indexOf(permission[i][j]['id']);
+                                if (self.isChecked() && indexOfPermission > -1) {
+                                    userOuPermissionsIdsCopy.splice(indexOfPermission, 1)
+                                } else if (!self.isChecked() && indexOfPermission === -1) {
+                                    userOuPermissionsIdsCopy.push(permission[i][j]['id']);
+                                }
                             }
                         }
                     }
                 }
             }
+
+            self.userOuPermissionsIds = userOuPermissionsIdsCopy;
         };
 
     });

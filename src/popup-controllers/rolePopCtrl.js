@@ -10,6 +10,7 @@ module.exports = function (app) {
                                             generator,
                                             langService,
                                             $filter,
+                                            employeeService,
                                             _) {
         'ngInject';
         var self = this;
@@ -37,8 +38,9 @@ module.exports = function (app) {
         _.map(self.permissions, function (keys) {
             _.map(keys, function (permissionsArr) {
                 _.map(permissionsArr, function (value) {
-                    if (value)
+                    if (value && !value.excluded) {
                         self.totalPermissionsCount++;
+                    }
                 })
             })
         });
@@ -180,8 +182,7 @@ module.exports = function (app) {
                 }
                 if (idx) {
                     self.role.customRolePermission.splice(index, 1);
-                }
-                else {
+                } else {
                     self.role.customRolePermission.push(item);
                 }
             }
@@ -191,7 +192,7 @@ module.exports = function (app) {
             for (var i = 0; i < allGroupPermissions.length; i++) {
                 for (var j = 0; j < allGroupPermissions[i].length; j++) {
                     //(function () {
-                    if (allGroupPermissions[i][j]) {
+                    if (allGroupPermissions[i][j] && !allGroupPermissions[i][j].excluded) {
                         var isPermissionExist = _.filter(self.role.customRolePermission, function (permission) {
                             return allGroupPermissions[i][j].id === permission.id;
                         })[0];
@@ -218,7 +219,7 @@ module.exports = function (app) {
             var count = 0;
             for (var i = 0; i < allGroupPermissions.length; i++) {
                 for (var j = 0; j < allGroupPermissions[i].length; j++) {
-                    if (allGroupPermissions[i][j]) {
+                    if (allGroupPermissions[i][j] && !allGroupPermissions[i][j].excluded) {
                         var isPermissionExist = _.filter(self.role.customRolePermission, function (permission) {
                             return allGroupPermissions[i][j].id === permission.id;
                         })[0];
@@ -245,37 +246,42 @@ module.exports = function (app) {
         };
 
         self.isIndeterminate = function () {
-            return (self.role.customRolePermission.length !== 0 && self.role.customRolePermission.length !== self.totalPermissionsCount);
+            var includedPermission = _.filter(self.role.customRolePermission, {'excluded': false});
+            return (includedPermission.length !== 0 && includedPermission.length !== self.totalPermissionsCount);
         };
 
         self.isChecked = function () {
-            return self.role.customRolePermission.length === self.totalPermissionsCount;
+            var includedPermission = _.filter(self.role.customRolePermission, {'excluded': false});
+            return includedPermission.length === self.totalPermissionsCount;
         };
 
         /**
          * @description parent checkbox
          */
         self.toggleAll = function () {
-            if (self.isChecked()) {
-                self.role.customRolePermission = [];
-            }
-            else {
+            var customRolePermissionCopy = angular.copy(self.role.customRolePermission);
+            if (self.isChecked() && employeeService.isSuperAdminUser()) {
+                customRolePermissionCopy = [];
+            } else {
                 for (var key in self.permissions) {
                     var permission = self.permissions[key];
                     for (var i = 0; i < permission.length; i++) {
                         for (var j = 0; j < permission[i].length; j++) {
-                            if (permission[i][j]) {
-                                var customRolePermissionIds = _.map(self.role.customRolePermission,"id");
-                                if (customRolePermissionIds.indexOf(permission[i][j]['id']) === -1) {
-                                    self.role.customRolePermission.push(permission[i][j]);
+                            if (permission[i][j] && !permission[i][j].excluded) {
+                                var customRolePermissionIds = _.map(customRolePermissionCopy, "id");
+                                var indexOfPermission = customRolePermissionIds.indexOf(permission[i][j]['id']);
+
+                                if (self.isChecked() && indexOfPermission > -1) {
+                                    customRolePermissionCopy.splice(indexOfPermission, 1);
+                                } else if (!self.isChecked() && indexOfPermission === -1) {
+                                    customRolePermissionCopy.push(permission[i][j]);
                                 }
                             }
                         }
                     }
                 }
             }
+            self.role.customRolePermission = customRolePermissionCopy;
         };
-
-
     });
 };
