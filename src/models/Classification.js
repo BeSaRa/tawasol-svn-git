@@ -19,6 +19,7 @@ module.exports = function (app) {
             self.status = true;
             self.code = null;
             self.children = [];
+            self.isUserPrivate = false;
 
 
             // every model has required fields
@@ -67,6 +68,10 @@ module.exports = function (app) {
 
             Classification.prototype.getTranslatedName = function (reverse) {
                 return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
+            };
+
+            Classification.prototype.getTranslatedIsUserPrivate = function () {
+                return this.isUserPrivate ? langService.get('yes') : langService.get('no');
             };
             /**
              * @description Get the name of record with passed language name

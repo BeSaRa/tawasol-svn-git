@@ -131,4 +131,5 @@ module.exports = function (app) {
     require('./arabicNormalizerService')(app);
     require('./externalDataSourceService')(app);
     require('./userExternalDataSourceService')(app);
+    require('./privateUserClassificationService')(app);
 };

@@ -120,6 +120,10 @@ module.exports = function (app) {
             RootEntity.prototype.getAllowedEditProperties = function () {
                 return self.rootEntity.allowedEditProperties ? JSON.parse(self.rootEntity.allowedEditProperties) : self.rootEntity.allowedEditProperties;
             }
+            RootEntity.prototype.isIntegratedClassificationEnabled = function () {
+                return self.rootEntity.hasOwnProperty('allowIntegeratedClassification') && !!self.rootEntity.allowIntegeratedClassification;
+
+            }
 
 
             // don't remove CMSModelInterceptor from last line

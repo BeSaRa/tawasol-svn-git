@@ -79,7 +79,7 @@
                 .addToAllWithBase('propertyConfigurations', '/cms-entity/correspondence/property-configuration')
                 .addToAllWithBase('searchDocument', '/cms-entity/correspondence/search/:searchType')
                 .addToAllWithBase('favoritesDWF', '/cms-entity/user/user-frequent-list')
-                .addToAllWithBase('favoriteWFActions','/cms-entity/admin/frequent-user-wf-action')
+                .addToAllWithBase('favoriteWFActions', '/cms-entity/admin/frequent-user-wf-action')
                 .addToAllWithBase('distributionWF', '/cms-entity/admin/ou-application-user/dist')
                 .addToAllWithBase('distributionWFEUsers', '/cms-entity/admin/application-user/dist/ge-heads')
                 .addToAllWithBase('distributionWFActions', '/cms-entity/admin/wf-action/wf')
@@ -215,9 +215,10 @@
                 .addToAllWithBase('externalDataSource', 'cms-entity/admin/ex-import-store')
                 .addToAllWithBase('userExternalDataSource', 'cms-entity/user/user-ext-import-store')
                 .addToAllWithBase('activeOus', 'cms-entity/admin/ou/active/lookup')
-                .addToAllWithBase('reminderEmail','cms-entity/user/inbox/send-remainder')
+                .addToAllWithBase('reminderEmail', 'cms-entity/user/inbox/send-remainder')
                 .addToAllWithBase('returnedArchive', 'cms-entity/correspondence/incoming/ou/returned-to-central-archive')
                 .addToAllWithBase('bulkRecallSentItems', 'cms-entity/user/inbox/bulk/recall')
+                .addToAllWithBase('userClassification', 'cms-entity/admin/user-classification')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

@@ -259,7 +259,7 @@
                         <label for="mainClassification">{{lang.outgoing_main_classification}}</label>
                         <md-select name="mainClassification"
                                    id="mainClassification"
-                                   ng-disabled="!!ctrl.disableProperties || ctrl.checkAllowedEditProperties('mainClassification')"
+                                   ng-disabled="!!ctrl.disableProperties || ctrl.checkAllowedEditProperties('mainClassification') || ctrl.checkMainClassificationDisabled()"
                                    ng-model="ctrl.document.mainClassification"
                                    ng-model-options="{trackBy: '$value.id'}"
                                    ng-required="ctrl.checkMandatory('mainClassification')"

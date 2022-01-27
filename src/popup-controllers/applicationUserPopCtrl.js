@@ -38,6 +38,7 @@ module.exports = function (app) {
                                                        $timeout,
                                                        Information,
                                                        gridService,
+                                                       privateUserClassificationService,
                                                        AppUserCertificate) {
         'ngInject';
         var self = this;
@@ -58,6 +59,7 @@ module.exports = function (app) {
         self.rankSearchText = '';
 
         self.hrEnabled = self.rootEntity.returnRootEntity().rootEntity.hrEnabled;
+        self.isIntegratedClassificationEnabled = rootEntity.isIntegratedClassificationEnabled();
 
         self.tabsToShow = [
             'basic',
@@ -1136,6 +1138,32 @@ module.exports = function (app) {
                         })
                 });
         };
+
+        /**
+         * @description open dialog private classifications for user
+         */
+        self.openPrivateUserClassificationsDialog = function (ouApplicationUser, $event) {
+            return dialog
+                .showDialog({
+                    targetEvent: $event,
+                    templateUrl: cmsTemplate.getPopup('private-user-classifications'),
+                    controller: 'privateUserClassificationsPopCtrl',
+                    controllerAs: 'ctrl',
+                    locals: {
+                        ouApplicationUser: ouApplicationUser
+                    },
+                    resolve: {
+                        privateClassifications: function () {
+                            'ngInject';
+                            return privateUserClassificationService.loadPrivateClassifications();
+                        },
+                        userClassifications: function () {
+                            'ngInject';
+                            return privateUserClassificationService.loadPrivateUserClassifications(ouApplicationUser);
+                        }
+                    }
+                });
+        }
 
         self.notificationTypes = {
             sms: {

@@ -134,4 +134,5 @@ module.exports = function (app) {
     require('./UserFollowupBookMultiInterceptor')(app);
     require('./ManualDeliveryReportInterceptor')(app);
     require('./CorrespondenceSiteTypeInterceptor')(app);
+    require('./PrivateUserClassificationInterceptor')(app);
 };

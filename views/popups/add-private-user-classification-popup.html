@@ -1,0 +1,101 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_private_user_classification : ctrl.privateUserClassificationCopy.getNames()}}">
+    <popup-toolbar-directive ng-if="!ctrl.editMode"
+                             header-text="{{lang.add_new_private_user_classification}}"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="ctrl.editMode"
+                             header-text="{{ctrl.privateUserClassificationCopy.getNames()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="privateUserClassificationForm" autocomplete="off">
+                <div layout="column">
+                    <div layout="row">
+                        <!-- Private Classifications -->
+                        <md-input-container flex>
+                            <label for="classification">{{lang.private_classifications}}</label>
+                            <md-select id="classification" name="classification"
+                                       ng-model="ctrl.privateUserClassification.classification"
+                                       ng-model-options="{trackBy: '$value.id'}"
+                                       required>
+                                <md-option ng-value="classification"
+                                           ng-disabled="ctrl.excludeClassificationsIfExists(classification)"
+                                           ng-repeat="classification in ctrl.privateClassificationsList">
+                                    {{classification.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="privateUserClassificationForm.classification.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- View Security Level -->
+                        <md-input-container flex>
+                            <label for="viewSecurityLevels">{{lang.security_level_view}}</label>
+                            <md-select name="viewSecurityLevels" id="viewSecurityLevels"
+                                       ng-model="ctrl.privateUserClassification.viewSecurityLevels"
+                                       multiple required
+                                       ng-model-options="{trackBy: '$value.id'}">
+                                <md-option
+                                        ng-repeat="securityLevel in ctrl.securityLevels"
+                                        ng-value="securityLevel">
+                                    {{securityLevel.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="privateUserClassificationForm.viewSecurityLevels.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <!-- View Security Level -->
+                        <md-input-container flex>
+                            <label for="archiveSecurityLevels">{{lang.security_level_archive}}</label>
+                            <md-select name="archiveSecurityLevels" id="archiveSecurityLevels"
+                                       ng-model="ctrl.privateUserClassification.archiveSecurityLevels"
+                                       multiple required
+                                       ng-model-options="{trackBy: '$value.id'}">
+                                <md-option
+                                        ng-repeat="securityLevel in ctrl.securityLevels"
+                                        ng-value="securityLevel">
+                                    {{securityLevel.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="privateUserClassificationForm.archiveSecurityLevels.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <div flex>
+                            <!-- Has View -->
+                            <md-switch ng-model="ctrl.privateUserClassification.hasView">
+                                <label>{{lang.can_view}} :
+                                    {{ctrl.privateUserClassification.getTranslatedYesNo('hasView')}}</label>
+                            </md-switch>
+                        </div>
+                    </div>
+                    <div layout="row">
+                        <div flex>
+                            <!-- Has Edit -->
+                            <md-switch ng-model="ctrl.privateUserClassification.hasEdit">
+                                <label>{{lang.can_edit}} :
+                                    {{ctrl.privateUserClassification.getTranslatedYesNo('hasEdit')}}</label>
+                            </md-switch>
+                        </div>
+                        <div flex></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary"
+                   ng-disabled="privateUserClassificationForm.$invalid"
+                   ng-if="!ctrl.editMode"
+                   ng-click="ctrl.addPrivateUserClassification(ctrl.privateUserClassification)">{{lang.add}}
+        </md-button>
+        <md-button class="md-raised md-primary" ng-if="ctrl.editMode"
+                   ng-disabled="privateUserClassificationForm.$invalid"
+                   ng-click="ctrl.editPrivateUserClassification(ctrl.privateUserClassification)">{{lang.save}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopUp()">{{lang.close}}</md-button>
+
+    </md-dialog-actions>
+</md-dialog>

@@ -57,6 +57,7 @@ module.exports = function (app) {
         // self.organizations = organizationService.organizations;
         self.organizations = organizationService.getAllRegistryOrganizations();
         self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
+        self.isIntegratedClassificationEnabled = rootEntity.isIntegratedClassificationEnabled();
 
         self.selectedOrganization = null;
         self.selectedOUClassifications = [];
@@ -74,6 +75,7 @@ module.exports = function (app) {
          */
         self.onChangeParent = function ($event) {
             if (self.classification.parent) {
+                self.resetIsUserPrivate();
                 self.classification.securityLevels = self.classification.parent.securityLevels;
                 self.classification.isGlobal = angular.copy(self.classification.parent.isGlobal);
                 if (self.classification.isGlobal) {
@@ -162,6 +164,7 @@ module.exports = function (app) {
                 });
         };
 
+
         /**
          * @description Handles the change of global switch in popup
          * @param $event
@@ -169,6 +172,7 @@ module.exports = function (app) {
         self.onChangeGlobal = function ($event) {
             if (!employeeService.isSuperAdminUser()) {
                 self.classification.isGlobal = !self.classification.isGlobal;
+                self.resetIsUserPrivate();
                 return false;
             }
 
@@ -179,12 +183,14 @@ module.exports = function (app) {
             self.selectedOrganization = null;
             if (!self.editMode) {
                 self.classification.setRelatedOus([]);
+                self.resetIsUserPrivate();
                 return;
             }
             if (self.classification.isGlobal) {
                 dialog.confirmMessage(langService.get('related_organization_confirm'), null, null, $event)
                     .then(function () {
                         self.classification.setRelatedOus([]);
+                        self.resetIsUserPrivate();
                     })
                     .catch(function () {
                         self.classification.isGlobal = false;
@@ -227,8 +233,7 @@ module.exports = function (app) {
             if (self.defaultOU) {
                 var ouId = self.editMode ? ouClassification.ouid.id : ouClassification.id;
                 return (ouId !== self.defaultOU.id)
-            }
-            else if(!employeeService.isSuperAdminUser() && self.classification.relatedOus.length === 1) {
+            } else if (!employeeService.isSuperAdminUser() && self.classification.relatedOus.length === 1) {
                 return false;
             }
             return true;
@@ -417,9 +422,16 @@ module.exports = function (app) {
                 || self.classification.isGlobal;
         };
 
+        self.resetIsUserPrivate = function () {
+            if (self.classification.isGlobal || self.classification.parent) {
+                self.classification.isUserPrivate = false;
+            }
+        }
+
         self.resetModel = function () {
             generator.resetFields(self.classification, self.model);
         };
+
 
         /**
          * @description Clears the searchText for the given field

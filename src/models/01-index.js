@@ -209,5 +209,6 @@ module.exports = function (app) {
     require('./FavoriteAction')(app);
     require('./UserFollowupBookMulti')(app);
     require('./ManualDeliveryReport')(app);
+    require('./PrivateUserClassification')(app);
 
 };

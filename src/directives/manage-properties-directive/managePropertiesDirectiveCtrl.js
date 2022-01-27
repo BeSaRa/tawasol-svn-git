@@ -468,6 +468,14 @@ module.exports = function (app) {
         };
 
         /**
+         * @description disable main classification if is user private true
+         * @returns {*|boolean}
+         */
+        self.checkMainClassificationDisabled = function () {
+            return self.document.hasVsId() && self.documentCopy.mainClassification && self.documentCopy.mainClassification.isUserPrivate;
+        }
+
+        /**
          * @description check if document received from incoming department
          * @returns {*|boolean}
          */
@@ -893,7 +901,7 @@ module.exports = function (app) {
             if (typeof self.document.fileId === 'number' && documentFileOptionFromInfo) {
                 self.document.fileId = documentFileOptionFromInfo.file;
             }
-
+            self.documentCopy = angular.copy(self.document);
             _getClassifications(false);
             _getDocumentFiles(false);
 

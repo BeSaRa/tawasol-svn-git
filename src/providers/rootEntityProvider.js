@@ -172,6 +172,9 @@ module.exports = function (app) {
                 },
                 isInternalOutgoingEnabled() {
                     return rootEntity && rootEntity.isInternalOutgoingEnabled() && employeeService.hasPermissionTo('ADD_INTERNAL_OUTGOING');
+                },
+                isIntegratedClassificationEnabled() {
+                    return rootEntity.isIntegratedClassificationEnabled();
                 }
             };
         }

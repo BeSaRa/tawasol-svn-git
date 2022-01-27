@@ -881,6 +881,13 @@
                                                                                 {{lang.followup_organization}}
                                                                             </md-button>
                                                                         </md-menu-item>
+                                                                        <md-menu-item
+                                                                                ng-if="ctrl.isIntegratedClassificationEnabled">
+                                                                            <md-button
+                                                                                    ng-click="ctrl.openPrivateUserClassificationsDialog(ouApplicationUser, $event)">
+                                                                                {{lang.private_classifications}}
+                                                                            </md-button>
+                                                                        </md-menu-item>
                                                                         <md-menu-divider></md-menu-divider>
                                                                         <md-menu-item>
                                                                             <md-button

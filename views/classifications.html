@@ -37,6 +37,7 @@
                                                 <table-status-directive
                                                         when-close="ctrl.changeBulkStatusClassifications"></table-status-directive>
                                                 <md-button class="md-icon-button"
+                                                           ng-if="!ctrl.hasUserPrivateClassifications()"
                                                            ng-click="ctrl.removeBulkClassifications($event)">
                                                     <md-icon md-svg-icon="delete"></md-icon>
                                                 </md-button>
@@ -95,7 +96,7 @@
                                         </td>
                                         <td md-cell>{{classification.getSecurityLevels()}}</td>
                                         <td md-cell>
-                                            <md-button
+                                            <md-button ng-disabled="classification.isUserPrivate"
                                                     ng-click="ctrl.openSubClassificationDialog(classification , $event)"
                                                     class="md-icon-button md-raised"
                                                     tooltip="{{classification.childCount + ' ' + lang.sub_classification}}">
@@ -105,6 +106,7 @@
                                         <td md-cell>
                                             <div flex layout="row" layout-align="start center">
                                                 <md-button class="md-icon-button" title="{{lang.delete}}"
+                                                           ng-if="!classification.isUserPrivate"
                                                            ng-click="ctrl.removeClassification(classification, $event)">
                                                     <md-icon md-svg-icon="delete"></md-icon>
                                                 </md-button>

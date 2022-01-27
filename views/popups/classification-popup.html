@@ -86,7 +86,7 @@
                                                ng-model="ctrl.classification.code">
                                         <div ng-messages="classificationForm.code.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:150})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 150})}}</div>
                                         </div>
                                     </md-input-container>
                                 </div>
@@ -110,6 +110,19 @@
                                                 {{ctrl.classification.getTranslatedGlobal()}}</label>
                                         </md-switch>
                                     </div>
+                                </div>
+                                <div layout="row">
+                                    <!-- isUserPrivate -->
+                                    <div flex class="cms-input-container"
+                                         ng-if="ctrl.isIntegratedClassificationEnabled && !ctrl.classification.parent">
+                                        <md-switch flex ng-model="ctrl.classification.isUserPrivate"
+                                                   aria-label="{{lang.is_user_private}}"
+                                                   ng-disabled="ctrl.classification.isGlobal || ctrl.classification.hasChildren()">
+                                            <label>{{lang.is_user_private}} :
+                                                {{ctrl.classification.getTranslatedIsUserPrivate()}}</label>
+                                        </md-switch>
+                                    </div>
+                                    <div flex></div>
                                 </div>
                             </div>
                         </md-content>

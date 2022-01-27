@@ -144,6 +144,12 @@ module.exports = function (app) {
                 });
         };
 
+        self.hasUserPrivateClassifications = function () {
+            return self.selectedClassifications.some(classification => {
+                return classification.isUserPrivate;
+            })
+        }
+
         /**
          * @description change the status of classification
          * @param classification
@@ -172,7 +178,7 @@ module.exports = function (app) {
          * @param classification
          */
         self.changeGlobalFromGrid = function (classification) {
-            if (!employeeService.isSuperAdminUser()){
+            if (!employeeService.isSuperAdminUser()) {
                 classification.isGlobal = !classification.isGlobal;
                 return false;
             }
