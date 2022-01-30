@@ -195,7 +195,7 @@ module.exports = function (app) {
             delete model.siteType;
 
             delete model.dummySearchDocClass;
-
+            delete model.isInternal;
             return model;
         });
 
