@@ -4,6 +4,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'reasonPopCtrl';
         self.reason = '';
+        self.shortDescription = '';
         // all user comments
         self.comments = comments;
         self.selectedComment = null;
@@ -19,7 +20,11 @@ module.exports = function (app) {
          * @description send the reason for controller.
          */
         self.sendReason = function () {
-            dialog.hide(self.reason);
+            var reason = self.showShortDescription ? {
+                description: self.reason,
+                shortDescription: self.shortDescription
+            } : self.reason
+            dialog.hide(reason);
         };
 
         /**

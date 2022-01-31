@@ -71,6 +71,7 @@ module.exports = function (app) {
             self.flipLogin = false;
             self.returnToCentralArchive = false;
             self.excludedPermissionList = [];
+            self.mergeCommentsWithTrackingSheet = false;
 
             //endregion
 

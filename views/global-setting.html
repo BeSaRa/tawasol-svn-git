@@ -234,6 +234,16 @@
                                     </md-switch>
                                 </md-input-container>
                             </div>
+                            <div layout="row" class="p20">
+                                <!-- Merge Comments With Tracking Sheet -->
+                                <md-input-container flex>
+                                    <md-switch flex ng-model="ctrl.globalSetting.mergeCommentsWithTrackingSheet"
+                                               aria-label="{{lang.merge_comments_with_tracking_sheet}} ">
+                                        <span>{{lang.merge_comments_with_tracking_sheet}} : </span>
+                                        {{ctrl.globalSetting.getTranslatedYesNo('mergeCommentsWithTrackingSheet')}}
+                                    </md-switch>
+                                </md-input-container>
+                            </div>
                         </div>
                         <br/>
                         <br/>

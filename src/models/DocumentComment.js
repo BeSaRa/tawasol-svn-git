@@ -122,6 +122,14 @@ module.exports = function (app) {
                 this.documentVSID = vsId;
                 return this;
             };
+            DocumentComment.prototype.setDescription = function (description){
+                this.description = description;
+                return this;
+            }
+            DocumentComment.prototype.setShortDescription = function (shortDescription){
+                this.shortDescription = shortDescription;
+                return this;
+            }
             DocumentComment.prototype.getPerOUStatus = function () {
                 return this.isPerOU ? langService.get('comments_organizations') : langService.get('comments_users');
             };

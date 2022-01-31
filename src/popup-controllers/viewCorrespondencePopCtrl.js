@@ -33,7 +33,9 @@ module.exports = function (app) {
                                                           workflowActionService,
                                                           userCommentService,
                                                           allowedEditProperties,
-                                                          documentTagService) {
+                                                          documentTagService,
+                                                          DocumentComment,
+                                                          documentCommentService) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewCorrespondencePopCtrl';
@@ -509,6 +511,24 @@ module.exports = function (app) {
                     self.saveCorrespondenceChanges($event, false, false, false, comment);
                 })
         };
+
+        /**
+         * @description to add comment for document
+         */
+        self.addDocumentCommentToDocument = function ($event) {
+            correspondenceService.openCommentDialog(1000, true)
+                .then(function (comment) {
+                    self.documentComment = (new DocumentComment())
+                        .setDescription(comment.hasOwnProperty('description') ? comment.description : comment)
+                        .setShortDescription(comment.hasOwnProperty('shortDescription') ? comment.shortDescription : '')
+                        .setVsId(self.correspondence.vsId)
+                        .setCreationDate();
+
+                    documentCommentService.addDocumentComment(self.documentComment).then(function () {
+                        toast.success(langService.get('add_success').change({name: langService.get('comments_comment')}));
+                    });
+                })
+        }
 
         self.saveAndSend = function ($event) {
             return self.saveCorrespondenceChanges($event, false)

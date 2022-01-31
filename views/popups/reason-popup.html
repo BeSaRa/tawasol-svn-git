@@ -8,7 +8,7 @@
             <form name="reason_form" autocomplete="off">
                 <div layout="column">
                     <div layout="row">
-                        <md-input-container flex>
+                        <md-input-container flex ng-if="!ctrl.showShortDescription">
                             <label for="comment">{{lang.comment}}</label>
                             <md-select ng-change="ctrl.setReason()" id="comment"
                                        ng-model="ctrl.selectedComment"
@@ -29,13 +29,24 @@
                                 </md-option>
                             </md-select>
                         </md-input-container>
+                        <md-input-container flex ng-if="ctrl.showShortDescription">
+                            <label for="shortDescription">{{lang.comments_short_description}}</label>
+                            <input id="shortDescription" maxlength="80" minlength="3" name="shortDescription"
+                                   required
+                                   ng-model="ctrl.shortDescription">
+                            <div ng-messages="ctrl.shortDescription.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                            </div>
+                        </md-input-container>
                     </div>
                     <div layout="row">
                         <md-input-container flex>
                             <label for="reason">{{lang.description}}</label>
                             <textarea required id="reason" maxlength="{{ctrl.allowedMaxLength}}"
                                       md-maxlength="{{ctrl.allowedMaxLength}}"
-                                      minlength="3" name="reason"
+                                      minlength="3" name="reason" rows="3"
                                       ng-model="ctrl.reason" class="cms-comment">
                             </textarea>
                             <div ng-messages="reason_form.reason.$error">

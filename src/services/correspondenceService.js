@@ -1402,7 +1402,7 @@ module.exports = function (app) {
          * @description open comment dialog for workItem reason.
          * @returns {promise|*}
          */
-        self.openCommentDialog = function (allowedMaxLength) {
+        self.openCommentDialog = function (allowedMaxLength, showShortDescription) {
             return dialog
                 .showDialog({
                     templateUrl: cmsTemplate.getPopup('reason'),
@@ -1412,7 +1412,8 @@ module.exports = function (app) {
                     locals: {
                         justReason: true,
                         title: 'select_reason',
-                        allowedMaxLength: allowedMaxLength || 200
+                        allowedMaxLength: allowedMaxLength || 200,
+                        showShortDescription: showShortDescription
                     },
                     resolve: {
                         comments: function (userCommentService) {

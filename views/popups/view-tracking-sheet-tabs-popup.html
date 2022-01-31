@@ -54,6 +54,13 @@
                                             ng-repeat="workflowHistoryRecord in ctrl.workflowHistoryRecords | filter:ctrl.searchModelWorkflowHistory | limitTo: ctrl.workflowHistoryGrid.limit: ((ctrl.workflowHistoryGrid.page - 1) * ctrl.workflowHistoryGrid.limit) track by $index"
                                             ng-class="{'font-bold': workflowHistoryRecord.userFromInfo.id === ctrl.employee.id}">
                                             <td md-cell class="zero-p-right">
+                                                <span class="action-type-icon-container">
+                                                    <md-icon
+                                                            ng-if="workflowHistoryRecord.actionType_vts && workflowHistoryRecord.actionType_vts.key === 'comment'"
+                                                            md-svg-icon="{{workflowHistoryRecord.actionType_vts.icon}}"
+                                                            tooltip="{{lang[workflowHistoryRecord.actionType_vts.langKey]}}"
+                                                    ></md-icon>
+                                                </span>
                                                 {{workflowHistoryRecord.userFromInfo.getTranslatedName()}}
                                             </td>
                                             <td md-cell>
@@ -62,7 +69,7 @@
                                             <td md-cell>
                                                 <span class="action-type-icon-container">
                                                     <md-icon
-                                                            ng-if="workflowHistoryRecord.actionType_vts"
+                                                            ng-if="workflowHistoryRecord.actionType_vts && workflowHistoryRecord.actionType_vts.key !== 'comment'"
                                                             md-svg-icon="{{workflowHistoryRecord.actionType_vts.icon}}"
                                                             tooltip="{{lang[workflowHistoryRecord.actionType_vts.langKey]}}"
                                                     ></md-icon>

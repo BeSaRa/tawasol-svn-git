@@ -30,6 +30,11 @@ module.exports = function (app) {
                         key: 'userInDifferentDepartment',
                         langKey: 'user_in_different_dept',
                         icon: gridService.gridIcons.indicators.userInDifferentDepartment
+                    },
+                    14: {
+                        key: 'comment',
+                        langKey: 'comment',
+                        icon: gridService.gridIcons.indicators.comments
                     }
                 };
             self.id = null;
