@@ -132,7 +132,7 @@ module.exports = function (app) {
                 } else if (self.replyType === 1) {
                     page = pages.internalSimpleAdd;
                 } else if (self.isInternalOutgoingEnabled && self.replyType === 2) {
-                    page = pages.outgoingSimpleAdd
+                    page = pages.outgoingSimpleAddInternal
                 }
             } else {
                 if (self.replyType === 0) {
@@ -140,7 +140,7 @@ module.exports = function (app) {
                 } else if (self.replyType === 1) {
                     page = pages.internalAdd;
                 } else if (self.isInternalOutgoingEnabled && self.replyType === 2) {
-                    page = pages.outgoingAdd
+                    page = pages.outgoingAddInternal
                 }
             }
             dialog.hide();
