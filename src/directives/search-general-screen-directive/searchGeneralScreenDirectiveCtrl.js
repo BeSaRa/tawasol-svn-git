@@ -1274,7 +1274,7 @@ module.exports = function (app) {
                 return;
             }
 
-            var allowedEditProperties = self.isAllowedEditProperties(correspondence) ? self.allowedEditProperties : null;
+            var allowedEditProperties = self.isAllowedEditProperties(correspondence) ? self.allowedEditProperties : false;
             correspondence.viewFromQueue(self.gridActions, 'searchGeneral', $event, false, allowedEditProperties)
                 .then(function () {
                     return self.reloadSearchCorrespondence(self.grid.page);
@@ -1416,9 +1416,9 @@ module.exports = function (app) {
                 } else if (self.isAllowedEditProperties(model)) {
                     hasPermission = true;
                 }
-                //If approved outgoing electronic, don't allow to edit
-                else if (info.docStatus >= 24 && !info.isPaper)
-                    hasPermission = false;
+                //If approved outgoing
+                else if (info.docStatus >= 24 )
+                    hasPermission = self.isAllowedEditProperties(model);
                 else
                     hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
             }

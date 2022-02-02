@@ -1230,7 +1230,7 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            var allowedEditProperties = self.isAllowedEditProperties(correspondence) ? self.allowedEditProperties : null;
+            var allowedEditProperties = self.isAllowedEditProperties(correspondence) ? self.allowedEditProperties : false;
             correspondence.viewFromQueue(self.gridActions, 'searchOutgoing', $event, false, allowedEditProperties)
                 .then(function () {
                     return self.reloadSearchCorrespondence(self.grid.page);
@@ -1380,9 +1380,9 @@ module.exports = function (app) {
             } else if (self.isAllowedEditProperties(model)) {
                 hasPermission = true;
             }
-            //If approved outgoing electronic, don't allow to edit
-            else if (info.docStatus >= 24 && !info.isPaper) {
-                hasPermission = false;
+            //If approved outgoing
+            else if (info.docStatus >= 24) {
+                hasPermission = self.isAllowedEditProperties(model);
             } else {
                 hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
             }
@@ -1411,7 +1411,7 @@ module.exports = function (app) {
          */
         self.editProperties = function (correspondence, $event) {
             var info = correspondence.getInfo();
-            var allowedEditProperties = self.isAllowedEditProperties(correspondence) ? self.allowedEditProperties : null;
+            var allowedEditProperties = self.isAllowedEditProperties(correspondence) ? self.allowedEditProperties : false;
             managerService.manageDocumentProperties(info.vsId, info.documentClass, info.title, $event, allowedEditProperties)
                 .finally(function (e) {
                     self.reloadSearchCorrespondence(self.grid.page)
