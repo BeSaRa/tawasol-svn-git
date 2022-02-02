@@ -63,23 +63,7 @@
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
-                        <div flex>
-                            <!-- Has View -->
-                            <md-switch ng-model="ctrl.privateUserClassification.hasView">
-                                <label>{{lang.can_view}} :
-                                    {{ctrl.privateUserClassification.getTranslatedYesNo('hasView')}}</label>
-                            </md-switch>
-                        </div>
-                    </div>
-                    <div layout="row">
-                        <div flex>
-                            <!-- Has Edit -->
-                            <md-switch ng-model="ctrl.privateUserClassification.hasEdit">
-                                <label>{{lang.can_edit}} :
-                                    {{ctrl.privateUserClassification.getTranslatedYesNo('hasEdit')}}</label>
-                            </md-switch>
-                        </div>
-                        <div flex></div>
+                        <span flex></span>
                     </div>
                 </div>
             </form>
