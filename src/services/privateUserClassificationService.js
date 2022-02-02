@@ -22,7 +22,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.loadPrivateUserClassifications = function (ouApplicationUser) {
-            return $http.post(urlService.userClassification + '/criteria', {
+            return $http.post(urlService.privateUserClassification + '/criteria', {
                 ouId: ouApplicationUser.getOuId(),
                 userId: ouApplicationUser.getApplicationUserId()
             }).then(function (result) {
@@ -69,6 +69,16 @@ module.exports = function (app) {
                             ouApplicationUser: ouApplicationUser
                         }
                     })
+            },
+            privateUserClassificationDelete: function (privateUserClassification, $event) {
+                return dialog.confirmMessage(langService.get('confirm_delete').change({name: privateUserClassification.getNames()}), null, null, $event)
+                    .then(function () {
+                        return self.deletePrivateUserClassification(privateUserClassification)
+                            .then(function (result) {
+                                //toast.success(langService.get("delete_specific_success").change({name: privateUserClassification.getNames()}));
+                                return result;
+                            })
+                    });
             }
         };
 
@@ -79,7 +89,7 @@ module.exports = function (app) {
          */
         self.addPrivateUserClassification = function (privateUserClassification) {
             return $http
-                .post(urlService.userClassification,
+                .post(urlService.privateUserClassification,
                     generator.interceptSendInstance('PrivateUserClassification', privateUserClassification))
                 .then(function (result) {
                     return generator.interceptReceivedInstance('PrivateUserClassification', generator.generateInstance(result.data.rs, PrivateUserClassification, self._sharedMethods));
@@ -92,7 +102,7 @@ module.exports = function (app) {
          */
         self.updatePrivateUserClassification = function (privateUserClassification) {
             return $http
-                .put(urlService.userClassification,
+                .put(urlService.privateUserClassification,
                     generator.interceptSendInstance('PrivateUserClassification', privateUserClassification))
                 .then(function () {
                     return generator.interceptReceivedInstance('PrivateUserClassification', generator.generateInstance(privateUserClassification, PrivateUserClassification, self._sharedMethods));
@@ -105,6 +115,13 @@ module.exports = function (app) {
                     return generator.interceptReceivedCollection('Classification', generator.generateCollection(result.data.rs, Classification));
                 });
         }
+
+        self.deletePrivateUserClassification = function (privateUserClassification) {
+            var id = privateUserClassification.hasOwnProperty('id') ? privateUserClassification.id : privateUserClassification;
+            return $http.delete((urlService.privateUserClassification + '/' + id)).then(function (result) {
+                return result;
+            });
+        };
 
         /**
          * @description create the shared method to the model.

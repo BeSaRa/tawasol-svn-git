@@ -98,6 +98,23 @@ module.exports = function (app) {
         };
 
         /**
+         * @description remove private classification
+         * @param userClassification
+         * @param $event
+         */
+        self.removePrivateUserClassification = function (userClassification, $event) {
+
+            privateUserClassificationService
+                .controllerMethod
+                .privateUserClassificationDelete(userClassification, $event)
+                .then(function (result) {
+                    self.reloadPrivateUserClassifications(self.grid.page).then(function () {
+                        toast.success(langService.get('delete_success').change({name: result.getNames()}));
+                    });
+                });
+        }
+
+        /**
          * @description close the popup
          */
         self.closePopUp = function () {

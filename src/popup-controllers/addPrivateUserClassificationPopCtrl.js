@@ -26,7 +26,6 @@ module.exports = function (app) {
         self.securityLevels = ouApplicationUser.archiveSecurityLevels.filter(securityLevel => {
             return securityLevel.lookupKey !== 4;
         });
-        console.log(self.securityLevels);
 
         /**
          * @description add private user classification

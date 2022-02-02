@@ -218,7 +218,7 @@
                 .addToAllWithBase('reminderEmail', 'cms-entity/user/inbox/send-remainder')
                 .addToAllWithBase('returnedArchive', 'cms-entity/correspondence/incoming/ou/returned-to-central-archive')
                 .addToAllWithBase('bulkRecallSentItems', 'cms-entity/user/inbox/bulk/recall')
-                .addToAllWithBase('userClassification', 'cms-entity/admin/user-classification')
+                .addToAllWithBase('privateUserClassification', 'cms-entity/admin/user-classification')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();
