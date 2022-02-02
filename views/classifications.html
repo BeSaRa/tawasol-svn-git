@@ -91,7 +91,7 @@
                                                        tooltip="{{classification.getTranslatedGlobal()}}"
                                                        ng-change="ctrl.changeGlobalFromGrid(classification)"
                                                        ng-model="classification.isGlobal"
-                                                       ng-disabled="!ctrl.employeeService.isSuperAdminUser()"
+                                                       ng-disabled="!ctrl.employeeService.isSuperAdminUser() || classification.isUserPrivate"
                                                        ng-readonly="!ctrl.employeeService.isSuperAdminUser()"></md-switch>
                                         </td>
                                         <td md-cell>{{classification.getSecurityLevels()}}</td>

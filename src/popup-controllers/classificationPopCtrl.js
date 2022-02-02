@@ -186,7 +186,7 @@ module.exports = function (app) {
                 self.resetIsUserPrivate();
                 return;
             }
-            if (self.classification.isGlobal) {
+            if (self.classification.isGlobal && self.classification.isUserPrivate) {
                 dialog.confirmMessage(langService.get('related_organization_confirm'), null, null, $event)
                     .then(function () {
                         self.classification.setRelatedOus([]);
@@ -452,6 +452,10 @@ module.exports = function (app) {
                     $event.stopPropagation();
             }
         };
+
+        self.isUserPrivateDisabled = function () {
+            return self.editMode || self.classification.isGlobal || self.classification.hasChildren();
+        }
 
         self.closeClassificationDialog = function () {
             dialog.cancel(self.model);

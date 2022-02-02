@@ -49,7 +49,7 @@
                                         <md-select aria-label="{{lang.parent_classification}}" id="parent"
                                                    ng-change="ctrl.onChangeParent($event)"
                                                    ng-model-options="{trackBy: '$value.id'}"
-                                                   ng-disabled="ctrl.classification.hasChildren()"
+                                                   ng-disabled="ctrl.classification.hasChildren() || (ctrl.editMode && ctrl.classification.isUserPrivate)"
                                                    ng-model="ctrl.classification.parent">
                                             <md-option ng-value="">{{lang.no_parent}}</md-option>
                                             <md-option ng-value="classification"
@@ -102,8 +102,8 @@
                                     <!-- Global -->
                                     <div flex class="cms-input-container">
                                         <md-switch flex ng-change="ctrl.onChangeGlobal($event)"
-                                                   ng-disabled="ctrl.defaultOU || ctrl.classification.parent || !ctrl.employeeService.isSuperAdminUser()"
-                                                   ng-readonly="ctrl.defaultOU || ctrl.classification.parent || !ctrl.employeeService.isSuperAdminUser()"
+                                                   ng-disabled="ctrl.defaultOU || ctrl.classification.parent || !ctrl.employeeService.isSuperAdminUser() || (ctrl.editMode && ctrl.classification.isUserPrivate)"
+                                                   ng-readonly="ctrl.defaultOU || ctrl.classification.parent || !ctrl.employeeService.isSuperAdminUser() || (ctrl.editMode && ctrl.classification.isUserPrivate)"
                                                    ng-model="ctrl.classification.isGlobal"
                                                    aria-label="{{lang.global}}">
                                             <label>{{lang.global}} :
@@ -117,7 +117,7 @@
                                          ng-if="ctrl.isIntegratedClassificationEnabled && !ctrl.classification.parent">
                                         <md-switch flex ng-model="ctrl.classification.isUserPrivate"
                                                    aria-label="{{lang.is_user_private}}"
-                                                   ng-disabled="ctrl.classification.isGlobal || ctrl.classification.hasChildren()">
+                                                   ng-disabled="ctrl.isUserPrivateDisabled()">
                                             <label>{{lang.is_user_private}} :
                                                 {{ctrl.classification.getTranslatedIsUserPrivate()}}</label>
                                         </md-switch>
