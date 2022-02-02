@@ -16,7 +16,7 @@
                             <md-select id="classification" name="classification"
                                        ng-model="ctrl.privateUserClassification.classification"
                                        ng-model-options="{trackBy: '$value.id'}"
-                                       required>
+                                       required ng-change="ctrl.setSecurityLevels($event)">
                                 <md-option ng-value="classification"
                                            ng-disabled="ctrl.excludeClassificationsIfExists(classification)"
                                            ng-repeat="classification in ctrl.privateClassificationsList">
@@ -32,7 +32,7 @@
                             <label for="viewSecurityLevels">{{lang.security_level_view}}</label>
                             <md-select name="viewSecurityLevels" id="viewSecurityLevels"
                                        ng-model="ctrl.privateUserClassification.viewSecurityLevels"
-                                       multiple required
+                                       multiple required ng-disabled="!ctrl.privateUserClassification.classification"
                                        ng-model-options="{trackBy: '$value.id'}">
                                 <md-option
                                         ng-repeat="securityLevel in ctrl.securityLevels"
@@ -51,7 +51,7 @@
                             <label for="archiveSecurityLevels">{{lang.security_level_archive}}</label>
                             <md-select name="archiveSecurityLevels" id="archiveSecurityLevels"
                                        ng-model="ctrl.privateUserClassification.archiveSecurityLevels"
-                                       multiple required
+                                       multiple required ng-disabled="!ctrl.privateUserClassification.classification"
                                        ng-model-options="{trackBy: '$value.id'}">
                                 <md-option
                                         ng-repeat="securityLevel in ctrl.securityLevels"

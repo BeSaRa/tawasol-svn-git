@@ -11,8 +11,9 @@ module.exports = function (app) {
                                                                     _,
                                                                     privateUserClassifications,
                                                                     $timeout,
-                                                                    privateUserClassification,
-                                                                    ouApplicationUser) {
+                                                                    generator,
+                                                                    securityLevels,
+                                                                    privateUserClassification) {
         'ngInject';
         var self = this;
         self.controllerName = 'addPrivateUserClassificationPopCtrl';
@@ -22,10 +23,7 @@ module.exports = function (app) {
 
         self.privateUserClassification = privateUserClassification;
         self.privateUserClassificationCopy = angular.copy(self.privateUserClassification);
-        // don't show "private personal" security level
-        self.securityLevels = ouApplicationUser.archiveSecurityLevels.filter(securityLevel => {
-            return securityLevel.lookupKey !== 4;
-        });
+        self.securityLevels = securityLevels;
 
         /**
          * @description add private user classification
@@ -54,6 +52,12 @@ module.exports = function (app) {
             return self.excludedClassifications.indexOf(classification.id) > -1;
         };
 
+        self.setSecurityLevels = function ($event) {
+            // exclude "private personal" from security level
+            self.securityLevels = self.privateUserClassification.classification.securityLevels.filter(securityLevel => {
+                return securityLevel.lookupKey !== 4;
+            });
+        }
 
         /**
          * @description close the popup
