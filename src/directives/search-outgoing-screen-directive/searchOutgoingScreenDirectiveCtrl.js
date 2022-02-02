@@ -163,7 +163,10 @@ module.exports = function (app) {
         self.availableRegistryOrganizations = [];
         self.isInternalOutgoingEnabled = rootEntity.isInternalOutgoingEnabled();
         self.allowedEditProperties = rootEntity.getAllowedEditProperties();
-
+        self.outgoingTypes = [
+            {text: 'external', value: false},
+            {text: 'internal', value: true}
+        ]
         var noneLookup = new Lookup({
             defaultEnName: langService.getByLangKey('none', 'en'),
             defaultArName: langService.getByLangKey('none', 'ar')

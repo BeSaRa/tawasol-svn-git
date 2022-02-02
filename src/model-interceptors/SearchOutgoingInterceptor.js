@@ -139,8 +139,8 @@ module.exports = function (app) {
             if (model.followUpFrom || model.followUpTo) {
                 var date = {
                     followupDates: {
-                        first: Date.UTC(model.followUpFrom.getFullYear() ,model.followUpFrom.getMonth(), model.followUpFrom.getDate()),
-                        second: Date.UTC(model.followUpTo.getFullYear() ,model.followUpTo.getMonth(), model.followUpTo.getDate(),23, 59, 59, 999)
+                        first: Date.UTC(model.followUpFrom.getFullYear(), model.followUpFrom.getMonth(), model.followUpFrom.getDate()),
+                        second: Date.UTC(model.followUpTo.getFullYear(), model.followUpTo.getMonth(), model.followUpTo.getDate(), 23, 59, 59, 999)
                     }
                 };
                 // if user select siteInfoTo
@@ -195,7 +195,6 @@ module.exports = function (app) {
             delete model.siteType;
 
             delete model.dummySearchDocClass;
-            delete model.isInternal;
             return model;
         });
 

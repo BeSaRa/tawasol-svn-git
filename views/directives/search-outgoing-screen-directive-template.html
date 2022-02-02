@@ -758,7 +758,17 @@
                             </md-input-container>
                         </div>
                         <div flex layout="row">
-
+                            <md-input-container flex>
+                                <label for="isInternal">{{lang.outgoing_type}}</label>
+                                <md-select name="isInternal" id="isInternal" flex
+                                           ng-model="ctrl.searchCriteria.isInternal">
+                                    <md-option selected ng-value="null">{{lang.all}}</md-option>
+                                    <md-option ng-value="type.value"
+                                               ng-repeat="type in ctrl.outgoingTypes">
+                                        {{lang[type.text]}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
                         </div>
                         <!-- directive: generate-remaining-search-div-directive -->
                     </div><!-- Eleventh row -->
