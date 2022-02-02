@@ -73,14 +73,15 @@
                                     <md-select id="siteTypeSimple" ng-model="ctrl.selectedSiteTypeSimple"
                                                ng-change="ctrl.onSiteTypeSimpleChange($event)"
                                                md-on-close="ctrl.clearSearchText('siteTypeSimple')"
-                                               data-md-container-class="select-header-container sticky-search-bar">
+                                               data-md-container-class="select-header-container sticky-search-bar"
+                                               ng-disabled="ctrl.isSiteTypesDisabled">
                                         <md-select-header class="select-header">
                                             <input ng-model="ctrl.siteTypeSimpleSearchText"
                                                    ng-keydown="ctrl.preventSearchKeyDown($event)"
                                                    placeholder="{{lang.search}}"
                                                    class="select-header-input">
                                         </md-select-header>
-                                        <md-option ng-value="type"
+                                        <md-option ng-value="type" ng-disabled="type.disabled"
                                                    ng-repeat="type in ctrl.correspondenceSiteTypes | translatedNameFilter:ctrl.siteTypeSimpleSearchText">
                                             <span md-highlight-text="ctrl.siteTypeSimpleSearchText"
                                                   md-highlight-flags="i">{{type.getTranslatedName()}}</span>
@@ -92,7 +93,7 @@
                                     <label for="mainSiteSimple">{{lang.main_site}}</label>
                                     <md-select id="mainSiteSimple" ng-model="ctrl.selectedMainSiteSimple"
                                                ng-model-options="{trackBy: '$value.id'}"
-                                               ng-disabled="!ctrl.selectedSiteTypeSimple || !ctrl.selectedSiteTypeSimple.id"
+                                               ng-disabled="!ctrl.selectedSiteTypeSimple || !ctrl.selectedSiteTypeSimple.id || ctrl.isSiteTypesDisabled"
                                                ng-change="ctrl.onMainSiteChangeSimple($event)"
                                                md-on-close="ctrl.clearSearchText('mainSiteSimple')"
                                                data-md-container-class="select-header-container sticky-search-bar">

@@ -77,6 +77,8 @@ module.exports = function (app) {
         // if selective export from global settings then false, otherwise true
         self.isGroupExport = self.settings.defaultExportTypeGrouping;
         self.exportOptions = self.partialExportList.getKeys();
+        self.isInternalOutgoingEnabled = rootEntity.isInternalOutgoingEnabled();
+        self.isSiteTypesDisabled = self.isInternalOutgoingEnabled && self.correspondence.hasOwnProperty('isInternal') && self.correspondence.isInternal;
 
         self.labels = _.map(self.partialExportList.getKeys(), function (label) {
             return label.toLowerCase();
@@ -781,6 +783,31 @@ module.exports = function (app) {
             self.selectedDistributionList = null;
         };
 
+        function _setSitesTypeIfInternalOutgoingActive() {
+            if (self.isInternalOutgoingEnabled && self.correspondenceSiteTypes) {
+                self.correspondenceSiteTypes.map(siteType => {
+                    if (!self.correspondence.hasOwnProperty('isInternal')) {
+                        return siteType;
+                    }
+                    // if adding internal outgoing disable all site types except internal
+                    if (self.correspondence.isInternal && !siteType.isInternalSiteType()) {
+                        siteType.disabled = true;
+                        // only internal correspondence site will be selected by default
+                        self.selectedSiteTypeSimple = _getTypeByLookupKey(configurationService.INTERNAL_CORRESPONDENCE_SITES_TYPE);
+                        self.onSiteTypeSimpleChange(null);
+                    }
+                    // if adding external outgoing enable only g2g and external site types
+                    else if (!self.correspondence.isInternal && !siteType.isGovernmentSiteType() && !siteType.isExternalSiteType()) {
+                        siteType.disabled = true;
+                    }
+                    return siteType;
+                });
+            }
+        }
+
+        $timeout(function () {
+            _setSitesTypeIfInternalOutgoingActive();
+        })
         // if selective export from global settings, change export type because in this popup, default is group export
         if (!self.isGroupExport) {
             self.onChangeExportType();
