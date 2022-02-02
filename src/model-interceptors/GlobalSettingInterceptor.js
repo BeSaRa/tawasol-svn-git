@@ -16,7 +16,6 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            debugger
             model.theme = themeService.getThemeById(model.theme);
             model.securityLevels = generator.getResultFromSelectedCollection(model.securityLevels, 'lookupKey');
             model.excludedUsersFromAudit = (model.excludedUsersFromAudit && model.excludedUsersFromAudit.length) ? JSON.stringify(_.map(model.excludedUsersFromAudit, 'id')) : JSON.stringify([]);
