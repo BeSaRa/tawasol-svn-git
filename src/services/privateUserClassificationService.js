@@ -22,8 +22,9 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.loadPrivateUserClassifications = function (ouApplicationUser) {
+            var regOuId = ouApplicationUser.getRegistryOUID().hasOwnProperty('id') ? ouApplicationUser.getRegistryOUID().id : ouApplicationUser.getRegistryOUID();
             return $http.post(urlService.privateUserClassification + '/criteria', {
-                ouId: ouApplicationUser.getOuId(),
+                regOUID: regOuId,
                 userId: ouApplicationUser.getApplicationUserId()
             }).then(function (result) {
                 self.privateUserClassifications = generator.interceptReceivedCollection('PrivateUserClassification', generator.generateCollection(result.data.rs, PrivateUserClassification, null));
@@ -36,6 +37,7 @@ module.exports = function (app) {
          */
         self.controllerMethod = {
             privateUserClassificationAdd: function (privateClassifications, ouApplicationUser, $event) {
+                var regOuId = ouApplicationUser.getRegistryOUID().hasOwnProperty('id') ? ouApplicationUser.getRegistryOUID().id : ouApplicationUser.getRegistryOUID();
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -45,7 +47,7 @@ module.exports = function (app) {
                         locals: {
                             editMode: false,
                             privateUserClassification: new PrivateUserClassification({
-                                ouId: ouApplicationUser.getOuId(),
+                                regOUID: regOuId,
                                 userId: ouApplicationUser.getApplicationUserId()
                             }),
                             privateUserClassifications: self.privateUserClassifications,
