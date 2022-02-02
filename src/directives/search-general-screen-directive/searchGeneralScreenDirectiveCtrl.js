@@ -45,6 +45,7 @@ module.exports = function (app) {
         LangWatcher($scope);
         // current employee
         self.employee = employeeService.getEmployee();
+        self.employeeService = employeeService;
         // today date
         self.maxCreateDate = new Date();
         /********** special properties **********/

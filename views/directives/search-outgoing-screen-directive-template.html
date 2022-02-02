@@ -31,13 +31,17 @@
                                        min-max-number-directive>
                                 <div ng-messages="simpleSearchForm.serialNoFrom.$error">
                                     <div ng-message="number">{{lang.numberonly}}</div>
-                                    <div ng-message="min">{{lang.min_number.change({number:
+                                    <div ng-message="min">{{lang.min_number.change({
+                                        number:
                                         ctrl.getMinMaxSerialNumberValues('from',
-                                        'min').errorValue})}}
+                                                'min').errorValue
+                                    })}}
                                     </div>
-                                    <div ng-message="max">{{lang.max_number.change({number:
+                                    <div ng-message="max">{{lang.max_number.change({
+                                        number:
                                         ctrl.getMinMaxSerialNumberValues('from',
-                                        'max').errorValue})}}
+                                                'max').errorValue
+                                    })}}
                                     </div>
                                 </div>
                             </md-input-container>
@@ -52,9 +56,11 @@
                                        min-max-number-directive>
                                 <div ng-messages="simpleSearchForm.serialNoTo.$error">
                                     <div ng-message="number">{{lang.numberonly}}</div>
-                                    <div ng-message="min">{{lang.min_number.change({number:
+                                    <div ng-message="min">{{lang.min_number.change({
+                                        number:
                                         ctrl.getMinMaxSerialNumberValues('to',
-                                        'min').errorValue})}}
+                                                'min').errorValue
+                                    })}}
                                     </div>
                                 </div>
                             </md-input-container>
@@ -785,7 +791,7 @@
                                 </md-select>
                             </md-input-container>
                         </div>
-                        <div ng-if="ctrl.checkFieldStatus('tags')" flex="25" layout="row"
+                        <div ng-if="ctrl.checkFieldStatus('tags')" flex="50" layout="row"
                              class="cms-autocomplete-wrapper">
                             <md-autocomplete flex
                                              class="cms-md-autocomplete"
@@ -803,15 +809,14 @@
                                 </md-not-found>
                             </md-autocomplete>
                         </div>
-                        <div flex="25" layout="row">
-                            <md-input-container class="restrict-max" flex>
-                                <label for="content">{{lang.content}}</label>
-                                <input name="content"
-                                       id="content"
-                                       ng-model="ctrl.searchCriteria.content"
-                                       type="text">
-                            </md-input-container>
-                        </div>
+                    </div>
+                    <div layout="row" ng-if="ctrl.employeeService.hasPermissionTo('CONTENT_SEARCH')">
+                        <md-input-container class="restrict-max" flex>
+                            <label for="content">{{lang.content}}</label>
+                            <input name="content" id="content"
+                                   ng-model="ctrl.searchCriteria.content"
+                                   type="text">
+                        </md-input-container>
                     </div>
                     <div layout="row" ng-if="ctrl.checkFieldStatus('docNotes')">
                         <div flex layout="row">
