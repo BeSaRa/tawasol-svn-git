@@ -307,7 +307,9 @@ module.exports = function (app) {
             if (!self.document)
                 return false;
             // disable organization when edit mode for any case || if in add mode and the current employee not in central archive organization.
-            if (self.document.hasVsId() || !self.employee.inCentralArchive()) {
+            if (self.document.hasVsId() || !self.employee.inCentralArchive() ||
+                (self.employee.inCentralArchive() && self.document.hasDocumentClass('outgoing') && self.document.isInternal)
+            ) {
                 return true;
             }
             // if this document new and internal or outgoing electronic disable the select organization.

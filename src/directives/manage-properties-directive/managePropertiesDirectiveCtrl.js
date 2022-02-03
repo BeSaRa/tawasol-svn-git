@@ -456,7 +456,8 @@ module.exports = function (app) {
             if (!self.document || $state.current.name.indexOf('central-archive.returned') > -1)
                 return false;
             // disable organization when edit mode for any case || if in add mode and the current employee not in central archive organization.
-            if ((self.document.hasVsId() && $stateParams.action !== 'receiveg2g') || !self.employee.inCentralArchive()) {
+            if ((self.document.hasVsId() && $stateParams.action !== 'receiveg2g') || !self.employee.inCentralArchive() ||
+                (self.employee.inCentralArchive() && self.document.hasDocumentClass('outgoing') && self.document.isInternal)) {
                 return true;
             }
             /*if ((self.document.hasVsId() && self.receiveG2g) || !self.employee.inCentralArchive()) {

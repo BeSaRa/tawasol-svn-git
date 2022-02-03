@@ -143,7 +143,7 @@ module.exports = function (app) {
          */
         self.checkCentralArchive = function () {
             // if employee in central archive and the outgoing is paper base
-            if (employeeService.isCentralArchive() && self.outgoing.addMethod && centralArchives.length) {
+            if (employeeService.isCentralArchive() && self.outgoing.addMethod && centralArchives.length && !self.outgoing.isInternal) {
                 self.registryOrganizations = centralArchives;
                 self.outgoing.emptyOrganizations();
             } else {
