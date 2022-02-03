@@ -127,6 +127,29 @@ module.exports = function (app) {
             });
         };
 
+        self.openPrivateUserClassificationsDialog = function (ouApplicationUser, $event) {
+            return dialog
+                .showDialog({
+                    targetEvent: $event,
+                    templateUrl: cmsTemplate.getPopup('private-user-classifications'),
+                    controller: 'privateUserClassificationsPopCtrl',
+                    controllerAs: 'ctrl',
+                    locals: {
+                        ouApplicationUser: ouApplicationUser
+                    },
+                    resolve: {
+                        privateClassifications: function () {
+                            'ngInject';
+                            return self.loadPrivateClassifications();
+                        },
+                        userClassifications: function () {
+                            'ngInject';
+                            return self.loadPrivateUserClassifications(ouApplicationUser);
+                        }
+                    }
+                });
+        }
+
         /**
          * @description create the shared method to the model.
          * @type {{delete: generator.delete, update: generator.update}}

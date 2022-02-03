@@ -37,6 +37,7 @@ module.exports = function (app) {
                                                              $filter,
                                                              $timeout,
                                                              Information,
+                                                             privateUserClassificationService,
                                                              AppUserCertificate) {
         'ngInject';
         var self = this;
@@ -58,6 +59,7 @@ module.exports = function (app) {
         self.rankSearchText = '';
 
         self.rootEntity = rootEntity;
+        self.isIntegratedClassificationEnabled = rootEntity.isIntegratedClassificationEnabled();
 
 
         self.tabsToShow = [
@@ -1561,6 +1563,13 @@ module.exports = function (app) {
                     $event.stopPropagation();
             }
         };
+
+        /**
+         * @description open dialog private classifications for user
+         */
+        self.openPrivateUserClassificationsDialog = function (ouApplicationUser, $event) {
+            return privateUserClassificationService.openPrivateUserClassificationsDialog(ouApplicationUser, $event);
+        }
 
         /**
          * @description Close the popup

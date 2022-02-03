@@ -53,6 +53,8 @@ module.exports = function (app) {
         };
 
         self.setSecurityLevels = function ($event) {
+            self.privateUserClassification.viewSecurityLevels = null;
+            self.privateUserClassifications.archiveSecurityLevels = null;
             // exclude "private personal" from security level
             self.securityLevels = self.privateUserClassification.classification.securityLevels.filter(securityLevel => {
                 return securityLevel.lookupKey !== 4;

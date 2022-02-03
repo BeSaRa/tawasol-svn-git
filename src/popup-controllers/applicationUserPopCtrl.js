@@ -1143,26 +1143,7 @@ module.exports = function (app) {
          * @description open dialog private classifications for user
          */
         self.openPrivateUserClassificationsDialog = function (ouApplicationUser, $event) {
-            return dialog
-                .showDialog({
-                    targetEvent: $event,
-                    templateUrl: cmsTemplate.getPopup('private-user-classifications'),
-                    controller: 'privateUserClassificationsPopCtrl',
-                    controllerAs: 'ctrl',
-                    locals: {
-                        ouApplicationUser: ouApplicationUser
-                    },
-                    resolve: {
-                        privateClassifications: function () {
-                            'ngInject';
-                            return privateUserClassificationService.loadPrivateClassifications();
-                        },
-                        userClassifications: function () {
-                            'ngInject';
-                            return privateUserClassificationService.loadPrivateUserClassifications(ouApplicationUser);
-                        }
-                    }
-                });
+            return privateUserClassificationService.openPrivateUserClassificationsDialog(ouApplicationUser, $event);
         }
 
         self.notificationTypes = {
