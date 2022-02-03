@@ -259,7 +259,7 @@
                         <label for="mainClassification">{{lang.outgoing_main_classification}}</label>
                         <md-select name="mainClassification"
                                    id="mainClassification"
-                                   ng-disabled="!!ctrl.disableProperties || ctrl.checkAllowedEditProperties('mainClassification') || ctrl.checkMainClassificationDisabled()"
+                                   ng-disabled="!!ctrl.disableProperties || ctrl.checkAllowedEditProperties('mainClassification') || ctrl.hasUserPrivateClassification()"
                                    ng-model="ctrl.document.mainClassification"
                                    ng-model-options="{trackBy: '$value.id'}"
                                    ng-required="ctrl.checkMandatory('mainClassification')"
@@ -285,6 +285,7 @@
                             </md-select-header>
                             <md-option ng-value="null">{{lang.none}}</md-option>
                             <md-option ng-value="classification.classification"
+                                       ng-disabled="ctrl.document.hasVsId() && classification.classification.isUserPrivate"
                                        ng-repeat="classification in ctrl.classifications | translatedNameFilter: ctrl.mainClassificationSearchText:'getCodeOrIdAndNameByLanguage':'classification'">
                             <span
                                     md-highlight-text="ctrl.mainClassificationSearchText"
@@ -489,11 +490,11 @@
                 <div flex ng-if="ctrl.isShowReceivedByInfo()">
                     <md-input-container class="md-block">
                         <label for="receivedByInfo">{{lang.received_by}}</label>
-                            <input name="receivedByInfo"
-                                   id="receivedByInfo"
-                                   ng-disabled="true"
-                                   ng-value="ctrl.document.receivedByInfo.getTranslatedName()"
-                                   ng-model="ctrl.document.receivedByInfo">
+                        <input name="receivedByInfo"
+                               id="receivedByInfo"
+                               ng-disabled="true"
+                               ng-value="ctrl.document.receivedByInfo.getTranslatedName()"
+                               ng-model="ctrl.document.receivedByInfo">
                     </md-input-container>
                 </div>
 

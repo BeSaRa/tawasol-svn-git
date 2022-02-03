@@ -468,10 +468,10 @@ module.exports = function (app) {
         };
 
         /**
-         * @description disable main classification if is user private true
+         * @description disable main classification if classification user private true
          * @returns {*|boolean}
          */
-        self.checkMainClassificationDisabled = function () {
+        self.hasUserPrivateClassification = function () {
             return self.document.hasVsId() && self.documentCopy.mainClassification && self.documentCopy.mainClassification.isUserPrivate;
         }
 
