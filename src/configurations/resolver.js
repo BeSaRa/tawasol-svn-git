@@ -660,13 +660,13 @@ module.exports = function (app) {
                         });
                     }
                 },
-                centralArchives: function ($q, organizations, employeeService, organizationService, receiveG2G, receive) {
+                centralArchives: function ($q, organizations, employeeService, organizationService, receiveG2G, receive, _) {
                     'ngInject';
                     var currentOU = employeeService.getEmployee().userOrganization;
 
                     return employeeService.isCentralArchive() ? (organizationService.centralArchiveOrganizations().then(function (organizations) {
                         if (employeeService.isCentralArchiveHasRegistry() && (_.map(organizations, 'id').indexOf(currentOU.id) === -1)) {
-                            organizations.push(currentOU);
+                            organizations ? organizations.push(currentOU) : $q.resolve(false);
                         }
                         return organizations;
                     })) : $q.resolve(false);
