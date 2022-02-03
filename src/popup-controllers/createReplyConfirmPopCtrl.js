@@ -54,7 +54,7 @@ module.exports = function (app) {
         ];
         self.replyTypeOptions = [
             {id: 0, key: 'reply_outgoing', show: true},
-            {id: 1, key: 'reply_internal', show: true},
+            {id: 1, key: 'reply_internal', show: self.employee.hasPermissionTo('ADD_NEW_INTERNAL_DOCUMENT')},
             {
                 id: 2,
                 key: 'reply_outgoing_internal',
