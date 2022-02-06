@@ -127,4 +127,5 @@ module.exports = function (app) {
     require('./chat-bot-directive/01-index')(app);
     require('./simple-forward-directive/01-index')(app);
     require('./help-videos-directive/01-index')(app);
+    require('./manage-correspondence-sites-filter-directive/01-index')(app);
 };

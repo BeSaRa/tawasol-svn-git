@@ -4,6 +4,8 @@ module.exports = function (app) {
                                         dialog,
                                         langService,
                                         _,
+                                        Site,
+                                        Lookup,
                                         generator) {
         'ngInject';
         return function UserFilter(model) {
@@ -119,6 +121,10 @@ module.exports = function (app) {
                 key_25: {
                     value: null
                 },
+                // multiple main sites and sub sites
+                key_26: {
+                    value: null
+                },
                 // anonymous properties - to be removed when sending
                 key_linkedAttachments: {
                     value: null
@@ -137,10 +143,16 @@ module.exports = function (app) {
                 },
                 key_subSite: {
                     value: null
+                },
+                key_mainSubSites: {
+                    value: null
+                },
+                key_allowMultipleSitesView: {
+                    value: false
                 }
             };
             // this is available keys for the current ui model
-            var availableKeys = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
+            var availableKeys = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26];
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -282,6 +294,7 @@ module.exports = function (app) {
                     // if site type is null, set main site, sub site as null
                     self.ui.key_mainSite.value = null;
                     self.ui.key_subSite.value = null;
+                    self.ui.key_26.value = null;
                 }
 
                 // main site
@@ -316,6 +329,20 @@ module.exports = function (app) {
                 }
                 self.ui.key_25.value = (self.ui.key_25.value === null) ? null : self.ui.key_25.value;
 
+                var mainSubSitesCopy = null;
+                if (self.ui.key_mainSubSites.value && self.ui.key_mainSubSites.value.length) {
+                    self.ui.key_26.value = {};
+                    mainSubSitesCopy = angular.copy(self.ui.key_mainSubSites.value);
+                    mainSubSitesCopy = _.chain(mainSubSitesCopy).groupBy("mainSiteId")
+                        .map((sites, key) => ({
+                                mainSiteId: key,
+                                subSiteList: _.filter(_.map(sites, 'subSiteId'), site => site !== null)
+                            })
+                        ).value()
+                } else {
+                    self.ui.key_26.value = null;
+                }
+                self.ui.key_26.value = (self.ui.key_26.value === null) ? null : JSON.stringify(mainSubSitesCopy);
 
                 self.filterCriteria = self.filterCriteria || {};
                 _.map(availableKeys, function (number) {
@@ -398,6 +425,24 @@ module.exports = function (app) {
                         self.ui.key_subSite.value = siteInfo.subSiteId;
                     }
                 }
+
+                if (extraCriteria && extraCriteria.hasOwnProperty('26')) {
+                    self.ui.key_allowMultipleSitesView.value = true;
+                    // extraCriteria[26] => [{childSites:[],mainSite:{}}, ...]
+                    var mainSubSites = extraCriteria[26], mappedSites = [];
+                    mainSubSites.forEach(site => {
+                        if (!site.childSites.length) {
+                            mappedSites.push(generator.generateInstance(site.mainSite, Site).setParentSiteText());
+                        } else {
+                            // loop through sub sites
+                            site.childSites.forEach(subSite => {
+                                mappedSites.push(generator.generateInstance(subSite, Site).setParentSiteText().setSubSiteText())
+                            })
+                        }
+                    })
+                    self.ui.key_mainSubSites.value = mappedSites;
+                }
+
                 return this;
             };
 

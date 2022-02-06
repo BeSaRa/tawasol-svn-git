@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.factory('Site_Search', function (CMSModelInterceptor,
                                          langService,
+                                         _,
                                          generator) {
         'ngInject';
         return function Site_Search(model) {

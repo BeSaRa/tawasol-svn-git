@@ -64,7 +64,7 @@ module.exports = function (app) {
          */
         self.updateUserFilter = function (userFilter, ignoreMessage) {
             var filter = generator.interceptSendInstance('UserFilter', userFilter);
-            console.log("filter",filter);
+
             return $http
                 .put(urlService.userFilters, filter)
                 .then(function (result) {

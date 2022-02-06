@@ -50,7 +50,7 @@ module.exports = function (app) {
         self.subClassifications = [];
         self.mainClassificationSearchText = '';
         self.subClassificationSearchText = '';
-
+        self.mainSubSitesCopy = angular.copy(self.filter.ui.key_mainSubSites.value);
 
         self.lookupNames = {};
         _.map(lookupService.returnLookups(lookupService.inboxFilterKey), function (lookup) {
@@ -222,7 +222,11 @@ module.exports = function (app) {
         self.resetFilterForm = function (form, $event) {
             self.filter = angular.copy(self.model);
             self.filter.ui['key_8'].value = (self.filter.ui['key_8'].value === '-2000000000000L');
-            self.getMainSites(false);
+            if (self.filter.ui.key_allowMultipleSitesView.value) {
+                self.emptyMainSubSites = true;
+            } else {
+                self.getMainSites(false);
+            }
             form.$setUntouched();
         };
 
@@ -255,6 +259,7 @@ module.exports = function (app) {
                     self.filter.ui.key_siteType.value = null;
                     self.filter.ui.key_mainSite.value = null;
                     self.filter.ui.key_subSite.value = null;
+                    self.filter.ui.key_mainSubSites.value = [];
                     self.mainSites = [];
                     self.subSites = [];
                 }
@@ -283,6 +288,7 @@ module.exports = function (app) {
                     if (resetMainAndSub) {
                         self.filter.ui.key_mainSite.value = null;
                         self.filter.ui.key_subSite.value = null;
+                        self.filter.ui.key_mainSubSites.value = [];
                     }
                     if (self.filter.ui.key_mainSite.value) {
                         self.getSubSites(false);
@@ -293,6 +299,7 @@ module.exports = function (app) {
                 self.subSites = [];
                 self.filter.ui.key_mainSite.value = null;
                 self.filter.ui.key_subSite.value = null;
+                self.filter.ui.key_mainSubSites.value = [];
             }
         };
 
@@ -504,6 +511,20 @@ module.exports = function (app) {
         self.checkDocCategoryDisabled = function () {
             return !(generator.validRequired(self.filter.ui.key_2.value));
         };
+
+        self.switchSitesViewer = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            return dialog.confirmMessage(langService.get('confirm_reset_main_sub_sites')).then(function () {
+                self.filter.ui.key_siteType.value = null;
+                self.filter.ui.key_mainSite.value = null;
+                self.filter.ui.key_subSite.value = null;
+                self.filter.ui.key_mainSubSites.value = [];
+            }).catch(function () {
+                self.filter.ui.key_allowMultipleSitesView.value = !self.filter.ui.key_allowMultipleSitesView.value;
+            })
+        }
 
         self.$onInit = function () {
             if (self.filter.ui.key_23.value) {

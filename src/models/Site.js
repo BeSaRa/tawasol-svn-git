@@ -21,6 +21,12 @@ module.exports = function (app) {
                     subEnSiteText: 'enName',
                     siteType: 'correspondenceSiteTypeId'
                 },
+                mainSiteMaps = {
+                    mainSiteId: 'id',
+                    mainEnSiteText: 'enName',
+                    mainArSiteText: 'arName',
+                    siteType: 'correspondenceSiteTypeId'
+                },
                 exportWayMap = {
                     1: 'export_electronic',
                     2: 'export_manual',
@@ -77,6 +83,18 @@ module.exports = function (app) {
                 });
                 return self;
             };
+            Site.prototype.mapMainFromSiteView = function (siteView) {
+                var self = this;
+                _.map(mainSiteMaps, function (property, key) {
+                    if (!angular.isArray(property)) {
+                        self[key] = siteView[property];
+                    } else {
+                        self[key] = _.get(siteView, property);
+                    }
+                });
+                return self;
+            }
+
             /**
              * @description set followup Status
              * @param followupStatus
@@ -161,7 +179,19 @@ module.exports = function (app) {
             Site.prototype.getNameByLanguage = function (language) {
                 return this['sub' + generator.ucFirst(language) + 'SiteText'];
             };
-
+            Site.prototype.hasSubSite = function () {
+                return !!this.subSiteId;
+            }
+            Site.prototype.setParentSiteText = function () {
+                this.mainEnSiteText = this.mainSite.enName;
+                this.mainArSiteText = this.mainSite.arName;
+                return this;
+            }
+            Site.prototype.setSubSiteText = function () {
+                this.subEnSiteText = this.subSite ? this.subSite.enName : null;
+                this.subArSiteText = this.subSite ? this.subSite.arName : null;
+                return this;
+            }
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Site', 'init', this);
