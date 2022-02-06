@@ -24,7 +24,7 @@ module.exports = function (app) {
         self.loadPrivateUserClassifications = function (ouApplicationUser) {
             var regOuId = ouApplicationUser.getRegistryOUID().hasOwnProperty('id') ? ouApplicationUser.getRegistryOUID().id : ouApplicationUser.getRegistryOUID();
             return $http.post(urlService.privateUserClassification + '/criteria', {
-                regOUID: regOuId,
+                ouId: regOuId,
                 userId: ouApplicationUser.getApplicationUserId()
             }).then(function (result) {
                 self.privateUserClassifications = generator.interceptReceivedCollection('PrivateUserClassification', generator.generateCollection(result.data.rs, PrivateUserClassification, null));
@@ -47,7 +47,7 @@ module.exports = function (app) {
                         locals: {
                             editMode: false,
                             privateUserClassification: new PrivateUserClassification({
-                                regOUID: regOuId,
+                                ouId: regOuId,
                                 userId: ouApplicationUser.getApplicationUserId()
                             }),
                             privateUserClassifications: self.privateUserClassifications,
