@@ -307,6 +307,21 @@
                         <!-- directive: generate-remaining-search-div-directive -->
                     </div> <!-- Fourth row -->
                     <div layout="row">
+                        <div flex="25" layout="row">
+                            <md-input-container flex>
+                                <label for="isInternal">{{lang.internal_external}}</label>
+                                <md-select name="isInternal" id="isInternal" flex
+                                           ng-model="ctrl.searchCriteria.isInternal">
+                                    <md-option selected ng-value="null">{{lang.all}}</md-option>
+                                    <md-option ng-value="type.value"
+                                               ng-repeat="type in ctrl.outgoingTypes">
+                                        {{lang[type.text]}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <div layout="row">
                         <md-button ng-click="ctrl.searchCorrespondence()" id="simple-search-button"
                                    class="md-raised md-primary search-button">
                             {{lang.search}}
@@ -757,19 +772,7 @@
                                 </div>
                             </md-input-container>
                         </div>
-                        <div flex layout="row">
-                            <md-input-container flex>
-                                <label for="isInternal">{{lang.outgoing_type}}</label>
-                                <md-select name="isInternal" id="isInternal" flex
-                                           ng-model="ctrl.searchCriteria.isInternal">
-                                    <md-option selected ng-value="null">{{lang.all}}</md-option>
-                                    <md-option ng-value="type.value"
-                                               ng-repeat="type in ctrl.outgoingTypes">
-                                        {{lang[type.text]}}
-                                    </md-option>
-                                </md-select>
-                            </md-input-container>
-                        </div>
+                        <span flex></span>
                         <!-- directive: generate-remaining-search-div-directive -->
                     </div><!-- Eleventh row -->
                     <div layout="row"><!-- Twelfth row -->
