@@ -423,7 +423,7 @@ module.exports = function (app) {
                     return self.classification.relatedOus.length > 0;
             }
             return (!self.classification.isGlobal && self.classification.relatedOus.length > 0)
-                || self.classification.isGlobal;
+                || self.classification.isGlobal || self.classification.isUserPrivate;
         };
 
         self.resetIsUserPrivate = function () {
