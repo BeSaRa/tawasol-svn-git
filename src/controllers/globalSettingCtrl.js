@@ -410,7 +410,9 @@ module.exports = function (app) {
         self.permissionsExists = function (item) {
             var i;
             for (i = 0; i < self.globalSetting.excludedPermissionList.length; i++) {
-                if (self.globalSetting.excludedPermissionList[i].id === item.id) {
+                var selectedExcludedPermission = self.globalSetting.excludedPermissionList[i];
+                var id = selectedExcludedPermission.hasOwnProperty('id') ? selectedExcludedPermission.id : selectedExcludedPermission;
+                if (id === item.id) {
                     return true;
                 }
             }
@@ -421,7 +423,9 @@ module.exports = function (app) {
                 var i;
                 var index;
                 for (i = 0; i < self.globalSetting.excludedPermissionList.length; i++) {
-                    if (self.globalSetting.excludedPermissionList[i].id === item.id) {
+                    var selectedExcludedPermission = self.globalSetting.excludedPermissionList[i];
+                    var id = selectedExcludedPermission.hasOwnProperty('id') ? selectedExcludedPermission.id : selectedExcludedPermission;
+                    if (id === item.id) {
                         idx = true;
                         index = i;
                     }
@@ -437,10 +441,10 @@ module.exports = function (app) {
         self.selectAllGroupPermissions = function (allGroupPermissions, key) {
             for (var i = 0; i < allGroupPermissions.length; i++) {
                 for (var j = 0; j < allGroupPermissions[i].length; j++) {
-                    //(function () {
                     if (allGroupPermissions[i][j]) {
                         var isPermissionExist = _.filter(self.globalSetting.excludedPermissionList, function (permission) {
-                            return allGroupPermissions[i][j].id === permission.id;
+                            var id = permission.hasOwnProperty('id') ? permission.id : permission;
+                            return allGroupPermissions[i][j].id === id;
                         })[0];
                         //on click event get previous value of checkbox (true/false)
                         if (!self[key]) {
@@ -449,14 +453,14 @@ module.exports = function (app) {
                             }
                         } else {
                             if (isPermissionExist) {
-                                var indexOfPermission = _.findIndex(self.globalSetting.excludedPermissionList, function (x) {
-                                    return x.id === isPermissionExist.id;
+                                var indexOfPermission = _.findIndex(self.globalSetting.excludedPermissionList, function (permission) {
+                                    var id = permission.hasOwnProperty('id') ? permission.id : permission;
+                                    return id === (isPermissionExist.hasOwnProperty('id') ? isPermissionExist.id : isPermissionExist);
                                 });
                                 self.globalSetting.excludedPermissionList.splice(indexOfPermission, 1);
                             }
                         }
                     }
-                    //})();
                 }
             }
         };
@@ -467,7 +471,8 @@ module.exports = function (app) {
                 for (var j = 0; j < allGroupPermissions[i].length; j++) {
                     if (allGroupPermissions[i][j]) {
                         var isPermissionExist = _.filter(self.globalSetting.excludedPermissionList, function (permission) {
-                            return allGroupPermissions[i][j].id === permission.id;
+                            var id = permission.hasOwnProperty('id') ? permission.id : permission;
+                            return allGroupPermissions[i][j].id === id;
                         })[0];
                         if (!isPermissionExist) {
                             return false;
@@ -511,7 +516,9 @@ module.exports = function (app) {
                     for (var i = 0; i < permission.length; i++) {
                         for (var j = 0; j < permission[i].length; j++) {
                             if (permission[i][j]) {
-                                var customRolePermissionIds = _.map(self.globalSetting.excludedPermissionList, "id");
+                                var customRolePermissionIds = _.map(self.globalSetting.excludedPermissionList, (permission) => {
+                                    return permission.hasOwnProperty('id') ? permission.id : permission;
+                                });
                                 if (customRolePermissionIds.indexOf(permission[i][j]['id']) === -1) {
                                     self.globalSetting.excludedPermissionList.push(permission[i][j]);
                                 }
