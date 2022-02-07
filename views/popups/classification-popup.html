@@ -117,6 +117,7 @@
                                          ng-if="ctrl.isIntegratedClassificationEnabled && !ctrl.classification.parent">
                                         <md-switch flex ng-model="ctrl.classification.isUserPrivate"
                                                    aria-label="{{lang.is_user_private}}"
+                                                   ng-change="ctrl.onChangeClassificationPrivate($event)"
                                                    ng-disabled="ctrl.isUserPrivateDisabled()">
                                             <label>{{lang.is_user_private}} :
                                                 {{ctrl.classification.getTranslatedIsUserPrivate()}}</label>
@@ -131,7 +132,7 @@
                     <md-tab ng-if="ctrl.showTab('ou')"
                             ng-click="ctrl.getOUClassifications()"
                             md-on-select="ctrl.setCurrentTab('ou')"
-                            ng-disabled="ctrl.classification.isGlobal || !ctrl.classification.status"
+                            ng-disabled="ctrl.classification.isGlobal || !ctrl.classification.status || ctrl.classification.isUserPrivate"
                             label="{{lang.organization_units}}">
                         <md-content class="md-padding">
                             <div layout="column">

@@ -198,6 +198,10 @@ module.exports = function (app) {
             }
         };
 
+        self.onChangeClassificationPrivate = function ($event) {
+            self.classification.setRelatedOus([]);
+        }
+
         /**
          * @description Adds the ouClassification
          */
