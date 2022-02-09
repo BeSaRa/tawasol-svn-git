@@ -200,17 +200,14 @@ module.exports = function (app) {
         });
 
         function _setSitesTypeIfInternalOutgoingActive() {
+            var info = self.correspondence.getInfo();
             if (self.isInternalOutgoingEnabled && self.correspondenceSiteTypes) {
                 self.correspondenceSiteTypes.map(siteType => {
-                    if (!self.correspondence.hasOwnProperty('isInternal')) {
-                        return siteType;
-                    }
                     // if adding internal outgoing disable all site types except internal
-                    if (self.correspondence.isInternal && !siteType.isInternalSiteType()) {
+                    if (info.documentClass === 'outgoing' && self.correspondence.isInternal && !siteType.isInternalSiteType()) {
                         siteType.disabled = true;
                         // only internal correspondence site will be selected by default
                         self.selectedSiteType = _getTypeByLookupKey(configurationService.INTERNAL_CORRESPONDENCE_SITES_TYPE);
-                        self.onSiteTypeChange(null);
                     }
                     // if adding external outgoing enable only g2g and external site types
                     else if (!self.correspondence.isInternal && !siteType.isGovernmentSiteType() && !siteType.isExternalSiteType()) {
@@ -219,6 +216,9 @@ module.exports = function (app) {
                     }
                     return siteType;
                 });
+                if (info.documentClass === 'outgoing' && self.correspondence.isInternal) {
+                    self.onSiteTypeChange(null);
+                }
             }
         }
 
@@ -739,7 +739,9 @@ module.exports = function (app) {
                 self.emptySiteSearch = false;
             }
 
-            // _setSitesTypeIfInternalOutgoingActive();
+            if (self.correspondence.isInternal) {
+                _setSitesTypeIfInternalOutgoingActive();
+            }
         });
 
 
@@ -844,8 +846,9 @@ module.exports = function (app) {
                         // just in case document is not passed to directive, avoid check for priority level
                         if (self.correspondence) {
                             _initPriorityLevelWatch();
+                            var info = self.correspondence.getInfo();
                             // to disable site type control if adding internal outgoing
-                            self.isSiteTypesDisabled = self.correspondence.hasOwnProperty('isInternal') && self.correspondence.isInternal;
+                            self.isSiteTypesDisabled = info.documentClass === 'outgoing' && self.correspondence.isInternal;
                         }
                         _checkFollowupStatusMandatory();
                     });

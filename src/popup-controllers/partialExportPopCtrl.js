@@ -78,7 +78,8 @@ module.exports = function (app) {
         self.isGroupExport = self.settings.defaultExportTypeGrouping;
         self.exportOptions = self.partialExportList.getKeys();
         self.isInternalOutgoingEnabled = rootEntity.isInternalOutgoingEnabled();
-        self.isSiteTypesDisabled = self.isInternalOutgoingEnabled && self.correspondence.hasOwnProperty('isInternal') && self.correspondence.isInternal;
+        var info = self.correspondence.getInfo();
+        self.isSiteTypesDisabled = self.isInternalOutgoingEnabled && info.documentClass === 'outgoing' && self.correspondence.isInternal;
 
         self.labels = _.map(self.partialExportList.getKeys(), function (label) {
             return label.toLowerCase();
@@ -784,20 +785,20 @@ module.exports = function (app) {
         };
 
         function _setSitesTypeIfInternalOutgoingActive() {
+            var info = self.correspondence.getInfo();
             if (self.isInternalOutgoingEnabled && self.correspondenceSiteTypes) {
                 self.correspondenceSiteTypes.map(siteType => {
-                    if (!self.correspondence.hasOwnProperty('isInternal')) {
-                        return siteType;
-                    }
                     // if adding internal outgoing disable all site types except internal
-                    if (self.correspondence.isInternal && !siteType.isInternalSiteType()) {
+                    if (info.documentClass === 'outgoing' && self.correspondence.isInternal && !siteType.isInternalSiteType()) {
                         siteType.disabled = true;
                         // only internal correspondence site will be selected by default
                         self.selectedSiteTypeSimple = _getTypeByLookupKey(configurationService.INTERNAL_CORRESPONDENCE_SITES_TYPE);
-                        self.onSiteTypeSimpleChange(null);
                     }
                     return siteType;
                 });
+                if (info.documentClass === 'outgoing' && self.correspondence.isInternal) {
+                    self.onSiteTypeSimpleChange(null);
+                }
             }
         }
 
