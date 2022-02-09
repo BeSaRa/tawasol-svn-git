@@ -796,10 +796,6 @@ module.exports = function (app) {
                         self.selectedSiteTypeSimple = _getTypeByLookupKey(configurationService.INTERNAL_CORRESPONDENCE_SITES_TYPE);
                         self.onSiteTypeSimpleChange(null);
                     }
-                    // if adding external outgoing enable only g2g and external site types
-                    else if (!self.correspondence.isInternal && !siteType.isGovernmentSiteType() && !siteType.isExternalSiteType()) {
-                        siteType.disabled = true;
-                    }
                     return siteType;
                 });
             }
