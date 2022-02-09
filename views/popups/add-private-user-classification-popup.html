@@ -32,7 +32,9 @@
                             <label for="viewSecurityLevels">{{lang.security_level_view}}</label>
                             <md-select name="viewSecurityLevels" id="viewSecurityLevels"
                                        ng-model="ctrl.privateUserClassification.viewSecurityLevels"
-                                       multiple required ng-disabled="!ctrl.privateUserClassification.classification"
+                                       multiple
+                                       ng-required="!ctrl.privateUserClassification.archiveSecurityLevels || !ctrl.privateUserClassification.archiveSecurityLevels.length"
+                                       ng-disabled="!ctrl.privateUserClassification.classification"
                                        ng-model-options="{trackBy: '$value.id'}">
                                 <md-option
                                         ng-repeat="securityLevel in ctrl.securityLevels"
@@ -51,7 +53,9 @@
                             <label for="archiveSecurityLevels">{{lang.security_level_archive}}</label>
                             <md-select name="archiveSecurityLevels" id="archiveSecurityLevels"
                                        ng-model="ctrl.privateUserClassification.archiveSecurityLevels"
-                                       multiple required ng-disabled="!ctrl.privateUserClassification.classification"
+                                       multiple
+                                       ng-required="!ctrl.privateUserClassification.viewSecurityLevels|| !ctrl.privateUserClassification.viewSecurityLevels.length"
+                                       ng-disabled="!ctrl.privateUserClassification.classification"
                                        ng-model-options="{trackBy: '$value.id'}">
                                 <md-option
                                         ng-repeat="securityLevel in ctrl.securityLevels"
