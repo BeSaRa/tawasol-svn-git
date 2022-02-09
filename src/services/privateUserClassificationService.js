@@ -52,11 +52,12 @@ module.exports = function (app) {
                             }),
                             privateUserClassifications: self.privateUserClassifications,
                             privateClassifications: privateClassifications,
+                            ouApplicationUser: ouApplicationUser,
                             securityLevels: []
                         }
                     })
             },
-            privateUserClassificationEdit: function (privateUserClassification, privateClassifications, $event) {
+            privateUserClassificationEdit: function (privateUserClassification, privateClassifications, ouApplicationUser, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -68,9 +69,8 @@ module.exports = function (app) {
                             privateUserClassification: angular.copy(privateUserClassification),
                             privateUserClassifications: self.privateUserClassifications,
                             privateClassifications: privateClassifications,
-                            securityLevels: privateUserClassification.classification.securityLevels.filter(securityLevel => {
-                                return securityLevel.lookupKey !== 4;
-                            })
+                            securityLevels: privateUserClassification.filterSecurityLevels(ouApplicationUser),
+                            ouApplicationUser: ouApplicationUser
                         }
                     })
             },

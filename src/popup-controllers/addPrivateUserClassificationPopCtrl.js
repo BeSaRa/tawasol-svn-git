@@ -13,6 +13,7 @@ module.exports = function (app) {
                                                                     $timeout,
                                                                     generator,
                                                                     securityLevels,
+                                                                    ouApplicationUser,
                                                                     privateUserClassification) {
         'ngInject';
         var self = this;
@@ -56,9 +57,7 @@ module.exports = function (app) {
             self.privateUserClassification.viewSecurityLevels = null;
             self.privateUserClassifications.archiveSecurityLevels = null;
             // exclude "private personal" from security level
-            self.securityLevels = self.privateUserClassification.classification.securityLevels.filter(securityLevel => {
-                return securityLevel.lookupKey !== 4;
-            });
+            self.securityLevels = self.privateUserClassification.filterSecurityLevels(ouApplicationUser);
         }
 
         /**

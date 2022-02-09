@@ -20,8 +20,10 @@ module.exports = function (app) {
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
-            var requiredFields = [
-            ];
+            var requiredFields = [];
+
+            if (model)
+                angular.extend(self, model);
 
             PrivateUserClassification.prototype.getSecurityLevelsText = function (securityLevels) {
                 return _.map(securityLevels, function (securityLevel) {
@@ -37,8 +39,12 @@ module.exports = function (app) {
                 return this.classification.arName + ' ' + (separator ? separator : '-') + ' ' + this.classification.enName;
             };
 
-            if (model)
-                angular.extend(self, model);
+            PrivateUserClassification.prototype.filterSecurityLevels = function (ouApplicationUser) {
+                var ouSecurityLevels = _.map(ouApplicationUser.archiveSecurityLevels, 'lookupKey');
+                return this.classification.securityLevels.filter(securityLevel => {
+                    return securityLevel.lookupKey !== 4 && ouSecurityLevels.indexOf(securityLevel.lookupKey) !== -1;
+                })
+            }
 
 
             // don't remove CMSModelInterceptor from last line

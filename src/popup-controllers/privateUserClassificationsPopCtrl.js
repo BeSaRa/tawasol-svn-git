@@ -67,7 +67,7 @@ module.exports = function (app) {
         self.openEditUserClassificationDialog = function (privateUserClassification, $event) {
             privateUserClassificationService
                 .controllerMethod
-                .privateUserClassificationEdit(privateUserClassification, self.privateClassifications, $event)
+                .privateUserClassificationEdit(privateUserClassification, self.privateClassifications, self.ouApplicationUser, $event)
                 .then(function (result) {
                     self.reloadPrivateUserClassifications(self.grid.page).then(function () {
                         toast.success(langService.get('edit_success').change({name: result.getNames()}));
@@ -103,13 +103,12 @@ module.exports = function (app) {
          * @param $event
          */
         self.removePrivateUserClassification = function (userClassification, $event) {
-
             privateUserClassificationService
                 .controllerMethod
                 .privateUserClassificationDelete(userClassification, $event)
                 .then(function (result) {
                     self.reloadPrivateUserClassifications(self.grid.page).then(function () {
-                        toast.success(langService.get('delete_success').change({name: result.getNames()}));
+                        toast.success(langService.get('delete_success').change({name: userClassification.getNames()}));
                     });
                 });
         }
