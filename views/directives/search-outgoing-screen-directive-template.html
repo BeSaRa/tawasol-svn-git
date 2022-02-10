@@ -307,7 +307,7 @@
                         <!-- directive: generate-remaining-search-div-directive -->
                     </div> <!-- Fourth row -->
                     <div layout="row">
-                        <div flex="25" layout="row">
+                        <div flex="25" layout="row" ng-if="ctrl.employeeService.hasPermissionTo('ADD_INTERNAL_OUTGOING')">
                             <md-input-container flex>
                                 <label for="isInternal">{{lang.internal_external}}</label>
                                 <md-select name="isInternal" id="isInternal" flex
