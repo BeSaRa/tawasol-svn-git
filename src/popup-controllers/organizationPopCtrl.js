@@ -48,6 +48,7 @@ module.exports = function (app) {
                                                     ouCorrespondenceSiteService,
                                                     gridService,
                                                     entityLDAPProviders,
+                                                    dynamicFollowupService,
                                                     distributionLists) {
         'ngInject';
 
@@ -394,7 +395,7 @@ module.exports = function (app) {
                 .organizationTypeAdd($event)
                 .then(function (result) {
                     organizationTypeService.loadOrganizationTypes()
-                        .then(function(){
+                        .then(function () {
                             self.organization.outype = result;
                             self.organizationTypes.unshift(result);
                         });
@@ -1860,7 +1861,7 @@ module.exports = function (app) {
                     self.userAdded = !self.userAdded;
                     self.selectedUnassignedUser = null;
                 })
-                .catch(function(error){
+                .catch(function (error) {
                     self.selectedUnassignedUser = null;
                 });
         };
@@ -2297,6 +2298,107 @@ module.exports = function (app) {
             printService.printData(self.serials, Object.keys(self.serials[0].getExportedData()), langService.get('menu_item_serials') + ' : ' + self.selectedSerialYear);
         };
 
+        self.dynamicFollowUps = [];
+        self.dynamicFollowUpsCopy = angular.copy(self.dynamicFollowUps);
+        self.selectedDynamicFollowUps = [];
+
+        /**
+         * @description Contains options for grid configuration
+         * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
+         */
+        self.dynamicFollowUpGrid = {
+            name: 'dynamicFollowUpGrid',
+            progress: null,
+            limit: 5, // default limit
+            page: 1, // first page
+            //order: 'arName', // default sorting order
+            order: '', // default sorting order
+            limitOptions: [5, 10, 20, // limit options
+                {
+                    label: langService.get('all'),
+                    value: function () {
+                        return (self.dynamicFollowUps.length + 21)
+                    }
+                }
+            ],
+            searchColumns: {
+                arabicName: 'arName',
+                englishName: 'enName'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.dynamicFollowUps = gridService.searchGridData(self.dynamicFollowUpGrid, self.dynamicFollowUpsCopy);
+            }
+        };
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataDynamicFollowUp = function () {
+            self.dynamicFollowUps = $filter('orderBy')(self.dynamicFollowUps, self.dynamicFollowUpGrid.order);
+        };
+
+        self.openAddDynamicFollowUpDialog = function ($event) {
+            dynamicFollowupService
+                .controllerMethod
+                .dynamicFollowUpAdd(self.organization, $event)
+                .then(function () {
+                    self.reloadDynamicFollowUps(self.dynamicFollowUpGrid.page);
+                })
+                .catch(function () {
+                    self.reloadDynamicFollowUps(self.dynamicFollowUpGrid.page);
+                });
+        }
+
+        self.openEditDynamicFollowUpDialog = function (dynamicFollowUpToUpdate, $event) {
+            return dynamicFollowupService.loadDynamicFollowUpById(dynamicFollowUpToUpdate)
+                .then(function (dynamicFollowUp) {
+                    return dynamicFollowupService
+                        .controllerMethod
+                        .dynamicFollowUpEdit(dynamicFollowUp, self.organization, $event)
+                        .then(function () {
+                            self.reloadDynamicFollowUps(self.dynamicFollowUpGrid.page);
+                        })
+                        .catch(function () {
+                            self.reloadDynamicFollowUps(self.dynamicFollowUpGrid.page);
+                        });
+                });
+        }
+
+        self.removeDynamicFollowUp = function (dynamicFollowUp, $event) {
+            dialog
+                .confirmMessage(langService.get('confirm_delete').change({name: dynamicFollowUp.getNames()}))
+                .then(function () {
+                    dynamicFollowupService.deleteDynamicFollowup(dynamicFollowUp)
+                        .then(function () {
+                            self.reloadDynamicFollowUps(self.dynamicFollowUpGrid.page);
+                            toast.success(langService.get('delete_success').change({name: dynamicFollowUp.getNames}));
+                        })
+                })
+        }
+
+        /**
+         * @description Reload the grid of application user
+         * @param pageNumber
+         * @return {*|Promise<U>}
+         */
+        self.reloadDynamicFollowUps = function (pageNumber) {
+            var defer = $q.defer();
+            self.dynamicFollowUpGrid.progress = defer.promise;
+            return dynamicFollowupService
+                .loadDynamicFollowUpsByOu(organization)
+                .then(function (result) {
+                    self.dynamicFollowUps = result;
+                    self.dynamicFollowUpsCopy = angular.copy(self.dynamicFollowUps);
+                    self.selectedDynamicFollowUps = [];
+                    defer.resolve(true);
+                    if (pageNumber)
+                        self.dynamicFollowUpGrid.page = pageNumber;
+                    self.getSortedDataDynamicFollowUp();
+                    self.dynamicFollowUpGrid.searchCallback();
+                    return result;
+                });
+        };
+
         self.tabsData = {
             'basic': {show: true, loaded: true},
             'securitySettings': {show: true, loaded: true},
@@ -2310,7 +2412,8 @@ module.exports = function (app) {
             'privateRegistryOU': {show: true, loaded: false, callback: self.reloadPrivateRegOU},
             'propertyConfiguration': {show: true, loaded: false},
             'users': {show: true, loaded: false, callback: self.reloadOuApplicationUsers},
-            'departmentUsers': {show: true, loaded: false, callback: self.reloadDepartmentUsers}
+            'departmentUsers': {show: true, loaded: false, callback: self.reloadDepartmentUsers},
+            'dynamicFollowups': {show: true, loaded: false, callback: self.reloadDynamicFollowUps}
         };
 
         self.setCurrentTab = function (tabName) {
@@ -2369,6 +2472,8 @@ module.exports = function (app) {
                 return rootEntity.hasPSPDFViewer() && self.globalSettings.isStampModuleEnabled() && employeeService.hasPermissionTo('MANAGE_STAMPS');
             } else if (tabName === 'privateRegistryOU') {
                 return self.model.isPrivateRegistry;
+            } else if (tabName === 'dynamicFollowups') {
+                return employeeService.hasPermissionTo('DYNAMIC_FOLLOW_UP');
             } else {
                 if (tabName === 'serials' || tabName === 'classifications' || tabName === 'correspondenceSites') {
                     if (!self.model.hasRegistry) {

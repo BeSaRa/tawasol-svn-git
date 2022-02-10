@@ -219,6 +219,8 @@
                 .addToAllWithBase('returnedArchive', 'cms-entity/correspondence/incoming/ou/returned-to-central-archive')
                 .addToAllWithBase('bulkRecallSentItems', 'cms-entity/user/inbox/bulk/recall')
                 .addToAllWithBase('privateUserClassification', 'cms-entity/admin/user-classification')
+                .addToAllWithBase('dynamicFollowup', 'cms-entity/user/user-followup-dynamic')
+                .addToAllWithBase('dynamicFollowupUsers','/cms-entity/user/user-followup-dynamic/dyanmic-followup-permission/ou/:ouId')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

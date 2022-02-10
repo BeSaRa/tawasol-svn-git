@@ -1857,6 +1857,109 @@
                             </div>
                         </md-content>
                     </md-tab>
+                    <!-- dynamic Followup -->
+                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('dynamicFollowups')"
+                            label="{{lang.dynamic_followup}}"
+                            ng-click="ctrl.setCurrentTab('dynamicFollowups')">
+                        <md-content class="md-padding">
+                            <div layout="column">
+                                <div layout="row" class="p20-0">
+                                    <md-button ng-click="ctrl.openAddDynamicFollowUpDialog($event)"
+                                               class="md-icon-button"
+                                               tooltip="{{lang.add}}">
+                                        <md-icon md-svg-icon="plus"></md-icon>
+                                    </md-button>
+                                    <md-button ng-click="ctrl.reloadDynamicFollowUps()" class="md-icon-button"
+                                               tooltip="{{lang.reload}}">
+                                        <md-icon md-svg-icon="refresh"></md-icon>
+                                    </md-button>
+                                    <span flex></span>
+                                    <grid-search-directive grid="ctrl.dynamicFollowUpGrid"></grid-search-directive>
+                                </div>
+                            </div>
+                            <div layout="column">
+                                <div scroll-directive>
+                                    <md-card md-whiteframe="3" class="card-overlay">
+                                        <md-table-container>
+                                            <div flex scroll-directive>
+                                                <table md-table md-row-select multiple
+                                                       ng-model="ctrl.selectedDynamicFollowUps"
+                                                       md-progress="ctrl.dynamicFollowUpGrid.progress">
+                                                    <thead md-head md-order="ctrl.dynamicFollowUpGrid.order"
+                                                           md-on-reorder="ctrl.getSortedDataDynamicFollowUp">
+                                                    <tr md-row>
+                                                        <th colspan="7"
+                                                            ng-if="ctrl.selectedDynamicFollowUps.length"
+                                                            md-column>
+                                                            <div layout="row" layout-align="start center">
+                                                                <span>{{ctrl.selectedDynamicFollowUps.length}} {{lang.items_selected}} </span>
+                                                                <span flex></span>
+                                                                <table-status-directive
+                                                                        when-close="ctrl.changeStatusBulkDynamicFollowups"></table-status-directive>
+                                                                <md-button class="md-icon-button"
+                                                                           title="{{lang.delete_selected_items}}"
+                                                                           ng-click="ctrl.removeBulkDynamicFollowups($event)">
+                                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                                </md-button>
+                                                            </div>
+                                                        </th>
+                                                        <th ng-if="!ctrl.selectedDynamicFollowUps.length"
+                                                            md-column
+                                                            md-order-by="arName">
+                                                            <span>{{lang.arabic_name}}</span>
+                                                        </th>
+                                                        <th ng-if="!ctrl.selectedDynamicFollowUps.length"
+                                                            md-column
+                                                            md-order-by="enName">
+                                                            <span>{{lang.english_name}}</span>
+                                                        </th>
+                                                        <th ng-if="!ctrl.selectedDynamicFollowUps.length"
+                                                            md-column>
+                                                            <span>{{lang.actions}}</span>
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody md-body>
+                                                    <tr md-row md-select="followUp"
+                                                        ng-repeat="dynamicFollowup in ctrl.dynamicFollowUps | limitTo: ctrl.dynamicFollowUpGrid.limit: ((ctrl.dynamicFollowUpGrid.page - 1) * ctrl.dynamicFollowUpGrid.limit) track by $index">
+                                                        <td md-cell>
+                                                            {{dynamicFollowup.arName}}
+                                                        </td>
+                                                        <td md-cell>
+                                                            {{dynamicFollowup.enName}}
+                                                        </td>
+                                                        <td md-cell>
+                                                            <div flex layout="row" layout-align="start center">
+                                                                <md-button class="md-icon-button"
+                                                                           title="{{lang.delete}}"
+                                                                           ng-click="ctrl.removeDynamicFollowUp(dynamicFollowup, $event)">
+                                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                                </md-button>
+                                                                <md-button
+                                                                        class="md-icon-button"
+                                                                        title="{{lang.edit}}"
+                                                                        ng-click="ctrl.openEditDynamicFollowUpDialog(dynamicFollowup, $event)">
+                                                                    <md-icon md-svg-icon="pencil"></md-icon>
+                                                                </md-button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <md-table-pagination
+                                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                    md-limit-options="ctrl.dynamicFollowUpGrid.limitOptions"
+                                                    md-limit="ctrl.dynamicFollowUpGrid.limit"
+                                                    md-page="ctrl.dynamicFollowUpGrid.page"
+                                                    md-total="{{ctrl.dynamicFollowUps.length}}" md-page-select>
+                                            </md-table-pagination>
+                                        </md-table-container>
+                                    </md-card>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
                 </md-tabs>
             </form>
         </div>

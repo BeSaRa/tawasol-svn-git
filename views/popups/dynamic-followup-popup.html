@@ -1,0 +1,144 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_dynamic_follow_up : ctrl.dynamicFollowup.getNames()}}">
+    <popup-toolbar-directive ng-if="!ctrl.editMode"
+                             header-text="{{lang.add_new_dynamic_follow_up}}"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="ctrl.editMode"
+                             header-text="{{ctrl.dynamicFollowup.getNames()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="dynamicFollowupForm" autocomplete="off">
+                <div layout="column">
+                    <div layout="row">
+                        <!-- Arabic Name -->
+                        <md-input-container flex>
+                            <label for="arName">{{lang.arabic_name}}</label>
+                            <input name="arName" id="arName" required minlength="4" maxlength="150"
+                                   ng-model="ctrl.dynamicFollowup.arName"
+                                   custom-validate-directive="A1NS">
+                            <div ng-messages="dynamicFollowupForm.arName.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="A1NS">{{lang.one_arabic_number_space}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- English Name -->
+                        <md-input-container flex>
+                            <label for="enName">{{lang.english_name}}</label>
+                            <input name="enName" id="enName" required minlength="4" maxlength="150"
+                                   ng-model="ctrl.dynamicFollowup.enName"
+                                   custom-validate-directive="E1NS">
+                            <div ng-messages="dynamicFollowupForm.enName.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <!-- Document Type -->
+                        <md-input-container flex>
+                            <label for="docClassId">{{lang.label_document_class}}</label>
+                            <md-select id="docClassId" aria-label="docClassId"
+                                       ng-model="ctrl.dynamicFollowup.docClassId">
+                                <md-option ng-value="null">{{lang.all}}</md-option>
+                                <md-option ng-value="documentClass.lookupKey"
+                                           ng-if="documentClass.lookupStrKey.toLowerCase() !== 'internal'"
+                                           ng-repeat="documentClass in ctrl.documentClasses">
+                                    {{documentClass.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <!-- Security Level -->
+                        <md-input-container flex>
+                            <label for="securityLevel">{{ctrl.lookupNames['key_14'].getTranslatedName()}}</label>
+                            <md-select name="securityLevel" id="securityLevel"
+                                       ng-model="ctrl.dynamicFollowup.ui.key_14.value" multiple>
+                                <md-option ng-value="securityLevel"
+                                           ng-repeat="securityLevel in ctrl.securityLevels">
+                                    {{securityLevel.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <!-- Users -->
+                        <md-input-container flex>
+                            <label for="participantSet">{{lang.select_user}}</label>
+                            <md-select multiple name="participantSet" id="participantSet"
+                                       ng-required="true"
+                                       aria-label="{{lang.select_user}}"
+                                       ng-model="ctrl.dynamicFollowup.participantSet"
+                                       ng-model-options="{trackBy: '$value.userInfo.id'}"
+                                       md-on-close="ctrl.clearSearchText('appUser')"
+                                       data-md-container-class="select-header-container sticky-search-bar">
+                                <md-option ng-value="user"
+                                           ng-repeat="user in ctrl.applicationUsers | translatedNameFilter: ctrl.appUserSearchText">
+                                       <span md-highlight-text="ctrl.appUserSearchText"
+                                             md-highlight-flags="i">{{user.userInfo.getTranslatedName()}}</span>
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="dynamicFollowup.participantSet.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- SLA -->
+                        <md-input-container flex>
+                            <label for="slaDays">{{lang.sla}}</label>
+                            <input name="slaDays" id="slaDays" required
+                                   ng-model="ctrl.dynamicFollowup.slaDays"
+                                   custom-validate-directive="number">
+                            <div ng-messages="dynamicFollowupForm.slaDays.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="number">{{lang.numberonly}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <!-- Item Order -->
+                        <md-input-container flex>
+                            <label for="itemOrder">{{lang.item_order}}</label>
+                            <input name="itemOrder" id="itemOrder" maxlength="5"
+                                   required
+                                   ng-model="ctrl.dynamicFollowup.itemOrder"
+                                   custom-validate-directive="number">
+                            <div ng-messages="dynamicFollowupForm.itemOrder.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="number">{{lang.numberonly}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length: 5})}}</div>
+                            </div>
+                        </md-input-container>
+                        <span flex>
+                             <!-- Status -->
+                                <md-switch flex ng-model="ctrl.dynamicFollowup.status"
+                                           aria-label="{{lang.status}}">
+                                    <span>{{lang.status}} : </span>{{ctrl.dynamicFollowup.getTranslatedStatus()}}
+                                </md-switch>
+                        </span>
+                    </div>
+                    <div layout="row">
+                        <!-- Correspondence Sites -->
+                        <manage-correspondence-sites-filter-directive flex
+                                                                      main-sub-sites="ctrl.dynamicFollowup.ui.key_mainSubSites.value"
+                                                                      lookup-names="ctrl.lookupNames">
+                        </manage-correspondence-sites-filter-directive>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary"
+                   ng-disabled="dynamicFollowupForm.$invalid"
+                   ng-if="!ctrl.editMode"
+                   ng-click="ctrl.addDynamicFollowUp()">{{lang.add}}
+        </md-button>
+        <md-button class="md-raised md-primary" ng-if="ctrl.editMode"
+                   ng-disabled="dynamicFollowupForm.$invalid"
+                   ng-click="ctrl.editDynamicFollowUp()">{{lang.save}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopUp()">{{lang.close}}</md-button>
+
+    </md-dialog-actions>
+</md-dialog>

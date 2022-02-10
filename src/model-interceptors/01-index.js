@@ -135,4 +135,5 @@ module.exports = function (app) {
     require('./ManualDeliveryReportInterceptor')(app);
     require('./CorrespondenceSiteTypeInterceptor')(app);
     require('./PrivateUserClassificationInterceptor')(app);
+    require('./DynamicFollowupInterceptor')(app);
 };

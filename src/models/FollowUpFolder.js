@@ -10,6 +10,7 @@ module.exports = function (app) {
             self.parent = null;
             self.userId = null;
             self.status = true;
+            self.userDynamicFollowupId = null;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [
@@ -94,6 +95,9 @@ module.exports = function (app) {
                 this.children = folders;
                 return this;
             };
+            FollowUpFolder.prototype.hasUserDynamicFollowup = function () {
+                return !!this.userDynamicFollowupId;
+            }
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('FollowUpFolder', 'init', this);

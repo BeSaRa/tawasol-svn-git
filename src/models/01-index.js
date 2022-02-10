@@ -210,5 +210,6 @@ module.exports = function (app) {
     require('./UserFollowupBookMulti')(app);
     require('./ManualDeliveryReport')(app);
     require('./PrivateUserClassification')(app);
+    require('./DynamicFollowup')(app);
 
 };

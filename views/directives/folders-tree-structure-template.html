@@ -18,7 +18,7 @@
                         </div>
                     </md-button>
                 </div>
-                <div ng-if="ctrl.allowControl && ctrl.displayMenu">
+                <div ng-if="ctrl.allowControl && ctrl.displayMenu && !ctrl.hasUserDynamicFollowup(folder)">
                     <md-menu>
                         <md-button ng-click="$mdMenu.open()" class="md-icon-button">
                             <md-icon md-svg-icon="dots-vertical"></md-icon>
@@ -52,24 +52,24 @@
                         </md-menu-content>
                     </md-menu>
                 </div>
-                <div ng-if="ctrl.allowControl && ctrl.addCallback && !ctrl.displayMenu">
+                <div ng-if="ctrl.allowControl && ctrl.addCallback && !ctrl.displayMenu && !ctrl.hasUserDynamicFollowup(folder) ">
                     <md-button ng-click="ctrl.addCallback(folder, $event)" class="folder-button-icon md-icon-button">
                         <md-icon md-svg-icon="plus"></md-icon>
                     </md-button>
                 </div>
-                <div ng-if="ctrl.allowControl && ctrl.editCallback && !ctrl.displayMenu">
+                <div ng-if="ctrl.allowControl && ctrl.editCallback && !ctrl.displayMenu && !ctrl.hasUserDynamicFollowup(folder)">
                     <md-button ng-click="ctrl.editCallback(folder, $event)" class="folder-button-icon md-icon-button">
                         <md-icon md-svg-icon="pencil"></md-icon>
                     </md-button>
                 </div>
-                <div ng-if="ctrl.allowControl && ctrl.deleteCallback && !ctrl.displayMenu">
+                <div ng-if="ctrl.allowControl && ctrl.deleteCallback && !ctrl.displayMenu && !ctrl.hasUserDynamicFollowup(folder)">
                     <md-button ng-click="ctrl.deleteCallback(folder, $event)" class="folder-button-icon md-icon-button">
                         <md-icon md-svg-icon="delete"></md-icon>
                     </md-button>
                 </div>
             </div>
         </div>
-        <folders-tree-structure-directive display-menu="ctrl.displayMenu" counter-property="{{ctrl.counterProperty}}"
+        <folders-tree-structure-directive display-menu="ctrl.displayMenu && !ctrl.hasUserDynamicFollowup(folder)" counter-property="{{ctrl.counterProperty}}"
                                           count="ctrl.count"
                                           highlight-selected="ctrl.highlightSelected"
                                           disable-selected="ctrl.disableSelected" click-callback="ctrl.clickCallback"

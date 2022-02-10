@@ -168,4 +168,5 @@ module.exports = function (app) {
     require('./manualDeliveryReportPopCtrl')(app);
     require('./privateUserClassificationsPopCtrl')(app);
     require('./addPrivateUserClassificationPopCtrl')(app);
+    require('./dynamicFollowupPopCtrl')(app);
 };

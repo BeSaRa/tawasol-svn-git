@@ -9,7 +9,7 @@ module.exports = function (app) {
             bindToController: true,
             scope: {
                 mainSubSites: '=',
-                emptyMainSubSites: '=',
+                emptyMainSubSites: '=?',
                 lookupNames: '=?'
             }
         }

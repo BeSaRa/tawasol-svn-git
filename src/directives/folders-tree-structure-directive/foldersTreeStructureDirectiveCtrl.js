@@ -44,5 +44,9 @@ module.exports = function (app) {
             return tooltip;
         };
 
+        self.hasUserDynamicFollowup = function (folder) {
+            return folder.hasOwnProperty('userDynamicFollowupId') && folder.hasUserDynamicFollowup();
+        }
+
     });
 };

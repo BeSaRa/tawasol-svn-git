@@ -132,4 +132,5 @@ module.exports = function (app) {
     require('./externalDataSourceService')(app);
     require('./userExternalDataSourceService')(app);
     require('./privateUserClassificationService')(app);
+    require('./dynamicFollowupService')(app);
 };
