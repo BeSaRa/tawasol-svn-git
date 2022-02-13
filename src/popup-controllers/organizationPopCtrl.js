@@ -2472,9 +2472,7 @@ module.exports = function (app) {
                 return rootEntity.hasPSPDFViewer() && self.globalSettings.isStampModuleEnabled() && employeeService.hasPermissionTo('MANAGE_STAMPS');
             } else if (tabName === 'privateRegistryOU') {
                 return self.model.isPrivateRegistry;
-            } else if (tabName === 'dynamicFollowups') {
-                return employeeService.hasPermissionTo('DYNAMIC_FOLLOW_UP');
-            } else {
+            }  else {
                 if (tabName === 'serials' || tabName === 'classifications' || tabName === 'correspondenceSites') {
                     if (!self.model.hasRegistry) {
                         return false;
