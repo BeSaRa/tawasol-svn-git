@@ -20,6 +20,7 @@ module.exports = function (app) {
             self.docClassId = null;
             self.slaDays = null;
             self.participantSet = [];
+            self.securityLevel = null;
             // not related to the model.
             self.ui = {
                 // DocType(document class) equals
@@ -209,12 +210,7 @@ module.exports = function (app) {
                 self.ui.key_13.value = self.ui.key_13.value ? self.ui.key_13.value : null;
 
                 // Security Level
-                if (Array.isArray(self.ui.key_14.value)) {
-                    self.ui.key_14.value = self.ui.key_14.value.length ? generator.getResultFromSelectedCollection(self.ui.key_14.value, 'lookupKey') : null;
-
-                } else {
-                    self.ui.key_14.value = self.ui.key_14.value ? self.ui.key_14.value : null;
-                }
+                self.ui.key_14.value = self.ui.key_14.value ? self.ui.key_14.value : null;
 
                 // Priority Level
                 var priorityLevel = self.ui.key_15.value;
@@ -368,11 +364,6 @@ module.exports = function (app) {
                 // Due date exists
                 self.ui.key_8.value = (self.ui.key_8.value === '-2000000000000L');
 
-                // Security Levels
-                if (self.ui.key_14.value) {
-                    var securityLevels = lookupService.returnLookups(lookupService.securityLevel);
-                    self.ui.key_14.value = generator.getSelectedCollectionFromResult(securityLevels, self.ui.key_14.value, 'lookupKey');
-                }
 
                 // linked docs
                 if (self.ui.key_16.value !== null)

@@ -51,9 +51,9 @@
                         </md-input-container>
                         <!-- Security Level -->
                         <md-input-container flex>
-                            <label for="securityLevel">{{ctrl.lookupNames['key_14'].getTranslatedName()}}</label>
+                            <label for="securityLevel">{{lang.security_levels}}</label>
                             <md-select name="securityLevel" id="securityLevel"
-                                       ng-model="ctrl.dynamicFollowup.ui.key_14.value" multiple>
+                                       ng-model="ctrl.dynamicFollowup.securityLevel" multiple>
                                 <md-option ng-value="securityLevel"
                                            ng-repeat="securityLevel in ctrl.securityLevels">
                                     {{securityLevel.getTranslatedName()}}

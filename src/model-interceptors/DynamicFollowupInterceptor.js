@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor, generator, _, OUViewPermission, dynamicFollowupService, Information) {
+    app.run(function (CMSModelInterceptor, generator, _, OUViewPermission, dynamicFollowupService, Information, lookupService) {
         'ngInject';
 
         var modelName = 'DynamicFollowup';
@@ -14,9 +14,14 @@ module.exports = function (app) {
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             model.prepareSendDynamicFollowup();
 
+            model.securityLevel = model.securityLevel ? generator.getResultFromSelectedCollection(model.securityLevel, 'lookupKey') : null;
             if (model.participantSet.length) {
                 model.participantSet = _.map(model.participantSet, participant => {
-                    return {'id':participant.id,'userId': participant.userId, 'ouId': participant.ouId}
+                    return {
+                        'id': (participant.id ? participant.id : null),
+                        'userId': participant.userId,
+                        'ouId': participant.ouId
+                    }
                 });
             }
 
@@ -28,6 +33,9 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.prepareReceivedDynamicFollowup();
+
+            var securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+            model.securityLevel = generator.getSelectedCollectionFromResult(securityLevels, model.securityLevel, 'lookupKey');
 
             model.participantSet = _.map(model.participantSet, function (user) {
                 user.userInfo = generator.generateInstance(user.userInfo, Information);
