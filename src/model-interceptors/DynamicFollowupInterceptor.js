@@ -16,13 +16,13 @@ module.exports = function (app) {
 
             if (model.participantSet.length) {
                 model.participantSet = _.map(model.participantSet, participant => {
-                    return {'userId': participant.userId, 'ouId': participant.ouId}
+                    return {'id':participant.id,'userId': participant.userId, 'ouId': participant.ouId}
                 });
             }
 
             delete model.selectedReceivedDateFilterType;
             delete model.creatorInfo;
-            console.log(model);
+
             return model;
         });
 
