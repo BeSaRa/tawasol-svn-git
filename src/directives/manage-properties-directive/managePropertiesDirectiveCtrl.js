@@ -476,6 +476,10 @@ module.exports = function (app) {
             return self.document.hasVsId() && self.documentCopy.mainClassification && self.documentCopy.mainClassification.isUserPrivate;
         }
 
+        self.disableMainClassificationOption = function (classification) {
+            return !$stateParams.action === 'reply' && !$stateParams.action === 'receive' && self.document.hasVsId() && classification.isUserPrivate;
+        }
+
         /**
          * @description check if document received from incoming department
          * @returns {*|boolean}

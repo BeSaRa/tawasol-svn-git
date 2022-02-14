@@ -285,7 +285,7 @@
                             </md-select-header>
                             <md-option ng-value="null">{{lang.none}}</md-option>
                             <md-option ng-value="classification.classification"
-                                       ng-disabled="ctrl.document.hasVsId() && classification.classification.isUserPrivate"
+                                       ng-disabled="ctrl.disableMainClassificationOption(classification.classification)"
                                        ng-repeat="classification in ctrl.classifications | translatedNameFilter: ctrl.mainClassificationSearchText:'getCodeOrIdAndNameByLanguage':'classification'">
                             <span
                                     md-highlight-text="ctrl.mainClassificationSearchText"
