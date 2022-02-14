@@ -53,12 +53,15 @@
                         <md-input-container flex>
                             <label for="securityLevel">{{lang.security_levels}}</label>
                             <md-select name="securityLevel" id="securityLevel"
-                                       ng-model="ctrl.dynamicFollowup.securityLevel" multiple>
+                                       ng-model="ctrl.dynamicFollowup.securityLevel" multiple required>
                                 <md-option ng-value="securityLevel"
                                            ng-repeat="securityLevel in ctrl.securityLevels">
                                     {{securityLevel.getTranslatedName()}}
                                 </md-option>
                             </md-select>
+                            <div ng-messages="dynamicFollowup.securityLevel.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
                         </md-input-container>
                     </div>
                     <div layout="row">
