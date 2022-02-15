@@ -140,6 +140,28 @@ module.exports = function (app) {
                 dynamicFollowupId = dynamicFollowupId instanceof DynamicFollowup ? dynamicFollowupId.id : dynamicFollowupId;
                 return $http.delete((urlService.dynamicFollowup + '/' + dynamicFollowupId));
             }
+
+
+        /**
+         * @description Check if record with same name exists. Returns true if exists
+         * @param dynamicFollowup
+         * @param editMode
+         * @returns {boolean}
+         */
+        self.checkDuplicateDynamicFollowup = function (dynamicFollowup, editMode) {
+            var dynamicFollowupsToFilter = self.dynamicFollowups;
+            if (editMode) {
+                dynamicFollowupsToFilter = _.filter(dynamicFollowupsToFilter, function (dynamicFollowupToFilter) {
+                    return dynamicFollowupToFilter.id !== dynamicFollowup.id;
+                });
+            }
+            return _.some(_.map(dynamicFollowupsToFilter, function (existingDynamicFollowup) {
+                return existingDynamicFollowup.arName.toLowerCase() === dynamicFollowup.arName.toLowerCase()
+                    || existingDynamicFollowup.enName.toLowerCase() === dynamicFollowup.enName.toLowerCase();
+            }), function (matchingResult) {
+                return matchingResult === true;
+            });
+        };
         }
     );
 };
