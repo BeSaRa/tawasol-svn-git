@@ -90,10 +90,12 @@
                             <label for="slaDays">{{lang.sla}}</label>
                             <input name="slaDays" id="slaDays" required
                                    ng-model="ctrl.dynamicFollowup.slaDays"
-                                   custom-validate-directive="number">
+                                   custom-validate-directive="number" max="365"
+                                   min-max-number-directive>
                             <div ng-messages="dynamicFollowupForm.slaDays.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                                 <div ng-message="number">{{lang.numberonly}}</div>
+                                <div ng-message="max">{{lang.max_number.change({number: 365})}}</div>
                             </div>
                         </md-input-container>
                     </div>
