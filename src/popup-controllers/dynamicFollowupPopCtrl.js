@@ -59,7 +59,7 @@ module.exports = function (app) {
                 .notifyFailure(function (step, result) {
                     toast.error(langService.get('required_correspondence_sites'));
                 })
-                .addStep('check_duplicate', true, dynamicFollowupService.checkDuplicateDynamicFollowup, [self.dynamicFollowup, self.editMode], function (result) {
+                .addStep('check_duplicate_name', true, dynamicFollowupService.checkDuplicateDynamicFollowupName, [self.dynamicFollowup, self.editMode], function (result) {
                     return !result;
                 }, true)
                 .notifyFailure(function () {
@@ -85,7 +85,7 @@ module.exports = function (app) {
                 .notifyFailure(function (step, result) {
                     toast.error(langService.get('required_correspondence_sites'));
                 })
-                .addStep('check_duplicate', true, dynamicFollowupService.checkDuplicateDynamicFollowup, [self.dynamicFollowup, self.editMode], function (result) {
+                .addStep('check_duplicate_name', true, dynamicFollowupService.checkDuplicateDynamicFollowupName, [self.dynamicFollowup, self.editMode], function (result) {
                     return !result;
                 }, true)
                 .notifyFailure(function () {

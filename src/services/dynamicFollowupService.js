@@ -142,26 +142,26 @@ module.exports = function (app) {
             }
 
 
-        /**
-         * @description Check if record with same name exists. Returns true if exists
-         * @param dynamicFollowup
-         * @param editMode
-         * @returns {boolean}
-         */
-        self.checkDuplicateDynamicFollowup = function (dynamicFollowup, editMode) {
-            var dynamicFollowupsToFilter = self.dynamicFollowups;
-            if (editMode) {
-                dynamicFollowupsToFilter = _.filter(dynamicFollowupsToFilter, function (dynamicFollowupToFilter) {
-                    return dynamicFollowupToFilter.id !== dynamicFollowup.id;
+            /**
+             * @description Check if record with same name exists. Returns true if exists
+             * @param dynamicFollowup
+             * @param editMode
+             * @returns {boolean}
+             */
+            self.checkDuplicateDynamicFollowupName = function (dynamicFollowup, editMode) {
+                var dynamicFollowupsToFilter = self.dynamicFollowups;
+                if (editMode) {
+                    dynamicFollowupsToFilter = _.filter(dynamicFollowupsToFilter, function (dynamicFollowupToFilter) {
+                        return dynamicFollowupToFilter.id !== dynamicFollowup.id;
+                    });
+                }
+                return _.some(_.map(dynamicFollowupsToFilter, function (existingDynamicFollowup) {
+                    return existingDynamicFollowup.arName.toLowerCase() === dynamicFollowup.arName.toLowerCase()
+                        || existingDynamicFollowup.enName.toLowerCase() === dynamicFollowup.enName.toLowerCase();
+                }), function (matchingResult) {
+                    return matchingResult === true;
                 });
-            }
-            return _.some(_.map(dynamicFollowupsToFilter, function (existingDynamicFollowup) {
-                return existingDynamicFollowup.arName.toLowerCase() === dynamicFollowup.arName.toLowerCase()
-                    || existingDynamicFollowup.enName.toLowerCase() === dynamicFollowup.enName.toLowerCase();
-            }), function (matchingResult) {
-                return matchingResult === true;
-            });
-        };
+            };
         }
     );
 };
