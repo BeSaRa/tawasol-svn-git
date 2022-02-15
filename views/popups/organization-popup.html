@@ -1914,6 +1914,11 @@
                                                             <span>{{lang.english_name}}</span>
                                                         </th>
                                                         <th ng-if="!ctrl.selectedDynamicFollowUps.length"
+                                                            md-column
+                                                            md-order-by="itemOrder">
+                                                            <span>{{lang.item_order}}</span>
+                                                        </th>
+                                                        <th ng-if="!ctrl.selectedDynamicFollowUps.length"
                                                             md-column>
                                                             <span>{{lang.actions}}</span>
                                                         </th>
@@ -1927,6 +1932,9 @@
                                                         </td>
                                                         <td md-cell>
                                                             {{dynamicFollowup.enName}}
+                                                        </td>
+                                                        <td md-cell>
+                                                            {{dynamicFollowup.itemOrder}}
                                                         </td>
                                                         <td md-cell>
                                                             <div flex layout="row" layout-align="start center">
