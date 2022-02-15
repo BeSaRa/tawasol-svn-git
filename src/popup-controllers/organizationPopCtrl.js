@@ -2472,8 +2472,8 @@ module.exports = function (app) {
                 return rootEntity.hasPSPDFViewer() && self.globalSettings.isStampModuleEnabled() && employeeService.hasPermissionTo('MANAGE_STAMPS');
             } else if (tabName === 'privateRegistryOU') {
                 return self.model.isPrivateRegistry;
-            }  else {
-                if (tabName === 'serials' || tabName === 'classifications' || tabName === 'correspondenceSites') {
+            } else {
+                if (tabName === 'serials' || tabName === 'classifications' || tabName === 'correspondenceSites' || tabName === 'dynamicFollowups') {
                     if (!self.model.hasRegistry) {
                         return false;
                     }
