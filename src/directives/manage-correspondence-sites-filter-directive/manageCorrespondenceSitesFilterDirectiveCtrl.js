@@ -222,17 +222,7 @@ module.exports = function (app) {
             self.subSitesSelected = [];
         }
 
-        /**
-         *@description add all sub sites to selected list
-         * @param $event
-         */
-        self.addAllSitesToSelected = function ($event) {
-            self.mainSubSites = self.mainSubSites.concat(self.subSites);
-            _mapSubSitesResultIds();
-            self.subSites = _.filter(self.subSitesCopy, _filterSubSites);
-            self.subSiteSearchText = '';
-            self.subSitesSelected = [];
-        }
+
 
         /**
          * @description remove selected main or sub site

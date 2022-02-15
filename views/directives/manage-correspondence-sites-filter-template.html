@@ -90,7 +90,7 @@
                         <!-- Add all -->
                         <div ng-if="!ctrl.subSitesSelected.length" layout="row">
                             <md-button class="md-raised"
-                                       ng-click="ctrl.addAllSitesToSelected($event)"
+                                       ng-click="ctrl.addMainToSelected(ctrl.selectedMainSite)"
                                        ng-disabled="!!ctrl.disableCorrespondence">
                                 {{lang.add_all}}
                             </md-button>
