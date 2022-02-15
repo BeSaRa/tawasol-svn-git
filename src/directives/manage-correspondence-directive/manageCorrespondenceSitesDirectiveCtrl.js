@@ -413,6 +413,7 @@ module.exports = function (app) {
                         self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
                         self.subSearchResult_DL = _.filter(self.subSearchResult_DL_Copy, _filterSubSites);
                         self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
+                        _setSitesTypeIfInternalOutgoingActive();
                     });
                 })
         };
@@ -438,6 +439,7 @@ module.exports = function (app) {
                         self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
                         self.subSearchResult_DL = _.filter(self.subSearchResult_DL_Copy, _filterSubSites);
                         self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
+                        _setSitesTypeIfInternalOutgoingActive();
                     });
                 });
         };
@@ -644,6 +646,7 @@ module.exports = function (app) {
          */
         self.changeSiteTo = function (type, site, index) {
             self['sitesInfo' + type] = self['sitesInfo' + type].concat(self['sitesInfo' + self.reversedMap[type]].splice(_findSiteIndex(self['sitesInfo' + self.reversedMap[type]], site), 1));
+            _setSitesTypeIfInternalOutgoingActive();
         };
 
         function _findSiteIndex(list, site) {
@@ -924,6 +927,7 @@ module.exports = function (app) {
                         }
                         self.subSearchResult_DL = _.filter(self.subSearchResult_DL_Copy, _filterSubSites);
                         self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
+                        _setSitesTypeIfInternalOutgoingActive();
                     });
                 });
         };
@@ -1093,7 +1097,9 @@ module.exports = function (app) {
                         (!self.sitesInfoTo.length || (self.sitesInfoTo.length && self.sitesInfoTo[0].siteType.isInternalSiteType()))) {
                         if (!siteType.isGovernmentSiteType() && !siteType.isExternalSiteType()) {
                             siteType.disabled = true;
-                            self.emptySiteSearch = true;
+                            // self.emptySiteSearch = true;
+                        } else {
+                            siteType.disabled = false;
                         }
                     } else {
                         siteType.disabled = false;
