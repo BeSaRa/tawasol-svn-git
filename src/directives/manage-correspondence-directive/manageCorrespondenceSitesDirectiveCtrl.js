@@ -1062,7 +1062,7 @@ module.exports = function (app) {
                 self.selectedSimpleSub = null;
                 self.simpleSubSiteResultSearchText = '';
             }
-            if (self.correspondence.isInternal) {
+            if (self.correspondence && self.correspondence.isInternal) {
                 _setSitesTypeIfInternalOutgoingActive();
             }
         });
@@ -1080,6 +1080,9 @@ module.exports = function (app) {
          * @private
          */
         function _setSitesTypeIfInternalOutgoingActive() {
+            if (!self.correspondence) {
+                return;
+            }
             var info = self.correspondence.getInfo();
             if (self.isInternalOutgoingEnabled && self.correspondenceSiteTypes && self.correspondence) {
                 self.correspondenceSiteTypes.map(siteType => {
