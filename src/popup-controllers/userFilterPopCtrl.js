@@ -516,14 +516,17 @@ module.exports = function (app) {
             $event.preventDefault();
             $event.stopPropagation();
 
-            return dialog.confirmMessage(langService.get('confirm_reset_main_sub_sites')).then(function () {
-                self.filter.ui.key_siteType.value = null;
-                self.filter.ui.key_mainSite.value = null;
-                self.filter.ui.key_subSite.value = null;
-                self.filter.ui.key_mainSubSites.value = [];
-            }).catch(function () {
-                self.filter.ui.key_allowMultipleSitesView.value = !self.filter.ui.key_allowMultipleSitesView.value;
-            })
+            if ((self.filter.ui.key_mainSubSites.value && self.filter.ui.key_mainSubSites.value.length) ||
+                self.filter.ui.key_siteType.value || self.filter.ui.key_mainSite.value) {
+                return dialog.confirmMessage(langService.get('confirm_reset_main_sub_sites')).then(function () {
+                    self.filter.ui.key_siteType.value = null;
+                    self.filter.ui.key_mainSite.value = null;
+                    self.filter.ui.key_subSite.value = null;
+                    self.filter.ui.key_mainSubSites.value = [];
+                }).catch(function () {
+                    self.filter.ui.key_allowMultipleSitesView.value = !self.filter.ui.key_allowMultipleSitesView.value;
+                })
+            }
         }
 
         self.$onInit = function () {
