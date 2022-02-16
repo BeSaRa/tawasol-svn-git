@@ -13,6 +13,7 @@ module.exports = function (app) {
                                                           correspondenceViewService,
                                                           moment,
                                                           folders,
+                                                          lookupService,
                                                           isAdminFollowup) {
         'ngInject';
         var self = this;
@@ -46,7 +47,7 @@ module.exports = function (app) {
                 value: false
             }
         ];
-
+        self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
         $timeout(function () {
             if (self.searchCriteria.selectedSiteType) {
                 self.getMainSites(false);
