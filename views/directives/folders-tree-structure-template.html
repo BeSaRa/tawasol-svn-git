@@ -10,7 +10,8 @@
                              tooltip="{{ctrl.getTooltip(folder)}}">
                             <!--tooltip="{{(!folder.status) ? lang.folder_deactivated:''}}"-->
                             <div class="folder-icon">
-                                <md-icon md-svg-icon="{{ctrl.icon ? ctrl.icon : 'folder'}}"></md-icon>
+                                <md-icon md-svg-icon="{{ctrl.icon ? ctrl.icon : 'folder'}}" ng-if="!ctrl.hasUserDynamicFollowup(folder)"></md-icon>
+                                <md-icon md-svg-icon="{{ctrl.icon ? ctrl.icon : 'folder-sync'}}" ng-if="ctrl.hasUserDynamicFollowup(folder)"></md-icon>
                             </div>
                             <div flex layout="row" layout-align="start center">{{folder.getTranslatedName()}} <span
                                     ng-if="ctrl.count && ctrl.counterHasFolderId(folder)"> &nbsp;&nbsp; ( {{ctrl.getCounter(folder).first}} ) &nbsp;&nbsp;</span>
