@@ -261,6 +261,51 @@ module.exports = function (app) {
                     return matchingResult === true;
                 });
             };
+
+            /**
+             * @description Check if record with same dynamic followup exists. Returns true if exists
+             * @param dynamicFollowup
+             * @param editMode
+             * @returns {boolean}
+             */
+            self.checkDuplicateDynamicFollowup = function (dynamicFollowup, editMode) {
+                var dynamicFollowupsToFilter = self.dynamicFollowups;
+                var securityLevels = generator.getResultFromSelectedCollection(dynamicFollowup.securityLevel, 'lookupKey');
+                var participantSetIds = _.map(dynamicFollowup.participantSet, 'userId');
+                var mainSites = _.map(dynamicFollowup.ui.key_mainSubSites.value, 'mainSiteId');
+                var subSites = _.map(dynamicFollowup.ui.key_mainSubSites.value, 'subSiteId');
+                if (editMode) {
+                    dynamicFollowupsToFilter = _.filter(dynamicFollowupsToFilter, function (dynamicFollowupToFilter) {
+                        return dynamicFollowupToFilter.id !== dynamicFollowup.id;
+                    });
+                }
+                return _.some(_.map(dynamicFollowupsToFilter, function (existingDynamicFollowup) {
+                    var existingSecurityLevels = generator.getResultFromSelectedCollection(existingDynamicFollowup.securityLevel, 'lookupKey');
+                    // check participants
+                    var matchParticipantSetIds = _.every(existingDynamicFollowup.participantSet, function (participant) {
+                        return participantSetIds.indexOf(participant.userId) !== -1;
+                    });
+                    //check main sites
+                    var existingMainSites = _.map(existingDynamicFollowup.ui.key_mainSubSites.value, 'mainSiteId');
+                    var matchMainSites = _.every(existingMainSites, function (site) {
+                        return mainSites.indexOf(site) !== -1;
+                    });
+                    // check sub sites
+                    var existingSubSites = _.map(existingDynamicFollowup.ui.key_mainSubSites.value, 'subSiteId');
+                    var matchSubSites = _.every(existingSubSites, function (site) {
+                        return subSites.indexOf(site) !== -1;
+                    });
+
+                    return Number(existingDynamicFollowup.itemOrder) === Number(dynamicFollowup.itemOrder)
+                        && Number(existingDynamicFollowup.slaDays) === Number(dynamicFollowup.slaDays)
+                        && existingDynamicFollowup.docClassId === dynamicFollowup.docClassId
+                        && Number(existingSecurityLevels) === Number(securityLevels)
+                        && matchParticipantSetIds
+                        && matchMainSites && matchSubSites;
+                }), function (matchingResult) {
+                    return matchingResult === true;
+                });
+            };
         }
     );
 };

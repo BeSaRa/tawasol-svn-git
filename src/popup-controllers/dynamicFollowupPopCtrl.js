@@ -65,6 +65,12 @@ module.exports = function (app) {
                 .notifyFailure(function () {
                     toast.error(langService.get('name_duplication_message'));
                 })
+                .addStep('check_duplicate', true, dynamicFollowupService.checkDuplicateDynamicFollowup, [self.dynamicFollowup, self.editMode], function (result) {
+                    return !result;
+                }, true)
+                .notifyFailure(function () {
+                    toast.error(langService.get('duplication_message'));
+                })
                 .validate()
                 .then(function () {
                     dynamicFollowupService.addDynamicFollowUp(self.dynamicFollowup).then(function () {
@@ -90,6 +96,12 @@ module.exports = function (app) {
                 }, true)
                 .notifyFailure(function () {
                     toast.error(langService.get('name_duplication_message'));
+                })
+                .addStep('check_duplicate', true, dynamicFollowupService.checkDuplicateDynamicFollowup, [self.dynamicFollowup, self.editMode], function (result) {
+                    return !result;
+                }, true)
+                .notifyFailure(function () {
+                    toast.error(langService.get('duplication_message'));
                 })
                 .validate()
                 .then(function () {
