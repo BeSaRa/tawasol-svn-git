@@ -525,6 +525,7 @@ module.exports = function (app) {
                         .setCreationDate();
 
                     documentCommentService.addDocumentComment(self.documentComment).then(function () {
+                        reloadCallback && reloadCallback();
                         toast.success(langService.get('add_success').change({name: langService.get('comments_comment')}));
                     });
                 })
