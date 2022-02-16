@@ -107,7 +107,12 @@ module.exports = function (app) {
                 searchText: '',
                 searchCallback: function (grid) {
                     self.followupBooks = gridService.searchGridData(self.grid, self.followupBooksCopy);
-                }
+                },
+                isDueDatePassed: gridService.getDueDatePassed(gridService.grids.inbox.userFollowupBook),
+                setIsDueDatePassed: function ($event) {
+                    gridService.setDueDatePassed(gridService.grids.inbox.userFollowupBook, self.grid.isDueDatePassed);
+                    self.filterDueDatePassed();
+                },
             };
 
             var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
@@ -142,6 +147,15 @@ module.exports = function (app) {
             };
 
             /**
+             * @description filter books which due date passed
+             */
+            self.filterDueDatePassed = function () {
+                self.followupBooks = self.grid.isDueDatePassed ? $filter('filter')(self.followupBooks, function (item) {
+                    return item.isDueDatePassed();
+                }) : self.followupBooksCopy;
+            }
+
+            /**
              * @description reload followup books
              * @param pageNumber
              */
@@ -174,7 +188,8 @@ module.exports = function (app) {
                         if (pageNumber)
                             self.grid.page = pageNumber;
                         self.getSortedData();
-                        return self.followupBooks;
+                        self.filterDueDatePassed();
+                        self.followupBooks;
                     });
             };
 

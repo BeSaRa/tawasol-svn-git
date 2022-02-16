@@ -221,6 +221,38 @@ module.exports = function (app) {
             localStorageService.set(self.storageKeys.sorting, JSON.stringify(sortingStorage));
         };
 
+
+        /**
+         * @description this will only used for user followup book page
+         */
+        self.getDueDatePassed = function (gridName) {
+            var dueDateStorage = localStorageService.get('dueDate');
+            if (dueDateStorage && generator.isJsonString(dueDateStorage)) {
+                dueDateStorage = JSON.parse(dueDateStorage);
+                if (dueDateStorage && Object.keys(dueDateStorage).length) {
+                    if (gridName) {
+                        return !!(dueDateStorage[gridName]);
+                    }
+                    return dueDateStorage;
+                }
+            }
+            return false;
+        }
+
+        /**
+         * @description
+         * @param gridName
+         * @param value
+         */
+        self.setDueDatePassed = function (gridName, value) {
+            var dueDateStorage = self.getDueDatePassed();
+            if (!dueDateStorage) {
+                dueDateStorage = {};
+            }
+            dueDateStorage[gridName] = value;
+            localStorageService.set('dueDate', JSON.stringify(dueDateStorage));
+        };
+
         function _removeGridSortingKey(gridName) {
             // get all the saved sorting
             var sortingStorage = self.getGridSortingKey();

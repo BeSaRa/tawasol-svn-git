@@ -6,6 +6,7 @@ module.exports = function (app) {
                                           viewDocumentService,
                                           Lookup,
                                           downloadService,
+                                          moment,
                                           generator) {
         'ngInject';
         return function FollowupBook(model) {
@@ -222,6 +223,10 @@ module.exports = function (app) {
             FollowupBook.prototype.compositeDocumentDownload = function ($event) {
                 return downloadService.controllerMethod
                     .compositeDocumentDownload(this, $event);
+            };
+
+            FollowupBook.prototype.isDueDatePassed = function () {
+                return moment(this.followupDate).valueOf() < moment().valueOf();
             };
 
             // don't remove CMSModelInterceptor from last line
