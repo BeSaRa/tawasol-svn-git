@@ -1919,13 +1919,18 @@
                                                             <span>{{lang.item_order}}</span>
                                                         </th>
                                                         <th ng-if="!ctrl.selectedDynamicFollowUps.length"
+                                                            md-column
+                                                            md-order-by="status">
+                                                            <span>{{lang.status}}</span>
+                                                        </th>
+                                                        <th ng-if="!ctrl.selectedDynamicFollowUps.length"
                                                             md-column>
                                                             <span>{{lang.actions}}</span>
                                                         </th>
                                                     </tr>
                                                     </thead>
                                                     <tbody md-body>
-                                                    <tr md-row md-select="followUp"
+                                                    <tr md-row md-select="dynamicFollowup"
                                                         ng-repeat="dynamicFollowup in ctrl.dynamicFollowUps | limitTo: ctrl.dynamicFollowUpGrid.limit: ((ctrl.dynamicFollowUpGrid.page - 1) * ctrl.dynamicFollowUpGrid.limit) track by $index">
                                                         <td md-cell>
                                                             {{dynamicFollowup.arName}}
@@ -1935,6 +1940,14 @@
                                                         </td>
                                                         <td md-cell>
                                                             {{dynamicFollowup.itemOrder}}
+                                                        </td>
+                                                        <td md-cell>
+                                                            <md-switch
+                                                                    tooltip="{{dynamicFollowup.getTranslatedStatus()}}"
+                                                                    aria-label="{{lang.status}}"
+                                                                    ng-change="ctrl.changeDynamicFollowupStatus(dynamicFollowup)"
+                                                                    ng-model="dynamicFollowup.status">
+                                                            </md-switch>
                                                         </td>
                                                         <td md-cell>
                                                             <div flex layout="row" layout-align="start center">

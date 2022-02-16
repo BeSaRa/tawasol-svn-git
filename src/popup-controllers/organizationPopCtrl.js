@@ -2233,6 +2233,15 @@ module.exports = function (app) {
             'true': ouApplicationUserService.activateOUApplicationUser,
             'false': ouApplicationUserService.deactivateOUApplicationUser
         };
+        /**
+         *@description Contains methods for CRUD operations for job titles
+         */
+        self.dynamicFollowupStatusServices = {
+            'activate': dynamicFollowupService.activateBulkDynamicFollowups,
+            'deactivate': dynamicFollowupService.deactivateBulkDynamicFollowups,
+            'true': dynamicFollowupService.activateDynamicFollowup,
+            'false': dynamicFollowupService.deactivateDynamicFollowup
+        };
 
         /**
          * @description Handles the change of ouApplicationUser status
@@ -2374,6 +2383,38 @@ module.exports = function (app) {
                             toast.success(langService.get('delete_success').change({name: dynamicFollowUp.getNames}));
                         })
                 })
+        }
+
+        self.removeBulkDynamicFollowups = function ($event) {
+            dynamicFollowupService
+                .controllerMethod
+                .dynamicFollowupDeleteBulk(self.selectedDynamicFollowUps, $event)
+                .then(function () {
+                    self.reloadDynamicFollowUps(self.dynamicFollowUpGrid.page);
+                });
+        }
+
+        self.changeDynamicFollowupStatus = function (dynamicFollowup) {
+            self.dynamicFollowupStatusServices[dynamicFollowup.status](dynamicFollowup)
+                .then(function () {
+                    toast.success(langService.get('status_success'));
+                })
+                .catch(function () {
+                    dynamicFollowup.status = !dynamicFollowup.status;
+                    dialog.errorMessage(langService.get('something_happened_when_update_status'));
+                });
+        }
+
+        self.changeStatusBulkDynamicFollowups = function (status) {
+            var statusCheck = (status === 'activate');
+            if (!generator.checkCollectionStatus(self.selectedDynamicFollowUps, statusCheck)) {
+                toast.success(langService.get(statusCheck ? 'success_activate_selected' : 'success_deactivate_selected'));
+                return;
+            }
+            self.dynamicFollowupStatusServices[status](self.selectedDynamicFollowUps).then(function () {
+                self.reloadDynamicFollowUps(self.dynamicFollowUpGrid.page).then(function () {
+                });
+            });
         }
 
         /**

@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                     dialog,
                                                     DynamicFollowup,
                                                     Information,
+                                                    langService,
                                                     _) {
             var self = this;
             self.serviceName = 'dynamicFollowupService';
@@ -73,6 +74,28 @@ module.exports = function (app) {
                                     return self.loadParticipantUsers(organization);
                                 }
                             }
+                        });
+                },
+                dynamicFollowupDeleteBulk: function (dynamicFollowups, $event) {
+                    return dialog.confirmMessage(langService.get('confirm_delete_selected_multiple'))
+                        .then(function (result) {
+                            return self.deleteBulkDynamicFollowup(dynamicFollowups)
+                                .then(function (result) {
+                                    var response = false;
+                                    if (result.length === dynamicFollowups.length) {
+                                        toast.error(langService.get("failed_delete_selected"));
+                                        response = false;
+                                    } else if (result.length) {
+                                        generator.generateFailedBulkActionRecords('delete_success_except_following', _.map(result, function (dynamicFollowup) {
+                                            return dynamicFollowup.getNames();
+                                        }));
+                                        response = true;
+                                    } else {
+                                        toast.success(langService.get("delete_success"));
+                                        response = true;
+                                    }
+                                    return response;
+                                });
                         });
                 }
             }
@@ -140,6 +163,82 @@ module.exports = function (app) {
                 dynamicFollowupId = dynamicFollowupId instanceof DynamicFollowup ? dynamicFollowupId.id : dynamicFollowupId;
                 return $http.delete((urlService.dynamicFollowup + '/' + dynamicFollowupId));
             }
+
+            /**
+             * @description Delete bulk follow ups.
+             * @return {Promise|null}
+             * @param dynamicFollowups
+             */
+            self.deleteBulkDynamicFollowup = function (dynamicFollowups) {
+                var bulkIds = dynamicFollowups[0].hasOwnProperty('id') ? _.map(dynamicFollowups, 'id') : dynamicFollowups;
+                return $http({
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    url: (urlService.dynamicFollowup + '/bulk'),
+                    data: bulkIds
+                }).then(function (result) {
+                    result = result.data.rs;
+                    var failedDynamicFollowups = [];
+                    _.map(result, function (value, key) {
+                        if (!value)
+                            failedDynamicFollowups.push(key);
+                    });
+                    return _.filter(dynamicFollowups, function (layout) {
+                        return (failedDynamicFollowups.indexOf(layout.id) > -1);
+                    });
+                });
+            };
+
+
+            /**
+             * @description activate dynamic follow up
+             * @param dynamicFollowup
+             */
+            self.activateDynamicFollowup = function (dynamicFollowup) {
+                return $http
+                    .put((urlService.dynamicFollowup + '/activate/' + dynamicFollowup.id))
+                    .then(function () {
+                        return dynamicFollowup;
+                    });
+            };
+
+            /**
+             * @description Deactivate dynamic follow up
+             * @param dynamicFollowup
+             */
+            self.deactivateDynamicFollowup = function (dynamicFollowup) {
+                return $http
+                    .put((urlService.dynamicFollowup + '/deactivate/' + dynamicFollowup.id))
+                    .then(function () {
+                        return dynamicFollowup;
+                    });
+            };
+
+            /**
+             * @description Activate bulk of dynamic follow ups
+             * @param dynamicFollowups
+             */
+            self.activateBulkDynamicFollowups = function (dynamicFollowups) {
+                return $http
+                    .put((urlService.dynamicFollowup + '/activate/bulk'), _.map(dynamicFollowups, 'id'))
+                    .then(function (result) {
+                        return generator.getBulkActionResponse(result, dynamicFollowups, false, 'failed_activate_selected', 'success_activate_selected', 'success_activate_selected_except_following');
+                    });
+            };
+
+            /**
+             * @description Deactivate bulk of dynamic follow ups
+             * @param dynamicFollowups
+             */
+            self.deactivateBulkDynamicFollowups = function (dynamicFollowups) {
+                return $http
+                    .put((urlService.dynamicFollowup + '/deactivate/bulk'), _.map(dynamicFollowups, 'id'))
+                    .then(function (result) {
+                        return generator.getBulkActionResponse(result, dynamicFollowups, false, 'failed_deactivate_selected', 'success_deactivate_selected', 'success_deactivate_selected_except_following');
+                    });
+            };
 
 
             /**
