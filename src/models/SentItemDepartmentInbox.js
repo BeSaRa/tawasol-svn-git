@@ -194,6 +194,10 @@ module.exports = function (app) {
                 return managerService.manageDocumentAttachments.apply(managerService, [this, info.vsId, info.documentClass, info.title, $event]);
             };
 
+            SentItemDepartmentInbox.prototype.manageDocumentComments = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentComments.apply(managerService, [this, info.vsId, info.title, $event]);
+            };
 
             /**
              * @description Opens the new viewer for department sent items
