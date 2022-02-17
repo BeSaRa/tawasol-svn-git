@@ -2349,7 +2349,7 @@ module.exports = function (app) {
         self.openAddDynamicFollowUpDialog = function ($event) {
             dynamicFollowupService
                 .controllerMethod
-                .dynamicFollowUpAdd(self.organization, $event)
+                .dynamicFollowUpAdd(self.organization, self.dynamicFollowUps, $event)
                 .then(function () {
                     self.reloadDynamicFollowUps(self.dynamicFollowUpGrid.page);
                 })
@@ -2363,7 +2363,7 @@ module.exports = function (app) {
                 .then(function (dynamicFollowUp) {
                     return dynamicFollowupService
                         .controllerMethod
-                        .dynamicFollowUpEdit(dynamicFollowUp, self.organization, $event)
+                        .dynamicFollowUpEdit(dynamicFollowUp, self.organization, self.dynamicFollowUps, $event)
                         .then(function () {
                             self.reloadDynamicFollowUps(self.dynamicFollowUpGrid.page);
                         })

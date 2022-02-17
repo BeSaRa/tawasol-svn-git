@@ -25,7 +25,7 @@ module.exports = function (app) {
             }
 
             self.controllerMethod = {
-                dynamicFollowUpAdd: function (organization, $event) {
+                dynamicFollowUpAdd: function (organization, dynamicFollowUps, $event) {
                     var ouId = organization.hasOwnProperty('id') ? organization.id : organization;
                     return dialog
                         .showDialog({
@@ -35,6 +35,7 @@ module.exports = function (app) {
                             controllerAs: 'ctrl',
                             locals: {
                                 editMode: false,
+                                dynamicFollowUps: dynamicFollowUps,
                                 dynamicFollowup: new DynamicFollowup({
                                     ouId: organization.id,
                                     creatorId: employeeService.getEmployee().id
@@ -52,7 +53,7 @@ module.exports = function (app) {
                             }
                         });
                 },
-                dynamicFollowUpEdit: function (dynamicFollowUp, organization, $event) {
+                dynamicFollowUpEdit: function (dynamicFollowUp, organization, dynamicFollowUps, $event) {
                     var ouId = organization.hasOwnProperty('id') ? organization.id : organization;
                     return dialog
                         .showDialog({
@@ -62,6 +63,7 @@ module.exports = function (app) {
                             controllerAs: 'ctrl',
                             locals: {
                                 editMode: true,
+                                dynamicFollowUps: dynamicFollowUps,
                                 dynamicFollowup: dynamicFollowUp
                             },
                             resolve: {
@@ -303,8 +305,7 @@ module.exports = function (app) {
                         return subSites.indexOf(site) !== -1;
                     });
 
-                    return Number(existingDynamicFollowup.itemOrder) === Number(dynamicFollowup.itemOrder)
-                        && Number(existingDynamicFollowup.slaDays) === Number(dynamicFollowup.slaDays)
+                    return Number(existingDynamicFollowup.slaDays) === Number(dynamicFollowup.slaDays)
                         && existingDynamicFollowup.docClassId === dynamicFollowup.docClassId
                         && Number(existingSecurityLevels) === Number(securityLevels)
                         && matchParticipantSetIds

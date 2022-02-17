@@ -11,6 +11,7 @@ module.exports = function (app) {
                                                        dynamicFollowupService,
                                                        generator,
                                                        validationService,
+                                                       dynamicFollowUps,
                                                        _) {
         'ngInject';
         var self = this;
@@ -20,6 +21,7 @@ module.exports = function (app) {
         self.dynamicFollowup = dynamicFollowup;
         self.dynamicFollowupCopy = angular.copy(dynamicFollowup);
         self.applicationUsers = applicationUsers;
+        self.dynamicFollowUps = dynamicFollowUps;
 
         self.documentClasses = lookupService.returnLookups(lookupService.documentClass);
         self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
@@ -65,6 +67,12 @@ module.exports = function (app) {
                 .notifyFailure(function () {
                     toast.error(langService.get('name_duplication_message'));
                 })
+                .addStep('checkItemOrder', true, generator.checkDuplicateItemOrder, [self.dynamicFollowup, self.dynamicFollowUps, false], function (result) {
+                    return !result;
+                }, true)
+                .notifyFailure(function () {
+                    toast.error(langService.get('item_order_duplicated'));
+                })
                 .addStep('check_duplicate', true, dynamicFollowupService.checkDuplicateDynamicFollowup, [self.dynamicFollowup, self.editMode], function (result) {
                     return !result;
                 }, true)
@@ -96,6 +104,12 @@ module.exports = function (app) {
                 }, true)
                 .notifyFailure(function () {
                     toast.error(langService.get('name_duplication_message'));
+                })
+                .addStep('checkItemOrder', true, generator.checkDuplicateItemOrder, [self.dynamicFollowup, self.dynamicFollowUps, true], function (result) {
+                    return !result;
+                }, true)
+                .notifyFailure(function () {
+                    toast.error(langService.get('item_order_duplicated'));
                 })
                 .addStep('check_duplicate', true, dynamicFollowupService.checkDuplicateDynamicFollowup, [self.dynamicFollowup, self.editMode], function (result) {
                     return !result;
