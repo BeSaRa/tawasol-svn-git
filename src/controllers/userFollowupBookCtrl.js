@@ -512,6 +512,8 @@ module.exports = function (app) {
              */
             self.printResult = function (printSelectedBulk, $event) {
                 var printCriteria = angular.copy(self.searchCriteriaCopy);
+                printCriteria.isDelayed = self.grid.isDueDatePassed;
+
                 if (!self.searchCriteriaUsed) {
                     printCriteria.folderId = self.selectedFolder.id
                 }
