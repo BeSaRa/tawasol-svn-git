@@ -223,15 +223,19 @@ module.exports = function (app) {
         }
 
 
-
         /**
          * @description remove selected main or sub site
          * @param site
+         * @param $event
          */
-        self.removeSelectedSites = function (site) {
-            _removeSelectedSites(site);
-            self.subSiteSearchText = '';
-            self.subSitesSelected = [];
+        self.removeSelectedSites = function (site, $event) {
+            var siteName = site.hasSubSite ? (site.getTranslatedParentName() + ' - ' + site.getTranslatedName()) : site.getTranslatedParentName();
+            dialog.confirmMessage(langService.get('confirm_delete').change({name: siteName}), null, null, $event)
+                .then(function () {
+                    _removeSelectedSites(site);
+                    self.subSiteSearchText = '';
+                    self.subSitesSelected = [];
+                });
         }
 
         function _removeSelectedSites(site) {
@@ -239,7 +243,7 @@ module.exports = function (app) {
                 if (!item.hasSubSite()) {
                     return item.mainSiteId === site.mainSiteId;
                 }
-                return item.hasSubSite() === site.subSiteId;
+                return item.subSiteId === site.subSiteId;
             });
             self.mainSubSites.splice(index, 1)
             _mapSubSitesResultIds();
@@ -249,12 +253,16 @@ module.exports = function (app) {
         /**
          *@description delete bulk
          * @param sites
+         * @param $event
          */
-        self.removeSelectedSitesBulk = function (sites) {
-            _.forEach(sites, site => {
-                _removeSelectedSites(site);
-            })
-            self.mainSubSitesSelected = [];
+        self.removeSelectedSitesBulk = function (sites, $event) {
+            dialog.confirmMessage(langService.get('confirm_delete_selected_multiple'), null, null, $event)
+                .then(function () {
+                    _.forEach(sites, site => {
+                        _removeSelectedSites(site);
+                    })
+                    self.mainSubSitesSelected = [];
+                });
         }
 
         /**

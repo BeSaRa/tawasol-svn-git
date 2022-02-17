@@ -189,7 +189,7 @@
                         <div layout="row">
                             <div layout="row" layout-align="start center">
                                 <md-button class="md-icon-button"
-                                           ng-click="ctrl.removeSelectedSitesBulk(ctrl.mainSubSitesSelected)"
+                                           ng-click="ctrl.removeSelectedSitesBulk(ctrl.mainSubSitesSelected,$event)"
                                            ng-disabled="!!ctrl.disableCorrespondence" tooltip="{{lang.delete}}">
                                     <md-icon md-svg-icon="delete"></md-icon>
                                 </md-button>
@@ -241,7 +241,7 @@
                             </td>
                             <td md-cell>
                                 <div flex layout="row" layout-align="start center">
-                                    <md-button ng-click="ctrl.removeSelectedSites(site)" class="md-icon-button"
+                                    <md-button ng-click="ctrl.removeSelectedSites(site,$event)" class="md-icon-button"
                                                tooltip="{{lang.delete}}">
                                         <md-icon md-svg-icon="delete"></md-icon>
                                     </md-button>
