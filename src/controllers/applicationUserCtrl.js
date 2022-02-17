@@ -100,12 +100,17 @@ module.exports = function (app) {
         self.openEditApplicationUserDialog = function (applicationUser, $event) {
             applicationUserService
                 .controllerMethod
-                .applicationUserEdit(applicationUser,  $event)
+                .applicationUserEdit(applicationUser, $event)
                 .then(function (result) {
-                    self.reloadApplicationUsers(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get('edit_success').change({name: result.getNames()}));
-                        });
+                    if (self.searchModel) {
+                        toast.success(langService.get('edit_success').change({name: result.getNames()}));
+                        self.searchInApplicationUser(self.searchModel);
+                    } else {
+                        self.reloadApplicationUsers(self.grid.page)
+                            .then(function () {
+                                toast.success(langService.get('edit_success').change({name: result.getNames()}));
+                            });
+                    }
                 });
         };
 
@@ -116,6 +121,12 @@ module.exports = function (app) {
             self.applicationUsers = $filter('orderBy')(self.applicationUsers, self.grid.order);
         };
 
+        self.cancelSearchFilter = function () {
+            self.searchMode = false;
+            self.searchModel = '';
+            self.reloadApplicationUsers();
+        }
+
         /**
          * @description Reload the grid of application user
          * @param pageNumber
@@ -124,8 +135,6 @@ module.exports = function (app) {
         self.reloadApplicationUsers = function (pageNumber) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
-            self.searchMode = false;
-            self.searchModel = '';
             return applicationUserService
                 //.loadApplicationUsers(true)
                 .loadApplicationUsersView()

@@ -136,4 +136,5 @@ module.exports = function (app) {
     require('./CorrespondenceSiteTypeInterceptor')(app);
     require('./PrivateUserClassificationInterceptor')(app);
     require('./DynamicFollowupInterceptor')(app);
+    require('./ApplicationUserViewInterceptor')(app);
 };

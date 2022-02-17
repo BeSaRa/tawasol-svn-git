@@ -16,7 +16,7 @@
                        ng-click="ctrl.exportApplicationUsers($event)">
                 <md-icon md-svg-icon="printer"></md-icon>
             </md-button>
-            <search-filter-directive change-icon-model="ctrl.searchMode" cancel-callback="ctrl.reloadApplicationUsers()"
+            <search-filter-directive change-icon-model="ctrl.searchMode" cancel-callback="ctrl.cancelSearchFilter()"
                                      on-change="ctrl.searchInApplicationUser"
                                      model="ctrl.searchModel"></search-filter-directive>
         </div>
@@ -64,6 +64,10 @@
                                             md-order-by="employeeNo">
                                             <span>{{lang.employee_number}}</span>
                                         </th>
+                                        <th ng-if="!ctrl.selectedApplicationUsers.length" md-column
+                                            md-order-by="updatedOn">
+                                            <span>{{lang.updated_on}}</span>
+                                        </th>
                                         <th ng-if="!ctrl.selectedApplicationUsers.length" md-column>
                                             <span>{{lang.actions}}</span>
                                         </th>
@@ -78,6 +82,7 @@
                                         <!--<td md-cell>{{applicationUser.loginName}}</td>-->
                                         <td md-cell>{{applicationUser.domainName}}</td>
                                         <td md-cell>{{applicationUser.employeeNo}}</td>
+                                        <td md-cell>{{applicationUser.updatedOnString}}</td>
                                         <td md-cell>
                                             <div flex layout="row" layout-align="start center">
                                                 <md-button class="md-icon-button" title="{{lang.delete}}"
