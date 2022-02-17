@@ -283,7 +283,7 @@ module.exports = function (app) {
                     deferTerminate.resolve(true);
                 }
                 deferTerminate.promise.then(function () {
-                    record.terminate(false, $event).then(function () {
+                    record.terminate(false, self.selectedFolder.hasUserDynamicFollowup(), $event).then(function () {
                         return self.reloadFollowupBooks(self.grid.page)
                             .then(function (result) {
                                 new ResolveDefer(defer);

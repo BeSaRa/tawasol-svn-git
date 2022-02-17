@@ -170,8 +170,8 @@ module.exports = function (app) {
                 return this.queueId !== null;
             };
 
-            FollowupBook.prototype.terminate = function (ignoreMessage, $event) {
-                return followUpUserService.terminateFollowup(this, $event);
+            FollowupBook.prototype.terminate = function (ignoreMessage, terminateAsBulk, $event) {
+                return followUpUserService.terminateFollowup(this, terminateAsBulk, $event);
             };
 
             FollowupBook.prototype.getTranslatedName = function () {

@@ -671,13 +671,14 @@ module.exports = function (app) {
                     });
             };
 
-            self.terminateFollowup = function (followUpBook, $event, ignoreMessage) {
+            self.terminateFollowup = function (followUpBook, terminateAsBulk, $event, ignoreMessage) {
                 return self.showReasonDialog('terminate_reason', $event)
                     .then(function (reason) {
                         return $http
                             .put(urlService.userFollowUp + "/terminate", {
                                 id: followUpBook.id,
-                                comment: reason
+                                comment: reason,
+                                terminateAsBulk: terminateAsBulk
                             })
                             .then(function () {
                                 if (!ignoreMessage) {
