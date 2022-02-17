@@ -18,7 +18,7 @@ module.exports = function (app) {
             if (model.participantSet.length) {
                 model.participantSet = _.map(model.participantSet, participant => {
                     return {
-                        'id': (participant.id ? participant.id : null),
+                        'id': (participant.hasOwnProperty('participantId') ? participant.participantId : null),
                         'userId': participant.userId,
                         'ouId': participant.ouId
                     }
@@ -39,8 +39,9 @@ module.exports = function (app) {
 
             model.participantSet = _.map(model.participantSet, function (user) {
                 user.userInfo = generator.generateInstance(user.userInfo, Information);
+                user.participantId = user.id;
                 return user
-            })
+            });
             return model;
         });
     })

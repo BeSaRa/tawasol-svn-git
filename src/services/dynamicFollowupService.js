@@ -71,7 +71,7 @@ module.exports = function (app) {
                                 },
                                 applicationUsers: function () {
                                     'ngInject';
-                                    return self.loadParticipantUsers(organization);
+                                    return self.loadParticipantUsers(organization, dynamicFollowUp);
                                 }
                             }
                         });
@@ -148,12 +148,19 @@ module.exports = function (app) {
                     });
             };
 
-            self.loadParticipantUsers = function (organization) {
+            self.loadParticipantUsers = function (organization, dynamicFollowup) {
                 var ouId = organization.hasOwnProperty('id') ? organization.getRegistryOUID() : organization;
                 return $http.get(urlService.dynamicFollowupUsers.change({ouId: ouId}))
                     .then(result => {
                         return _.map(result.data.rs, function (user) {
                             user.userInfo = generator.generateInstance(user.userInfo, Information);
+
+                            if (dynamicFollowup && dynamicFollowup.participantSet && dynamicFollowup.participantSet.length) {
+                                var dynamicFollowupUser = _.find(dynamicFollowup.participantSet, function (item) {
+                                    return user.userId === item.userId && user.ouId === item.ouId;
+                                });
+                                user.participantId = dynamicFollowupUser ? dynamicFollowupUser.participantId : null;
+                            }
                             return user
                         });
                     })
