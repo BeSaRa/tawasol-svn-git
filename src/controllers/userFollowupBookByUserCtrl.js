@@ -309,7 +309,7 @@ module.exports = function (app) {
          */
         self.terminate = function (record, $event, defer) {
             record = _getOriginalFollowupBook(record);
-            console.log(self.selectedFolder);
+
             if (record.isTerminated()) {
                 return;
             }
