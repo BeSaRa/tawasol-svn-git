@@ -274,7 +274,7 @@ module.exports = function (app) {
                     return;
                 }
                 var deferTerminate = $q.defer();
-                if (record.isSharedFollowup() || self.selectedFolder.hasUserDynamicFollowup()) {
+                if (record.isSharedFollowup() || record.hasUserDynamicFollowup()) {
                     dialog.confirmMessage(langService.get('confirm_terminate_with_shared_followup'))
                         .then(function () {
                             deferTerminate.resolve(true);

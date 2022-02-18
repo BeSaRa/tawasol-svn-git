@@ -309,12 +309,12 @@ module.exports = function (app) {
          */
         self.terminate = function (record, $event, defer) {
             record = _getOriginalFollowupBook(record);
-
+            console.log(self.selectedFolder);
             if (record.isTerminated()) {
                 return;
             }
             var deferTerminate = $q.defer();
-            if (record.isSharedFollowup()) {
+            if (record.isSharedFollowup() || record.hasUserDynamicFollowup()) {
                 dialog.confirmMessage(langService.get('confirm_terminate_with_shared_followup'))
                     .then(function () {
                         deferTerminate.resolve(true);
@@ -323,7 +323,7 @@ module.exports = function (app) {
                 deferTerminate.resolve(true);
             }
             deferTerminate.promise.then(function () {
-                record.terminate(false, $event).then(function () {
+                record.terminate(false, record.hasUserDynamicFollowup(), $event).then(function () {
                     return self.reloadFollowupBooks(self.grid.page)
                         .then(function (result) {
                             new ResolveDefer(defer);

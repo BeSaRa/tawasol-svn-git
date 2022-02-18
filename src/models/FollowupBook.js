@@ -228,6 +228,10 @@ module.exports = function (app) {
             FollowupBook.prototype.isDueDatePassed = function () {
                 return moment(this.followupDate).valueOf() < moment().valueOf();
             };
+            FollowupBook.prototype.hasUserDynamicFollowup = function () {
+                return !!this.userDynamicFollowupId;
+            }
+
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
