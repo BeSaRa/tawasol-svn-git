@@ -184,9 +184,19 @@
                                 </md-option>
                             </md-select>
                         </md-input-container>
-                        <span flex ng-if="ctrl.isAdminFollowup"></span>
+                        <!-- Security Level -->
+                        <md-input-container flex ng-if="ctrl.isAdminFollowup">
+                            <label for="securityLevel">{{lang.security_levels}}</label>
+                            <md-select name="securityLevel" id="securityLevel"
+                                       ng-model="ctrl.searchCriteria.securityLevel" multiple>
+                                <md-option ng-value="securityLevel"
+                                           ng-repeat="securityLevel in ctrl.securityLevels">
+                                    {{securityLevel.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
                     </div>
-                    <div layout="row">
+                    <div ng-if="!ctrl.isAdminFollowup" layout="row">
                         <!-- Security Level -->
                         <md-input-container flex>
                             <label for="securityLevel">{{lang.security_levels}}</label>
