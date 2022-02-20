@@ -368,6 +368,11 @@
                                                     md-order-by="docFullSerial">
                                                     <span>{{lang.inbox_serial}}</span>
                                                 </th>
+                                                <th md-column
+                                                    ng-if="!ctrl.selectedCorrespondences.length && ctrl.isIncomingDocClass()"
+                                                    md-order-by="refDocNumber">
+                                                    <span>{{lang.document_number}}</span>
+                                                </th>
                                                 <th md-column ng-if="!ctrl.selectedCorrespondences.length"
                                                     md-order-by="priorityLevel">
                                                     <span>{{lang.priority_level}}</span>
@@ -461,6 +466,9 @@
                                                 </td>
                                                 <td md-cell><span
                                                         class="serial-td">{{correspondence.docFullSerial}}</span></td>
+                                                <td md-cell ng-if="ctrl.isIncomingDocClass()">
+                                                    {{correspondence.refDocNumber}}
+                                                </td>
                                                 <td md-cell>{{correspondence.priorityLevel.getTranslatedName()}}</td>
                                                 <td md-cell>{{correspondence.securityLevel.getTranslatedName()}}</td>
                                                 <td md-cell>{{correspondence.docClassInfo.getTranslatedName()}}</td>
