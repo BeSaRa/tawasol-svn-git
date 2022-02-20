@@ -90,7 +90,10 @@ module.exports = function (app) {
                     isOfficial: !!self.isOfficial
                 });
             };
-
+            Attachment.prototype.canUpdateIfAuthorizedActionStatus = function () {
+                var updateActionStatus = this.updateActionStatus.hasOwnProperty('lookupKey') ? this.updateActionStatus.lookupKey : this.updateActionStatus;
+                return updateActionStatus !== 1;
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

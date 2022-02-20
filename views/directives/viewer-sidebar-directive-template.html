@@ -54,7 +54,7 @@
                             <md-button title="{{lang.annotate_document}}"
                                        ng-click="ctrl.openAnnotateAttachment(attachment , $event)"
                                        class="md-icon-button view-icon-button"
-                                       ng-if="!ctrl.isLimitedCentralUnitAccess">
+                                       ng-if="!ctrl.isLimitedCentralUnitAccess && attachment.canUpdateIfAuthorizedActionStatus()">
                                 <md-icon md-svg-icon="draw"></md-icon>
                             </md-button>
                             <grid-indicator-directive record="attachment"
@@ -83,7 +83,7 @@
                             <md-button title="{{lang.annotate_document}}"
                                        ng-click="ctrl.openAnnotateAttachment(attachment , $event)"
                                        class="md-icon-button view-icon-button"
-                                       ng-if="!ctrl.isLimitedCentralUnitAccess">
+                                       ng-if="!ctrl.isLimitedCentralUnitAccess && attachment.canUpdateIfAuthorizedActionStatus()">
                                 <md-icon md-svg-icon="draw"></md-icon>
                             </md-button>
                             <grid-indicator-directive record="attachment"
