@@ -19,15 +19,13 @@ module.exports = function (app) {
             model.theme = themeService.getThemeById(model.theme);
             model.securityLevels = generator.getResultFromSelectedCollection(model.securityLevels, 'lookupKey');
             model.excludedUsersFromAudit = (model.excludedUsersFromAudit && model.excludedUsersFromAudit.length) ? JSON.stringify(_.map(model.excludedUsersFromAudit, 'id')) : JSON.stringify([]);
-            if (employeeService.isSuperAdminUser()) {
-                if ((model.excludedPermissionList && model.excludedPermissionList.length)) {
-                    model.excludedPermissionList = _.map(model.excludedPermissionList, permission => {
-                        return permission.hasOwnProperty('id') ? permission.id : permission;
-                    })
-                    model.excludedPermissionList = JSON.stringify(model.excludedPermissionList);
-                } else {
-                    model.excludedPermissionList = JSON.stringify([]);
-                }
+            if (employeeService.isSuperAdminUser() && model.excludedPermissionList && model.excludedPermissionList.length) {
+                model.excludedPermissionList = _.map(model.excludedPermissionList, permission => {
+                    return permission.hasOwnProperty('id') ? permission.id : permission;
+                })
+                model.excludedPermissionList = JSON.stringify(model.excludedPermissionList);
+            } else {
+                model.excludedPermissionList = JSON.stringify(model.excludedPermissionList);
             }
             model.fileType = angular.toJson(model.fileType);
             model.barcodeElements = model.barcodeElements.mapSend();
