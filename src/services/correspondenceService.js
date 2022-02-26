@@ -5398,6 +5398,9 @@ module.exports = function (app) {
             var ouId = "";
             if (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm && correspondence.isWorkItem()) { /* WorkItem */
                 ouId = correspondence.generalStepElm.ou;
+            } else if (correspondence.hasOwnProperty('registryOU') && correspondence.registryOU) {
+                // as agreed with Issawi to use registryOU
+                ouId = correspondence.registryOU;
             } else if (correspondence.hasOwnProperty('ouId') && correspondence.ouId) { /* EventHistory */
                 ouId = correspondence.ouId;
             } else {  /* Correspondence */
