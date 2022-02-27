@@ -524,6 +524,24 @@ module.exports = function (app) {
                     return $q.reject(false);
                 });
         };
+        /**
+         * @description Update the given user preferences.
+         * @param applicationUser
+         * @return {Promise|ApplicationUser}
+         */
+        self.updateUserPreferences = function (applicationUser) {
+            return $http
+                .put(urlService.applicationUsers + '/user-preferences',
+                    generator.interceptSendInstance('ApplicationUser', applicationUser))
+                .then(function () {
+                    return applicationUser;
+                }).catch(function (error) {
+                    if (error && errorCode.checkIf(error, 'FAILED_DUPLICATE_EMPLOYEE_NUMBER') === true) {
+                        dialog.errorMessage(generator.getTranslatedError(error));
+                    }
+                    return $q.reject(false);
+                });
+        };
 
         /**
          * @description Delete given application user.

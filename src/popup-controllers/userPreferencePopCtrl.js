@@ -527,7 +527,7 @@ module.exports = function (app) {
                 .validate()
                 .then(function () {
                     applicationUserService
-                        .updateApplicationUser(self.applicationUser)
+                        .updateUserPreferences(self.applicationUser)
                         .then(function (result) {
                             employeeService.setCurrentEmployee(result);
                             toast.success(langService.get('general_notification_settings_success'));
