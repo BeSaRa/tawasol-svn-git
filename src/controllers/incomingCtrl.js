@@ -696,6 +696,12 @@ module.exports = function (app) {
             self.documentInformationExist = false;
             self.contentFileExist = false;
             self.document_properties.$setUntouched();
+            $timeout(function () {
+                if (self.document_properties) {
+                    generator.validateRequiredSelectFields(self.document_properties, true);
+                }
+            });
+
             self.receiveG2G = false;
             self.receive = false;
 
@@ -760,5 +766,12 @@ module.exports = function (app) {
             self.resetAddCorrespondence();
         });
 
+        self.$onInit = function () {
+            $timeout(function () {
+                if (self.document_properties) {
+                    generator.validateRequiredSelectFields(self.document_properties, true);
+                }
+            }, 500);
+        }
     });
 };
