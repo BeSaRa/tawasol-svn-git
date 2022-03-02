@@ -30,6 +30,7 @@ module.exports = function (app) {
 
         self.viewerLogs = [];
         self.viewerLogsCopy = angular.copy(self.viewerLogs);
+        self.highlightViewerLog = null;
 
         self.grid = {
             name: 'viewersLogGrid',
@@ -93,6 +94,7 @@ module.exports = function (app) {
                     self.selectedDocument = null;
                     self.viewerLogs = [];
                     self.viewerLogsCopy = angular.copy(self.viewerLogs);
+                    self.highlightViewerLog = null;
                 });
         };
 
@@ -107,6 +109,8 @@ module.exports = function (app) {
                     self.selectedDocument = null;
                     self.viewerLogs = [];
                     self.viewerLogsCopy = angular.copy(self.viewerLogs);
+                    self.highlightViewerLog = null;
+                    self.showViewerLog(self.allSearchableRecords[0], $event, null, true)
                 });
         };
 
@@ -124,6 +128,7 @@ module.exports = function (app) {
                         self.selectedDocument = null;
                         self.viewerLogs = [];
                         self.viewerLogsCopy = angular.copy(self.viewerLogs);
+                        self.highlightViewerLog = null;
                     }
                 })
         };
@@ -134,15 +139,15 @@ module.exports = function (app) {
          * @param $event
          * @param forceStopPropagation
          */
-        self.showViewerLog = function (record, $event, forceStopPropagation) {
+        self.showViewerLog = function (record, $event, forceStopPropagation, highlightFirstLog) {
             if ($event && forceStopPropagation) {
                 $event.stopPropagation();
             }
             self.selectedDocument = record;
-            self.reloadViewerLog();
+            self.reloadViewerLog(null, null, highlightFirstLog);
         };
 
-        self.reloadViewerLog = function (pageNumber, $event) {
+        self.reloadViewerLog = function (pageNumber, $event, highlightFirstLog) {
             if (!self.selectedDocument)
                 return;
 
@@ -152,6 +157,11 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.viewerLogs = result;
                     self.viewerLogsCopy = angular.copy(self.viewerLogs);
+                    if (self.viewerLogs.length && highlightFirstLog) {
+                        self.highlightViewerLog = _.find(result, function (viewerLog) {
+                            return viewerLog.key.toLowerCase() === self.watermarkSearchText.toLowerCase();
+                        });
+                    }
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
@@ -186,7 +196,7 @@ module.exports = function (app) {
         self.viewTrackingSheet = function (record, $event) {
             viewTrackingSheetService
                 .controllerMethod
-                .viewTrackingSheetPopup(record, ['view_tracking_sheet', 'tabs', gridService.grids.administration.viewersLog], $event , true)
+                .viewTrackingSheetPopup(record, ['view_tracking_sheet', 'tabs', gridService.grids.administration.viewersLog], $event, true)
                 .then(function (result) {
 
                 });

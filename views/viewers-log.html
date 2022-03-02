@@ -97,7 +97,8 @@
                                           class="view-doc subject-internal"
                                           tooltip="{{ctrl.selectedDocument.getTranslatedName()}}">{{ctrl.selectedDocument.getTranslatedName()}}</span>
                                     <span flex></span>
-                                    <grid-search-directive grid="ctrl.grid" ng-if="ctrl.selectedDocument"></grid-search-directive>
+                                    <grid-search-directive grid="ctrl.grid"
+                                                           ng-if="ctrl.selectedDocument"></grid-search-directive>
                                 </div>
                                 <!--<md-icon md-svg-icon="file-excel" ng-if="ctrl.selectedDocument"
                                          title="{{lang.export_to_excel}}"
@@ -144,6 +145,14 @@
                                         </tr>
                                         </thead>
                                         <tbody md-body>
+                                        <tr md-row ng-if="ctrl.highlightViewerLog" class="background-warning">
+                                            <td md-cell>{{ctrl.highlightViewerLog.userInfo.getTranslatedName()}}</td>
+                                            <td md-cell>{{ctrl.highlightViewerLog.itemTypeInfo.getTranslatedName()}}
+                                            </td>
+                                            <td md-cell>{{ctrl.highlightViewerLog.updatedOnString}}</td>
+                                            <td md-cell>{{ctrl.highlightViewerLog.key}}</td>
+                                            <td md-cell>{{ctrl.highlightViewerLog.clientIP}}</td>
+                                        </tr>
                                         <tr md-row md-select="log" model="log" grid-right-click-directive="log"
                                             selected-length="{{ctrl.selectedLogs.length ? ctrl.selectedLogs.length : 0}}"
                                             ng-repeat="log in ctrl.viewerLogs | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
