@@ -2778,3 +2778,28 @@ html.rtl {
   width: 750px !important;
   max-width: 750px !important;
 }
+
+.simple-add-container {
+  margin-top: 15px !important;
+  position: relative !important;
+}
+
+.simple-properties-toggle {
+  position: absolute;
+  top: -15px;
+  z-index: 10;
+}
+
+.properties-sidenav {
+  overflow: hidden;
+  transition: all 5s ease-in-out;
+
+  &.is-properties-closed {
+    width: 0;
+  }
+
+  .simple-properties {
+    margin-right: 5px;
+    margin-left: 3px;
+  }
+}

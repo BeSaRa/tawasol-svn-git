@@ -90,7 +90,12 @@ module.exports = function (app) {
 
         self.documentInformation = null;
         self.isNewDocument = false;
-
+        self.propertiesSideNavStatus = true;
+        self.propertiesSideNavText = 'collapse';
+        self.propertiesSideNavIcon = {
+            'ar': {collapse: 'arrow-right-bold-circle-outline', expand: 'arrow-left-bold-circle-outline'},
+            'en': {collapse: 'arrow-left-bold-circle-outline', expand: 'arrow-right-bold-circle-outline'}
+        }
         self.outgoing =
             new Outgoing({
                 ou: self.employee.getOUID(),
@@ -1124,6 +1129,13 @@ module.exports = function (app) {
                     });
                 }, configurationService.OFFICE_ONLINE_DELAY);
             }
+        }
+
+        self.toggleProperties = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            self.propertiesSideNavStatus = !self.propertiesSideNavStatus;
+            self.propertiesSideNavText = self.propertiesSideNavStatus ? 'collapse' : 'expand';
         }
 
         $rootScope.$on('SEQ_LAUNCH_SUCCESS', function () {

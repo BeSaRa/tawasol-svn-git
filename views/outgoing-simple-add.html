@@ -14,201 +14,217 @@
         <div layout="column" flex>
             <div scroll-directive>
                 <!--<div class="page-padding">-->
-                <div class="simple-padding" layout="row" flex>
-                    <!--document content-->
-                    <div class="simple-properties" layout="row" flex="30">
-                        <div layout="column" flex>
-                            <accordion-directive class="simple-add-properties-accordion" label-collapse="ctrl.collapse"
-                                                 validation="ctrl.validation">
-                                <accordion-item active fail-when="ctrl.document_properties.$invalid ||
+                <div class="simple-add-container">
+                    <md-button class="md-icon-button simple-properties-toggle" aria-label="toggle"
+                               ng-click="ctrl.toggleProperties($event)" tooltip="{{lang[ctrl.propertiesSideNavText]}}">
+                        <md-icon
+                                md-svg-icon="{{ ctrl.propertiesSideNavIcon[lang.current][ctrl.propertiesSideNavText] }}"></md-icon>
+                    </md-button>
+                    <div class="simple-padding" layout="row" flex>
+                        <div class="properties-sidenav"
+                             ng-class="{ 'is-properties-closed': !ctrl.propertiesSideNavStatus }" layout="column">
+                            <!--document content-->
+                            <div class="simple-properties" layout="row" flex="30">
+                                <div layout="column" flex>
+                                    <accordion-directive class="simple-add-properties-accordion"
+                                                         label-collapse="ctrl.collapse"
+                                                         validation="ctrl.validation">
+                                        <accordion-item active fail-when="ctrl.document_properties.$invalid ||
                                                                       !ctrl.outgoing.sitesInfoTo.length"
-                                                pass-when="ctrl.document_properties.$valid &&
+                                                        pass-when="ctrl.document_properties.$valid &&
                                                                !!ctrl.outgoing.sitesInfoTo.length">
-                                    <accordion-title>
-                                        <!--<div layout="row" layout-align="start center">-->
-                                        <md-icon md-svg-icon="file-document-box"></md-icon>
-                                        <span> &nbsp;{{lang.document_properties}}</span>
-                                        <!--</div>-->
-                                    </accordion-title>
-                                    <accordion-content>
-                                        <div>
-                                            <manage-properties-simple-directive
-                                                    registry-organizations="ctrl.registryOrganizations"
-                                                    source-model="ctrl.model"
-                                                    source-form="ctrl.document_properties"
-                                                    document="ctrl.outgoing"
-                                                    is-new-document="ctrl.isNewDocument"></manage-properties-simple-directive>
-                                        </div>
-                                        <div>
-                                            <div layout="row" layout-align="start center" class="p10">
-                                                <md-icon md-svg-icon="arrange-send-backward"></md-icon>
-                                                <span flex>{{lang.manage_correspondence_sites}}</span>
+                                            <accordion-title>
+                                                <!--<div layout="row" layout-align="start center">-->
+                                                <md-icon md-svg-icon="file-document-box"></md-icon>
+                                                <span> &nbsp;{{lang.document_properties}}</span>
+                                                <!--</div>-->
+                                            </accordion-title>
+                                            <accordion-content>
+                                                <div>
+                                                    <manage-properties-simple-directive
+                                                            registry-organizations="ctrl.registryOrganizations"
+                                                            source-model="ctrl.model"
+                                                            source-form="ctrl.document_properties"
+                                                            document="ctrl.outgoing"
+                                                            is-new-document="ctrl.isNewDocument"></manage-properties-simple-directive>
+                                                </div>
+                                                <div>
+                                                    <div layout="row" layout-align="start center" class="p10">
+                                                        <md-icon md-svg-icon="arrange-send-backward"></md-icon>
+                                                        <span flex>{{lang.manage_correspondence_sites}}</span>
+                                                    </div>
+                                                    <manage-correspondence-sites-simple-directive
+                                                            correspondence="ctrl.outgoing"
+                                                            empty-site-search="ctrl.emptySiteSearch"
+                                                            empty-sub-records="ctrl.emptySubSites"
+                                                            vs-id="ctrl.outgoing.vsId"
+                                                            document-class="ctrl.outgoing.docClassName"
+                                                            sites-info-c-c="ctrl.outgoing.sitesInfoCC"
+                                                            sites-info-to="ctrl.outgoing.sitesInfoTo"></manage-correspondence-sites-simple-directive>
+                                                </div>
+                                            </accordion-content>
+                                        </accordion-item>
+                                    </accordion-directive>
+                                    <div layout="column">
+                                        <div layout="row">
+                                            <md-button
+                                                    ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, 'save', false)"
+                                                    ng-click="ctrl.saveCorrespondence()" class="md-raised"
+                                                    ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
+                                                {{lang.outgoing_save}}
+                                            </md-button>
+                                            <md-button
+                                                    ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, 'saveAndPrintBarcode', false)"
+                                                    ng-click="ctrl.saveCorrespondenceAndPrintBarcode()"
+                                                    class="md-raised"
+                                                    ng-if="ctrl.outgoing.addMethod">
+                                                {{lang.outgoing_save_print_barcode}}
+                                            </md-button>
+                                            <div ng-if="!ctrl.outgoing.addMethod && !ctrl.editContent && ctrl.employeeService.hasPermissionTo('COMPLETE_DRAFT_OUTGOING_DOCUMENTS')">
+                                                <md-button
+                                                        ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, 'saveAsDraft', true)"
+                                                        ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
+                                                    {{lang.outgoing_save_draft}}
+                                                </md-button>
                                             </div>
-                                            <manage-correspondence-sites-simple-directive
-                                                    correspondence="ctrl.outgoing"
-                                                    empty-site-search="ctrl.emptySiteSearch"
-                                                    empty-sub-records="ctrl.emptySubSites"
-                                                    vs-id="ctrl.outgoing.vsId"
-                                                    document-class="ctrl.outgoing.docClassName"
-                                                    sites-info-c-c="ctrl.outgoing.sitesInfoCC"
-                                                    sites-info-to="ctrl.outgoing.sitesInfoTo"></manage-correspondence-sites-simple-directive>
                                         </div>
-                                    </accordion-content>
-                                </accordion-item>
-                            </accordion-directive>
-                            <div layout="column">
-                                <div layout="row">
-                                    <md-button ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, 'save', false)"
-                                               ng-click="ctrl.saveCorrespondence()" class="md-raised"
-                                               ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
-                                        {{lang.outgoing_save}}
-                                    </md-button>
-                                    <md-button
-                                            ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, 'saveAndPrintBarcode', false)"
-                                            ng-click="ctrl.saveCorrespondenceAndPrintBarcode()" class="md-raised"
-                                            ng-if="ctrl.outgoing.addMethod">
-                                        {{lang.outgoing_save_print_barcode}}
-                                    </md-button>
-                                    <div ng-if="!ctrl.outgoing.addMethod && !ctrl.editContent && ctrl.employeeService.hasPermissionTo('COMPLETE_DRAFT_OUTGOING_DOCUMENTS')">
-                                        <md-button
-                                                ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, 'saveAsDraft', true)"
-                                                ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
-                                            {{lang.outgoing_save_draft}}
-                                        </md-button>
-                                    </div>
-                                </div>
-                                <div layout="row">
-                                    <md-button
-                                            ng-if="ctrl.canSaveAndAnnotate()"
-                                            ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, 'saveAndInsert', true)"
-                                            ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised"
-                                            ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
-                                        {{lang.save_and_insert}}
-                                    </md-button>
-                                    <md-button ng-disabled="ctrl.saveInProgress"
-                                               ng-click="ctrl.confirmResetAddCorrespondence($event)" class="md-raised">
-                                        {{lang.outgoing_new}}
-                                    </md-button>
-                                    <md-button ng-disabled="ctrl.saveInProgress"
-                                               ng-click="ctrl.cancelAddCorrespondence($event)" class="md-raised">
-                                        {{lang.outgoing_cancel}}
-                                    </md-button>
-                                </div>
-                                <div layout="row" ng-if="ctrl.outgoing.hasVsId() && ctrl.requestCompleted">
-                                    <div>
-                                        <md-input-container class="mt5">
-                                            <label for="documentAction">{{lang.document_action}}</label>
-                                            <md-select name="documentAction" id="documentAction"
-                                                       ng-disabled="!ctrl.isActionsAvailable || ctrl.saveInProgress"
-                                                       ng-model="ctrl.documentAction">
-                                                <md-option ng-value="action" class="{{action.class}}"
-                                                           ng-if="action.checkShow(action, ctrl.outgoing, $index)"
-                                                           ng-repeat="action in ctrl.documentActions track by $index">
-                                                    {{action.text}}
-                                                </md-option>
-                                            </md-select>
-                                        </md-input-container>
-                                    </div>
-                                    <div>
-                                        <md-button class="md-raised"
-                                                   ng-disabled="!ctrl.documentAction || ctrl.saveInProgress"
-                                                   ng-click="ctrl.performDocumentAction($event)">{{lang.action_submit}}
-                                        </md-button>
+                                        <div layout="row">
+                                            <md-button
+                                                    ng-if="ctrl.canSaveAndAnnotate()"
+                                                    ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, 'saveAndInsert', true)"
+                                                    ng-click="ctrl.saveAndAnnotateDocument()" class="md-raised"
+                                                    ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
+                                                {{lang.save_and_insert}}
+                                            </md-button>
+                                            <md-button ng-disabled="ctrl.saveInProgress"
+                                                       ng-click="ctrl.confirmResetAddCorrespondence($event)"
+                                                       class="md-raised">
+                                                {{lang.outgoing_new}}
+                                            </md-button>
+                                            <md-button ng-disabled="ctrl.saveInProgress"
+                                                       ng-click="ctrl.cancelAddCorrespondence($event)"
+                                                       class="md-raised">
+                                                {{lang.outgoing_cancel}}
+                                            </md-button>
+                                        </div>
+                                        <div layout="row" ng-if="ctrl.outgoing.hasVsId() && ctrl.requestCompleted">
+                                            <div>
+                                                <md-input-container class="mt5">
+                                                    <label for="documentAction">{{lang.document_action}}</label>
+                                                    <md-select name="documentAction" id="documentAction"
+                                                               ng-disabled="!ctrl.isActionsAvailable || ctrl.saveInProgress"
+                                                               ng-model="ctrl.documentAction">
+                                                        <md-option ng-value="action" class="{{action.class}}"
+                                                                   ng-if="action.checkShow(action, ctrl.outgoing, $index)"
+                                                                   ng-repeat="action in ctrl.documentActions track by $index">
+                                                            {{action.text}}
+                                                        </md-option>
+                                                    </md-select>
+                                                </md-input-container>
+                                            </div>
+                                            <div>
+                                                <md-button class="md-raised"
+                                                           ng-disabled="!ctrl.documentAction || ctrl.saveInProgress"
+                                                           ng-click="ctrl.performDocumentAction($event)">
+                                                    {{lang.action_submit}}
+                                                </md-button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- document viewer -->
-                    <div class="simple-viewer" layout="row" flex="70">
-                        <div layout="column" flex>
-                            <accordion-directive layout="column" flex label-collapse="ctrl.collapse"
-                                                 validation="ctrl.validation">
-                                <accordion-item layout="column" active
-                                                pass-when="ctrl.documentInformation || ctrl.outgoing.contentFile">
-                                    <accordion-title>
-                                        <div layout="row" layout-align="start center">
-                                            <md-icon md-svg-icon="format-align-justify"></md-icon>
-                                            <span>{{lang.outgoing_create_content}}</span>
-                                            <span flex></span>
-                                            <div layout="row" layout-align="center center">
-                                                <span>{{lang.outgoing_document_type}} :&nbsp;</span>
-                                                <span>{{lang.current === 'en' ? lang.outgoing_electronic : lang.outgoing_paper}}</span>
-                                                <span>&nbsp;&nbsp;</span>
-                                                <md-switch
-                                                        ng-disabled="ctrl.isDocumentTypeSwitchDisabled()"
-                                                        class="m0 top-switch-handler"
-                                                        aria-label="{{lang.outgoing_document_type}}"
-                                                        ng-true-value="1" ng-false-value="0"
-                                                        ng-click="ctrl.preventPropagation($event)"
-                                                        ng-change="ctrl.checkChangeOutgoingType()"
-                                                        ng-model="ctrl.outgoing.addMethod">
-                                                </md-switch>
-                                                <span>{{lang.current === 'en' ? lang.outgoing_paper : lang.outgoing_electronic}}</span>
+                        <!-- document viewer -->
+                        <div class="simple-viewer" layout="row" flex="{{ctrl.propertiesSideNavStatus ? 70 : 100}}">
+                            <div layout="column" flex>
+                                <accordion-directive layout="column" flex label-collapse="ctrl.collapse"
+                                                     validation="ctrl.validation">
+                                    <accordion-item layout="column" active
+                                                    pass-when="ctrl.documentInformation || ctrl.outgoing.contentFile">
+                                        <accordion-title>
+                                            <div layout="row" layout-align="start center">
+                                                <md-icon md-svg-icon="format-align-justify"></md-icon>
+                                                <span>{{lang.outgoing_create_content}}</span>
+                                                <span flex></span>
+                                                <div layout="row" layout-align="center center">
+                                                    <span>{{lang.outgoing_document_type}} :&nbsp;</span>
+                                                    <span>{{lang.current === 'en' ? lang.outgoing_electronic : lang.outgoing_paper}}</span>
+                                                    <span>&nbsp;&nbsp;</span>
+                                                    <md-switch
+                                                            ng-disabled="ctrl.isDocumentTypeSwitchDisabled()"
+                                                            class="m0 top-switch-handler"
+                                                            aria-label="{{lang.outgoing_document_type}}"
+                                                            ng-true-value="1" ng-false-value="0"
+                                                            ng-click="ctrl.preventPropagation($event)"
+                                                            ng-change="ctrl.checkChangeOutgoingType()"
+                                                            ng-model="ctrl.outgoing.addMethod">
+                                                    </md-switch>
+                                                    <span>{{lang.current === 'en' ? lang.outgoing_paper : lang.outgoing_electronic}}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </accordion-title>
-                                    <accordion-content layout="column">
-                                        <div layout="row">
-                                            <manage-content-directive
-                                                    uploaded-callback="ctrl.injectIframe"
-                                                    edit-content="ctrl.editContent"
-                                                    display-prepare="!ctrl.outgoing.addMethod"
-                                                    document-information="ctrl.documentInformation"
-                                                    vs-id="ctrl.outgoing.vsId"
-                                                    document="ctrl.outgoing"
-                                                    signatures-count="ctrl.outgoing.signaturesCount"
-                                                    templates="ctrl.templates"
-                                                    simple-view-url="ctrl.simpleViewUrl"
-                                                    is-simple-add="ctrl.simpleAdd"></manage-content-directive>
-                                            <span flex></span>
-                                            <!-- open document in side view mode -->
-                                            <div class="icon-relative"
-                                                 ng-if="ctrl.action === 'createReply' && !ctrl.outgoing.addMethod">
-                                                <md-button tooltip="{{lang.side_view}}"
-                                                           class="md-raised md-icon-button"
-                                                           ng-click="ctrl.openSideViewDocument($event)"
-                                                           ng-disabled="(!ctrl.documentInformation || !ctrl.outgoing.contentFile) && !ctrl.simpleViewUrl">
-                                                    <md-icon md-svg-icon="view-split-vertical"></md-icon>
-                                                </md-button>
+                                        </accordion-title>
+                                        <accordion-content layout="column">
+                                            <div layout="row">
+                                                <manage-content-directive
+                                                        uploaded-callback="ctrl.injectIframe"
+                                                        edit-content="ctrl.editContent"
+                                                        display-prepare="!ctrl.outgoing.addMethod"
+                                                        document-information="ctrl.documentInformation"
+                                                        vs-id="ctrl.outgoing.vsId"
+                                                        document="ctrl.outgoing"
+                                                        signatures-count="ctrl.outgoing.signaturesCount"
+                                                        templates="ctrl.templates"
+                                                        simple-view-url="ctrl.simpleViewUrl"
+                                                        is-simple-add="ctrl.simpleAdd"></manage-content-directive>
+                                                <span flex></span>
+                                                <!-- open document in side view mode -->
+                                                <div class="icon-relative"
+                                                     ng-if="ctrl.action === 'createReply' && !ctrl.outgoing.addMethod">
+                                                    <md-button tooltip="{{lang.side_view}}"
+                                                               class="md-raised md-icon-button"
+                                                               ng-click="ctrl.openSideViewDocument($event)"
+                                                               ng-disabled="(!ctrl.documentInformation || !ctrl.outgoing.contentFile) && !ctrl.simpleViewUrl">
+                                                        <md-icon md-svg-icon="view-split-vertical"></md-icon>
+                                                    </md-button>
+                                                </div>
+                                                <!-- Attachments -->
+                                                <div class="icon-relative"
+                                                     ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')">
+                                                    <md-button tooltip="{{lang.attachments}}"
+                                                               class="md-raised md-icon-button"
+                                                               ng-click="ctrl.manageAttachments($event)">
+                                                        <md-icon md-svg-icon="attachment"></md-icon>
+                                                    </md-button>
+                                                    <span class="counter blue">{{ctrl.outgoing.attachments.length}}</span>
+                                                </div>
+                                                <!-- Linked Docs -->
+                                                <div class="icon-relative"
+                                                     ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_DOCUMENTS')">
+                                                    <md-button tooltip="{{lang.linked_documents}}"
+                                                               class="md-raised md-icon-button"
+                                                               ng-click="ctrl.manageLinkedDocuments($event)">
+                                                        <md-icon md-svg-icon="note-multiple-outline"></md-icon>
+                                                    </md-button>
+                                                    <span class="counter blue">{{ctrl.outgoing.linkedDocs ? ctrl.outgoing.linkedDocs.length : 0}}</span>
+                                                </div>
+                                                <!-- Linked Entities -->
+                                                <div class="icon-relative"
+                                                     ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_ENTITIES')">
+                                                    <md-button tooltip="{{lang.linked_entities}}"
+                                                               class="md-raised md-icon-button"
+                                                               ng-click="ctrl.manageLinkedEntities($event)">
+                                                        <md-icon md-svg-icon="vector-triangle"></md-icon>
+                                                    </md-button>
+                                                    <span class="counter blue">{{ctrl.outgoing.linkedEntities.length}}</span>
+                                                </div>
                                             </div>
-                                            <!-- Attachments -->
-                                            <div class="icon-relative"
-                                                 ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')">
-                                                <md-button tooltip="{{lang.attachments}}"
-                                                           class="md-raised md-icon-button"
-                                                           ng-click="ctrl.manageAttachments($event)">
-                                                    <md-icon md-svg-icon="attachment"></md-icon>
-                                                </md-button>
-                                                <span class="counter blue">{{ctrl.outgoing.attachments.length}}</span>
+                                            <div id="iframe-inject-area" flex layout="row">
+                                                <!--document viewer editor-->
                                             </div>
-                                            <!-- Linked Docs -->
-                                            <div class="icon-relative"
-                                                 ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_DOCUMENTS')">
-                                                <md-button tooltip="{{lang.linked_documents}}"
-                                                           class="md-raised md-icon-button"
-                                                           ng-click="ctrl.manageLinkedDocuments($event)">
-                                                    <md-icon md-svg-icon="note-multiple-outline"></md-icon>
-                                                </md-button>
-                                                <span class="counter blue">{{ctrl.outgoing.linkedDocs ? ctrl.outgoing.linkedDocs.length : 0}}</span>
-                                            </div>
-                                            <!-- Linked Entities -->
-                                            <div class="icon-relative"
-                                                 ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_ENTITIES')">
-                                                <md-button tooltip="{{lang.linked_entities}}"
-                                                           class="md-raised md-icon-button"
-                                                           ng-click="ctrl.manageLinkedEntities($event)">
-                                                    <md-icon md-svg-icon="vector-triangle"></md-icon>
-                                                </md-button>
-                                                <span class="counter blue">{{ctrl.outgoing.linkedEntities.length}}</span>
-                                            </div>
-                                        </div>
-                                        <div id="iframe-inject-area" flex layout="row">
-                                            <!--document viewer editor-->
-                                        </div>
-                                    </accordion-content>
-                                </accordion-item>
-                            </accordion-directive>
+                                        </accordion-content>
+                                    </accordion-item>
+                                </accordion-directive>
+                            </div>
                         </div>
                     </div>
                 </div>
