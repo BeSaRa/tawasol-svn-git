@@ -225,7 +225,8 @@
                         class="iframe-main-document"
                         frameborder="0"></iframe>
 
-                <iframe ng-init="console.log(' Second FRAME ')" id="iframe-main-document" ng-if="(!ctrl.correspondence && !ctrl.editMode)"
+                <iframe ng-init="console.log(' Second FRAME ')" id="iframe-main-document"
+                        ng-if="(!ctrl.correspondence && !ctrl.editMode)"
                         ng-src="{{ctrl.viewURL}}" flex
                         class="iframe-main-document"
                         frameborder="0"></iframe>
@@ -238,8 +239,7 @@
                 {{lang.save}}
             </md-button>
         </div>
-        <div ng-if="ctrl.editContentFrom !== 'editContentFromGrid' && ctrl.correspondence && !ctrl.correspondence.viewVersion && !ctrl.g2gItemCopy && !ctrl.disableEverything
-                    && ctrl.pageName !=='departmentReadyToExport' && ( ctrl.pageName !=='departmentIncoming' || (ctrl.pageName === 'departmentIncoming' && ctrl.workItem &&  ctrl.workItem.generalStepElm.isReassigned))">
+        <div ng-if="ctrl.isSaveCorrespondenceVisible()">
             <md-button class="md-raised md-primary" ng-click="ctrl.saveCorrespondenceChanges($event, false)"
                        ng-disabled="ctrl.document_properties.$invalid">{{lang.save}}
             </md-button>

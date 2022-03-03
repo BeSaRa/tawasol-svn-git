@@ -35,6 +35,7 @@ module.exports = function (app) {
                                                           allowedEditProperties,
                                                           documentTagService,
                                                           DocumentComment,
+                                                          viewDocumentService,
                                                           documentCommentService) {
         'ngInject';
         var self = this;
@@ -427,9 +428,10 @@ module.exports = function (app) {
          * @param saveBeforeApprove
          * @param skipCheck
          * @param userComment
+         * @param ignoreClose
          * @returns {*}
          */
-        self.saveCorrespondenceChanges = function ($event, ignoreMessage, saveBeforeApprove, skipCheck, userComment) {
+        self.saveCorrespondenceChanges = function ($event, ignoreMessage, saveBeforeApprove, skipCheck, userComment, ignoreClose) {
             if (!self.validateCorrespondence()) {
                 generator.generateErrorFields('check_this_fields', invalidFields);
                 return;
@@ -457,7 +459,11 @@ module.exports = function (app) {
                             if (saveBeforeApprove) {
                                 return 'savedBeforeApprove';
                             }
-                            dialog.hide(true);
+                            if (ignoreClose && self.pageName === 'userInbox') {
+                                self.reloadDocumentContentAfterEdit();
+                            } else {
+                                dialog.hide(true);
+                            }
                             return true;
                         })
                         .catch(function (error) {
@@ -483,9 +489,12 @@ module.exports = function (app) {
                 self.correspondence.userCommentForSave = userComment;
                 return self.correspondence[method](false, skipCheck)
                     .then(function () {
-                        if (!ignoreMessage)
+                        if (!ignoreMessage) {
                             toast.success(langService.get('save_success'));
-                        dialog.hide(true);
+                        }
+                        if (!ignoreClose) {
+                            dialog.hide(true);
+                        }
                         return true;
                     })
                     .catch(function (error) {
@@ -1083,6 +1092,24 @@ module.exports = function (app) {
             }
 
             return true;
+        }
+
+        self.isSaveCorrespondenceVisible = function () {
+            return self.editContentFrom !== 'editContentFromGrid' && self.correspondence && !self.correspondence.viewVersion && !self.g2gItemCopy && !self.disableEverything
+                && self.pageName !== 'departmentReadyToExport' && (self.pageName !== 'departmentIncoming' || (self.pageName === 'departmentIncoming' && self.workItem && self.workItem.generalStepElm.isReassigned));
+        }
+
+        self.reloadDocumentContentAfterEdit = function () {
+            viewDocumentService
+                .loadGeneralStepElementView(self.workItem)
+                .then(function (generalStepElementView) {
+                    self.editMode = false;
+                    self.content = generalStepElementView.documentViewInfo;
+                    _resetViewModeToggle(true);
+                    self.document_properties = null;
+                    self.correspondence.majorVersionNumber = generalStepElementView.correspondence.majorVersionNumber;
+                    self.correspondence.minorVersionNumber = generalStepElementView.correspondence.minorVersionNumber;
+                });
         }
     });
 };

@@ -1821,6 +1821,14 @@ module.exports = function (app) {
                 return self;
             };
 
+            self.loadGeneralStepElementView = function (workItem) {
+                var info = workItem.getInfo();
+                return $http.get(urlService.inboxWF + '/wob-num/' + info.wobNumber)
+                    .then(function (result) {
+                        return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
+                    })
+            }
+
             $timeout(function () {
                 CMSModelInterceptor.runEvent('viewDocumentService', 'init', self);
             }, 100);
