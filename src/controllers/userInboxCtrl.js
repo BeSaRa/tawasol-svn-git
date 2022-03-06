@@ -1980,7 +1980,6 @@ module.exports = function (app) {
                 text: 'grid_action_manage',
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",
-                    "MANAGE_DOCUMENT’S_COMMENTS",
                     "MANAGE_TASKS",
                     "MANAGE_ATTACHMENTS",
                     "MANAGE_LINKED_DOCUMENTS",
@@ -2010,7 +2009,6 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'comment',
                         text: 'grid_action_comments',
-                        permissionKey: "MANAGE_DOCUMENT’S_COMMENTS",
                         callback: self.manageComments,
                         class: "action-green",
                         sticky: true,

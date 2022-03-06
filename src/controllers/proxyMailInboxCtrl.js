@@ -1271,7 +1271,6 @@ module.exports = function (app) {
                 },
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",
-                    "MANAGE_DOCUMENT’S_COMMENTS",
                     "MANAGE_TASKS",
                     "MANAGE_ATTACHMENTS",
                     "MANAGE_LINKED_DOCUMENTS",
@@ -1299,7 +1298,6 @@ module.exports = function (app) {
                         icon: 'comment',
                         text: 'grid_action_comments',
                         shortcut: false,
-                        permissionKey: "MANAGE_DOCUMENT’S_COMMENTS",
                         callback: self.manageComments,
                         sticky: true,
                         stickyIndex: 3,

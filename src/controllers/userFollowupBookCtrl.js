@@ -853,7 +853,6 @@ module.exports = function (app) {
                         return gridService.checkToShowMainMenuBySubMenu(action, model);
                     },
                     permissionKey: [
-                        "MANAGE_DOCUMENT’S_COMMENTS"
                     ],
                     checkAnyPermission: true,
                     subMenu: [
@@ -863,7 +862,6 @@ module.exports = function (app) {
                             icon: 'comment',
                             text: 'grid_action_comments',
                             shortcut: false,
-                            permissionKey: "MANAGE_DOCUMENT’S_COMMENTS",
                             callback: self.manageComments,
                             class: "action-green",
                             sticky: true,

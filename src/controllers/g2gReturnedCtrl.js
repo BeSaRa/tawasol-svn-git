@@ -544,7 +544,6 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'comment',
                         text: 'grid_action_comments',
-                        permissionKey: "MANAGE_DOCUMENT’S_COMMENTS",
                         callback: self.manageComments,
                         class: "action-green",
                         hide: true,

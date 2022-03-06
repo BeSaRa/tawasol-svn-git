@@ -1,6 +1,6 @@
 <div layout="column">
     <div layout="row" ng-if="ctrl.employeeService.hasPermissionTo('ADD_DOCUMENT_COMMENT') && !ctrl.disableEverything">
-        <div>
+        <div ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_COMMENTS')">
             <md-button ng-if="!(ctrl.showCommentForm && ctrl.fromDialog)" ng-disabled="ctrl.showCommentForm"
                        class="md-raised" ng-click="ctrl.showDocumentCommentForm()">
                 <div>
@@ -389,7 +389,7 @@
                                 md-order-by="creationDate">
                                 <span ng-if="!ctrl.selectedDocumentComments.length">{{lang.comments_creation_date}}</span>
                             </th>
-                            <th md-column ng-if="!ctrl.disableEverything">
+                            <th md-column ng-if="!ctrl.disableEverything && ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_COMMENTS')">
                                 <span ng-if="!ctrl.selectedDocumentComments.length">{{lang.actions}}</span>
                                 <!--&& ctrl.vsId && ctrl.employeeService.hasPermissionTo('DELETE_ALL_DOCUMENT_COMMENTS')-->
                                 <md-button
@@ -414,7 +414,7 @@
                             <td md-cell>
                                 {{documentComment.creationDate |date:'yyyy-MM-dd'}}
                             </td>
-                            <td md-cell ng-if="!ctrl.disableEverything">
+                            <td md-cell ng-if="!ctrl.disableEverything && ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_COMMENTS')">
                                 <div flex layout="row" layout-align="start center">
                                     <div>
                                         <md-button class="md-icon-button" title="{{lang.delete}}"
