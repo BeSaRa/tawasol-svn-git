@@ -1023,8 +1023,8 @@ module.exports = function (app) {
                     if (self.outgoingDeliveryReports.length) {
                         headerNames = [
                             langService.get('view_tracking_sheet_sent_by'),
-                            langService.get('view_tracking_sheet_main_site_from'),
-                            langService.get('view_tracking_sheet_sub_site_from'),
+                            // langService.get('view_tracking_sheet_main_site_from'),
+                            // langService.get('view_tracking_sheet_sub_site_from'),
                             //langService.get('view_tracking_sheet_priority_level'),
                             langService.get('view_tracking_sheet_received_by'),
                             langService.get('view_tracking_sheet_main_site_to'),
@@ -1038,8 +1038,8 @@ module.exports = function (app) {
                             record = self.outgoingDeliveryReports[i];
                             data.push([
                                 record.sentByIdInfo.getTranslatedName(),
-                                record.mainSiteFromIdInfo.getTranslatedName(),
-                                record.subSiteFromIdInfo.getTranslatedName(),
+                                // record.mainSiteFromIdInfo.getTranslatedName(),
+                                // record.subSiteFromIdInfo.getTranslatedName(),
                                 //record.priorityLevelInfo.getTranslatedName(),
                                 record.receivedByIdInfo.getTranslatedName(),
                                 record.mainSiteToIdInfo.getTranslatedName(),

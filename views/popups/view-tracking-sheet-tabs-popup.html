@@ -115,12 +115,12 @@
                                             <th md-column
                                                 md-order-by="{{ctrl.getSortingKey('sentByIdInfo', 'Information')}}">
                                                 <span>{{lang.view_tracking_sheet_sent_by}}</span></th>
-                                            <th md-column
+                                            <!-- <th md-column
                                                 md-order-by="{{ctrl.getSortingKey('mainSiteFromIdInfo', 'Information')}}">
-                                                <span>{{lang.view_tracking_sheet_main_site_from}}</span></th>
-                                            <th md-column
+                                                <span>{{lang.view_tracking_sheet_main_site_from}}</span></th> -->
+                                            <!-- <th md-column
                                                 md-order-by="{{ctrl.getSortingKey('subSiteFromIdInfo', 'Information')}}">
-                                                <span>{{lang.view_tracking_sheet_sub_site_from}}</span></th>
+                                                <span>{{lang.view_tracking_sheet_sub_site_from}}</span></th> -->
                                             <!--<th md-column md-order-by="priorityLevelInfo"><span>{{lang.view_tracking_sheet_priority_level}}</span></th>-->
                                             <th md-column
                                                 md-order-by="{{ctrl.getSortingKey('receivedByIdInfo', 'Information')}}">
@@ -151,12 +151,12 @@
                                             <td md-cell>
                                                 {{outgoingDeliveryReportRecord.sentByIdInfo.getTranslatedName()}}
                                             </td>
-                                            <td md-cell>
+                                            <!-- <td md-cell>
                                                 {{outgoingDeliveryReportRecord.mainSiteFromIdInfo.getTranslatedName()}}
-                                            </td>
-                                            <td md-cell>
+                                            </td> -->
+                                            <!-- <td md-cell>
                                                 {{outgoingDeliveryReportRecord.subSiteFromIdInfo.getTranslatedName()}}
-                                            </td>
+                                            </td> -->
                                             <!--<td md-cell>{{outgoingDeliveryReportRecord.priorityLevelInfo.getTranslatedName()}}</td>-->
                                             <td md-cell>
                                                 {{outgoingDeliveryReportRecord.receivedByIdInfo.getTranslatedName()}}
