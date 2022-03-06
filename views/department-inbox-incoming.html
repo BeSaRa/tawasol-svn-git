@@ -71,7 +71,7 @@
                                         </th>
                                         <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
                                             md-order-by="generalStepElm.docFullSerial">
-                                            <span>{{lang.inbox_serial}}</span>
+                                            <span>{{lang.incoming_mail_document_number}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
                                             md-order-by="generalStepElm.docSubject">
@@ -87,7 +87,7 @@
                                         </th>
                                         <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
                                             md-order-by="{{ctrl.getSortingKey('fromOU','Information')}}">
-                                            <span>{{lang.sender_reg_ou}}</span>
+                                            <span>{{lang.sender_organization}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
                                             md-order-by="generalStepElm.numberOfDays">
