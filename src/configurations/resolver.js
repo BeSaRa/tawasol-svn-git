@@ -617,7 +617,7 @@ module.exports = function (app) {
 
                     return employeeService.isCentralArchive() ? (organizationService.centralArchiveOrganizations().then(function (organizations) {
                         if (employeeService.isCentralArchiveHasRegistry() && organizations && (_.map(organizations, 'id').indexOf(currentOU.id) === -1)) {
-                            organizations.push(currentOU);
+                            organizations ? organizations.push(currentOU) : $q.resolve(false);
                         }
                         return organizations;
                     })) : $q.resolve(false);
