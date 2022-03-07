@@ -90,6 +90,11 @@
                 </md-input-container>
             </div>
             <div layout="column">
+                <div layout="row">
+                    <md-checkbox aria-label="{{lang.remember_me}}" ng-model="login.rememberMe">
+                        {{lang.remember_me}}
+                    </md-checkbox>
+                </div>
                 <md-button id="login-button" ng-click="login.login($event)"
                            class="md-raised md-primary">{{lang.login}}
                 </md-button>

@@ -29,6 +29,7 @@ module.exports = function (app) {
         self.controllerName = 'loginCtrl';
         self.flipBg = loginPage.flip;
         self.loginStatus = false;
+        self.rememberMe = false;
 
         self.credentials = new Credentials({
             username: '',
@@ -158,6 +159,7 @@ module.exports = function (app) {
                 return;
             }
             self.loginStatus = true;
+            self.handleRememberMe();
             authenticationService
                 .authenticate(self.credentials)
                 .then(function (result) {
@@ -270,5 +272,36 @@ module.exports = function (app) {
             return self.rootEntity && self.rootEntity.rootEntity.isMSTeamsEnabled && self.globalSettings.msTeamsSupoortURL;
         };
 
+        /***
+         * @description if checked set remember me otherwise if unchecked and already stored user in local storage will remove value
+         */
+        self.handleRememberMe = function () {
+            var rememberMe = JSON.parse(localStorage.getItem('RM'));
+            if (self.rememberMe) {
+                localStorage.setItem('RM', JSON.stringify({un: self.credentials.username, rm: self.rememberMe}));
+            } else if (!self.rememberMe && rememberMe && rememberMe.un === self.credentials.username) {
+                localStorage.removeItem('RM');
+            }
+        }
+
+        self.setRememberMe = function () {
+            var rememberMe = JSON.parse(localStorage.getItem('RM'));
+            self.rememberMe = rememberMe.rm.toString().toLowerCase() === "true";
+        }
+
+        self.$onInit = function () {
+            if (localStorage.getItem('RM') === null) {
+                localStorage.setItem('RM', JSON.stringify({rm: false}));
+                self.setRememberMe();
+            } else {
+                // fill user name only
+                self.setRememberMe();
+                //  var userData = authenticationService.getUserData();
+                var rememberMe = JSON.parse(localStorage.getItem('RM'));
+                if (rememberMe && rememberMe.hasOwnProperty('un') && self.rememberMe) {
+                    self.credentials.username = rememberMe.un;
+                }
+            }
+        }
     });
 };

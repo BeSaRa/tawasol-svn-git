@@ -58,14 +58,14 @@
                 </md-input-container>
             </div>
             <div layout="column">
-                <!--<div layout="row">
-                    <md-checkbox aria-label="{{lang.remember_me}}">
+                <div layout="row">
+                    <md-checkbox aria-label="{{lang.remember_me}}" ng-model="login.rememberMe">
                         {{lang.remember_me}}
                     </md-checkbox>
-                    <span flex></span>
-                    <a id="forget-password-link" href="#">{{lang.forget_password}}</a>
+                    <!--   <span flex></span>
+                       <a id="forget-password-link" href="#">{{lang.forget_password}}</a>-->
                 </div>
-                <br/>-->
+                <br/>
                 <md-button id="login-button-popup" ng-click="login.login($event , callback)"
                            class="md-raised md-primary">{{lang.login}}
                 </md-button>
