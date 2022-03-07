@@ -286,7 +286,7 @@ module.exports = function (app) {
 
         self.setRememberMe = function () {
             var rememberMe = JSON.parse(localStorage.getItem('RM'));
-            self.rememberMe = rememberMe.rm.toString().toLowerCase() === "true";
+            self.rememberMe = rememberMe.rm;
         }
 
         self.$onInit = function () {
@@ -296,7 +296,6 @@ module.exports = function (app) {
             } else {
                 // fill user name only
                 self.setRememberMe();
-                //  var userData = authenticationService.getUserData();
                 var rememberMe = JSON.parse(localStorage.getItem('RM'));
                 if (rememberMe && rememberMe.hasOwnProperty('un') && self.rememberMe) {
                     self.credentials.username = rememberMe.un;
