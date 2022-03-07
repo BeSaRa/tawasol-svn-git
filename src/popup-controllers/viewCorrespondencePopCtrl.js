@@ -404,7 +404,14 @@ module.exports = function (app) {
                         dialog.hide(self.workItem);
                     });
             } else {
-                dialog.hide(self.workItem);
+                if (self.isReviewQueue() && self.document_properties && self.document_properties.$dirty) {
+                    dialog.confirmMessage(langService.get('confirm_close_dirty_document'))
+                        .then(function () {
+                            dialog.hide(self.workItem);
+                        })
+                } else {
+                    dialog.hide(self.workItem);
+                }
             }
         };
 
@@ -1110,6 +1117,10 @@ module.exports = function (app) {
                     self.correspondence.majorVersionNumber = generalStepElementView.correspondence.majorVersionNumber;
                     self.correspondence.minorVersionNumber = generalStepElementView.correspondence.minorVersionNumber;
                 });
+        }
+
+        self.isReviewQueue = function () {
+            return self.pageName === 'reviewOutgoing' || self.pageName === 'reviewInternal' || self.pageName === 'reviewIncoming';
         }
     });
 };
