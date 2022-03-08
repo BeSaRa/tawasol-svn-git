@@ -5486,6 +5486,43 @@ module.exports = function (app) {
             return false;
         }
 
+        self.getEmailItemByG2GVsId = function (items, stateParams) {
+            var action = stateParams.action, source = stateParams.source,
+                vsid = stateParams['vsid'], item;
+
+            if (action && action === 'open' && source && source === 'email' && vsid) {
+                item = _.find(items, function (workItem) {
+                    return workItem.correspondence.g2gVSID === vsid;
+                });
+
+                return !item ? (dialog.errorMessage(langService.get('work_item_not_found').change({
+                    wobNumber: vsid
+                })).then(function () {
+                    return false;
+                })) : item;
+            }
+            return false;
+        }
+
+        self.getEmailItemByDocId = function (items, stateParams) {
+            var action = stateParams.action, source = stateParams.source,
+                vsid = stateParams['vsid'], item;
+
+            if (action && action === 'open' && source && source === 'email' && vsid) {
+                item = _.find(items, function (workItem) {
+                    return workItem.docId === vsid;
+                });
+
+                return !item ? (dialog.errorMessage(langService.get('work_item_not_found').change({
+                    wobNumber: vsid
+                })).then(function () {
+                    return false;
+                })) : item;
+            }
+            return false;
+        }
+
+
         /**
          * @description Load the returned central archive items from server.
          * @returns {Promise|returnedArchiveItems}

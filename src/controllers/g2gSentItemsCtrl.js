@@ -19,6 +19,7 @@ module.exports = function (app) {
                                                  printService,
                                                  gridService,
                                                  _,
+                                                 $stateParams,
                                                  G2GMessagingHistory) {
         'ngInject';
         var self = this;
@@ -102,9 +103,10 @@ module.exports = function (app) {
         /**
          * @description Reload the grid of g2g inbox item
          * @param pageNumber
+         * @param openEmailItem
          * @return {*|Promise<U>}
          */
-        self.reloadG2gItems = function (pageNumber) {
+        self.reloadG2gItems = function (pageNumber, openEmailItem) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return g2gSentItemsService
@@ -117,6 +119,9 @@ module.exports = function (app) {
                     if (pageNumber)
                         self.grid.page = pageNumber;
                     self.getSortedData();
+                    if (openEmailItem)
+                        _openEmailItem();
+
                     return result;
                 });
         };
@@ -416,5 +421,25 @@ module.exports = function (app) {
 
         self.shortcutActions = gridService.getShortcutActions(self.gridActions);
         self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
+
+        self.openEmailItem = function () {
+            var year = $stateParams.year, month = $stateParams.month,
+                vsid = $stateParams['vsid'];
+            // set month and year
+            if (year && month && vsid) {
+                self.selectedMonth = month;
+                self.selectedYear = year;
+                self.selectedMonthText = angular.copy(generator.months[self.selectedMonth - 1].text);
+                self.reloadG2gItems(self.grid.page, true);
+            }
+        };
+
+        function _openEmailItem() {
+            var emailItem = correspondenceService.getEmailItemByDocId(self.g2gItems, $stateParams);
+            emailItem ? self.viewDocument(emailItem) : null;
+        }
+
+        // to open Email item if it exists.
+        self.openEmailItem();
     });
 };

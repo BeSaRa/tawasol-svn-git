@@ -21,6 +21,7 @@ module.exports = function (app) {
                                                 gridService,
                                                 _,
                                                 managerService,
+                                                emailItem,
                                                 G2GMessagingHistory) {
         'ngInject';
         var self = this;
@@ -633,5 +634,11 @@ module.exports = function (app) {
 
         self.shortcutActions = gridService.getShortcutActions(self.gridActions);
         self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
+
+        self.openEmailItem = function () {
+            emailItem ? self.viewDocument(emailItem) : null;
+        };
+        // to open Email item if it exists.
+        self.openEmailItem();
     });
 };

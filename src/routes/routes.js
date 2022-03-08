@@ -1583,7 +1583,7 @@ module.exports = function (app) {
                 }
             })
             .state('app.g2g.incoming', {
-                url: '/incoming',
+                url: '/incoming?action?source?vsid',
                 templateUrl: cmsTemplateProvider.getView('g2g-incoming'),
                 controller: 'g2gIncomingCtrl',
                 controllerAs: 'ctrl',
@@ -1592,11 +1592,15 @@ module.exports = function (app) {
                     g2gItems: function (g2gIncomingService) {
                         'ngInject';
                         return g2gIncomingService.loadG2gItems();
+                    },
+                    emailItem: function (g2gItems, correspondenceService, $stateParams) {
+                        'ngInject';
+                        return correspondenceService.getEmailItemByG2GVsId(g2gItems, $stateParams);
                     }
                 }
             })
             .state('app.g2g.returned', {
-                url: '/returned',
+                url: '/returned?action?source?vsid',
                 templateUrl: cmsTemplateProvider.getView('g2g-returned'),
                 controller: 'g2gReturnedCtrl',
                 controllerAs: 'ctrl',
@@ -1605,11 +1609,15 @@ module.exports = function (app) {
                     g2gItems: function (g2gReturnedService) {
                         'ngInject';
                         return g2gReturnedService.loadG2gItems();
+                    },
+                    emailItem: function (g2gItems, correspondenceService, $stateParams) {
+                        'ngInject';
+                        return correspondenceService.getEmailItemByDocId(g2gItems, $stateParams);
                     }
                 }
             })
             .state('app.g2g.sent-items', {
-                url: '/sent-items',
+                url: '/sent-items?action?source?year?month?vsid',
                 templateUrl: cmsTemplateProvider.getView('g2g-sent-items'),
                 controller: 'g2gSentItemsCtrl',
                 controllerAs: 'ctrl',
