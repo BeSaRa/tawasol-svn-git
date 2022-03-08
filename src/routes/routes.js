@@ -447,10 +447,11 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_application_users',
                 resolve: {
-                    applicationUsers: function (applicationUserService) {
+                    applicationUsers: function (applicationUserService, gridService) {
                         'ngInject';
                         //return applicationUserService.loadApplicationUsers(true);
-                        return applicationUserService.loadApplicationUsersView();
+                        var limit = gridService.getGridPagingLimitByGridName(gridService.grids.inbox.sentItem) || 5;
+                        return applicationUserService.loadApplicationUsersView(1, limit);
                     },
                     applicationUsersCount: function (applicationUserService) {
                         'ngInject';

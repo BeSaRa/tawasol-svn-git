@@ -24,6 +24,7 @@ module.exports = function (app) {
         self.serviceName = 'applicationUserService';
 
         self.applicationUsers = [];
+        self.totalCount = 0;
 
         /**
          * @description Load the application users from server.
@@ -49,8 +50,14 @@ module.exports = function (app) {
          * @description Loads application users for grid view
          * @returns {*}
          */
-        self.loadApplicationUsersView = function () {
-            return $http.get(urlService.applicationUsers + '/view').then(function (result) {
+        self.loadApplicationUsersView = function (page, limit, criteria) {
+            var offset = ((page - 1) * limit);
+            var params = {offset: offset, limit: limit};
+            if (criteria) {
+                params.criteria = criteria;
+            }
+            return $http.get(urlService.applicationUsers + '/view', {params: params}).then(function (result) {
+                self.totalCount = result.data.count;
                 return generator.interceptReceivedCollection('ApplicationUserView', generator.generateCollection(result.data.rs, ApplicationUserView, self._sharedMethods));
             });
         };

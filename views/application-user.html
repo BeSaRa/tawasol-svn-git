@@ -76,7 +76,8 @@
                                     <tbody md-body>
                                     <tr md-row md-select="applicationUser"
                                         ng-disabled="ctrl.currentEmployee.id === applicationUser.id"
-                                        ng-repeat="applicationUser in ctrl.applicationUsers | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)  track by $index">
+                                        ng-repeat="applicationUser in ctrl.applicationUsers track by $index">
+                                        <!--| limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)">-->
                                         <td md-cell>{{applicationUser.arFullName}}</td>
                                         <td md-cell>{{applicationUser.enFullName}}</td>
                                         <!--<td md-cell>{{applicationUser.loginName}}</td>-->
@@ -111,7 +112,7 @@
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.applicationUsers).length}}"
+                                    md-total="{{ctrl.totalRecords}}"
                                     md-page-select
                                     md-on-paginate="ctrl.grid.pagingCallback">
                             </md-table-pagination>

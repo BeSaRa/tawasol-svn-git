@@ -23,7 +23,7 @@ module.exports = function (app) {
          */
         self.applicationUsers = applicationUsers;
         self.applicationUsersCopy = angular.copy(self.applicationUsers);
-
+        self.totalRecords = applicationUserService.totalCount;
         /**
          * @description Current logged in applicationUser
          * @type {*}
@@ -45,9 +45,10 @@ module.exports = function (app) {
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.applicationUser) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.applicationUser, self.applicationUsers),
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.applicationUser, self.totalRecords),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.applicationUser, limit);
+                self.reloadApplicationUsers(page)
             },
             searchColumns: {
                 arabicName: 'arFullName',
@@ -124,6 +125,9 @@ module.exports = function (app) {
         self.cancelSearchFilter = function () {
             self.searchMode = false;
             self.searchModel = '';
+            self.grid.page = 1;
+            self.grid.searchText = '';
+            self.grid.searchText = '';
             self.reloadApplicationUsers();
         }
 
@@ -136,11 +140,12 @@ module.exports = function (app) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return applicationUserService
-                //.loadApplicationUsers(true)
-                .loadApplicationUsersView()
+                .loadApplicationUsersView(self.grid.page, self.grid.limit, self.searchModel)
                 .then(function (result) {
                     self.applicationUsers = result;
                     self.applicationUsersCopy = angular.copy(self.applicationUsers);
+                    self.totalRecords = applicationUserService.totalCount;
+
                     self.selectedApplicationUsers = [];
                     defer.resolve(true);
                     if (pageNumber)
@@ -154,9 +159,8 @@ module.exports = function (app) {
             if (!searchText)
                 return;
             self.searchMode = true;
-            return applicationUserService
-                //.applicationUserSearch(searchText)
-                .applicationUserViewSearch(searchText)
+            return self
+                .reloadApplicationUsers(1)
                 .then(function (result) {
                     self.applicationUsers = result;
                 })

@@ -310,7 +310,7 @@ module.exports = function (app) {
             if (typeof records !== 'undefined' && records !== null)
                 count = (typeof records === "number") ? records : records.length;
 
-            if (gridName === self.grids.inbox.sentItem) {
+            if (gridName === self.grids.inbox.sentItem || gridName === self.grids.administration.applicationUser) {
                 return [5, 10, 20, 100, 200];
             } else if (gridName === self.grids.inbox.userInbox) {
                 return [5, 10, 20, 50, 70, 90, 100, 200];
