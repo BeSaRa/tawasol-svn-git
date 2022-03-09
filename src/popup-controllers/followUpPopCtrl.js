@@ -165,13 +165,19 @@ module.exports = function (app) {
 
             var deferUpdate = $q.defer();
             if (modelToSave.hasUserDynamicFollowup()) {
-                dialog.confirmMessage(langService.get('confirm_update_with_shared_followup'))
-                    .then(function () {
-                        modelToSave.applyUpdateAsDynamic = true;
-                        deferUpdate.resolve(true);
-                    }).catch(function () {
-                    deferUpdate.resolve(false)
-                })
+                var confirmButtons = {
+                    yes: {text: 'yes', id: 1},
+                    no: {text: 'no', id: 2}
+                };
+                dialog.confirmThreeButtonMessage(langService.get('confirm_update_with_shared_followup'), '', langService.get(confirmButtons.yes.text), langService.get(confirmButtons.no.text))
+                    .then(function (result) {
+                        if (result.button === confirmButtons.yes.id) {
+                            modelToSave.applyUpdateAsDynamic = true;
+                            deferUpdate.resolve(true);
+                        } else if (result.button === confirmButtons.no.id) {
+                            deferUpdate.resolve(false)
+                        }
+                    });
             } else {
                 deferUpdate.resolve(false);
             }
