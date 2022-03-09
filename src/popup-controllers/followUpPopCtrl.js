@@ -14,6 +14,7 @@ module.exports = function (app) {
                                                 moment,
                                                 generator,
                                                 Information,
+                                                $q,
                                                 distributionWFService) {
         'ngInject';
         var self = this;
@@ -162,12 +163,27 @@ module.exports = function (app) {
                 modelToSave.userOUID = self.selectedOrganization;
             }
 
-            return followUpUserService
-                .updateUserFollowUp(modelToSave)
-                .then(function () {
-                    toast.success(langService.get('followup_updated_successfully').change({name: modelToSave.docSubject}));
-                    dialog.hide();
-                });
+            var deferUpdate = $q.defer();
+            if (modelToSave.hasUserDynamicFollowup()) {
+                dialog.confirmMessage(langService.get('confirm_update_with_shared_followup'))
+                    .then(function () {
+                        modelToSave.applyUpdateAsDynamic = true;
+                        deferUpdate.resolve(true);
+                    }).catch(function () {
+                    deferUpdate.resolve(false)
+                })
+            } else {
+                deferUpdate.resolve(false);
+            }
+
+            return deferUpdate.promise.then(function (applyUpdateAsDynamic) {
+                return followUpUserService
+                    .updateUserFollowUp(modelToSave)
+                    .then(function () {
+                        toast.success(langService.get('followup_updated_successfully').change({name: modelToSave.docSubject}));
+                        dialog.hide();
+                    });
+            });
         };
 
         /**
