@@ -211,5 +211,5 @@ module.exports = function (app) {
     require('./ManualDeliveryReport')(app);
     require('./PrivateUserClassification')(app);
     require('./DynamicFollowup')(app);
-
+    require('./ReassignFollowup')(app);
 };

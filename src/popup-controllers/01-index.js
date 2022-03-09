@@ -169,4 +169,5 @@ module.exports = function (app) {
     require('./privateUserClassificationsPopCtrl')(app);
     require('./addPrivateUserClassificationPopCtrl')(app);
     require('./dynamicFollowupPopCtrl')(app);
+    require('./reassignFollowupBookPopCtrl')(app);
 };

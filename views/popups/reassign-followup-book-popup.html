@@ -1,0 +1,91 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.reassign}}">
+    <popup-toolbar-directive header-text="{{lang.reassign}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="reassign_followup_form" autocomplete="off">
+                <div layout="column">
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="newDynamicRuleId">{{lang.dynamic_followup_rules}}</label>
+                            <md-select id="newDynamicRuleId" name="newDynamicRuleId"
+                                       ng-required="true"
+                                       aria-label="{{lang.dynamic_followup_rules}}"
+                                       ng-model="ctrl.model.newDynamicRuleId"
+                                       md-on-close="ctrl.clearSearchText('newDynamicRuleId')"
+                                       ng-model-options="{trackBy: '$value'}"
+                                       data-md-container-class="select-header-container sticky-search-bar">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.ruleSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <md-option ng-if="ctrl.isDynamicRuleVisible(rule)"
+                                        ng-repeat="rule in ctrl.dynamicFollowupRules | translatedNameFilter: ctrl.ruleSearchText"
+                                        ng-value="rule.id">
+                                        <span
+                                                md-highlight-text="ctrl.ruleSearchText"
+                                                md-highlight-flags="i">{{rule.getTranslatedName()}}</span>
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="reassign_followup_form.newDynamicRuleId.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="comment">{{lang.comment}}</label>
+                            <md-select ng-change="ctrl.setComment()" id="comment"
+                                       ng-model="ctrl.selectedComment"
+                                       md-on-close="ctrl.clearSearchText('comment')"
+                                       data-md-container-class="select-header-container sticky-search-bar">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.commentSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <md-option
+                                        ng-repeat="comment in ctrl.comments | translatedNameFilter: ctrl.commentSearchText"
+                                        ng-value="comment">
+                                    <span
+                                            md-highlight-text="ctrl.commentSearchText"
+                                            md-highlight-flags="i">{{comment.getCommentTitle()}}</span>
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="comments">{{lang.comments}}</label>
+                            <textarea id="comments"  name="comments"
+                                      maxlength="2000" minlength="3"
+                                      md-maxlength="2000" required rows="4"
+                                      ng-model="ctrl.model.comments">
+                            </textarea>
+                            <div ng-messages="reassign_followup_form.comments.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="maxlength">
+                                    {{lang.max_length.change({length: 2000})}}
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary"
+                   ng-disabled="reassign_followup_form.$invalid"
+                   ng-click="ctrl.reassignFollowupDocument($event)">
+            {{lang.reassign}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closeReassignFollowup()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

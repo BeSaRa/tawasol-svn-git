@@ -395,6 +395,26 @@ module.exports = function (app) {
         };
 
         /**
+         * @description reassign dynamic follow up documents
+         * @param record
+         * @param $event
+         * @param defer
+         */
+        self.reassignFollowup = function (record, $event, defer) {
+            record = _getOriginalFollowupBook(record);
+
+            followUpUserService
+                .openReassignDialog(record, $event)
+                .then(function () {
+                    self.reloadFollowupBooks(self.grid.page)
+                        .then(function () {
+                            toast.success(langService.get('reassign_mail_success'));
+                            new ResolveDefer(defer);
+                        });
+                });
+        }
+
+        /**
          * @description Transfer to another employee
          * @param record
          * @param $event
@@ -743,6 +763,20 @@ module.exports = function (app) {
                     return true;
                 }
             },
+            // Reassign Followup
+            {
+                type: 'action',
+                icon: 'file-swap',
+                text: 'grid_action_reassign',
+                shortcut: true,
+                callback: self.reassignFollowup,
+                class: "action-green",
+                showInView: true,
+                checkShow: function (action, model) {
+                    // only for dynamic followup books
+                    return model.hasUserDynamicFollowup();
+                }
+            },
             // edit employee follow up date
             {
                 type: 'action',
@@ -819,8 +853,7 @@ module.exports = function (app) {
                     return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 showInView: false,
-                permissionKey: [
-                ],
+                permissionKey: [],
                 checkAnyPermission: true,
                 subMenu: [
                     // Comments

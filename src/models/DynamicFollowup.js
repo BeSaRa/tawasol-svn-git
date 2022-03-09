@@ -175,6 +175,10 @@ module.exports = function (app) {
                 return this.ui[lookupKey].value ? langService.get('yes') : langService.get('no');
             };
 
+            DynamicFollowup.prototype.getTranslatedName = function (reverse) {
+                return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
+            };
+
             DynamicFollowup.prototype.prepareSendDynamicFollowup = function () {
                 var self = this;
                 self.arName = self.arName ? self.arName : naValue;
@@ -443,6 +447,10 @@ module.exports = function (app) {
              */
             DynamicFollowup.prototype.getTranslatedStatus = function () {
                 return this.status ? langService.get('active') : langService.get('inactive');
+            };
+
+            DynamicFollowup.prototype.getNameByLanguage = function (language) {
+                return this[language + 'Name'];
             };
 
             /**

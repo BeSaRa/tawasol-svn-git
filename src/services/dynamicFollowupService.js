@@ -17,7 +17,8 @@ module.exports = function (app) {
             self.dynamicFollowups = [];
 
             self.loadDynamicFollowUpsByOu = function (organization) {
-                return $http.get(urlService.dynamicFollowup + '/ou/' + organization.id)
+                var id = organization.hasOwnProperty('id') ? organization.id : organization;
+                return $http.get(urlService.dynamicFollowup + '/ou/' + id)
                     .then(result => {
                         self.dynamicFollowups = generator.interceptReceivedCollection('DynamicFollowup', generator.generateCollection(result.data.rs, DynamicFollowup));
                         return self.dynamicFollowups;

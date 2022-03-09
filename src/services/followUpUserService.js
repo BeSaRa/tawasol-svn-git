@@ -17,6 +17,8 @@ module.exports = function (app) {
                                                  langService,
                                                  errorCode,
                                                  tokenService,
+                                                 dynamicFollowupService,
+                                                 ReassignFollowup,
                                                  FollowupBookCriteria) {
             var self = this;
             self.serviceName = 'followUpUserService';
@@ -1191,6 +1193,53 @@ module.exports = function (app) {
             self.transferBulkFollowupBooks = function (userFollowupRequests) {
                 return $http
                     .put((urlService.userFollowUp + '/transfer/bulk'), generator.interceptSendCollection('UserFollowupRequest', userFollowupRequests))
+                    .then(function (result) {
+                        return result.data.rs;
+                    })
+            };
+
+            /**
+             *
+             * @param record
+             * @param $event
+             * @returns {*}
+             */
+            self.openReassignDialog = function (record, $event) {
+                return dialog
+                    .showDialog({
+                        templateUrl: cmsTemplate.getPopup('reassign-followup-book'),
+                        controller: 'reassignFollowupBookPopCtrl',
+                        controllerAs: 'ctrl',
+                        targetEvent: $event,
+                        locals: {
+                            record: record,
+                            reassignFollowup: new ReassignFollowup({
+                                vsId: record.vsId,
+                                docClassId: record.docClassId,
+                                oldDynamicRuleId: record.userDynamicFollowupId
+                            })
+                        },
+                        resolve: {
+                            dynamicFollowUpRules: function (dynamicFollowupService, employeeService, _) {
+                                'ngInject';
+                                return dynamicFollowupService.loadDynamicFollowUpsByOu(employeeService.getEmployee().getOUID());
+                            },
+                            comments: function (userCommentService) {
+                                'ngInject';
+                                return userCommentService.loadUserCommentsForDistribution();
+                            }
+                        }
+                    });
+            }
+
+            /**
+             *
+             * @param reassignedRule
+             * @returns {*}
+             */
+            self.reassignFollowupBooks = function (reassignedRule) {
+                return $http
+                    .put((urlService.userFollowUp + '/reassign-dynamic-rule'), reassignedRule)
                     .then(function (result) {
                         return result.data.rs;
                     })
