@@ -795,7 +795,12 @@ module.exports = function (app) {
                 showInView: true,
                 checkShow: function (action, model) {
                     // only for dynamic followup books
-                    return model.hasUserDynamicFollowup();
+                    if (model instanceof FollowupBook) {
+                        return model.hasUserDynamicFollowup();
+                    } else {
+                        model = _getOriginalFollowupBook();
+                        return model.hasUserDynamicFollowup();
+                    }
                 }
             },
             // edit employee follow up date
