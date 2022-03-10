@@ -30,7 +30,7 @@
                                        aria-label="{{lang.sms_template}}"
                                        ng-model="ctrl.smsMessage.smsTemplate">
                                 <md-option ng-value="null">{{lang.none}}</md-option>
-                                <md-option ng-value="smsTemplate.id"
+                                <md-option ng-value="smsTemplate"
                                            ng-repeat="smsTemplate in ctrl.smsTemplates track by $index">
                                     {{smsTemplate.getTranslatedName()}}
                                 </md-option>

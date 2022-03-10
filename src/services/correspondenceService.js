@@ -4733,6 +4733,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.parseSMSTemplate = function (correspondence, smsObject) {
+            smsObject.smsTemplate = (smsObject.smsTemplate && smsObject.smsTemplate.hasOwnProperty('id')) ? smsObject.smsTemplate.id : smsObject.smsTemplate;
             var info = correspondence.getInfo(),
                 url = urlService.correspondence + '/' + info.documentClass + '/' + info.vsId + '/template/' + smsObject.smsTemplate,
                 smsObjectCopy = angular.copy(smsObject);
@@ -4755,6 +4756,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.sendSMSMessage = function (correspondence, smsObject) {
+            smsObject.smsTemplate = (smsObject.smsTemplate && smsObject.smsTemplate.hasOwnProperty('id')) ? smsObject.smsTemplate.id : smsObject.smsTemplate;
             var info = correspondence.getInfo(),
                 smsObjectCopy = angular.copy(smsObject),
                 url = urlService.correspondence + '/' + info.documentClass + '/' + info.vsId + '/send-sms';

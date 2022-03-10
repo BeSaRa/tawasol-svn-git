@@ -32,7 +32,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.onChangeSmsTemplate = function ($event) {
-
+            if (!self.smsMessage.smsTemplate) {
+                return
+            }
+            self.smsMessage.message = self.smsMessage.smsTemplate.getTranslatedName();
         };
 
         self.getMessageFromTemplate = function ($event) {
