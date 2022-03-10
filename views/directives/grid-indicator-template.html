@@ -226,6 +226,15 @@
              tooltip="{{ctrl.record.generalStepElm.comments}}"
     ></md-icon>
 </span>
+<!-- Follow-up last comment -->
+<span ng-if="ctrl.indicatorType === 'lastComment'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.lastCommentsIndicator}">
+    <md-icon ng-if="ctrl.record.lastCommentsIndicator && ctrl.isShowIndicator()"
+             md-svg-icon="{{ctrl.record.lastCommentsIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.lastCommentsIndicator.tooltip)}}"
+             ng-click="ctrl.indicatorCallback(ctrl.record, $event)"
+    ></md-icon>
+</span>
 <!-- Registry Ou -->
 <span ng-if="ctrl.indicatorType === 'regOU'" class="{{ctrl.spanClass}}"
       ng-class="{'indicator-content': ctrl.record.registryOuIndicator}">

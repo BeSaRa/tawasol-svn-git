@@ -40,6 +40,7 @@ module.exports = function (app) {
             delete model.priorityLevelLookup;
             delete model.priorityLevelIndicator;
             delete model.sharedFollowupIndicator;
+            delete model.lastCommentsIndicator;
             delete model.statusIndicator;
             delete model.folderInfo;
             delete model.mainSiteSubSiteString;   // added in model when binding main-site-sub-site directive value in grid
@@ -55,7 +56,7 @@ module.exports = function (app) {
             model.followDateIndicator = model.getFollowupDateIndicator(model.followupDate);
             model.sharedFollowupIndicator = model.getSharedFollowupIndicator();
             model.siteFollowUpDueDateIndicator = model.getSiteFollowupDueDateIndicator(); // this indicator is used to show followup date of book. its not showing info for correspondence site followup date
-
+            model.lastCommentsIndicator = model.hasUserDynamicFollowup() ? model.getLastCommentsIndicator() : null;
             /* if terminated followup book, show followup terminated indicator, not followup (past/today/future) indicator
             So indicator is replaced with other indicator under same indicator property */
             if (!model.status) {

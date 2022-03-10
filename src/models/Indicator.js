@@ -235,6 +235,22 @@ module.exports = function (app) {
                 });
             };
 
+            /**
+             * @description Returns the last comment indicator
+             * @returns {Indicator}
+             */
+            Indicator.prototype.getLastCommentsIndicator = function () {
+                return new Indicator({
+                    class: 'indicator badge',
+                    text: 'last_comment',
+                    icon: self.getIndicatorIcons('comments'),
+                    tooltip: 'last_comment',
+                    legendText: function (indicator) {
+                        return '';
+                    }
+                });
+            };
+
 
             /**
              * @description Returns the is-paper indicator and description

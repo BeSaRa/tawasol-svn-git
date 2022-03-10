@@ -23,6 +23,7 @@ module.exports = function (app) {
                                                      ResolveDefer,
                                                      FollowupBook,
                                                      toast,
+                                                     documentCommentService,
                                                      $timeout) {
             'ngInject';
             var self = this;
@@ -619,6 +620,26 @@ module.exports = function (app) {
             self.mergeAndDownloadFullDocument = function (record) {
                 downloadService.mergeAndDownload(record);
             };
+
+            /**
+             * @description show last comment
+             * @param record
+             * @param $event
+             */
+            self.showLastCommentCallback = function (record, $event) {
+                $event.preventDefault();
+                documentCommentService.loadDocumentCommentsByVsId(record.vsId)
+                    .then(function (documentComments) {
+                        if (!documentComments.length) {
+                            toast.info(langService.get('no_comments_added_yet'));
+                            return;
+                        }
+                        var lastComment = _.chain(documentComments).sortBy('id').last().value();
+                        dialog
+                            .successMessage(lastComment.description, null, null, $event, true);
+
+                    })
+            }
 
             self.gridActions = [
                 // Document Information

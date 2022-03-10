@@ -158,6 +158,10 @@ module.exports = function (app) {
                 return indicator.getSiteFollowUpDueDateIndicator(this.followupDate);
             };
 
+            FollowupBook.prototype.getLastCommentsIndicator = function () {
+                return indicator.getLastCommentsIndicator();
+            }
+
             FollowupBook.prototype.viewFromQueue = function (actions, queueName, $event, viewOnly) {
                 return viewDocumentService.viewQueueDocument(this, actions, queueName, $event, viewOnly);
             };

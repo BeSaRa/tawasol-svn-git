@@ -215,6 +215,11 @@
                                             <grid-indicator-directive record="record"
                                                                       indicator-type="sharedFollowup"
                                                                       record-type="FollowupBook"></grid-indicator-directive>
+                                            <!-- last comment -->
+                                            <grid-indicator-directive record="record"
+                                                                      indicator-type="lastComment"
+                                                                      record-type="FollowupBook"
+                                                                      callback="ctrl.showLastCommentCallback"></grid-indicator-directive>
                                         </td>
                                         <td md-cell><span class="serial-td">{{record.docFullSerial}}</span></td>
                                         <td md-cell class="indicator-td text-right"
