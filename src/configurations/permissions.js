@@ -70,7 +70,7 @@ module.exports = function (app) {
             .end()
             // outgoing mail
             .addMenuPermissionGroup('menu_item_outgoing')
-            .addMenuPermission('menu_item_add_outgoing', 'ADD_NEW_OUTGOING')
+            .addMenuPermission('menu_item_add_outgoing', 'FULL_ADD_OUTGOING')
             .addMenuPermission('menu_item_outgoing_simple_add', 'ADD_NEW_OUTGOING')
             .addMenuPermission('menu_item_internal_outgoing_add', function (employee) {
                 var rootEntity = employee.getRootEntity().returnRootEntity();
@@ -89,7 +89,7 @@ module.exports = function (app) {
             .end()
             // incoming mail
             .addMenuPermissionGroup('menu_item_incoming')
-            .addMenuPermission('menu_item_incoming_add', 'ADD_NEW_INCOMING_DOCUMENT')
+            .addMenuPermission('menu_item_incoming_add', 'FULL_ADD_INCOMING')
             .addMenuPermission('menu_item_incoming_simple_add', 'ADD_NEW_INCOMING_DOCUMENT')
             .addMenuPermission('menu_item_incoming_scan', 'INCOMING_SCAN_DOCUMENT')
             .addMenuPermission('menu_item_incoming_review', 'REVIEW_INCOMING_DOCUMENT')
@@ -99,7 +99,7 @@ module.exports = function (app) {
             .end()
             // internal mail
             .addMenuPermissionGroup('menu_item_internal')
-            .addMenuPermission('menu_item_internal_add', 'ADD_NEW_INTERNAL_DOCUMENT')
+            .addMenuPermission('menu_item_internal_add', 'FULL_ADD_INTERNAL')
             .addMenuPermission('menu_item_internal_simple_add', 'ADD_NEW_INTERNAL_DOCUMENT')
             .addMenuPermission('menu_item_internal_prepare', 'PREPARE_INTERNAL')
             .addMenuPermission('menu_item_internal_draft', 'DRAFT_INTERNAL')

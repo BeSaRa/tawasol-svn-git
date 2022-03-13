@@ -53,12 +53,20 @@ module.exports = function (app) {
             {id: 1, key: 'advanced'}
         ];
         self.replyTypeOptions = [
-            {id: 0, key: 'reply_outgoing', show: true},
-            {id: 1, key: 'reply_internal', show: self.employee.hasPermissionTo('ADD_NEW_INTERNAL_DOCUMENT')},
+            {id: 0, key: 'reply_outgoing', 
+            checkPermission_0:self.employee.hasPermissionTo('ADD_NEW_OUTGOING'), // simple
+            checkPermission_1:self.employee.hasPermissionTo('FULL_ADD_OUTGOING'), //full add 
+            showInView: true},
+            {id: 1, key: 'reply_internal',
+            checkPermission_0:self.employee.hasPermissionTo('ADD_NEW_INTERNAL_DOCUMENT'),
+            checkPermission_1:self.employee.hasPermissionTo('FULL_ADD_INTERNAL'),
+             showInView: true},
             {
                 id: 2,
                 key: 'reply_outgoing_internal',
-                show: self.isInternalOutgoingEnabled && self.record.checkIfInternalSiteTypeWhenCreateReply()
+                checkPermission_0:self.employee.hasPermissionTo('ADD_NEW_OUTGOING'),
+                checkPermission_1:self.employee.hasPermissionTo('FULL_ADD_OUTGOING'),
+                showInView: self.isInternalOutgoingEnabled && self.record.checkIfInternalSiteTypeWhenCreateReply()
             }
         ];
         self.createAsOptions = [
@@ -128,7 +136,7 @@ module.exports = function (app) {
                 };
             if (self.replyForm === 0) {
                 if (self.replyType === 0) {
-                    page = pages.outgoingSimpleAdd;
+                   page = pages.outgoingSimpleAdd;
                 } else if (self.replyType === 1) {
                     page = pages.internalSimpleAdd;
                 } else if (self.isInternalOutgoingEnabled && self.replyType === 2) {
@@ -143,6 +151,12 @@ module.exports = function (app) {
                     page = pages.outgoingAddInternal
                 }
             }
+            
+        if(!self.replyTypeOptions[self.replyType]['checkPermission_'+self.replyForm]){
+            dialog.infoMessage(langService.get('no_view_permission'));
+            return;
+        }
+
             dialog.hide();
             $state.go(page, {
                 wobNum: info.wobNumber,

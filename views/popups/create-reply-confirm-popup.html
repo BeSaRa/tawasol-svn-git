@@ -13,7 +13,7 @@
                         <div layout="row">
                             <md-radio-group ng-model="ctrl.replyType" ng-change="ctrl.onChangeReplyType($event)">
                                 <div ng-repeat='option in ctrl.replyTypeOptions'>
-                                    <div flex layout-padding layout-align="start center" ng-if="option.show">
+                                    <div flex layout-padding layout-align="start center" ng-if="option.showInView">
                                         <md-radio-button flex ng-value="option.id">
                                             {{lang[option.key]}}
                                         </md-radio-button>

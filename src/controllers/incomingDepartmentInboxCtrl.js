@@ -992,7 +992,7 @@ module.exports = function (app) {
                 },
                 checkShow: function (action, model) {
                     //var info = model.getInfo();
-                    return !model.generalStepElm.isReassigned && employeeService.hasPermissionTo('ADD_NEW_INCOMING_DOCUMENT');//!!info.incomingVsId;
+                    return !model.generalStepElm.isReassigned && employeeService.hasPermissionTo('FULL_ADD_INCOMING');//!!info.incomingVsId;
                 }
             },
             // View Tracking Sheet
@@ -1036,7 +1036,7 @@ module.exports = function (app) {
                 },
                 checkShow: function (action, model) {
                     //var info = model.getInfo();
-                    return !model.generalStepElm.isReassigned && employeeService.hasPermissionTo('ADD_NEW_INCOMING_DOCUMENT');//!!info.incomingVsId;
+                    return !model.generalStepElm.isReassigned && employeeService.hasPermissionTo('FULL_ADD_INCOMING');//!!info.incomingVsId;
                 }
             },
             //Launch Distribution Workflow
