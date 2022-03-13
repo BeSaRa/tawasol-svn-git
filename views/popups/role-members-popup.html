@@ -12,35 +12,48 @@
             <md-card md-whiteframe="3" class="card-overlay">
                 <md-table-container>
                     <div flex scroll-directive>
-                        <table md-table ng-model="ctrl.selectedRoleMembers"
-                               md-progress="ctrl.progress">
+                        <table md-table multiple md-row-select="ctrl.overrideRoles"
+                               ng-model="ctrl.selectedRoleMembers" md-progress="ctrl.progress">
                             <!--md-row-select multiple-->
                             <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                             <tr md-row>
-                                <th md-column md-order-by="loginName">{{lang.login_name}}</th>
-                                <th md-column md-order-by="arFullName">{{lang.arabic_name}}</th>
-                                <th md-column md-order-by="enFullName">{{lang.english_name}}
+                                <th colspan="5" class="table-selector-header"
+                                    ng-if="ctrl.selectedRoleMembers.length" md-column>
+                                    <div layout="row" layout-align="start center">
+                                        <span>{{ctrl.selectedRoleMembers.length}} {{lang.items_selected}} </span>
+                                        <span flex></span>
+                                    </div>
                                 </th>
-                                <th md-column md-order-by="employeeNo">
+                                <th ng-if="!ctrl.selectedRoleMembers.length"
+                                    md-column md-order-by="applicationUser.loginName">{{lang.login_name}}
+                                </th>
+                                <th ng-if="!ctrl.selectedRoleMembers.length"
+                                    md-column md-order-by="applicationUser.arFullName">{{lang.arabic_name}}
+                                </th>
+                                <th ng-if="!ctrl.selectedRoleMembers.length"
+                                    md-column md-order-by="applicationUser.enFullName">{{lang.english_name}}
+                                </th>
+                                <th ng-if="!ctrl.selectedRoleMembers.length"
+                                    md-column md-order-by="applicationUser.employeeNo">
                                     {{lang.employee_number}}
                                 </th>
-                                <th md-column
-                                    md-order-by="{{ctrl.getSortingKey('organization','Organization')}}">
+                                <th md-column ng-if="!ctrl.selectedRoleMembers.length"
+                                    md-order-by="{{ctrl.getSortingKey('ouid','Information')}}">
                                     {{lang.organization_unit}}
                                 </th>
-                                <th md-column md-order-by="status">{{lang.status}}</th>
+                                <th ng-if="!ctrl.selectedRoleMembers.length"
+                                    md-column md-order-by="status">{{lang.status}}
+                                </th>
                             </tr>
                             </thead>
                             <tbody md-body>
-                            <tr md-row md-select="member" md-row-select multiple
-                                ng-model="ctrl.selectedRoleMembers"
-                                md-progress="ctrl.progress"
+                            <tr md-row md-select="member"
                                 ng-repeat="member in ctrl.roleMembers | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
-                                <td md-cell>{{member.loginName}}</td>
-                                <td md-cell>{{member.arFullName}}</td>
-                                <td md-cell>{{member.enFullName}}</td>
-                                <td md-cell>{{member.employeeNo}}</td>
-                                <td md-cell>{{member.organization.getTranslatedName()}}</td>
+                                <td md-cell>{{member.getApplicationUser().loginName}}</td>
+                                <td md-cell>{{member.getTranslatedApplicationUserNameByLanguage('ar')}}</td>
+                                <td md-cell>{{member.getTranslatedApplicationUserNameByLanguage('en')}}</td>
+                                <td md-cell>{{member.getApplicationUser().employeeNo}}</td>
+                                <td md-cell>{{member.getOrganizationTranslate()}}</td>
                                 <td md-cell>
                                     <md-switch aria-label="{{lang.status}}"
                                                ng-model="member.status"
@@ -63,6 +76,11 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary" ng-click="ctrl.overrideMembersPermissions($event)"
+                   ng-if="ctrl.overrideRoles" ng-disabled="!ctrl.selectedRoleMembers.length">
+            {{lang.save}}
+        </md-button>
+
         <md-button class="md-raised red-text" ng-click="ctrl.closeRoleMembersPopup($event)">{{lang.close}}
         </md-button>
     </md-dialog-actions>

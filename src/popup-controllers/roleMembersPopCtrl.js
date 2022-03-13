@@ -10,6 +10,9 @@ module.exports = function (app) {
                                                    langService,
                                                    role,
                                                    gridService,
+                                                   overrideRoles,
+                                                   members,
+                                                   roleService,
                                                    $filter) {
         'ngInject';
         var self = this;
@@ -17,29 +20,9 @@ module.exports = function (app) {
         self.role = role;
         self.progress = null;
 
-        self.roleMembersCopy = angular.copy(self.role.members);
-
-        self.roleMembers = _.map(self.roleMembersCopy, function (member) {
-            return new Member({
-                employeeNo: member.applicationUser.employeeNo,
-                loginName: member.applicationUser.loginName,
-                arFullName: member.applicationUser.arFullName,
-                enFullName: member.applicationUser.enFullName,
-                organization: member.ouid,
-                status: member.status
-            });
-        });
-
-        self.roleMembersCopy = _.map(self.roleMembersCopy, function (member) {
-            return new Member({
-                employeeNo: member.applicationUser.employeeNo,
-                loginName: member.applicationUser.loginName,
-                arFullName: member.applicationUser.arFullName,
-                enFullName: member.applicationUser.enFullName,
-                organization: member.ouid,
-                status: member.status
-            });
-        });
+        self.roleMembers = members;
+        self.roleMembersCopy = angular.copy(members);
+        self.overrideRoles = overrideRoles;
 
         /**
          * @description Contains the selected application users
@@ -60,16 +43,16 @@ module.exports = function (app) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.role, limit);
             },
             searchColumns: {
-                employeeNo: 'employeeNo',
-                loginName: 'loginName',
-                arFullName: 'arFullName',
-                enFullName: 'enFullName',
+                employeeNo: 'applicationUser.employeeNo',
+                loginName: 'applicationUser.loginName',
+                arFullName: 'applicationUser.arFullName',
+                enFullName: 'applicationUser.enFullName',
                 organization: function () {
-                    return self.getSortingKey('organization', 'Organization');
+                    return self.getSortingKey('ouid', 'Information');
                 },
-                 status: function (model) {
+                status: function (model) {
                     return '';
-                 }
+                }
             },
             searchText: '',
             searchCallback: function (grid) {
@@ -93,6 +76,33 @@ module.exports = function (app) {
         self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
+
+        /**
+         * @description
+         * @param $event
+         */
+        self.overrideMembersPermissions = function ($event) {
+            roleService.overrideMembersPermissions(self.role, self.selectedRoleMembers)
+                .then(function (result) {
+                    var overrideFailedKeys = Object.keys(result).map(key => {
+                        if (!result[key]) {
+                            return key;
+                        }
+                    })
+                    dialog.hide(overrideFailedKeys.length ? _mapFailedMembers(overrideFailedKeys) : null);
+                })
+        }
+
+        function _mapFailedMembers(overrideFailedKeys) {
+            // key: "userid:ouid"
+            return overrideFailedKeys.map(function (key) {
+                var [userId, ouId] = key.split(':');
+                return self.selectedRoleMembers.find(function (member) {
+                    return member.getApplicationUserId() === Number(userId) && member.getOuId() === Number(ouId);
+                })
+            })
+
+        }
 
         self.closeRoleMembersPopup = function ($event) {
             return dialog.cancel();

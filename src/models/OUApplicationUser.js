@@ -126,6 +126,9 @@ module.exports = function (app) {
             OUApplicationUser.prototype.getTranslatedApplicationUserName = function (reverse) {
                 return langService.current === 'ar' ? (reverse ? this.applicationUser.enFullName : this.applicationUser.arFullName) : (reverse ? this.applicationUser.arFullName : this.applicationUser.enFullName);
             };
+            OUApplicationUser.prototype.getTranslatedApplicationUserNameByLanguage = function (language) {
+                return this.applicationUser[language + 'FullName'];
+            };
             /**
              * @description get translated Name by lang key
              * @param key

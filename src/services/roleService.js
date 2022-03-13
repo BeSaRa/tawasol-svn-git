@@ -10,6 +10,7 @@ module.exports = function (app) {
                                          langService,
                                          toast,
                                          lookupService,
+                                         OUApplicationUser,
                                          Permission) {
         'ngInject';
         var self = this;
@@ -18,6 +19,7 @@ module.exports = function (app) {
         self.roles = [];
         self.permissionsList = [];
         self.permissionListFromAppUserView = [];
+        self.roleMembers = [];
 
         /**
          * @description load roles from server.
@@ -238,8 +240,11 @@ module.exports = function (app) {
          * @param roleId
          */
         self.getCustomRoleMembers = function (roleId) {
-            return $http.get((urlService.roles + "/" + roleId + '/members')).then(function (result) {
-                return result.data.rs;
+            return $http.get((urlService.roles + "/" + roleId + '/members-list')).then(function (result) {
+                self.roleMembers = generator.generateCollection(result.data.rs, OUApplicationUser);
+                self.roleMembers = generator.interceptReceivedCollection('OUApplicationUser', self.roleMembers);
+
+                return self.roleMembers;
             });
         };
 
@@ -330,10 +335,31 @@ module.exports = function (app) {
                     controller: 'roleMembersPopCtrl',
                     controllerAs: 'ctrl',
                     locals: {
-                        role: role
+                        role: role,
+                        overrideRoles: false,
+                        members: role.members
                     }
                 });
                 // });
+            },
+            showSelectiveRoleMembers: function (role) {
+                return dialog.showDialog({
+                    templateUrl: cmsTemplate.getPopup('role-members'),
+                    escToCancel: true,
+                    targetEvent: null,
+                    controller: 'roleMembersPopCtrl',
+                    controllerAs: 'ctrl',
+                    locals: {
+                        role: role,
+                        overrideRoles: true
+                    },
+                    resolve: {
+                        members: function () {
+                            'ngInject';
+                            return self.getCustomRoleMembers(role.id);
+                        }
+                    }
+                });
             }
         };
 
@@ -382,5 +408,24 @@ module.exports = function (app) {
             return collection;
         }
 
+
+        /**
+         * @description override user permissions
+         * @param role
+         * @param ouApplicationUsers
+         * @returns {*}
+         */
+        self.overrideMembersPermissions = function (role, ouApplicationUsers) {
+            var members = _.map(ouApplicationUsers, function (ouApplicationUser) {
+                return {
+                    'userId': ouApplicationUser.getApplicationUserId(),
+                    'customRoleId': role.id,
+                    'ouId': ouApplicationUser.getOuId()
+                }
+            })
+            return $http.put(urlService.roles + '/unify-user-permissions', members).then(function (result) {
+                return result.data.rs;
+            })
+        }
     });
 };

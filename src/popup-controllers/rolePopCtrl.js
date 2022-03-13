@@ -11,6 +11,7 @@ module.exports = function (app) {
                                             langService,
                                             $filter,
                                             employeeService,
+                                            tableGeneratorService,
                                             _) {
         'ngInject';
         var self = this;
@@ -115,39 +116,20 @@ module.exports = function (app) {
                 })
                 .validate()
                 .then(function () {
-
                     dialog.confirmMessage(langService.get('custom_role_warning_message'))
                         .then(function () {
-                            roleService.updateRole(self.role).then(function () {
-                                toast.success(langService.get('edit_success').change({name: self.role.getTranslatedName()}));
-                                dialog.hide();
-                            });
+                            roleService.controllerMethod
+                                .showSelectiveRoleMembers(self.role).then(function (failedMembers) {
+                                roleService.updateRole(self.role).then(function () {
+                                    if (failedMembers) {
+                                        dialog.alertMessage(_prepareOverridePermissionMessage(failedMembers));
+                                    } else {
+                                        toast.success(langService.get('edit_success').change({name: self.role.getTranslatedName()}));
+                                    }
+                                    dialog.hide();
+                                });
+                            })
                         });
-                    // roleService.updateRole(self.role).then(function (result) {
-                    //     toast.success(langService.get('edit_success').change({name: self.role.getTranslatedName()}));
-                    //
-                    //     //check if permissions changes for role and then ask confirmation to change for members also
-                    //     // if (result.customRolePermission.length !== self.role.customRolePermission.length) {
-                    //     //     dialog.confirmMessage(langService.get('permission_change_popup_message')).then(function () {
-                    //     //     }, function () {
-                    //     //     });
-                    //     // } else {
-                    //     //     var samePermissionCount = 0;
-                    //     //     for (var i = 0; i < result.customRolePermission.length; i++) {
-                    //     //         if (result.customRolePermission[i].permissionId === self.role.customRolePermission[i].permissionId) {
-                    //     //             samePermissionCount += 1;
-                    //     //         }
-                    //     //     }
-                    //     //     if (samePermissionCount !== result.customRolePermission.length) {
-                    //     //         dialog.confirmMessage(langService.get('permission_change_popup_message')).then(function () {
-                    //     //
-                    //     //         }, function () {
-                    //     //         });
-                    //     //     }
-                    //     // }
-                    //
-                    //
-                    // });
                 })
                 .catch(function () {
 
@@ -283,5 +265,26 @@ module.exports = function (app) {
             }
             self.role.customRolePermission = customRolePermissionCopy;
         };
+
+        /**
+         * @description prepare Failed Update User Permissions
+         * @private
+         * @param members
+         */
+        function _prepareOverridePermissionMessage(members) {
+            var titleTemplate = angular.element('<span class="validation-title">' + langService.get('failed_override_permission') + '</span> <br/>');
+            titleTemplate.html(langService.get('failed_override_permission'));
+
+            var tableRows = _.map(members, function (user) {
+                return [user.getApplicationUser().loginName, user.getTranslatedApplicationUserNameByLanguage('ar'), user.getTranslatedApplicationUserNameByLanguage('en'), user.getOrganizationTranslate()];
+            });
+
+            var table = tableGeneratorService.createTable([langService.get('login_name'), langService.get('arabic_name'), langService.get('english_name'), langService.get('organization_unit')], 'error-table');
+            table.createTableRows(tableRows);
+
+            titleTemplate.append(table.getTable(true));
+
+            return titleTemplate.html();
+        }
     });
 };
