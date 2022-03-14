@@ -57,6 +57,7 @@ module.exports = function (app) {
         // self.organizations = organizationService.organizations;
         self.organizations = organizationService.getAllRegistryOrganizations();
         self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
+        self.documentClasses = lookupService.returnLookups(lookupService.documentClass);
         self.isIntegratedClassificationEnabled = rootEntity.isIntegratedClassificationEnabled();
 
         self.selectedOrganization = null;
@@ -429,6 +430,7 @@ module.exports = function (app) {
         self.resetIsUserPrivate = function () {
             if (self.classification.isGlobal || self.classification.parent) {
                 self.classification.isUserPrivate = false;
+                self.classification.docClassId = null;
             }
         }
 

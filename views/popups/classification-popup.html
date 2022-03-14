@@ -79,6 +79,20 @@
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
+                                    <!-- document Class -->
+                                    <md-input-container flex>
+                                        <label for="docClassId">{{lang.label_document_class}}</label>
+                                        <md-select id="docClassId" aria-label="docClassId"
+                                                   ng-model="ctrl.classification.docClassId"
+                                                   ng-disabled="ctrl.isUserPrivateDisabled()">
+                                            <md-option ng-value="null">{{lang.all}}</md-option>
+                                            <md-option ng-value="documentClass.lookupKey"
+                                                       ng-if="documentClass.lookupStrKey.toLowerCase() !== 'internal'"
+                                                       ng-repeat="documentClass in ctrl.documentClasses">
+                                                {{documentClass.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
                                     <!-- Code -->
                                     <md-input-container flex>
                                         <label for="code">{{lang.code}}</label>

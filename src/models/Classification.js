@@ -20,7 +20,7 @@ module.exports = function (app) {
             self.code = null;
             self.children = [];
             self.isUserPrivate = false;
-
+            self.docClassId = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
