@@ -159,6 +159,10 @@
                                                                   indicator-type="isTransferredDocumentIndicator"
                                                                   record-type="correspondence">
                                         </grid-indicator-directive>
+                                        <!-- Is Outgoing Internal -->
+                                        <grid-indicator-directive record="searchedOutgoingDocument"
+                                                                  indicator-type="isInternalOutgoing"
+                                                                  record-type="correspondence"></grid-indicator-directive>
                                         <span flex
                                               ng-class="{'indicator-content': searchedOutgoingDocument.followUpStatusIndicator}">
                                         <md-icon ng-if="searchedOutgoingDocument.followUpStatusIndicator"

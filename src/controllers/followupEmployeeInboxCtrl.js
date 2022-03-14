@@ -146,6 +146,7 @@ module.exports = function (app) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.followupEmployeeInboxes = result;
+                    console.log(self.followupEmployeeInboxes)
                     self.followupEmployeeInboxesCopy = angular.copy(self.followupEmployeeInboxes);
                     self.selectedFollowupEmployeeInboxes = [];
                     defer.resolve(true);

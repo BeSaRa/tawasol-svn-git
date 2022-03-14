@@ -999,7 +999,7 @@ module.exports = function (app) {
                 internalSite: 'arrow-bottom-left-bold-outline',
                 g2gSite: 'file-cloud',
                 sharedFollowup: 'file-star-outline',
-                outgoingInternal: 'recycle'
+                outgoingInternal: 'file-sync'
             }
         };
     });

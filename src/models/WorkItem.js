@@ -1451,6 +1451,10 @@ module.exports = function (app) {
                 var info = this.getInfo();
                 return info.documentClass === 'outgoing' && this.generalStepElm.hasOwnProperty('isInternal') && this.generalStepElm.isInternal;
             }
+            WorkItem.prototype.getIndicatorOutgoingInternal = function (model) {
+                var indicator = model.getIsInternalOutgoingIndicator();
+                return indicator ? langService.get(indicator.text) : null;
+            };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

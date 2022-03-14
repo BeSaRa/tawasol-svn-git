@@ -710,7 +710,7 @@ module.exports = function (app) {
                     icon: self.getIndicatorIcons('outgoingInternal'),
                     tooltip: 'indicator_internal_outgoing',
                     legendText: function (indicator) {
-                        return '';
+                        return langService.get('indicator_internal_outgoing');
                     }
                 }) : false;
             };

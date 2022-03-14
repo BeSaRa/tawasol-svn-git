@@ -14,7 +14,8 @@ module.exports = function (app) {
 
         self.gridLegends = [
             'docClass', 'hasAttachment', 'hasLinkedDocuments', 'paperElectronic', 'securityLevel', 'priorityLevel',
-            'followupStatus', 'isReassigned', 'siteFollowUpDueDate', 'siteFollowUpEnded', 'sequentialWF', 'conditionalApprove'
+            'followupStatus', 'isReassigned', 'siteFollowUpDueDate', 'siteFollowUpEnded', 'sequentialWF', 'conditionalApprove',
+            'outgoingInternal'
         ];//, 'broadcast'
 
 

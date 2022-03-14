@@ -101,6 +101,9 @@ module.exports = function (app) {
                     case 'conditionalApprove':
                         self.legendIndicators.push(indicator.getConditionalApproveIndicator(true));
                         break;
+                    case 'outgoingInternal':
+                        self.legendIndicators.push(indicator.getIsInternalOutgoingIndicator(true))
+                        break
                 }
             });
         };
