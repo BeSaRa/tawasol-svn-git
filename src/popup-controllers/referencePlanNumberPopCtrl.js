@@ -180,6 +180,10 @@ module.exports = function (app) {
                         siteTypes: function (correspondenceSiteTypeService) {
                             'ngInject';
                             return correspondenceSiteTypeService.getCorrespondenceSiteTypes()
+                        },
+                        mainClassifications: function (classificationService) {
+                            'ngInject';
+                            return classificationService.classificationSearch('', undefined, true);
                         }
                     }
                 })
@@ -209,6 +213,10 @@ module.exports = function (app) {
                         siteTypes: function (correspondenceSiteTypeService) {
                             'ngInject';
                             return correspondenceSiteTypeService.getCorrespondenceSiteTypes()
+                        },
+                        mainClassifications: function (classificationService) {
+                            'ngInject';
+                            return classificationService.classificationSearch('', undefined, true);
                         }
                     }
                 })

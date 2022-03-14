@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.run(function (CMSModelInterceptor,
                       ReferencePlanItemStartSerial,
+                      _,
                       ReferencePlanItem) {
         'ngInject';
 

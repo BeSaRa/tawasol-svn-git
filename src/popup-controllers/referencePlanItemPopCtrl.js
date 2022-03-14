@@ -13,6 +13,10 @@ module.exports = function (app) {
                                                          ReferencePlanItem,
                                                          referencePlanItems,
                                                          siteTypes,
+                                                         correspondenceService,
+                                                         classificationService,
+                                                         $timeout,
+                                                         mainClassifications,
                                                          CorrespondenceSiteType) {
         'ngInject';
         var self = this;
@@ -37,6 +41,12 @@ module.exports = function (app) {
         self.correspondenceSiteTypes = angular.copy(siteTypes);
 
         self.referencePlanItemPerOU = self.model.perOu;
+        self.mainClassificationSearchText = '';
+        self.previousMainClassifications = [];
+        self.previousSubClassifications = [];
+
+        self.mainClassifications = mainClassifications;
+        self.mainClassificationsCopy = angular.copy(mainClassifications);
 
         var lookup = new Lookup({
             defaultArName: langService.getKey('all', 'ar'),
@@ -116,6 +126,70 @@ module.exports = function (app) {
                 });
 
         };
+
+        /**
+         * @description load Main depend on criteria ... used to load more if the current mainClassifications dose not have what the user searched for.
+         * @param $event
+         */
+        self.loadMainClassificationByCriteria = function ($event) {
+            if ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+            }
+
+            // to reserve old sub sites
+            if (self.mainClassifications.length)
+                self.previousMainClassifications = angular.copy(self.mainClassifications);
+
+            classificationService.classificationSearch(self.mainClassificationSearchText, undefined, true)
+                .then(function (classifications) {
+                    self.mainClassifications = self.getClassificationsByDocumentClass();
+                    // self.mainClassificationsCopy = angular.copy(classifications);
+                });
+        };
+
+        self.getClassificationsByDocumentClass = function () {
+            if (!self.referencePlanItem.expressionComponents.classDescription) {
+                return self.mainClassificationsCopy;
+            }
+
+            return self.mainClassificationsCopy.filter(function (classification) {
+                return classification.docClassId !== null && generator.getDocumentClassName(classification.docClassId).toLowerCase() === self.referencePlanItem.expressionComponents.classDescription.toLowerCase()
+            });
+        }
+
+        self.onDocumentClassChanged = function () {
+            self.referencePlanItem.expressionComponents.mainClassification = null;
+            self.mainClassifications = self.getClassificationsByDocumentClass();
+        }
+
+        self.setPropertiesSpaceBackIfNoLength = function ($event, text, callback) {
+            var key = $event.keyCode || $event.which;
+            if (!text.length && key === 8) {
+                callback();
+            }
+        };
+        /**
+         * @description set previousMainClassifications in case if it has length
+         */
+        self.setOldMainClassification = function () {
+            self.previousMainClassifications.length && !self.mainClassifications.length ? self.mainClassifications = self.previousMainClassifications : null;
+            self.previousMainClassifications = [];
+        };
+        /**
+         * capture any event except arrows UP/DOWN allow those.
+         * @param $event
+         * @param enterCallback
+         */
+        self.allowPropagationUpDownArrows = function ($event, enterCallback) {
+            var key = $event.keyCode || $event.which;
+            if (key === 13 && enterCallback) {
+                enterCallback($event);
+                $event.stopPropagation();
+            }
+            var allowedKeys = [38 /* UP */, 40 /* DOWN */];
+            allowedKeys.indexOf(key) === -1 ? $event.stopPropagation() : null;
+        };
         /**
          * @description close reference plan Item
          */
@@ -129,5 +203,6 @@ module.exports = function (app) {
             self.referencePlanItem.setPerOU(self.referencePlanItemPerOU);
         }
 
+        self.onDocumentClassChanged();
     });
 };

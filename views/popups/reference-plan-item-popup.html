@@ -22,6 +22,7 @@
                                     <md-input-container flex>
                                         <label for="docClass">{{lang.label_document_class}}</label>
                                         <md-select id="docClass" aria-label="classDescription"
+                                                   ng-change="ctrl.onDocumentClassChanged()"
                                                    ng-model="ctrl.referencePlanItem.expressionComponents.classDescription">
                                             <md-option ng-value="documentClass.customLookupKey"
                                                        ng-repeat="documentClass in ctrl.documentClasses">
@@ -72,6 +73,48 @@
                                             </md-option>
                                         </md-select>
                                     </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <!-- main Classification -->
+                                    <md-input-container flex>
+                                        <label for="mainClassification">{{lang.linked_document_main_classification}}</label>
+                                        <md-select data-md-container-class="select-header-container sticky-search-bar"
+                                                   id="mainClassification"
+                                                   name="mainClassification"
+                                                   md-on-close="ctrl.mainClassificationSearchText = ''"
+                                                   ng-model="ctrl.referencePlanItem.expressionComponents.mainClassification">
+                                            <md-select-header class="select-header" layout="column">
+                                                <div layout="row" flex class="size-100">
+                                                    <input ng-model="ctrl.mainClassificationSearchText"
+                                                           type="text"
+                                                           ng-keyup="ctrl.setPropertiesSpaceBackIfNoLength($event , ctrl.mainClassificationSearchText ,ctrl.setOldMainClassification)"
+                                                           ng-keydown="ctrl.allowPropagationUpDownArrows($event)"
+                                                           placeholder="{{lang.search}}"
+                                                           class="select-header-input">
+                                                    <md-button
+                                                            ng-click="ctrl.loadMainClassificationByCriteria($event)"
+                                                            tooltip="{{lang.load_more_records}}" class="md-icon-button">
+                                                        <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                                    </md-button>
+                                                </div>
+                                            </md-select-header>
+                                            <md-option ng-if="!ctrl.mainClassificationSearchText.length"
+                                                       ng-value="null">{{lang.none}}
+                                            </md-option>
+                                            <md-option md-highlight-text="ctrl.mainClassificationSearchText"
+                                                       md-highlight-flags="i"
+                                                       ng-value="item.id"
+                                                       ng-repeat="item in ctrl.mainClassifications|translatedNameFilter:ctrl.mainClassificationSearchText">
+                                                {{item.getTranslatedName()}}
+                                            </md-option>
+                                            <md-option ng-click="ctrl.loadMainClassificationByCriteria( $event)"
+                                                       ng-if="!(ctrl.mainClassifications|translatedNameFilter:ctrl.mainClassificationSearchText).length && ctrl.mainClassificationSearchText.length">
+                                                <span class="red-text">{{lang.press_enter_to_load_more_records}}</span>
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+
+                                    <span flex></span>
                                 </div>
                                 <div layout="row">
                                     <md-input-container flex>

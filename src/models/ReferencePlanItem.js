@@ -19,7 +19,8 @@ module.exports = function (app) {
                 classDescription: "",
                 securityLevel: null,
                 docType: null,
-                siteType: null
+                siteType: null,
+                mainClassification: null
             };
 
             self.referenceOptions = {};
