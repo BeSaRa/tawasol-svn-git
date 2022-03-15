@@ -57,7 +57,7 @@ module.exports = function (app) {
                 img.src = _URL.createObjectURL(file);
                 img.onload = function () {
                     var fieldName = input[0].name;
-                    if (fieldName === 'loginLogo' || fieldName === 'bannerLogo') { //fieldName === 'signatureImage'
+                    if (fieldName === 'loginLogo' || fieldName === 'bannerLogo' || fieldName === 'organizationLogo') { //fieldName === 'signatureImage'
                         if (!_checkValidDimensions(this, 283, 283)) {
                             input.val('');
                             return false;
