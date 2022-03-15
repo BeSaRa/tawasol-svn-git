@@ -36,6 +36,7 @@ module.exports = function (app) {
             model.updateDate = generator.getTimeStampFromDate(model.updateDate);
             //model.followupStatus = model.followupStatus.hasOwnProperty('id') ? model.followupStatus.lkey : model.followupStatus;
             model.followupStatus = angular.isObject(model.followupStatus) && model.followupStatus.hasOwnProperty('id') ? model.followupStatus.lookupKey : model.followupStatus;
+            model.updatedByOrg = generator.isJsonString(model.updatedByOrg) ? JSON.stringify(model.updatedByOrg) : model.updatedByOrg;
 
             delete model.recordInfo;
             delete model.statusInfo;
