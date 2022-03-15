@@ -45,7 +45,7 @@ module.exports = function (app) {
         self.previousMainClassifications = [];
         self.previousSubClassifications = [];
 
-        self.mainClassifications = mainClassifications;
+        self.mainClassifications = getClassificationsByDocumentClass(mainClassifications);
         self.mainClassificationsCopy = angular.copy(mainClassifications);
 
         var lookup = new Lookup({
@@ -143,24 +143,25 @@ module.exports = function (app) {
 
             classificationService.classificationSearch(self.mainClassificationSearchText, undefined, true)
                 .then(function (classifications) {
-                    self.mainClassifications = self.getClassificationsByDocumentClass();
+                    self.mainClassifications = getClassificationsByDocumentClass(classifications);
                     // self.mainClassificationsCopy = angular.copy(classifications);
                 });
         };
 
-        self.getClassificationsByDocumentClass = function () {
-            if (!self.referencePlanItem.expressionComponents.classDescription) {
-                return self.mainClassificationsCopy;
+        function getClassificationsByDocumentClass(classifications) {
+            classifications = classifications || self.mainClassificationsCopy;
+            if (self.referencePlanItem.expressionComponents.classDescription === null || self.referencePlanItem.expressionComponents.classDescription === 'undefined') {
+                return classifications;
             }
 
-            return self.mainClassificationsCopy.filter(function (classification) {
+            return classifications.filter(function (classification) {
                 return classification.docClassId !== null && generator.getDocumentClassName(classification.docClassId).toLowerCase() === self.referencePlanItem.expressionComponents.classDescription.toLowerCase()
             });
         }
 
-        self.onDocumentClassChanged = function () {
+        self.onChangeDocumentClass = function () {
             self.referencePlanItem.expressionComponents.mainClassification = null;
-            self.mainClassifications = self.getClassificationsByDocumentClass();
+            self.mainClassifications = getClassificationsByDocumentClass();
         }
 
         self.setPropertiesSpaceBackIfNoLength = function ($event, text, callback) {
@@ -203,6 +204,5 @@ module.exports = function (app) {
             self.referencePlanItem.setPerOU(self.referencePlanItemPerOU);
         }
 
-        self.onDocumentClassChanged();
     });
 };

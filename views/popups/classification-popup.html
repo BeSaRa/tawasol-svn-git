@@ -82,9 +82,9 @@
                                     <!-- document Class -->
                                     <md-input-container flex>
                                         <label for="docClassId">{{lang.label_document_class}}</label>
+                                        <!--ng-disabled="ctrl.isUserPrivateDisabled()"-->
                                         <md-select id="docClassId" aria-label="docClassId"
-                                                   ng-model="ctrl.classification.docClassId"
-                                                   ng-disabled="ctrl.isUserPrivateDisabled()">
+                                                   ng-model="ctrl.classification.docClassId">
                                             <md-option ng-value="null">{{lang.all}}</md-option>
                                             <md-option ng-value="documentClass.lookupKey"
                                                        ng-if="documentClass.lookupStrKey.toLowerCase() !== 'internal'"

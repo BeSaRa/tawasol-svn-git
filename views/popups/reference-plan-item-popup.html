@@ -22,7 +22,7 @@
                                     <md-input-container flex>
                                         <label for="docClass">{{lang.label_document_class}}</label>
                                         <md-select id="docClass" aria-label="classDescription"
-                                                   ng-change="ctrl.onDocumentClassChanged()"
+                                                   ng-change="ctrl.onChangeDocumentClass()"
                                                    ng-model="ctrl.referencePlanItem.expressionComponents.classDescription">
                                             <md-option ng-value="documentClass.customLookupKey"
                                                        ng-repeat="documentClass in ctrl.documentClasses">

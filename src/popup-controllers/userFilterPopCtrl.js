@@ -45,7 +45,8 @@ module.exports = function (app) {
         self.previousMainClassifications = [];
         self.previousSubClassifications = [];
 
-        self.mainClassifications = mainClassifications;
+        self.mainClassifications = getClassificationsByDocumentClass(mainClassifications);
+        self.mainClassificationsCopy = angular.copy(mainClassifications);
 
         self.subClassifications = [];
         self.mainClassificationSearchText = '';
@@ -253,6 +254,7 @@ module.exports = function (app) {
         self.onChangeDocumentType = function ($event) {
             self.filter.ui.key_12.value = null;
             self.documentTypes = [];
+            self.mainClassifications = getClassificationsByDocumentClass();
 
             if (generator.validRequired(self.filter.ui.key_2.value)) {
                 if (self.filter.ui.key_2.value === 2) {
@@ -264,6 +266,10 @@ module.exports = function (app) {
                     self.subSites = [];
                 }
 
+                // reset main/sub classifications
+                self.filter.ui.key_23.value = null;
+                self.filter.ui.key_24.value = null;
+                self.subClassifications = [];
                 self.documentTypes = correspondenceService.getLookup(generator.getDocumentClassName(self.filter.ui.key_2.value), 'docTypes');
             } else {
                 self.documentTypes = correspondenceService.getLookupUnionByLookupName('docTypes');
@@ -480,7 +486,7 @@ module.exports = function (app) {
 
             classificationService.classificationSearch(self.mainClassificationSearchText, undefined, true)
                 .then(function (classifications) {
-                    self.mainClassifications = classifications;
+                    self.mainClassifications = getClassificationsByDocumentClass(classifications);
                 });
         };
         /**
@@ -527,6 +533,17 @@ module.exports = function (app) {
                     self.filter.ui.key_allowMultipleSitesView.value = !self.filter.ui.key_allowMultipleSitesView.value;
                 })
             }
+        }
+
+        function getClassificationsByDocumentClass(classifications) {
+            classifications = classifications || self.mainClassificationsCopy;
+            if (self.filter.ui.key_2.value === null || self.filter.ui.key_2.value === 'undefined') {
+                return classifications;
+            }
+
+            return classifications.filter(function (classification) {
+                return classification.docClassId !== null && classification.docClassId === self.filter.ui.key_2.value;
+            });
         }
 
         self.$onInit = function () {

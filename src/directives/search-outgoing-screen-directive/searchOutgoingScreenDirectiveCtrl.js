@@ -142,6 +142,7 @@ module.exports = function (app) {
         self.mainClassificationSearchText = '';
         // mainClassifications list
         self.mainClassifications = [];
+        self.mainClassificationsCopy = [];
         // search text for filtering subClassification DDL
         self.subClassificationSearchText = '';
         // subClassifications list
@@ -197,6 +198,17 @@ module.exports = function (app) {
             var docClass = self.searchCriteria.docClassName.toLowerCase() === 'correspondence' ? 'outgoing' : self.searchCriteria.docClassName;
             self.mainClassifications = angular.copy(correspondenceService.getLookup(docClass, 'classifications'));
             self.mainClassifications = _displayCorrectClassifications(self.mainClassifications);
+            // later to filter by document class
+            self.mainClassificationsCopy = angular.copy(self.mainClassifications);
+            self.mainClassifications = getClassificationsByDocumentClass();
+        }
+
+        function getClassificationsByDocumentClass(classifications) {
+            classifications = classifications || self.mainClassificationsCopy;
+
+            return classifications.filter(function (classification) {
+                return classification.classification.docClassId !== null && classification.classification.docClassId === 0
+            });
         }
 
         /**
@@ -528,7 +540,7 @@ module.exports = function (app) {
 
             self.loadClassificationsByCriteria('main', self.mainClassificationSearchText)
                 .then(function (classifications) {
-                    self.mainClassifications = classifications;
+                    self.mainClassifications = getClassificationsByDocumentClass(classifications);
                 });
         };
         /**
