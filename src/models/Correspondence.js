@@ -112,6 +112,7 @@ module.exports = function (app) {
             self.azureResultItem = null;
             self.highlights = null;
             self.transfered = false;
+            self.copyAllAttachments = false;
 
             self.externalImportData = null; // set the value from external data source import popup. used in upload content
 
@@ -744,9 +745,9 @@ module.exports = function (app) {
                 var info = this.getInfo();
                 return managerService.manageDocumentComments.apply(managerService, [this, info.vsId, info.title, $event]);
             };
-            Correspondence.prototype.manageDocumentAttachments = function ($event, isSimpleAdd) {
+            Correspondence.prototype.manageDocumentAttachments = function ($event, isSimpleAdd, allowAddFromCorrespondence, selectedAttachmentIds) {
                 var info = this.getInfo();
-                return managerService.manageDocumentAttachments.apply(managerService, [this, info.vsId, info.documentClass, info.title, $event, isSimpleAdd]);
+                return managerService.manageDocumentAttachments.apply(managerService, [this, info.vsId, info.documentClass, info.title, $event, isSimpleAdd, allowAddFromCorrespondence, selectedAttachmentIds]);
             };
             Correspondence.prototype.manageDocumentLinkedDocuments = function ($event, isSimpleAdd) {
                 var info = this.getInfo();

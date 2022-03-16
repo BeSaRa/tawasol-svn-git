@@ -22,6 +22,8 @@ module.exports = function (app) {
                                                             correspondenceSiteTypes,
                                                             correspondenceViewService,
                                                             Site_Search,
+                                                            allowAddFromCorrespondence,
+                                                            cmsTemplate,
                                                             Lookup) {
         'ngInject';
         var self = this,
@@ -47,7 +49,8 @@ module.exports = function (app) {
         self.isAdminSearch = isAdminSearch;
 
         self.multiSelect = multiSelect;
-
+        self.allowAddFromCorrespondence = allowAddFromCorrespondence;
+        self.selectedAttachmentIds = [];
         // all security levels
         //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
         self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
@@ -277,6 +280,41 @@ module.exports = function (app) {
         self.sendLinkedDocuments = function () {
             dialog.hide(self.selectedCorrespondences)
         };
+
+        /**
+         * @description send selected correspondences and attachments to parent controller
+         */
+        self.saveAttachmentCopies = function () {
+            dialog.hide({
+                attachments: self.selectedAttachmentIds,
+                correspondence: self.selectedCorrespondences.length ? self.selectedCorrespondences[0] : null
+            })
+        }
+        self.toggleAllAttachmentCopy = function (correspondence) {
+            // remove all selected
+            self.selectedAttachmentIds = self.selectedAttachmentIds.filter(function (attachmentId) {
+                return correspondence.attachments.indexOf(attachmentId) === -1;
+            });
+
+            if (correspondence.copyAllAttachments) {
+                self.selectedAttachmentIds = self.selectedAttachmentIds.concat(correspondence.attachments);
+                correspondence.totaselectedAttachments = correspondence.attachments.length;
+            } else {
+                correspondence.totaselectedAttachments = 0;
+            }
+        }
+
+        /***
+         * @description open to select attachments
+         * @param correspondence
+         * @param $event
+         */
+        self.openSelectAttachmentDialog = function (correspondence, $event) {
+            correspondence.manageDocumentAttachments($event, false, self.allowAddFromCorrespondence, self.selectedAttachmentIds)
+                .then(function (result) {
+                    self.selectedAttachmentIds = result;
+                })
+        }
 
         _getClassifications(true);
         _getDocumentFiles(true);
@@ -570,6 +608,8 @@ module.exports = function (app) {
          * @description start search after create your criteria.
          */
         self.searchLinkedDocuments = function () {
+            self.selectedAttachmentIds = [];
+            self.selectedCorrespondences = [];
             var vsIds = self.excludeVsId ? [self.excludeVsId] : [];
 
             self.correspondence.siteType = self.selectedSiteType ? self.selectedSiteType : null;

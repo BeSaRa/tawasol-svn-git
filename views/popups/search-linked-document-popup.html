@@ -332,6 +332,7 @@
                     <md-content class="md-padding">
                         <div layout="column">
                             <div layout="row" class="p020">
+                                <span ng-if="ctrl.allowAddFromCorrespondence && ctrl.selectedAttachmentIds.length">{{lang.attachments_selected.change({total: ctrl.selectedAttachmentIds.length})}}</span>
                                 <span flex></span>
                                 <md-switch aria-label="{{lang.truncate_subject}}"
                                            class="m0"
@@ -392,6 +393,10 @@
                                                 <th md-column ng-if="!ctrl.selectedCorrespondences.length"
                                                     md-order-by="createdOn">
                                                     <span>{{lang.created_on}}</span>
+                                                </th>
+                                                <th md-column
+                                                    ng-if="!ctrl.selectedCorrespondences.length && ctrl.allowAddFromCorrespondence">
+                                                    {{lang.all_attachments}}
                                                 </th>
                                             </tr>
                                             </thead>
@@ -474,6 +479,22 @@
                                                 <td md-cell>{{correspondence.docClassInfo.getTranslatedName()}}</td>
                                                 <td md-cell>{{correspondence.creatorInfo.getTranslatedName()}}</td>
                                                 <td md-cell>{{correspondence.createdOn}}</td>
+                                                <td md-cell ng-if="ctrl.allowAddFromCorrespondence">
+                                                    <div class="icon-relative">
+                                                        <md-button class="md-icon-button" title="{{lang.attachments}}"
+                                                                   ng-if="correspondence.attachments.length"
+                                                                   ng-click="ctrl.openSelectAttachmentDialog(correspondence,$event)">
+                                                            <md-icon md-svg-icon="paperclip"></md-icon>
+                                                        </md-button>
+                                                        <span ng-if="correspondence.totaselectedAttachments"
+                                                              class="counter blue">{{correspondence.totaselectedAttachments}}</span>
+                                                    </div>
+                                                    <md-checkbox aria-label="attachments"
+                                                                 ng-if="correspondence.attachments.length"
+                                                                 ng-change="ctrl.toggleAllAttachmentCopy(correspondence)"
+                                                                 ng-model="correspondence.copyAllAttachments">
+                                                    </md-checkbox>
+                                                </td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -499,9 +520,15 @@
                    ng-disabled="reason_form.$invalid && ctrl.itemNeedReason()">
             {{lang.linked_document_search_button}}
         </md-button>
-        <md-button ng-if="ctrl.selectedCorrespondences.length" ng-click="ctrl.sendLinkedDocuments()"
+        <md-button ng-if="ctrl.selectedCorrespondences.length && !ctrl.allowAddFromCorrespondence"
+                   ng-click="ctrl.sendLinkedDocuments()"
                    class="md-raised md-primary">
             {{ctrl.isAdminSearch ? lang.action_submit : lang.linked_document_link_button}}
+        </md-button>
+        <md-button
+                ng-if="ctrl.selectedIndex === 1 && ctrl.allowAddFromCorrespondence && (ctrl.selectedCorrespondences.length || ctrl.selectedAttachmentIds.length)"
+                ng-click="ctrl.saveAttachmentCopies()" class="md-raised md-primary">
+            {{lang.save}}
         </md-button>
         <md-button ng-click="ctrl.closeLinkedDocuments()" class="md-raised red-text">
             {{lang.close}}

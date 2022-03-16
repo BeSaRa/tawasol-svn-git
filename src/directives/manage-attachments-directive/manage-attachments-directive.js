@@ -23,7 +23,10 @@ module.exports = function (app) {
                 receiveG2g: '=?',
                 receive: '=?',
                 receiveG2gOuId: '=?',
-                activeAttachment: '=?'
+                activeAttachment: '=?',
+                allowAddFromCorrespondence: '=?',
+                selectedAttachmentIds: '=?',
+                selectedAttachments: '=?'
             }
         }
     });

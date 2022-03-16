@@ -883,6 +883,22 @@ module.exports = function (app) {
                         });
                 };
 
+                /***
+                 * @description copy attachments from existing correspondence
+                 * @param document
+                 * @param selectedCorrespondence
+                 * @param selectedAttachmentIds
+                 * @returns {*}
+                 */
+                self.copyAttachmentsFromCorrespondence = function (document, selectedCorrespondence, selectedAttachmentIds) {
+                    var info = document.getInfo()
+                    return $http.post(urlService.correspondence + '/' + info.documentClass + '/' + info.vsId + '/attachments/copy-from-cor',
+                        {
+                            first: selectedCorrespondence ? selectedCorrespondence.vsId : selectedCorrespondence,
+                            second: selectedAttachmentIds
+                        })
+                }
+
                 _prepareExtensionGroups();
                 return self;
 

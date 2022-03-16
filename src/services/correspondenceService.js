@@ -1038,6 +1038,51 @@ module.exports = function (app) {
                 });
 
         };
+
+        /***
+         * @description open linked documents search dialog
+         * @param vsId
+         * @param linkedDocs
+         * @param viewCorrespondence
+         * @param multiSelect
+         * @param allowAddFromCorrespondence
+         * @param $event
+         * @returns {*}
+         */
+        self.openLinkedDocsSearchDialog = function (vsId, linkedDocs, viewCorrespondence, multiSelect, allowAddFromCorrespondence, $event) {
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('search-linked-document'),
+                    controller: 'searchLinkedDocumentPopCtrl',
+                    controllerAs: 'ctrl',
+                    targetEvent: $event,
+                    locals: {
+                        linkedDocs: linkedDocs,
+                        viewCallback: viewCorrespondence,
+                        excludeVsId: vsId,
+                        isAdminSearch: false,
+                        multiSelect: multiSelect,
+                        allowAddFromCorrespondence: allowAddFromCorrespondence
+                    },
+                    resolve: {
+                        organizations: function (organizationService) {
+                            'ngInject';
+                            return organizationService.getAllOrganizationsStructure()
+                                .then(function (organizations) {
+                                    return _.filter(organizations, function (organization) {
+                                        return organization.hasRegistry;
+                                    })
+                                });
+                        },
+                        correspondenceSiteTypes: function (correspondenceSiteTypeService) {
+                            'ngInject';
+                            return correspondenceSiteTypeService.getCorrespondenceSiteTypes();
+                        }
+                    }
+                });
+        }
+
+
         /**
          * @description load lookups for correspondence depend on documentClass.
          * @param documentClass

@@ -1,6 +1,6 @@
 <div layout="column">
     <div layout="row"
-         ng-if="(ctrl.allowUpload || ctrl.allowScanner) && !ctrl.disableEverything && ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')">
+         ng-if="(ctrl.allowUpload || ctrl.allowScanner) && !ctrl.disableEverything && ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS') && !ctrl.allowAddFromCorrespondence">
         <md-menu-bar ng-if="ctrl.allowUpload" class="p0">
             <md-menu>
                 <md-button ng-disabled="(ctrl.checkReceiveOrReceiveG2G()) && ctrl.attachmentCopyBeforeEdit"
@@ -57,6 +57,9 @@
                 <md-icon md-svg-icon="file-import"></md-icon>
                 <span>{{lang.external_import}}</span>
             </div>
+        </md-button>
+        <md-button class="md-raised" ng-if="ctrl.vsId" ng-click="ctrl.openSearchDialog($event)">
+            {{lang.search}}
         </md-button>
     </div>
 
@@ -215,7 +218,7 @@
                         md-order-by="exportStatus">
                         <span>{{lang.export_status}}</span>
                     </th>
-                    <th md-column>
+                    <th md-column ng-if="!ctrl.allowAddFromCorrespondence">
                         <span ng-if="!ctrl.selectedAttachments.length">{{lang.actions}}</span>
                         <div layout="row"
                              ng-if="ctrl.selectedAttachments.length && ctrl.isEnabledDeleteBulkAttachments($event)">
@@ -256,7 +259,7 @@
                     <td md-cell>{{attachment.getSecurityLevels()}}</td>
                     <td md-cell>{{attachment.priorityLevel.getTranslatedName()}}</td>
                     <td md-cell>{{attachment.getTranslatedExportStatus()}}</td>
-                    <td md-cell>
+                    <td md-cell ng-if="!ctrl.allowAddFromCorrespondence">
                         <div flex layout="row" layout-align="start center">
                             <md-button class="md-icon-button" title="{{lang.attachment_view}}"
                                        ng-click="ctrl.openViewDocumentAttachment(attachment, $event)"

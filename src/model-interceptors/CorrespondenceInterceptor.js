@@ -189,6 +189,8 @@ module.exports = function (app) {
             delete model.g2gSiteIndicator;
             delete model.azureResultItem;
             delete model.highlights;
+            delete model.copyAllAttachments;
+            delete model.totalSelectedAttachments;
             return model;
         });
 

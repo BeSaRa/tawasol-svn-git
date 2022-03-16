@@ -121,7 +121,8 @@ module.exports = function (app) {
                         viewCallback: viewCorrespondenceCallback,
                         excludeVsId: null,
                         isAdminSearch: true,
-                        multiSelect: true
+                        multiSelect: true,
+                        allowAddFromCorrespondence: false
                     },
                     resolve: {
                         organizations: function (organizationService) {

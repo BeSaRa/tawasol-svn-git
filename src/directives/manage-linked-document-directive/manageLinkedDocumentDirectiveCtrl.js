@@ -127,35 +127,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.openSearchDialog = function ($event) {
-            dialog
-                .showDialog({
-                    templateUrl: cmsTemplate.getPopup('search-linked-document'),
-                    controller: 'searchLinkedDocumentPopCtrl',
-                    controllerAs: 'ctrl',
-                    targetEvent: $event,
-                    locals: {
-                        linkedDocs: self.linkedDocs,
-                        viewCallback: self.viewCorrespondence,
-                        excludeVsId: self.vsId,
-                        isAdminSearch: false,
-                        multiSelect: true
-                    },
-                    resolve: {
-                        organizations: function (organizationService) {
-                            'ngInject';
-                            return organizationService.getAllOrganizationsStructure()
-                                .then(function (organizations) {
-                                    return _.filter(organizations, function (organization) {
-                                        return organization.hasRegistry;
-                                    })
-                                });
-                        },
-                        correspondenceSiteTypes: function (correspondenceSiteTypeService) {
-                            'ngInject';
-                            return correspondenceSiteTypeService.getCorrespondenceSiteTypes();
-                        }
-                    }
-                })
+            correspondenceService.openLinkedDocsSearchDialog(self.vsId, self.linkedDocs, self.viewCorrespondence, true, false, $event)
                 .then(function (correspondences) {
                     var vsIds = _.map(self.linkedDocs, 'vsId'); // get current linked documents vsIds
                     var linkedDocs = angular.isArray(self.linkedDocs) ? self.linkedDocs.concat(_filterExists(correspondences, vsIds)) : correspondences;

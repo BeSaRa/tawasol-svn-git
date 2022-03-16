@@ -105,8 +105,10 @@ module.exports = function (app) {
          * @param documentSubject
          * @param $event
          * @param isSimpleAdd
+         * @param allowAddFromCorrespondence
+         * @param selectedAttachmentIds
          */
-        self.manageDocumentAttachments = function (document, vsId, documentClass, documentSubject, $event, isSimpleAdd) {
+        self.manageDocumentAttachments = function (document, vsId, documentClass, documentSubject, $event, isSimpleAdd, allowAddFromCorrespondence, selectedAttachmentIds) {
             var defer = $q.defer();
             documentClass = _checkDocumentClass(documentClass);
             return dialog.showDialog({
@@ -121,7 +123,10 @@ module.exports = function (app) {
                     vsId: vsId,
                     documentClass: documentClass,
                     documentSubject: documentSubject,
-                    document: document
+                    document: document,
+                    allowAddFromCorrespondence: allowAddFromCorrespondence || false,
+                    selectedAttachmentIds: selectedAttachmentIds || [],
+                    selectedAttachments: []
                 },
                 resolve: {
                     attachments: function (attachmentService) {
@@ -170,6 +175,9 @@ module.exports = function (app) {
                     fromDialog: true,
                     documentClass: 'outgoing',
                     documentSubject: info.title,
+                    allowAddFromCorrespondence: false,
+                    selectedAttachmentIds: [],
+                    selectedAttachments: []
                 },
                 resolve: {
                     vsId: function () {

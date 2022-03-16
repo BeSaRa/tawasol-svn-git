@@ -13,10 +13,17 @@
                     vs-id="ctrl.vsId"
                     from-dialog="ctrl.fromDialog"
                     attachments="ctrl.attachments"
-                    active-attachment="ctrl.activeAttachment"></manage-attachment-directive>
+                    active-attachment="ctrl.activeAttachment"
+                    allow-add-from-correspondence="ctrl.allowAddFromCorrespondence"
+                    selected-attachment-ids="ctrl.selectedAttachmentIds"
+                    selected-attachments="ctrl.selectedAttachments"></manage-attachment-directive>
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
+        <!--ng-disabled="!ctrl.selectedAttachments.length"-->
+        <md-button class="md-raised md-primary" ng-click="ctrl.addSelectedDocumentAttachments()"
+                   ng-if="ctrl.allowAddFromCorrespondence">{{lang.select}}
+        </md-button>
         <md-button class="md-raised red-text" ng-click="ctrl.closeDocumentAttachments()">{{lang.close}}</md-button>
     </md-dialog-actions>
 </md-dialog>

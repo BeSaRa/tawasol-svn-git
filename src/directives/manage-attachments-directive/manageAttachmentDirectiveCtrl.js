@@ -22,6 +22,7 @@ module.exports = function (app) {
                                                               _,
                                                               managerService,
                                                               userExternalDataSourceService,
+                                                              cmsTemplate,
                                                               employeeService) {
         'ngInject';
         var self = this;
@@ -341,6 +342,9 @@ module.exports = function (app) {
             if (self.disableEverything) {
                 return false;
             }
+            if (self.allowAddFromCorrespondence) {
+                return true;
+            }
 
             var isDeletable = attachmentService.checkAttachmentIsDeletable(self.document.getInfo(), attachment, self.checkReceiveOrReceiveG2G()),
                 isEditable = attachmentService.checkAttachmentIsEditable(self.document.getInfo(), attachment, self.checkReceiveOrReceiveG2G());
@@ -595,6 +599,46 @@ module.exports = function (app) {
             correspondenceService
                 .annotateCorrespondence(attachment, AnnotationType.ANNOTATION, self.document);
         };
+
+        /**
+         * @description view correspondence .
+         * @param correspondence
+         * @param $event
+         */
+        self.viewCorrespondence = function (correspondence, $event) {
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+
+            if (correspondence.isLimitedCentralUnitAccess()) {
+                dialog.infoMessage(langService.get('archive_secure_document_content'));
+                return;
+            }
+            correspondenceService.viewCorrespondence(correspondence, [], true, true);
+        };
+
+        /**
+         * @description open search dialog
+         * @param $event
+         */
+        self.openSearchDialog = function ($event) {
+            correspondenceService.openLinkedDocsSearchDialog(self.vsId, [], self.viewCorrespondence, false, true, $event)
+                .then(function (result) {
+                    if (self.vsId) {
+                        _copyAttachments(angular.copy(result));
+                    }
+                });
+        };
+
+        function _copyAttachments(selectedCopies) {
+            attachmentService.copyAttachmentsFromCorrespondence(self.document, selectedCopies.correspondence, selectedCopies.attachments)
+                .then(function (result) {
+                    toast.success(langService.get('add_success'));
+                    self.reloadAttachments();
+                });
+        }
+
 
         self.$onInit = function () {
             self.isImportFromExDataSourceAllowed = false;
