@@ -476,7 +476,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.createCopy = function (searchedCorrespondenceDocument, $event) {
-           // console.log('create copy for searched outgoing document : ', searchedCorrespondenceDocument);
+            // console.log('create copy for searched outgoing document : ', searchedCorrespondenceDocument);
         };
 
         /**
@@ -496,6 +496,33 @@ module.exports = function (app) {
                     }
                 });
         };
+
+        /**
+         * @description end followup bulk
+         * @param $event
+         */
+        self.endFollowupBulk = function ($event) {
+            correspondenceService
+                .endCorrespondenceFollowupBulk($event, self.selectedQuickSearchCorrespondence)
+                .then(function () {
+                    self.reloadQuickSearchCorrespondence(self.grid.page)
+                        .then(function () {
+                        })
+                });
+        }
+
+        self.canEndFollowupBulk = function () {
+            if (!employeeService.hasPermissionTo('MANAGE_DESTINATIONS')) {
+                return false;
+            }
+            return _.every(self.selectedQuickSearchCorrespondence, function (document) {
+                var info = document.getInfo();
+                if (info.documentClass === 'outgoing' || info.documentClass === 'incoming') {
+                    return !document.getSiteFollowupStatus() && !document.getSiteFollowupEndDate();
+                }
+                return false;
+            })
+        }
 
         /**
          * @description Change the followup status of correspondence sites

@@ -57,6 +57,14 @@
                                         <div layout="row" layout-align="start center">
                                             <span>{{ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length}} {{lang.items_selected}} </span>
                                             <span flex></span>
+                                            <!-- End Follow-up Bulk -->
+                                            <md-button class="md-icon-button" class="action-green"
+                                                       tooltip="{{lang.grid_action_end_follow_up}}"
+                                                       ng-if="ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length &&
+                                                        ctrl.searchScreens.outgoing.controller.canEndFollowupBulk()"
+                                                       ng-click="ctrl.searchScreens.outgoing.controller.endFollowupBulk($event)">
+                                                <md-icon md-svg-icon="calendar-remove-outline"></md-icon>
+                                            </md-button>
                                             <!-- Add to Favorite -->
                                             <md-button class="md-icon-button" class="action-green"
                                                        tooltip="{{lang.grid_action_add_to_favorite}}"
@@ -416,6 +424,14 @@
                                         <div layout="row" layout-align="start center">
                                             <span>{{ctrl.searchScreens.incoming.controller.selectedSearchedIncomingDocuments.length}} {{lang.items_selected}} </span>
                                             <span flex></span>
+                                            <!-- End Follow-up Bulk -->
+                                            <md-button class="md-icon-button" class="action-green"
+                                                       tooltip="{{lang.grid_action_end_follow_up}}"
+                                                       ng-if="ctrl.searchScreens.outgoing.controller.selectedSearchedIncomingDocuments.length &&
+                                                        ctrl.searchScreens.incoming.controller.canEndFollowupBulk()"
+                                                       ng-click="ctrl.searchScreens.incoming.controller.endFollowupBulk($event)">
+                                                <md-icon md-svg-icon="calendar-remove-outline"></md-icon>
+                                            </md-button>
                                             <!-- Add to Favorite -->
                                             <md-button class="md-icon-button" class="action-green"
                                                        tooltip="{{lang.grid_action_add_to_favorite}}"
@@ -596,6 +612,14 @@
                                         <div layout="row" layout-align="start center">
                                             <span>{{ctrl.searchScreens.outgoingIncoming.controller.selectedSearchedOutgoingIncomingDocuments.length}} {{lang.items_selected}} </span>
                                             <span flex></span>
+                                            <!-- End Follow-up Bulk -->
+                                            <md-button class="md-icon-button" class="action-green"
+                                                       tooltip="{{lang.grid_action_end_follow_up}}"
+                                                       ng-if="ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingIncomingDocuments.length &&
+                                                        ctrl.searchScreens.outgoingIncoming.controller.canEndFollowupBulk()"
+                                                       ng-click="ctrl.searchScreens.outgoingIncoming.controller.endFollowupBulk($event)">
+                                                <md-icon md-svg-icon="calendar-remove-outline"></md-icon>
+                                            </md-button>
                                             <!-- Add to Favorite -->
                                             <md-button class="md-icon-button" class="action-green"
                                                        tooltip="{{lang.grid_action_add_to_favorite}}"
@@ -735,7 +759,9 @@
                                     <td md-cell>{{searchedOutgoingIncomingDocument.creatorInfo.getTranslatedName()}}
                                     </td>
                                     <td md-cell>{{searchedOutgoingIncomingDocument.createdOn}}</td>
-                                    <td md-cell>{{searchedOutgoingIncomingDocument.lastModifierInfo.getTranslatedName()}}</td>
+                                    <td md-cell>
+                                        {{searchedOutgoingIncomingDocument.lastModifierInfo.getTranslatedName()}}
+                                    </td>
                                     <td md-cell class="td-data">
                                         <main-site-sub-site-directive item="searchedOutgoingIncomingDocument"
                                                                       show-indicator="true"></main-site-sub-site-directive>

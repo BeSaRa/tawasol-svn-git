@@ -1181,6 +1181,29 @@ module.exports = function (app) {
         };
 
         /**
+         * @description end followup bulk
+         * @param $event
+         */
+        self.endFollowupBulk = function ($event) {
+            correspondenceService
+                .endCorrespondenceFollowupBulk($event, self.selectedSearchedIncomingDocuments)
+                .then(function () {
+                    self.reloadSearchCorrespondence(self.grid.page)
+                        .then(function () {
+                        })
+                });
+        }
+
+        self.canEndFollowupBulk = function () {
+            if (!self.employee.hasPermissionTo('MANAGE_DESTINATIONS')) {
+                return false;
+            }
+            return _.every(self.selectedSearchedIncomingDocuments, function (document) {
+                return !document.getSiteFollowupStatus() && !document.getSiteFollowupEndDate();
+            })
+        }
+
+        /**
          * @description Change the followup status of correspondence sites
          * @param correspondence
          * @param $event

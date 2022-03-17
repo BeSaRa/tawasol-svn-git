@@ -41,6 +41,14 @@
                                             ng-if="ctrl.selectedQuickSearchCorrespondence.length" md-column>
                                             <div layout="row" layout-align="start center">
                                                 <span>{{ctrl.selectedQuickSearchCorrespondence.length}} {{lang.items_selected}} </span>
+                                                <span flex></span>
+                                                <!-- End Follow-up Bulk -->
+                                                <md-button class="md-icon-button" class="action-green"
+                                                           tooltip="{{lang.grid_action_end_follow_up}}"
+                                                           ng-if="ctrl.selectedQuickSearchCorrespondence.length && ctrl.canEndFollowupBulk()"
+                                                           ng-click="ctrl.endFollowupBulk($event)">
+                                                    <md-icon md-svg-icon="calendar-remove-outline"></md-icon>
+                                                </md-button>
                                             </div>
                                         </th>
                                         <th md-column>

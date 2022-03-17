@@ -489,7 +489,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTasks = function (correspondence, $event) {
-           // console.log('manage tasks for searched document : ', correspondence);
+            // console.log('manage tasks for searched document : ', correspondence);
         };
 
         /**
@@ -661,7 +661,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.createCopy = function (correspondence, $event) {
-          //  console.log('create copy for searched document : ', correspondence);
+            //  console.log('create copy for searched document : ', correspondence);
         };
 
         /**
@@ -1347,7 +1347,7 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     // only for outgoing/incoming
                     var info = model.getInfo();
-                    if (info.documentClass === 'outgoing' || info.documentClass === 'incoming'){
+                    if (info.documentClass === 'outgoing' || info.documentClass === 'incoming') {
                         // no follow up status = 0 (need reply)
                         return !model.getSiteFollowupStatus() && !model.getSiteFollowupEndDate()// && model.getSiteMaxFollowupDate();
                     }

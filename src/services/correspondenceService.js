@@ -5165,6 +5165,32 @@ module.exports = function (app) {
             })
         };
 
+
+        self.endCorrespondenceFollowupBulk = function ($event, correspondences, ignoreMessage) {
+            // if the selected correspondences has just one record.
+            if (correspondences.length === 1) {
+                return self.endCorrespondenceFollowup(correspondences[0], $event);
+            } else {
+                return self.showReasonDialog('terminate_reason', $event)
+                    .then(function (reason) {
+                        var data = _.map(correspondences, function (correspondence) {
+                            var info = correspondence.getInfo();
+                            return {
+                                vsId: info.vsId,
+                                comments: reason,
+                                docClassId: info.docClassId
+                            };
+                        });
+
+                        return $http
+                            .put((urlService.correspondence + "/common/terminate-followup/bulk"), data)
+                            .then(function (result) {
+                                return _bulkMessages(result, correspondences, ignoreMessage, 'failed_remove_selected', 'remove_success', 'remove_success_except_following');
+                            });
+                    });
+            }
+        }
+
         /**
          *
          * @param correspondence
