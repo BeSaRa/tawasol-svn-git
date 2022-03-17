@@ -615,29 +615,18 @@ module.exports = function (app) {
 
         self.printResult = function ($event) {
             var printTitle = langService.get('menu_item_sent_items'),
-                table = {
-                    headers:
-                        [
-                            'sent_items_serial_number',
-                            'label_document_class',
-                            'sent_items_document_subject',
-                            'action_date',
-                            'sent_items_action',
-                            'sent_items_receiver',
-                            'comment'
-                        ],
-                    columns: [
-                        'docFullSerial',
-                        'docClassName',
-                        'docSubject',
-                        'actionDate',
-                        'workflowActionInfo',
-                        'userToInfo',
-                        'comments'
-                    ]
-                };
+                table = [
+                    {header: 'sent_items_serial_number', column: 'docFullSerial',},
+                    {header: 'label_document_class', column: 'docClassName'},
+                    {header: 'sent_items_document_subject', column: 'docSubject'},
+                    {header: 'action_date', column: 'actionDate'},
+                    {header: 'sent_items_action', column: 'workflowActionInfo'},
+                    {header: 'sent_items_receiver', column: 'userToInfo'},
+                    {header: 'comment', column: 'comments'}
+                ];
+
             printService
-                .printData(self.userSentItems, table, printTitle, (self.searchCriteriaUsed ? self.searchCriteria : new EventHistoryCriteria()));
+                .printData(self.userSentItems, table, printTitle, (self.searchCriteriaUsed ? self.searchCriteria : new EventHistoryCriteria()), null, null, true);
 
         };
 

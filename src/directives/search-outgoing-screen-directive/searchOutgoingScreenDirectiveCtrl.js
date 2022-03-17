@@ -794,7 +794,7 @@ module.exports = function (app) {
             ];
 
             printService
-                .printData(self.searchedOutgoingDocuments, headers, printTitle);
+                .printData(self.searchedOutgoingDocuments, headers, printTitle, null, null, null, true);
 
         };
 

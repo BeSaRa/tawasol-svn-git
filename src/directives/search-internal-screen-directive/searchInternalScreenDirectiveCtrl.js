@@ -711,7 +711,7 @@ module.exports = function (app) {
         self.searchCorrespondence = function () {
             if (!self.searchCriteria.hasValidApproveDateRange()) {
                 toast.info(langService.get('msg_invalid_date_range'));
-                $scope.simpleSearchForm ? $scope.simpleSearchForm.$setTouched(): null;
+                $scope.simpleSearchForm ? $scope.simpleSearchForm.$setTouched() : null;
                 $scope.advancedSearchForm ? $scope.advancedSearchForm.$setTouched() : null;
                 return;
             }
@@ -787,7 +787,7 @@ module.exports = function (app) {
             ];
 
             printService
-                .printData(self.searchedInternalDocuments, headers, printTitle);
+                .printData(self.searchedInternalDocuments, headers, printTitle, null, null, null, true);
 
         };
 

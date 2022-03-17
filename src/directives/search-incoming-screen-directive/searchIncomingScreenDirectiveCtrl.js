@@ -784,7 +784,7 @@ module.exports = function (app) {
             ];
             console.log(self.searchedIncomingDocuments);
             printService
-                .printData(self.searchedIncomingDocuments, headers, printTitle);
+                .printData(self.searchedIncomingDocuments, headers, printTitle, null, null, null, true);
 
         };
         /**

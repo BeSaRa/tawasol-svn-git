@@ -598,35 +598,18 @@ module.exports = function (app) {
                 isCentral: false
             };
             var printTitle = [langService.get('menu_item_department_inbox'), langService.get('menu_item_department_inbox')].join(' - '),
-                table =
-                    {
-                        headers:
-                            [
-                                'department_sent_items_serial',
-                                'subject',
-                                'type',
-                                'action_by',
-                                'main_site_from',
-                                'main_site_to',
-                                'sub_site_from',
-                                'sub_site_to',
-                                'received_date',
-                                'status'
-                            ],
-                        columns: [
-                            'docFullSerial',
-                            'docSubject',
-                            'typeInfo',
-                            'sentByIdInfo',
-                            'mainSiteFromIdInfo',
-                            'mainSiteToIdInfo',
-                            'subSiteFromIdInfo',
-                            'subSiteToIdInfo',
-                            'deliveryDate',
-                            'messageStatus'
-                        ]
-                    };
-
+                table = [
+                    {header: 'department_sent_items_serial', column: 'docFullSerial'},
+                    {header: 'subject', column: 'docSubject'},
+                    {header: 'type', column: 'typeInfo'},
+                    {header: 'action_by', column: 'sentByIdInfo'},
+                    {header: 'main_site_from', column: 'mainSiteFromIdInfo'},
+                    {header: 'main_site_to', column: 'mainSiteToIdInfo'},
+                    {header: 'sub_site_from', column: 'subSiteFromIdInfo'},
+                    {header: 'sub_site_to', column: 'subSiteToIdInfo'},
+                    {header: 'received_date', column: 'deliveryDate'},
+                    {header: 'status', column: 'messageStatus'}
+                ];
 
             printService
                 .printData(self.sentItemDepartmentInboxes, table, printTitle, searchCriteria);

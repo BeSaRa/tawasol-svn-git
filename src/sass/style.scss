@@ -865,6 +865,10 @@ md-tooltip.tooltip-multiline {
   margin-top: 0;
 }
 
+.input-container-no-min-height {
+  min-height: 0 !important;
+}
+
 #organization-dialog {
   min-width: 80%;
 }
@@ -2777,6 +2781,11 @@ html.rtl {
 .max-w-750 {
   width: 750px !important;
   max-width: 750px !important;
+}
+
+.max-w-200 {
+  width: 200px !important;
+  max-width: 200px !important;
 }
 
 .simple-add-container {

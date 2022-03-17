@@ -2610,7 +2610,7 @@ module.exports = function (app) {
             var printTitle = langService.get('menu_item_user_inbox');
             var records = [];
             var headers = [
-                'inbox_serial',
+                // 'inbox_serial',
                 'subject',
                 'received_date',
                 'action',
@@ -2636,7 +2636,7 @@ module.exports = function (app) {
             }
 
             printService
-                .printData(records, headers, printTitle);
+                .printData(records, headers, printTitle, null, null, null, true);
         }
 
         self.canShowPrint = function () {

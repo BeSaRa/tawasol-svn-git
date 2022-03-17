@@ -795,7 +795,7 @@ module.exports = function (app) {
             ];
 
             printService
-                .printData(self.searchedGeneralDocuments, headers, printTitle);
+                .printData(self.searchedGeneralDocuments, headers, printTitle, null, null, null, true);
 
         };
 
@@ -1417,7 +1417,7 @@ module.exports = function (app) {
                     hasPermission = true;
                 }
                 //If approved outgoing
-                else if (info.docStatus >= 24 )
+                else if (info.docStatus >= 24)
                     hasPermission = self.isAllowedEditProperties(model);
                 else
                     hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");

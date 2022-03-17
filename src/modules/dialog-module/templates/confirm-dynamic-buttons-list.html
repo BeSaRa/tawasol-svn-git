@@ -8,5 +8,15 @@
                 class="button radius md-raised md-button md-ink-ripple {{item.cssClass}}"
                 ng-click="ctrl.buttonCallback(item)">{{item.text}}
         </button>
+        <!-- dynamic selected headers-->
+        <md-input-container ng-if="ctrl.headers && ctrl.headers.length" class="input-container-no-min-height">
+            <label for="headers">{{lang.headers}}</label>
+            <md-select id="headers" aria-label="headers" multiple
+                       ng-model="ctrl.selectedHeaders" class="max-w-200">
+                <md-option ng-value="header" ng-repeat="header in ctrl.headers">
+                    {{ctrl.hasTableColumn ? lang[header.header] : lang[header]}}
+                </md-option>
+            </md-select>
+        </md-input-container>
     </div>
 </div>

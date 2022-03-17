@@ -536,32 +536,17 @@ module.exports = function (app) {
             };
 
             var printTitle = langService.get('menu_item_sent_items'),
-                table =
-                    {
-                        headers:
-                            [
-                                'sent_items_serial_number',
-                                //'label_document_class',
-                                'sent_items_document_subject',
-                                'main_site_to',
-                                'sub_site_to',
-                                'action_by',
-                                'export_date',
-                                'sent_items_receive_date',
-                                'status'
-                            ],
-                        columns: [
-                            'docFullSerial',
-                            //'docClassName',
-                            'docSubject',
-                            'mainSiteToIdInfo',
-                            'subSiteToIdInfo',
-                            'sentByIdInfo',
-                            'sentDate',
-                            'deliveryDate',
-                            'messageStatus'
-                        ]
-                    };
+                table = [
+                    {header: 'sent_items_serial_number', column: 'docFullSerial'},
+                    // {header:'label_document_class',column:'docClassName'},
+                    {header: 'sent_items_document_subject', column: 'docSubject'},
+                    {header: 'main_site_to', column: 'mainSiteToIdInfo'},
+                    {header: 'sub_site_to', column: 'subSiteToIdInfo'},
+                    {header: 'action_by', column: 'sentByIdInfo'},
+                    {header: 'export_date', column: 'sentDate'},
+                    {header: 'sent_items_receive_date', column: 'deliveryDate'},
+                    {header: 'status', column: 'messageStatus'}
+                ]
 
             printService
                 .printData(self.sentItemDepartmentInboxes, table, printTitle, searchCriteria);

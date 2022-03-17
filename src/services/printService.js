@@ -7,6 +7,7 @@ module.exports = function (app) {
                                           urlService,
                                           EventHistoryCriteria,
                                           generator,
+                                          _,
                                           toast) {
         'ngInject';
         var self = this;
@@ -76,13 +77,13 @@ module.exports = function (app) {
                         criteria, // user sent items
                     headerNames: [],
                     headerText: title ? title : '',
-                    columnNames: table.columns,
+                    columnNames: _.map(table, 'column'),
                     exportType: exportType
                 },
-                headersCount = table.headers.length;
+                headersCount = table.length;
 
             for (var i = 0; i < headersCount; i++) {
-                var exportedLabel = table.headers[i];
+                var exportedLabel = table[i].header;
 
                 // to put the column header
                 data.headerNames.push(langService.get(exportedLabel));
@@ -99,13 +100,15 @@ module.exports = function (app) {
          * @param criteria
          * @param selectedEmployee used in followup sent items
          * @param selectedOrganization used in followup sent items
+         * @param showCustomHeaders used to show a drop-down that able user to select printing columns
          * @returns {*}
          */
-        self.printData = function (records, table, title, criteria, selectedEmployee, selectedOrganization) {
-            var headers = table.hasOwnProperty('headers') ? table.headers : table;
+        self.printData = function (records, table, title, criteria, selectedEmployee, selectedOrganization, showCustomHeaders) {
+            var hasTableColumn = table && table[0].hasOwnProperty('column');
+            var headers = hasTableColumn ? _.map(table, 'header') : table;
             var urlPdf, urlExel;
 
-            if (table.hasOwnProperty('columns')) {
+            if (hasTableColumn) {
                 //to check whether department/central or user sent items otherwise its normal print from existing records
                 if (criteria && criteria instanceof EventHistoryCriteria) {
                     // used in followup sent items
@@ -126,37 +129,38 @@ module.exports = function (app) {
             }
 
             var defer = $q.defer(),
-                urlTypeMap = {
-                    pdf: {
-                        url: urlPdf,
-                        type: 'pdf',
-                        text: 'PDF',
-                        id: 1
-                    },
-                    excel: {
-                        url: urlExel,
-                        type: 'excel',
-                        text: 'EXCEL',
-                        id: 2
-                    }
+                buttonsList = [
+                    self.printButtonTypes.pdf,
+                    self.printButtonTypes.excel,
+                ],
+                urls = {
+                    pdf: urlPdf,
+                    excel: urlExel
                 };
 
-            dialog.confirmThreeButtonMessage(langService.get('select_file_type_to_print_download'), '', urlTypeMap.pdf.text, urlTypeMap.excel.text, null, null, false)
+            dialog.confirmMessageWithDynamicButtonsList(langService.get('select_file_type_to_print_download'), buttonsList, '', null, null, false, (showCustomHeaders ? (hasTableColumn ? table : headers) : null))
                 .then(function (result) {
-                    if (result.button === urlTypeMap.pdf.id) {
-                        defer.resolve(urlTypeMap.pdf);
-                    } else if (result.button === urlTypeMap.excel.id) {
-                        defer.resolve(urlTypeMap.excel);
+                    var button = result;
+                    if (showCustomHeaders && result.hasOwnProperty('selectedHeaders')) {
+                        button = result.button;
+                        if (hasTableColumn) {
+                            table = result.selectedHeaders;
+                        } else {
+                            headers = result.selectedHeaders;
+                        }
+                    }
+                    if (button) {
+                        defer.resolve(button)
                     }
                 });
             return defer.promise.then(function (exportOption) {
 
-                var data = (table.hasOwnProperty('columns')) ?
+                var data = (hasTableColumn) ?
                     _prepareExportedDataWithCriteria(table, title, exportOption.type, criteria) :
                     _prepareExportedData(records, headers, title);
 
                 var errorMessage = langService.get('error_export_to_file').change({format: (exportOption.type === 'excel' ? 'EXCEL' : 'PDF')});
-                return $http.post(exportOption.url, data)
+                return $http.post(urls[exportOption.type], data)
                     .then(function (result) {
                         var physicalPath = result.data.rs;
                         if (!physicalPath) {

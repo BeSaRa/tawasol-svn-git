@@ -806,7 +806,7 @@ module.exports = function (app) {
             ];
 
             printService
-                .printData(self.searchedOutgoingIncomingDocuments, headers, printTitle);
+                .printData(self.searchedOutgoingIncomingDocuments, headers, printTitle, null, null, null, true);
 
         };
         /**

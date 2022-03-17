@@ -126,7 +126,7 @@ module.exports = function (app) {
             }
         }
 
-        function prepareDialogWithDynamicButtonsList(type, content, cancelButtonText, escapeToCancel, event, hideIcon, avoidStripEvent, buttonsList) {
+        function prepareDialogWithDynamicButtonsList(type, content, cancelButtonText, escapeToCancel, event, hideIcon, avoidStripEvent, buttonsList, headers) {
             buttonsList.push({
                 id: null,
                 type: 'CANCEL_BUTTON',
@@ -140,22 +140,34 @@ module.exports = function (app) {
                 content = $sce.trustAsHtml(content);
             return {
                 template: getTemplate(type),
-                controller: function ($mdDialog) {
+                controller: function ($mdDialog, LangWatcher, toast, $scope) {
                     'ngInject';
                     var self = this;
+                    LangWatcher($scope);
+                    self.hasTableColumn = headers && headers[0].hasOwnProperty('column');
+                    self.selectedHeaders = headers;
 
                     self.buttonCallback = function (button) {
                         if (button.type === 'CANCEL_BUTTON') {
                             $mdDialog.cancel();
                         } else {
-                            $mdDialog.hide(button);
+                            // no headers selected
+                            if (headers && !self.selectedHeaders.length) {
+                                toast.error(langService.get('no_headers_selected_to_print'));
+                                return;
+                            }
+                            $mdDialog.hide(headers ? {
+                                button: button,
+                                selectedHeaders: self.selectedHeaders,
+                            } : button);
                         }
                     }
                 },
                 locals: {
                     content: content,
                     buttonsList: buttonsList,
-                    hideIcon: hideIcon || false
+                    hideIcon: hideIcon || false,
+                    headers: headers
                 },
                 targetEvent: event || false,
                 escapeToClose: escapeToCancel || false,
@@ -261,8 +273,8 @@ module.exports = function (app) {
             return $mdDialog.show(dialog);
         };
 
-        self.confirmMessageWithDynamicButtonsList = function (content, buttonsList, cancelButtonText, escapeToCancel, event, hideIcon) {
-            var dialog = prepareDialogWithDynamicButtonsList('confirm-dynamic-buttons-list', content, cancelButtonText, escapeToCancel, event, hideIcon, false, buttonsList);
+        self.confirmMessageWithDynamicButtonsList = function (content, buttonsList, cancelButtonText, escapeToCancel, event, hideIcon, headers) {
+            var dialog = prepareDialogWithDynamicButtonsList('confirm-dynamic-buttons-list', content, cancelButtonText, escapeToCancel, event, hideIcon, false, buttonsList, headers);
             return $mdDialog.show(dialog);
         };
 
