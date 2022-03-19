@@ -1717,7 +1717,7 @@ module.exports = function (app) {
                 permission: 'menu_item_serials'
             })
             .state('app.inbox.my-followup', {
-                url: '/my-followup',
+                url: '/my-followup?folder',
                 templateUrl: templateProvider.getView('user-followup-book'),
                 controller: 'userFollowupBookCtrl',
                 controllerAs: 'ctrl',

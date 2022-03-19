@@ -31,7 +31,7 @@ module.exports = function (app) {
             from: 0,
             to: 200,
             callback: function () {
-              //  console.log("ASDASD");
+                //  console.log("ASDASD");
             }
         };
 
@@ -41,7 +41,8 @@ module.exports = function (app) {
                 return;
             }
             // start loading layout elements
-            self.layout.loadLayoutElements().then(function () {
+            self.layout.loadLayoutElements().then(function (elements) {
+                console.log(elements);
                 self.layout.loadLayoutOptions().then(function () {
                     self.loading = false;
                     _renderLayout();

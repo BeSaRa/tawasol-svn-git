@@ -1170,7 +1170,6 @@ module.exports = function (app) {
                     });
             };
 
-
             /**
              * @description transfer single followup book.
              * @param userFollowupRequest
@@ -1196,6 +1195,13 @@ module.exports = function (app) {
                         return result.data.rs;
                     })
             };
+
+            self.loadPersonalFollowupChartData = function () {
+                return $http.get(urlService.userFollowUp + '/user-folder-stats')
+                    .then(function (result) {
+                        return result.data.rs;
+                    })
+            }
         }
     );
 };
