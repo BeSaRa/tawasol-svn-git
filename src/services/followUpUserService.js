@@ -1202,6 +1202,13 @@ module.exports = function (app) {
                         return result.data.rs;
                     })
             }
+
+            self.loadEmployeesFollowupChartData = function (orgId) {
+                return $http.get(urlService.userFollowUp + '/user-followup-stats/' + orgId)
+                    .then(function (result) {
+                        return result.data.rs;
+                    })
+            }
         }
     );
 };

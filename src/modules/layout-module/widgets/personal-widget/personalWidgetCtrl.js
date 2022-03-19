@@ -60,10 +60,18 @@ module.exports = function (app) {
         };
 
         self.$onInit = function () {
+            self.reload();
+        }
+
+        self.reload = function () {
+            self.loaded = false;
             followUpUserService.loadPersonalFollowupChartData()
                 .then((data) => {
                     self.loaded = true;
                     self.data = data;
+                })
+                .catch(function () {
+                    self.loaded = true;
                 })
         }
 

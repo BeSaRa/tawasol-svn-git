@@ -1724,7 +1724,7 @@ module.exports = function (app) {
                 permission: 'menu_item_my_followup'
             })
             .state('app.inbox.user-followup', {
-                url: '/user-followup',
+                url: '/user-followup?ou?user?isDelayed',
                 templateUrl: templateProvider.getView('user-followup-book-by-user'),
                 controller: 'userFollowupBookByUserCtrl',
                 controllerAs: 'ctrl',

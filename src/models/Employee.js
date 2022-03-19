@@ -181,7 +181,7 @@ module.exports = function (app) {
 
             Employee.prototype.setOuList = function (ouList) {
                 this.ouList = generator.generateCollection(ouList, Organization);
-                this.ouList = generator.interceptReceivedCollection('Organization',this.ouList)
+                this.ouList = generator.interceptReceivedCollection('Organization', this.ouList)
                 return this;
             };
 
@@ -468,6 +468,10 @@ module.exports = function (app) {
 
             Employee.prototype.getSignAnnotationSettings = function () {
                 return this.signAnnotationSettings;
+            };
+
+            Employee.prototype.removeFollowupOrganizations = function () {
+                organizationService.followupOrganizations = [];
             };
 
             CMSModelInterceptor.runEvent('Employee', 'init', this);

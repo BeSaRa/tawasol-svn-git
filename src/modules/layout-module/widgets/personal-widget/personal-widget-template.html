@@ -1,10 +1,13 @@
 <md-card id="{{widget.getWidgetTagId()}}" flex
          class="widget bar-chart-widget">
-    <div class="bar-chart-title">
+    <div layout="row" layout-align="start center" class="bar-chart-title">
         <span ng-if="!ctrl.hideLabel" ng-dblclick="ctrl.onHideLabel($event)">{{ctrl.model[lang.current+'Name'].optionValue}}</span>
         <input ng-if="ctrl.hideLabel" id="title-{{widget.id}}" ng-keydown="ctrl.onLabelKeyPress($event)"
                ng-blur="ctrl.onLabelBlur()"
                class="label-value" ng-model="ctrl.options[lang.current+'Name'].optionValue"/>
+        <md-button ng-click="ctrl.reload()" class="md-icon-button">
+            <md-icon md-svg-icon="reload"></md-icon>
+        </md-button>
     </div>
     <div layout="row" class="bar-chart-content">
         <div flex>

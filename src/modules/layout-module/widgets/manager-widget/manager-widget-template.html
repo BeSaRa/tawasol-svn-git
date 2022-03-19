@@ -1,0 +1,37 @@
+<md-card id="{{widget.getWidgetTagId()}}" flex
+         class="widget bar-chart-widget">
+    <div layout="row" layout-align="start center" class="bar-chart-title">
+        <div>
+            <span ng-if="!ctrl.hideLabel"
+                  ng-dblclick="ctrl.onHideLabel($event)">{{ctrl.model[lang.current + 'Name'].optionValue}}</span>
+            <input ng-if="ctrl.hideLabel" id="title-{{widget.id}}" ng-keydown="ctrl.onLabelKeyPress($event)"
+                   ng-blur="ctrl.onLabelBlur()"
+                   class="label-value" ng-model="ctrl.options[lang.current+'Name'].optionValue"/>
+        </div>
+        <md-button ng-click="ctrl.reload()" class="md-icon-button">
+            <md-icon md-svg-icon="reload"></md-icon>
+        </md-button>
+        <span flex></span>
+        <span>{{ctrl.selected.getTranslatedName()}}</span>
+        <md-button ng-if="ctrl.selected" ng-click="ctrl.print()" class="md-icon-button">
+            <md-icon md-svg-icon="printer"></md-icon>
+        </md-button>
+        <md-menu-bar>
+            <md-menu>
+                <md-button ng-click="$mdMenu.open()" class="md-icon-button">
+                    <md-icon md-svg-icon="dots-vertical"></md-icon>
+                </md-button>
+                <md-menu-content width="3">
+                    <md-menu-item ng-repeat="org in ctrl.organizations track by org.id">
+                        <md-button ng-click="ctrl.selectOrganization(org)">{{org.getTranslatedName()}}</md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </md-menu-bar>
+    </div>
+    <div layout="row" class="bar-chart-content">
+        <div flex>
+            <manager-directive></manager-directive>
+        </div>
+    </div>
+</md-card>

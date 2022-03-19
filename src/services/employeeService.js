@@ -144,6 +144,7 @@ module.exports = function (app) {
          */
         self.destroyEmployee = function () {
             applicationUserSignatureService ? applicationUserSignatureService.emptySignatures() : null;
+            employee ? employee.removeFollowupOrganizations() : null;
             _destroyEmployeeCookies();
         };
         /**

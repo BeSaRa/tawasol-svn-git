@@ -26,6 +26,9 @@ module.exports = function (app) {
 
         self.rootOrganization = {};
         self.childrenOrganizations = {};
+
+        self.followupOrganizations = [];
+
         /**
          * @description load organizations from server.
          * @returns {Promise|organizations}
@@ -848,14 +851,17 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.getFollowUpOrganizations = function () {
+            return self.followupOrganizations.length ? $q.when(self.followupOrganizations) : this.loadFollowUpOrganizations();
+        };
+        self.loadFollowUpOrganizations = function () {
             return $http.get(urlService.followupOu)
                 .then(function (result) {
                     result = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
                     result = generator.interceptReceivedCollection('FollowupOrganization', result);
+                    self.followupOrganizations = result;
                     return result;
                 })
-        };
-
+        }
         /**
          * @description load central archive organizations.
          * @return {*}
@@ -1006,7 +1012,7 @@ module.exports = function (app) {
          * @description Get the list of organizations available for seqWF
          * @returns {*}
          */
-        self.getOrganizationsForSeqWF = function (){
+        self.getOrganizationsForSeqWF = function () {
             var defer = $q.defer();
             if (employeeService.isSuperAdminUser() || employeeService.isSubAdminInCurrentOu()) {
                 self.loadAllOrganizationsStructure(true)
