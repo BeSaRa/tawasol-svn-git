@@ -13,6 +13,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
+            delete model.trackingSheetTypes_vts;
             delete model.actionType_vts;
             return model;
         });
@@ -25,6 +26,7 @@ module.exports = function (app) {
             model.actionByOUInfo = new Information(model.actionByOUInfo);
             model.actionToInfo = new Information(model.actionToInfo);
             model.actionType_vts = model.mapActionType();
+            model.trackingSheetTypes_vts = model.mapTrackingSheetTypes()
 
             return model;
         });

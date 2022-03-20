@@ -292,6 +292,9 @@
                                         <th md-column md-order-by="actionDate">
                                             <span>{{lang.view_tracking_sheet_action_date}}</span>
                                         </th>
+                                        <th md-column>
+                                            <span>{{lang.log_type}}</span>
+                                        </th>
                                         <th md-column
                                             md-order-by="{{ctrl.getSortingKey('actionByOUInfo', 'Information')}}">
                                             <span>{{lang.view_tracking_sheet_action_by_department}}</span>
@@ -323,6 +326,15 @@
                                             {{fullHistoryRecord.actionByInfo.getTranslatedName()}}
                                         </td>
                                         <td md-cell>{{fullHistoryRecord.actionDate}}</td>
+                                        <td md-cell>
+                                            <span class="action-type-icon-container">
+                                                <md-icon
+                                                        ng-if="fullHistoryRecord.trackingSheetTypes_vts"
+                                                        md-svg-icon="{{fullHistoryRecord.trackingSheetTypes_vts.icon}}"
+                                                        tooltip="{{lang[fullHistoryRecord.trackingSheetTypes_vts.langKey]}}"
+                                                ></md-icon>
+                                            </span>
+                                        </td>
                                         <td md-cell>{{fullHistoryRecord.actionByOUInfo.getTranslatedName()}}</td>
                                         <td md-cell>{{fullHistoryRecord.actionToInfo.getTranslatedName()}}</td>
                                         <td md-cell>{{fullHistoryRecord.actionTypeInfo.getTranslatedName()}}</td>
