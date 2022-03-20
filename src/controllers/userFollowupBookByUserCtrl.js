@@ -23,6 +23,7 @@ module.exports = function (app) {
                                                            downloadService,
                                                            distributionWFService,
                                                            documentCommentService,
+                                                           $stateParams,
                                                            FollowupBook) {
         'ngInject';
         var self = this;
@@ -97,7 +98,8 @@ module.exports = function (app) {
         /**
          * @description Get the Application Users and Security Levels for the selected Organization
          */
-        self.getAppUsersForOU = function ($event) {
+        self.getAppUsersForOU = function ($event, setSelectedUser) {
+            var defer = $q.defer();
             self.selectedUser = null;
             self.followupBooks = [];
             self.followupBooksCopy = angular.copy(self.followupBooks);
@@ -110,6 +112,10 @@ module.exports = function (app) {
                 .searchFollowupUsersByCriteria({ou: self.selectedOrganization})
                 .then(function (result) {
                     self.applicationUsers = result;
+                    if (setSelectedUser) {
+                        self.setSelectedUserFromRoute();
+                    }
+                    defer.resolve(true)
                     return result;
                 });
         };
@@ -1050,6 +1056,36 @@ module.exports = function (app) {
                     $event.stopPropagation();
             }
         };
+
+        self.setSelectedUserFromRoute = function () {
+            var userId = $stateParams.user;
+            self.selectedUser = self.applicationUsers.find((user) => {
+                return !self.isCurrentUser(user) && user.id === Number(userId)
+            });
+            if (!self.selectedUser) {
+                dialog.infoMessage(langService.get('user_not_found'));
+            }
+        }
+
+        self.openFolderItem = function () {
+            var userId = $stateParams.user, ouId = $stateParams.ou,
+                isDelayed = $stateParams['isDelayed'];
+
+            if (userId && ouId && isDelayed !== undefined) {
+                self.grid.isDueDatePassed = isDelayed.toLowerCase() === 'true';
+                self.selectedOrganization = self.organizations.find((org) => org.id === Number(ouId));
+                self.getAppUsersForOU(null, true)
+                    .then(function () {
+                        _initSearchCriteria()
+                            .then(function () {
+                                self.reloadFollowupBooks();
+                            });
+                    });
+            }
+        };
+
+        // to open Folder item if it exists.
+        self.openFolderItem();
 
     });
 };
