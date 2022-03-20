@@ -157,8 +157,22 @@ module.exports = function (app) {
             searchText: '',
             searchCallback: function (grid) {
                 self.followupBooks = gridService.searchGridData(self.grid, self.followupBooksCopy);
+            },
+            isDueDatePassed: gridService.getDueDatePassed(gridService.grids.inbox.userFollowupBookByUser),
+            setIsDueDatePassed: function ($event) {
+                gridService.setDueDatePassed(gridService.grids.inbox.userFollowupBookByUser, self.grid.isDueDatePassed);
+                self.filterDueDatePassed();
             }
         };
+
+        /**
+         * @description filter books which due date passed
+         */
+        self.filterDueDatePassed = function () {
+            self.followupBooks = self.grid.isDueDatePassed ? $filter('filter')(self.followupBooks, function (item) {
+                return item.isDueDatePassed();
+            }) : self.followupBooksCopy;
+        }
 
         /**
          * @description Get the sorting key for information or lookup model
@@ -243,6 +257,7 @@ module.exports = function (app) {
                     if (pageNumber)
                         self.grid.page = pageNumber;
                     self.getSortedData();
+                    self.filterDueDatePassed();
                     return result;
                 });
         };

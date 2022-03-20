@@ -15,12 +15,18 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
-            <div class="p020">
+            <div class="p020" layout="row">
                 <md-switch aria-label="{{lang.truncate_subject}}"
                            ng-model="ctrl.grid.truncateSubject"
                            ng-change="ctrl.grid.setTruncateSubject($event)">
                     <span>{{lang.truncate_subject}} : </span>
                     {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
+                </md-switch>
+                <md-switch aria-label="{{lang.show_due_date_passed_documents}}"
+                           ng-model="ctrl.grid.isDueDatePassed"
+                           ng-change="ctrl.grid.setIsDueDatePassed()">
+                    <span>{{lang.show_due_date_passed_documents}} : </span>
+                    {{ctrl.grid.isDueDatePassed ? lang.yes : lang.no }}
                 </md-switch>
             </div>
             <!-- Organizations -->
