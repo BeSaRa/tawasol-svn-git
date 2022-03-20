@@ -1730,6 +1730,7 @@ module.exports = function (app) {
                 templateUrl: templateProvider.getView('user-followup-book'),
                 controller: 'userFollowupBookCtrl',
                 controllerAs: 'ctrl',
+                reloadOnSearch: false,
                 permission: 'menu_item_my_followup'
             })
             .state('app.inbox.user-followup', {

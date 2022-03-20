@@ -24,6 +24,8 @@ module.exports = function (app) {
                                                      FollowupBook,
                                                      toast,
                                                      documentCommentService,
+                                                     $stateParams,
+                                                     $state,
                                                      $timeout) {
             'ngInject';
             var self = this;
@@ -205,6 +207,7 @@ module.exports = function (app) {
                 if (folder.id === 0)
                     return;
                 self.selectedFolder = folder;
+                $state.go('app.inbox.my-followup', {folder: self.selectedFolder.id});
                 return self.reloadFollowupBooks(self.grid.page);
             };
             /**
@@ -1047,6 +1050,24 @@ module.exports = function (app) {
                 });
                 _initSearchCriteria();
             };
+
+            self.openFolderItem = function () {
+                var folderId = $stateParams.folder;
+                if (folderId) {
+                    var selectedFolder = self.folders.find(function (folder) {
+                        return folder.id === Number(folderId);
+                    });
+
+                    if (!selectedFolder) {
+                        dialog.infoMessage(langService.get('no_folder_found'));
+                        return;
+                    }
+                    self.getFolderContent(selectedFolder);
+                }
+            };
+
+            // to open Folder item if it exists.
+            self.openFolderItem();
         }
     );
 };
