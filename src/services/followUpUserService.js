@@ -19,6 +19,7 @@ module.exports = function (app) {
                                                  tokenService,
                                                  dynamicFollowupService,
                                                  ReassignFollowup,
+                                                 EmployeeFollowupStatistics,
                                                  FollowupBookCriteria) {
             var self = this;
             self.serviceName = 'followUpUserService';
@@ -1255,7 +1256,7 @@ module.exports = function (app) {
             self.loadEmployeesFollowupChartData = function (orgId) {
                 return $http.get(urlService.userFollowUp + '/user-followup-stats/' + orgId)
                     .then(function (result) {
-                        return result.data.rs;
+                        return generator.generateCollection(result.data.rs, EmployeeFollowupStatistics);
                     })
             }
         }

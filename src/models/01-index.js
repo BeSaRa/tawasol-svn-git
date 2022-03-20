@@ -212,4 +212,5 @@ module.exports = function (app) {
     require('./PrivateUserClassification')(app);
     require('./DynamicFollowup')(app);
     require('./ReassignFollowup')(app);
+    require('./EmployeeFollowupStatistics')(app);
 };

@@ -1,5 +1,13 @@
 module.exports = function (app) {
-    app.controller('managerWidgetCtrl', function ($scope, langService, employeeService, $timeout, LayoutWidgetOption, organizationService, followUpUserService) {
+    app.controller('managerWidgetCtrl', function ($scope,
+                                                  langService,
+                                                  employeeService,
+                                                  $timeout,
+                                                  LayoutWidgetOption,
+                                                  organizationService,
+                                                  followUpUserService,
+                                                  printService,
+                                                  _) {
         'ngInject';
         var self = this;
         self.controllerName = 'managerWidgetCtrl';
@@ -120,7 +128,13 @@ module.exports = function (app) {
         }
 
         self.print = function () {
-            console.log('Print this data khaled', self.data);
+            var printTitle = langService.get('employees_followups') + ' - ' + self.selected.getTranslatedName(),
+                headers = [
+                    'user',
+                    'count'
+                ];
+            printService
+                .printData(self.data, headers, printTitle);
         }
 
     });
