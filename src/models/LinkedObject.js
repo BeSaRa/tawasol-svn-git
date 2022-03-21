@@ -124,7 +124,7 @@ module.exports = function (app) {
                             fieldIdentifier: 'englishName'
                         },
                         qid: {
-                            required: true,
+                            required: false,
                             customValidation: {
                                 type: 'number',
                                 message: 'numberonly'
@@ -140,7 +140,7 @@ module.exports = function (app) {
                             fieldIdentifier: 'employeeNumber'
                         },
                         mobileNumber: {
-                            required: true,
+                            required: false,
                             customValidation: {
                                 type: 'number',
                                 message: 'numberonly'

@@ -56,7 +56,7 @@
                                                custom-validate-directive="phone_mobile">
                                         <div ng-messages="HRIntegrationSearchForm.mobile.$error">
                                             <div ng-message="phone_mobile">
-                                                {{lang.invalid_phone_mobile.change({phonemob:lang.mobile})}}
+                                                {{lang.invalid_phone_mobile.change({phonemob: lang.mobile})}}
                                             </div>
                                         </div>
                                     </md-input-container>
@@ -146,6 +146,14 @@
                                                 <th ng-if="!ctrl.selectedEmployees.length" md-column
                                                     md-order-by="qid"><span>{{lang.qid}}</span>
                                                 </th>
+                                                <th ng-if="!ctrl.selectedEmployees.length" md-column
+                                                    md-order-by="jobTitle">
+                                                    {{lang.job_title}}
+                                                </th>
+                                                <th ng-if="!ctrl.selectedEmployees.length" md-column
+                                                    md-order-by="jobRank">
+                                                    {{lang.job_rank}}
+                                                </th>
                                             </tr>
                                             </thead>
                                             <tbody md-body>
@@ -158,6 +166,8 @@
                                                 <td md-cell>{{employee.fullNameAr}}</td>
                                                 <td md-cell>{{employee.fullNameEn}}</td>
                                                 <td md-cell>{{employee.qid}}</td>
+                                                <td md-cell>{{employee.jobTitle}}</td>
+                                                <td md-cell>{{employee.jobRank}}</td>
                                             </tr>
                                             </tbody>
                                         </table>
