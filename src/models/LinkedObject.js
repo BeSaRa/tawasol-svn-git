@@ -116,7 +116,7 @@ module.exports = function (app) {
                             fieldIdentifier: 'arabicName'
                         },
                         fullNameEn: {
-                            required: true,
+                            required: false,
                             customValidation: {
                                 type: 'EN_DOT_DASH',
                                 message: 'one_english_number_space'
