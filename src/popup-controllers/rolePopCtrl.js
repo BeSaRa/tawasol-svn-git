@@ -119,14 +119,18 @@ module.exports = function (app) {
                     dialog.confirmMessage(langService.get('custom_role_warning_message'))
                         .then(function () {
                             roleService.controllerMethod
-                                .showSelectiveRoleMembers(self.role).then(function (failedMembers) {
+                                .showSelectiveRoleMembers(self.role).then(function (selectedUsers) {
                                 roleService.updateRole(self.role).then(function () {
-                                    if (failedMembers) {
-                                        dialog.alertMessage(_prepareOverridePermissionMessage(failedMembers));
-                                    } else {
-                                        toast.success(langService.get('edit_success').change({name: self.role.getTranslatedName()}));
-                                    }
-                                    dialog.hide();
+                                    roleService.overrideMembersPermissions(self.role, selectedUsers)
+                                        .then(function (overrideMemberResult) {
+                                            var failedMembers = _getFailedMembers(overrideMemberResult, selectedUsers);
+                                            if (failedMembers.length) {
+                                                dialog.alertMessage(_prepareOverridePermissionMessage(failedMembers));
+                                            } else {
+                                                toast.success(langService.get('edit_success').change({name: self.role.getTranslatedName()}));
+                                                dialog.hide()
+                                            }
+                                        })
                                 });
                             })
                         });
@@ -135,6 +139,21 @@ module.exports = function (app) {
 
                 });
         };
+
+        function _getFailedMembers(overrideMembersResult, selectedUsers) {
+            return Object.keys(overrideMembersResult)
+                .reduce((failedUsers, currentValue) => {
+                    if (!overrideMembersResult[currentValue]) {
+                        var [userId, ouId] = currentValue.split(':');
+                        var failedUser = selectedUsers.find(function (member) {
+                            return member.getApplicationUserId() === Number(userId) && member.getOuId() === Number(ouId);
+                        });
+                        failedUsers.push(failedUser);
+                    }
+
+                    return failedUsers;
+                }, [])
+        }
 
         /**
          * @description Close the popup

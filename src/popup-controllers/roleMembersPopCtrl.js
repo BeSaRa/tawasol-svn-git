@@ -82,26 +82,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.overrideMembersPermissions = function ($event) {
-            roleService.overrideMembersPermissions(self.role, self.selectedRoleMembers)
-                .then(function (result) {
-                    var overrideFailedKeys = Object.keys(result).map(key => {
-                        if (!result[key]) {
-                            return key;
-                        }
-                    })
-                    dialog.hide(overrideFailedKeys.length ? _mapFailedMembers(overrideFailedKeys) : null);
-                })
-        }
-
-        function _mapFailedMembers(overrideFailedKeys) {
-            // key: "userid:ouid"
-            return overrideFailedKeys.map(function (key) {
-                var [userId, ouId] = key.split(':');
-                return self.selectedRoleMembers.find(function (member) {
-                    return member.getApplicationUserId() === Number(userId) && member.getOuId() === Number(ouId);
-                })
-            })
-
+            dialog.hide(self.selectedRoleMembers);
         }
 
         self.closeRoleMembersPopup = function ($event) {
