@@ -29,7 +29,8 @@ module.exports = function (app) {
 
                             var index = element[0]._index;
                             $state.go('app.inbox.my-followup', {
-                                folder: personalWidgetCtrl.data[index].folderId
+                                folder: personalWidgetCtrl.data[index].folderId,
+                                isDelayed: true
                             });
                         }, animation: {
                             onProgress: function () {

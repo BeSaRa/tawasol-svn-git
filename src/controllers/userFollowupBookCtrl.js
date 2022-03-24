@@ -1060,8 +1060,11 @@ module.exports = function (app) {
             };
 
             self.openFolderItem = function () {
-                var folderId = $stateParams.folder;
-                if (folderId) {
+                var folderId = $stateParams.folder,
+                    isDelayed = $stateParams['isDelayed'];
+                if (folderId && isDelayed !== undefined) {
+                    self.grid.isDueDatePassed = isDelayed.toLowerCase() === 'true';
+
                     var selectedFolder = self.folders.find(function (folder) {
                         return folder.id === Number(folderId);
                     });
