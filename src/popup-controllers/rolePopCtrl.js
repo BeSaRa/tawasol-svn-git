@@ -142,9 +142,10 @@ module.exports = function (app) {
 
         function _getFailedMembers(overrideMembersResult, selectedUsers) {
             return Object.keys(overrideMembersResult)
-                .reduce((failedUsers, currentValue) => {
-                    if (!overrideMembersResult[currentValue]) {
-                        var [userId, ouId] = currentValue.split(':');
+                .reduce((failedUsers, key) => {
+                    // key: "userid:ouid"
+                    if (!overrideMembersResult[key]) {
+                        var [userId, ouId] = key.split(':');
                         var failedUser = selectedUsers.find(function (member) {
                             return member.getApplicationUserId() === Number(userId) && member.getOuId() === Number(ouId);
                         });
