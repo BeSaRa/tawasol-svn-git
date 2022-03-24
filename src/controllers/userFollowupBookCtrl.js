@@ -280,15 +280,23 @@ module.exports = function (app) {
                 }
                 var deferTerminate = $q.defer();
                 if (record.isSharedFollowup() || record.hasUserDynamicFollowup()) {
-                    dialog.confirmMessage(langService.get('confirm_terminate_with_shared_followup'))
-                        .then(function () {
-                            deferTerminate.resolve(true);
+                    var confirmButtons = {
+                        yes: {text: 'yes', id: 1},
+                        no: {text: 'only_me', id: 2}
+                    };
+                    dialog.confirmThreeButtonMessage(langService.get('confirm_terminate_with_shared_followup'), '', langService.get(confirmButtons.yes.text), langService.get(confirmButtons.no.text))
+                        .then(function (result) {
+                            if (result.button === confirmButtons.yes.id) {
+                                deferTerminate.resolve(true); // bulk terminate
+                            } else if (result.button === confirmButtons.no.id) {
+                                deferTerminate.resolve(false); // current user terminate
+                            }
                         });
                 } else {
-                    deferTerminate.resolve(true);
+                    deferTerminate.resolve(false);
                 }
-                deferTerminate.promise.then(function () {
-                    record.terminate(false, record.hasUserDynamicFollowup(), $event).then(function () {
+                deferTerminate.promise.then(function (isBulk) {
+                    record.terminate(false, isBulk, $event).then(function () {
                         return self.reloadFollowupBooks(self.grid.page)
                             .then(function (result) {
                                 new ResolveDefer(defer);
