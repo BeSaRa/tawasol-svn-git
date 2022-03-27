@@ -7,12 +7,14 @@ module.exports = function (app) {
                 actionStatusMap = {
                     added: 0,
                     transferred: 1,
-                    terminated: 2
+                    terminated: 2,
+                    email_reminder: 6
                 },
                 reverseActionStatusMap = {
                     0: 'added',
                     1: 'transferred',
                     2: 'terminated',
+                    6: 'email_reminder'
                 };
             self.id = null;
             self.docSubject = null;
