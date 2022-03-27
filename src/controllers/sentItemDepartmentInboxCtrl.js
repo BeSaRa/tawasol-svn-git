@@ -612,7 +612,7 @@ module.exports = function (app) {
                 ];
 
             printService
-                .printData(self.sentItemDepartmentInboxes, table, printTitle, searchCriteria);
+                .printData(self.sentItemDepartmentInboxes, table, printTitle, searchCriteria, null, null, true);
         };
 
 
