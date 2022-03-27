@@ -8,12 +8,14 @@ module.exports = function (app) {
                     added: 0,
                     transferred: 1,
                     terminated: 2,
+                    dynamic_followup_reassign: 5,
                     email_reminder: 6
                 },
                 reverseActionStatusMap = {
                     0: 'added',
                     1: 'transferred',
                     2: 'terminated',
+                    5: 'dynamic_followup_reassign',
                     6: 'email_reminder'
                 };
             self.id = null;
