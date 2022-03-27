@@ -10,7 +10,7 @@
         </button>
         <!-- dynamic selected headers-->
         <md-input-container ng-if="ctrl.headers && ctrl.headers.length" class="input-container-no-min-height">
-            <label for="headers">{{lang.headers}}</label>
+            <label for="headers">{{lang.selected_headers}}</label>
             <md-select id="headers" aria-label="headers" multiple
                        ng-model="ctrl.selectedHeaders" class="max-w-200">
                 <md-option ng-value="header" ng-repeat="header in ctrl.headers">
