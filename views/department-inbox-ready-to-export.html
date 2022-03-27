@@ -160,6 +160,10 @@
                                                                       indicator-type="conditionalApprove"
                                                                       record-type="WorkItem"
                                                                       callback="ctrl.openConditionalApproveDetails"></grid-indicator-directive>
+                                            <!-- Is Internal -->
+                                            <grid-indicator-directive record="readyToExport"
+                                                                      indicator-type="isInternalOutgoing"
+                                                                      record-type="WorkItem"></grid-indicator-directive>
                                         </td>
                                         <td md-cell><span class="serial-td">{{readyToExport.generalStepElm.docFullSerial}}</span>
                                         </td>
