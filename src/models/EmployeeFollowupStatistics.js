@@ -5,8 +5,11 @@ module.exports = function (app) {
             var self = this,
                 exportData = {
                     count: 'count',
-                    user: function () {
-                        return langService.current === 'ar' ? this.userInfo.arName : this.userInfo.enName;
+                    arabic_full_name: function () {
+                        return this.userInfo.arName;
+                    },
+                    english_full_name: function () {
+                        return this.userInfo.enName;
                     }
                 };
             self.count = 0;

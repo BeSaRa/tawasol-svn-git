@@ -130,7 +130,8 @@ module.exports = function (app) {
         self.print = function () {
             var printTitle = langService.get('employees_followups') + ' - ' + self.selected.getTranslatedName(),
                 headers = [
-                    'user',
+                    'arabic_full_name',
+                    'english_full_name',
                     'count'
                 ];
             printService
