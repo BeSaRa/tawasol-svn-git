@@ -603,9 +603,9 @@ module.exports = function (app) {
                     {header: 'subject', column: 'docSubject'},
                     {header: 'type', column: 'typeInfo'},
                     {header: 'action_by', column: 'sentByIdInfo'},
-                    {header: 'main_site_from', column: 'mainSiteFromIdInfo'},
+                    //  {header: 'main_site_from', column: 'mainSiteFromIdInfo'},
                     {header: 'main_site_to', column: 'mainSiteToIdInfo'},
-                    {header: 'sub_site_from', column: 'subSiteFromIdInfo'},
+                    //  {header: 'sub_site_from', column: 'subSiteFromIdInfo'},
                     {header: 'sub_site_to', column: 'subSiteToIdInfo'},
                     {header: 'received_date', column: 'deliveryDate'},
                     {header: 'status', column: 'messageStatus'}

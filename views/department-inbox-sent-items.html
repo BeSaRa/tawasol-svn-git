@@ -79,18 +79,18 @@
                                             md-order-by="{{ctrl.getSortingKey('sentByIdInfo', 'SenderInfo')}}">
                                             <span>{{lang.action_by}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
+                                        <!--<th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
                                             md-order-by="{{ctrl.getSortingKey('mainSiteFromIdInfo', 'CorrespondenceSite')}}">
                                             <span>{{lang.main_site_from}}</span>
-                                        </th>
+                                        </th>-->
                                         <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
                                             md-order-by="{{ctrl.getSortingKey('mainSiteToIdInfo', 'CorrespondenceSite')}}">
                                             <span>{{lang.main_site_to}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
+                                        <!--<th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
                                             md-order-by="{{ctrl.getSortingKey('subSiteFromIdInfo', 'CorrespondenceSite')}}">
                                             <span>{{lang.sub_site_from}}</span>
-                                        </th>
+                                        </th>-->
                                         <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
                                             md-order-by="{{ctrl.getSortingKey('subSiteToIdInfo', 'CorrespondenceSite')}}">
                                             <span>{{lang.sub_site_to}}</span>
@@ -174,21 +174,21 @@
                                                 <span flex>{{sentItemDepartmentInbox.sentByIdInfo.getTranslatedName()}}</span>
                                             </div>
                                         </td>
-                                        <td md-cell class="td-data">
+                                        <!--<td md-cell class="td-data">
                                             <div layout="row">
                                                 <span flex>{{sentItemDepartmentInbox.mainSiteFromIdInfo.getTranslatedName()}}</span>
                                             </div>
-                                        </td>
+                                        </td>-->
                                         <td md-cell class="td-data">
                                             <div layout="row">
                                                 <span flex>{{sentItemDepartmentInbox.mainSiteToIdInfo.getTranslatedName()}}</span>
                                             </div>
                                         </td>
-                                        <td md-cell class="td-data">
+                                        <!--<td md-cell class="td-data">
                                             <div layout="row">
                                                 <span flex>{{sentItemDepartmentInbox.subSiteFromIdInfo.getTranslatedName()}}</span>
                                             </div>
-                                        </td>
+                                        </td>-->
                                         <td md-cell class="td-data">
                                             <div layout="row">
                                                 <span flex>{{sentItemDepartmentInbox.subSiteToIdInfo.getTranslatedName()}}</span>
