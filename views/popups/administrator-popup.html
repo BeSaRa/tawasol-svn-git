@@ -59,7 +59,7 @@
                                            class="select-header-input">
                                 </md-select-header>
                                 <md-option
-                                        ng-repeat="option in ctrl.allRegOus"
+                                        ng-repeat="option in ctrl.allRegOus | translatedNameFilter:ctrl.regOuSearchText"
                                         ng-value="option.id">
                                     <span md-highlight-text="ctrl.regOuSearchText"
                                           md-highlight-flags="i">{{option.getTranslatedName()}}</span>
