@@ -511,9 +511,9 @@
                 {{lang.save_with_comment}}
             </md-button>
         </div>-->
-        <div ng-if="ctrl.correspondence &&ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_COMMENTS')">
+        <div ng-if="ctrl.correspondence && ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_COMMENTS')">
             <md-button class="md-raised md-primary" ng-click="ctrl.addDocumentCommentToDocument($event)">
-                {{lang.comments}}
+                {{lang.outgoing_add_document_comment}}
             </md-button>
         </div>
         <div ng-if="ctrl.pageName === 'returnedCentralArchive' || (ctrl.pageName === 'userInbox' &&
