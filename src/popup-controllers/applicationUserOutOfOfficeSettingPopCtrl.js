@@ -193,6 +193,7 @@ module.exports = function (app) {
         };
 
         self.selectedProxyUserChange = function (proxyUser) {
+            // in case of user didn't reset from BE after finish his out of office
             if (proxyUser && proxyUser.applicationUser.outOfOffice) {
                 toast.error(langService.get('can_not_select_out_of_office_user'));
                 return false;
