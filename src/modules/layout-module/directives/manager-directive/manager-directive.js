@@ -23,6 +23,10 @@ module.exports = function (app) {
                             if (!element.length) return;
 
                             var index = element[0]._index;
+                            if (employeeService.getEmployee().id === managerWidgetCtrl.data[index].userInfo.id) {
+                                return;
+                            }
+
                             $state.go('app.inbox.user-followup', {
                                 ou: managerWidgetCtrl.data[index].oUInfo.id,
                                 user: managerWidgetCtrl.data[index].userInfo.id,
