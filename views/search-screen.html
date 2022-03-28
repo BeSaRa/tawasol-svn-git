@@ -427,7 +427,7 @@
                                             <!-- End Follow-up Bulk -->
                                             <md-button class="md-icon-button" class="action-green"
                                                        tooltip="{{lang.grid_action_end_follow_up}}"
-                                                       ng-if="ctrl.searchScreens.outgoing.controller.selectedSearchedIncomingDocuments.length &&
+                                                       ng-if="ctrl.searchScreens.incoming.controller.selectedSearchedIncomingDocuments.length &&
                                                         ctrl.searchScreens.incoming.controller.canEndFollowupBulk()"
                                                        ng-click="ctrl.searchScreens.incoming.controller.endFollowupBulk($event)">
                                                 <md-icon md-svg-icon="calendar-remove-outline"></md-icon>
@@ -615,7 +615,7 @@
                                             <!-- End Follow-up Bulk -->
                                             <md-button class="md-icon-button" class="action-green"
                                                        tooltip="{{lang.grid_action_end_follow_up}}"
-                                                       ng-if="ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingIncomingDocuments.length &&
+                                                       ng-if="ctrl.searchScreens.outgoingIncoming.controller.selectedSearchedOutgoingIncomingDocuments.length &&
                                                         ctrl.searchScreens.outgoingIncoming.controller.canEndFollowupBulk()"
                                                        ng-click="ctrl.searchScreens.outgoingIncoming.controller.endFollowupBulk($event)">
                                                 <md-icon md-svg-icon="calendar-remove-outline"></md-icon>
