@@ -24,6 +24,7 @@ module.exports = function (app) {
                       $cookies,
                       localStorageService,
                       tokenService,
+                      $window,
                       langService) {
         'ngInject';
         // start watching when the app runs. also starts the Keepalive service by default.
@@ -63,6 +64,11 @@ module.exports = function (app) {
             } else if (url === urlService.documentTags.replace('tag/search?criteria={{tag}}', 'tag/bulk')) {
                 return false;
             } else {
+                // sso timeout error handler
+                if (xhr.data.ec === 9023) {
+                    // refresh current page
+                    $window.location.reload();
+                }
                 if (!errorCode.hasErrorCode(xhr) && (xhr.config.method !== 'DELETE') && !xhr.config.ignore) {
                     dialog
                         .errorMessage(langService.get('internal_server_error'));
