@@ -213,4 +213,5 @@ module.exports = function (app) {
     require('./DynamicFollowup')(app);
     require('./ReassignFollowup')(app);
     require('./EmployeeFollowupStatistics')(app);
+    require('./PersonalFollowupStatistics')(app);
 };

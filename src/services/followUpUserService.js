@@ -19,6 +19,7 @@ module.exports = function (app) {
                                                  tokenService,
                                                  dynamicFollowupService,
                                                  ReassignFollowup,
+                                                 PersonalFollowupStatistics,
                                                  EmployeeFollowupStatistics,
                                                  FollowupBookCriteria) {
             var self = this;
@@ -1249,7 +1250,7 @@ module.exports = function (app) {
             self.loadPersonalFollowupChartData = function () {
                 return $http.get(urlService.userFollowUp + '/user-folder-stats')
                     .then(function (result) {
-                        return result.data.rs;
+                        return generator.generateCollection(result.data.rs, PersonalFollowupStatistics);
                     })
             }
 

@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('personalWidgetCtrl', function ($scope, langService, $timeout, LayoutWidgetOption, followUpUserService) {
+    app.controller('personalWidgetCtrl', function ($scope, langService, $timeout, LayoutWidgetOption, followUpUserService, printService) {
         'ngInject';
         var self = this;
         self.controllerName = 'personalWidgetCtrl';
@@ -69,10 +69,22 @@ module.exports = function (app) {
                 .then((data) => {
                     self.loaded = true;
                     self.data = data;
+                    console.log(self.data)
                 })
                 .catch(function () {
                     self.loaded = true;
                 })
+        }
+
+        self.print = function () {
+            var printTitle = langService.get('personal_widget_chart'),
+                headers = [
+                    'arabic_folder_name',
+                    'english_folder_name',
+                    'count'
+                ];
+            printService
+                .printData(self.data, headers, printTitle);
         }
 
     });
