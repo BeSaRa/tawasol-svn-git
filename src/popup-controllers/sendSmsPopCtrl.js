@@ -35,7 +35,7 @@ module.exports = function (app) {
             if (!self.smsMessage.smsTemplate) {
                 return
             }
-            self.smsMessage.message = self.smsMessage.smsTemplate.getTranslatedName();
+            self.smsMessage.message = self.smsMessage.smsTemplate.getMessageTranslatedName();
         };
 
         self.getMessageFromTemplate = function ($event) {

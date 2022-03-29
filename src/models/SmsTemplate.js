@@ -55,6 +55,10 @@ module.exports = function (app) {
                 return langService.current === 'ar' ? (reverse ? this.enName : this.arName ) : (reverse ? this.arName : this.enName);
             };
 
+            SmsTemplate.prototype.getMessageTranslatedName = function () {
+                return this[langService.current + 'Message'];
+            }
+
             /**
              * @description Get the status of sms template as Active or Inactive instead of true or false.
              * @returns {string}
