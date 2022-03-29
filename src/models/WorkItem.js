@@ -1070,7 +1070,7 @@ module.exports = function (app) {
 
             WorkItem.prototype.checkIfInternalSiteTypeWhenCreateReply = function () {
                 var info = this.getInfo();
-                if (info.documentClass === 'incoming') {
+                if (info.documentClass.toLowerCase() === 'incoming') {
                     return configurationService.INTERNAL_CORRESPONDENCE_SITES_TYPE === this.generalStepElm.siteType;
                 }
                 return false;

@@ -6,6 +6,7 @@ module.exports = function (app) {
                                       Site,
                                       Information,
                                       generator,
+                                      configurationService,
                                       Indicator) {
         'ngInject';
         return function Incoming(model) {
@@ -152,6 +153,10 @@ module.exports = function (app) {
             Incoming.prototype.isCompositeSites = function () {
                 return false;
             };
+
+            Incoming.prototype.checkIfInternalSiteTypeWhenCreateReply = function () {
+                return configurationService.INTERNAL_CORRESPONDENCE_SITES_TYPE === this.siteType;
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
