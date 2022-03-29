@@ -307,7 +307,17 @@ module.exports = function (app) {
          */
         self.getLayoutWidgets = function () {
             return _.filter(self.widgets, function (widget) {
-                return !widget.layoutElement;
+                if (widget.layoutElement) {
+                    return false;
+                }
+                // check permission for manager and  personal widgets
+                if (widget.tag.toLowerCase() === 'manager-widget') {
+                    return employeeService.hasPermissionTo('ADMIN_USER_FOLLOWUP_BOOKS');
+                } else if (widget.tag.toLowerCase() === 'personal-widget') {
+                    return employeeService.hasPermissionTo('USER_FOLLOWUP_BOOKS');
+                } else {
+                    return true;
+                }
             });
         };
 
