@@ -10,7 +10,7 @@
                 </md-button>
             </div>
             <span>{{lang.menu_item_user_book_followup}}</span>
-            <md-button ng-click="ctrl.reloadFollowupBooks()" class="md-icon-button"
+            <md-button ng-click="ctrl.reloadFollowupBooks(null, true)" class="md-icon-button"
                        tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
@@ -131,7 +131,8 @@
                                             <div layout="row" layout-align="start center">
                                                 <span>{{ctrl.selectedFollowupBooks.length}} {{lang.items_selected}} </span>
                                                 <span flex></span>
-                                                <md-button class="md-icon-button" aria-label="{{lang.grid_action_terminate_followup}}"
+                                                <md-button class="md-icon-button"
+                                                           aria-label="{{lang.grid_action_terminate_followup}}"
                                                            tooltip="{{lang.grid_action_terminate_followup}}"
                                                            ng-if="ctrl.checkIfTerminateBulkAvailable()"
                                                            ng-click="ctrl.terminateBulk($event)">

@@ -1738,6 +1738,7 @@ module.exports = function (app) {
                 templateUrl: templateProvider.getView('user-followup-book-by-user'),
                 controller: 'userFollowupBookByUserCtrl',
                 controllerAs: 'ctrl',
+                reloadOnSearch: false,
                 permission: 'menu_item_user_book_followup'
             })
             .state('app.administration.document-stamps', {

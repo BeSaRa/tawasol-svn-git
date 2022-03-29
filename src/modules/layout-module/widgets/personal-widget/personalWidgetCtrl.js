@@ -69,7 +69,6 @@ module.exports = function (app) {
                 .then((data) => {
                     self.loaded = true;
                     self.data = data;
-                    console.log(self.data)
                 })
                 .catch(function () {
                     self.loaded = true;

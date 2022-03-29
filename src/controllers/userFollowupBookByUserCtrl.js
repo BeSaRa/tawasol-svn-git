@@ -24,6 +24,7 @@ module.exports = function (app) {
                                                            distributionWFService,
                                                            documentCommentService,
                                                            $stateParams,
+                                                           $state,
                                                            FollowupBook) {
         'ngInject';
         var self = this;
@@ -244,15 +245,25 @@ module.exports = function (app) {
         /**
          * @description reload user followup books
          * @param pageNumber
+         * @param reloadByStats
          */
-        self.reloadFollowupBooks = function (pageNumber) {
+        self.reloadFollowupBooks = function (pageNumber, reloadByStats) {
             if (!self.isValidBasicCriteria()) {
                 return;
             }
             var defer = $q.defer();
             self.grid.progress = defer.promise;
+            var promise = null;
+            if (reloadByStats && hasQueryParams()) {
+                promise = followUpUserService.loadUserFollowupBooksByStats(self.selectedUser, self.selectedOrganization);
+            } else {
+                promise = followUpUserService.loadUserFollowupBooksByCriteria(null, self.searchCriteria);
+                if (hasQueryParams()) {
+                    $state.go('app.inbox.user-followup', {user: null, ou: null, isDelayed: null});
+                }
+            }
 
-            return followUpUserService.loadUserFollowupBooksByCriteria(null, self.searchCriteria)
+            return promise
                 .then(function (result) {
                     self.followupBooks = result;
                     self.followupBooksCopy = angular.copy(self.followupBooks);
@@ -1078,11 +1089,18 @@ module.exports = function (app) {
                     .then(function () {
                         _initSearchCriteria()
                             .then(function () {
-                                self.reloadFollowupBooks();
+                                self.reloadFollowupBooks(1, true);
                             });
                     });
             }
         };
+
+        function hasQueryParams() {
+            var userId = $stateParams.user, ouId = $stateParams.ou,
+                isDelayed = $stateParams['isDelayed'];
+
+            return userId && ouId && isDelayed !== undefined && isDelayed.toLowerCase() === 'true';
+        }
 
         // to open Folder item if it exists.
         self.openFolderItem();

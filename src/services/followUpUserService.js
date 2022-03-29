@@ -616,6 +616,21 @@ module.exports = function (app) {
             };
 
             /**
+             * @description load user followup books by stats used in dashboard
+             * @param user
+             * @param organization
+             * @returns {*}
+             */
+            self.loadUserFollowupBooksByStats = function (user, organization) {
+                var userId = user.hasOwnProperty('id') ? user.id : user;
+                var ouId = organization.hasOwnProperty('id') ? organization.id : organization;
+                return $http.get(urlService.userFollowUp + '/user-followup-stats/user?followeeUserId=' + userId + '&followeeOuId=' + ouId)
+                    .then(function (result) {
+                        return generator.interceptReceivedCollection('FollowupBook', generator.generateCollection(result.data.rs, FollowupBook));
+                    });
+            }
+
+            /**
              * @description  open reason dialog
              * @param dialogTitle
              * @param $event
