@@ -11,6 +11,7 @@ module.exports = function (app) {
                                          toast,
                                          lookupService,
                                          OUApplicationUser,
+                                         tableGeneratorService,
                                          Permission) {
         'ngInject';
         var self = this;
@@ -65,6 +66,33 @@ module.exports = function (app) {
                     return generator.interceptReceivedInstance('Role', generator.generateInstance(result.data.rs, Role, self._sharedMethods));
                 });
         };
+
+        /**
+         * @description
+         * @param role
+         * @returns {Promise<T>}
+         */
+        self.updateRoleForSelectedMembers = function (role) {
+            var defer = $q.defer();
+            return self.controllerMethod
+                .showSelectiveRoleMembers(role).then(function (selectedUsers) {
+                    return self.updateRole(role).then(function () {
+                        return self.overrideMembersPermissions(role, selectedUsers)
+                            .then(function (unifyUsersResult) {
+                                var failedMembers = _getFailedMembers(unifyUsersResult, selectedUsers);
+                                if (failedMembers.length) {
+                                    dialog.alertMessage(_prepareOverridePermissionMessage(failedMembers));
+                                    defer.resolve(false);
+                                } else {
+                                    debugger
+                                    defer.resolve(true);
+                                }
+                                return defer.promise;
+                            })
+                    })
+                });
+        }
+
         /**
          * @description delete given role.
          * @param roleId
@@ -426,6 +454,43 @@ module.exports = function (app) {
             return $http.put(urlService.roles + '/unify-user-permissions', members).then(function (result) {
                 return result.data.rs;
             })
+        }
+
+        function _getFailedMembers(unifyUsersResult, selectedUsers) {
+            return Object.keys(unifyUsersResult)
+                .reduce((failedUsers, key) => {
+                    // key: "userid:ouid"
+                    if (!unifyUsersResult[key]) {
+                        var [userId, ouId] = key.split(':');
+                        var failedUser = selectedUsers.find(function (member) {
+                            return member.getApplicationUserId() === Number(userId) && member.getOuId() === Number(ouId);
+                        });
+                        failedUsers.push(failedUser);
+                    }
+
+                    return failedUsers;
+                }, [])
+        }
+
+        /**
+         * @description prepare Failed Update User Permissions
+         * @private
+         * @param members
+         */
+        function _prepareOverridePermissionMessage(members) {
+            var titleTemplate = angular.element('<span class="validation-title">' + langService.get('failed_override_permission') + '</span> <br/>');
+            titleTemplate.html(langService.get('failed_override_permission'));
+
+            var tableRows = _.map(members, function (user) {
+                return [user.getApplicationUser().loginName, user.getTranslatedApplicationUserNameByLanguage('ar'), user.getTranslatedApplicationUserNameByLanguage('en'), user.getOrganizationTranslate()];
+            });
+
+            var table = tableGeneratorService.createTable([langService.get('login_name'), langService.get('arabic_name'), langService.get('english_name'), langService.get('organization_unit')], 'error-table');
+            table.createTableRows(tableRows);
+
+            titleTemplate.append(table.getTable(true));
+
+            return titleTemplate.html();
         }
     });
 };
