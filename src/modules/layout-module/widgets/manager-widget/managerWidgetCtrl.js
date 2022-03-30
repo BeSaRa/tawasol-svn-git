@@ -79,7 +79,9 @@ module.exports = function (app) {
         }
 
         self.selectOrganization = function (organization) {
-            self.options.selectedOrganization
+            self.selected = organization;
+            self.loadFollowupForSelectedOrganization();
+            /*self.options.selectedOrganization
                 .setLayoutWidgetId($scope.widget)
                 .setOptionValue(organization.id)
                 .setInCaseOfEmptyValue(employeeService.getEmployee().getOUID())
@@ -88,7 +90,7 @@ module.exports = function (app) {
                     _updateModel();
                     self.selected = organization;
                     self.loadFollowupForSelectedOrganization();
-                })
+                })*/
         }
 
         self.loadOrganizations = function () {
