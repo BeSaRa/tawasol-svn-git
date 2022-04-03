@@ -5472,7 +5472,7 @@ module.exports = function (app) {
         }
 
         self.isLimitedCentralUnitAccess = function (correspondence) {
-            if (!correspondence) { //|| !correspondence.hasVsId()
+            if (!correspondence || !correspondence.id) { //|| !correspondence.hasVsId()
                 return false;
             }
 
