@@ -387,6 +387,7 @@ module.exports = function (app) {
                 readyToExport
                     .transferInternalOutgoing($event)
                     .then(function () {
+                        toast.success(langService.get('successfully_transfer_document'));
                         self.reloadReadyToExports(self.grid.page);
                         new ResolveDefer(defer);
                     })
