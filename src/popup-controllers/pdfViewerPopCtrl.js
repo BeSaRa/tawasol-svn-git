@@ -1880,12 +1880,14 @@ module.exports = function (app) {
          * @param signatureModel
          * @param ignoreValidateMultiSignature
          * @param terminateAllWFS
+         * @param comments
          * @return {*}
          */
-        self.applyNextStep = function (content, signatureModel, ignoreValidateMultiSignature, terminateAllWFS) {
+        self.applyNextStep = function (content, signatureModel, ignoreValidateMultiSignature, terminateAllWFS, comments) {
             signatureModel.setValidateMultiSignature(self.isSeqBackStep() ? false : !ignoreValidateMultiSignature);
             signatureModel.setSeqWFId(self.sequentialWF.id);
             signatureModel.setIsNotifyAllPrevious(self.notifyPreviousSteps);
+            signatureModel.setComments(comments);
             return sequentialWorkflowService
                 .launchSeqWFCorrespondence(self.correspondence, signatureModel, content, self.isLaunchStep, terminateAllWFS)
                 .then(function (result) {
@@ -1893,14 +1895,14 @@ module.exports = function (app) {
                         return dialog
                             .confirmMessage(langService.get('confirm_authorize_same_user').change({user: employeeService.getEmployee().getTranslatedName()}))
                             .then(function () {
-                                return self.applyNextStep(content, signatureModel, true, terminateAllWFS);
+                                return self.applyNextStep(content, signatureModel, true, terminateAllWFS, comments);
                             });
                     }
 
                     if (result === 'ERROR_MULTI_USER') {
                         return dialog.confirmMessage(langService.get('workflow_in_multi_user_inbox'))
                             .then(function () {
-                                return self.applyNextStep(content, signatureModel, ignoreValidateMultiSignature, true)
+                                return self.applyNextStep(content, signatureModel, ignoreValidateMultiSignature, true, comments)
                             });
                     }
                     return result;
@@ -1911,10 +1913,11 @@ module.exports = function (app) {
          * @param pdfContent
          * @param signatureModel
          * @param logAnnotations
+         * @param comments
          */
-        self.applyNextStepOnCorrespondence = function (pdfContent, signatureModel, logAnnotations) {
+        self.applyNextStepOnCorrespondence = function (pdfContent, signatureModel, logAnnotations, comments) {
             signatureModel = signatureModel ? signatureModel : self.correspondence.prepareSignatureModel(null, null, null);
-            return self.applyNextStep(pdfContent, signatureModel)
+            return self.applyNextStep(pdfContent, signatureModel, null, null, comments)
                 .then(logAnnotations ? function (result) {
                     self.disableSaveButton = false;
                     toast.success(langService.get('launch_sequential_workflow_success'));
@@ -1935,25 +1938,38 @@ module.exports = function (app) {
                     });
                 });
         };
+
         /**
          * @description start Next Step Validation to launch or advance seq workflow.
          */
-        self.startNextStepValidation = async function () {
+        self.startNextStepValidation = async function (withComment) {
             self.launchAfterSave = false;
+            var defer = $q.defer();
             if (self.disableSaveButton || !self.nextSeqStep) {
                 return null;
             }
 
-            if (!!self.nextSeqStep.proxyUserInfo) {
-                _showProxyMessage([self.nextSeqStep.proxyUserInfo], self.nextSeqStep).then(function () {
-                    _startNextStepValidation();
-                });
+            if (withComment && self.checkCanSendBack()) {
+                correspondenceService.openCommentDialog(1000)
+                    .then(function (comment) {
+                        defer.resolve(comment);
+                    })
             } else {
-                _startNextStepValidation();
+                defer.resolve(null);
             }
+
+            defer.promise.then(function (comments) {
+                if (!!self.nextSeqStep.proxyUserInfo) {
+                    _showProxyMessage([self.nextSeqStep.proxyUserInfo], self.nextSeqStep).then(function () {
+                        _startNextStepValidation(comments);
+                    });
+                } else {
+                    _startNextStepValidation(comments);
+                }
+            })
         };
 
-        function _startNextStepValidation() {
+        function _startNextStepValidation(comments) {
             self.disableSaveButton = true;
 
             self.getDocumentAnnotations(true)
@@ -1967,10 +1983,10 @@ module.exports = function (app) {
                                     self.getPDFContentForCurrentDocument()
                                         .then(function (pdfContent) {
                                             if (_isFromBackStep()) {
-                                                self.applyNextStepOnCorrespondence(pdfContent, null, true).catch(self.handleSeqExceptions);
+                                                self.applyNextStepOnCorrespondence(pdfContent, null, true, comments).catch(self.handleSeqExceptions);
                                             } else {
                                                 self.correspondence.handlePinCodeAndComposite().then(function (signatureModel) {
-                                                    self.applyNextStepOnCorrespondence(pdfContent, signatureModel, true).catch(self.handleSeqExceptions);
+                                                    self.applyNextStepOnCorrespondence(pdfContent, signatureModel, true, comments).catch(self.handleSeqExceptions);
                                                 }).catch(self.handleExceptions);
                                             }
                                         });
@@ -1980,10 +1996,10 @@ module.exports = function (app) {
 
                                         PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON, self.documentOperations, _getFlattenStatus()).then(function (pdfContent) {
                                             if (_isFromBackStep()) {
-                                                self.applyNextStepOnCorrespondence(pdfContent, null, true).catch(self.handleSeqExceptions);
+                                                self.applyNextStepOnCorrespondence(pdfContent, null, true, comments).catch(self.handleSeqExceptions);
                                             } else {
                                                 self.correspondence.handlePinCodeAndComposite().then(function (signatureModel) {
-                                                    self.applyNextStepOnCorrespondence(pdfContent, signatureModel, true).catch(self.handleSeqExceptions);
+                                                    self.applyNextStepOnCorrespondence(pdfContent, signatureModel, true, comments).catch(self.handleSeqExceptions);
                                                 }).catch(self.handleExceptions);
                                             }
                                         });
@@ -1997,17 +2013,17 @@ module.exports = function (app) {
                     } else { // else nextSeqStep.isAuthorizeAndSendStep()
                         var hasChanges = annotationLogService.getAnnotationsChanges(self.oldAnnotations, self.newAnnotations, self.documentOperations, self.oldBookmarks, self.newBookmarks);
                         if (!hasChanges.length) {
-                            return self.applyNextStepOnCorrespondence(null).catch(self.handleSeqExceptions);
+                            return self.applyNextStepOnCorrespondence(null, null, null, comments).catch(self.handleSeqExceptions);
                         }
                         self.currentInstance.exportInstantJSON().then(function (instantJSON) {
                             delete instantJSON.pdfId;
 
                             PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON, self.documentOperations, _getFlattenStatus()).then(function (pdfContent) {
                                 if (self.info.isPaper || _isElectronicAndAuthorizeByAnnotationBefore()) {
-                                    self.applyNextStepOnCorrespondence(pdfContent, null, true).catch(self.handleSeqExceptions);
+                                    self.applyNextStepOnCorrespondence(pdfContent, null, true, comments).catch(self.handleSeqExceptions);
                                 } else {
                                     self.handleSaveAnnotationAsAttachment(pdfContent, function () {
-                                        return self.applyNextStepOnCorrespondence(null).catch(self.handleSeqExceptions);
+                                        return self.applyNextStepOnCorrespondence(null, null, null, comments).catch(self.handleSeqExceptions);
                                     });
                                 }
                             });
