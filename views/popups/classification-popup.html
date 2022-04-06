@@ -137,7 +137,15 @@
                                                 {{ctrl.classification.getTranslatedIsUserPrivate()}}</label>
                                         </md-switch>
                                     </div>
-                                    <div flex></div>
+                                    <div flex>
+                                        <!-- isBroadcastable -->
+                                        <md-switch flex ng-model="ctrl.classification.isBroadcastable"
+                                                   aria-label="{{lang.is_broadcastable}}"
+                                                   ng-disabled="!ctrl.classification.isUserPrivate">
+                                            <label>{{lang.is_broadcastable}} :
+                                                {{ctrl.classification.getTranslatedYesNo('isBroadcastable')}}</label>
+                                        </md-switch>
+                                    </div>
                                 </div>
                             </div>
                         </md-content>

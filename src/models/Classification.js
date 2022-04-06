@@ -21,6 +21,7 @@ module.exports = function (app) {
             self.children = [];
             self.isUserPrivate = false;
             self.docClassId = null;
+            self.isBroadcastable = false;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -72,6 +73,9 @@ module.exports = function (app) {
 
             Classification.prototype.getTranslatedIsUserPrivate = function () {
                 return this.isUserPrivate ? langService.get('yes') : langService.get('no');
+            };
+            Classification.prototype.getTranslatedYesNo = function (fieldName) {
+                return this[fieldName] ? langService.get('yes') : langService.get('no');
             };
             /**
              * @description Get the name of record with passed language name

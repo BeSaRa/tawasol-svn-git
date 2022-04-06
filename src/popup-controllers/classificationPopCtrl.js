@@ -201,6 +201,7 @@ module.exports = function (app) {
 
         self.onChangeClassificationPrivate = function ($event) {
             self.classification.setRelatedOus([]);
+            self.classification.isBroadcastable = false;
         }
 
         /**
@@ -430,6 +431,7 @@ module.exports = function (app) {
         self.resetIsUserPrivate = function () {
             if (self.classification.isGlobal || self.classification.parent) {
                 self.classification.isUserPrivate = false;
+                self.classification.isBroadcastable = false;
                 self.classification.docClassId = null;
             }
         }
