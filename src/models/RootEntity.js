@@ -122,7 +122,9 @@ module.exports = function (app) {
             }
             RootEntity.prototype.isIntegratedClassificationEnabled = function () {
                 return self.rootEntity.hasOwnProperty('allowIntegeratedClassification') && !!self.rootEntity.allowIntegeratedClassification;
-
+            }
+            RootEntity.prototype.isAllowExportInternalOutgoingEnabled = function () {
+                return self.rootEntity.hasOwnProperty('allowExportInternalOutgoing') && !!self.rootEntity.allowExportInternalOutgoing;
             }
 
 

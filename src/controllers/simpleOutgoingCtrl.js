@@ -837,7 +837,8 @@ module.exports = function (app) {
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
                     isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !!info.isPaper && _hasContent() && (!_hasExternalOrG2GSite(model) || (_hasExternalOrG2GSite(model) && !employeeService.isCurrentOuLinkedToArchive())) && !model.hasActiveSeqWF(); //Don't show if its electronic outgoing
-                    self.setDropdownAvailability(index, isVisible);
+                    self.setDropdownAvailability(index, isVisible)
+                    && !(rootEntity.isAllowExportInternalOutgoingEnabled() && model.isInternalOutgoing());
                     return isVisible;
                 }
             },
@@ -883,7 +884,8 @@ module.exports = function (app) {
                     var info = model.getInfo();
                     //Don't show if its paper outgoing or any site is external/g2g or signatures count more than 1 or personal/private security level
                     isVisible = !model.hasActiveSeqWF() && gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !info.isPaper && !_hasExternalOrG2GSite(model) && _hasContent() && _hasSingleSignature(model);
-                    self.setDropdownAvailability(index, isVisible);
+                    self.setDropdownAvailability(index, isVisible)
+                    && !(rootEntity.isAllowExportInternalOutgoingEnabled() && model.isInternalOutgoing());
                     return isVisible;
                 }
             },

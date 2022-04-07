@@ -1455,6 +1455,9 @@ module.exports = function (app) {
                 var indicator = model.getIsInternalOutgoingIndicator();
                 return indicator ? langService.get(indicator.text) : null;
             };
+            WorkItem.prototype.transferInternalOutgoing = function ($event) {
+                return correspondenceService.transferInternalOutgoing(this);
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

@@ -175,6 +175,9 @@ module.exports = function (app) {
                 },
                 isIntegratedClassificationEnabled() {
                     return rootEntity.isIntegratedClassificationEnabled();
+                },
+                isAllowExportInternalOutgoingEnabled() {
+                    return rootEntity.isAllowExportInternalOutgoingEnabled();
                 }
             };
         }

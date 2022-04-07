@@ -1876,7 +1876,8 @@ module.exports = function (app) {
                         && info.docStatus === 24
                         && info.documentClass === 'outgoing'
                         && !model.isPrivateSecurityLevel()
-                        && !model.hasActiveSeqWF();
+                        && !model.hasActiveSeqWF()
+                        && !(rootEntity.isAllowExportInternalOutgoingEnabled() && model.isInternalOutgoing());
                 }
             },
             // add task
@@ -2316,7 +2317,8 @@ module.exports = function (app) {
                                 && model.allInternalSites
                                 && model.hasSingleSignature()
                                 && !model.isPrivateSecurityLevel()
-                                && !model.isBroadcasted();
+                                && !model.isBroadcasted()
+                                && !(rootEntity.isAllowExportInternalOutgoingEnabled() && model.isInternalOutgoing());
                         }
                     },
                     // e-Signature

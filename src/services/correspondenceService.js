@@ -5678,6 +5678,15 @@ module.exports = function (app) {
                 })
         }
 
+        /**
+         *@description transfer internal outgoing document
+         * @param document
+         */
+        self.transferInternalOutgoing = function (document) {
+            var info = document.getInfo();
+            return $http.put(urlService.departmentInboxActions + "/" + info.documentClass + '/transfer-internal/vsid/' + info.vsId + '/wob-num/' + info.wobNumber, null)
+        }
+
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);
         }, 100);

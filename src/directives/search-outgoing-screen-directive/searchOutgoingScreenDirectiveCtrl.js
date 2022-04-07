@@ -1728,7 +1728,8 @@ module.exports = function (app) {
                     return (info.docStatus === 25 || info.docStatus === 26)
                         && (model.registryOU === employeeService.getEmployee().getRegistryOUID())
                         && !model.isPrivateSecurityLevel()
-                        && !model.hasActiveSeqWF();
+                        && !model.hasActiveSeqWF()
+                        && !(rootEntity.isAllowExportInternalOutgoingEnabled() && model.isInternalOutgoing());
                 }
             },
             // Launch Distribution Workflow

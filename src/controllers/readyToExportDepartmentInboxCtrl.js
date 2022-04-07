@@ -370,6 +370,30 @@ module.exports = function (app) {
             });
         };
 
+        /***
+         *
+         * @param readyToExport
+         * @param $event
+         * @param defer
+         * @returns {*}
+         */
+        self.transferInternalOutgoing = function (readyToExport, $event, defer) {
+            if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
+                dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
+                return;
+            }
+
+            readyToExport
+                .transferInternalOutgoing($event)
+                .then(function () {
+                    self.reloadReadyToExports(self.grid.page);
+                    new ResolveDefer(defer);
+                })
+                .catch(function (error) {
+                    toast.error(langService.get('internal_transfer_failed'));
+                });
+        }
+
         /**
          * @description Terminate Ready To Export Bulk
          * @param $event
@@ -1288,6 +1312,21 @@ module.exports = function (app) {
                     return true;
                 }
             },
+            // Transfer Internal Outgoing
+            {
+                type: 'action',
+                icon: 'export',
+                text: 'grid_action_transfer_internal',
+                shortcut: true,
+                callback: self.transferInternalOutgoing,
+                class: "action-green",
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
+                checkShow: function (action, model) {
+                    return rootEntity.isAllowExportInternalOutgoingEnabled() && model.isInternalOutgoing();
+                }
+            },
             // Export
             {
                 type: 'action',
@@ -1303,7 +1342,7 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                    return true;
+                    return !(rootEntity.isAllowExportInternalOutgoingEnabled() && model.isInternalOutgoing());
                 }
             },
             // Export and send
@@ -1318,7 +1357,8 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                    return !model.exportViaArchive() && employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && !model.hasActiveSeqWF();
+                    return !model.exportViaArchive() && employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && !model.hasActiveSeqWF() &&
+                        !(rootEntity.isAllowExportInternalOutgoingEnabled() && model.isInternalOutgoing());
                 }
             },
             // Export and add to icn archive
@@ -1333,7 +1373,8 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                    return !model.exportViaArchive() && employeeService.hasPermissionTo('ICN_ENTRY_TEMPLATE');
+                    return !model.exportViaArchive() && employeeService.hasPermissionTo('ICN_ENTRY_TEMPLATE') &&
+                        !(rootEntity.isAllowExportInternalOutgoingEnabled() && model.isInternalOutgoing());
                 }
             },
             // Print Barcode
