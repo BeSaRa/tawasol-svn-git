@@ -148,6 +148,10 @@ module.exports = function (app) {
                 return this.hasOwnProperty('checked') && this.checked;
             }
 
+            WorkflowAction.prototype.isTransferWorkflowAction = function () {
+                return this.id === 3;
+            }
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('WorkflowAction', 'init', this);

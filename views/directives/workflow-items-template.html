@@ -82,6 +82,14 @@
                                     item="ctrl.selectedWorkflowItems"
                                     release="ctrl.selectedWorkflowItems"
                                     ignore-callback="ctrl.runAddSelectedUsersWithIgnoreToGrid"></vertical-menu-workflow-item-directive>
+                            <!-- add all ous for central archive -->
+                            <vertical-menu-workflow-item-directive
+                                    display="ctrl.displayAddBulkAllOUs()"
+                                    callback="ctrl.addAllBulkWorkflowItems"
+                                    display-button="true"
+                                    item="ctrl.workflowItems"
+                                    release="ctrl.selectedWorkflowItems"
+                                    ignore-callback="ctrl.runAddSelectedUsersWithIgnoreToGrid"></vertical-menu-workflow-item-directive>
                         </div>
                     </th>
                 </tr>

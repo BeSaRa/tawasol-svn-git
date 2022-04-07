@@ -170,4 +170,5 @@ module.exports = function (app) {
     require('./addPrivateUserClassificationPopCtrl')(app);
     require('./dynamicFollowupPopCtrl')(app);
     require('./reassignFollowupBookPopCtrl')(app);
+    require('./selectRegistryOUsCentralArchivePopCtrl')(app);
 };

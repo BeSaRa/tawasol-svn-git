@@ -191,6 +191,7 @@ module.exports = function (app) {
             delete model.highlights;
             delete model.copyAllAttachments;
             delete model.totalSelectedAttachments;
+            delete model.additionalRegistryOUs;
             return model;
         });
 

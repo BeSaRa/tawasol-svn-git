@@ -145,6 +145,10 @@ module.exports = function (app) {
             DistributionOUWFItem.prototype.isRegOU = function () {
                 return !!this.hasRegistry;
             };
+            DistributionOUWFItem.prototype.setAction = function (action) {
+                this.action = action;
+                return this;
+            }
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('DistributionOUWFItem', 'init', this);

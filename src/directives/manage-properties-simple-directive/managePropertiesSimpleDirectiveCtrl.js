@@ -602,6 +602,17 @@ module.exports = function (app) {
             }
         };
 
+        /**
+         * @description selected central archive reg ou will be selected by default when launch screen with default action (transferred book)
+         * @param $event
+         */
+        self.addAdditionalDepartments = function ($event) {
+            correspondenceService.selectRegOUsCentralArchiveDialog(self.document, self.registryOrganizations, $event)
+                .then(function (result) {
+                    self.document.additionalRegistryOUs = result;
+                })
+        }
+
         $timeout(function () {
             self.sourceForm = $scope.outgoing_properties;
         });

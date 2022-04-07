@@ -12,15 +12,17 @@ module.exports = function (app) {
                                                            employeeService,
                                                            gridService,
                                                            lookupService,
+                                                           $state,
+                                                           workflowActionService,
                                                            Lookup) {
         'ngInject';
         var self = this,
-        noneLookup = new Lookup({
-            id: -1,
-            defaultEnName: langService.getByLangKey('none', 'en'),
-            defaultArName: langService.getByLangKey('none', 'ar'),
-            lookupKey: -1
-        });
+            noneLookup = new Lookup({
+                id: -1,
+                defaultEnName: langService.getByLangKey('none', 'en'),
+                defaultArName: langService.getByLangKey('none', 'ar'),
+                lookupKey: -1
+            });
 
         self.controllerName = 'workflowItemsDirectiveCtrl';
         LangWatcher($scope);
@@ -230,6 +232,20 @@ module.exports = function (app) {
             });
         };
 
+        self.addAllBulkWorkflowItems = function (workflowItems) {
+            var defaultAction = workflowActionService.getDefaultWorkflowAction(self.workflowActions);
+            workflowItems.reduce((items, workflowItem) => {
+                if (self.runItemNotExists(workflowItem)) {
+                    if (!workflowItem.action) {
+                        workflowItem.setAction(defaultAction)
+                    }
+                    //items.push(workflowItem);
+                    self.addWorkflowItem(workflowItem);
+                }
+                return items
+            }, [])
+        }
+
         /**
          * @description Sets the workflow action
          * @param workflowItem
@@ -277,5 +293,10 @@ module.exports = function (app) {
             });
         };
 
+        self.displayAddBulkAllOUs = function () {
+            return self.gridName.toLowerCase() === 'ous' && employeeService.getEmployee().inCentralArchive() &&
+                self.workflowItems.length && !self.selectedWorkflowItems.length && self.multiSelect &&
+                ($state.current.name === 'app.incoming.add' || $state.current.name === 'app.incoming.simple-add');
+        }
     });
 };

@@ -45,6 +45,7 @@ module.exports = function (app) {
                                                                     lookupService,
                                                                     reloadCallback,
                                                                     manageLaunchWorkflowService,
+                                                                    workflowActionService,
                                                                     $state) {
         'ngInject';
         var self = this;
@@ -242,6 +243,7 @@ module.exports = function (app) {
         if (self.selectedOrganizationToSend) {
             self.selectTab(self.selectedTab).then(function () {
                 _addSelectedOrganization(self.selectedOrganizationToSend);
+                _addAdditionalSelectedOrganization(); // for incoming central archive
             });
         }
 
@@ -249,14 +251,38 @@ module.exports = function (app) {
             var organization = (selected.ou === selected.registryOU)
                 ? _findOrganization(selected.registryOU, selected.registryOU, true)
                 : _findOrganization(selected.registryOU, selected.ou);
-            if (!!organization)
-                self.selectedWorkflowItems.push(organization);
+            if (!!organization) {
+                _setDefaultWorkflowAction(organization);
+                self.selectedWorkflowItems.push(angular.copy(organization));
+            }
         }
 
         function _findOrganization(regOU, ouId, justByRegOu) {
             return _.find((justByRegOu ? self.registryOrganizations : self.organizationGroups), function (item) {
                 return item.toOUId === ouId;
             })
+        }
+
+
+        function _setDefaultWorkflowAction(organization) {
+            // set default action (transferred) when add incoming in central archive
+            if (self.isCentralArchive && ($state.current.name === 'app.incoming.add' || $state.current.name === 'app.incoming.simple-add')) {
+                var defaultAction = workflowActionService.getDefaultWorkflowAction(self.workflowActions);
+                organization.setAction(defaultAction);
+            }
+        }
+
+        function _addAdditionalSelectedOrganization() {
+            if (self.isCentralArchive && ($state.current.name === 'app.incoming.add' || $state.current.name === 'app.incoming.simple-add')) {
+                self.correspondence.additionalRegistryOUs.map(regOu => {
+                    var selectedAdditionalOrganizationToSend = {
+                        tab: 'registry_organizations',
+                        registryOU: regOu.id,
+                        ou: regOu.id
+                    }
+                    _addSelectedOrganization(selectedAdditionalOrganizationToSend);
+                })
+            }
         }
 
         // grid options for all grids

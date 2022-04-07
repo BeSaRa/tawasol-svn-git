@@ -395,5 +395,16 @@ module.exports = function (app) {
                     }
                 });
         }
+
+        /**
+         * @description get a default workflow action (transfer book)
+         * @param workflowActions
+         * @returns {*}
+         */
+        self.getDefaultWorkflowAction = function (workflowActions) {
+            return workflowActions.find((action) => {
+                return action.isTransferWorkflowAction();
+            })
+        }
     });
 };

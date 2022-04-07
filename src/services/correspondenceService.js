@@ -5687,6 +5687,23 @@ module.exports = function (app) {
             return $http.put(urlService.departmentInboxActions + "/" + info.documentClass + '/transfer-internal/vsid/' + info.vsId + '/wob-num/' + info.wobNumber, null)
         }
 
+        /**
+         * @description open dialog to select more reg ous when adding central archive incoming
+         */
+        self.selectRegOUsCentralArchiveDialog = function (document, registryOrganizations, $event) {
+            return dialog.showDialog({
+                templateUrl: cmsTemplate.getPopup('select-registry-ous-central-archive'),
+                controller: 'selectRegistryOUsCentralArchivePopCtrl',
+                controllerAs: 'ctrl',
+                targetEvent: $event,
+                locals: {
+                    registryOrganizations: registryOrganizations,
+                    documentRegOUId: document.registryOU,
+                    selectedRecords: document.hasOwnProperty('additionalRegistryOUs') ? document.additionalRegistryOUs : []
+                }
+            })
+        }
+
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);
         }, 100);

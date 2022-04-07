@@ -1,0 +1,81 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.corr_registry}}">
+    <popup-toolbar-directive
+            header-text="{{lang.corr_registry}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <div layout="row" class="p20-0">
+                <span flex></span>
+                <grid-search-directive grid="ctrl.grid"></grid-search-directive>
+            </div>
+            <div layout="column">
+                <div scroll-directive>
+                    <md-card md-whiteframe="3" class="card-overlay">
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table ng-model="ctrl.selectedRecords"
+                                       md-row-select="true" multiple="true"
+                                       md-progress="ctrl.grid.progress">
+                                    <thead md-head md-order="ctrl.grid.order"
+                                           md-on-reorder="ctrl.getSortedData">
+                                    <tr md-row>
+                                        <th colspan="2"
+                                            ng-if="ctrl.selectedRecords.length"
+                                            md-column>
+                                            <div layout="row" layout-align="start center">
+                                                <span>{{ctrl.selectedRecords.length}} {{lang.items_selected}} </span>
+                                                <span flex></span>
+                                            </div>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedRecords.length"
+                                            md-column
+                                            md-order-by="enName">
+                                            <span>{{lang.english_name}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedRecords.length"
+                                            md-column
+                                            md-order-by="arName">
+                                            <span>{{lang.arabic_name}}</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="record"
+                                        ng-disabled="record.id === ctrl.documentRegOUId"
+                                        ng-class="{'background-warning': (record.id === ctrl.documentRegOUId)}"
+                                        ng-repeat="record in ctrl.registryOrganizations | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                        <td md-cell>
+                                            {{record.getNameByLanguage('en')}}
+                                        </td>
+                                        <td md-cell>
+                                            {{record.getNameByLanguage('ar')}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit"
+                                    md-page="ctrl.grid.page"
+                                    md-total="{{ctrl.registryOrganizations.length}}" md-page-select>
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary"
+                   ng-disabled="!ctrl.selectedRecords.length"
+                   ng-click="ctrl.saveRegistryOUs()">
+            {{lang.select}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

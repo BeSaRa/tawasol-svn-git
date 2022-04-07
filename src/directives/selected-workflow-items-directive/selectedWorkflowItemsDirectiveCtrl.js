@@ -29,6 +29,8 @@ module.exports = function (app) {
         self.sendRelatedDocsBulk = false;
         self.forwardSenderActionAndCommentBulk = false;
         self.isWorkItem = false;
+        self.action = null;
+        self.actionSearchText = '';
 
         $timeout(function () {
             if (self.item) {
@@ -395,5 +397,16 @@ module.exports = function (app) {
             return self.info.needToApprove() && !self.info.hasActiveSeqWF && self.globalSettings.externalAuthorization;
         };
 
+        /**
+         *
+         * @param selectedAction set action all selected workflow
+         * @param $event
+         */
+        self.setBulkWorkflowAction = function (selectedAction, $event) {
+            _.map(self.workflowItems, function (item) {
+                var result = {action: selectedAction};
+                _setDistWorkflowItem(item, result);
+            });
+        }
     });
 };

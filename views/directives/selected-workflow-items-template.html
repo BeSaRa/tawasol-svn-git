@@ -26,7 +26,28 @@
                         </md-checkbox>
                     </th>
                     <th md-column ng-if="!ctrl.selectedWorkflowItems.length">
-                        {{lang.action}}
+                        <md-select ng-model="ctrl.action"
+                                   ng-model-options="{trackBy:'$value.id'}"
+                                   aria-label="workflow action"
+                                   md-on-close="workflowItem.clearWFActionSearchText()"
+                                   data-md-container-class="select-header-container sticky-search-bar"
+                                   placeholder="{{workflowItem.getActionMessage()}}"
+                                   ng-disabled="!ctrl.workflowItems.length"
+                                   ng-change="ctrl.setBulkWorkflowAction(ctrl.action,$event)">
+                            <md-select-header class="select-header">
+                                <input ng-model="actionSearchText"
+                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                       placeholder="{{lang.search}}"
+                                       class="select-header-input">
+                            </md-select-header>
+                            <md-option
+                                    ng-repeat="action in ctrl.workflowActions | translatedNameFilter: actionSearchText"
+                                    ng-value="action">
+                                <span
+                                        md-highlight-text="workflowItem.actionSearchText"
+                                        md-highlight-flags="i">{{action.getTranslatedName()}}</span>
+                            </md-option>
+                        </md-select>
                     </th>
                     <th ng-if="!ctrl.selectedWorkflowItems.length" md-column>
                         {{lang.comment}}

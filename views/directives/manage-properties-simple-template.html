@@ -28,6 +28,14 @@
                                     md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
                         </md-option>
                     </md-select>
+                    <!-- Add Additional Departments -->
+                    <md-button class="md-icon-button cms-select-overlay-button"
+                               tooltip="{{lang.add_more_departments}}"
+                               ng-if="ctrl.document.hasDocumentClass('incoming')"
+                               ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled() || !ctrl.document.registryOU"
+                               ng-click="ctrl.addAdditionalDepartments($event)">
+                        <md-icon md-svg-icon="plus"></md-icon>
+                    </md-button>
                     <div ng-messages="outgoing_properties.ou.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
@@ -109,8 +117,12 @@
                             {{lang[type.key]}}
                         </md-option>
                     </md-select>
-                    <div class="hint hint-reference" ng-if="ctrl.document.isInternalPersonal()">{{lang.hint_internal_personal}}</div>
-                    <div class="hint hint-reference" ng-if="!ctrl.document.isInternalPersonal()">{{lang.hint_internal_department}}</div>
+                    <div class="hint hint-reference" ng-if="ctrl.document.isInternalPersonal()">
+                        {{lang.hint_internal_personal}}
+                    </div>
+                    <div class="hint hint-reference" ng-if="!ctrl.document.isInternalPersonal()">
+                        {{lang.hint_internal_department}}
+                    </div>
                     <div ng-messages="outgoing_properties.type.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
