@@ -670,14 +670,20 @@
                                 </md-input-container>
                             </div>
                             <div layout="row" flex class="p20">
-                                <div flex>
-                                    <!-- Allow send WF Related Books -->
-                                    <md-switch ng-model="ctrl.globalSetting.allowSendWFRelatedBook"
-                                               aria-label="{{lang.send_related_documents}}">
-                                        <span>{{lang.send_related_documents}} : </span>{{
-                                        ctrl.globalSetting.getTranslatedYesNo('allowSendWFRelatedBook')}}
-                                    </md-switch>
-                                </div>
+                                <!-- Allow send WF Related Books -->
+                                <md-input-container flex>
+                                    <label for="wFRelatedBookStatus">{{lang.send_related_documents}}</label>
+                                    <md-select id="wFRelatedBookStatus" name="wFRelatedBookStatus" required
+                                               ng-model="ctrl.globalSetting.wFRelatedBookStatus">
+                                        <md-option ng-value="option.lookupKey"
+                                                   ng-repeat="option in ctrl.sendRelatedDocsStatusList track by $index">
+                                            {{option.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="globalSettingForm.wFRelatedBookStatus.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
                                 <div flex>
                                     <!-- enable WF to order by user rank  -->
                                     <md-switch ng-model="ctrl.globalSetting.orderUsersByRank"

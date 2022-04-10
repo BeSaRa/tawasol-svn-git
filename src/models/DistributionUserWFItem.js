@@ -12,7 +12,7 @@ module.exports = function (app) {
             self.arOUName = null;
             self.enOUName = null;
             self.proxyInfo = null;
-            self.sendRelatedDocs = rootEntity.getGlobalSettings().allowSendWFRelatedBook;
+            self.sendRelatedDocs = rootEntity.getGlobalSettings().isSendToRelatedDocsAllowed();
             self.securityLevel = null;
 
             // every model has required fields

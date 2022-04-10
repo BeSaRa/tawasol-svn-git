@@ -59,6 +59,10 @@ module.exports = function (app) {
                 return this.limitedCentralUnitAccess;
             }
 
+            Settings.prototype.isSendToRelatedDocsAllowed = function () {
+                return this.wFRelatedBookStatus !== 0;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Settings', 'init', this);

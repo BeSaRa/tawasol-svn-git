@@ -144,7 +144,7 @@
                 <div layout="row">
                     <!-- Send Related Documents -->
                     <div flex>
-                        <md-checkbox ng-if="ctrl.globalSettings.allowSendWFRelatedBook"
+                        <md-checkbox ng-if="ctrl.globalSettings.isSendToRelatedDocsAllowed()"
                                      ng-model="ctrl.distWorkflowItem.sendRelatedDocs">
                             {{lang.send_related_documents}}
                         </md-checkbox>
