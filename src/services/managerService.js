@@ -11,7 +11,7 @@ module.exports = function (app) {
                                             $http,
                                             urlService,
                                             HREmployee,
-                                            Attachment) {
+                                            Information) {
         'ngInject';
         var self = this;
         self.serviceName = 'managerService';
@@ -664,16 +664,21 @@ module.exports = function (app) {
                         linkedEntities: linkedEntities,
                         fromApplicationUser: fromApplicationUser,
                         attachDomainNameToModel: fromApplicationUser
+                    },
+                    resolve: {
+                        integrationLists: function (){
+                            'ngInject';
+                            return self.loadListsForHRIntegration()
+                        }
                     }
                 })
         };
-
 
         /**
          * @description search for hr employees when hr Enabled
          */
         self.searchForIntegratedHREmployees = function (criteria, attachDomainNameToModel) {
-            return $http.post(urlService.hrEmployeeIntegration, generator.interceptSendInstance('HREmployee', criteria))
+            return $http.post(urlService.hrEmployeeIntegration + '/criteria', generator.interceptSendInstance('HREmployee', criteria))
                 .then(function (result) {
                     var employeeLinkedEntity = generator.generateCollection(result.data.rs, HREmployee, self._sharedMethods);
                     if (attachDomainNameToModel) {
@@ -686,6 +691,21 @@ module.exports = function (app) {
                     return employeeLinkedEntity;
                 })
         };
+
+        self.loadListsForHRIntegration = function () {
+            return $http.get(urlService.hrEmployeeIntegration + '/lookup')
+                .then(function (result) {
+                    var data = result.data.rs;
+                    data.jobRank = generator.generateCollection(data.jobRank, Information);
+                    data.jobTitle = generator.generateCollection(data.jobTitle, Information);
+                    data.hrOUName = generator.generateCollection(data.hrOUName, Information);
+                    return {
+                        jobRank: data.jobRank,
+                        jobTitle: data.jobTitle,
+                        hrOUName: data.hrOUName,
+                    };
+                });
+        }
 
         self.itemSelectorPopup = function (title, templateName, items, info, selectedItems, selectionCallback) {
             return dialog.showDialog({

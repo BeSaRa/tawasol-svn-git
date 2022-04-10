@@ -23,6 +23,8 @@ module.exports = function (app) {
         self.defaultEntityTypes = [];
         self.entityTypes = [];
         self.employeeService = employeeService;
+        self.integrationLists = {};
+
         $timeout(function () {
             self.defaultEntityTypes = correspondenceService.getDefaultEntityTypesForDocumentClass(self.documentClass);
             self.entityTypes = correspondenceService.getCustomEntityTypesForDocumentClass(self.documentClass);
@@ -34,6 +36,11 @@ module.exports = function (app) {
                             self.smsTemplates = result;
                         });
                 })
+
+            managerService.loadListsForHRIntegration()
+                .then(function (result) {
+                    self.integrationLists = result;
+                });
         });
         self.rootEntity = rootEntity.returnRootEntity().rootEntity;
 
@@ -95,9 +102,21 @@ module.exports = function (app) {
         };
 
         function _currentFields(entityType) {
-            self.currentFields = _.chunk(_.filter(_.map(self.entity.getLinkedTypeFields(entityType), function (field, key) {
+            var hrEmployeeFields = ['xJobRank', 'xJobTitle', 'xOU'],
+                fieldsToOptionsMap = {
+                    xJobRank: self.integrationLists.jobRank,
+                    xJobTitle: self.integrationLists.jobTitle,
+                    xOU: self.integrationLists.hrOUName
+                };
+            var fields = _.map(self.entity.getLinkedTypeFields(entityType), function (field, key) {
+                if (self.rootEntity.hrEnabled && hrEmployeeFields.indexOf(key) > -1) {
+                    field.controlType = 'select';
+                    field.options = fieldsToOptionsMap[key];
+                    field.bindKey = 'arName'
+                }
                 return angular.extend({}, field, {label: key})
-            }), function (field) {
+            })
+            self.currentFields = _.chunk(_.filter(fields, function (field) {
                 return ['typeId'].indexOf(field.label) === -1;
             }), 3);
         }
@@ -366,6 +385,9 @@ module.exports = function (app) {
          */
         self.editDocumentEntity = function (entity, $index, $event) {
             _editEntity(angular.copy(entity));
+            if (self.selectedEntityType.lookupStrKey && self.selectedEntityType.lookupStrKey.toLowerCase() === 'employee' && self.rootEntity.hrEnabled) {
+
+            }
             self.showEntityFrom = true;
             self.editIndex = $index;
         };

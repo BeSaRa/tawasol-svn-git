@@ -24,6 +24,7 @@ module.exports = function (app) {
         self.linkedEntitiesCopy = angular.copy(linkedEntities);
         self.hasEmployees = _isLinkedEntitiesHasEmployee();
         self.selectedExcludedEmployeeNumbers = _.map(self.linkedEntitiesCopy, 'employeeNum');
+
         /**
          * @description Set the current tab name
          * @param tabName

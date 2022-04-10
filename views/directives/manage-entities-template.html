@@ -45,6 +45,7 @@
                 <label for="{{field.label}}">{{lang[ctrl.labels[field.label]]}}</label>
                 <input name="{{field.label}}" custom-validate-directive="{{field.customValidation.type}}"
                        id="{{field.label}}" ng-model="ctrl.entity[field.label]"
+                       ng-if="!field.controlType || field.controlType !== 'select'"
                        ng-required="field.required" ng-keydown="ctrl.handleFieldKeyDown(field, $event)">
                 <md-button
                         ng-if="ctrl.rootEntity.hrEnabled && ctrl.selectedEntityType.lookupStrKey.toLowerCase() === 'external_user' && field.fieldIdentifier === 'qid'"
@@ -54,6 +55,16 @@
                         class="md-icon-button cms-input-overlay-button">
                     <md-icon md-svg-icon="magnify"></md-icon>
                 </md-button>
+                <md-select name="{{field.label}}" id="{{field.label}}"
+                           ng-if="field.controlType && field.controlType === 'select'"
+                           ng-required="field.required"
+                           ng-model="ctrl.entity[field.label]">
+                    <md-option ng-value="null">{{lang.none}}</md-option>
+                    <md-option ng-value="option[field.bindKey]"
+                               ng-repeat="option in field.options track by $index">
+                        {{option.getTranslatedName()}}
+                    </md-option>
+                </md-select>
                 <div ng-messages="entityForm[field.label].$error">
                     <div ng-message="required">{{lang.field_required}}</div>
                     <div ng-message="{{field.customValidation.type}}">

@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.factory('LinkedObject', function (CMSModelInterceptor,
                                           langService,
+                                          rootEntity,
                                           _) {
         'ngInject';
         return function LinkedObject(model) {
