@@ -4,197 +4,329 @@
     <popup-toolbar-directive
             header-text="{{lang.workflow_participation}} : {{ctrl.model.ouid.getTranslatedName()}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
-        <div class="md-dialog-content cms-dialog-content">
-            <form name="applicationUserWorkflowParticipationForm" autocomplete="off">
-                <div layout="column">
-                    <!-- Private Users -->
-                    <div layout="row" flex>
-                        <div flex class="cms-input-container">
-                            <md-checkbox flex ng-model="ctrl.ouApplicationUser.sendToPrivateUsers"
-                                         aria-label="{{lang.send_to_private_users}}"
-                                         ng-change="ctrl.sendToPrivateUsersChange()">{{lang.send_to_private_users}}
-                            </md-checkbox>
-                        </div>
-                        <md-input-container flex>
-                            <label for="privateUsers">{{lang.private_users}}</label>
-                            <md-select ng-model-options="{trackBy: '$value.id'}" multiple name="privateUsers"
-                                       id="privateUsers"
-                                       ng-required="ctrl.ouApplicationUser.sendToPrivateUsers"
-                                       ng-model="ctrl.ouApplicationUser.privateUsers"
-                                       ng-disabled="!ctrl.ouApplicationUser.sendToPrivateUsers"
-                                       md-selected-text="ctrl.getSelectedPrivateUsersText()">
-                                <md-optgroup label="{{ou.getTranslatedName()}}"
-                                             ng-repeat="ou in ctrl.organizationsWithPrivateUsers">
-                                    <md-option ng-value="privateUser"
-                                               ng-repeat="privateUser in ou.privateUsers">
-                                        {{privateUser.applicationUser.getTranslatedName()}}
-                                    </md-option>
-                                </md-optgroup>
-                            </md-select>
-                            <div ng-messages="applicationUserWorkflowParticipationForm.privateUsers.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
+        <md-tabs md-dynamic-height md-selected="ctrl.selectedTabIndex">
+            <!-- Basic Info Tab -->
+            <md-tab label="{{lang.general}}" ng-if="ctrl.showTab('general')"
+                    md-on-select="ctrl.setCurrentTab('general')">
+                <md-content class="md-padding">
+                    <form name="applicationUserWorkflowParticipationForm" autocomplete="off">
+                        <div layout="column">
+                            <!-- Private Users -->
+                            <div layout="row" flex>
+                                <div flex class="cms-input-container">
+                                    <md-checkbox flex ng-model="ctrl.ouApplicationUser.sendToPrivateUsers"
+                                                 aria-label="{{lang.send_to_private_users}}"
+                                                 ng-change="ctrl.sendToPrivateUsersChange()">
+                                        {{lang.send_to_private_users}}
+                                    </md-checkbox>
+                                </div>
+                                <md-input-container flex>
+                                    <label for="privateUsers">{{lang.private_users}}</label>
+                                    <md-select ng-model-options="{trackBy: '$value.id'}" multiple name="privateUsers"
+                                               id="privateUsers"
+                                               ng-required="ctrl.ouApplicationUser.sendToPrivateUsers"
+                                               ng-model="ctrl.ouApplicationUser.privateUsers"
+                                               ng-disabled="!ctrl.ouApplicationUser.sendToPrivateUsers"
+                                               md-selected-text="ctrl.getSelectedPrivateUsersText()">
+                                        <md-optgroup label="{{ou.getTranslatedName()}}"
+                                                     ng-repeat="ou in ctrl.organizationsWithPrivateUsers">
+                                            <md-option ng-value="privateUser"
+                                                       ng-repeat="privateUser in ou.privateUsers">
+                                                {{privateUser.applicationUser.getTranslatedName()}}
+                                            </md-option>
+                                        </md-optgroup>
+                                    </md-select>
+                                    <div ng-messages="applicationUserWorkflowParticipationForm.privateUsers.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
                             </div>
-                        </md-input-container>
-                    </div>
-                    <!-- Managers -->
-                    <div layout="row" flex>
-                        <div flex class="cms-input-container">
-                            <md-checkbox ng-model="ctrl.ouApplicationUser.sendToManagers"
-                                         aria-label="{{lang.send_to_managers}}"
-                                         ng-change="ctrl.sendToManagersChange()">
-                                {{lang.send_to_managers}}
-                            </md-checkbox>
-                        </div>
-                        <md-input-container flex>
-                            <label for="managers">{{lang.managers}}</label>
-                            <md-select multiple name="managers" id="managers"
-                                       ng-required="ctrl.ouApplicationUser.sendToManagers"
-                                       ng-model="ctrl.ouApplicationUser.managers"
-                                       ng-disabled="!ctrl.ouApplicationUser.sendToManagers"
-                                       md-selected-text="ctrl.getSelectedManagersText()"
-                                       ng-model-options="{trackBy: '$value'}"
-                                       md-on-close="ctrl.clearSearchText('managers')"
-                                       data-md-container-class="select-header-container sticky-search-bar">
-                                <md-select-header class="select-header">
-                                    <!--      <div class="cms-simple-checkbox-container">
-                                              <input type="checkbox" class="cms-simple-checkbox"
-                                                     ng-class="{'checked': ctrl.isChecked('manager'), 'indeterminate': ctrl.isIndeterminate('manager')}"
-                                                     ng-checked="ctrl.isChecked('manager')"
-                                                     ng-model="ctrl.toggleAllManagersCheck">
-                                              <span class="cms-simple-checkbox-text"
-                                                    ng-click="ctrl.toggleAll('manager', $event)">{{ctrl.isChecked('manager') ? lang.un_select_all : lang.select_all}}</span>
-                                          </div>-->
-                                    <input ng-model="ctrl.managersSearchText"
-                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
-                                           placeholder="{{lang.search}}"
-                                           class="select-header-input">
-                                </md-select-header>
-                                <md-option
-                                        ng-repeat="manager in ctrl.managersList | translatedNameFilter:ctrl.managersSearchText:'getManagerAndOuTranslate'"
-                                        ng-value="manager.ouRegistryID.id">
+                            <!-- Managers -->
+                            <div layout="row" flex>
+                                <div flex class="cms-input-container">
+                                    <md-checkbox ng-model="ctrl.ouApplicationUser.sendToManagers"
+                                                 aria-label="{{lang.send_to_managers}}"
+                                                 ng-change="ctrl.sendToManagersChange()">
+                                        {{lang.send_to_managers}}
+                                    </md-checkbox>
+                                </div>
+                                <md-input-container flex>
+                                    <label for="managers">{{lang.managers}}</label>
+                                    <md-select multiple name="managers" id="managers"
+                                               ng-required="ctrl.ouApplicationUser.sendToManagers"
+                                               ng-model="ctrl.ouApplicationUser.managers"
+                                               ng-disabled="!ctrl.ouApplicationUser.sendToManagers"
+                                               md-selected-text="ctrl.getSelectedManagersText()"
+                                               ng-model-options="{trackBy: '$value'}"
+                                               md-on-close="ctrl.clearSearchText('managers')"
+                                               data-md-container-class="select-header-container sticky-search-bar">
+                                        <md-select-header class="select-header">
+                                            <!--      <div class="cms-simple-checkbox-container">
+                                                      <input type="checkbox" class="cms-simple-checkbox"
+                                                             ng-class="{'checked': ctrl.isChecked('manager'), 'indeterminate': ctrl.isIndeterminate('manager')}"
+                                                             ng-checked="ctrl.isChecked('manager')"
+                                                             ng-model="ctrl.toggleAllManagersCheck">
+                                                      <span class="cms-simple-checkbox-text"
+                                                            ng-click="ctrl.toggleAll('manager', $event)">{{ctrl.isChecked('manager') ? lang.un_select_all : lang.select_all}}</span>
+                                                  </div>-->
+                                            <input ng-model="ctrl.managersSearchText"
+                                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                        </md-select-header>
+                                        <md-option
+                                                ng-repeat="manager in ctrl.managersList | translatedNameFilter:ctrl.managersSearchText:'getManagerAndOuTranslate'"
+                                                ng-value="manager.ouRegistryID.id">
                                     <span md-highlight-text="ctrl.managersSearchText"
                                           md-highlight-flags="i">
                                         {{manager.getManagerAndOuRegistryTranslate()}}
                                     </span>
-                                </md-option>
-                            </md-select>
-                            <div ng-messages="applicationUserWorkflowParticipationForm.managers.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="applicationUserWorkflowParticipationForm.managers.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
                             </div>
-                        </md-input-container>
-                    </div>
-                    <!-- Vice Managers -->
-                    <div layout="row" flex>
-                        <div flex class="cms-input-container">
-                            <md-checkbox flex ng-model="ctrl.ouApplicationUser.sendToViceManager"
-                                         aria-label="{{lang.send_to_vice_manager}}"
-                                         ng-change="ctrl.sendToViceManagerChange()">
-                                {{lang.send_to_vice_manager}}
-                            </md-checkbox>
-                        </div>
-                        <md-input-container flex>
-                            <label for="viceManagers">{{lang.vice_manager}}</label>
-                            <md-select multiple name="viceManagers" id="viceManagers"
-                                       ng-required="ctrl.ouApplicationUser.sendToViceManager"
-                                       ng-model="ctrl.ouApplicationUser.viceManagers"
-                                       ng-disabled="!ctrl.ouApplicationUser.sendToViceManager"
-                                       md-selected-text="ctrl.getSelectedViceManagersText()"
-                                       ng-model-options="{trackBy: '$value'}"
-                                       md-on-close="ctrl.clearSearchText('viceManagers')"
-                                       data-md-container-class="select-header-container sticky-search-bar">
-                                <md-select-header class="select-header">
-                                    <!--   <div class="cms-simple-checkbox-container">
-                                           <input type="checkbox" class="cms-simple-checkbox"
-                                                  ng-class="{'checked': ctrl.isChecked('viceManager'), 'indeterminate': ctrl.isIndeterminate('viceManager')}"
-                                                  ng-checked="ctrl.isChecked('viceManager')"
-                                                  ng-model="ctrl.toggleAllViceManagersCheck">
-                                           <span class="cms-simple-checkbox-text"
-                                                 ng-click="ctrl.toggleAll('viceManager', $event)">{{ctrl.isChecked('viceManager') ? lang.un_select_all : lang.select_all}}</span>
-                                       </div>-->
-                                    <input ng-model="ctrl.viceManagersSearchText"
-                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
-                                           placeholder="{{lang.search}}"
-                                           class="select-header-input">
-                                </md-select-header>
-                                <md-option
-                                        ng-repeat="viceManager in ctrl.viceManagersList | translatedNameFilter:ctrl.viceManagersSearchText:'getManagerAndOuTranslate'"
-                                        ng-value="viceManager.ouRegistryID.id">
+                            <!-- Vice Managers -->
+                            <div layout="row" flex>
+                                <div flex class="cms-input-container">
+                                    <md-checkbox flex ng-model="ctrl.ouApplicationUser.sendToViceManager"
+                                                 aria-label="{{lang.send_to_vice_manager}}"
+                                                 ng-change="ctrl.sendToViceManagerChange()">
+                                        {{lang.send_to_vice_manager}}
+                                    </md-checkbox>
+                                </div>
+                                <md-input-container flex>
+                                    <label for="viceManagers">{{lang.vice_manager}}</label>
+                                    <md-select multiple name="viceManagers" id="viceManagers"
+                                               ng-required="ctrl.ouApplicationUser.sendToViceManager"
+                                               ng-model="ctrl.ouApplicationUser.viceManagers"
+                                               ng-disabled="!ctrl.ouApplicationUser.sendToViceManager"
+                                               md-selected-text="ctrl.getSelectedViceManagersText()"
+                                               ng-model-options="{trackBy: '$value'}"
+                                               md-on-close="ctrl.clearSearchText('viceManagers')"
+                                               data-md-container-class="select-header-container sticky-search-bar">
+                                        <md-select-header class="select-header">
+                                            <!--   <div class="cms-simple-checkbox-container">
+                                                   <input type="checkbox" class="cms-simple-checkbox"
+                                                          ng-class="{'checked': ctrl.isChecked('viceManager'), 'indeterminate': ctrl.isIndeterminate('viceManager')}"
+                                                          ng-checked="ctrl.isChecked('viceManager')"
+                                                          ng-model="ctrl.toggleAllViceManagersCheck">
+                                                   <span class="cms-simple-checkbox-text"
+                                                         ng-click="ctrl.toggleAll('viceManager', $event)">{{ctrl.isChecked('viceManager') ? lang.un_select_all : lang.select_all}}</span>
+                                               </div>-->
+                                            <input ng-model="ctrl.viceManagersSearchText"
+                                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                        </md-select-header>
+                                        <md-option
+                                                ng-repeat="viceManager in ctrl.viceManagersList | translatedNameFilter:ctrl.viceManagersSearchText:'getManagerAndOuTranslate'"
+                                                ng-value="viceManager.ouRegistryID.id">
                                     <span md-highlight-text="ctrl.viceManagersSearchText"
                                           md-highlight-flags="i">
                                         {{viceManager.getManagerAndOuRegistryTranslate()}}
                                     </span>
-                                </md-option>
-                            </md-select>
-                            <div ng-messages="applicationUserWorkflowParticipationForm.viceManagers.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="applicationUserWorkflowParticipationForm.viceManagers.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
                             </div>
-                        </md-input-container>
-                    </div>
-                    <!-- Workflow Security -->
-                    <div layout="row" flex>
-                        <md-input-container flex>
-                            <label for="wfsecurity">{{lang.workflow_governance_rules}}</label>
-                            <md-select name="wfsecurity"
-                                       id="wfsecurity"
-                                       required
-                                       ng-model="ctrl.ouApplicationUser.wfsecurity">
-                                <md-option ng-repeat="workflowSecurity in ctrl.workFlowSecurities"
-                                           ng-value="workflowSecurity.lookupKey">
-                                    {{workflowSecurity.getTranslatedName()}}
-                                </md-option>
-                            </md-select>
-                            <div ng-messages="applicationUserWorkflowParticipationForm.wfsecurity.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
+                            <!-- Workflow Security -->
+                            <div layout="row" flex>
+                                <md-input-container flex>
+                                    <label for="wfsecurity">{{lang.workflow_governance_rules}}</label>
+                                    <md-select name="wfsecurity"
+                                               id="wfsecurity"
+                                               required
+                                               ng-model="ctrl.ouApplicationUser.wfsecurity">
+                                        <md-option ng-repeat="workflowSecurity in ctrl.workFlowSecurities"
+                                                   ng-value="workflowSecurity.lookupKey">
+                                            {{workflowSecurity.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="applicationUserWorkflowParticipationForm.wfsecurity.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
                             </div>
-                        </md-input-container>
-                    </div>
-                    <div layout="row" flex ng-if="ctrl.sendToDifferentOuLevelSelected()">
-                        <md-input-container flex>
-                            <label for="userLevelId">{{lang.custom_level_groups}}</label>
-                            <md-select name="userLevelId"
-                                       id="userLevelId" required
-                                       ng-model="ctrl.ouApplicationUser.userLevelId">
-                                <md-option ng-repeat="customLevelGroup in ctrl.customLevelGroupsList"
-                                           ng-value="customLevelGroup.id">
-                                    {{customLevelGroup.getTranslatedName()}}
-                                </md-option>
-                            </md-select>
-                            <div ng-messages="applicationUserWorkflowParticipationForm.userLevelId.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
+                            <div layout="row" flex ng-if="ctrl.sendToDifferentOuLevelSelected()">
+                                <md-input-container flex>
+                                    <label for="userLevelId">{{lang.custom_level_groups}}</label>
+                                    <md-select name="userLevelId"
+                                               id="userLevelId" required
+                                               ng-model="ctrl.ouApplicationUser.userLevelId">
+                                        <md-option ng-repeat="customLevelGroup in ctrl.customLevelGroupsList"
+                                                   ng-value="customLevelGroup.id">
+                                            {{customLevelGroup.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="applicationUserWorkflowParticipationForm.userLevelId.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
                             </div>
-                        </md-input-container>
-                    </div>
-                    <!--<div layout="row" flex>
-                        &lt;!&ndash; Send to All Organization’s Users &ndash;&gt;
-                        <md-checkbox flex ng-model="ctrl.ouApplicationUser.sendToAllEntityUsers"
-                                     aria-label="{{lang.send_to_all_organizations_users}}">
-                            {{lang.send_to_all_organizations_users}}
-                        </md-checkbox>
-                        &lt;!&ndash; Send to any user in the same unit and to all units having the same correspondence register &ndash;&gt;
-                        <md-checkbox flex ng-model="ctrl.ouApplicationUser.sendToAllRegistryOUUsers"
-                                     aria-label="{{lang.send_to_any_user_in_same_unit_and_to_all_units}}">
-                            {{lang.send_to_any_user_in_same_unit_and_to_all_units}}
-                        </md-checkbox>
-                    </div>
-                    <div layout="row" flex>
-                        &lt;!&ndash; Send to any user in the same unit, parent unit, child units and units having the same parent &ndash;&gt;
-                        <md-checkbox flex ng-model="ctrl.ouApplicationUser.sendToAllParentOUUsers"
-                                     aria-label="{{lang.send_to_any_user_in_same_unit_parent_child_same_parent}}">
-                            {{lang.send_to_any_user_in_same_unit_parent_child_same_parent}}
-                        </md-checkbox>
-                        <span flex></span>
-                    </div>-->
-                </div>
-            </form>
-        </div>
+                        </div>
+                    </form>
+                </md-content>
+            </md-tab>
+            <md-tab label="{{lang.selective_departments}}" ng-if="ctrl.showTab('selectiveDepartments')"
+                    md-on-select="ctrl.setCurrentTab('selectiveDepartments')">
+                <md-content class="md-padding">
+                    <form name="selectiveDepartmentsForm" autocomplete="off">
+                        <div layout="column">
+                            <div layout="row">
+                                <!-- regOu -->
+                                <md-input-container flex>
+                                    <label for="ouid">{{lang.department}}</label>
+                                    <md-select id="ouid" name="ouid"
+                                               ng-model-options="{trackBy : '$value.id'}"
+                                               ng-model="ctrl.regOu"
+                                               ng-change="ctrl.onRegistryChanged()"
+                                               md-on-close="ctrl.clearSearchText('inlineUserOU')"
+                                               data-md-container-class="select-header-container sticky-search-bar">
+                                        <md-select-header class="select-header">
+                                            <input ng-model="ctrl.inlineUserOUSearchText"
+                                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                        </md-select-header>
+                                        <md-option ng-value="regOu"
+                                                   ng-repeat="regOu in ctrl.registryOrganizations | translatedNameFilter: ctrl.inlineUserOUSearchText : 'getNameByLanguageRegOUSection'"
+                                                   ng-disabled="ctrl.isRegOuDisabled(regOu)"
+                                                   tooltip="{{(!regOu.status)? lang.inactive_organization : '' }}">
+                                                <span
+                                                        md-highlight-text="ctrl.inlineUserOUSearchText"
+                                                        md-highlight-flags="i">{{regOu.getTranslatedNameRegOUSection()}}</span>
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+
+                                <!-- Section -->
+                                <md-input-container flex>
+                                    <label for="ou">{{lang.section}}</label>
+                                    <md-select name="ou" id="ou"
+                                               ng-model="ctrl.Ou"
+                                               ng-disabled="!ctrl.regOu"
+                                               ng-readonly="!ctrl.regOu"
+                                               md-on-close="ctrl.clearSearchText('sectionOU')"
+                                               data-md-container-class="select-header-container sticky-search-bar">
+                                        <md-select-header class="select-header">
+                                            <input ng-model="ctrl.sectionOUSearchText"
+                                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                        </md-select-header>
+                                        <md-option ng-value="null">{{lang.none}}</md-option>
+                                        <md-option ng-value="organization"
+                                                   ng-disabled="ctrl.isSectionDisabled(organization)"
+                                                   ng-repeat="organization in ctrl.subOrganizations | translatedNameFilter: ctrl.sectionOUSearchText">
+                                                <span md-highlight-text="ctrl.sectionOUSearchText"
+                                                      md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+
+                                <md-switch aria-label="{{lang.with_subs_ou}}"
+                                           ng-model="ctrl.withSubs"
+                                           ng-disabled="!ctrl.regOu || !!ctrl.Ou">
+                                    <label>{{lang.with_subs_ou}} : {{ctrl.withSubs ? lang.yes : lang.no}}</label>
+                                </md-switch>
+
+                                <div class="p020">
+                                    <md-button class="md-raised md-primary"
+                                               ng-disabled="ctrl.isAddSelectiveOrganizationDisabled()"
+                                               ng-click="ctrl.saveSelectiveDepartment($event)">
+                                        {{lang.add}}
+                                    </md-button>
+                                </div>
+                            </div>
+                            <div layout="row">
+                                <md-card md-whiteframe="3" layout="column" class="card-overlay" flex>
+                                    <md-table-container>
+                                        <div flex scroll-directive>
+                                            <table md-table
+                                                   ng-model="ctrl.selectedSelectiveDepartments"
+                                                   md-progress="ctrl.selectiveDepartmentsGrid.progress">
+                                                <thead md-head md-order="ctrl.selectiveDepartmentsGrid.order"
+                                                       md-on-reorder="ctrl.getSortedData">
+                                                <tr md-row>
+                                                    <th colspan="4" class="table-selector-header"
+                                                        ng-if="ctrl.selectedSelectiveDepartments.length" md-column>
+                                                        <div layout="row" layout-align="start center">
+                                                            <span>{{ctrl.selectedSelectiveDepartments.length}} {{lang.items_selected}} </span>
+                                                            <span flex></span>
+                                                            <table-status-directive
+                                                                    when-close="ctrl.changeWithSubsBulkOrganizations"></table-status-directive>
+                                                            <md-button class="md-icon-button"
+                                                                       ng-click="ctrl.removeBulkSelectiveDepartments($event)">
+                                                                <md-icon md-svg-icon="delete"></md-icon>
+                                                            </md-button>
+                                                        </div>
+                                                    </th>
+                                                    <th ng-if="!ctrl.selectedSelectiveDepartments.length" md-column
+                                                        md-order-by="ouInfo.arName"><span>{{lang.arabic_name}}</span>
+                                                    </th>
+                                                    <th ng-if="!ctrl.selectedSelectiveDepartments.length" md-column
+                                                        md-order-by="ouInfo.enName"><span>{{lang.english_name}}</span>
+                                                    </th>
+                                                    <th ng-if="!ctrl.selectedSelectiveDepartments.length" md-column
+                                                        md-order-by="withSubs"><span>{{lang.with_subs_ou}}</span>
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody md-body>
+                                                <tr md-select="selectiveDept" md-row
+                                                    ng-repeat="selectiveDept in ctrl.selectiveDepartments | filter:ctrl.searchModel | limitTo: ctrl.selectiveDepartmentsGrid.limit: ((ctrl.selectiveDepartmentsGrid.page - 1) * ctrl.selectiveDepartmentsGrid.limit) track by $index">
+                                                    <td md-cell>{{selectiveDept.ouInfo.arName}}</td>
+                                                    <td md-cell>{{selectiveDept.ouInfo.enName}}</td>
+                                                    <td md-cell>
+                                                        <md-switch aria-label="{{lang.with_subs_ou}}"
+                                                                   ng-model="selectiveDept.withSubs"
+                                                                   ng-if="selectiveDept.ouInfo.hasRegistry"
+                                                                   ng-disabled="true"
+                                                                   title="{{ctrl.getTranslatedWithSubs(selectiveDept.withSubs)}}"></md-switch>
+                                                    </td>
+                                                    <td md-cell>
+                                                        <div flex layout="row" layout-align="start center">
+                                                            <md-button class="md-icon-button" title="{{lang.delete}}"
+                                                                       ng-click="ctrl.removeSelectiveDepartment(selectiveDept,$index ,$event)">
+                                                                <md-icon md-svg-icon="delete"></md-icon>
+                                                            </md-button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <md-table-pagination
+                                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                md-limit-options="ctrl.selectiveDepartmentsGrid.limitOptions"
+                                                md-limit="ctrl.selectiveDepartmentsGrid.limit"
+                                                md-page="ctrl.selectiveDepartmentsGrid.page"
+                                                md-total="{{(ctrl.selectiveDepartments | filter:ctrl.searchModel).length}}"
+                                                md-page-select>
+                                        </md-table-pagination>
+                                    </md-table-container>
+                                </md-card>
+                            </div>
+                        </div>
+                    </form>
+                </md-content>
+            </md-tab>
+        </md-tabs>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
         <md-button class="md-raised md-primary" ng-disabled="applicationUserWorkflowParticipationForm.$invalid"
-                   ng-click="ctrl.addApplicationUserWorkflowParticipationPopupFromCtrl()">
+                   ng-if="ctrl.selectedTab==='general'"
+                   ng-click="ctrl.addWorkflowParticipation()">
             {{lang.add}}
         </md-button>
         <md-button class="md-raised red-text"
-                   ng-click="ctrl.closeApplicationUserWorkflowParticipationPopupFromCtrl()">
+                   ng-click="ctrl.closePopup()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

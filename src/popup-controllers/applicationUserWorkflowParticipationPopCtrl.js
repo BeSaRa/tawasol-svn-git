@@ -8,9 +8,18 @@ module.exports = function (app) {
                                                                             lookupService,
                                                                             organizations,
                                                                             privateUsers,
+                                                                            Information,
                                                                             langService,
                                                                             managers,
                                                                             viceManagers,
+                                                                            toast,
+                                                                            $q,
+                                                                            $filter,
+                                                                            UserSpecifiedDistWF,
+                                                                            registryOrganizations,
+                                                                            organizationService,
+                                                                            selectiveDepartmentsList,
+                                                                            userSpecificDistributionWFService,
                                                                             customLevelGroups,
                                                                             OUApplicationUser) {
         'ngInject';
@@ -27,6 +36,29 @@ module.exports = function (app) {
         self.customLevelGroupsList = customLevelGroups;
 
         self.organizationsWithPrivateUsers = [];
+
+        self.tabsToShow = [
+            'general',
+            'selectiveDepartments'
+        ];
+        self.selectedTab = "general";
+
+        self.showTab = function (tabName) {
+            return (self.tabsToShow.indexOf(tabName) > -1);
+        };
+        self.selectedTabIndex = self.tabsToShow.indexOf(self.selectedTab);
+
+        if (self.selectedTab !== 'general') {
+            self.setCurrentTab('general');
+        }
+
+        /**
+         * @description Set the current tab name
+         * @param tabName
+         */
+        self.setCurrentTab = function (tabName) {
+            self.selectedTab = tabName;
+        }
 
         var _getPrivateUserOuIndex = function (privateUser) {
             return _.findIndex(self.organizationsWithPrivateUsers, {id: (privateUser.ouid.hasOwnProperty('id') ? privateUser.ouid.id : privateUser.ouid)});
@@ -171,6 +203,7 @@ module.exports = function (app) {
                 self.ouApplicationUser.managers = null;
             self.getSelectedManagersText();
         };
+
         self.sendToViceManagerChange = function () {
             if (!self.ouApplicationUser.sendToViceManager) {
                 self.ouApplicationUser.viceManagers = null;
@@ -181,7 +214,7 @@ module.exports = function (app) {
         /**
          * @description Add the workflow participation changes to grid
          */
-        self.addApplicationUserWorkflowParticipationPopupFromCtrl = function () {
+        self.addWorkflowParticipation = function () {
             self.requiredFields = angular.copy(requiredFields);
 
             if (!self.ouApplicationUser.sendToPrivateUsers) {
@@ -196,7 +229,7 @@ module.exports = function (app) {
             }
 
             validationService
-                .createValidation('ADD_OUT_OF_OFFICE_SETTINGS')
+                .createValidation('SAVE_WORKFLOW_PARTICIPATION')
                 .addStep('check_required', true, self.checkRequiredFieldsAppUserWorkflowParticipation, self.ouApplicationUser, function (result) {
                     return !result.length;
                 })
@@ -240,7 +273,7 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Check if some of options in dropdown are selected
+         * @description Check if some options in dropdown are selected
          * @returns {boolean}
          */
         self.isIndeterminate = function (recordType) {
@@ -275,7 +308,7 @@ module.exports = function (app) {
         /**
          * @description Close the popup
          */
-        self.closeApplicationUserWorkflowParticipationPopupFromCtrl = function () {
+        self.closePopup = function () {
             //self.ouApplicationUser = self.model;
             dialog.cancel();
         };
@@ -303,5 +336,161 @@ module.exports = function (app) {
                     $event.stopPropagation();
             }
         };
+
+
+        self.inlineUserOUSearchText = '';
+
+        self.selectiveDepartments = selectiveDepartmentsList;
+        self.registryOrganizations = registryOrganizations;
+        self.subOrganizations = [];
+        self.Ou = null;
+        self.regOu = null;
+        self.withSubs = null;
+        self.selectedSelectiveDepartments = [];
+
+        var _resetSelectiveDepartmentModel = function () {
+            self.Ou = null;
+            self.regOu = null;
+            self.withSubs = false;
+
+            self.selectiveDepartment = new UserSpecifiedDistWF({
+                userId: ouApplicationUser.applicationUser.id,
+                ouId: ouApplicationUser.ouid.id,
+                toOUID: null,
+                withSubs: false
+            });
+        };
+        _resetSelectiveDepartmentModel();
+
+        /**
+         * @description Save the selective department
+         */
+        self.saveSelectiveDepartment = function () {
+            if (self.isAddSelectiveOrganizationDisabled()) {
+                return;
+            }
+
+            self.selectiveDepartment.toOUID = self.Ou ? self.Ou : self.regOu;
+            self.selectiveDepartment.withSubs = self.withSubs;
+
+            userSpecificDistributionWFService
+                .saveSelectiveDepartment(self.selectiveDepartment)
+                .then(function (result) {
+                    self.reloadSelectiveDepartments()
+                        .then(function () {
+                            toast.success(langService.get('save_success'));
+                        })
+                }).catch(function () {
+
+            });
+        };
+
+        /**
+         * @description Removes the selective department from grid
+         * @param selectiveDept
+         * @param $index
+         * @param $event
+         */
+        self.removeSelectiveDepartment = function (selectiveDept, $index, $event) {
+            return dialog
+                .confirmMessage(langService.get('confirm_remove').change({name: selectiveDept.ouInfo.getTranslatedName()}), null, null, $event)
+                .then(function () {
+                    userSpecificDistributionWFService
+                        .deleteSelectiveDepartment(selectiveDept)
+                        .then(function (result) {
+                            self.reloadSelectiveDepartments()
+                                .then(function () {
+                                    toast.success(langService.get("delete_specific_success").change({name: selectiveDept.ouInfo.getNames()}));
+                                })
+                        }).catch(function () {
+
+                    });
+                });
+        };
+
+        self.onRegistryChanged = function () {
+            self.subOrganizations = [];
+            self.Ou = null;
+            self.withSubs = false;
+
+            organizationService
+                .loadChildrenOrganizations(self.regOu, true)
+                .then(function (result) {
+                    // sort sections/sub-organizations
+                    result = _.sortBy(result, [function (ou) {
+                        return ou[langService.current + 'Name'].toLowerCase();
+                    }]);
+
+                    self.subOrganizations = result;
+                })
+        };
+
+        self.getTranslatedWithSubs = function (value) {
+            return value ? langService.get('with_subs_ou') : langService.get('without_subs_ou');
+        };
+
+        self.isAddSelectiveOrganizationDisabled = function () {
+            return !self.regOu ||
+                (!self.Ou &&
+                    _.some(self.selectiveDepartments, function (ou) {
+                        return ou.ouInfo.id === self.regOu.id;
+                    }));
+        };
+
+        self.isRegOuDisabled = function (organization) {
+            return !organization.status ||
+                _.some(self.selectiveDepartments, function (ou) {
+                    return ou.ouInfo.id === organization.id && ou.withSubs;
+                });
+        };
+
+        self.isSectionDisabled = function (organization) {
+            return !organization.status ||
+                _.some(self.selectiveDepartments, function (ou) {
+                    return ou.ouInfo.id === organization.id;
+                });
+        };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.selectiveDepartments = $filter('orderBy')(self.selectiveDepartments, self.selectiveDepartmentsGrid.order);
+        };
+
+        /**
+         * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
+         * @type {Array}
+         */
+        self.selectiveDepartmentsGrid = {
+            progress: null,
+            limit: 5, // default limit
+            page: 1, // first page
+            order: '', // default sorting order
+            limitOptions: [5, 10, 20, // limit options
+                {
+                    label: langService.get('all'),
+                    value: function () {
+                        return (self.selectiveDepartments.length + 21);
+                    }
+                }
+            ]
+        };
+
+        self.reloadSelectiveDepartments = function (pageNumber) {
+            var defer = $q.defer();
+            self.selectiveDepartmentsGrid.progress = defer.promise;
+            return userSpecificDistributionWFService.loadSelectiveDepartments(ouApplicationUser.getApplicationUserId(), ouApplicationUser.getOuId())
+                .then(function (result) {
+                    self.selectiveDepartments = result;
+                    defer.resolve(true);
+
+                    if (pageNumber)
+                        self.selectiveDepartmentsGrid.page = pageNumber;
+                    self.getSortedData();
+                    return result;
+                });
+        };
+
     });
 };

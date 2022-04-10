@@ -1019,6 +1019,19 @@ module.exports = function (app) {
                         customLevelGroups: function (customLevelGroupService) {
                             'ngInject';
                             return customLevelGroupService.loadCustomLevelGroups();
+                        },
+                        registryOrganizations: function (organizationService) {
+                            'ngInject';
+                            return organizationService.getAllOrganizationsStructure()
+                                .then(function (organizations) {
+                                    return _.filter(organizations, function (organization) {
+                                        return organization.hasRegistry;
+                                    });
+                                });
+                        },
+                        selectiveDepartmentsList: function(userSpecificDistributionWFService){
+                            'ngInject';
+                            return userSpecificDistributionWFService.loadSelectiveDepartments(ouApplicationUser.getApplicationUserId(), ouApplicationUser.getOuId());
                         }
                     }
                 })

@@ -222,6 +222,7 @@
                 .addToAllWithBase('dynamicFollowup', 'cms-entity/user/user-followup-dynamic')
                 .addToAllWithBase('dynamicFollowupUsers', '/cms-entity/user/user-followup-dynamic/dyanmic-followup-permission/ou/:ouId')
                 .addToAllWithBase('applicationUserLevel', '/cms-entity/admin/application-user-level')
+                .addToAllWithBase('userSpecificDistWF','/cms-entity/admin/user-specific-dist-wf')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

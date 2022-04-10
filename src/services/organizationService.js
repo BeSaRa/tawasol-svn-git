@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                  langService,
                                                  WFOrganization,
                                                  $rootScope,
+                                                 Information,
                                                  _,
                                                  organizationTypeService,
                                                  $q,
@@ -1050,6 +1051,45 @@ module.exports = function (app) {
 
             var managerId = currentUserOrg.managerId.hasOwnProperty('id') ? currentUserOrg.managerId.id : currentUserOrg.managerId;
             return managerId === generator.getNormalizedValue(currentUser, 'id');
+        }
+
+        self.mapRegOUSections = function (list) {
+            // filter all regOU (has registry)
+            var regOus = _.filter(list, function (item) {
+                    return item.hasRegistry;
+                }),
+                // filter all sections (no registry)
+                sections = _.filter(list, function (ou) {
+                    return !ou.hasRegistry;
+                }),
+                // registry parent organization
+                parentRegistryOu;
+
+            // To show (regou - section), append the dummy property "tempRegOUSection"
+            regOus = _.map(regOus, function (regOu) {
+                regOu.tempRegOUSection = new Information({
+                    arName: regOu.arName,
+                    enName: regOu.enName
+                });
+                return regOu;
+            });
+            sections = _.map(sections, function (section) {
+                parentRegistryOu = (section.regouId || section.regOuId);
+                if (typeof parentRegistryOu === 'number') {
+                    parentRegistryOu = _.find(list, function (ou) {
+                        return ou.id === parentRegistryOu;
+                    })
+                }
+
+                section.tempRegOUSection = new Information({
+                    arName: ((parentRegistryOu) ? parentRegistryOu.arName + ' - ' : '') + section.arName,
+                    enName: ((parentRegistryOu) ? parentRegistryOu.enName + ' - ' : '') + section.enName
+                });
+                return section;
+            });
+
+            // sorting from BE based on user selection (alphabetical or by org structure)
+            return [].concat(regOus, sections)
         }
 
     });

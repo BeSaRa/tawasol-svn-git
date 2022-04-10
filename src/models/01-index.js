@@ -215,4 +215,5 @@ module.exports = function (app) {
     require('./EmployeeFollowupStatistics')(app);
     require('./PersonalFollowupStatistics')(app);
     require('./CustomLevelGroup')(app);
+    require('./UserSpecifiedDistWF')(app);
 };

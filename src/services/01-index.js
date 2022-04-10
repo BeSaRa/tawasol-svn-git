@@ -134,4 +134,5 @@ module.exports = function (app) {
     require('./privateUserClassificationService')(app);
     require('./dynamicFollowupService')(app);
     require('./customLevelGroupService')(app);
+    require('./userSpecificDistributionWFService')(app);
 };
