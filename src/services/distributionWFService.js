@@ -223,8 +223,13 @@ module.exports = function (app) {
         /**
          * @description search for distribution users by criteria
          * @param searchCriteria
+         * @param checkOUHasRegistry
          */
-        self.searchUsersByCriteria = function (searchCriteria) {
+        self.searchUsersByCriteria = function (searchCriteria, checkOuHasRegistry) {
+            if (checkOuHasRegistry) {
+                searchCriteria = {...searchCriteria, regOu: searchCriteria.ou, ou: null};
+            }
+
             return $http.post(urlService.distributionWF + '/search', generator.interceptSendInstance('UserSearchCriteria', searchCriteria))
                 .then(function (result) {
                     return generator.interceptReceivedCollection('WFUser', generator.generateCollection(result.data.rs, WFUser));

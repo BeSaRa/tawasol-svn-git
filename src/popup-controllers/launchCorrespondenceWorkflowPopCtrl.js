@@ -1175,7 +1175,7 @@ module.exports = function (app) {
             if (!self.usersCriteria.ou)
                 return;
             return distributionWFService
-                .searchUsersByCriteria(self.usersCriteria)
+                .searchUsersByCriteria(self.usersCriteria, self.usersCriteria.ou.hasRegistry)
                 .then(function (result) {
                     self.users = _mapWFUser(result);
                 });

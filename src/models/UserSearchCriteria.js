@@ -6,7 +6,7 @@ module.exports = function (app) {
             self.arName = null;
             self.enName = null;
             self.ou = null;
-            self.regOU = null;
+            self.regOu = null;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
