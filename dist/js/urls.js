@@ -220,7 +220,8 @@
                 .addToAllWithBase('bulkRecallSentItems', 'cms-entity/user/inbox/bulk/recall')
                 .addToAllWithBase('privateUserClassification', 'cms-entity/admin/user-classification')
                 .addToAllWithBase('dynamicFollowup', 'cms-entity/user/user-followup-dynamic')
-                .addToAllWithBase('dynamicFollowupUsers','/cms-entity/user/user-followup-dynamic/dyanmic-followup-permission/ou/:ouId')
+                .addToAllWithBase('dynamicFollowupUsers', '/cms-entity/user/user-followup-dynamic/dyanmic-followup-permission/ou/:ouId')
+                .addToAllWithBase('applicationUserLevel', '/cms-entity/admin/application-user-level')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

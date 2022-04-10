@@ -1146,6 +1146,10 @@ module.exports = function (app) {
                         viceManagers: function (ouApplicationUserService) {
                             'ngInject';
                             return ouApplicationUserService.loadAllViceManagers();
+                        },
+                        customLevelGroups: function (customLevelGroupService) {
+                            'ngInject';
+                            return customLevelGroupService.loadCustomLevelGroups();
                         }
                     }
                 })

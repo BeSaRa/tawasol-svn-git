@@ -31,10 +31,10 @@ module.exports = function (app) {
             self.proxyOUId = null;
             self.ouInfo = null;
             self.wfsecurity = null;
-            self.ouViewPermissionList = null;
             self.archiveSecurityLevels = null;
             self.proxyStartDateString = '';
             self.proxyEndDateString = '';
+            self.userLevelId = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -101,7 +101,7 @@ module.exports = function (app) {
                     return this.ouInfo.id;
                 } else if (this.ouid) {
                     return this.ouid.hasOwnProperty('id') ? this.ouid.id : this.ouid;
-                }else if (this.ouId) {
+                } else if (this.ouId) {
                     return this.ouId.hasOwnProperty('id') ? this.ouId.id : this.ouId;
                 }
                 return null;
@@ -112,7 +112,7 @@ module.exports = function (app) {
                     return this.ouInfo;
                 } else if (this.hasOwnProperty('ouid') && this.ouid && this.ouid.id) {
                     return this.ouid;
-                }else if (this.hasOwnProperty('ouId') && this.ouId && this.ouId.id) {
+                } else if (this.hasOwnProperty('ouId') && this.ouId && this.ouId.id) {
                     return this.ouId;
                 }
                 return null;

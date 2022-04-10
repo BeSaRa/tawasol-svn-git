@@ -91,4 +91,5 @@ module.exports = function (app) {
     require('./externalDataSourcesCtrl')(app);
     require('./searchIntelligenceCtrl')(app);
     require('./returnedCentralArchiveCtrl')(app);
+    require('./customLevelGroupCtrl')(app);
 };

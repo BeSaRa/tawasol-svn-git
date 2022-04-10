@@ -214,4 +214,5 @@ module.exports = function (app) {
     require('./ReassignFollowup')(app);
     require('./EmployeeFollowupStatistics')(app);
     require('./PersonalFollowupStatistics')(app);
+    require('./CustomLevelGroup')(app);
 };

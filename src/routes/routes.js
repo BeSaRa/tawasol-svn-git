@@ -1769,6 +1769,19 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_intelligence_search'
             })
-
-    });
+            // Custom Level Groups
+            .state('app.administration.custom-levels-groups', {
+                url: '/custom-levels-groups',
+                templateUrl: templateProvider.getView('custom-level-groups'),
+                controller: 'customLevelGroupCtrl',
+                controllerAs: 'ctrl',
+                permission: 'menu_item_custom_level_group',
+                resolve: {
+                    customLevelGroups: function (customLevelGroupService) {
+                        'ngInject';
+                        return customLevelGroupService.loadCustomLevelGroups();
+                    }
+                }
+            });
+    })
 };

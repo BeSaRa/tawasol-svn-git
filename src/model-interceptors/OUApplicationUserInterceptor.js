@@ -71,6 +71,9 @@ module.exports = function (app) {
                 model.proxyAuthorityLevels = generator.getResultFromSelectedCollection(rootEntity.getGlobalSettings().getSecurityLevels(), 'lookupKey');
             }
 
+            // Send To Different OU Level Selected
+            model.userLevelId = (model.wfsecurity === 6) ? model.userLevelId : null;
+
             delete model.ouInfo;
             delete model.securityLevelsString;
             delete model.archiveSecurityLevelsString;

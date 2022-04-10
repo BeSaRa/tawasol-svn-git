@@ -1378,5 +1378,17 @@
     "sort_order": 1,
     "active": true,
     "sort_value": 0
+  },
+  {
+    "ID": 128,
+    "lang_key": "menu_item_custom_level_group",
+    "icon": "arrow-up-box",
+    "parent": 8,
+    "link": "#custom-level-group",
+    "state": "app.administration.custom-levels-groups",
+    "icon_type": "font",
+    "sort_order": 27,
+    "active": true,
+    "sort_value": 0
   }
 ]

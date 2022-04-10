@@ -185,8 +185,10 @@ module.exports = function (app) {
             .addMenuPermission('menu_item_reports_message_board_response', 'FOLLOWUP_BOARD')
             .addMenuPermission('menu_item_reports_user_performance_panel', 'USER_PERFORMANCE_BOARD')
             .addMenuPermission('menu_item_reports_monitoring_correspondence_documentary_panel', 'REALTIME_MONITORING_BOARD')
-            .addMenuPermission('menu_item_reports_processed_documents', 'PROCESSED_DOCUMENT_REPORT');
-
+            .addMenuPermission('menu_item_reports_processed_documents', 'PROCESSED_DOCUMENT_REPORT')
+            .addMenuPermission('menu_item_custom_level_group', function (employee) {
+                return employee.isSuperAdmin;
+            })
 
     });
 };

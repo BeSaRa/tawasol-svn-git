@@ -116,7 +116,7 @@ module.exports = function (app) {
             port: /^(([1-9]\d{0,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))$/,
             EN_DOT: /^[a-zA-Z0-9_.]+$/,
             EN_DOT_DASH: /^[a-zA-Z0-9_. \-]+$/,
-            AN_DOT_DASH:  /^[ء-ي0-9_. \-]+$/,
+            AN_DOT_DASH: /^[ء-ي0-9_. \-]+$/,
             AE_DOT_DASH: /^[A-Za-zء-ي_. \-]?( ?[A-Za-zء-ي_. \-]+)+$/,
             FILE_NET_USER: /^[\w]+[@.\-\w]*[\w.]+$/
         };
@@ -141,5 +141,14 @@ module.exports = function (app) {
             return true;
         };
 
+        self.validateInputArray = function (inputValueToValidate, inputType) {
+            if (angular.isArray(inputValueToValidate)) {
+                return _.every(inputValueToValidate, (input) => {
+                    return self.validateInput(input, inputType);
+                })
+            } else {
+                self.validateInput(inputValueToValidate, inputType)
+            }
+        }
     });
 };

@@ -69,7 +69,8 @@
                                            placeholder="{{lang.search}}"
                                            class="select-header-input">
                                 </md-select-header>
-                                <md-option ng-repeat="manager in ctrl.managersList | translatedNameFilter:ctrl.managersSearchText:'getManagerAndOuTranslate'"
+                                <md-option
+                                        ng-repeat="manager in ctrl.managersList | translatedNameFilter:ctrl.managersSearchText:'getManagerAndOuTranslate'"
                                         ng-value="manager.ouRegistryID.id">
                                     <span md-highlight-text="ctrl.managersSearchText"
                                           md-highlight-flags="i">
@@ -115,8 +116,9 @@
                                            placeholder="{{lang.search}}"
                                            class="select-header-input">
                                 </md-select-header>
-                                <md-option ng-repeat="viceManager in ctrl.viceManagersList | translatedNameFilter:ctrl.viceManagersSearchText:'getManagerAndOuTranslate'"
-                                           ng-value="viceManager.ouRegistryID.id">
+                                <md-option
+                                        ng-repeat="viceManager in ctrl.viceManagersList | translatedNameFilter:ctrl.viceManagersSearchText:'getManagerAndOuTranslate'"
+                                        ng-value="viceManager.ouRegistryID.id">
                                     <span md-highlight-text="ctrl.viceManagersSearchText"
                                           md-highlight-flags="i">
                                         {{viceManager.getManagerAndOuRegistryTranslate()}}
@@ -142,6 +144,22 @@
                                 </md-option>
                             </md-select>
                             <div ng-messages="applicationUserWorkflowParticipationForm.wfsecurity.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row" flex ng-if="ctrl.sendToDifferentOuLevelSelected()">
+                        <md-input-container flex>
+                            <label for="userLevelId">{{lang.custom_level_groups}}</label>
+                            <md-select name="userLevelId"
+                                       id="userLevelId" required
+                                       ng-model="ctrl.ouApplicationUser.userLevelId">
+                                <md-option ng-repeat="customLevelGroup in ctrl.customLevelGroupsList"
+                                           ng-value="customLevelGroup.id">
+                                    {{customLevelGroup.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="applicationUserWorkflowParticipationForm.userLevelId.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>

@@ -123,7 +123,8 @@ module.exports = function (app) {
                 serialNumbers: 'serialNumbers',
                 documentStamp: 'docStamp',
                 sequentialWF: 'seqWF',
-                externalDataSources: 'extDataSources'
+                externalDataSources: 'extDataSources',
+                customLevelGroup: 'customLevelGroups'
             },
             others: {
                 linkedDoc: 'linkedDoc',

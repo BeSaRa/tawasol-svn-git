@@ -11,6 +11,7 @@ module.exports = function (app) {
                                                                             langService,
                                                                             managers,
                                                                             viceManagers,
+                                                                            customLevelGroups,
                                                                             OUApplicationUser) {
         'ngInject';
         var self = this;
@@ -23,6 +24,7 @@ module.exports = function (app) {
 
         self.managersList = managers;
         self.viceManagersList = viceManagers;
+        self.customLevelGroupsList = customLevelGroups;
 
         self.organizationsWithPrivateUsers = [];
 
@@ -67,9 +69,9 @@ module.exports = function (app) {
                 self.ouApplicationUser.privateUsers = _.filter(self.ouApplicationUser.privateUsers, function (savedPrivateUser) {
                     return !!savedPrivateUser;
                 })
-            } else if (self.ouApplicationUser.privateUsers && self.ouApplicationUser.privateUsers.length && self.ouApplicationUser.privateUsers[0] instanceof OUApplicationUser){
+            } else if (self.ouApplicationUser.privateUsers && self.ouApplicationUser.privateUsers.length && self.ouApplicationUser.privateUsers[0] instanceof OUApplicationUser) {
                 // do nothing as its already ouApplicationUsers list
-            }  else {
+            } else {
                 self.ouApplicationUser.privateUsers = [];
             }
         };
@@ -285,6 +287,10 @@ module.exports = function (app) {
         self.clearSearchText = function (fieldType) {
             self[fieldType + 'SearchText'] = '';
         };
+
+        self.sendToDifferentOuLevelSelected = function () {
+            return self.ouApplicationUser.wfsecurity === 6;
+        }
 
         /**
          * @description Prevent the default dropdown behavior of keys inside the search box of dropdown

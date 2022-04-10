@@ -171,4 +171,5 @@ module.exports = function (app) {
     require('./dynamicFollowupPopCtrl')(app);
     require('./reassignFollowupBookPopCtrl')(app);
     require('./selectRegistryOUsCentralArchivePopCtrl')(app);
+    require('./customLevelGroupPopCtrl')(app);
 };

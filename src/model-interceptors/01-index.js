@@ -137,4 +137,5 @@ module.exports = function (app) {
     require('./PrivateUserClassificationInterceptor')(app);
     require('./DynamicFollowupInterceptor')(app);
     require('./ApplicationUserViewInterceptor')(app);
+    require('./CustomLevelGroupInterceptor')(app);
 };

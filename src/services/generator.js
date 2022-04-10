@@ -506,6 +506,9 @@ module.exports = function (app) {
                 (typeof value === 'string') ? (value.trim() !== '') : (value !== null && typeof value !== 'undefined')
             );
         };
+        self.validRequiredArray = function (value) {
+            return !!value.length
+        }
         /**
          * check validation of required fields
          * @param model
@@ -514,7 +517,8 @@ module.exports = function (app) {
         self.checkRequiredFields = function (model) {
             var required = model.getRequiredFields(), result = [];
             _.map(required, function (property) {
-                if (!self.validRequired(model[property]))
+                if (!self.validRequired(model[property]) ||
+                    (angular.isArray(model[property]) && !self.validRequiredArray(model[property])))
                     result.push(property);
             });
             return result;
