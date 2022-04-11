@@ -1723,13 +1723,14 @@ module.exports = function (app) {
                 callback: self.partialExportCallback,
                 class: "action-green",
                 checkShow: function (action, model) {
+                    var allowExportInternalOutgoing = model.isInternalOutgoing() ? rootEntity.isAllowExportInternalOutgoingEnabled() : true;
                     var info = model.getInfo();
                     // When document is EXPORTED or PARTIALLY_EXPORTED, show partial export button.
                     return (info.docStatus === 25 || info.docStatus === 26)
                         && (model.registryOU === employeeService.getEmployee().getRegistryOUID())
                         && !model.isPrivateSecurityLevel()
                         && !model.hasActiveSeqWF()
-                        && !(rootEntity.isAllowExportInternalOutgoingEnabled() && model.isInternalOutgoing());
+                        && allowExportInternalOutgoing;
                 }
             },
             // Launch Distribution Workflow

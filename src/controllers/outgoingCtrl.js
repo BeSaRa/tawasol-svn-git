@@ -805,11 +805,11 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: ['LAUNCH_DISTRIBUTION_WORKFLOW', 'OPEN_DEPARTMENT’S_READY_TO_EXPORT_QUEUE'],
                 checkShow: function (action, model, index) {
-                    var info = model.getInfo();
-                    isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !!info.isPaper && _hasContent() && (!_hasExternalOrG2GSite(model) || (_hasExternalOrG2GSite(model) && !employeeService.isCurrentOuLinkedToArchive())) && !model.hasActiveSeqWF(); //Don't show if its electronic outgoing
-                    self.setDropdownAvailability(index, isVisible)
-                    && !(rootEntity.isAllowExportInternalOutgoingEnabled() && model.isInternalOutgoing());
-                    return isVisible;
+                    var allowExportInternalOutgoing = model.isInternalOutgoing() ? rootEntity.isAllowExportInternalOutgoingEnabled() : true;
+                    var info = model.getInfo(),
+                        isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !!info.isPaper && _hasContent() && (!_hasExternalOrG2GSite(model) || (_hasExternalOrG2GSite(model) && !employeeService.isCurrentOuLinkedToArchive())) && !model.hasActiveSeqWF(); //Don't show if its electronic outgoing
+                    self.setDropdownAvailability(index, isVisible);
+                    return isVisible && allowExportInternalOutgoing;
                 }
             },
             // Send to central archive ready to export
@@ -847,6 +847,7 @@ module.exports = function (app) {
                 callback: self.docActionApproveAndExport,
                 class: "action-green",
                 checkShow: function (action, model, index) {
+                    var allowExportInternalOutgoing = model.isInternalOutgoing() ? rootEntity.isAllowExportInternalOutgoingEnabled() : true;
                     var employee = employeeService.getEmployee();
                     if (!employee.hasPermissionTo('ELECTRONIC_SIGNATURE') || !employee.hasPermissionTo('OPEN_DEPARTMENT’S_READY_TO_EXPORT_QUEUE'))
                         return false;
@@ -854,9 +855,8 @@ module.exports = function (app) {
                     var info = model.getInfo();
                     //Don't show if its paper outgoing or any site is external/g2g or signatures count more than 1 or personal/private security level
                     isVisible = !model.hasActiveSeqWF() && gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !info.isPaper && !_hasExternalOrG2GSite(model) && _hasContent() && _hasSingleSignature(model);
-                    self.setDropdownAvailability(index, isVisible)
-                    && !(rootEntity.isAllowExportInternalOutgoingEnabled() && model.isInternalOutgoing());
-                    return isVisible;
+                    self.setDropdownAvailability(index, isVisible);
+                    return isVisible && allowExportInternalOutgoing;
                 }
             },
             // Add To ICN Archive

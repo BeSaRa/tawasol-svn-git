@@ -1871,13 +1871,14 @@ module.exports = function (app) {
                 sticky: true,
                 shortcut: true,
                 checkShow: function (action, model) {
+                    var allowExportInternalOutgoing = model.isInternalOutgoing() ? rootEntity.isAllowExportInternalOutgoingEnabled() : true;
                     var info = model.getInfo();
                     return gridService.checkToShowAction(action)
                         && info.docStatus === 24
                         && info.documentClass === 'outgoing'
                         && !model.isPrivateSecurityLevel()
                         && !model.hasActiveSeqWF()
-                        && !(rootEntity.isAllowExportInternalOutgoingEnabled() && model.isInternalOutgoing());
+                        && allowExportInternalOutgoing;
                 }
             },
             // add task
@@ -2300,6 +2301,7 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: function (action, model) {
                             var employee = employeeService.getEmployee();
+                            var allowExportInternalOutgoing = model.isInternalOutgoing() ? rootEntity.isAllowExportInternalOutgoingEnabled() : true;
                             if (model.hasActiveSeqWF() || model.isTerminatedSEQ()) {
                                 return false;
                             }
@@ -2318,7 +2320,7 @@ module.exports = function (app) {
                                 && model.hasSingleSignature()
                                 && !model.isPrivateSecurityLevel()
                                 && !model.isBroadcasted()
-                                && !(rootEntity.isAllowExportInternalOutgoingEnabled() && model.isInternalOutgoing());
+                                && allowExportInternalOutgoing;
                         }
                     },
                     // e-Signature

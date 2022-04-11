@@ -1324,7 +1324,7 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                    return rootEntity.isAllowExportInternalOutgoingEnabled() && model.isInternalOutgoing();
+                    return !rootEntity.isAllowExportInternalOutgoingEnabled() && model.isInternalOutgoing();
                 }
             },
             // Export
@@ -1342,7 +1342,7 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                    return !(rootEntity.isAllowExportInternalOutgoingEnabled() && model.isInternalOutgoing());
+                    return model.isInternalOutgoing() ? rootEntity.isAllowExportInternalOutgoingEnabled() : true;
                 }
             },
             // Export and send
@@ -1357,8 +1357,9 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
+                    var allowExportInternalOutgoing = model.isInternalOutgoing() ? rootEntity.isAllowExportInternalOutgoingEnabled() : true;
                     return !model.exportViaArchive() && employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && !model.hasActiveSeqWF() &&
-                        !(rootEntity.isAllowExportInternalOutgoingEnabled() && model.isInternalOutgoing());
+                        allowExportInternalOutgoing;
                 }
             },
             // Export and add to icn archive
@@ -1373,8 +1374,8 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                    return !model.exportViaArchive() && employeeService.hasPermissionTo('ICN_ENTRY_TEMPLATE') &&
-                        !(rootEntity.isAllowExportInternalOutgoingEnabled() && model.isInternalOutgoing());
+                    var allowExportInternalOutgoing = model.isInternalOutgoing() ? rootEntity.isAllowExportInternalOutgoingEnabled() : true;
+                    return !model.exportViaArchive() && employeeService.hasPermissionTo('ICN_ENTRY_TEMPLATE') && allowExportInternalOutgoing;
                 }
             },
             // Print Barcode
