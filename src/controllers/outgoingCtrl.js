@@ -807,9 +807,9 @@ module.exports = function (app) {
                 checkShow: function (action, model, index) {
                     var allowExportInternalOutgoing = model.isInternalOutgoing() ? rootEntity.isAllowExportInternalOutgoingEnabled() : true;
                     var info = model.getInfo(),
-                        isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !!info.isPaper && _hasContent() && (!_hasExternalOrG2GSite(model) || (_hasExternalOrG2GSite(model) && !employeeService.isCurrentOuLinkedToArchive())) && !model.hasActiveSeqWF(); //Don't show if its electronic outgoing
+                        isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !!info.isPaper && _hasContent() && (!_hasExternalOrG2GSite(model) || (_hasExternalOrG2GSite(model) && !employeeService.isCurrentOuLinkedToArchive())) && !model.hasActiveSeqWF() && allowExportInternalOutgoing; //Don't show if its electronic outgoing
                     self.setDropdownAvailability(index, isVisible);
-                    return isVisible && allowExportInternalOutgoing;
+                    return isVisible;
                 }
             },
             // Send to central archive ready to export
@@ -854,9 +854,9 @@ module.exports = function (app) {
 
                     var info = model.getInfo();
                     //Don't show if its paper outgoing or any site is external/g2g or signatures count more than 1 or personal/private security level
-                    isVisible = !model.hasActiveSeqWF() && gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !info.isPaper && !_hasExternalOrG2GSite(model) && _hasContent() && _hasSingleSignature(model);
+                    isVisible = !model.hasActiveSeqWF() && gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !info.isPaper && !_hasExternalOrG2GSite(model) && _hasContent() && _hasSingleSignature(model) && allowExportInternalOutgoing;
                     self.setDropdownAvailability(index, isVisible);
-                    return isVisible && allowExportInternalOutgoing;
+                    return isVisible;
                 }
             },
             // Add To ICN Archive
