@@ -383,15 +383,17 @@ module.exports = function (app) {
                 return;
             }
 
-            readyToExport
-                .transferInternalOutgoing($event)
-                .then(function () {
-                    self.reloadReadyToExports(self.grid.page);
-                    new ResolveDefer(defer);
-                })
-                .catch(function (error) {
-                    toast.error(langService.get('internal_transfer_failed'));
-                });
+            dialog.confirmMessage(langService.get('confirm_transfer_internal_outgoing').change({name: readyToExport.getTranslatedName()})).then(function () {
+                readyToExport
+                    .transferInternalOutgoing($event)
+                    .then(function () {
+                        self.reloadReadyToExports(self.grid.page);
+                        new ResolveDefer(defer);
+                    })
+                    .catch(function (error) {
+                        toast.error(langService.get('internal_transfer_failed'));
+                    });
+            })
         }
 
         /**
