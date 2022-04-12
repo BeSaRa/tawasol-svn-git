@@ -165,7 +165,8 @@
                                                                       indicator-type="isInternalOutgoing"
                                                                       record-type="WorkItem"></grid-indicator-directive>
                                         </td>
-                                        <td md-cell><span class="serial-td">{{readyToExport.generalStepElm.docFullSerial}}</span>
+                                        <td md-cell><span
+                                                class="serial-td">{{readyToExport.generalStepElm.docFullSerial}}</span>
                                         </td>
                                         <td md-cell class="subject">
                                             <!-- Locked Item -->
@@ -195,6 +196,10 @@
                                         <td md-cell class="td-data">
                                             <div layout="row">
                                                 <span flex>{{readyToExport.senderInfo.getTranslatedName()}}</span>
+                                                <grid-indicator-directive record="readyToExport"
+                                                                          indicator-type="comments"
+                                                                          class="p0p5"
+                                                                          record-type="WorkItem"></grid-indicator-directive>
                                             </div>
                                         </td>
                                         <!--<td md-cell>{{readyToExport.generalStepElm.dueDate}}</td>-->
