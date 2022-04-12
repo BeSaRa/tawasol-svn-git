@@ -160,7 +160,8 @@
                                                id="userLevelId" required
                                                ng-model="ctrl.ouApplicationUser.userLevelId">
                                         <md-option ng-repeat="customLevelGroup in ctrl.customLevelGroupsList"
-                                                   ng-value="customLevelGroup.id">
+                                                   ng-value="customLevelGroup.id"
+                                                   ng-disabled="!customLevelGroup.status">
                                             {{customLevelGroup.getTranslatedName()}}
                                         </md-option>
                                     </md-select>
