@@ -31,7 +31,7 @@
                                    aria-label="workflow action"
                                    md-on-close="workflowItem.clearWFActionSearchText()"
                                    data-md-container-class="select-header-container sticky-search-bar"
-                                   placeholder="{{workflowItem.getActionMessage()}}"
+                                   placeholder="{{lang.please_select_action}}"
                                    ng-disabled="!ctrl.workflowItems.length"
                                    ng-change="ctrl.setBulkWorkflowAction(ctrl.action,$event)">
                             <md-select-header class="select-header">
