@@ -6,6 +6,8 @@ module.exports = function (app) {
                                                      dialog,
                                                      cmsTemplate,
                                                      CustomLevelGroup,
+                                                     langService,
+                                                     toast,
                                                      _) {
         'ngInject';
         var self = this;
@@ -75,6 +77,15 @@ module.exports = function (app) {
                             readOnlyLevels: readOnlyLevels
                         }
                     });
+            },
+            customLevelGroupDelete: function (customLevelGroup, $event) {
+                return dialog.confirmMessage(langService.get('confirm_delete').change({name: customLevelGroup.getNames()}))
+                    .then(function () {
+                        return self.deleteCustomLevelGroup(customLevelGroup).then(function () {
+                            toast.success(langService.get("delete_specific_success").change({name: langService.getNames()}));
+                            return true;
+                        })
+                    });
             }
         };
 
@@ -106,6 +117,18 @@ module.exports = function (app) {
         };
 
         /**
+         * @description delete given CustomLevelGroup.
+         * @param customLevelGroup
+         * @return {Promise|null}
+         */
+        self.deleteCustomLevelGroup = function (customLevelGroup) {
+            var id = customLevelGroup.hasOwnProperty('id') ? customLevelGroup.id : customLevelGroup;
+            return $http.delete(urlService.applicationUserLevel + '/' + id).then(function (result) {
+                return result;
+            });
+        };
+
+        /**
          * @description Activate custom level group
          * @param customLevelGroup
          */
@@ -134,7 +157,7 @@ module.exports = function (app) {
          * @type {{delete: generator.delete, update: generator.update}}
          * @private
          */
-        self._sharedMethods = generator.generateSharedMethods(null, self.updateCustomLevelGroup);
+        self._sharedMethods = generator.generateSharedMethods(self.deleteCustomLevelGroup, self.updateCustomLevelGroup);
 
     });
 };

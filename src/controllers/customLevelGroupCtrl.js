@@ -127,6 +127,23 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description delete custom level group
+         * @param customLevelGroup
+         * @param $event
+         */
+        self.removeCustomLevelGroup = function (customLevelGroup, $event) {
+            customLevelGroupService
+                .controllerMethod
+                .customLevelGroupDelete(customLevelGroup, $event)
+                .then(function () {
+                    self.reloadCustomLevelGroups(self.grid.page);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+
 
         /**
          * @description Change the status of Custom Level Group

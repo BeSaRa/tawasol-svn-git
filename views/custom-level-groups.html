@@ -79,6 +79,11 @@
                                                            ng-click="ctrl.openEditCustomLevelGroupDialog(customLevelGroup, $event)">
                                                     <md-icon md-svg-icon="pencil"></md-icon>
                                                 </md-button>
+                                                <md-button class="md-icon-button"
+                                                           ng-click="ctrl.removeCustomLevelGroup(customLevelGroup,$event)"
+                                                           title="{{lang.delete}}">
+                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                </md-button>
                                             </div>
                                         </td>
                                     </tr>
