@@ -179,6 +179,7 @@
                 .addToAllWithBase('userAdminList', 'cms-entity/admin/user-admin-list')
                 .addToAllWithBase('ouViewPermission', 'cms-entity/admin/user-view-ou-permission')
                 .addToAllWithBase('hrEmployeeIntegration', 'cms-entity/admin/employee/criteria')
+                .addToAllWithBase('employeeLookup', 'cms-entity/admin/employee/lookup')
                 .addToAllWithBase('documentLink', 'cms-entity/user/document-link')
                 .addToAllWithBase('viewDocumentLink', 'no-auth/view-link/:subscriberId/entity/:entity?otp=:otp')
                 .addToAllWithBase('refreshCache', 'cloud/root-entity/refresh-cache')
@@ -222,7 +223,7 @@
                 .addToAllWithBase('dynamicFollowup', 'cms-entity/user/user-followup-dynamic')
                 .addToAllWithBase('dynamicFollowupUsers', '/cms-entity/user/user-followup-dynamic/dyanmic-followup-permission/ou/:ouId')
                 .addToAllWithBase('applicationUserLevel', '/cms-entity/admin/application-user-level')
-                .addToAllWithBase('userSpecificDistWF','/cms-entity/admin/user-specific-dist-wf')
+                .addToAllWithBase('userSpecificDistWF', '/cms-entity/admin/user-specific-dist-wf')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

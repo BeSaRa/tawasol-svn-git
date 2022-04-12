@@ -11,6 +11,7 @@ module.exports = function (app) {
                                             $http,
                                             urlService,
                                             HREmployee,
+                                            Attachment,
                                             Information) {
         'ngInject';
         var self = this;
@@ -666,7 +667,7 @@ module.exports = function (app) {
                         attachDomainNameToModel: fromApplicationUser
                     },
                     resolve: {
-                        integrationLists: function (){
+                        integrationLists: function () {
                             'ngInject';
                             return self.loadListsForHRIntegration()
                         }
@@ -678,7 +679,7 @@ module.exports = function (app) {
          * @description search for hr employees when hr Enabled
          */
         self.searchForIntegratedHREmployees = function (criteria, attachDomainNameToModel) {
-            return $http.post(urlService.hrEmployeeIntegration + '/criteria', generator.interceptSendInstance('HREmployee', criteria))
+            return $http.post(urlService.hrEmployeeIntegration, generator.interceptSendInstance('HREmployee', criteria))
                 .then(function (result) {
                     var employeeLinkedEntity = generator.generateCollection(result.data.rs, HREmployee, self._sharedMethods);
                     if (attachDomainNameToModel) {
@@ -693,7 +694,7 @@ module.exports = function (app) {
         };
 
         self.loadListsForHRIntegration = function () {
-            return $http.get(urlService.hrEmployeeIntegration + '/lookup')
+            return $http.get(urlService.employeeLookup)
                 .then(function (result) {
                     var data = result.data.rs;
                     data.jobRank = generator.generateCollection(data.jobRank, Information);
