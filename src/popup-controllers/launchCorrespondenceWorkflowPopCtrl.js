@@ -248,9 +248,10 @@ module.exports = function (app) {
         }
 
         function _addSelectedOrganization(selected) {
-            var organization = (selected.ou === selected.registryOU)
+            /*var organization = (selected.ou === selected.registryOU)
                 ? _findOrganization(selected.registryOU, selected.registryOU, true)
-                : _findOrganization(selected.registryOU, selected.ou);
+                : _findOrganization(selected.registryOU, selected.ou);*/
+            var organization = _findOrganization(selected.registryOU, selected.registryOU, true);
             if (!!organization) {
                 _setDefaultWorkflowAction(organization);
                 self.selectedWorkflowItems.push(angular.copy(organization));
