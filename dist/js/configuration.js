@@ -4,9 +4,9 @@
         .config(function (urlServiceProvider, configurationServiceProvider) {
             'ngInject';
             urlServiceProvider
-                .setEnvironment('trunk')
+                .setEnvironment('testFixpack')
                 .setBaseUrl('fix', 'http://100.100.3.220:9080/CMSServicesFix/service')
-                .setBaseUrl('trunk', 'http://100.100.3.220:5001/CMSServices/service')
+                .setBaseUrl('trunk', 'http://100.100.3.202:9081/CMSServices/service')
                 .setBaseUrl('stage', 'http://MDPS-FNWEB01/CMSServices/service')
                 .setBaseUrl('testFixpack', 'http://100.100.3.162:9080/CMSServices/service')
                 .setBaseUrl('testFeatures', 'http://eblaepm.no-ip.org:9080/CMSServices/service')
@@ -17,7 +17,7 @@
                 .addSegment('desktopWord', 'http://localhost:4444'); //  Edit in Desktop URL
 
             configurationServiceProvider
-                //  to https connection and use HTTP instead to connect with scanner service
+            //  to https connection and use HTTP instead to connect with scanner service
                 .updateConfiguration('IGNORE_HTTPS_FOR_SCANNER', true)
                 // delay before send request to backend to save the changes on content.
                 .updateConfiguration('OFFICE_ONLINE_DELAY', 5000)
@@ -28,16 +28,7 @@
                 // just for test
                 .updateConfiguration('ENABLE_ACTIVE_SENDER_LINKS', false)
                 // Evaluation license PSPDF
-                .updateConfiguration('PSPDF_LICENSE_KEY', true) //true = evaluation version, false = production version
-                // Cahtbot Configurations
-                .updateConfiguration('CHAT_BOT', {
-                    URL: 'http://tawasolbot-b750.azurewebsites.net/chatbot.html?',
-                    APPEND_TOKEN: true
-                })
-                .updateConfiguration('CUSTOM_STAMP_SIZE', {
-                    width: 112,
-                    height: 88
-                });
+                .updateConfiguration('PSPDF_LICENSE_KEY', true);
 
         });
 

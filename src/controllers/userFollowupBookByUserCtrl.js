@@ -22,6 +22,7 @@ module.exports = function (app) {
                                                            Information,
                                                            downloadService,
                                                            distributionWFService,
+                                                           contextHelpService,
                                                            documentCommentService,
                                                            $stateParams,
                                                            $state,
@@ -29,6 +30,7 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'userFollowupBookByUserCtrl';
+        contextHelpService.setHelpTo('user-followup');
 
         self.followupBooks = [];
         self.followupBooksCopy = angular.copy(self.followupBooks);

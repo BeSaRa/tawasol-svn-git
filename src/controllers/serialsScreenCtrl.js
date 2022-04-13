@@ -1,8 +1,10 @@
 module.exports = function (app) {
-    app.controller('serialsScreenCtrl', function (registryOrganizations, langService, printService, configurationService, gridService, referencePlanNumberService, _) {
+    app.controller('serialsScreenCtrl', function (registryOrganizations, langService, printService, configurationService, gridService, referencePlanNumberService, _, contextHelpService) {
         'ngInject';
         var self = this;
         self.controllerName = 'serialsScreenCtrl';
+        contextHelpService.setHelpTo('serials-screen');
+
         self.registryOrganizations = angular.copy(registryOrganizations);
         self.selectedOrganizations = [];
         self.selectedYear = (new Date()).getFullYear();

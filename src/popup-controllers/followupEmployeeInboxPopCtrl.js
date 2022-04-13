@@ -17,6 +17,7 @@ module.exports = function (app) {
                                                              employeeService,
                                                              rootEntity,
                                                              lookupService,
+                                                             contextHelpService,
                                                              Information) {
         'ngInject';
         var self = this;
@@ -25,6 +26,8 @@ module.exports = function (app) {
         self.inlineOUSearchText = '';
         self.inlineAppUserSearchText = '';
         self.isFollowupSentItems = isFollowupSentItems;
+        contextHelpService.setHelpTo('followup-employee-sent-items');
+
 
         var _mapRegOUSections = function () {
             // filter all regOU (has registry)

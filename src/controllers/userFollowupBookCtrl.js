@@ -22,6 +22,7 @@ module.exports = function (app) {
                                                      downloadService,
                                                      ResolveDefer,
                                                      FollowupBook,
+                                                     contextHelpService,
                                                      toast,
                                                      documentCommentService,
                                                      $stateParams,
@@ -30,6 +31,7 @@ module.exports = function (app) {
             'ngInject';
             var self = this;
             self.controllerName = 'userFollowupBookCtrl';
+            contextHelpService.setHelpTo('my-followup');
 
             self.sidebarStatus = false;
 
