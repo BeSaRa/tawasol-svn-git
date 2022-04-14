@@ -5,7 +5,7 @@ module.exports = function (app) {
             var self = this;
             DistributionWFItem.call(this);
             self.wfGroupId = null;
-            self.sendRelatedDocs = rootEntity.getGlobalSettings().allowSendWFRelatedBook;
+            self.sendRelatedDocs = rootEntity.getGlobalSettings().isSendToRelatedDocsAllowed();
             self.members = [];
 
             // every model has required fields
