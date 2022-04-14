@@ -1950,7 +1950,7 @@ module.exports = function (app) {
             }
 
             if (withComment && self.checkCanSendBack()) {
-                correspondenceService.openCommentDialog(1000)
+                correspondenceService.openCommentDialog(1000, false, 'outgoing_add_document_comment')
                     .then(function (comment) {
                         defer.resolve(comment);
                     })

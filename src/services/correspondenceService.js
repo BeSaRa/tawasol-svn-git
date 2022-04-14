@@ -1447,7 +1447,7 @@ module.exports = function (app) {
          * @description open comment dialog for workItem reason.
          * @returns {promise|*}
          */
-        self.openCommentDialog = function (allowedMaxLength, showShortDescription) {
+        self.openCommentDialog = function (allowedMaxLength, showShortDescription, title) {
             return dialog
                 .showDialog({
                     templateUrl: cmsTemplate.getPopup('reason'),
@@ -1456,7 +1456,7 @@ module.exports = function (app) {
                     bindToController: true,
                     locals: {
                         justReason: true,
-                        title: 'select_reason',
+                        title: title || 'select_reason',
                         allowedMaxLength: allowedMaxLength || 200,
                         showShortDescription: showShortDescription
                     },
