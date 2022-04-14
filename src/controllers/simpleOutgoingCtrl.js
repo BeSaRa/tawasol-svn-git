@@ -808,8 +808,9 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: "OPEN_DEPARTMENT’S_READY_TO_EXPORT_QUEUE",
                 checkShow: function (action, model, index) {
-                    var info = model.getInfo();
-                    isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !!info.isPaper && _hasContent() && (!_hasExternalOrG2GSite(model) || (_hasExternalOrG2GSite(model) && !employeeService.isCurrentOuLinkedToArchive())) && !model.hasActiveSeqWF(); //Don't show if its electronic outgoing
+                    var allowExportInternalOutgoing = model.isInternalOutgoing() ? rootEntity.isAllowExportInternalOutgoingEnabled() : true;
+                    var info = model.getInfo(),
+                        isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !!info.isPaper && _hasContent() && (!_hasExternalOrG2GSite(model) || (_hasExternalOrG2GSite(model) && !employeeService.isCurrentOuLinkedToArchive())) && !model.hasActiveSeqWF() && allowExportInternalOutgoing; //Don't show if its electronic outgoing
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
