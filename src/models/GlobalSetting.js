@@ -175,9 +175,12 @@ module.exports = function (app) {
                 return this.stampModuleEnabled;
             };
 
-            GlobalSetting.prototype.isSendToRelatedDocsAllowed = function () {
+            GlobalSetting.prototype.isSendRelatedDocsAllowed = function () {
                 return this.wFRelatedBookStatus !== 0;
             };
+            GlobalSetting.prototype.canSendRelatedDocsToSameDepartmentOnly = function () {
+                return this.wFRelatedBookStatus === 2;
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

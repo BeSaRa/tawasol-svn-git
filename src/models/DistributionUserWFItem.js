@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('DistributionUserWFItem', function (CMSModelInterceptor, ProxyInfo, moment, cmsTemplate, dialog, langService, DistributionWFItem, rootEntity, generator) {
+    app.factory('DistributionUserWFItem', function (CMSModelInterceptor, ProxyInfo, moment, cmsTemplate, dialog, langService, DistributionWFItem, rootEntity, generator, employeeService) {
         'ngInject';
         return function DistributionUserWFItem(model) {
             var self = this;
@@ -12,7 +12,7 @@ module.exports = function (app) {
             self.arOUName = null;
             self.enOUName = null;
             self.proxyInfo = null;
-            self.sendRelatedDocs = rootEntity.getGlobalSettings().isSendToRelatedDocsAllowed();
+            self.sendRelatedDocs = false;
             self.securityLevel = null;
 
             // every model has required fields
@@ -40,6 +40,7 @@ module.exports = function (app) {
             };
 
             DistributionUserWFItem.prototype.mapFromWFUser = function (user) {
+                var globalSettings = rootEntity.getGlobalSettings();
                 return this
                     .setArName(user.arName)
                     .setEnName(user.enName)
@@ -55,7 +56,10 @@ module.exports = function (app) {
                     .setEscalationStatus(user.escalationStatus)
                     .setEscalationUser(user.escalationUserId)
                     .setEscalationUserOUId(user.escalationUserId)
-                    .setSecurityLevel(user.securityLevel);
+                    .setSecurityLevel(user.securityLevel)
+                    .setRegOuId(user.regouId)
+                    .setSendRelatedDocs(globalSettings.canSendRelatedDocsToSameDepartmentOnly() ?
+                        this.isSendRelatedDocsAllowed() : globalSettings.isSendRelatedDocsAllowed());
             };
 
             DistributionUserWFItem.prototype.mapFromPredefinedActionMemberUser = function (user, forLaunch) {
@@ -203,6 +207,10 @@ module.exports = function (app) {
             DistributionUserWFItem.prototype.isSameWorkflowItem = function (distWorkflowItem) {
                 return distWorkflowItem.isUser() ? this.isSameUser(distWorkflowItem) : false;
             };
+
+            DistributionUserWFItem.prototype.isSendRelatedDocsAllowed = function () {
+                return this.regOuId && this.regOuId === employeeService.getEmployee().getOUID();
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

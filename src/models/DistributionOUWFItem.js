@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('DistributionOUWFItem', function (CMSModelInterceptor, langService, DistributionWFItem, rootEntity, generator) {
+    app.factory('DistributionOUWFItem', function (CMSModelInterceptor, langService, DistributionWFItem, rootEntity, generator, employeeService) {
         'ngInject';
         return function DistributionOUWFItem(model) {
             var self = this;
@@ -7,7 +7,7 @@ module.exports = function (app) {
             self.toOUId = null;
             self.originality = null;
             self.hasRegistry = false;
-            self.sendRelatedDocs = rootEntity.getGlobalSettings().isSendToRelatedDocsAllowed();
+            self.sendRelatedDocs = false;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
@@ -47,6 +47,7 @@ module.exports = function (app) {
                 return false;
             };
             DistributionOUWFItem.prototype.mapFromWFOrganization = function (organization) {
+                var globalSettings = rootEntity.getGlobalSettings();
                 return this
                     .setRelationId(organization.relationId)
                     .setArName(organization.arName)
@@ -56,7 +57,9 @@ module.exports = function (app) {
                     .setSendSMS(organization.sendSMS)
                     .setSendEmail(organization.sendEmail)
                     .setRegOuId(organization.regouId || organization.regOuId)
-                    .setTempRegOUSection(organization.tempRegOUSection);
+                    .setTempRegOUSection(organization.tempRegOUSection)
+                    .setSendRelatedDocs(globalSettings.canSendRelatedDocsToSameDepartmentOnly() ?
+                        this.isSendRelatedDocsAllowed() : globalSettings.isSendRelatedDocsAllowed());
             };
             DistributionOUWFItem.prototype.mapFromPredefinedActionMemberOrganization = function (organization, forLaunch) {
                 this
@@ -148,6 +151,9 @@ module.exports = function (app) {
             DistributionOUWFItem.prototype.setAction = function (action) {
                 this.action = action;
                 return this;
+            }
+            DistributionOUWFItem.prototype.isSendRelatedDocsAllowed = function () {
+                return this.toOUId === employeeService.getEmployee().getOUID();
             }
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

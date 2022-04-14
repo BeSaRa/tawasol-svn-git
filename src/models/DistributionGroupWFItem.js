@@ -5,7 +5,7 @@ module.exports = function (app) {
             var self = this;
             DistributionWFItem.call(this);
             self.wfGroupId = null;
-            self.sendRelatedDocs = rootEntity.getGlobalSettings().isSendToRelatedDocsAllowed();
+            self.sendRelatedDocs = false;
             self.members = [];
 
             // every model has required fields
@@ -52,13 +52,16 @@ module.exports = function (app) {
                 return this;
             };
             DistributionGroupWFItem.prototype.mapFromWFGroup = function (workflowGroup) {
+                var globalSettings = rootEntity.getGlobalSettings();
                 return this
                     .setArName(workflowGroup.arName)
                     .setEnName(workflowGroup.enName)
                     .setWfGroupId(workflowGroup.id)
                     .setSendSMS(workflowGroup.sendSMS)
                     .setSendSMS(workflowGroup.sendEmail)
-                    .setWfMembers(workflowGroup.members);
+                    .setWfMembers(workflowGroup.members)
+                    .setSendRelatedDocs(globalSettings.canSendRelatedDocsToSameDepartmentOnly() ?
+                        this.isSendRelatedDocsAllowed() : globalSettings.isSendRelatedDocsAllowed());
             };
             DistributionGroupWFItem.prototype.setWfGroupId = function (wfGroupId) {
                 this.wfGroupId = wfGroupId;
@@ -99,6 +102,10 @@ module.exports = function (app) {
             DistributionGroupWFItem.prototype.isSameWorkflowItem = function (distWorkflowItem) {
                 return distWorkflowItem.isGroup() ? this.isSameGroup(distWorkflowItem) : false;
             };
+
+            DistributionGroupWFItem.prototype.isSendRelatedDocsAllowed = function () {
+                return false
+            }
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('DistributionGroupWFItem', 'init', this);

@@ -16,7 +16,8 @@
                     <th md-column ng-if="!ctrl.selectedWorkflowItems.length">
                         {{lang.type}}
                     </th>
-                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length && ctrl.isWorkItem && !ctrl.hiddenForwardSenderInfo">
+                    <th md-column
+                        ng-if="!ctrl.selectedWorkflowItems.length && ctrl.isWorkItem && !ctrl.hiddenForwardSenderInfo">
                         <md-checkbox ng-model="ctrl.forwardSenderActionAndCommentBulk"
                                      tooltip="{{lang.forward_with_sender_info}}"
                                      ng-click="ctrl.toggleBulkForwardSenderActionAndComment($event)"
@@ -90,14 +91,15 @@
                     <th md-column>
                         <div layout="row">
                             <!-- Bulk Send related documents -->
-                            <div class="p10" ng-if="ctrl.globalSettings.isSendToRelatedDocsAllowed()">
-                                <md-checkbox ng-disabled="!ctrl.workflowItems.length"
-                                             ng-model="ctrl.sendRelatedDocsBulk"
-                                             ng-click="ctrl.toggleBulkSendRelatedDocs($event)"
-                                             tooltip="{{lang.send_related_documents}}"
-                                             ng-checked="ctrl.isCheckedSendRelatedDocs()"
-                                             md-indeterminate="ctrl.isIndeterminateSendRelatedDocs()"
-                                             aria-label="{{lang.send_related_documents}}">
+                            <div class="p10" ng-if="ctrl.globalSettings.isSendRelatedDocsAllowed()">
+                                <md-checkbox
+                                        ng-disabled="!ctrl.workflowItems.length"
+                                        ng-model="ctrl.sendRelatedDocsBulk"
+                                        ng-click="ctrl.toggleBulkSendRelatedDocs($event)"
+                                        tooltip="{{lang.send_related_documents}}"
+                                        ng-checked="ctrl.isCheckedSendRelatedDocs()"
+                                        md-indeterminate="ctrl.isIndeterminateSendRelatedDocs()"
+                                        aria-label="{{lang.send_related_documents}}">
                                 </md-checkbox>
                             </div>
                             <div>
@@ -253,10 +255,11 @@
                     <td md-cell>
                         <div layout="row">
                             <!-- Send related documents -->
-                            <div class="p10" ng-if="ctrl.globalSettings.isSendToRelatedDocsAllowed()">
+                            <div class="p10" ng-if="ctrl.globalSettings.isSendRelatedDocsAllowed()">
                                 <md-checkbox ng-model="workflowItem.sendRelatedDocs"
                                              tooltip="{{lang.send_related_documents}}"
-                                             aria-label="{{lang.send_related_documents}}">
+                                             aria-label="{{lang.send_related_documents}}"
+                                             ng-disabled="ctrl.globalSettings.canSendRelatedDocsToSameDepartmentOnly() && !workflowItem.isSendRelatedDocsAllowed()">
                                 </md-checkbox>
                             </div>
 
@@ -269,8 +272,8 @@
                             </div>
                             <div>
                                 <md-button ng-disabled="ctrl.selectedWorkflowItems.length"
-                                        class="md-icon-button"
-                                        ng-click="ctrl.deleteWorkflowItem(workflowItem,$event)">
+                                           class="md-icon-button"
+                                           ng-click="ctrl.deleteWorkflowItem(workflowItem,$event)">
                                     <md-icon md-svg-icon="delete"></md-icon>
                                 </md-button>
                             </div>

@@ -115,8 +115,9 @@ module.exports = function (app) {
         };
         _setEscalationProcess();
 
-        if (self.globalSettings.isSendToRelatedDocsAllowed()) {
-            self.distWorkflowItem.sendRelatedDocs = true;
+        if (self.globalSettings.isSendRelatedDocsAllowed()) {
+            self.distWorkflowItem.sendRelatedDocs =
+                self.globalSettings.canSendRelatedDocsToSameDepartmentOnly() ? self.distWorkflowItem.isSendRelatedDocsAllowed() : true;
         }
 
         self.onChangeReplyTo = function ($event) {

@@ -151,7 +151,8 @@ module.exports = function (app) {
 
         var _toggleAllSendRelatedDocs = function (value) {
             self.workflowItems = _.map(self.workflowItems, function (workflowItem) {
-                workflowItem.sendRelatedDocs = value;
+                // ignore sending related docs to user with different departments
+                workflowItem.sendRelatedDocs = (self.globalSettings.canSendRelatedDocsToSameDepartmentOnly() && !workflowItem.isSendRelatedDocsAllowed()) ? false : value;
                 return workflowItem;
             });
         };

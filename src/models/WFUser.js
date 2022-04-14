@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.factory('WFUser', function (CMSModelInterceptor,
-                                    langService) {
+                                    langService,
+                                    employeeService) {
         'ngInject';
         return function WFUser(model) {
             var self = this;
@@ -16,6 +17,7 @@ module.exports = function (app) {
             self.proxyInfo = null;
             self.isSecureAction = false;
             self.registeryOu = null;
+            self.sendRelatedDocs = false;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
@@ -50,6 +52,10 @@ module.exports = function (app) {
             WFUser.prototype.getNameByLanguage = function (language) {
                 return this.getTranslatedNameAndOU();
             };
+
+            WFUser.prototype.isSendRelatedDocsAllowed = function () {
+                return this.regouId && this.regouId === employeeService.getEmployee().getOUID();
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
