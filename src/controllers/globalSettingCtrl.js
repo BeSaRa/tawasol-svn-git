@@ -63,8 +63,7 @@ module.exports = function (app) {
         self.languages = lookupService.returnLookups(lookupService.language);
         self.digitalCertificateModesList = lookupService.returnLookups(lookupService.digitalCertificateMode);
         self.employeeService = employeeService;
-        self.permissionsList = permissions;
-        self.sendRelatedDocsStatusList = lookupService.returnLookups(lookupService.wfRelatedBookStatus);
+        self.permissionsList = permissions
 
         self.loginLogoExtensions = ['.png'];
         self.bannerLogoExtensions = ['.png'];
@@ -193,8 +192,7 @@ module.exports = function (app) {
             escalationProcess: 'choose_escalation_process',
             simpleCorsSiteSearch: 'correspondence_Site_search_type',
             theme: 'default_application_theme',
-            digitalCertificateMode: 'digital_certificate_mode',
-            wFRelatedBookStatus: 'send_related_documents'
+            digitalCertificateMode: 'digital_certificate_mode'
         };
 
         /**

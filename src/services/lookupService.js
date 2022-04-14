@@ -39,7 +39,6 @@ module.exports = function (app) {
         self.searchDefaultView = 'searchDefaultView';
         self.userDistWFView = 'userDistWFView';
         self.seqWFEmailSettings = 'seqEmailSettings';
-        self.wfRelatedBookStatus = 'wfRelatedBookStatus';
 
         // this propertyConfiguration related to the property configurations Service.
         self.propertyConfigurations = {

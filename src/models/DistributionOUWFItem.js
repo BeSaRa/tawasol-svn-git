@@ -7,7 +7,7 @@ module.exports = function (app) {
             self.toOUId = null;
             self.originality = null;
             self.hasRegistry = false;
-            self.sendRelatedDocs = rootEntity.getGlobalSettings().isSendToRelatedDocsAllowed();
+            self.sendRelatedDocs = rootEntity.getGlobalSettings().allowSendWFRelatedBook;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];

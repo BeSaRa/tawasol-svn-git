@@ -51,6 +51,7 @@ module.exports = function (app) {
             self.barcodeElements = new BarcodeSetting();
             self.deadlineReminderDays = null;
             self.thumbnailMode = 0;
+            self.allowSendWFRelatedBook = true;
             self.allowTwoWaysRelatedBook = false;
             self.removeMAIPSecurity = true;
             self.separateActionOnTransfer = false;
@@ -71,7 +72,6 @@ module.exports = function (app) {
             self.returnToCentralArchive = false;
             self.excludedPermissionList = [];
             self.mergeCommentsWithTrackingSheet = false;
-            self.wFRelatedBookStatus = 0;
 
             //endregion
 
@@ -109,8 +109,7 @@ module.exports = function (app) {
                 'useCentralArchiveInternally',
                 // 'escalationProcess',
                 'simpleCorsSiteSearch',
-                'theme',
-                'wFRelatedBookStatus'
+                'theme'
             ];
 
             if (model)
@@ -173,10 +172,6 @@ module.exports = function (app) {
 
             GlobalSetting.prototype.isStampModuleEnabled = function () {
                 return this.stampModuleEnabled;
-            };
-
-            GlobalSetting.prototype.isSendToRelatedDocsAllowed = function () {
-                return this.wFRelatedBookStatus !== 0;
             };
 
             // don't remove CMSModelInterceptor from last line

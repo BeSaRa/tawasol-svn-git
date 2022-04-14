@@ -115,7 +115,7 @@ module.exports = function (app) {
         };
         _setEscalationProcess();
 
-        if (self.globalSettings.isSendToRelatedDocsAllowed()) {
+        if (self.globalSettings.allowSendWFRelatedBook) {
             self.distWorkflowItem.sendRelatedDocs = true;
         }
 
