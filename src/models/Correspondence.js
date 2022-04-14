@@ -113,6 +113,7 @@ module.exports = function (app) {
             self.highlights = null;
             self.transfered = false;
             self.copyAllAttachments = false;
+            self.additionalRegistryOUs = [];
 
             self.externalImportData = null; // set the value from external data source import popup. used in upload content
 

@@ -1672,7 +1672,15 @@ module.exports = function (app) {
                 }
 
                 if (self.launchAfterSave) {
-                    self.correspondence.launchWorkFlow(null, 'forward', 'favorites')
+                    var defaultTab = 'favorites';
+                    if (employeeService.isCentralArchive() && self.correspondence.hasContent()) {
+                        defaultTab = {
+                            tab: 'registry_organizations',
+                            registryOU: self.correspondence.registryOU,
+                            ou: self.correspondence.ou || self.correspondence.registryOU
+                        }
+                    }
+                    self.correspondence.launchWorkFlow(null, 'forward', defaultTab)
                         .then(function () {
                             dialog.hide({
                                 content: self.savedPdfContent,

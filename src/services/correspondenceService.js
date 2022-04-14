@@ -727,7 +727,7 @@ module.exports = function (app) {
                 }).catch(function (error) {
                     if (errorCode.checkIf(error, 'ERROR_SAVE_DOC_ALREADY_MODIFIED_BY_OTHER_USER') === true) {
                         dialog.infoMessage(langService.get('error_save_document_already_modified_by_other_user'));
-                        return $q.reject(error);
+                        return $q.reject(false);
                     }
                     return $q.reject(error);
                 });
@@ -5699,7 +5699,7 @@ module.exports = function (app) {
                 locals: {
                     registryOrganizations: registryOrganizations,
                     documentRegOUId: document.registryOU,
-                    selectedRecords: document.hasOwnProperty('additionalRegistryOUs') ? document.additionalRegistryOUs : []
+                    selectedRecords: document.additionalRegistryOUs
                 }
             })
         }
