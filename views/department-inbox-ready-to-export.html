@@ -46,7 +46,7 @@
                                                     <md-icon md-svg-icon="stop" class="action-green"></md-icon>
                                                 </md-button>
 
-                                                <md-button ng-if="ctrl.employeeService.hasPermissionTo('BULK_EXPORT')"
+                                                <md-button ng-if="ctrl.canShowBulkExport()"
                                                            class="md-icon-button" aria-label="{{lang.inbox_export}}"
                                                            tooltip="{{lang.inbox_export}}"
                                                            ng-click="ctrl.exportReadyToExportBulk($event)">

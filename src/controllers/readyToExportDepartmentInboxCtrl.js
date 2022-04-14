@@ -1149,6 +1149,20 @@ module.exports = function (app) {
         };
 
         /**
+         * @description can show bulk export button
+         * @returns {boolean|*}
+         */
+        self.canShowBulkExport = function () {
+            if (!self.employeeService.hasPermissionTo('BULK_EXPORT')) {
+                return false;
+            }
+
+            return _.every(self.selectedReadyToExports, (item) => {
+                return item.isInternalOutgoing() ? rootEntity.isAllowExportInternalOutgoingEnabled() : true;
+            });
+        }
+
+        /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
          */
