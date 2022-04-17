@@ -209,7 +209,7 @@ module.exports = function (app) {
             };
 
             DistributionUserWFItem.prototype.isSendRelatedDocsAllowed = function () {
-                return this.regOuId && this.regOuId === employeeService.getEmployee().getOUID();
+                return this.regOuId && this.regOuId === employeeService.getEmployee().getRegistryOUID();
             }
 
             // don't remove CMSModelInterceptor from last line

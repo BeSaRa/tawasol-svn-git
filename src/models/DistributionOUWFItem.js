@@ -153,7 +153,7 @@ module.exports = function (app) {
                 return this;
             }
             DistributionOUWFItem.prototype.isSendRelatedDocsAllowed = function () {
-                return this.toOUId === employeeService.getEmployee().getOUID();
+                return this.toOUId === employeeService.getEmployee().getRegistryOUID();
             }
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
