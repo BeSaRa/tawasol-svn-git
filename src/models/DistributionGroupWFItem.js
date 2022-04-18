@@ -104,7 +104,7 @@ module.exports = function (app) {
             };
 
             DistributionGroupWFItem.prototype.isSendRelatedDocsAllowed = function () {
-                return false
+                return false;
             }
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
