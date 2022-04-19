@@ -24,6 +24,7 @@ module.exports = function (app) {
         self.entityTypes = [];
         self.employeeService = employeeService;
         self.integrationLists = {};
+        self.rootEntity = rootEntity.returnRootEntity().rootEntity;
 
         $timeout(function () {
             self.defaultEntityTypes = correspondenceService.getDefaultEntityTypesForDocumentClass(self.documentClass);
@@ -37,12 +38,13 @@ module.exports = function (app) {
                         });
                 })
 
-            managerService.loadListsForHRIntegration()
-                .then(function (result) {
-                    self.integrationLists = result;
-                });
+            if (self.rootEntity.hrEnabled) {
+                managerService.loadListsForHRIntegration()
+                    .then(function (result) {
+                        self.integrationLists = result;
+                    });
+            }
         });
-        self.rootEntity = rootEntity.returnRootEntity().rootEntity;
 
 
         self.showEntityFrom = false;
