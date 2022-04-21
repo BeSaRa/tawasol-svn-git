@@ -4,7 +4,7 @@
         .config(function (urlServiceProvider, configurationServiceProvider) {
             'ngInject';
             urlServiceProvider
-                .setEnvironment('trunk')
+                .setEnvironment('testFeatures')
                 .setBaseUrl('fix', 'http://100.100.3.220:9080/CMSServicesFix/service')
                 .setBaseUrl('trunk', 'http://100.100.3.220:5001/CMSServices/service')
                 .setBaseUrl('stage', 'http://MDPS-FNWEB01/CMSServices/service')

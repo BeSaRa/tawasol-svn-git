@@ -1464,6 +1464,7 @@ module.exports = function (app) {
                 url: '/localization',
                 templateUrl: templateProvider.getView('localization'),
                 controller: 'localizationCtrl',
+                permission: 'menu_item_localization',
                 controllerAs: 'ctrl'
             })
             .state('app.inbox.group-inbox', {
