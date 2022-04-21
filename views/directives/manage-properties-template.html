@@ -216,10 +216,10 @@
                                 {{lang[type.key]}}
                             </md-option>
                         </md-select>
-                        <div class="hint hint-reference" ng-if="ctrl.document.isInternalPersonal()">
+                        <div class="red-text hint hint-reference" ng-if="ctrl.document.isInternalPersonal()">
                             {{lang.hint_internal_personal}}
                         </div>
-                        <div class="hint hint-reference" ng-if="!ctrl.document.isInternalPersonal()">
+                        <div class="red-text hint hint-reference" ng-if="!ctrl.document.isInternalPersonal()">
                             {{lang.hint_internal_department}}
                         </div>
                         <div ng-messages="outgoing_properties.type.$error">
