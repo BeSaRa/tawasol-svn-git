@@ -624,7 +624,7 @@ module.exports = function (app) {
                                 organizationService
                                     .loadOrganizations()
                                     .then(function () {
-                                        if (self.organization.hasRegistry && !self.organization.isPrivateRegistry && self.ouDistributionLists.length) {
+                                        if (self.organization.hasRegistry && self.ouDistributionLists.length) {
                                             organizationService
                                                 .updateDistributionListsForRegOU(self.organization, self.ouDistributionLists)
                                                 .then(function () {
@@ -709,7 +709,7 @@ module.exports = function (app) {
 
                                 self.model = angular.copy(self.organization);
 
-                                if (self.organization.hasRegistry && !self.organization.isPrivateRegistry && self.ouDistributionLists.length) {
+                                if (self.organization.hasRegistry && self.ouDistributionLists.length) {
                                     organizationService
                                         .updateDistributionListsForRegOU(self.organization, self.ouDistributionLists)
                                         .then(function () {
