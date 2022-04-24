@@ -26,16 +26,16 @@ module.exports = function (app) {
                     }
                 };
 
-                angular
+                /*angular
                     .element($window)
                     .on('keydown', function (e) {
                         var code = e.which || e.keyCode;
 
-                        if (e.altKey && e.ctrlKey && e.shiftKey && code === 67 && tokenService.getToken()) {
+                        if (e.altKey && e.ctrlKey && e.shiftKey && code === 82 && tokenService.getToken()) {
                             e.preventDefault();
                             cacheService.refreshCache();
                         }
-                    });
+                    });*/
             }
         }
     })
