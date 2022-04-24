@@ -129,8 +129,10 @@ module.exports = function (app) {
         self.recallSentItem = function (sentItem, $event, ignoreMessage) {
             return self.showReasonDialog('recall_reason', $event)
                 .then(function (reason) {
-                    return $http.put((urlService.departmentInboxes + '/' + sentItem.getInfo().vsId + '/recall'), {
-                        comment: reason
+                    return $http.put((urlService.departmentInboxes + '/recall'), {
+                        comment: reason,
+                        vsId: sentItem.getInfo().vsId,
+                        subSiteId: sentItem.subSiteToId
                     }).then(function (result) {
                         return result.data.rs;
                     }).catch(function (error) {
