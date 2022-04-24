@@ -1029,7 +1029,7 @@ module.exports = function (app) {
                                     });
                                 });
                         },
-                        selectiveDepartmentsList: function(userSpecificDistributionWFService){
+                        selectiveDepartmentsList: function (userSpecificDistributionWFService) {
                             'ngInject';
                             return userSpecificDistributionWFService.loadSelectiveDepartments(ouApplicationUser.getApplicationUserId(), ouApplicationUser.getOuId());
                         }
@@ -1063,7 +1063,7 @@ module.exports = function (app) {
                         availableProxies: function (ouApplicationUserService) {
                             'ngInject';
                             return ouApplicationUserService
-                                .getAvailableProxies(null, true, ouApplicationUser.applicationUser.id, true)
+                                .getAvailableProxies(null, false, ouApplicationUser.applicationUser.id, true)
                                 .then(function (result) {
                                     return result
                                 })
