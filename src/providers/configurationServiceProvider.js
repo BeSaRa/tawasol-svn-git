@@ -54,6 +54,7 @@ module.exports = function (app) {
                 "text-highlighter",
                 "ink-eraser",
                 "ink-signature",
+                "signature",
                 "image",
                 "note",
                 "text",

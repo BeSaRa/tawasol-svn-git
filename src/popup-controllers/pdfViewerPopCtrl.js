@@ -418,7 +418,7 @@ module.exports = function (app) {
                 approveButton.disabled = true;
                 _addButtonToToolbar(toolbarInstance, approveButton);
                 toolbarInstance = toolbarInstance.map(function (toolbarItem) {
-                    if (toolbarItem.type === 'ink-signature') {
+                    if (toolbarItem.type === 'ink-signature' || toolbarItem.type === 'signature') {
                         toolbarItem.disabled = true;
                     }
                     return toolbarItem;
