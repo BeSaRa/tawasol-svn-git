@@ -169,8 +169,14 @@ module.exports = function (app) {
             },
             isDueDatePassed: gridService.getDueDatePassed(gridService.grids.inbox.userFollowupBookByUser),
             setIsDueDatePassed: function ($event) {
-                gridService.setDueDatePassed(gridService.grids.inbox.userFollowupBookByUser, self.grid.isDueDatePassed);
-                self.filterDueDatePassed();
+                _initSearchCriteria()
+                    .then(function () {
+                        gridService.setDueDatePassed(gridService.grids.inbox.userFollowupBookByUser, self.grid.isDueDatePassed);
+                        if (hasQueryParams()) {
+                            self.reloadFollowupBooks(1, true);
+                        }
+                        self.filterDueDatePassed();
+                    });
             }
         };
 
@@ -212,13 +218,15 @@ module.exports = function (app) {
             self.searchCriteria = new FollowupBookCriteria({
                 userId: self.selectedUser,
                 userOUID: self.selectedOrganization,
-                securityLevel: self.selectedSecurityLevels
+                securityLevel: self.selectedSecurityLevels,
+                isDelayed: self.grid.isDueDatePassed
             });
-            self.searchCriteriaCopy = angular.copy(self.searchCriteria);
             if (!skipDates) {
                 self.searchCriteria.fromFollowupDate = moment().subtract(configurationService.FOLLOWUP_BOOK_FILTER_START_BEFORE_VALUE, configurationService.FOLLOWUP_BOOK_FILTER_START_BEFORE_TYPE).toDate();
                 self.searchCriteria.toFollowupDate = moment(generator.getFutureDate(30)).endOf("day").toDate();
             }
+            self.searchCriteriaCopy = angular.copy(self.searchCriteria);
+
             return $q.resolve(true);
         };
 
@@ -229,7 +237,7 @@ module.exports = function (app) {
         self.onChangeSecurityLevel = function () {
             _initSearchCriteria()
                 .then(function () {
-                    self.reloadFollowupBooks(1);
+                    self.reloadFollowupBooks(1, true);
                 });
         };
 
@@ -240,29 +248,27 @@ module.exports = function (app) {
         self.onChangeUser = function () {
             _initSearchCriteria()
                 .then(function () {
-                    self.reloadFollowupBooks(1);
+                    self.reloadFollowupBooks(1, true);
                 });
         };
 
         /**
          * @description reload user followup books
          * @param pageNumber
-         * @param reloadByStats
+         * @param resetQueryParams
          */
-        self.reloadFollowupBooks = function (pageNumber, reloadByStats) {
+        self.reloadFollowupBooks = function (pageNumber, resetQueryParams) {
             if (!self.isValidBasicCriteria()) {
                 return;
             }
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             var promise = null;
-            if (reloadByStats && hasQueryParams()) {
+            if (!resetQueryParams && hasQueryParams()) {
                 promise = followUpUserService.loadUserFollowupBooksByStats(self.selectedUser, self.selectedOrganization);
             } else {
                 promise = followUpUserService.loadUserFollowupBooksByCriteria(null, self.searchCriteria);
-                if (hasQueryParams()) {
-                    $state.go('app.inbox.user-followup', {user: null, ou: null, isDelayed: null});
-                }
+                self.resetQueryParams();
             }
 
             return promise
@@ -1089,19 +1095,25 @@ module.exports = function (app) {
                 self.selectedOrganization = self.organizations.find((org) => org.id === Number(ouId));
                 self.getAppUsersForOU(null, true)
                     .then(function () {
-                        _initSearchCriteria()
+                        _initSearchCriteria(true)
                             .then(function () {
-                                self.reloadFollowupBooks(1, true);
+                                self.reloadFollowupBooks(1);
                             });
                     });
             }
         };
 
         function hasQueryParams() {
-            var userId = $stateParams.user, ouId = $stateParams.ou,
-                isDelayed = $stateParams['isDelayed'];
+            var userId = $state.params.user, ouId = $state.params.ou,
+                isDelayed = $state.params['isDelayed'];
 
             return userId && ouId && isDelayed !== undefined && isDelayed.toLowerCase() === 'true';
+        }
+
+        self.resetQueryParams = function () {
+            if (hasQueryParams()) {
+                $state.go('app.inbox.user-followup', {user: null, ou: null, isDelayed: null});
+            }
         }
 
         // to open Folder item if it exists.
