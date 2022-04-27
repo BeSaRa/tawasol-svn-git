@@ -239,6 +239,11 @@ module.exports = function (app) {
                         attachment.isDeletable = self.checkAttachmentIsDeletable(info, attachment);
                         attachment = generator.generateInstance(attachment, Attachment, self._sharedMethods);
                         attachment = generator.interceptReceivedInstance('Attachment', attachment);
+
+                        if (!attachment.hasOwnProperty('vsId')) {
+                            throw new Error('INVALID_OBJECT');
+                        }
+
                         return attachment;
                     })
                         .catch(function (error) {
@@ -247,6 +252,9 @@ module.exports = function (app) {
                                 return $q.reject(error);
                             } else if (errorCode.checkIf(error, 'CANNOT_EXPORT_TOO_MANY_ATTACHMENTS_OR_LINKED_DOCUMENTS') === true) {
                                 dialog.errorMessage(generator.getTranslatedError(error));
+                                return $q.reject(error);
+                            } else if (error.message === 'INVALID_OBJECT') {
+                                dialog.errorMessage(langService.get('msg_error_occurred_while_processing_request'));
                                 return $q.reject(error);
                             }
 
@@ -407,6 +415,11 @@ module.exports = function (app) {
                         attachment.isDeletable = self.checkAttachmentIsDeletable(info, attachment);
                         attachment = generator.generateInstance(attachment, Attachment, self._sharedMethods);
                         attachment = generator.interceptReceivedInstance('Attachment', attachment);
+
+                        if (!attachment.hasOwnProperty('vsId')) {
+                            throw new Error('INVALID_OBJECT');
+                        }
+
                         return attachment;
                     })
                         .catch(function (error) {
@@ -418,6 +431,9 @@ module.exports = function (app) {
                                 return $q.reject(error);
                             } else if (errorCode.checkIf(error, 'ATTACHMENT_RESTRICTED_TO_MODIFY_AFTER_BOOK_AUTHORIZATION') === true) {
                                 dialog.errorMessage(langService.get('attachment_restricted_to_modify_after_book_authorization'));
+                                return $q.reject(error);
+                            } else if (error.message === 'INVALID_OBJECT') {
+                                dialog.errorMessage(langService.get('msg_error_occurred_while_processing_request'));
                                 return $q.reject(error);
                             }
 
