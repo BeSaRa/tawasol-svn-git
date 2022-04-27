@@ -234,15 +234,15 @@ module.exports = function (app) {
                     }
 
                     return promise.then(function (result) {
+                        if (!result.data.hasOwnProperty('rs')) {
+                            throw new Error('INVALID_OBJECT');
+                        }
+
                         attachment.vsId = result.data.rs;
                         attachment.createdBy = _getEmployeeDomainName();
                         attachment.isDeletable = self.checkAttachmentIsDeletable(info, attachment);
                         attachment = generator.generateInstance(attachment, Attachment, self._sharedMethods);
                         attachment = generator.interceptReceivedInstance('Attachment', attachment);
-
-                        if (!attachment.hasOwnProperty('vsId')) {
-                            throw new Error('INVALID_OBJECT');
-                        }
 
                         return attachment;
                     })
@@ -412,13 +412,13 @@ module.exports = function (app) {
                     }
 
                     return promise.then(function (result) {
+                        if (!result.data.hasOwnProperty('rs')) {
+                            throw new Error('INVALID_OBJECT');
+                        }
+
                         attachment.isDeletable = self.checkAttachmentIsDeletable(info, attachment);
                         attachment = generator.generateInstance(attachment, Attachment, self._sharedMethods);
                         attachment = generator.interceptReceivedInstance('Attachment', attachment);
-
-                        if (!attachment.hasOwnProperty('vsId')) {
-                            throw new Error('INVALID_OBJECT');
-                        }
 
                         return attachment;
                     })
