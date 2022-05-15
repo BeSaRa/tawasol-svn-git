@@ -339,7 +339,8 @@ module.exports = function (app) {
                 'dc': provider.dc,
                 'userName': provider.userName,
                 'password': provider.password,
-                'tawasolOU': provider.tawasolOU
+                'tawasolOU': provider.tawasolOU,
+                'isSSL': provider.isSSL
             };
             return $http
                 .post((urlService.connectionTest + '/' + 'ldap'), ldapConnection)
