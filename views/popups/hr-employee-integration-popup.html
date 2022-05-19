@@ -98,7 +98,7 @@
                                         <md-select id="hrOUName" name="hrOUName"
                                                    ng-model="ctrl.criteria.hrOUName">
                                             <md-option ng-value="null">{{lang.none}}</md-option>
-                                            <md-option ng-value="option.arName"
+                                            <md-option md-truncate ng-value="option.arName"
                                                        ng-repeat="option in ctrl.integrationLists.hrOUName track by $index">
                                                 {{option.getTranslatedName()}}
                                             </md-option>

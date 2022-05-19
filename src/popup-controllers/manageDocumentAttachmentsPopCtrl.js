@@ -5,7 +5,6 @@ module.exports = function (app) {
         self.controllerName = 'manageDocumentAttachmentsPopCtrl';
 
         self.activeAttachment = null;
-
         self.closeDocumentAttachments = function () {
             if (!self.activeAttachment) {
                 dialog.cancel(self.attachments);
@@ -38,7 +37,7 @@ module.exports = function (app) {
          * @description set selected attachment ids to Attachment object when open popup
          */
         function setSelectedAttachmentIds() {
-            if (!self.selectedAttachmentIds.length) {
+            if (!self.selectedAttachmentIds || !self.selectedAttachmentIds.length) {
                 return;
             }
             self.selectedAttachments = self.attachments.filter(function (attachment) {
