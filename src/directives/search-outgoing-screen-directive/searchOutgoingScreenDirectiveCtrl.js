@@ -207,7 +207,7 @@ module.exports = function (app) {
             classifications = classifications || self.mainClassificationsCopy;
 
             return classifications.filter(function (classification) {
-                return classification.classification.docClassId !== null && classification.classification.docClassId === 0
+                return classification.classification.docClassId === null || classification.classification.docClassId === 0
             });
         }
 
