@@ -73,6 +73,7 @@ module.exports = function (app) {
         self.isUserInboxCtrl = true;
 
         self.langService = langService;
+        self.canAutoReload = true;
 
         self.bySender = false;
 
@@ -420,9 +421,10 @@ module.exports = function (app) {
         /**
          * @description Reload the grid of user inboxes
          * @param pageNumber
+         * @param isAutoReload
          * @return {*|Promise<WorkItem>}
          */
-        self.reloadUserInboxes = function (pageNumber) {
+        self.reloadUserInboxes = function (pageNumber, isAutoReload) {
             if (ignoreReload) {
                 // ignoreReload is used from tasks
                 return $q.resolve([]);
@@ -443,7 +445,7 @@ module.exports = function (app) {
                 self.starredGrid.progress = defer.promise;
             }
             return userInboxService
-                .loadUserInboxes(true)
+                .loadUserInboxes(true, (isAutoReload ? 'auto' : null))
                 .then(function (result) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
@@ -2599,17 +2601,13 @@ module.exports = function (app) {
 
         self.refreshInbox = function (time) {
             $timeout(function () {
-                $state.is('app.inbox.user-inbox') && self.reloadUserInboxes(self.grid.page);
+                $state.is('app.inbox.user-inbox') && self.reloadUserInboxes(self.grid.page, true);
             }, time)
                 .then(function () {
                     $state.is('app.inbox.user-inbox') && self.refreshInbox(time);
                 });
         };
 
-
-        if (employeeService.getEmployee().getIntervalMin()) {
-            self.refreshInbox(employeeService.getEmployee().getIntervalMin());
-        }
 
         self.printResult = function (printSelected, $event) {
             var printTitle = langService.get('menu_item_user_inbox');
@@ -2720,6 +2718,10 @@ module.exports = function (app) {
                 _prepareFilters();
             });
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+
+            if (employeeService.getEmployee().getIntervalMin() && self.canAutoReload) {
+                self.refreshInbox(employeeService.getEmployee().getIntervalMin());
+            }
         }
 
     });

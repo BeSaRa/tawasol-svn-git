@@ -36,8 +36,12 @@ module.exports = function (app) {
 
             return $q.when(items);
         };
+
         /**
          * @description Load the user inboxes from server.
+         * @param excludeLoading
+         * @param afterTime - Can be 'auto' | null | undefined | time difference between now and interval for user
+         * @param returnResult
          * @returns {Promise|userInboxes}
          */
         self.loadUserInboxes = function (excludeLoading, afterTime, returnResult) {
@@ -45,7 +49,11 @@ module.exports = function (app) {
                 'optional-fields': 'registeryOu'
             };
             if (afterTime) {
-                params.afterTime = (afterTime + '').substr(0, ('' + afterTime).length - 3);
+                if (afterTime === 'auto') {
+                    params.afterTime = '';
+                } else {
+                    params.afterTime = (afterTime + '').substr(0, ('' + afterTime).length - 3);
+                }
             }
             return $http.get(urlService.userInbox + '/all-mails', {
                 excludeLoading: !!excludeLoading,
