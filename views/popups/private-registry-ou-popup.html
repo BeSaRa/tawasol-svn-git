@@ -36,61 +36,68 @@
                         </md-button>
                     </div>
                 </div>
-                <md-card ng-if="ctrl.privateRegOusGrid.length" class="card-overlay">
-                    <md-table-container>
-                        <table md-table
-                               md-row-select multiple ng-model="ctrl.selectedPrivateRegOusGrid">
-                            <thead md-head>
-                            <tr md-row>
-                                <th ng-if="ctrl.selectedPrivateRegOusGrid.length" colspan="3"
-                                    md-column>
-                                    <div layout="row" layout-align="start center">
-                                        <span>{{ctrl.selectedPrivateRegOusGrid.length}} {{lang.items_selected}} </span>
-                                        <span flex></span>
-                                        <div>
+                <div class="row" ng-if="ctrl.privateRegOusGrid.length">
+                    <md-switch id="asTwoWay" name="asTwoWay"
+                               aria-label="{{lang.two_way_mapping}}"
+                               ng-model="ctrl.asTwoWay">
+                        <label>{{lang.two_way_mapping}} : {{ctrl.asTwoWay ? lang.yes : lang.no}}</label>
+                    </md-switch>
+                    <md-card class="card-overlay">
+                        <md-table-container>
+                            <table md-table
+                                   md-row-select multiple ng-model="ctrl.selectedPrivateRegOusGrid">
+                                <thead md-head>
+                                <tr md-row>
+                                    <th ng-if="ctrl.selectedPrivateRegOusGrid.length" colspan="5"
+                                        md-column>
+                                        <div layout="row" layout-align="start center">
+                                            <span>{{ctrl.selectedPrivateRegOusGrid.length}} {{lang.items_selected}} </span>
+                                            <span flex></span>
+                                            <div>
+                                                <md-button class="md-icon-button"
+                                                           ng-click="ctrl.removeBulkPrivateRegistryOu()">
+                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedPrivateRegOusGrid.length" md-column>
+                                        <span>{{lang.arabic_name}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedPrivateRegOusGrid.length" md-column>
+                                        <span>{{lang.english_name}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedPrivateRegOusGrid.length" md-column>
+                                        <span>{{lang.actions}}</span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row md-select="organization"
+                                    ng-repeat="organization in ctrl.privateRegOusGrid track by $index">
+                                    <td md-cell>{{organization.arName}}</td>
+                                    <td md-cell>{{organization.enName}}</td>
+                                    <td md-cell>
+                                        <div layout="row">
                                             <md-button class="md-icon-button"
-                                                       ng-click="ctrl.removeBulkPrivateRegistryOu()">
+                                                       ng-click="ctrl.removePrivateRegistryOu(organization)">
                                                 <md-icon md-svg-icon="delete"></md-icon>
                                             </md-button>
                                         </div>
-                                    </div>
-                                </th>
-                                <th ng-if="!ctrl.selectedPrivateRegOusGrid.length" md-column>
-                                    <span>{{lang.arabic_name}}</span>
-                                </th>
-                                <th ng-if="!ctrl.selectedPrivateRegOusGrid.length" md-column>
-                                    <span>{{lang.english_name}}</span>
-                                </th>
-                                <th ng-if="!ctrl.selectedPrivateRegOusGrid.length" md-column>
-                                    <span>{{lang.actions}}</span>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody md-body>
-                            <tr md-row md-select="organization"
-                                ng-repeat="organization in ctrl.privateRegOusGrid track by $index">
-                                <td md-cell>{{organization.arName}}</td>
-                                <td md-cell>{{organization.enName}}</td>
-                                <td md-cell>
-                                    <div layout="row">
-                                        <md-button class="md-icon-button"
-                                                   ng-click="ctrl.removePrivateRegistryOu(organization)">
-                                            <md-icon md-svg-icon="delete"></md-icon>
-                                        </md-button>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <md-table-pagination
-                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                md-limit-options="ctrl.grid.limitOptions"
-                                md-limit="ctrl.grid.limit"
-                                md-page="ctrl.grid.page"
-                                md-total="{{ctrl.privateRegOusGrid.length}}" md-page-select>
-                        </md-table-pagination>
-                    </md-table-container>
-                </md-card>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit"
+                                    md-page="ctrl.grid.page"
+                                    md-total="{{ctrl.privateRegOusGrid.length}}" md-page-select>
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
             </form>
         </div>
     </md-dialog-content>

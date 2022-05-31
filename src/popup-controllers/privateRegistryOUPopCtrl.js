@@ -6,6 +6,7 @@ module.exports = function (app) {
 
         self.allRegOus = registryOrganizations;
         self.selectedPrivateRegOus = [];
+        self.asTwoWay = false;
 
         self.privateRegOusGrid = [];
         self.selectedPrivateRegOusGrid = [];
@@ -28,7 +29,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.savePrivateRegistryOUs = function ($event) {
-            organizationService.addPrivateRegistryOUs(self.organization, self.privateRegOusGrid)
+            organizationService.addPrivateRegistryOUs(self.organization, self.privateRegOusGrid, self.asTwoWay)
                 .then(function () {
                     dialog.hide();
                 });

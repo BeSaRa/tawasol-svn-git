@@ -767,10 +767,10 @@ module.exports = function (app) {
         /**
          * @description add Private Registry Ous
          */
-        self.addPrivateRegistryOUs = function (organization, privateOus) {
+        self.addPrivateRegistryOUs = function (organization, privateOus, asTwoWay) {
             organization = organization.hasOwnProperty('id') ? organization.id : organization;
             privateOus = _.map(privateOus, 'id');
-            return $http.post(urlService.privateRegistryOU + '/from-regou-id/bulk',
+            return $http.post(urlService.privateRegistryOU + '/from-regou-id/bulk?asTwoWay=' + asTwoWay,
                 {
                     first: organization,
                     second: privateOus
