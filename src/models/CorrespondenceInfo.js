@@ -51,6 +51,16 @@ module.exports = function (app) {
             CorrespondenceInfo.prototype.needToApprove = function () {
                 return (this.documentClass.toLowerCase() !== 'incoming') && (this.docStatus < 24) && !this.isPaper;
             };
+
+            CorrespondenceInfo.prototype.isOutgoingDocument = function () {
+                return this.docClassId === 0;
+            };
+            CorrespondenceInfo.prototype.isIncomingDocument = function () {
+                return this.docClassId === 1;
+            };
+            CorrespondenceInfo.prototype.isInternalDocument = function () {
+                return this.docClassId === 2;
+            };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('CorrespondenceInfo', 'init', this);

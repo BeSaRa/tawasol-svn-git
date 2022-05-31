@@ -5702,6 +5702,32 @@ module.exports = function (app) {
                     selectedRecords: document.additionalRegistryOUs
                 }
             })
+        };
+
+        self.recallInternalOutgoingCorrespondence = function (correspondence, skipConfirm) {
+            var info = correspondence.getInfo();
+            if (!info.isOutgoingDocument() || !correspondence.isInternalOutgoing()) {
+                toast.error(langService.get(langService.get('msg_only_internal_outgoing_can_be_recalled')));
+                return $q.reject(false);
+            }
+
+            var defer = $q.defer();
+            if (skipConfirm) {
+                defer.resolve(true);
+            } else {
+                dialog.confirmMessage(langService.get('confirm_recall').change({name: correspondence.getInfo().title}))
+                    .then(function () {
+                        defer.resolve(true);
+                    });
+            }
+            return defer.promise.then(function () {
+                return $http.put(urlService.outgoings + '/vsid/' + info.vsId + '/recall-internal', {})
+                    .then(function (result) {
+                        return result.data.sc === 200;
+                    }).catch(function (error) {
+                        return errorCode.showErrorDialog(error);
+                    });
+            })
         }
 
         $timeout(function () {
