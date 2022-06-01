@@ -1851,7 +1851,11 @@ module.exports = function (app) {
                 callback: self.recallInternalOutgoing,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return model.isInternalOutgoing() && employeeService.isSuperAdminUser() && model.docStatus === 25;
+                    var info = model.getInfo();
+                    if (!info.isOutgoingDocument()) {
+                        return false;
+                    }
+                    return model.isInternalOutgoing() && info.docStatus >= 24;
                 }
             },
             // Annotate Document
