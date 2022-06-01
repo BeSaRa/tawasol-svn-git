@@ -73,9 +73,15 @@ module.exports = function (app) {
                 .selectDepartmentToLogin(organization)
                 .then(function () {
                     self.employee = employeeService.getEmployee();
-                    $state.reload().then(function () {
+                    /*$state.reload().then(function () {
                         privateAnnouncementService.openPrivateAnnouncementsDialog(true);
-                    })
+                    })*/
+
+                    $state.transitionTo($state.current, {}, {
+                        reload: true, inherit: false
+                    }).then(function () {
+                        privateAnnouncementService.openPrivateAnnouncementsDialog(true);
+                    });
                 })
                 .catch(function (error) {
                     errorCode.checkIf(error, 'INACTIVE_USER_ENTITY', function () {

@@ -10,7 +10,9 @@ module.exports = function (app) {
                                               sidebarService,
                                               ResolveDefer,
                                               generator,
+                                              authenticationService,
                                               userFilterService,
+                                              $stateParams,
                                               correspondenceService,
                                               // userFilters,
                                               $state,
@@ -39,7 +41,7 @@ module.exports = function (app) {
                                               UserSubscription,
                                               userSubscriptionService,
                                               fromNotification,
-                                              emailItem,
+                                              //emailItem,
                                               gridService,
                                               WorkItem,
                                               configurationService,
@@ -68,6 +70,7 @@ module.exports = function (app) {
                 return self.getSortingKey('mainSiteSubSiteString', 'Information');
             }
         };
+        self.isUserInboxCtrl = true;
 
         self.langService = langService;
 
@@ -2590,7 +2593,7 @@ module.exports = function (app) {
                 })
         };
 
-        self.openEmailItem = function () {
+        self.openEmailItem = function (emailItem) {
             emailItem ? self.viewDocument(emailItem) : null;
         };
 
@@ -2602,8 +2605,6 @@ module.exports = function (app) {
                     $state.is('app.inbox.user-inbox') && self.refreshInbox(time);
                 });
         };
-        // to open Email item if it exists.
-        self.openEmailItem();
 
 
         if (employeeService.getEmployee().getIntervalMin()) {
@@ -2665,7 +2666,53 @@ module.exports = function (app) {
             }
         });
 
+        var _forceSwitchOU = function (ouId) {
+            authenticationService.selectDepartmentToLogin(ouId)
+                .then(function () {
+                    var newParams = {};
+                    Object.keys($stateParams).forEach(function (key) {
+                        if (key !== 'ouId') {
+                            newParams[key] = $stateParams[key];
+                        }
+                    })
+                    /*$state.go($state.current, newParams, {inherit:false});*/
+                    $state.transitionTo($state.current, newParams, {
+                        reload: true, inherit: false
+                    });
+                })
+                .catch(function (error) {
+                    errorCode.checkIf(error, 'INACTIVE_USER_ENTITY', function () {
+                        toast.error(langService.get('can_not_login_with_inactive_user_or_entity'));
+                    });
+                });
+        }
+
+        self.checkAndOpenEmail = function () {
+            var action = $stateParams.action, source = $stateParams.source,
+                wobNumber = $stateParams['wob-num'], ouId = $stateParams.ouId, item;
+
+            if (action && action === 'open' && source && source === 'email' && wobNumber) {
+                item = _.find(userInboxes, function (workItem) {
+                    return workItem.generalStepElm.workObjectNumber === wobNumber;
+                });
+                if (item) {
+                    self.openEmailItem(item);
+                } else {
+                    if (ouId) {
+                        _forceSwitchOU(ouId);
+                    } else {
+                        dialog.errorMessage(langService.get('work_item_not_found').change({
+                            wobNumber: wobNumber
+                        }));
+                    }
+                }
+            }
+        }
+
         self.$onInit = function () {
+            if (self.isUserInboxCtrl) {
+                self.checkAndOpenEmail();
+            }
             userFilterService.loadUserFilters().then(function (userFilters) {
                 self.userFilters = $filter('orderBy')(userFilters, 'sortOptionId');
                 _prepareFilters();

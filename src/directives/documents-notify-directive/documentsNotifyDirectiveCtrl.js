@@ -27,6 +27,7 @@ module.exports = function (app) {
             ignoreReload: false
         });
         userInboxCtrl.controllerName = 'documentsNotifyDirectiveCtrl';
+        userInboxCtrl.isUserInboxCtrl = false;
         angular.extend(this, userInboxCtrl);
 
         self.openNotificationMenu = function ($mdMenu) {

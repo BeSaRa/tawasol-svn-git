@@ -1008,7 +1008,7 @@ module.exports = function (app) {
             })
             // user inbox
             .state('app.inbox.user-inbox', {
-                url: '/user-inbox?action?source?wob-num',
+                url: '/user-inbox?action?source?wob-num?ouId',
                 templateUrl: templateProvider.getView('user-inbox'),
                 controller: 'userInboxCtrl',
                 controllerAs: 'ctrl',
@@ -1029,7 +1029,7 @@ module.exports = function (app) {
                     correspondenceSiteTypes: function (correspondenceSiteTypeService) {
                         'ngInject';
                         return correspondenceSiteTypeService.getCorrespondenceSiteTypes();
-                    },
+                    }/*,
                     emailItem: function (userInboxes, langService, dialog, _, $stateParams) {
                         'ngInject';
                         var action = $stateParams.action, source = $stateParams.source,
@@ -1047,7 +1047,7 @@ module.exports = function (app) {
                             })) : item;
                         }
                         return false;
-                    }
+                    }*/
 
                 }
             })
