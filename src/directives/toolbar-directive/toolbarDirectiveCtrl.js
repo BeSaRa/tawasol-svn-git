@@ -76,8 +76,15 @@ module.exports = function (app) {
                     /*$state.reload().then(function () {
                         privateAnnouncementService.openPrivateAnnouncementsDialog(true);
                     })*/
+                    var newParams = {};
+                    // use only default parameters # and identifier and remove all other params
+                    Object.keys($state.params).forEach(function (key) {
+                        if (key === '#' || key === 'identifier') {
+                            newParams[key] = $state.params[key];
+                        }
+                    });
 
-                    $state.transitionTo($state.current, {}, {
+                    $state.transitionTo($state.current, newParams, {
                         reload: true, inherit: false
                     }).then(function () {
                         privateAnnouncementService.openPrivateAnnouncementsDialog(true);
@@ -123,11 +130,11 @@ module.exports = function (app) {
             return self.employee.ouList.length > 10;
         }
 
-        self.currentUserOrganization= function(){
-            var ou =  self.employee.ouList.find(ou => {
-                 return ou.id === self.employee.userOrganization.id;
-             });
-             return ou.hasRegistry ? ou.getTranslatedName() : ou.regouInfo.getTranslatedName() + ' - ' + ou.getTranslatedName();         
-         }
+        self.currentUserOrganization = function () {
+            var ou = self.employee.ouList.find(ou => {
+                return ou.id === self.employee.userOrganization.id;
+            });
+            return ou.hasRegistry ? ou.getTranslatedName() : ou.regouInfo.getTranslatedName() + ' - ' + ou.getTranslatedName();
+        }
     });
 };

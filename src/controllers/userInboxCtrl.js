@@ -2670,6 +2670,7 @@ module.exports = function (app) {
             authenticationService.selectDepartmentToLogin(ouId)
                 .then(function () {
                     var newParams = {};
+                    // use all params except ouId because ouId is only to switch ou
                     Object.keys($stateParams).forEach(function (key) {
                         if (key !== 'ouId') {
                             newParams[key] = $stateParams[key];
@@ -2698,6 +2699,7 @@ module.exports = function (app) {
                 if (item) {
                     self.openEmailItem(item);
                 } else {
+                    // if ouId exists in url, switch the organization to given ouId
                     if (ouId) {
                         _forceSwitchOU(ouId);
                     } else {
