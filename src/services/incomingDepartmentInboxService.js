@@ -17,10 +17,17 @@ module.exports = function (app) {
 
         /**
          * @description Load the incoming department inbox items from server.
+         * @param ignoreTokenRefresh
          * @returns {Promise|incomingDepartmentInboxes}
          */
-        self.loadIncomingDepartmentInboxes = function () {
-            return $http.get(urlService.departmentInboxes + "/all-mails").then(function (result) {
+        self.loadIncomingDepartmentInboxes = function (ignoreTokenRefresh) {
+            var params = {};
+            if (ignoreTokenRefresh) {
+                params.ignoreTokenRefresh = true;
+            }
+            return $http.get(urlService.departmentInboxes + "/all-mails", {
+                params: params
+            }).then(function (result) {
                 self.incomingDepartmentInboxes = generator.generateCollection(result.data.rs, WorkItem, self._sharedMethods);
                 self.incomingDepartmentInboxes = generator.interceptReceivedCollection('WorkItem', self.incomingDepartmentInboxes);
                 return self.incomingDepartmentInboxes;
@@ -39,9 +46,9 @@ module.exports = function (app) {
          * @description Contains methods for CRUD operations for incoming department inbox items
          */
         self.controllerMethod = {
-            incomingDepartmentInboxReturn: function(incomingDepartmentInbox, $event){
+            incomingDepartmentInboxReturn: function (incomingDepartmentInbox, $event) {
                 return self.returnIncomingDepartmentInbox(incomingDepartmentInbox)
-                    .then(function(result){
+                    .then(function (result) {
                         toast.success(langService.get("return_specific_success").change({name: incomingDepartmentInbox.getNames()}));
                         return true;
                     });
@@ -70,16 +77,16 @@ module.exports = function (app) {
                         return response;
                     });
             },
-            incomingDepartmentInboxReceive: function(incomingDepartmentInbox, $event){
+            incomingDepartmentInboxReceive: function (incomingDepartmentInbox, $event) {
                 return self.receiveIncomingDepartmentInbox(incomingDepartmentInbox)
-                    .then(function(result){
+                    .then(function (result) {
                         toast.success(langService.get("receive_specific_success").change({name: incomingDepartmentInbox.getNames()}));
                         return true;
                     });
             },
-            incomingDepartmentInboxQuickReceive: function(incomingDepartmentInbox, $event){
+            incomingDepartmentInboxQuickReceive: function (incomingDepartmentInbox, $event) {
                 return self.quickReceiveIncomingDepartmentInbox(incomingDepartmentInbox)
-                    .then(function(result){
+                    .then(function (result) {
                         toast.success(langService.get("quick_receive_specific_success").change({name: incomingDepartmentInbox.getNames()}));
                         return result.data.rs;
                     });
@@ -108,7 +115,7 @@ module.exports = function (app) {
             var vsId = incomingDepartmentInbox.generalStepElm.vsId;
             var workObjectNumber = incomingDepartmentInbox.generalStepElm.workObjectNumber;
             return $http
-                .put(urlService.departmentInboxes+'/'+vsId+'/return/'+workObjectNumber)
+                .put(urlService.departmentInboxes + '/' + vsId + '/return/' + workObjectNumber)
                 .then(function (result) {
                     return result;
                 });
@@ -159,7 +166,7 @@ module.exports = function (app) {
             //var vsId = incomingDepartmentInbox.generalStepElm.vsId;
             var workObjectNumber = incomingDepartmentInbox.generalStepElm.workObjectNumber;
             return $http
-                .put(urlService.departmentInboxes+'/'+workObjectNumber+'/receive')
+                .put(urlService.departmentInboxes + '/' + workObjectNumber + '/receive')
                 .then(function (result) {
                     return result;
                 });
@@ -173,7 +180,7 @@ module.exports = function (app) {
         self.quickReceiveIncomingDepartmentInbox = function (incomingDepartmentInbox) {
             var workObjectNumber = incomingDepartmentInbox.generalStepElm.workObjectNumber;
             return $http
-                .put((urlService.departmentInboxes + '/'+workObjectNumber+'/'+'receive-quick'))
+                .put((urlService.departmentInboxes + '/' + workObjectNumber + '/' + 'receive-quick'))
                 .then(function (result) {
                     return result;
                 });

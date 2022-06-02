@@ -168,7 +168,7 @@ module.exports = function (app) {
             /*sentItemDepartmentInboxService.controllerMethod
              .sentItemDepartmentInboxTerminate(centralArchiveItem, $event)
              .then(function (result) {
-             self.reloadUserInboxes(self.grid.page)
+             self.reloadSentItemCentralArchives(self.grid.page)
              .then(function () {
              toast.success(langService.get("terminate_specific_success").change({name: centralArchiveItem.generalStepElm.docSubject}));
              new ResolveDefer(defer);

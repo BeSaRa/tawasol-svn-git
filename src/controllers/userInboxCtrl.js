@@ -73,7 +73,7 @@ module.exports = function (app) {
         self.isUserInboxCtrl = true;
 
         self.langService = langService;
-        self.canAutoReload = true;
+        self.isUserInboxCtrl = true; // true for userInboxCtrl, false for documentsNotifyDirectiveCtrl to avoid auto-refresh of grid from documentsNotifyDirectiveCtrl
 
         self.bySender = false;
 
@@ -445,7 +445,7 @@ module.exports = function (app) {
                 self.starredGrid.progress = defer.promise;
             }
             return userInboxService
-                .loadUserInboxes(true, (isAutoReload ? 'auto' : null))
+                .loadUserInboxes(true, null, !!isAutoReload)
                 .then(function (result) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
@@ -2719,7 +2719,7 @@ module.exports = function (app) {
             });
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
 
-            if (employeeService.getEmployee().getIntervalMin() && self.canAutoReload) {
+            if (employeeService.getEmployee().getIntervalMin() && self.isUserInboxCtrl) {
                 self.refreshInbox(employeeService.getEmployee().getIntervalMin());
             }
         }

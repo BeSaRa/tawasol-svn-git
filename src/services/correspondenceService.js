@@ -2602,10 +2602,17 @@ module.exports = function (app) {
 
         /**
          * @description load group inbox from service
+         * @param ignoreTokenRefresh
          */
-        self.loadGroupInbox = function () {
+        self.loadGroupInbox = function (ignoreTokenRefresh) {
+            var params = {};
+            if (ignoreTokenRefresh) {
+                params.ignoreTokenRefresh = true;
+            }
             return $http
-                .get(urlService.correspondenceWF.replace('wf', 'ou-queue/all-mails'))
+                .get(urlService.correspondenceWF.replace('wf', 'ou-queue/all-mails'), {
+                    params: params
+                })
                 .then(function (result) {
                     return generator.interceptReceivedCollection('WorkItem', generator.generateCollection(result.data.rs, WorkItem));
                 });
@@ -3577,13 +3584,18 @@ module.exports = function (app) {
         };
         /**
          * @description load central archive workItems
+         * @param ignoreTokenRefresh
          */
-        self.loadCentralArchiveWorkItems = function () {
-            return $http
-                .get(urlService.departmentWF + '/ready-to-export-central-archive?optional-fields=fromRegOU')
-                .then(function (result) {
-                    return generator.interceptReceivedCollection('WorkItem', generator.generateCollection(result.data.rs, WorkItem));
-                });
+        self.loadCentralArchiveWorkItems = function (ignoreTokenRefresh) {
+            var params = {};
+            if (ignoreTokenRefresh) {
+                params.ignoreTokenRefresh = true;
+            }
+            return $http.get(urlService.departmentWF + '/ready-to-export-central-archive?optional-fields=fromRegOU', {
+                params: params
+            }).then(function (result) {
+                return generator.interceptReceivedCollection('WorkItem', generator.generateCollection(result.data.rs, WorkItem));
+            });
         };
         /**
          * @description return from central archive to actual organization.

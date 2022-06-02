@@ -179,7 +179,7 @@ module.exports = function (app) {
             /*sentItemDepartmentInboxService.controllerMethod
              .sentItemDepartmentInboxTerminate(sentItemDepartmentInbox, $event)
              .then(function (result) {
-             self.reloadUserInboxes(self.grid.page)
+             self.reloadSentItemDepartmentInboxes(self.grid.page)
              .then(function () {
              toast.success(langService.get("terminate_specific_success").change({name: sentItemDepartmentInbox.generalStepElm.docSubject}));
              new ResolveDefer(defer);

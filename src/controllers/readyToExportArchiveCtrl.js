@@ -155,13 +155,14 @@ module.exports = function (app) {
         /**
          * @description Reload the grid of ready To Export
          * @param pageNumber
+         * @param isAutoReload
          * @return {*|Promise<U>}
          */
-        self.reloadReadyToExports = function (pageNumber) {
+        self.reloadReadyToExports = function (pageNumber, isAutoReload) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return correspondenceService
-                .loadCentralArchiveWorkItems()
+                .loadCentralArchiveWorkItems(!!isAutoReload)
                 .then(function (result) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
@@ -1696,7 +1697,7 @@ module.exports = function (app) {
 
         self.refreshGrid = function (time) {
             $timeout(function () {
-                $state.is('app.central-archive.ready-to-export') && self.reloadReadyToExports(self.grid.page);
+                $state.is('app.central-archive.ready-to-export') && self.reloadReadyToExports(self.grid.page, true);
             }, time)
                 .then(function () {
                     $state.is('app.central-archive.ready-to-export') && self.refreshGrid(time);

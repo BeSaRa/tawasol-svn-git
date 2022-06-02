@@ -16,9 +16,17 @@ module.exports = function (app) {
 
         self.reminders = [];
 
-        self.loadReminders = function () {
-            return $http
-                .get(urlService.tasks + '/calender-remainders')
+        /**
+         * @description Loads the reminders from server
+         * @param ignoreTokenRefresh
+         * @returns {*}
+         */
+        self.loadReminders = function (ignoreTokenRefresh) {
+            var params = {};
+            if (ignoreTokenRefresh) {
+                params.ignoreTokenRefresh = true;
+            }
+            return $http.get(urlService.tasks + '/calender-remainders', {params: params})
                 .then(function (result) {
                     self.reminders = generator.interceptReceivedCollection('TaskCalenderItem', generator.generateCollection(result.data.rs, TaskCalenderItem));
                     return self.reminders;

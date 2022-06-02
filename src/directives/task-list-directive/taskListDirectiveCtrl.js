@@ -19,7 +19,7 @@ module.exports = function (app) {
             $event.stopPropagation();
             $event.preventDefault();
             self.taskService
-                .loadReminders()
+                .loadReminders(false)
                 .then(function () {
                     $mdMenu.open();
                 });
@@ -38,7 +38,7 @@ module.exports = function (app) {
                 $interval.cancel(interval);
                 return;
             }
-            return self.taskService.loadReminders()
+            return self.taskService.loadReminders(true)
                 .catch(function () {
                     $interval.cancel(interval);
                     stopLoadingReminders = true;

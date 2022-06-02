@@ -14,7 +14,7 @@ module.exports = function (app) {
                                                              langService,
                                                              followupEmployeeInboxService) {
         'ngInject';
-        var self = this;
+        var self = this, interval;
         self.mailService = mailNotificationService;
 
         var userInboxCtrl = $controller('userInboxCtrl', {
@@ -128,7 +128,6 @@ module.exports = function (app) {
                     });
                 });
         };
-        var interval;
 
         if (!employeeService.isAdminUser() && desktopNotificationService.isDesktopNotificationAvailable()) {
             desktopNotificationService
@@ -149,7 +148,7 @@ module.exports = function (app) {
                     return;
                 }
                 if (Notification && Notification.permission === 'granted') {
-                    userInboxService.loadUserInboxes(true, (Date.now() - employeeService.getEmployee().getIntervalMin())).then(self.desktopNotify);
+                    userInboxService.loadUserInboxes(true, (Date.now() - employeeService.getEmployee().getIntervalMin()), true).then(self.desktopNotify);
                 }
                 return self.mailService.loadMailNotifications(self.mailService.notificationsRequestCount)
                     .catch(function () {

@@ -40,28 +40,24 @@ module.exports = function (app) {
         /**
          * @description Load the user inboxes from server.
          * @param excludeLoading
-         * @param afterTime - Can be 'auto' | null | undefined | time difference between now and interval for user
-         * @param returnResult
+         * @param afterTime - time difference between now and interval for user
+         * @param ignoreTokenRefresh
          * @returns {Promise|userInboxes}
          */
-        self.loadUserInboxes = function (excludeLoading, afterTime, returnResult) {
+        self.loadUserInboxes = function (excludeLoading, afterTime, ignoreTokenRefresh) {
             var params = {
                 'optional-fields': 'registeryOu'
             };
             if (afterTime) {
-                if (afterTime === 'auto') {
-                    params.afterTime = '';
-                } else {
-                    params.afterTime = (afterTime + '').substr(0, ('' + afterTime).length - 3);
-                }
+                params.afterTime = (afterTime + '').substr(0, ('' + afterTime).length - 3);
+            }
+            if (ignoreTokenRefresh) {
+                params.ignoreTokenRefresh = true;
             }
             return $http.get(urlService.userInbox + '/all-mails', {
                 excludeLoading: !!excludeLoading,
                 params: params
             }).then(function (result) {
-                if (returnResult)
-                    return result.data.rs;
-
                 self.userInboxes = generator.generateCollection(result.data.rs, WorkItem, self._sharedMethods);
                 //self.userInboxes = _.sortBy(self.userInboxes, 'generalStepElm.starred').reverse();
                 self.userInboxes = generator.interceptReceivedCollection('WorkItem', self.userInboxes);

@@ -125,13 +125,14 @@ module.exports = function (app) {
         /**
          * @description Reload the grid of returned department inbox item
          * @param pageNumber
+         * @param isAutoReload
          * @return {*|Promise<U>}
          */
-        self.reloadReturnedDepartmentInboxes = function (pageNumber) {
+        self.reloadReturnedDepartmentInboxes = function (pageNumber, isAutoReload) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return returnedDepartmentInboxService
-                .loadReturnedDepartmentInboxes()
+                .loadReturnedDepartmentInboxes(!!isAutoReload)
                 .then(function (result) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
@@ -1445,7 +1446,7 @@ module.exports = function (app) {
 
         self.refreshGrid = function (time) {
             $timeout(function () {
-                $state.is('app.department-inbox.returned') && self.reloadReturnedDepartmentInboxes(self.grid.page);
+                $state.is('app.department-inbox.returned') && self.reloadReturnedDepartmentInboxes(self.grid.page, true);
             }, time)
                 .then(function () {
                     $state.is('app.department-inbox.returned') && self.refreshGrid(time);

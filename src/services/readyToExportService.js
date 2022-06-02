@@ -23,10 +23,17 @@ module.exports = function (app) {
 
             /**
              * @description Load the ready To Exports from server.
+             * @param ignoreTokenRefresh
              * @returns {Promise|readyToExports}
              */
-            self.loadReadyToExports = function () {
-                return $http.get(urlService.readyToExports).then(function (result) {
+            self.loadReadyToExports = function (ignoreTokenRefresh) {
+                var params = {};
+                if (ignoreTokenRefresh) {
+                    params.ignoreTokenRefresh = true;
+                }
+                return $http.get(urlService.readyToExports, {
+                        params: params
+                }).then(function (result) {
                     self.readyToExports = generator.generateCollection(result.data.rs, WorkItem, self._sharedMethods);
                     self.readyToExports = generator.interceptReceivedCollection('WorkItem', self.readyToExports);
                     return self.readyToExports;

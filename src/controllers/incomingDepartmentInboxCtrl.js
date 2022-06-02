@@ -121,13 +121,14 @@ module.exports = function (app) {
         /**
          * @description Reload the grid of incoming department inbox item
          * @param pageNumber
+         * @param isAutoReload
          * @return {*|Promise<U>}
          */
-        self.reloadIncomingDepartmentInboxes = function (pageNumber) {
+        self.reloadIncomingDepartmentInboxes = function (pageNumber, isAutoReload) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return incomingDepartmentInboxService
-                .loadIncomingDepartmentInboxes()
+                .loadIncomingDepartmentInboxes(!!isAutoReload)
                 .then(function (result) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
@@ -1155,7 +1156,7 @@ module.exports = function (app) {
 
         self.refreshGrid = function (time) {
             $timeout(function () {
-                $state.is('app.department-inbox.incoming') && self.reloadIncomingDepartmentInboxes(self.grid.page);
+                $state.is('app.department-inbox.incoming') && self.reloadIncomingDepartmentInboxes(self.grid.page, true);
             }, time)
                 .then(function () {
                     $state.is('app.department-inbox.incoming') && self.refreshGrid(time);

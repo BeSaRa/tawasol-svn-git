@@ -151,12 +151,14 @@ module.exports = function (app) {
 
         /**
          * @description reload group Inbox grid
+         * @param pageNumber
+         * @param isAutoReload
          */
-        self.reloadGroupInbox = function (pageNumber) {
+        self.reloadGroupInbox = function (pageNumber, isAutoReload) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return correspondenceService
-                .loadGroupInbox()
+                .loadGroupInbox(!!isAutoReload)
                 .then(function (workItems) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
@@ -1897,7 +1899,7 @@ module.exports = function (app) {
 
         self.refreshGrid = function (time) {
             $timeout(function () {
-                $state.is('app.inbox.group-inbox') && self.reloadGroupInbox(self.grid.page);
+                $state.is('app.inbox.group-inbox') && self.reloadGroupInbox(self.grid.page, true);
             }, time)
                 .then(function () {
                     $state.is('app.inbox.group-inbox') && self.refreshGrid(time);

@@ -20,12 +20,18 @@ module.exports = function (app) {
 
         /**
          * @description Load the returned department inbox items from server.
+         * @param ignoreTokenRefresh
          * @returns {Promise|returnedDepartmentInboxes}
          */
-        self.loadReturnedDepartmentInboxes = function () {
-            return $http.get(urlService.departmentInboxes + '/returned').then(function (result) {
+        self.loadReturnedDepartmentInboxes = function (ignoreTokenRefresh) {
+            var params = {};
+            if (ignoreTokenRefresh) {
+                params.ignoreTokenRefresh = true;
+            }
+            return $http.get(urlService.departmentInboxes + '/returned', {
+                params: params
+            }).then(function (result) {
                 self.returnedDepartmentInboxes = generator.generateCollection(result.data.rs, WorkItem, self._sharedMethods);
-
                 self.returnedDepartmentInboxes = generator.interceptReceivedCollection('WorkItem', self.returnedDepartmentInboxes);
                 return self.returnedDepartmentInboxes;
             });
