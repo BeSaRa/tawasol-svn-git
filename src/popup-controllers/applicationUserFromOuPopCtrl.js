@@ -61,6 +61,8 @@ module.exports = function (app) {
         self.rootEntity = rootEntity;
         self.isIntegratedClassificationEnabled = rootEntity.isIntegratedClassificationEnabled();
 
+        self.smsNotify = false;
+        self.emailNotify = false;
 
         self.tabsToShow = [
             'basic',
@@ -999,7 +1001,8 @@ module.exports = function (app) {
                     key: 'reminderSmsnotify',
                     dependentProperties: ['reminderSmsPriority', 'reminderSmsdays'],
                     skipDefault: ['reminderSmsdays']
-                }
+                },
+                subscriptionSMSNotify: {key: 'subscriptionsmsNotify', dependentProperties: []}
             },
             email: {
                 newEmail: {key: 'newItemEmailNotify', dependentProperties: ['newItemEmailPriority']},
@@ -1008,7 +1011,8 @@ module.exports = function (app) {
                     key: 'reminderEmailNotify',
                     dependentProperties: ['reminderEmailPriority', 'reminderEmailDays'],
                     skipDefault: ['reminderEmailDays']
-                }
+                },
+                subscriptionEmailNotify: {key: 'subscriptionEmailNotify', dependentProperties: []}
             }
         };
 
@@ -1018,15 +1022,17 @@ module.exports = function (app) {
          * @param $event
          */
         self.toggleAllSMSNotifications = function (form, $event) {
-            var isActive = !!self.applicationUser.subscriptionsmsNotify;
+            var isActive = !!self.smsNotify;
 
             self.applicationUser[self.notificationTypes.sms.newSMS.key] = isActive;
             self.applicationUser[self.notificationTypes.sms.deadlineSMS.key] = isActive;
             self.applicationUser[self.notificationTypes.sms.reminderSMS.key] = isActive;
+            self.applicationUser[self.notificationTypes.sms.subscriptionSMSNotify.key] = isActive;
 
             self.resetNotifications(form, self.notificationTypes.sms.newSMS, (isActive ? self.priorityLevels : null));
             self.resetNotifications(form, self.notificationTypes.sms.deadlineSMS, (isActive ? self.priorityLevels : null));
             self.resetNotifications(form, self.notificationTypes.sms.reminderSMS, (isActive ? self.priorityLevels : null));
+            self.resetNotifications(form, self.notificationTypes.sms.subscriptionSMSNotify, (isActive ? self.priorityLevels : null));
         };
 
         /**
@@ -1035,15 +1041,17 @@ module.exports = function (app) {
          * @param $event
          */
         self.toggleAllEmailNotifications = function (form, $event) {
-            var isActive = !!self.applicationUser.subscriptionEmailNotify;
+            var isActive = !!self.emailNotify;
 
             self.applicationUser[self.notificationTypes.email.newEmail.key] = isActive;
             self.applicationUser[self.notificationTypes.email.deadlineEmail.key] = isActive;
             self.applicationUser[self.notificationTypes.email.reminderEmail.key] = isActive;
+            self.applicationUser[self.notificationTypes.email.subscriptionEmailNotify.key] = isActive;
 
             self.resetNotifications(form, self.notificationTypes.email.newEmail, (isActive ? self.priorityLevels : null));
             self.resetNotifications(form, self.notificationTypes.email.deadlineEmail, (isActive ? self.priorityLevels : null));
             self.resetNotifications(form, self.notificationTypes.email.reminderEmail, (isActive ? self.priorityLevels : null));
+            self.resetNotifications(form, self.notificationTypes.email.subscriptionEmailNotify, (isActive ? self.priorityLevels : null));
         };
 
         /**
