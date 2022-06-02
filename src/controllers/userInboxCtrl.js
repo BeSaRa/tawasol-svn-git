@@ -70,7 +70,6 @@ module.exports = function (app) {
                 return self.getSortingKey('mainSiteSubSiteString', 'Information');
             }
         };
-        self.isUserInboxCtrl = true;
 
         self.langService = langService;
         self.isUserInboxCtrl = true; // true for userInboxCtrl, false for documentsNotifyDirectiveCtrl to avoid auto-refresh of grid from documentsNotifyDirectiveCtrl
