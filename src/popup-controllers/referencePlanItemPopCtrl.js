@@ -45,7 +45,7 @@ module.exports = function (app) {
         self.previousMainClassifications = [];
         self.previousSubClassifications = [];
 
-        self.mainClassifications = getClassificationsByDocumentClass(mainClassifications);
+        self.mainClassifications = mainClassifications;
         self.mainClassificationsCopy = angular.copy(mainClassifications);
 
         var lookup = new Lookup({
@@ -141,16 +141,16 @@ module.exports = function (app) {
             if (self.mainClassifications.length)
                 self.previousMainClassifications = angular.copy(self.mainClassifications);
 
-            classificationService.classificationSearch(self.mainClassificationSearchText, undefined, true)
+            classificationService.classificationSearch(self.mainClassificationSearchText, undefined)
                 .then(function (classifications) {
-                    self.mainClassifications = getClassificationsByDocumentClass(classifications);
-                    // self.mainClassificationsCopy = angular.copy(classifications);
+                    self.mainClassifications = classifications;
+                    self.mainClassificationsCopy = angular.copy(classifications);
                 });
         };
 
         function getClassificationsByDocumentClass(classifications) {
             classifications = classifications || self.mainClassificationsCopy;
-            if (self.referencePlanItem.expressionComponents.classDescription === null || self.referencePlanItem.expressionComponents.classDescription === 'undefined') {
+            if (!self.referencePlanItem.expressionComponents.classDescription || self.referencePlanItem.expressionComponents.classDescription === 'undefined') {
                 return classifications;
             }
 
@@ -161,7 +161,7 @@ module.exports = function (app) {
 
         self.onChangeDocumentClass = function () {
             self.referencePlanItem.expressionComponents.mainClassification = null;
-            self.mainClassifications = getClassificationsByDocumentClass();
+            // self.mainClassifications = getClassificationsByDocumentClass();
         }
 
         self.setPropertiesSpaceBackIfNoLength = function ($event, text, callback) {

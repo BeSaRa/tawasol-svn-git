@@ -183,7 +183,7 @@ module.exports = function (app) {
                         },
                         mainClassifications: function (classificationService) {
                             'ngInject';
-                            return classificationService.classificationSearch('', undefined, true);
+                            return classificationService.classificationSearch('', undefined);
                         }
                     }
                 })
@@ -216,7 +216,7 @@ module.exports = function (app) {
                         },
                         mainClassifications: function (classificationService) {
                             'ngInject';
-                            return classificationService.classificationSearch('', undefined, true);
+                            return classificationService.classificationSearch('', undefined);
                         }
                     }
                 })
