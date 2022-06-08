@@ -35,9 +35,6 @@
                                            ng-model="ctrl.searchCriteria.fromFollowupDate"
                                            md-max-date="ctrl.searchCriteria.toFollowupDate"
                             ></md-datepicker>
-                            <div ng-messages="followupBookSearchForm.fromFollowupDate.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
-                            </div>
                         </md-input-container>
                         <!-- Followup Date To -->
                         <md-input-container flex class="cms-datepicker">
@@ -46,10 +43,6 @@
                                            ng-model="ctrl.searchCriteria.toFollowupDate"
                                            md-min-date="ctrl.searchCriteria.fromFollowupDate"
                             ></md-datepicker>
-                            <!--md-max-date="ctrl.todayEndOfDay"-->
-                            <div ng-messages="followupBookSearchForm.toFollowupDate.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
-                            </div>
                         </md-input-container>
                     </div>
                     <div layout="row">
