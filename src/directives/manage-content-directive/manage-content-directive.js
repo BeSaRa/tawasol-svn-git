@@ -25,6 +25,7 @@ module.exports = function (app) {
                 uploadedCallback: '=?',
                 receiveG2g: '=?',
                 receiveG2gOuId: '=?',
+                simpleEdit: '=?'
             }
         }
     })

@@ -42,7 +42,8 @@
             </md-button>
         </div>
         <!-- Is Official -->
-        <div flex ng-if="ctrl.canShowImportFromExDataSource(ctrl.document) && ctrl.psPDFViewerEnabled && ctrl.document.externalImportData"
+        <div flex
+             ng-if="ctrl.canShowImportFromExDataSource(ctrl.document) && ctrl.psPDFViewerEnabled && ctrl.document.externalImportData"
              class="cms-input-container">
             <md-switch flex ng-model="ctrl.document.isOfficial"
                        aria-label="{{lang.official_document}}"
@@ -93,8 +94,10 @@
                     class="md-raised" ng-click="ctrl.openCorrespondenceToEdit()">
                 {{lang.edit_content}}
             </md-button>
-            <md-button ng-if="ctrl.receiveDocument && !ctrl.isLimitedCentralUnitAccess" class="md-raised"
-                       ng-click="ctrl.openCorrespondenceToEdit(true)">
+            <md-button
+                    ng-if="(ctrl.receiveDocument || (ctrl.simpleEdit && !!ctrl.document.addMethod)) && !ctrl.isLimitedCentralUnitAccess"
+                    class="md-raised"
+                    ng-click="ctrl.openCorrespondenceToEdit(true)">
                 {{lang.view}}
             </md-button>
         </div>

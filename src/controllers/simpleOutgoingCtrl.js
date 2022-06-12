@@ -45,7 +45,8 @@ module.exports = function (app) {
                                                    rootEntity,
                                                    downloadService,
                                                    isInternal,
-                                                   errorCode) {
+                                                   errorCode,
+                                                   simpleEdit) {
         'ngInject';
         var self = this;
         self.controllerName = 'simpleOutgoingCtrl';
@@ -65,7 +66,7 @@ module.exports = function (app) {
         // collapse from label
         self.collapse = true;
         // current mode
-        self.editMode = !!(editAfterApproved || editAfterExport);
+        self.editMode = !!(editAfterApproved || editAfterExport || simpleEdit);
         // self.editMode = false;
         // copy of the current outgoing if saved.
         // self.model = angular.copy(demoOutgoing);
@@ -74,11 +75,13 @@ module.exports = function (app) {
             self.model = angular.copy(editAfterApproved.metaData);
         } else if (editAfterExport) {
             self.model = angular.copy(editAfterExport.metaData);
+        } else if (simpleEdit) {
+            self.model = angular.copy(simpleEdit.metaData);
         }
         self.editContent = false;
         //is in simple add mode
         self.simpleAdd = true;
-
+        self.simpleEdit = false;
         self.maxCreateDate = new Date();
         // all system organizations
         self.organizations = angular.copy(organizations);
@@ -127,6 +130,12 @@ module.exports = function (app) {
             self.documentInformation = editAfterExport.content;
             self.editContent = true;
             self.action = 'editAfterExport';
+        } else if (simpleEdit) {
+            self.outgoing = simpleEdit.metaData;
+            self.documentInformation = self.outgoing.hasContent() ? simpleEdit.content : null;
+            self.editContent = true;
+            self.action = 'simpleEdit';
+            self.simpleEdit = true;
         }
 
         if (self.isInternalOutgoingEnabled) {
@@ -359,7 +368,7 @@ module.exports = function (app) {
                 self.saveInProgress = false;
                 toast.success(langService.get(successKey));
 
-                if (ignoreLaunch) {
+                if (ignoreLaunch || simpleEdit) {
                     return;
                 }
                 _launchAfterSave();

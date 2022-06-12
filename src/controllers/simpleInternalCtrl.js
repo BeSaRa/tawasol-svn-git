@@ -40,6 +40,7 @@ module.exports = function (app) {
                                                    $q,
                                                    rootEntity,
                                                    downloadService,
+                                                   simpleEdit,
                                                    errorCode) {
         'ngInject';
         var self = this;
@@ -58,15 +59,21 @@ module.exports = function (app) {
         // collapse from label
         self.collapse = true;
         // current mode
-        self.editMode = !!(editAfterApproved);
+        self.editMode = !!(editAfterApproved || simpleEdit);
         // self.editMode = false;
         // copy of the current internal if saved.
         // self.model = angular.copy(demoInternal);
-        self.model = editAfterApproved ? angular.copy(editAfterApproved.metaData) : null;
+        self.model = null;
 
+        if (editAfterApproved) {
+            self.model = angular.copy(editAfterApproved.metaData);
+        } else if (simpleEdit) {
+            self.model = angular.copy(simpleEdit.metaData);
+        }
         self.editContent = false;
         //is in simple add mode
         self.simpleAdd = true;
+        self.simpleEdit = false;
         self.activeDocumentViewer = true;
 
         self.maxCreateDate = new Date();
@@ -112,6 +119,14 @@ module.exports = function (app) {
             self.documentInformation = editAfterApproved.content;
             self.editContent = true;
             self.action = 'editAfterApproved';
+        }
+
+        if (simpleEdit) {
+            self.internal = simpleEdit.metaData;
+            self.documentInformation = self.internal.hasContent() ? simpleEdit.content : null;
+            self.editContent = true;
+            self.action = 'simpleEdit';
+            self.simpleEdit = true;
         }
 
         self.isDocumentTypeSwitchDisabled = function () {
@@ -261,7 +276,7 @@ module.exports = function (app) {
                 self.saveInProgress = false;
                 toast.success(langService.get(successKey));
 
-                if (ignoreLaunch) {
+                if (ignoreLaunch || simpleEdit) {
                     return;
                 }
                 _launchAfterSave()

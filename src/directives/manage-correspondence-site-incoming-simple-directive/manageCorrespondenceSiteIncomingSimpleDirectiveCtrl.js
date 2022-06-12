@@ -70,6 +70,31 @@ module.exports = function (app) {
         self.selectedSubSiteFollowupDate = null;
         self.isFollowupStatusMandatory = false;
 
+        $timeout(function () {
+            if (self.correspondence && self.correspondence.site) {
+                var site = angular.copy(self.correspondence.site);
+                self.selectedSiteType = site.siteType;
+                self.onSiteTypeChange().then(function () {
+                    self.selectedMainSite = _.find(self.mainSites, function (mainSite) {
+                        return mainSite.id === site.mainSiteId;
+                    });
+
+                    self.getSubSites().then(function () {
+                        self.selectedSubSite = _.find(self.subSites, function (subSite) {
+                            return subSite.mainSiteId === site.mainSiteId && subSite.subSiteId === site.subSiteId;
+                        });
+
+                        if (self.selectedSubSite) {
+                            self.site = site;
+                            self.selectedSubSiteFollowUpStatus = lookupService.getLookupByLookupKey(lookupService.followupStatus, self.correspondence.followupStatus);
+                            self.selectedSubSiteFollowupDate = site.followupDate;
+                        }
+                    });
+
+                });
+            }
+        })
+
         function _isShowRegistryUnit() {
             return (employeeService.getEmployee().inCentralArchive() && self.correspondence.getInfo().isPaper);
         }
@@ -223,7 +248,7 @@ module.exports = function (app) {
             self.subSiteChanged();
 
             if (self.selectedSiteType) {
-                correspondenceViewService.correspondenceSiteSearch('main', {
+                return correspondenceViewService.correspondenceSiteSearch('main', {
                     type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                     criteria: null,
                     excludeOuSites: false
@@ -240,6 +265,7 @@ module.exports = function (app) {
                 self.subSites = [];
                 self.subSitesCopy = angular.copy(self.subSites);
                 self.subSiteSearchText = '';
+                return $q.when(true);
             }
         };
 
@@ -255,9 +281,9 @@ module.exports = function (app) {
                 self.selectedSubSite = null;
                 self.subSiteSearchText = '';
                 self.subSiteChanged();
-                return;
+                return $q.reject();
             }
-            correspondenceViewService.correspondenceSiteSearch('sub', {
+            return correspondenceViewService.correspondenceSiteSearch('sub', {
                 type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                 parent: self.selectedMainSite ? self.selectedMainSite.id : null,
                 criteria: null,

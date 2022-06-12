@@ -1221,6 +1221,23 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description
+         * @param userInbox
+         * @param $event
+         */
+        self.correspondenceSimpleEdit = function (userInbox, $event) {
+            var info = userInbox.getInfo(),
+                page = (self.isInternalOutgoingEnabled && userInbox.isInternalOutgoing()) ? '.simple-add-internal' : '.simple-add';
+            userInbox.correspondenceSimpleEdit().then(function () {
+                $state.go('app.' + info.documentClass + page, {
+                    wobNum: info.wobNumber,
+                    vsId: info.vsId,
+                    action: 'simpleEdit'
+                });
+            })
+        }
+
 
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
             var info = model.getInfo();
@@ -1244,6 +1261,30 @@ module.exports = function (app) {
                 return !hasPermission || model.isBroadcasted();
             return hasPermission && !model.isBroadcasted();
         };
+
+        var checkIfEditContentAllowed = function (model) {
+            var info = model.getInfo(), isAllowed = true;
+            if (model.hasActiveSeqWF() && model.isCorrespondenceApprovedBefore()) {
+                return false;
+            }
+            // if already approved once and not allowed to edit partial approved in global settings, return false
+            if (model.isCorrespondenceApprovedBefore()) {
+                isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
+            }
+            if (!isAllowed || info.docStatus >= 24) {
+                return false;
+            }
+            var hasPermission = false;
+            if (info.documentClass === "internal")
+                hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
+            else if (info.documentClass === "incoming")
+                hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
+            else if (info.documentClass === "outgoing") {
+                hasPermission = (info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+            }
+
+            return hasPermission;
+        }
 
 
         var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
@@ -2448,27 +2489,7 @@ module.exports = function (app) {
                         callback: self.editContent,
                         class: "action-green",
                         checkShow: function (action, model) {
-                            var info = model.getInfo(), isAllowed = true;
-                            if (model.hasActiveSeqWF() && model.isCorrespondenceApprovedBefore()) {
-                                return false;
-                            }
-                            // if already approved once and not allowed to edit partial approved in global settings, return false
-                            if (model.isCorrespondenceApprovedBefore()) {
-                                isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
-                            }
-                            if (!isAllowed || info.docStatus >= 24) {
-                                return false;
-                            }
-                            var hasPermission = false;
-                            if (info.documentClass === "internal")
-                                hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
-                            else if (info.documentClass === "incoming")
-                                hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
-                            else if (info.documentClass === "outgoing") {
-                                hasPermission = (info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
-                            }
-
-                            return hasPermission;
+                           return checkIfEditContentAllowed(model);
                         }
                     },
                     // Properties
@@ -2486,6 +2507,17 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: function (action, model) {
                             return checkIfEditPropertiesAllowed(model);
+                        }
+                    },
+                    // Simple Edit
+                    {
+                        type: 'action',
+                        icon: 'pencil',
+                        text: 'grid_action_simple_edit',
+                        callback: self.correspondenceSimpleEdit,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return checkIfEditContentAllowed(model) && checkIfEditPropertiesAllowed(model);
                         }
                     },
                     // editInDeskTop

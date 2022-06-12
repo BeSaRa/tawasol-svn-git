@@ -1342,6 +1342,20 @@ module.exports = function (app) {
             return hasPermission && !model.isBroadcasted();
         };
 
+        var checkIfEditContentAllowed = function (model) {
+            var info = model.getInfo(), isAllowed = true;
+            if (model.hasActiveSeqWF()) {
+                return false;
+            }
+            if (model.isCorrespondenceApprovedBefore()) {
+                isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
+            }
+            if (!isAllowed || info.docStatus >= 24) {
+                return false;
+            }
+            return employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
+        }
+
         /**
          * @description Edit Content
          * @param correspondence
@@ -2077,17 +2091,7 @@ module.exports = function (app) {
                         callback: self.editContent,
                         class: "action-green",
                         checkShow: function (action, model) {
-                            var info = model.getInfo(), isAllowed = true;
-                            if (model.hasActiveSeqWF()) {
-                                return false;
-                            }
-                            if (model.isCorrespondenceApprovedBefore()) {
-                                isAllowed = rootEntity.getGlobalSettings().isAllowEditAfterFirstApprove();
-                            }
-                            if (!isAllowed || info.docStatus >= 24) {
-                                return false;
-                            }
-                            return employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
+                            return checkIfEditContentAllowed(model);
                         }
                     },
                     // Properties
@@ -2105,6 +2109,17 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: function (action, model) {
                             return checkIfEditPropertiesAllowed(model);
+                        }
+                    },
+                    // Simple Edit
+                    {
+                        type: 'action',
+                        icon: 'pencil',
+                        text: 'grid_action_simple_edit',
+                        callback: self.correspondenceSimpleEdit,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return checkIfEditContentAllowed(model) && checkIfEditPropertiesAllowed(model);
                         }
                     }
                 ]

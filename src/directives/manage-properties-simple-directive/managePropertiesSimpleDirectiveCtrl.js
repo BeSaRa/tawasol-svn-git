@@ -389,11 +389,11 @@ module.exports = function (app) {
          */
         function _selectFirstOptionForRequired() {
             var fields = [
-              /*{
-                    name: 'registryOU',
-                    options: 'registryOrganizations',
-                    value: 'id'
-                },*/
+                /*{
+                      name: 'registryOU',
+                      options: 'registryOrganizations',
+                      value: 'id'
+                  },*/
                 {
                     name: 'mainClassification',
                     options: 'classifications',

@@ -39,6 +39,7 @@ module.exports = function (app) {
                                                    errorCode,
                                                    downloadService,
                                                    _,
+                                                   simpleEdit,
                                                    rootEntity) {
         'ngInject';
         var self = this;
@@ -56,7 +57,7 @@ module.exports = function (app) {
         // collapse from label
         self.collapse = true;
         // current mode
-        self.editMode = !!(receive || receiveG2G);
+        self.editMode = !!(receive || receiveG2G || simpleEdit);
         // self.editMode = false;
         // copy of the current incoming if saved.
         // self.model = angular.copy(demoOutgoing);
@@ -92,6 +93,7 @@ module.exports = function (app) {
         if (receive) {
             self.receive = true;
             self.receiveG2G = false;
+            self.simpleEdit = false;
             self.incoming = receive.metaData;
             self.model = angular.copy(self.incoming);
             self.documentInformation = receive.content;
@@ -99,9 +101,20 @@ module.exports = function (app) {
         if (receiveG2G) {
             self.receiveG2G = true;
             self.receive = false;
+            self.simpleEdit = false;
             self.incoming = receiveG2G.metaData;
             self.model = angular.copy(self.incoming);
             self.documentInformation = receiveG2G.content;
+        }
+
+        if (simpleEdit) {
+            self.incoming = simpleEdit.metaData;
+            self.model = angular.copy(self.incoming);
+            self.documentInformation = simpleEdit.content;
+            self.action = 'simpleEdit';
+            self.simpleEdit = true;
+            self.receiveG2G = false;
+            self.receive = false;
         }
 
         self.followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
@@ -241,7 +254,7 @@ module.exports = function (app) {
                 self.saveInProgress = false;
                 toast.success(langService.get(successKey));
 
-                if (ignoreLaunch) {
+                if (ignoreLaunch || simpleEdit) {
                     return;
                 }
                 _launchAfterSave();

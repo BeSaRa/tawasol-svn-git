@@ -5742,6 +5742,21 @@ module.exports = function (app) {
             })
         }
 
+        /**
+         * @description correspondence simple edit
+         * @param correspondence
+         */
+        self.correspondenceSimpleEdit = function (correspondence) {
+            var info = correspondence.getInfo();
+            return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))
+                .then(function (result) {
+                    var documentClass = result.data.rs.metaData.classDescription;
+                    result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
+                    result.data.rs.metaData.sitesToList = angular.copy(result.data.rs.metaData.toSitesList);
+                    return correspondenceStorageService.storeCorrespondence('simpleEdit', result.data.rs);
+                });
+        }
+
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);
         }, 100);

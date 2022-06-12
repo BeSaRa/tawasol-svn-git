@@ -459,6 +459,23 @@ module.exports = function (app) {
                     'ngInject';
                     return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
                 },
+                simpleEdit: function ($timeout, $stateParams, correspondenceStorageService) {
+                    'ngInject';
+                    var vsId = $stateParams.vsId, workItem = $stateParams.wobNum, action = $stateParams.action;
+                    if (action !== 'simpleEdit') {
+                        return $timeout(function () {
+                            return false;
+                        })
+                    }
+
+                    return correspondenceStorageService
+                        .getCorrespondence('simpleEdit')
+                        .catch(function () {
+                            return $timeout(function () {
+                                return false;
+                            });
+                        });
+                },
                 isInternal: function ($q) {
                     'ngInject';
                     return $q.resolve(false);
@@ -540,6 +557,23 @@ module.exports = function (app) {
                 centralArchives: function ($q, organizations, employeeService, organizationService) {
                     'ngInject';
                     return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
+                },
+                simpleEdit: function ($timeout, $stateParams, correspondenceStorageService) {
+                    'ngInject';
+                    var vsId = $stateParams.vsId, workItem = $stateParams.wobNum, action = $stateParams.action;
+                    if (action !== 'simpleEdit') {
+                        return $timeout(function () {
+                            return false;
+                        })
+                    }
+
+                    return correspondenceStorageService
+                        .getCorrespondence('simpleEdit')
+                        .catch(function () {
+                            return $timeout(function () {
+                                return false;
+                            });
+                        });
                 },
                 isInternal: function ($q) {
                     'ngInject';
@@ -670,6 +704,23 @@ module.exports = function (app) {
                         }
                         return organizations;
                     })) : $q.resolve(false);
+                },
+                simpleEdit: function ($timeout, $stateParams, correspondenceStorageService) {
+                    'ngInject';
+                    var vsId = $stateParams.vsId, workItem = $stateParams.wobNum, action = $stateParams.action;
+                    if (action !== 'simpleEdit') {
+                        return $timeout(function () {
+                            return false;
+                        })
+                    }
+
+                    return correspondenceStorageService
+                        .getCorrespondence('simpleEdit')
+                        .catch(function () {
+                            return $timeout(function () {
+                                return false;
+                            });
+                        });
                 }
             })
             .bulkResolveToState('app.internal.add', {
@@ -793,6 +844,23 @@ module.exports = function (app) {
                     }
                     return correspondenceStorageService
                         .getCorrespondence('approved')
+                        .catch(function () {
+                            return $timeout(function () {
+                                return false;
+                            });
+                        });
+                },
+                simpleEdit: function ($timeout, $stateParams, correspondenceStorageService) {
+                    'ngInject';
+                    var vsId = $stateParams.vsId, workItem = $stateParams.wobNum, action = $stateParams.action;
+                    if (action !== 'simpleEdit') {
+                        return $timeout(function () {
+                            return false;
+                        })
+                    }
+
+                    return correspondenceStorageService
+                        .getCorrespondence('simpleEdit')
                         .catch(function () {
                             return $timeout(function () {
                                 return false;

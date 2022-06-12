@@ -355,6 +355,7 @@ module.exports = function (app) {
 
                             if (self.isSimpleAdd) {
                                 // available viewer
+                                self.simpleEdit = false;
                                 var availableViewer = ['jpg', 'jpeg', 'gif', 'png'];
                                 if (availableViewer.indexOf(file.name.split('.').pop().toLowerCase()) === -1) {
                                     return file;
