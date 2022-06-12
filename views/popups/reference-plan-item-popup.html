@@ -86,9 +86,10 @@
                                             <md-select-header class="select-header" layout="column">
                                                 <div layout="row" flex class="size-100">
                                                     <input ng-model="ctrl.mainClassificationSearchText"
+                                                           autocomplete="off"
                                                            type="text"
                                                            ng-keyup="ctrl.setPropertiesSpaceBackIfNoLength($event , ctrl.mainClassificationSearchText ,ctrl.setOldMainClassification)"
-                                                           ng-keydown="ctrl.allowPropagationUpDownArrows($event)"
+                                                           ng-keydown="ctrl.allowPropagationUpDownArrows($event,ctrl.loadMainClassificationByCriteria)"
                                                            placeholder="{{lang.search}}"
                                                            class="select-header-input">
                                                     <md-button
@@ -107,7 +108,7 @@
                                                        ng-repeat="item in ctrl.mainClassifications|translatedNameFilter:ctrl.mainClassificationSearchText">
                                                 {{item.getTranslatedName()}}
                                             </md-option>
-                                            <md-option ng-click="ctrl.loadMainClassificationByCriteria( $event)"
+                                            <md-option ng-click="ctrl.loadMainClassificationByCriteria($event)"
                                                        ng-if="!(ctrl.mainClassifications|translatedNameFilter:ctrl.mainClassificationSearchText).length && ctrl.mainClassificationSearchText.length">
                                                 <span class="red-text">{{lang.press_enter_to_load_more_records}}</span>
                                             </md-option>
