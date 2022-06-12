@@ -280,7 +280,7 @@ module.exports = function (app) {
         /**
          * @description Priority Levels
          */
-        self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
+        self.priorityLevels = lookupService.returnLookups(lookupService.notificationPriorityLevel);
 
         // /**
         //  * @description List of user classification view permissions

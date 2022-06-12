@@ -23,6 +23,13 @@ module.exports = function (app) {
                 model.seqWFEmailSettings = generator.getResultFromSelectedCollection(model.seqWFEmailSettings, 'lookupKey')
             }
 
+            model.newItemSmspriority = (!model.newsmsEmailNotify) ? null : generator.getResultFromSelectedCollection(model.newItemSmspriority, 'lookupKey');
+            model.deadlineSmspriority = (!model.deadlinesmsNotify) ? null : generator.getResultFromSelectedCollection(model.deadlineSmspriority, 'lookupKey');
+            model.reminderSmsPriority = (!model.reminderSmsnotify) ? null : generator.getResultFromSelectedCollection(model.reminderSmsPriority, 'lookupKey');
+            model.newItemEmailPriority = (!model.newItemEmailNotify) ? null : generator.getResultFromSelectedCollection(model.newItemEmailPriority, 'lookupKey');
+            model.deadlineEmailPriority = (!model.deadlineEmailNotify) ? null : generator.getResultFromSelectedCollection(model.deadlineEmailPriority, 'lookupKey');
+            model.reminderEmailPriority = (!model.reminderEmailNotify) ? null : generator.getResultFromSelectedCollection(model.reminderEmailPriority, 'lookupKey');
+
             if (model.signature) {
                 delete model.signature;
             }
@@ -44,6 +51,14 @@ module.exports = function (app) {
                 var seqWFEmailSettingsList = lookupService.returnLookups(lookupService.seqWFEmailSettings);
                 model.seqWFEmailSettings = generator.getSelectedCollectionFromResult(seqWFEmailSettingsList, model.seqWFEmailSettings, 'lookupKey');
             }
+
+            var notificationPriorityLevel = lookupService.returnLookups(lookupService.notificationPriorityLevel);
+            model.newItemSmspriority = generator.getSelectedCollectionFromResult(notificationPriorityLevel, model.newItemSmspriority, 'lookupKey');
+            model.deadlineSmspriority = generator.getSelectedCollectionFromResult(notificationPriorityLevel, model.deadlineSmspriority, 'lookupKey');
+            model.reminderSmsPriority = generator.getSelectedCollectionFromResult(notificationPriorityLevel, model.reminderSmsPriority, 'lookupKey');
+            model.newItemEmailPriority = generator.getSelectedCollectionFromResult(notificationPriorityLevel, model.newItemEmailPriority, 'lookupKey');
+            model.deadlineEmailPriority = generator.getSelectedCollectionFromResult(notificationPriorityLevel, model.deadlineEmailPriority, 'lookupKey');
+            model.reminderEmailPriority = generator.getSelectedCollectionFromResult(notificationPriorityLevel, model.reminderEmailPriority, 'lookupKey');
 
             model.mapReceived();
             return model;

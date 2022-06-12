@@ -40,6 +40,7 @@ module.exports = function (app) {
         self.userDistWFView = 'userDistWFView';
         self.seqWFEmailSettings = 'seqEmailSettings';
         self.wfRelatedBookStatus = 'wfRelatedBookStatus';
+        self.notificationPriorityLevel = 'notificationPriorityLevel';
 
         // this propertyConfiguration related to the property configurations Service.
         self.propertyConfigurations = {
