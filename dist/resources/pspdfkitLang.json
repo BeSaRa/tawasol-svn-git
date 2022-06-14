@@ -138,5 +138,21 @@
   "mergeDocument": {
     "en": "Import Document",
     "ar": "استيراد كتاب"
+  },
+  "nextPage": {
+    "en": "Next Page",
+    "ar": "الصفحة التالية"
+  },
+  "prevPage": {
+    "en": "Previous Page",
+    "ar": "الصفحة السابقة"
+  },
+  "pageX": {
+    "en": "Page {arg0}",
+    "ar": "الصفحة {arg0}"
+  },
+  "pageXofY": {
+    "en": "Page {arg0} of {arg1}",
+    "ar": "الصفحة {arg0} من {arg1}"
   }
 }
