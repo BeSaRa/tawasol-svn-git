@@ -776,6 +776,17 @@ module.exports = function (app) {
                 });
         };
 
+        self.reloadByCorrespondence = function (correspondence) {
+            var info = correspondence.getInfo();
+            correspondenceService.loadCorrespondenceByVsIdClass(info.vsId, info.documentClass)
+                .then(function (document) {
+                    correspondence.docSubject = document.docSubject;
+                    correspondence.priorityLevel = document.priorityLevel;
+                    correspondence.docTypeInfo = document.docTypeInfo;
+                    correspondence.lastModifierInfo = document.lastModifierInfo;
+                });
+        }
+
         /**
          * @description Prints the result
          * @param $event
@@ -1256,10 +1267,10 @@ module.exports = function (app) {
             }
             correspondenceService.viewCorrespondence(searchedGeneralDocument, self.gridActions, checkIfEditPropertiesAllowed(searchedGeneralDocument, true), checkIfEditCorrespondenceSiteAllowed(searchedGeneralDocument, true))
                 .then(function () {
-                    return self.reloadSearchCorrespondence(self.grid.page);
+                    self.reloadByCorrespondence(searchedGeneralDocument);
                 })
                 .catch(function () {
-                    return self.reloadSearchCorrespondence(self.grid.page);
+                    self.reloadByCorrespondence(searchedGeneralDocument);
                 });
         };
 
@@ -1277,10 +1288,10 @@ module.exports = function (app) {
             var allowedEditProperties = self.isAllowedEditProperties(correspondence) ? self.allowedEditProperties : false;
             correspondence.viewFromQueue(self.gridActions, 'searchGeneral', $event, false, allowedEditProperties)
                 .then(function () {
-                    return self.reloadSearchCorrespondence(self.grid.page);
+                    self.reloadByCorrespondence(correspondence);
                 })
                 .catch(function (error) {
-                    return self.reloadSearchCorrespondence(self.grid.page);
+                    self.reloadByCorrespondence(correspondence);
                 });
         };
 

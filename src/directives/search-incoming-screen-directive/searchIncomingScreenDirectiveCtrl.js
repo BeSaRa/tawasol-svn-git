@@ -763,6 +763,18 @@ module.exports = function (app) {
                 });
         };
 
+        self.reloadByCorrespondence = function (correspondence) {
+            var info = correspondence.getInfo();
+            correspondenceService.loadCorrespondenceByVsIdClass(info.vsId, info.documentClass)
+                .then(function (document) {
+                    correspondence.docSubject = document.docSubject;
+                    correspondence.priorityLevel = document.priorityLevel;
+                    correspondence.docTypeInfo = document.docTypeInfo;
+                    correspondence.lastModifierInfo = document.lastModifierInfo;
+                    correspondence.refDocNumber = document.refDocNumber;
+                });
+        }
+
         /**
          * @description Prints the result
          * @param $event
@@ -1268,10 +1280,10 @@ module.exports = function (app) {
             }
             correspondenceService.viewCorrespondence(searchedIncomingDocument, self.gridActions, checkIfEditPropertiesAllowed(searchedIncomingDocument, true), checkIfEditCorrespondenceSiteAllowed(searchedIncomingDocument, true))
                 .then(function () {
-                    return self.reloadSearchCorrespondence(self.grid.page);
+                    self.reloadByCorrespondence(searchedIncomingDocument);
                 })
                 .catch(function () {
-                    return self.reloadSearchCorrespondence(self.grid.page);
+                    self.reloadByCorrespondence(searchedIncomingDocument);
                 });
         };
 
@@ -1287,10 +1299,10 @@ module.exports = function (app) {
             }
             correspondence.viewFromQueue(self.gridActions, 'searchIncoming', $event)
                 .then(function () {
-                    return self.reloadSearchCorrespondence(self.grid.page);
+                    self.reloadByCorrespondence(correspondence);
                 })
                 .catch(function (error) {
-                    return self.reloadSearchCorrespondence(self.grid.page);
+                    self.reloadByCorrespondence(correspondence);
                 });
         };
 
