@@ -1032,13 +1032,15 @@ module.exports = function (app) {
                 return;
             }
 
-            self.organization
-                .assignClassifications(availableClassifications)
-                .then(function (ouClassifications) {
-                    self.ouClassifications = self.ouClassifications.concat(ouClassifications);
-                    self.ouClassificationsCopy = angular.copy(self.ouClassifications);
-                    toast.success(langService.get('add_success').change({name: langService.get('classifications')}));
-                });
+            dialog.confirmMessage(langService.get('confirm_continue_message')).then(function () {
+                self.organization
+                    .assignClassifications(availableClassifications)
+                    .then(function (ouClassifications) {
+                        self.ouClassifications = self.ouClassifications.concat(ouClassifications);
+                        self.ouClassificationsCopy = angular.copy(self.ouClassifications);
+                        toast.success(langService.get('add_success').change({name: langService.get('classifications')}));
+                    });
+            });
         };
 
         /**
