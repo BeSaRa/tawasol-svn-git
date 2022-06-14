@@ -1,0 +1,142 @@
+{
+  "lineAnnotation": {
+    "en": "Line",
+    "ar": "خط مستقيم"
+  },
+  "arrow": {
+    "en": "Arrow",
+    "ar": "سهم"
+  },
+  "rectangleAnnotation": {
+    "en": "Rectangle",
+    "ar": "مستطيل"
+  },
+  "ellipseAnnotation": {
+    "en": "Ellipse",
+    "ar": "شكل بيضاوي"
+  },
+  "polygonAnnotation": {
+    "en": "Polygon",
+    "ar": "مضلع"
+  },
+  "polylineAnnotation": {
+    "en": "Polyline",
+    "ar": "متعدد الخطوط"
+  },
+  "textAnnotation": {
+    "en": "Text",
+    "ar": "نص"
+  },
+  "noteAnnotation": {
+    "en": "Note",
+    "ar": "ملاحظة"
+  },
+  "imageAnnotation": {
+    "en": "Image",
+    "ar": "صورة"
+  },
+  "stampAnnotation": {
+    "en": "Stamp",
+    "ar": "ختم"
+  },
+  "pen": {
+    "en": "Drawing",
+    "ar": "رسم"
+  },
+  "highlighter": {
+    "en": "Freeform Highlight",
+    "ar": "قلم للتمييز"
+  },
+  "textHighlighter": {
+    "en": "Text Highlight",
+    "ar": "تمييز الخط"
+  },
+  "fitPage": {
+    "en": "Fit Page",
+    "ar": "ملئ الصفحة"
+  },
+  "zoomIn": {
+    "en": "Zoom In",
+    "ar": "تكبير"
+  },
+  "zoomOut": {
+    "en": "Zoom Out",
+    "ar": "تصغير"
+  },
+  "panMode": {
+    "en": "Pan Mode",
+    "ar": "الوضع العام"
+  },
+  "sign": {
+    "en": "Sign",
+    "ar": "توقيع"
+  },
+  "documentCrop": {
+    "en": "Document Crop",
+    "ar": "قص الكتاب"
+  },
+  "print": {
+    "en": "Print",
+    "ar": "طباعة"
+  },
+  "printWithoutAnnotations": {
+    "en": "Print Without Annotations",
+    "ar": "طباعة بدون تعليقات توضيحية"
+  },
+  "bookmarks": {
+    "en": "Bookmarks",
+    "ar": "الاشارات المرجعية"
+  },
+  "thumbnails": {
+    "en": "Thumbnails",
+    "ar": "الصور المصغرة"
+  },
+  "outline": {
+    "en": "Outline",
+    "ar": "الخطوط العريضة"
+  },
+  "annotations": {
+    "en": "Annotations",
+    "ar": "التعليقات التوضيحية"
+  },
+  "searchDocument": {
+    "en": "Search Document",
+    "ar": "بحث بالكتاب"
+  },
+  "customStamps": {
+    "en": "Custom Stamps",
+    "ar": "أختام مخصصة"
+  },
+  "barcode": {
+    "en": "Barcode",
+    "ar": "باركود"
+  },
+  "electronicSignatures": {
+    "en": "Electronic Signatures",
+    "ar": "توقيع الكتروني"
+  },
+  "openForApproval": {
+    "en": "Open For Approval",
+    "ar": "فتح للموافقة"
+  },
+  "documentComparison": {
+    "en": "Document Comparison",
+    "ar": "مقارنة المستندات"
+  },
+  "export": {
+    "en": "Export",
+    "ar": "تصدير"
+  },
+  "documentEditor": {
+    "en": "Document Editor",
+    "ar": "محرر المستندات"
+  },
+  "newPage": {
+    "en": "New Page",
+    "ar": "صفحة جديدة"
+  },
+  "mergeDocument": {
+    "en": "Import Document",
+    "ar": "استيراد كتاب"
+  }
+}

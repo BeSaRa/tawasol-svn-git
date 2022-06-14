@@ -811,6 +811,10 @@ module.exports = function (app) {
                         langService.setSelectedLanguageById(employeeService.getEmployee().defaultDisplayLang);
                     }, 1000);
                     return true;
+                },
+                loadPSPDFLanguages: function (PDFService) {
+                    'ngInject';
+                    return PDFService.PSPDFLanguages.load();
                 }
             })
             .bulkResolveToState('app.inbox.folders', {

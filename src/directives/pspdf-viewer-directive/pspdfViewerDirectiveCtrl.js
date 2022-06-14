@@ -17,7 +17,7 @@ module.exports = function (app) {
         var bookmarkButton = {
             type: "custom",
             id: "bookmark-shortcut",
-            title: "Bookmarks",
+            title: PDFService.PSPDFLanguages.get('bookmarks'),
             icon: "./assets/images/bookmark.svg",
             onPress: function () {
                 self.instance.setViewState((state) => {
@@ -35,6 +35,8 @@ module.exports = function (app) {
         };
 
         self.renderViewer = function () {
+            var baseUrl = (location.protocol + '//' + location.host + '/' + (configurationService.APP_CONTEXT ? configurationService.APP_CONTEXT + '/' : ''));
+
             var initialViewState = new PSPDFKit.ViewState({
                 readOnly: true,
                 allowPrinting: employeeService.hasPermissionTo('PRINT_DOCUMENT')
@@ -57,7 +59,7 @@ module.exports = function (app) {
             }
 
             var configuration = {
-                baseUrl: (location.protocol + '//' + location.host + '/' + (configurationService.APP_CONTEXT ? configurationService.APP_CONTEXT + '/' : '')),
+                baseUrl: baseUrl,
                 container: self.container,
                 printMode: PSPDFKit.PrintMode.EXPORT_PDF,
                 toolbarItems: defaultToolbar,
@@ -72,12 +74,16 @@ module.exports = function (app) {
                 delete configuration.licenseKey;
             }
 
-            PSPDFKit.load(configuration).then(function (instance) {
-                self.instance = instance;
+            PSPDFKit.I18n.preloadLocalizationData('en', {baseUrl: baseUrl}).then(function () {
+                PDFService.PSPDFLanguages.prepare();
 
-                if (self.correspondence && self.correspondence.highlights) {
-                    self.createHighlights(self.correspondence.highlights);
-                }
+                PSPDFKit.load(configuration).then(function (instance) {
+                    self.instance = instance;
+
+                    if (self.correspondence && self.correspondence.highlights) {
+                        self.createHighlights(self.correspondence.highlights);
+                    }
+                });
             });
         };
 

@@ -1,10 +1,11 @@
 module.exports = function (app) {
     app.service('PDFService', function (dialog, PSPDFKit, $q, cmsTemplate, AnnotationType, downloadService, employeeService, _,
-                                        langService, moment, jobTitleService, configurationService, $cookies, $http) {
+                                        langService, moment, jobTitleService, configurationService, $cookies, $http, urlService, rootEntity) {
         'ngInject';
         var self = this;
         self.serviceName = 'PDFService';
         self.cookieAttachedTypeKey = '';
+        self.pspdfLangs = null;
 
         self.userInfoAnnotationTypes = [
             {
@@ -170,6 +171,31 @@ module.exports = function (app) {
             return _.map(userInfoAnnotationRows, function (item) {
                 return {id: item.id, selected: item.selected};
             });
+        }
+
+        /**
+         * @description PSPDF Languages
+         * @returns {*}
+         */
+        self.PSPDFLanguages = {
+            load: function () {
+                if (!rootEntity.hasPSPDFViewer())
+                    return [];
+
+                return $http.get(urlService.pspdfLanguage).then(function (result) {
+                    self.pspdfLangs = result.data;
+                    return self.pspdfLangs;
+                }).catch(function () {
+                });
+            },
+            prepare: async function () {
+                Object.keys(self.pspdfLangs).forEach(key => {
+                    PSPDFKit.I18n.messages.en[key] = self.pspdfLangs[key][langService.current];
+                })
+            },
+            get: function (key) {
+                return self.pspdfLangs[key][langService.current];
+            }
         }
 
         function loadCustomFontPSPDF(fontFileName) {

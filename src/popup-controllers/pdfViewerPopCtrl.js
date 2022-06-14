@@ -212,7 +212,7 @@ module.exports = function (app) {
             var exportButton = {
                 type: "custom",
                 id: "export-pdf",
-                title: "Export",
+                title: PDFService.PSPDFLanguages.get('export'),
                 icon: "./assets/images/download.svg",
                 onPress: function () {
                     self.exportDocument();
@@ -221,7 +221,7 @@ module.exports = function (app) {
             var bookmarkButton = {
                 type: "custom",
                 id: "bookmark-shortcut",
-                title: "Bookmarks",
+                title: PDFService.PSPDFLanguages.get('bookmarks'),
                 icon: "./assets/images/bookmark.svg",
                 onPress: function () {
                     self.currentInstance.setViewState((state) => {
@@ -241,7 +241,7 @@ module.exports = function (app) {
             var customStampsButton = {
                 type: "custom",
                 id: "custom-stamps",
-                title: "custom stamps",
+                title: PDFService.PSPDFLanguages.get('customStamps'),
                 icon: "./assets/images/custom-stamps.svg",
                 disabled: !(employeeService.hasPermissionTo('ADD_STAMP')),
                 onPress: self.openCustomStampsDialog
@@ -249,14 +249,14 @@ module.exports = function (app) {
             var barcodeButton = {
                 type: "custom",
                 id: "barcode",
-                title: "barcode",
+                title: PDFService.PSPDFLanguages.get('barcode'),
                 icon: "./assets/images/barcode.svg",
                 onPress: self.openBarcodeDialog
             };
             var printWithoutAnnotationButton = {
                 type: "custom",
                 id: "print-without-annotations",
-                title: "print without annotations",
+                title: PDFService.PSPDFLanguages.get('printWithoutAnnotations'),
                 icon: "./assets/images/print-without-annotation.svg",
                 dropdownGroup: 'print-menu',
                 disabled: !(employeeService.hasPermissionTo('PRINT_DOCUMENT')),
@@ -267,14 +267,14 @@ module.exports = function (app) {
             var approveButton = {
                 type: "custom",
                 id: "approve",
-                title: "Electronic Signatures",
+                title: PDFService.PSPDFLanguages.get('electronicSignatures'),
                 icon: "./assets/images/approve.svg",
                 onPress: self.openSignaturesDialog
             };
             var openForApprovalButton = {
                 type: "custom",
                 id: "open-for-approval",
-                title: "open for approval",
+                title: PDFService.PSPDFLanguages.get('openForApproval'),
                 icon: "./assets/images/open-for-approve.svg",
                 onPress: function () {
                     dialog.hide(AnnotationType.SIGNATURE);
@@ -386,7 +386,7 @@ module.exports = function (app) {
                 type: 'custom',
                 id: 'print',
                 icon: './assets/images/print.svg',
-                title: 'Print',
+                title: PDFService.PSPDFLanguages.get('print'),
                 dropdownGroup: 'print-menu',
                 disabled: !(employeeService.hasPermissionTo('PRINT_DOCUMENT')),
                 onPress: function (e) {
@@ -2410,13 +2410,17 @@ module.exports = function (app) {
                 instance = await PSPDFKit.load(configuration);
             }
 
-            instance.exportPDF({flatten: flatten})
-                .then(function (buffer) {
-                    var pdfContent = new Blob([buffer], {type: "application/pdf"});
-                    $timeout(function () {
-                        dialog.hide(pdfContent);
-                    }, 1000);
-                });
+            PSPDFKit.I18n.preloadLocalizationData('en', {baseUrl: self.baseUrl}).then(function () {
+                PDFService.PSPDFLanguages.prepare();
+
+                instance.exportPDF({flatten: flatten})
+                    .then(function (buffer) {
+                        var pdfContent = new Blob([buffer], {type: "application/pdf"});
+                        $timeout(function () {
+                            dialog.hide(pdfContent);
+                        }, 1000);
+                    });
+            });
         };
 
         /**
@@ -2504,23 +2508,27 @@ module.exports = function (app) {
                     delete configuration.licenseKey;
                 }
 
-                PSPDFKit.load(configuration).then(function (instance) {
-                    self.currentInstance = instance;
-                    // set current annotations for loaded document
-                    self.getDocumentAnnotations().then(function (annotations) {
-                        self.oldAnnotations = annotations;
+                PSPDFKit.I18n.preloadLocalizationData('en', {baseUrl: self.baseUrl}).then(function () {
+                    PDFService.PSPDFLanguages.prepare();
+
+                    PSPDFKit.load(configuration).then(function (instance) {
+                        self.currentInstance = instance;
+                        // set current annotations for loaded document
+                        self.getDocumentAnnotations().then(function (annotations) {
+                            self.oldAnnotations = annotations;
+                        });
+                        self.getDocumentBookmarks().then(function (bookmarks) {
+                            self.oldBookmarks = bookmarks.toArray();
+                            if (self.oldBookmarks.length && ((self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep()) || self.info.isAttachment)) {
+                                self.currentInstance.setViewState(function (state) {
+                                    return state.set('sidebarMode', PSPDFKit.SidebarMode.BOOKMARKS);
+                                });
+                            }
+                        });
+                        self.currentInstance.setAnnotationCreatorName(employeeService.getEmployee().domainName);
+                        self.registerEventListeners();
+                        _setRuntimeFrameCSS();
                     });
-                    self.getDocumentBookmarks().then(function (bookmarks) {
-                        self.oldBookmarks = bookmarks.toArray();
-                        if (self.oldBookmarks.length && ((self.sequentialWF && self.nextSeqStep.isAuthorizeAndSendStep()) || self.info.isAttachment)) {
-                            self.currentInstance.setViewState(function (state) {
-                                return state.set('sidebarMode', PSPDFKit.SidebarMode.BOOKMARKS);
-                            });
-                        }
-                    });
-                    self.currentInstance.setAnnotationCreatorName(employeeService.getEmployee().domainName);
-                    self.registerEventListeners();
-                    _setRuntimeFrameCSS();
                 });
             });
         };
