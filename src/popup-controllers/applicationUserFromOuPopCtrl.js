@@ -1032,7 +1032,6 @@ module.exports = function (app) {
             self.resetNotifications(form, self.notificationTypes.sms.newSMS, (isActive ? self.priorityLevels : null));
             self.resetNotifications(form, self.notificationTypes.sms.deadlineSMS, (isActive ? self.priorityLevels : null));
             self.resetNotifications(form, self.notificationTypes.sms.reminderSMS, (isActive ? self.priorityLevels : null));
-            self.resetNotifications(form, self.notificationTypes.sms.subscriptionSMSNotify, (isActive ? self.priorityLevels : null));
         };
 
         /**
@@ -1051,7 +1050,6 @@ module.exports = function (app) {
             self.resetNotifications(form, self.notificationTypes.email.newEmail, (isActive ? self.priorityLevels : null));
             self.resetNotifications(form, self.notificationTypes.email.deadlineEmail, (isActive ? self.priorityLevels : null));
             self.resetNotifications(form, self.notificationTypes.email.reminderEmail, (isActive ? self.priorityLevels : null));
-            self.resetNotifications(form, self.notificationTypes.email.subscriptionEmailNotify, (isActive ? self.priorityLevels : null));
         };
 
         /**
@@ -1074,6 +1072,11 @@ module.exports = function (app) {
                 }
             }
         };
+
+        self.setEnableNotifications = function () {
+            self.smsNotify = self.applicationUser.newsmsEmailNotify && self.applicationUser.deadlinesmsNotify && self.applicationUser.reminderSmsnotify && self.applicationUser.subscriptionsmsNotify;
+            self.emailNotify = self.applicationUser.newItemEmailNotify && self.applicationUser.deadlineEmailNotify && self.applicationUser.reminderEmailNotify && self.applicationUser.subscriptionEmailNotify
+        }
 
         /**
          * @description Opens the dialog for all permissions
@@ -1601,6 +1604,10 @@ module.exports = function (app) {
          */
         self.closeApplicationUserPopupFromCtrl = function () {
             dialog.cancel();
+        };
+
+        self.$onInit = function () {
+            self.setEnableNotifications();
         };
     });
 };

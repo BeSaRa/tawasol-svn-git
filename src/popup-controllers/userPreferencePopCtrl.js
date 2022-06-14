@@ -430,7 +430,6 @@ module.exports = function (app) {
             self.resetNotifications(form, self.notificationTypes.sms.newSMS, (isActive ? self.priorityLevels : null));
             self.resetNotifications(form, self.notificationTypes.sms.deadlineSMS, (isActive ? self.priorityLevels : null));
             self.resetNotifications(form, self.notificationTypes.sms.reminderSMS, (isActive ? self.priorityLevels : null));
-            self.resetNotifications(form, self.notificationTypes.sms.subscriptionSMSNotify, (isActive ? self.priorityLevels : null));
         };
 
         /**
@@ -449,7 +448,6 @@ module.exports = function (app) {
             self.resetNotifications(form, self.notificationTypes.email.newEmail, (isActive ? self.priorityLevels : null));
             self.resetNotifications(form, self.notificationTypes.email.deadlineEmail, (isActive ? self.priorityLevels : null));
             self.resetNotifications(form, self.notificationTypes.email.reminderEmail, (isActive ? self.priorityLevels : null));
-            self.resetNotifications(form, self.notificationTypes.email.subscriptionEmailNotify, (isActive ? self.priorityLevels : null));
         };
 
         /**
@@ -471,7 +469,13 @@ module.exports = function (app) {
                     form[changedProperty.dependentProperties[i]].$setUntouched();
                 }
             }
+            self.setEnableNotifications();
         };
+
+        self.setEnableNotifications = function () {
+            self.smsNotify = self.applicationUser.newsmsEmailNotify && self.applicationUser.deadlinesmsNotify && self.applicationUser.reminderSmsnotify && self.applicationUser.subscriptionsmsNotify;
+            self.emailNotify = self.applicationUser.newItemEmailNotify && self.applicationUser.deadlineEmailNotify && self.applicationUser.reminderEmailNotify && self.applicationUser.subscriptionEmailNotify
+        }
 
         /**
          * @description Checks the required fields validation by skipping notification if notification is false
@@ -1818,6 +1822,7 @@ module.exports = function (app) {
         self.$onInit = function () {
             _checkProxyDate(self.ouApplicationUser);
             _resetOutOfOfficeIfProxyUserAndAuthorityLevelsEmpty();
+            self.setEnableNotifications();
             setSelectedProxyUser().then(() => {
                 self.filteredSecurityLevels = _.filter(self.securityLevels, self.isSecurityLevelInclude);
             });

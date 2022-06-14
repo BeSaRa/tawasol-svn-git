@@ -614,7 +614,8 @@
                                             <md-switch id="subscriptionsmsNotify" name="subscriptionsmsNotify"
                                                        ng-disabled="!ctrl.globalSetting.enableSMSNotification"
                                                        flex ng-model="ctrl.applicationUser.subscriptionsmsNotify"
-                                                       aria-label="{{lang.subscription_sms}}">
+                                                       aria-label="{{lang.subscription_sms}}"
+                                                       ng-change="ctrl.setEnableNotifications()">
                                                 <label>{{lang.subscription_sms}} :
                                                     {{ctrl.applicationUser.getTranslatedYesNo('subscriptionsmsNotify')}}</label>
                                             </md-switch>
@@ -764,7 +765,8 @@
                                             <md-switch id="subscriptionEmailNotify" name="subscriptionEmailNotify"
                                                        flex ng-model="ctrl.applicationUser.subscriptionEmailNotify"
                                                        ng-disabled="!ctrl.globalSetting.enableEmailNotification"
-                                                       aria-label="{{lang.subscription_email}}">
+                                                       aria-label="{{lang.subscription_email}}"
+                                                       ng-change="ctrl.setEnableNotifications()">
                                                 <label>{{lang.subscription_email}} :
                                                     {{ctrl.applicationUser.getTranslatedYesNo('subscriptionEmailNotify')}}</label>
                                             </md-switch>
