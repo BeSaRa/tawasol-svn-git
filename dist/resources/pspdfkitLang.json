@@ -169,7 +169,7 @@
   },
   "opacity": {
     "en": "Opacity",
-    "ar": "التعتيم"
+    "ar": "الشفافية"
   },
   "fillColor": {
     "en": "Fill Color",
@@ -178,5 +178,13 @@
   "delete": {
     "en": "Delete",
     "ar": "حذف"
+  },
+  "blendMode": {
+    "en": "Blend Mode",
+    "ar": "وضع المزج"
+  },
+  "font": {
+    "en": "Font",
+    "ar": "الخط"
   }
 }
