@@ -154,5 +154,29 @@
   "pageXofY": {
     "en": "Page {arg0} of {arg1}",
     "ar": "الصفحة {arg0} من {arg1}"
+  },
+  "color": {
+    "en": "Color",
+    "ar": "اللون"
+  },
+  "linecaps-dasharray": {
+    "en": "Line Style",
+    "ar": "نمط الخط"
+  },
+  "thickness": {
+    "en": "Thickness",
+    "ar": "السماكة"
+  },
+  "opacity": {
+    "en": "Opacity",
+    "ar": "التعتيم"
+  },
+  "fillColor": {
+    "en": "Fill Color",
+    "ar": "ملئ اللون"
+  },
+  "delete": {
+    "en": "Delete",
+    "ar": "حذف"
   }
 }
