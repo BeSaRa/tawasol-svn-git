@@ -51,7 +51,7 @@
                         ng-if="ctrl.rootEntity.hrEnabled && ctrl.selectedEntityType.lookupStrKey.toLowerCase() === 'external_user' && field.fieldIdentifier === 'qid'"
                         tooltip="{{lang.search}}"
                         ng-disabled="!ctrl.isValidValues(field)"
-                        ng-click="ctrl.searchRecordsByField(field, $event)"
+                        ng-click="ctrl.searchRecordsByField(field,entityForm ,$event)"
                         class="md-icon-button cms-input-overlay-button">
                     <md-icon md-svg-icon="magnify"></md-icon>
                 </md-button>

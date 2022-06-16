@@ -159,14 +159,16 @@ module.exports = function (app) {
         /**
          * @description Search the linked person by field value
          * @param field
+         * @param form
          * @param $event
          * @returns {*[]}
          */
-        self.searchRecordsByField = function (field, $event) {
+        self.searchRecordsByField = function (field, form, $event) {
             if (self.isValidValues(field)) {
                 if (self.rootEntity.hrEnabled && self.selectedEntityType.lookupStrKey && self.selectedEntityType.lookupStrKey.toLowerCase() === 'external_user' && field.fieldIdentifier === 'qid') {
                     correspondenceService.searchLinkedPersonByCriteria({qid: self.entity.qid})
                         .then(function (result) {
+                            form.mobileNumber.$setTouched();
                             if (result && result.length) {
                                 result[0].typeId = self.selectedEntityType;
                                 self.entity = angular.copy(result[0]);
@@ -184,13 +186,13 @@ module.exports = function (app) {
          * @param field
          * @param $event
          */
-        self.handleFieldKeyDown = function (field, $event) {
+        self.handleFieldKeyDown = function (field, form, $event) {
             if ($event) {
                 if (self.rootEntity.hrEnabled && self.selectedEntityType.lookupStrKey && self.selectedEntityType.lookupStrKey.toLowerCase() === 'external_user' && field.fieldIdentifier === 'qid') {
                     var code = $event.which || $event.keyCode;
                     // if enter key pressed, load from server with search text
                     if (code === 13) {
-                        self.searchRecordsByField(field, $event)
+                        self.searchRecordsByField(field, form, $event)
                     }
                 }
             }
