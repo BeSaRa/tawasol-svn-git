@@ -151,6 +151,17 @@ module.exports = function (app) {
         };
 
         /**
+         * @description get permission by id
+         * @param id
+         * @returns {*}
+         */
+        self.getPermissionById = function (id) {
+            return $http.get(urlService.rolePermissions + '/' + id).then(function (result) {
+                return generator.generateInstance(result.data.rs, Permission);
+            })
+        };
+
+        /**
          * @description Groups the permissions according to permission group
          * @param permissionsList
          * List of permissions to be grouped. If not passed, permissions will be loaded from server

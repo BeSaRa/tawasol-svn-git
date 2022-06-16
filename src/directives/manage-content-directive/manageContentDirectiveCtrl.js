@@ -253,6 +253,7 @@ module.exports = function (app) {
                         self.uploadedCallback && self.uploadedCallback();
                         self.document.externalImportData = null;
                         self.document.isOfficial = false;
+                        correspondenceService.sessionTimeoutWarning.show(self.document);
                         if (self.isSimpleAdd) {
                             return self.getTrustViewUrl(template.getSubjectTitle(), $event);
                         } else {
@@ -272,7 +273,7 @@ module.exports = function (app) {
 
             if (contentFiles.length) {
                 var info = self.document.getInfo();
-
+                correspondenceService.sessionTimeoutWarning.show(self.document);
                 //Electronic Document - only word document is allowed
                 var allowedDocument = "wordDocument";
                 //Paper Document - Check global settings for allowed types
@@ -406,6 +407,7 @@ module.exports = function (app) {
                 $timeout(function () {
                     self.document.contentFile = null;
                     self.isContentFileAttached = false;
+                    correspondenceService.sessionTimeoutWarning.cancel();
                 })
             }
         };
@@ -424,6 +426,7 @@ module.exports = function (app) {
             self.viewUrl = null;
             self.document.externalImportData = null;
             self.document.isOfficial = false;
+            correspondenceService.sessionTimeoutWarning.cancel();
         };
 
 
@@ -597,6 +600,7 @@ module.exports = function (app) {
         self.savePreparedDocument = function () {
             self.documentInformation = self.docInfo;
             self.templateOrFileName = self.docName;
+            correspondenceService.sessionTimeoutWarning.cancel();
             if (self.simpleViewUrl) {
                 if (self.vsId && !self.fromDialog) {
                     correspondenceService

@@ -1154,5 +1154,8 @@ module.exports = function (app) {
             self.resetAddCorrespondence();
         });
 
+        $scope.$on('$destroy', function () {
+            correspondenceService.sessionTimeoutWarning.cancel();
+        });
     });
 };

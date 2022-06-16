@@ -36,6 +36,7 @@ module.exports = function (app) {
                                                           documentTagService,
                                                           DocumentComment,
                                                           viewDocumentService,
+                                                          roleService,
                                                           documentCommentService) {
         'ngInject';
         var self = this;
@@ -216,6 +217,7 @@ module.exports = function (app) {
         function _editInOfficeOnline() {
             self.editMode = true;
             _setPropertiesFormDirty();
+            correspondenceService.sessionTimeoutWarning.show(self.correspondence);
             if (self.content.desktop) {
                 self.content.desktop.overlay = false;
             }
@@ -253,11 +255,13 @@ module.exports = function (app) {
                         ctrl.editInOfficeOnlineCallback = function () {
                             self.editMode = true;
                             _setPropertiesFormDirty();
+                            correspondenceService.sessionTimeoutWarning.show(self.correspondence);
                             dialog.hide();
                         };
 
                         ctrl.cancelCallback = function () {
                             self.editMode = false;
+                            correspondenceService.sessionTimeoutWarning.cancel();
                             dialog.cancel();
                             if (self.editContentFrom === 'editContentFromGrid') {
                                 dialog.cancel();
@@ -398,6 +402,7 @@ module.exports = function (app) {
         }
 
         self.closeCorrespondenceDialog = function () {
+            correspondenceService.sessionTimeoutWarning.cancel();
             if (self.workItem) {
                 correspondenceService.unlockWorkItem(self.workItem, true)
                     .then(function () {
@@ -451,6 +456,7 @@ module.exports = function (app) {
 
             var info = self.correspondence.getInfo();
             delete self.correspondence.userCommentForSave;
+            correspondenceService.sessionTimeoutWarning.cancel();
 
             var method = info.needToApprove() && self.editMode ? 'saveDocumentWithContent' : 'saveDocument';
             if (method === 'saveDocumentWithContent') {

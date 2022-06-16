@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('documentEditorPopCtrl', function (dialog, employeeService) {
+    app.controller('documentEditorPopCtrl', function (dialog, employeeService, correspondenceService) {
         'ngInject';
         var self = this;
         self.controllerName = 'documentEditorPopCtrl';
@@ -17,10 +17,12 @@ module.exports = function (app) {
         };
 
         self.savePreparedDocument = function () {
+            correspondenceService.sessionTimeoutWarning.cancel();
             dialog.hide(true);
         };
 
         self.closeEditor = function () {
+            correspondenceService.sessionTimeoutWarning.cancel();
             dialog.hide(false);
         };
 

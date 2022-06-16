@@ -82,6 +82,7 @@ module.exports = function (app) {
                                                    CorrespondenceView,
                                                    TawasolDocument,
                                                    ManualDeliveryReport,
+                                                   roleService,
                                                    SequentialWFResult) {
         'ngInject';
         var self = this, managerService, correspondenceStorageService;
@@ -167,6 +168,7 @@ module.exports = function (app) {
             INTERNAL_PERSONAL: {text: 'INTERNAL_PERSONAL', value: 3},
             SAME_USER_AUTHORIZED: {text: 'SAME_USER_AUTHORIZED', value: 4}
         };
+        self.sessionTimer = null;
 
         var merge = {
                 classifications: {
@@ -5761,5 +5763,34 @@ module.exports = function (app) {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);
         }, 100);
 
+        /**
+         * @description show warning message to extend session time out before 5 min of global setting session timeout
+         */
+        self.sessionTimeoutWarning = {
+            show: function (correspondence) {
+                var info = correspondence.getInfo();
+                if (info.documentClass !== 'outgoing' || info.isPaper || info.docStatus >= 24) {
+                    return;
+                }
+
+                var sessionTimeout = (rootEntity.returnRootEntity().settings.sessionTimeout * 1000 * 60) - (5 * 1000 * 60);
+                self.sessionTimeoutWarning.cancel();
+                self.sessionTimer = $timeout(function () {
+                    dialog.confirmMessage(langService.get('session_timeout_finish_five_min'), langService.get('extend'), null)
+                        .then(function () {
+                            // it's a light service and don't have any permissions
+                            roleService.getPermissionById(1).then(function () {
+                                self.sessionTimeoutWarning.show(correspondence);
+                            });
+                        });
+                }, sessionTimeout)
+            },
+            cancel: function () {
+                if (self.sessionTimer) {
+                    $timeout.cancel(self.sessionTimer);
+                    self.sessionTimer = null;
+                }
+            }
+        }
     });
 };

@@ -45,6 +45,7 @@ module.exports = function (app) {
                                              downloadService,
                                              loadingIndicatorService,
                                              isInternal,
+                                             $scope,
                                              errorCode) {
         'ngInject';
         var self = this;
@@ -1074,6 +1075,10 @@ module.exports = function (app) {
 
         $rootScope.$on('SEQ_LAUNCH_SUCCESS', function () {
             self.resetAddCorrespondence();
+        });
+
+        $scope.$on('$destroy', function () {
+            correspondenceService.sessionTimeoutWarning.cancel();
         });
     });
 };
