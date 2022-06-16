@@ -22,6 +22,9 @@
                                 {{updateAction.getTranslatedName()}}
                             </md-option>
                         </md-select>
+                        <div class="red-text hint hint-reference" ng-if="!ctrl.attachment.canUpdateIfAuthorizedActionStatus()">
+                            {{lang.hint_attachment_restricted_for_modification}}
+                        </div>
                         <div ng-messages="attachment_form.updateActionStatus.$error">
                             <div ng-message="required">{{lang.field_required}}</div>
                         </div>
@@ -129,6 +132,9 @@
                                 {{updateAction.getTranslatedName()}}
                             </md-option>
                         </md-select>
+                        <div class="red-text hint hint-reference" ng-if="!ctrl.attachment.canUpdateIfAuthorizedActionStatus()">
+                            {{lang.hint_attachment_restricted_for_modification}}
+                        </div>
                         <div ng-messages="attachment_form.updateActionStatus.$error">
                             <div ng-message="required">{{lang.field_required}}</div>
                         </div>
