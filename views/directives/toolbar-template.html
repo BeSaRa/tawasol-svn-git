@@ -16,10 +16,11 @@
             <div class="font-size-14" ng-if="!toolbar.employeeService.isAdminUser()">
                 <md-menu-bar class="user-menu">
                     <md-menu flex md-position-mode="{{toolbar.getPositionMode($event)}}">
-                        <md-button ng-click="toolbar.openUserOrganizationMenu($mdMenu)">
+                        <md-button ng-click="toolbar.openUserOrganizationMenu($mdMenu)"
+                                   tooltip=" {{toolbar.currentUserOrganization()}}" tooltip-direction="bottom">
                             <div layout="row" flex layout-align="start center">
                                 <!-- {{toolbar.employee.userOrganization.getTranslatedName()}} -->
-                                {{toolbar.currentUserOrganization()}}
+                               <span class="subject over-flow-hidden">{{toolbar.currentUserOrganization()}}</span>
                                 <md-icon md-svg-icon="chevron-down"></md-icon>
                             </div>
                         </md-button>
