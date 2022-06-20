@@ -62,6 +62,7 @@ module.exports = function (app) {
             self.allowedEditProperties = null;
             self.allowIntegeratedClassification = false;
             self.allowDownloadWithoutWatermark = false;
+            self.mailingRoomEnabled = false;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [
@@ -121,6 +122,10 @@ module.exports = function (app) {
 
             Entity.prototype.getTranslatedMSTeamsStatus = function () {
                 return this.isMSTeamsEnabled ? langService.get('active') : langService.get('inactive');
+            };
+
+            Entity.prototype.getTranslatedMailingRoomStatus = function (){
+                return this.mailingRoomEnabled ? langService.get('active') : langService.get('inactive');
             };
 
             Entity.prototype.getNameByKey = function (langKey) {

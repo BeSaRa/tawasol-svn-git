@@ -32,6 +32,7 @@ module.exports = function (app) {
         self.settings = rootEntity.getGlobalSettings();
         // if selective export from global settings then false, otherwise true
         self.isGroupExport = self.settings.defaultExportTypeGrouping;
+        self.mailRoomEnabled = rootEntity.isMailRoomIntegrationEnabled()
 
 
         /*self.correspondenceSites = [].concat(sites.first, _.map(sites.second, function (item) {
@@ -47,6 +48,7 @@ module.exports = function (app) {
         self.externalSites = [];
         self.g2gSites = [];
         self.privateSites = [];
+        self.selectedMailingRoomSites = [];
         self.g2gData = g2gData;
         self.hasExternalSite = _.find(self.correspondenceSites, function (item) {
             return item.siteCategory === 2;
@@ -341,6 +343,7 @@ module.exports = function (app) {
         };
         // validate before send to export
         self.validateExportOption = function (exportOption) {
+            self.isGroupExport ? self.model.setMailingRoomSites(self.selectedMailingRoomSites) : self.partialExportList.setMailingRoomSites(self.selectedMailingRoomSites);
             _.map(canExportOptions, function (value, key) {
                 if (!self.settings.canExport(value)) {
                     exportOption.hasOwnProperty(key) ? exportOption[key] = false : null;

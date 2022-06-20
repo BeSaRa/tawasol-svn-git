@@ -178,6 +178,9 @@ module.exports = function (app) {
                 },
                 isAllowExportInternalOutgoingEnabled() {
                     return rootEntity.isAllowExportInternalOutgoingEnabled();
+                },
+                isMailRoomIntegrationEnabled() {
+                    return rootEntity && rootEntity.isMailRoomIntegrationEnabled();
                 }
             };
         }

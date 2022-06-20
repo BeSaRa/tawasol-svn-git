@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('PartialExportSelective', function (CMSModelInterceptor, _, PartialExport) {
+    app.factory('PartialExportSelective', function (CMSModelInterceptor, _, PartialExport, rootEntity) {
         'ngInject';
         return function PartialExportSelective(model) {
             var self = this, PartialExportCollection,
@@ -13,7 +13,8 @@ module.exports = function (app) {
                 ATTACHMENTS: [],
                 RELATED_BOOKS: [],
                 RELATED_OBJECTS: [],
-                ATTACHMENT_LINKED_DOCS: []
+                ATTACHMENT_LINKED_DOCS: [],
+                MAILING_ROOM: []
             };
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -49,6 +50,11 @@ module.exports = function (app) {
                     keys.push('ATTACHMENT_LINKED_DOCS');
                 }
 
+                if (!rootEntity.isMailRoomIntegrationEnabled()) {
+                    delete self.exportItems.MAILING_ROOM;
+                    keys.splice(keys.indexOf('MAILING_ROOM'), 1);
+                }
+
                 _.map(keys, function (key) {
                     self.exportItems[key] = _.map(self.exportItems[key], function (item) {
                         if (key === 'ATTACHMENT_LINKED_DOCS') {
@@ -57,6 +63,8 @@ module.exports = function (app) {
                                 vsId: info.vsId,
                                 docClassId: documentClassMap[info.documentClass.toLowerCase()]
                             }
+                        } else if (key === 'MAILING_ROOM') {
+                            return item.subSiteId;
                         }
                         return item.hasOwnProperty('vsId') ? item.vsId : item;
                     });
@@ -81,6 +89,9 @@ module.exports = function (app) {
 
             PartialExportSelective.prototype.setAttachmentLinkedDocs = function (attachmentLinkedDocs) {
                 this.exportItems.ATTACHMENT_LINKED_DOCS = attachmentLinkedDocs;
+            };
+            PartialExportSelective.prototype.setMailingRoomSites = function (correspondenceSites) {
+                this.exportItems.MAILING_ROOM = correspondenceSites;
             };
             PartialExportSelective.prototype.getAttachmentLinkedDocs = function () {
                 return this.exportItems.ATTACHMENT_LINKED_DOCS;

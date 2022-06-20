@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.factory('ReadyToExportOption', function (CMSModelInterceptor,
                                                  langService,
+                                                 rootEntity,
                                                  _) {
         'ngInject';
         return function ReadyToExportOption(model) {
@@ -13,6 +14,7 @@ module.exports = function (app) {
             self.RELATED_BOOKS = true;
             self.RELATED_OBJECTS = true;
             self.ATTACHMENT_LINKED_DOCS = [];
+            self.MAILING_ROOM = [];
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -57,7 +59,9 @@ module.exports = function (app) {
             ReadyToExportOption.prototype.setAttachmentLinkedDocs = function (attachmentLinkedDocs) {
                 this.ATTACHMENT_LINKED_DOCS = attachmentLinkedDocs;
             };
-
+            ReadyToExportOption.prototype.setMailingRoomSites = function (correspondenceSites) {
+                this.MAILING_ROOM = correspondenceSites;
+            };
             ReadyToExportOption.prototype.getAttachmentLinkedDocs = function () {
                 return this.ATTACHMENT_LINKED_DOCS;
             };
@@ -67,6 +71,12 @@ module.exports = function (app) {
             };
 
             ReadyToExportOption.prototype.mapSend = function () {
+                return this
+                    .mapAttachedLinkedDocs()
+                    .mapMailRoomSites();
+            };
+
+            ReadyToExportOption.prototype.mapAttachedLinkedDocs = function () {
                 var self = this;
                 if (self.hasAttachedLinkedDocs()) {
                     self.ATTACHMENT_LINKED_DOCS = _.map(self.ATTACHMENT_LINKED_DOCS, function (item) {
@@ -78,7 +88,20 @@ module.exports = function (app) {
                     })
                 }
                 return self;
-            };
+            }
+
+            ReadyToExportOption.prototype.mapMailRoomSites = function () {
+                var self = this;
+                //check if mail room integration enabled from root entity
+                if (!rootEntity.isMailRoomIntegrationEnabled()) {
+                    delete self.MAILING_ROOM;
+                } else {
+                    self.MAILING_ROOM = _.map(angular.copy(self.MAILING_ROOM), site => {
+                        return site.subSiteId;
+                    });
+                }
+                return self;
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

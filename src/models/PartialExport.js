@@ -2,7 +2,7 @@ module.exports = function (app) {
     app.factory('PartialExport', function (CMSModelInterceptor) {
         'ngInject';
         return function PartialExport(model) {
-            var self = this, keys = ['ATTACHMENTS', 'RELATED_BOOKS', 'RELATED_OBJECTS'];
+            var self = this, keys = ['ATTACHMENTS', 'RELATED_BOOKS', 'RELATED_OBJECTS', 'MAILING_ROOM'];
             self.sitesToList = [];
             self.sitesCCList = [];
             // every model has required fields

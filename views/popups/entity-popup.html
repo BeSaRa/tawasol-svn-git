@@ -120,7 +120,13 @@
                                                 {{ctrl.entity.getTranslatedYesNo('otpEnabled')}}</label>
                                         </md-switch>
                                     </div>
-                                    <span flex></span>
+                                    <div flex>
+                                        <md-switch ng-model="ctrl.entity.mailingRoomEnabled"
+                                                   aria-label="{{lang.mail_room_integration}}">
+                                            <label>{{lang.mail_room_integration}} :
+                                                {{ctrl.entity.getTranslatedMailingRoomStatus()}}</label>
+                                        </md-switch>
+                                    </div>
                                 </div>
                             </div>
                         </md-content>

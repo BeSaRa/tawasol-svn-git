@@ -13,7 +13,8 @@ module.exports = function (app) {
                 ATTACHMENTS: false,
                 RELATED_BOOKS: false,
                 RELATED_OBJECTS: false,
-                ATTACHMENT_LINKED_DOCS: []
+                ATTACHMENT_LINKED_DOCS: [],
+                MAILING_ROOM: []
             };
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -47,6 +48,9 @@ module.exports = function (app) {
             };
             PartialExportCollection.prototype.setAttachmentLinkedDocs = function (attachmentLinkedDocs) {
                 this.exportOptions.ATTACHMENT_LINKED_DOCS = attachmentLinkedDocs;
+            };
+            PartialExportCollection.prototype.setMailingRoomSites = function (correspondenceSites) {
+                this.exportOptions.MAILING_ROOM = correspondenceSites;
             };
             PartialExportCollection.prototype.getAttachmentLinkedDocs = function () {
                 return this.exportOptions.ATTACHMENT_LINKED_DOCS;
