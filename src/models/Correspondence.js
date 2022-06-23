@@ -905,7 +905,7 @@ module.exports = function (app) {
                 return this.internalG2G;
             };
 
-            Correspondence.prototype.hasExternalSite = function () {
+            Correspondence.prototype.hasCorrespondenceExternalSite = function () {
                 var info = this.getInfo();
                 if (info.documentClass === 'internal') {
                     return false;
@@ -952,7 +952,7 @@ module.exports = function (app) {
             }
 
             Correspondence.prototype.getExternalSiteIndicator = function () {
-                return this.hasExternalSite() ? indicator.getExternalSiteIndicator() : null;
+                return this.hasCorrespondenceExternalSite() ? indicator.getExternalSiteIndicator() : null;
             };
 
             Correspondence.prototype.getInternalSiteIndicator = function () {

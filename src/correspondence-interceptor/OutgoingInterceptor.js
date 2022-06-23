@@ -77,7 +77,7 @@ module.exports = function (app) {
             model.internalSiteIndicator = model.getInternalSiteIndicator();
             model.g2gSiteIndicator = model.getG2GSiteIndicator();
             model.isInternalOutgoingIndicator = model.getIsInternalOutgoingIndicator();
-            model.hasExternalSite = model.hasExternalSite();
+            model.hasExternalSite = model.hasCorrespondenceExternalSite();
 
             return model;
         });
