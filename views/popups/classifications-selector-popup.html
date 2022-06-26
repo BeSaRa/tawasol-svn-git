@@ -4,78 +4,126 @@
     <popup-toolbar-directive header-text="{{lang.select_classification}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
-            <div layout="row">
-                <md-input-container flex>
-                    <label for="classifications">{{lang.select_classification}}</label>
-                    <md-select multiple ng-model="ctrl.classification"
-                               id="classifications">
-                        <md-option
-                                ng-repeat="classification in ctrl.classifications track by $index"
-                                ng-if="ctrl.excludeIfExists(classification) && ctrl.includeIfEnabled(classification) && !classification.isGlobal"
-                                ng-value="classification">
-                            {{classification.getTranslatedName()}}
-                        </md-option>
-                    </md-select>
-                </md-input-container>
-                <div>
-                    <md-button class="md-raised md-primary" ng-disabled="ctrl.isDisabled()"
-                               ng-click="ctrl.addClassificationToSelectedClassification()">
-                        {{lang.add}}
-                    </md-button>
+            <div layout="column">
+                <div layout="row" class="p20-0">
+                    <span flex></span>
+                    <grid-search-directive grid="ctrl.grid"></grid-search-directive>
                 </div>
-            </div>
-            <md-card ng-if="ctrl.selectedClassifications.length" class="card-overlay">
-                <md-table-container>
-                    <table md-table
-                           md-row-select multiple ng-model="ctrl.selectedClassificationGrid">
-                        <thead md-head>
-                        <tr md-row>
-                            <th ng-if="ctrl.selectedClassificationGrid.length" colspan="4"
-                                md-column>
-                                <div layout="row" layout-align="start center">
-                                    <span>{{ctrl.selectedClassificationGrid.length}} {{lang.items_selected}} </span>
-                                    <span flex></span>
-                                    <div>
-                                        <md-button class="md-icon-button"
-                                                   ng-click="ctrl.removeSelectedClassification()">
-                                            <md-icon md-svg-icon="delete"></md-icon>
-                                        </md-button>
+                <md-card md-whiteframe="3" layout="column">
+                    <md-table-container>
+                        <table md-table md-progress="ctrl.grid.progress"
+                               md-row-select multiple ng-model="ctrl.selectedClassificationsGrid">
+                            <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                            <tr md-row>
+                                <th ng-if="ctrl.selectedClassificationsGrid.length" colspan="4"
+                                    md-column>
+                                    <div layout="row" layout-align="start center">
+                                        <span>{{ctrl.selectedClassificationsGrid.length}} {{lang.items_selected}} </span>
+                                        <span flex></span>
+                                        <div>
+                                            <md-button class="md-icon-button"
+                                                       ng-click="ctrl.addClassificationToSelectedClassification()">
+                                                <md-icon md-svg-icon="plus"></md-icon>
+                                            </md-button>
+                                        </div>
                                     </div>
-                                </div>
-                            </th>
-                            <th ng-if="!ctrl.selectedClassificationGrid.length" md-column>
-                                <span>{{lang.arabic_name}}</span>
-                            </th>
-                            <th ng-if="!ctrl.selectedClassificationGrid.length" md-column>
-                                <span>{{lang.english_name}}</span>
-                            </th>
-                            <th ng-if="!ctrl.selectedClassificationGrid.length" md-column>
-                                <span>{{lang.security_levels}}</span>
-                            </th>
-                            <th ng-if="!ctrl.selectedClassificationGrid.length" md-column>
-                                <span>{{lang.actions}}</span>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody md-body>
-                        <tr md-row md-select="classification"
-                            ng-repeat="classification in ctrl.selectedClassifications |orderBy:'itemOrder' track by $index">
-                            <td md-cell>{{classification.arName}}</td>
-                            <td md-cell>{{classification.enName}}</td>
-                            <td md-cell>{{classification.getSecurityLevels()}}</td>
-                            <td md-cell>
-                                <div layout="row">
-                                    <md-button class="md-icon-button"
-                                               ng-click="ctrl.removeClassification(classification)">
-                                        <md-icon md-svg-icon="delete"></md-icon>
-                                    </md-button>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </md-table-container>
-            </md-card>
+                                </th>
+                                <th ng-if="!ctrl.selectedClassificationsGrid.length" md-column md-order-by="arName">
+                                    <span>{{lang.arabic_name}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedClassificationsGrid.length" md-column md-order-by="enName">
+                                    <span>{{lang.english_name}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedClassificationsGrid.length" md-column md-order-by="">
+                                    <span>{{lang.security_levels}}</span>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody md-body>
+                            <tr md-row md-select="classification"
+                                ng-repeat="classification in ctrl.classifications | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                <td md-cell>{{classification.arName}}</td>
+                                <td md-cell>{{classification.enName}}</td>
+                                <td md-cell>{{classification.getSecurityLevels()}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </md-table-container>
+                    <md-table-pagination
+                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                            md-limit-options="ctrl.grid.limitOptions"
+                            md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                            md-total="{{(ctrl.classifications).length}}"
+                            md-page-select
+                            md-on-paginate="ctrl.grid.pagingCallback">
+                    </md-table-pagination>
+                </md-card>
+            </div>
+            <div layout="column">
+                    <md-card ng-if="ctrl.selectedClassifications.length" md-whiteframe="3" layout="column">
+                        <md-table-container>
+                            <table md-table md-progress="ctrl.gridAdded.progress"
+                                   md-row-select multiple ng-model="ctrl.selectedClassificationsAdded">
+                                <thead md-head md-order="ctrl.gridAdded.order" md-on-reorder="ctrl.getSortedDataAdded">
+
+                                <tr md-row>
+                                    <th ng-if="ctrl.selectedClassificationsAdded.length" colspan="4"
+                                        md-column>
+                                        <div layout="row" layout-align="start center">
+                                            <span>{{ctrl.selectedClassificationsAdded.length}} {{lang.items_selected}} </span>
+                                            <span flex></span>
+                                            <div>
+                                                <md-button class="md-icon-button"
+                                                           ng-click="ctrl.removeSelectedClassification()">
+                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedClassificationsAdded.length" md-column
+                                        md-order-by="arName">
+                                        <span>{{lang.arabic_name}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedClassificationsAdded.length" md-column
+                                        md-order-by="enName">
+                                        <span>{{lang.english_name}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedClassificationsAdded.length" md-column>
+                                        <span>{{lang.security_levels}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedClassificationsAdded.length" md-column>
+                                        <span>{{lang.actions}}</span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row md-select="classification"
+                                    ng-repeat="classification in ctrl.selectedClassifications |orderBy:'itemOrder' | limitTo: ctrl.gridAdded.limit: ((ctrl.gridAdded.page - 1) * ctrl.gridAdded.limit) track by $index">
+                                    <td md-cell>{{classification.arName}}</td>
+                                    <td md-cell>{{classification.enName}}</td>
+                                    <td md-cell>{{classification.getSecurityLevels()}}</td>
+                                    <td md-cell>
+                                        <div layout="row">
+                                            <md-button class="md-icon-button"
+                                                       ng-click="ctrl.removeClassification(classification)">
+                                                <md-icon md-svg-icon="delete"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </md-table-container>
+                        <md-table-pagination
+                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                md-limit-options="ctrl.gridAdded.limitOptions"
+                                md-limit="ctrl.gridAdded.limit" md-page="ctrl.gridAdded.page"
+                                md-total="{{(ctrl.selectedClassifications).length}}"
+                                md-page-select
+                                md-on-paginate="ctrl.gridAdded.pagingCallback">
+                        </md-table-pagination>
+                    </md-card>
+            </div>
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
