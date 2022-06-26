@@ -10,6 +10,7 @@ module.exports = function (app) {
                                                      editMode,
                                                      administratorService,
                                                      $timeout,
+                                                     applicationUsers,
                                                      organizationService) {
         'ngInject';
         var self = this;
@@ -19,7 +20,7 @@ module.exports = function (app) {
         self.administrator = angular.copy(administrator);
         self.model = angular.copy(self.administrator);
 
-        self.applicationUsers = applicationUserService.applicationUsers;
+        self.applicationUsers = applicationUsers;
         self.applicationUsersCopy = angular.copy(self.applicationUsers);
         self.applicationUserSearchText = '';
 
@@ -105,6 +106,44 @@ module.exports = function (app) {
                     $event.stopPropagation();
             }
         };
+
+
+        /**
+         * capture any event except arrows UP/DOWN allow those.
+         * @param $event
+         * @param enterCallback
+         */
+        self.allowPropagationUpDownArrows = function ($event, enterCallback) {
+            var key = $event.keyCode || $event.which;
+            if (key === 13 && enterCallback) {
+                enterCallback($event);
+                $event.stopPropagation();
+            }
+            var allowedKeys = [38 /* UP */, 40 /* DOWN */];
+            allowedKeys.indexOf(key) === -1 ? $event.stopPropagation() : null;
+        };
+
+        /**
+         * @description load application users by search text
+         * @param $event
+         */
+        self.loadApplicationUsers = function ($event) {
+            if ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+            }
+
+            applicationUserService
+                .loadApplicationUsersView(1, 25, self.applicationUserSearchText)
+                .then(function (result) {
+                    if (result.length) {
+                        self.applicationUsers = result;
+                        self.applicationUsersCopy = angular.copy(self.applicationUsers);
+                    } else {
+                        self.applicationUsers = angular.copy(self.applicationUsersCopy);
+                    }
+                });
+        }
 
         /**
          * @description Close the popup

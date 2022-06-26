@@ -26,9 +26,14 @@
                                        data-md-container-class="select-header-container sticky-search-bar">
                                 <md-select-header class="select-header">
                                     <input ng-model="ctrl.applicationUserSearchText"
-                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           ng-keydown="ctrl.allowPropagationUpDownArrows($event,ctrl.loadApplicationUsers)"
                                            placeholder="{{lang.search}}"
                                            class="select-header-input">
+                                    <md-button ng-if="ctrl.applicationUserSearchText"
+                                               ng-click="ctrl.loadApplicationUsers($event)"
+                                               tooltip="{{lang.load_more_records}}"
+                                               class="select-header-icon md-icon-button">
+                                        <md-icon md-svg-icon="magnify-plus"></md-icon>
                                 </md-select-header>
                                 <md-option
                                         ng-repeat="option in ctrl.applicationUsers | translatedNameFilter:ctrl.applicationUserSearchText"
