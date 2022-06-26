@@ -20,6 +20,7 @@ module.exports = function (app) {
                                                   $timeout,
                                                   correspondenceSiteTypes,
                                                   classificationService,
+                                                  ouApplicationUserService,
                                                   correspondenceViewService) {
         'ngInject';
         var self = this;
@@ -517,6 +518,28 @@ module.exports = function (app) {
         self.checkDocCategoryDisabled = function () {
             return !(generator.validRequired(self.filter.ui.key_2.value));
         };
+
+        /**
+         * @description load senders by criteria
+         * @param $event
+         */
+        self.loadSendersByCriteria = function ($event) {
+            if ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+            }
+
+            ouApplicationUserService
+                .searchByCriteria(langService.current === 'ar' ? {arName: self.senderSearchText} : {enName: self.senderSearchText})
+                .then(function (result) {
+                    if (result.length) {
+                        self.senders = _.uniqBy(_.map(result, 'applicationUser'), 'domainName');
+                        self.sendersCopy = angular.copy(self.senders);
+                    } else {
+                        self.senders = angular.copy(self.sendersCopy);
+                    }
+                });
+        }
 
         self.switchSitesViewer = function ($event) {
             $event.preventDefault();

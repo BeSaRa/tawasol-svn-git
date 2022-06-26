@@ -211,11 +211,22 @@
                                                    ng-model="ctrl.filter.ui.key_9.value"
                                                    md-on-close="ctrl.clearSearchText('sender')"
                                                    data-md-container-class="select-header-container sticky-search-bar">
-                                            <md-select-header class="select-header">
-                                                <input ng-model="ctrl.senderSearchText"
-                                                       ng-keydown="ctrl.handleSearchKeyDown($event, 'sender')"
-                                                       placeholder="{{lang.search}}"
-                                                       class="select-header-input">
+                                            <md-select-header class="select-header" layout="column">
+                                                <div layout="row" flex class="size-100">
+                                                    <input ng-model="ctrl.senderSearchText"
+                                                           ng-keydown="ctrl.handleSearchKeyDown($event, 'sender')"
+                                                           placeholder="{{lang.search}}"
+                                                           class="select-header-input">
+                                                    <md-button ng-if="ctrl.senderSearchText"
+                                                               ng-click="ctrl.loadSendersByCriteria($event)"
+                                                               tooltip="{{lang.load_more_records}}"
+                                                               class="select-header-icon md-icon-button">
+                                                        <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                                    </md-button>
+                                                </div>
+                                                <div class="help-text-div" ng-if="ctrl.senderSearchText">
+                                                    {{lang.press_enter_to_load_more_records}}
+                                                </div>
                                             </md-select-header>
                                             <md-option ng-value="null">{{lang.none}}</md-option>
                                             <md-option ng-value="sender.domainName"
