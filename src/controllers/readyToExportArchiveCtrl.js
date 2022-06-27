@@ -1261,7 +1261,7 @@ module.exports = function (app) {
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
-                permissionKey: "EDIT_OUTGOING_CONTENT",
+                permissionKey: "EDIT_AFTER_AUTHORIZATION_OUTGOING",
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     return !info.isPaper;

@@ -1421,7 +1421,7 @@ module.exports = function (app) {
                 callback: self.editAfterApprove,
                 class: "action-green",
                 showInView: true,
-                permissionKey: "EDIT_OUTGOING_CONTENT",
+                permissionKey: "EDIT_AFTER_AUTHORIZATION_OUTGOING",
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },

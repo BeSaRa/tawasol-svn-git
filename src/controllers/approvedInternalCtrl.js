@@ -1154,7 +1154,7 @@ module.exports = function (app) {
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
-                permissionKey: "EDIT_INTERNAL_CONTENT", //TODO: Apply correct permission when added to database.
+                permissionKey: "EDIT_AFTER_AUTHORIZATION_INTERNAL",
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     return !info.isPaper;
