@@ -30,6 +30,9 @@
                                         <th md-column>
                                             <span>{{lang.export_status}}</span>
                                         </th>
+                                        <th md-column>
+                                            <span class="break-white-space">{{lang.export_to_mailing_room}}</span>
+                                        </th>
                                     </tr>
                                     </thead>
                                     <tbody md-body>
@@ -59,6 +62,11 @@
                                         <td md-cell>
                                             <div flex layout="column">
                                                 <span class="span-column">{{site.getExportStatusText()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell ng-if="ctrl.mailRoomEnabled">
+                                            <div layout="column" ng-if="ctrl.isExportToMailRoomSelected(site)">
+                                                <md-icon md-svg-icon="email-check"></md-icon>
                                             </div>
                                         </td>
                                     </tr>

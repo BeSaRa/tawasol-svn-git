@@ -355,6 +355,13 @@ module.exports = function (app) {
             return exportOption
         };
 
+        /**
+         * @description check if mail room selected to show icon
+         */
+        self.isExportToMailRoomSelected = function (site) {
+            return self.selectedMailingRoomSites.indexOf(site) !== -1;
+        }
+
         self.closeExportPopupFromCtrl = function () {
             dialog.cancel('close');
         };
