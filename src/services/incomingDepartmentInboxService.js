@@ -90,7 +90,87 @@ module.exports = function (app) {
                         toast.success(langService.get("quick_receive_specific_success").change({name: incomingDepartmentInbox.getNames()}));
                         return result.data.rs;
                     });
-            }
+            },
+            /**
+             * @description Terminate incoming department document
+             * @param incomingDepartmentInbox
+             * @param $event
+             * @param justReason
+             */
+            incomingDepartmentInboxTerminate: function (incomingDepartmentInbox, $event, justReason) {
+                return dialog
+                    .showDialog({
+                        templateUrl: cmsTemplate.getPopup('reason'),
+                        controller: 'reasonPopCtrl',
+                        controllerAs: 'ctrl',
+                        bindToController: true,
+                        locals: {
+                            justReason: justReason
+                        },
+                        resolve: {
+                            comments: function (userCommentService) {
+                                'ngInject';
+                                return userCommentService.loadUserCommentsForDistribution();
+                            }
+                        }
+                    }).then(function (reason) {
+                        // to check if you need to return just the reason and no operation.
+                        if (justReason)
+                            return reason;
+
+                        return self.terminateIncomingDepartmentInbox(incomingDepartmentInbox, reason)
+                            .then(function () {
+                                return true;
+                            })
+                    });
+            },
+            /**
+             * @description Terminate bulk incoming department items
+             * @param workItems
+             * @param $event
+             * @param ignoreMessage
+             */
+            incomingDepartmentInboxTerminateBulk: function (workItems, $event, ignoreMessage) {
+                // if the selected workItem has just one record.
+                if (workItems.length === 1)
+                    return self.controllerMethod.incomingDepartmentInboxTerminate(workItems[0]);
+
+                return dialog
+                    .showDialog({
+                        templateUrl: cmsTemplate.getPopup('reason-bulk'),
+                        controller: 'reasonBulkPopCtrl',
+                        controllerAs: 'ctrl',
+                        bindToController: true,
+                        locals: {
+                            workItems: workItems
+                        },
+                        resolve: {
+                            comments: function (userCommentService) {
+                                'ngInject';
+                                return userCommentService.loadUserCommentsForDistribution();
+                            }
+                        }
+                    })
+                    .then(function (workItems) {
+                        return self.terminateBulkIncomingDepartmentInbox(workItems, $event, ignoreMessage)
+                            .then(function (result) {
+                                var response = false;
+                                if (result.length === workItems.length) {
+                                    toast.error(langService.get("failed_terminate_selected"));
+                                    response = false;
+                                } else if (result.length) {
+                                    generator.generateFailedBulkActionRecords('following_records_failed_to_terminate', _.map(result, function (readyToExport) {
+                                        return readyToExport.getTranslatedName();
+                                    }));
+                                    response = true;
+                                } else {
+                                    toast.success(langService.get("selected_terminate_success"));
+                                    response = true;
+                                }
+                                return response;
+                            });
+                    });
+            },
         };
 
 
@@ -185,6 +265,61 @@ module.exports = function (app) {
                     return result;
                 });
         };
+
+        /**
+         * @description Terminate incoming department item
+         * @param incomingDepartmentInbox
+         * @param reason
+         */
+        self.terminateIncomingDepartmentInbox = function (incomingDepartmentInbox, reason) {
+            var info = incomingDepartmentInbox.getInfo();
+            return $http
+                .put(urlService.userInboxActions + "/" + info.documentClass + "/terminate/wob-num", {
+                    first: info.wobNumber,
+                    second: reason
+                })
+                .then(function (result) {
+                    let res = result.data.rs;
+                    if (!res) {
+                        throw new Error(res);
+                    }
+                    return incomingDepartmentInbox;
+                }).catch(function (error) {
+                    toast.error(langService.get('failed_exporting'));
+                    return $q.reject(error)
+                });
+        };
+
+        /**
+         * @description Terminate bulk Ready To Export items
+         * @param workItems
+         * @param $event
+         * @param ignoreMessage
+         */
+        self.terminateBulkIncomingDepartmentInbox = function (workItems, $event, ignoreMessage) {
+            var items = _.map(workItems, function (workItem) {
+                return {
+                    first: workItem.getWobNumber(),
+                    second: workItem.reason
+                };
+            });
+            var wfName = 'incoming';
+
+            return $http
+                .put((urlService.userInboxActions + "/" + wfName.toLowerCase() + "/terminate/bulk"), items)
+                .then(function (result) {
+                    result = result.data.rs;
+                    var failedIncomingDepartmentItems = [];
+                    _.map(result, function (value, key) {
+                        if (!value)
+                            failedIncomingDepartmentItems.push(key);
+                    });
+                    return _.filter(workItems, function (workItem) {
+                        return (failedIncomingDepartmentItems.indexOf(workItem.generalStepElm.workObjectNumber) > -1);
+                    });
+                });
+        };
+
 
         /**
          * @description Create the shared method to the model.

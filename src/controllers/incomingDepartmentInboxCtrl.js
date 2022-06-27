@@ -165,6 +165,12 @@ module.exports = function (app) {
             return !(self.itemsWithoutQuickReceive && self.itemsWithoutQuickReceive.length);
         };
 
+        self.checkIfTerminateBulkAvailable = function () {
+            return _.every(self.selectedIncomingDepartmentInboxes, function (workItem) {
+                return workItem.isTransferredDocument();
+            });
+        }
+
         /**
          * @description Return the bulk incoming department inbox items
          * @param $event
@@ -739,6 +745,52 @@ module.exports = function (app) {
                 });
         };
 
+
+        /**
+         * @description Terminate Incoming Department Document
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.terminate = function (workItem, $event, defer) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
+                return;
+            }
+            incomingDepartmentInboxService
+                .controllerMethod
+                .incomingDepartmentInboxTerminate(workItem, $event)
+                .then(function () {
+                    self.reloadIncomingDepartmentInboxes(self.grid.page)
+                        .then(function () {
+                            toast.success(langService.get("terminate_specific_success").change({name: workItem.getTranslatedName()}));
+                            new ResolveDefer(defer);
+                        });
+                }).catch(function (error) {
+                if (error)
+                    toast.error(langService.get('failed_terminate_selected'));
+            });
+        };
+
+
+        /**
+         * @description Terminate Ready To Export Bulk
+         * @param $event
+         */
+        self.terminateBulk = function ($event) {
+            var numberOfRecordsToTerminate = angular.copy(self.selectedIncomingDepartmentInboxes.length);
+            incomingDepartmentInboxService
+                .controllerMethod
+                .incomingDepartmentInboxTerminateBulk(self.selectedIncomingDepartmentInboxes)
+                .then(function () {
+                    self.reloadIncomingDepartmentInboxes(self.grid.page)
+                        .then(function () {
+                            if (numberOfRecordsToTerminate === 1)
+                                toast.success(langService.get("selected_terminate_success"));
+                        });
+                });
+        };
+
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
             var info = model.getInfo();
             var hasPermission = false;
@@ -869,6 +921,21 @@ module.exports = function (app) {
                     return true;
                 },
                 showInView: false
+            },
+            // Terminate
+            {
+                type: 'action',
+                icon: 'stop',
+                text: 'grid_action_terminate',
+                shortcut: true,
+                callback: self.terminate,
+                class: "action-green",
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
+                checkShow: function (action, model) {
+                    return model.isTransferredDocument();
+                }
             },
             // Edit outgoing properties
             {
