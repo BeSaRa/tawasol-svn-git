@@ -171,6 +171,17 @@ module.exports = function (app) {
             });
         }
 
+        self.checkIfForwardBulkAvailable = function () {
+            var hasPermission = employeeService.hasPermissionTo("LAUNCH_DISTRIBUTION_WORKFLOW");
+            if (!hasPermission) {
+                return false;
+            }
+
+            return _.every(self.selectedIncomingDepartmentInboxes, function (workItem) {
+                return workItem.generalStepElm.isReassigned;
+            });
+        };
+
         /**
          * @description Return the bulk incoming department inbox items
          * @param $event
@@ -434,6 +445,18 @@ module.exports = function (app) {
                         });
                 });
         };
+
+        /**
+         * @description Launch distribution workflow for selected incoming mails
+         * @param $event
+         */
+        self.launchBulkDistributionWorkflow = function ($event) {
+            return correspondenceService
+                .launchCorrespondenceWorkflow(self.selectedIncomingDepartmentInboxes, $event, 'forward', 'favorites', true)
+                .then(function () {
+                    self.reloadIncomingDepartmentInboxes(self.grid.page);
+                });
+        }
 
         /**
          * @description Launch distribution workflow with quick send

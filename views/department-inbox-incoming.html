@@ -69,6 +69,13 @@
                                                            ng-if="ctrl.checkIfTerminateBulkAvailable()">
                                                     <md-icon md-svg-icon="stop" class="action-green"></md-icon>
                                                 </md-button>
+                                                <md-button class="md-icon-button"
+                                                           aria-label="{{lang.grid_action_forward}}"
+                                                           tooltip="{{lang.grid_action_forward}}"
+                                                           ng-click="ctrl.launchBulkDistributionWorkflow($event)"
+                                                           ng-if="ctrl.checkIfForwardBulkAvailable()">
+                                                    <md-icon md-svg-icon="share" class="action-green"></md-icon>
+                                                </md-button>
                                             </div>
                                         </th>
                                         <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
