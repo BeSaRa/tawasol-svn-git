@@ -450,7 +450,7 @@ module.exports = function (app) {
                     applicationUsers: function (applicationUserService, gridService) {
                         'ngInject';
                         //return applicationUserService.loadApplicationUsers(true);
-                        var limit = gridService.getGridPagingLimitByGridName(gridService.grids.inbox.sentItem) || 5;
+                        var limit = gridService.getGridPagingLimitByGridName(gridService.grids.administration.applicationUser) || 5;
                         return applicationUserService.loadApplicationUsersView(1, limit);
                     },
                     applicationUsersCount: function (applicationUserService) {
