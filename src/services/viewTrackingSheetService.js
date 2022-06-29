@@ -1246,6 +1246,19 @@ module.exports = function (app) {
             };
 
             /**
+             * @description load Correspondence Last Action
+             * @param correspondence
+             * @returns {*}
+             */
+            self.loadCorrespondenceLastAction = function (correspondence) {
+                var info = correspondence.getInfo();
+                return $http.get(urlService.lastAction + '/' + info.vsId)
+                    .then(function (result) {
+                        return generator.interceptReceivedInstance('FullHistory', generator.generateInstance(result.data.rs, FullHistory));
+                    });
+            }
+
+            /**
              * @description Create the shared method to the model.
              * @type {{delete: generator.delete, update: generator.update}}
              * @private

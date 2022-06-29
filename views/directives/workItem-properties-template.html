@@ -26,5 +26,25 @@
             <span class="property-key">{{lang.time}}</span>
             <span class="property-value">{{ctrl.item.getReceivedTime()}}</span>
         </li>
+        <li ng-if="ctrl.action">
+            <span class="property-key">{{lang.view_tracking_sheet_action}}</span>
+            <span class="property-value">{{ctrl.action.actionTypeInfo.getTranslatedName()}}</span>
+        </li>
+        <li ng-if="ctrl.action">
+            <span class="property-key">{{lang.view_tracking_sheet_action_by}}</span>
+            <span class="property-value">{{ctrl.action.actionByInfo.getTranslatedName()}}</span>
+        </li>
+        <li ng-if="ctrl.action">
+            <span class="property-key">{{lang.view_tracking_sheet_action_by_department}}</span>
+            <span class="property-value">{{ctrl.action.actionByOUInfo.getTranslatedName()}}</span>
+        </li>
+        <li ng-if="ctrl.action">
+            <span class="property-key">{{lang.view_tracking_sheet_action_date}}</span>
+            <span class="property-value">{{ctrl.action.actionDate}}</span>
+        </li>
+        <li>
+            <a class="cursor-pointer"
+               ng-click="ctrl.loadLastAction($event)">{{ ctrl.action ? lang.reload : lang.show_more}}</a>
+        </li>
     </ul>
 </li>

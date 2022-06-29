@@ -4,14 +4,23 @@ module.exports = function (app) {
         return {
             restrict: 'E',
             replace: true,
-            controller: function ($scope, LangWatcher) {
+            controller: function ($scope, LangWatcher, viewTrackingSheetService) {
                 'ngInject';
                 var self = this;
                 LangWatcher($scope);
                 self.collapse = false;
+                self.action = null;
+
                 self.toggleCollapse = function ($event) {
                     self.collapse = !self.collapse;
                     angular.element($event.target).parents('.section-title').next().slideToggle('fast');
+                }
+
+                self.loadLastAction = function ($event) {
+                    viewTrackingSheetService.loadCorrespondenceLastAction(self.item)
+                        .then(function (result) {
+                            self.action = result;
+                        });
                 }
             },
             controllerAs: 'ctrl',
