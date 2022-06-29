@@ -51,6 +51,7 @@ module.exports = function (app) {
             delete model.originalCopyIndicator;
             delete model.numberOfDays;
             delete model.recordGridName;
+            delete model.combinedItems;
 
             return model;
         });

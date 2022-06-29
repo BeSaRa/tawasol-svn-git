@@ -1,0 +1,168 @@
+<md-dialog class="dialog-extend cms-tabs-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.view_combined_sent_items}}">
+    <popup-toolbar-directive header-text="{{lang.view_combined_sent_items}}"
+                             full-screen-button="true" full-screen="ctrl.fullScreen"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div layout="column" flex class="md-padding">
+            <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                <md-table-container>
+                    <div flex scroll-directive>
+                        <table md-table ng-model="ctrl.selectedSentItemDepartmentInboxes"
+                               md-progress="ctrl.grid.progress">
+                            <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                            <tr md-row>
+                                <th colspan="{{ctrl.selectedSentItemDepartmentInboxes.length > 1 ? 12 : 13}}"
+                                    ng-if="ctrl.selectedSentItemDepartmentInboxes.length" md-column>
+                                    <div layout="row" layout-align="start center">
+                                        <span>{{ctrl.selectedSentItemDepartmentInboxes.length}} {{lang.items_selected}} </span>
+                                        <span flex></span>
+                                    </div>
+                                </th>
+                                <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
+                                    md-order-by="securityLevelLookup.lookupKey">
+                                    <!-- Security Level, Document type, Re-assigned Indicators -->
+                                </th>
+                                <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
+                                    md-order-by="docFullSerial">
+                                    <span>{{lang.department_sent_items_serial}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column>
+                                    <!-- Priority Level, Has Attachment Indicators -->
+                                </th>
+                                <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
+                                    md-order-by="docSubject">
+                                    <span>{{lang.subject}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
+                                    md-order-by="typeOriginalCopy">
+                                    <span>{{lang.type}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
+                                    md-order-by="{{ctrl.getSortingKey('sentByIdInfo', 'SenderInfo')}}">
+                                    <span>{{lang.action_by}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
+                                    md-order-by="{{ctrl.getSortingKey('mainSiteToIdInfo', 'CorrespondenceSite')}}">
+                                    <span>{{lang.main_site_to}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
+                                    md-order-by="{{ctrl.getSortingKey('subSiteToIdInfo', 'CorrespondenceSite')}}">
+                                    <span>{{lang.sub_site_to}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
+                                    md-order-by="deliveryDate">
+                                    <span>{{lang.received_date}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
+                                    md-order-by="{{ctrl.getSortingKey('messageStatus', 'Information')}}">
+                                    <span>{{lang.status}}</span>
+                                </th>
+                                <!--<th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column>
+                                    &lt;!&ndash; Grid Actions &ndash;&gt;
+                                </th>-->
+                            </tr>
+                            </thead>
+                            <tbody md-body>
+                            <tr md-row
+                                md-select="sentItemDepartmentInbox"
+                                grid-context-menu-directive="ctrl.contextMenuActions"
+                                context-menu-type="grid"
+                                selected-length="{{ctrl.selectedSentItemDepartmentInboxes.length ? ctrl.selectedSentItemDepartmentInboxes.length : 0}}"
+                                ng-repeat="sentItemDepartmentInbox in ctrl.sentItemDepartmentInboxes | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)">
+                                <td md-cell class="indicator-td">
+                                    <!-- Security Level -->
+                                    <grid-indicator-directive record="sentItemDepartmentInbox"
+                                                              indicator-type="securityLevel"
+                                                              record-type="SentItemDepartmentInbox"></grid-indicator-directive>
+                                    <!-- Linked Documents -->
+                                    <grid-indicator-directive record="sentItemDepartmentInbox"
+                                                              indicator-type="hasLinkedDocuments"
+                                                              record-type="SentItemDepartmentInbox"></grid-indicator-directive>
+                                    <!-- Follow up Status -->
+                                    <grid-indicator-directive record="sentItemDepartmentInbox"
+                                                              indicator-type="followupStatus"
+                                                              record-type="SentItemDepartmentInbox"></grid-indicator-directive>
+                                    <!-- Original/Copy -->
+                                    <grid-indicator-directive record="sentItemDepartmentInbox"
+                                                              indicator-type="originalCopy"
+                                                              record-type="SentItemDepartmentInbox"></grid-indicator-directive>
+                                </td>
+                                <td md-cell><span
+                                        class="serial-td">{{sentItemDepartmentInbox.docFullSerial}}</span>
+                                </td>
+                                <td md-cell class="indicator-td text-right"
+                                    style="padding-right:0 !important; padding-left:0px !important;">
+                                    <!-- Priority Level -->
+                                    <grid-indicator-directive record="sentItemDepartmentInbox"
+                                                              indicator-type="priorityLevel"
+                                                              record-type="SentItemDepartmentInbox"></grid-indicator-directive>
+                                    <!-- Has Attachments -->
+                                    <grid-indicator-directive record="sentItemDepartmentInbox"
+                                                              span-class="float-right"
+                                                              indicator-type="hasAttachment"
+                                                              record-type="SentItemDepartmentInbox"></grid-indicator-directive>
+                                </td>
+                                <td md-cell class="subject">
+                                    <a href=""
+                                       ng-if="sentItemDepartmentInbox.hasContent() && ctrl.grid.truncateSubject"
+                                       class="view-doc subject-internal" md-truncate
+                                       tooltip="{{sentItemDepartmentInbox.docSubject}}"
+                                       ng-click="ctrl.viewDocument(sentItemDepartmentInbox, $event)">{{sentItemDepartmentInbox.docSubject}}</a>
+                                    <span ng-if="!sentItemDepartmentInbox.hasContent() && ctrl.grid.truncateSubject"
+                                          class="view-doc subject-internal" md-truncate
+                                          tooltip="{{sentItemDepartmentInbox.docSubject}}">{{sentItemDepartmentInbox.docSubject}}</span>
+                                    <a href=""
+                                       ng-if="sentItemDepartmentInbox.hasContent() && !ctrl.grid.truncateSubject"
+                                       class="view-doc subject-internal"
+                                       tooltip="{{sentItemDepartmentInbox.docSubject}}"
+                                       ng-click="ctrl.viewDocument(sentItemDepartmentInbox, $event)">{{sentItemDepartmentInbox.docSubject}}</a>
+                                    <span ng-if="!sentItemDepartmentInbox.hasContent() && !ctrl.grid.truncateSubject"
+                                          class="view-doc subject-internal"
+                                          tooltip="{{sentItemDepartmentInbox.docSubject}}">{{sentItemDepartmentInbox.docSubject}}</span>
+                                </td>
+                                <td md-cell>{{sentItemDepartmentInbox.typeOriginalCopy}}</td>
+                                <td md-cell class="td-data">
+                                    <div layout="row">
+                                        <span flex>{{sentItemDepartmentInbox.sentByIdInfo.getTranslatedName()}}</span>
+                                    </div>
+                                </td>
+                                <td md-cell class="td-data">
+                                    <div layout="row">
+                                        <span flex>{{sentItemDepartmentInbox.mainSiteToIdInfo.getTranslatedName()}}</span>
+                                    </div>
+                                </td>
+                                <td md-cell class="td-data">
+                                    <div layout="row">
+                                        <span flex>{{sentItemDepartmentInbox.subSiteToIdInfo.getTranslatedName()}}</span>
+                                    </div>
+                                </td>
+                                <td md-cell>{{sentItemDepartmentInbox.deliveryDate}}</td>
+                                <td md-cell>{{sentItemDepartmentInbox.messageStatus.getTranslatedName()}}
+                                </td>
+                                <!--<td md-cell class="p-r0"
+                                    ng-if="ctrl.selectedSentItemDepartmentInboxes.length < 2">
+                                    <div layout-align="start center" flex ng-if="!ctrl.selectedSentItemDepartmentInboxes.length
+                                                          || ctrl.selectedSentItemDepartmentInboxes.length===1 && ctrl.selectedSentItemDepartmentInboxes[0].workObjectNumber === sentItemDepartmentInbox.workObjectNumber">
+                                        <grid-shortcut-actions-directive actions="ctrl.shortcutActions"
+                                                                model="sentItemDepartmentInbox">
+                                        </grid-shortcut-actions-directive>
+                                    </div>
+                                </td>-->
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </md-table-container>
+                <md-table-pagination
+                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                        md-limit-options="ctrl.grid.limitOptions"
+                        md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                        md-total="{{(ctrl.sentItemDepartmentInboxes).length}}"
+                        md-page-select
+                        md-on-paginate="ctrl.grid.pagingCallback">
+                </md-table-pagination>
+            </md-card>
+        </div>
+    </md-dialog-content>
+</md-dialog>

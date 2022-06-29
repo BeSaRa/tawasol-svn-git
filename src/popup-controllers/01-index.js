@@ -172,4 +172,5 @@ module.exports = function (app) {
     require('./reassignFollowupBookPopCtrl')(app);
     require('./selectRegistryOUsCentralArchivePopCtrl')(app);
     require('./customLevelGroupPopCtrl')(app);
+    require('./sentItemDepartmentInboxPopCtrl')(app);
 };

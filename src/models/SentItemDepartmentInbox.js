@@ -50,6 +50,7 @@ module.exports = function (app) {
             self.priorityLevelInfo = null;
             self.g2GRefNo = null;
             self.docStatus = 24;
+            self.combinedItems = [];
             /*Default status to show its already approved*/
 
             // every model has required fields

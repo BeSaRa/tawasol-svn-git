@@ -1,32 +1,32 @@
 module.exports = function (app) {
-    app.controller('sentItemDepartmentInboxCtrl', function (lookupService,
-                                                            sentItemDepartmentInboxService,
-                                                            $q,
-                                                            _,
-                                                            $filter,
-                                                            $state,
-                                                            listGeneratorService,
-                                                            langService,
-                                                            toast,
-                                                            dialog,
-                                                            viewDocumentService,
-                                                            viewTrackingSheetService,
-                                                            managerService,
-                                                            rootEntity,
-                                                            counterService,
-                                                            downloadService,
-                                                            contextHelpService,
-                                                            employeeService,
-                                                            correspondenceService,
-                                                            ResolveDefer,
-                                                            favoriteDocumentsService,
-                                                            generator,
-                                                            mailNotificationService,
-                                                            printService,
-                                                            SentItemDepartmentInbox,
-                                                            $stateParams,
-                                                            $timeout,
-                                                            gridService) {
+    app.controller('sentItemDepartmentInboxPopupCtrl', function (lookupService,
+                                                                 sentItemDepartmentInboxService,
+                                                                 $q,
+                                                                 _,
+                                                                 $filter,
+                                                                 $state,
+                                                                 listGeneratorService,
+                                                                 langService,
+                                                                 toast,
+                                                                 dialog,
+                                                                 viewDocumentService,
+                                                                 viewTrackingSheetService,
+                                                                 managerService,
+                                                                 rootEntity,
+                                                                 counterService,
+                                                                 downloadService,
+                                                                 employeeService,
+                                                                 correspondenceService,
+                                                                 ResolveDefer,
+                                                                 favoriteDocumentsService,
+                                                                 generator,
+                                                                 mailNotificationService,
+                                                                 SentItemDepartmentInbox,
+                                                                 $stateParams,
+                                                                 departmentSentItem,
+                                                                 selectedYear,
+                                                                 selectedMonth,
+                                                                 gridService) {
         'ngInject';
         var self = this;
 
@@ -34,15 +34,14 @@ module.exports = function (app) {
          * IT WILL ALWAYS GET OUTGOING DOCUMENTS ONLY
          * */
 
-        self.controllerName = 'sentItemDepartmentInboxCtrl';
-        contextHelpService.setHelpTo('sent-items-department');
+        self.controllerName = 'sentItemDepartmentInboxPopupCtrl';
 
         self.docClassName = 'outgoing';
         /**
          * @description All sent items
          * @type {*}
          */
-        self.sentItemDepartmentInboxes = [];
+        self.sentItemDepartmentInboxes = angular.copy(departmentSentItem.combinedItems);
         self.sentItemDepartmentInboxesCopy = angular.copy(self.sentItemDepartmentInboxes);
 
         /**
@@ -51,6 +50,7 @@ module.exports = function (app) {
          */
         self.selectedSentItemDepartmentInboxes = [];
         self.globalSetting = rootEntity.returnRootEntity().settings;
+        self.fullScreen = false;
 
         /**
          * @description Contains options for grid configuration
@@ -124,42 +124,22 @@ module.exports = function (app) {
          */
         self.reloadSentItemDepartmentInboxes = function (pageNumber) {
             var defer = $q.defer();
-            self.grid.progress = defer.promise;
-            return sentItemDepartmentInboxService
-                .loadCombinedSentItemDepartmentInboxes(self.selectedMonth, self.selectedYear)
-                .then(function (result) {
+            // self.grid.progress = defer.promise;
+            return defer.promise
+                .then(function () {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                    self.sentItemDepartmentInboxes = result;
+                    self.sentItemDepartmentInboxes = departmentSentItem.combinedItems;
                     self.sentItemDepartmentInboxesCopy = angular.copy(self.sentItemDepartmentInboxes);
                     self.selectedSentItemDepartmentInboxes = [];
                     defer.resolve(true);
+
                     if (pageNumber)
                         self.grid.page = pageNumber;
                     self.getSortedData();
-                    return result;
+                    return departmentSentItem;
                 });
         };
-
-        /**
-         * @description Opens the popup to get the month and year for sent items
-         * @type {Date}
-         */
-        var today = new Date();
-        self.selectedYear = today.getFullYear();
-        self.selectedMonth = today.getMonth() + 1;
-        self.getMonthYearForSentItems = function ($event) {
-            sentItemDepartmentInboxService
-                .controllerMethod
-                .openDateAndYearDialog(self.selectedMonth, self.selectedYear, $event)
-                .then(function (result) {
-                    self.selectedMonth = result.month;
-                    self.selectedYear = result.year;
-                    self.selectedMonthText = angular.copy(result.monthText);
-                    self.reloadSentItemDepartmentInboxes(self.grid.page);
-                });
-        };
-        self.selectedMonthText = generator.months[self.selectedMonth - 1].text;
 
         /**
          * @description Recall multiple selected sent items
@@ -176,16 +156,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.terminate = function (sentItemDepartmentInbox, $event, defer) {
-            /*sentItemDepartmentInboxService.controllerMethod
-             .sentItemDepartmentInboxTerminate(sentItemDepartmentInbox, $event)
-             .then(function (result) {
-             self.reloadSentItemDepartmentInboxes(self.grid.page)
-             .then(function () {
-             toast.success(langService.get("terminate_specific_success").change({name: sentItemDepartmentInbox.generalStepElm.docSubject}));
-             new ResolveDefer(defer);
-             })
-             ;
-             });*/
+
         };
 
         /**
@@ -209,41 +180,7 @@ module.exports = function (app) {
                             });
                     }
                 });
-
-
-            /*if(sentItemDepartmentInbox.receivedById === null){
-                sentItemDepartmentInboxService.fetchDeptSentWorkitemByVsId(sentItemDepartmentInbox.vsId).then(function (result) {
-                    var wobNum = 'temp01';
-                    angular.forEach(result, function(item){
-                        if(item.senderInfo.id === employeeService.getEmployee().id){
-                            wobNum = item.generalStepElm.workObjectNumber;
-                        }
-                    });
-
-                    dialog.showPrompt($event,langService.get('transfer_reason')+'?','','').then(function (reason) {
-                        sentItemDepartmentInboxService.recallSingleWorkItem(wobNum, employeeService.getEmployee().domainName, reason).then(function (result) {
-                            if(result){
-                                toast.success(langService.get('transfer_mail_success'));
-                            }
-                        }).catch(function (error) {
-                            toast.error(langService.get('work_item_not_found').change({wobNumber: wobNum}));
-                        });
-                    });
-                });
-            }else{
-                toast.error(langService.get('cannot_recall_received_book'));
-            }*/
         };
-
-        /**
-         * @description show combined sent items
-         */
-        self.showCombinedSentItems = function (sentItemDepartmentInbox, $event) {
-            sentItemDepartmentInboxService
-                .showCombinedSentItems(sentItemDepartmentInbox, self.selectedYear, self.selectedMonth, $event)
-                .then(function (result) {
-                });
-        }
 
         /**
          * @description Launch New Distribution workflow for Department Sent Item
@@ -600,31 +537,6 @@ module.exports = function (app) {
                 });
         };
 
-        self.printResult = function ($event) {
-            var searchCriteria = {
-                month: self.selectedMonth,
-                year: self.selectedYear,
-                isCentral: false
-            };
-            var printTitle = [langService.get('menu_item_department_inbox'), langService.get('menu_item_department_inbox')].join(' - '),
-                table = [
-                    {header: 'department_sent_items_serial', column: 'docFullSerial'},
-                    {header: 'subject', column: 'docSubject'},
-                    {header: 'type', column: 'typeInfo'},
-                    {header: 'action_by', column: 'sentByIdInfo'},
-                    //  {header: 'main_site_from', column: 'mainSiteFromIdInfo'},
-                    {header: 'main_site_to', column: 'mainSiteToIdInfo'},
-                    //  {header: 'sub_site_from', column: 'subSiteFromIdInfo'},
-                    {header: 'sub_site_to', column: 'subSiteToIdInfo'},
-                    {header: 'received_date', column: 'deliveryDate'},
-                    {header: 'status', column: 'messageStatus'}
-                ];
-
-            printService
-                .printData(self.sentItemDepartmentInboxes, table, printTitle, searchCriteria, null, null, true);
-        };
-
-
         /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
@@ -750,18 +662,6 @@ module.exports = function (app) {
                     var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
                     // return !info.isPaper;
                     return hasPermission; //TODO: Check with Besara as its enabled for paper by Issawi on 16 Oct, 2018
-                }
-            },
-            // Show Combined Sent Items
-            {
-                type: 'action',
-                icon: 'table-eye',
-                text: 'grid_action_show_combined_sent_items',
-                shortcut: true,
-                callback: self.showCombinedSentItems,
-                class: "action-green",
-                checkShow: function (action, model) {
-                    return model.combinedItems && model.combinedItems.length > 1;
                 }
             },
             // Recall
@@ -1158,19 +1058,6 @@ module.exports = function (app) {
 
         self.shortcutActions = gridService.getShortcutActions(self.gridActions);
         self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
-
-        self.openEmailItem = function () {
-            self.reloadSentItemDepartmentInboxes(self.grid.page).then(function () {
-                var departmentSentItems = _.flatten(self.sentItemDepartmentInboxes.map((item) => {
-                    return item.combinedItems;
-                }));
-                var emailItem = correspondenceService.getEmailItemByWobNum(departmentSentItems, $stateParams);
-                emailItem ? self.viewDocument(emailItem) : null;
-            });
-        };
-
-        // to open Email item if it exists.
-        self.openEmailItem();
 
     });
 };

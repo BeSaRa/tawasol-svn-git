@@ -36,6 +36,28 @@ module.exports = function (app) {
             });
         };
 
+        self.loadCombinedSentItemDepartmentInboxes = function (month, year) {
+            /*
+          * Pending(0),Sent(1),Delivered(2),Returned(3),Removed(4)
+          * */
+            month = month.hasOwnProperty('value') ? month.value : month;
+            return $http.post(urlService.departmentInboxes + '/hierarchical/dept-sent-items/month/' + month + '/year/' + year, [0, 1, 2]
+            ).then(function (result) {
+                var records = [];
+                self.sentItemDepartmentInboxes = [];
+                Object.keys(result.data.rs)
+                    .forEach((key) => {
+                        // var sentItems =result[key] ;
+                        records = generator.generateCollection(result.data.rs[key], SentItemDepartmentInbox, self._sharedMethods);
+                        records = generator.interceptReceivedCollection('SentItemDepartmentInbox', records);
+                        records[0].combinedItems = (records.length > 1) ? records : [];
+                        self.sentItemDepartmentInboxes.push(records[0]);
+                    });
+
+                return self.sentItemDepartmentInboxes;
+            });
+        }
+
 
         /**
          * @description  open reason dialog
@@ -227,6 +249,30 @@ module.exports = function (app) {
                 return Number(sentItemDepartmentInbox.id) === Number(sentItemDepartmentInboxId);
             });
         };
+
+        /**
+         * @description show combined sent items
+         * @returns {*}
+         * @param departmentSentItem
+         * @param selectedYear
+         * @param selectedMonth
+         * @param $event
+         */
+        self.showCombinedSentItems = function (departmentSentItem, selectedYear, selectedMonth, $event) {
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('department-inbox-sent-items'),
+                    controller: 'sentItemDepartmentInboxPopupCtrl',
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    targetEvent: $event,
+                    locals: {
+                        departmentSentItem: departmentSentItem,
+                        selectedYear: selectedYear,
+                        selectedMonth: selectedMonth
+                    }
+                });
+        }
 
         /**
          * @description Check if record with same name exists. Returns true if exists
