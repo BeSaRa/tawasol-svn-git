@@ -1,5 +1,6 @@
 <div layout="column" class="p20">
     <form name="corrSiteForm" layout="column">
+        <!-- Simple Site Search -->
         <div flex layout="column" ng-if="ctrl.simpleSearch" id="simple-site-search">
             <!-- Site Type -->
             <md-input-container class="exclude-margin" flex>
@@ -9,7 +10,7 @@
                            md-on-close="ctrl.clearSearchText('siteType')"
                            ng-model-options="{trackBy: '$value.lookupKey'}"
                            data-md-container-class="select-header-container sticky-search-bar"
-                           ng-disabled="ctrl.isSiteTypesDisabled">
+                           ng-disabled="ctrl.isInternalOutgoing">
                     <md-select-header class="select-header">
                         <input ng-model="ctrl.siteTypeSearchText"
                                ng-keydown="ctrl.preventSearchKeyDown($event)"
@@ -29,7 +30,7 @@
                 <label for="mainSite">{{lang.main_site}}</label>
                 <md-select id="mainSite" ng-model="ctrl.selectedMainSite"
                            ng-model-options="{trackBy: '$value.id'}"
-                           ng-disabled="!ctrl.selectedSiteType || !ctrl.selectedSiteType.id || ctrl.isSiteTypesDisabled"
+                           ng-disabled="!ctrl.selectedSiteType || !ctrl.selectedSiteType.id || ctrl.isInternalOutgoing"
                            ng-change="ctrl.getSubSites(true)"
                            md-on-close="ctrl.clearSearchText('mainSite')"
                            data-md-container-class="select-header-container sticky-search-bar">
@@ -91,6 +92,7 @@
             </div>
             <br/>
         </div>
+        <!-- Advance Site Search -->
         <div flex layout="column" ng-if="!ctrl.simpleSearch" id="advance-site-search">
             <md-input-container class="exclude-margin" flex>
                 <label for="siteTypeAdvanced">{{lang.sites_select_site_type}}</label>
@@ -99,7 +101,7 @@
                            md-on-close="ctrl.clearSearchText('siteType')"
                            ng-model-options="{trackBy: '$value.lookupKey'}"
                            data-md-container-class="select-header-container sticky-search-bar"
-                           ng-disabled="ctrl.isSiteTypesDisabled">
+                           ng-disabled="ctrl.isInternalOutgoing">
                     <md-select-header class="select-header">
                         <input ng-model="ctrl.siteTypeSearchText"
                                ng-keydown="ctrl.preventSearchKeyDown($event)"
@@ -122,6 +124,7 @@
                            ng-model-options="{trackBy:'$value.id'}"
                            ng-change="ctrl.getSubSites(true)"
                            md-on-close="ctrl.mainSiteSearchText = ''"
+                           ng-disabled="ctrl.isInternalOutgoingEnabled && (!ctrl.selectedSiteType || !ctrl.selectedSiteType.id || ctrl.isInternalOutgoing)"
                            ng-model="ctrl.selectedMainSite">
                     <md-select-header class="select-header" layout="column">
                         <div layout="row" flex class="size-100">
@@ -159,6 +162,7 @@
                            name="subSite"
                            ng-model-options="{trackBy:'$value.subSiteId'}"
                            md-on-close="ctrl.subSiteSearchText = ''"
+                           ng-disabled="ctrl.isInternalOutgoingEnabled && !ctrl.selectedMainSite"
                            ng-model="ctrl.selectedSubSite">
                     <md-select-header class="select-header" layout="column">
                         <div layout="row" flex class="size-100">

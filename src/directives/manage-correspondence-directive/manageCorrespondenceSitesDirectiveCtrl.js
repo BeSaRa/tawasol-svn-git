@@ -49,7 +49,7 @@ module.exports = function (app) {
         self.followupStatus = null;
         self.isFollowupStatusMandatory = false;
         self.isInternalOutgoingEnabled = rootEntity.isInternalOutgoingEnabled();
-        self.isSiteTypesDisabled = false;
+        self.isInternalOutgoing = false;
 
         var followupStatusWithoutReply = _.find(self.followUpStatuses, function (status) {
                 return status.lookupStrKey === 'WITHOUT_REPLY';
@@ -1323,7 +1323,7 @@ module.exports = function (app) {
                         _initPriorityLevelWatch();
                         var info = self.correspondence.getInfo();
                         // to disable site type control if adding internal outgoing
-                        self.isSiteTypesDisabled = info.documentClass === 'outgoing' && self.correspondence.isInternal;
+                        self.isInternalOutgoing = info.documentClass === 'outgoing' && self.correspondence.isInternal;
                     }
                     _checkFollowupStatusMandatory();
                 });

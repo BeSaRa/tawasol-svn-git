@@ -79,7 +79,7 @@ module.exports = function (app) {
         self.exportOptions = self.partialExportList.getKeys();
         self.isInternalOutgoingEnabled = rootEntity.isInternalOutgoingEnabled();
         var info = self.correspondence.getInfo();
-        self.isSiteTypesDisabled = self.isInternalOutgoingEnabled && info.documentClass === 'outgoing' && self.correspondence.isInternal;
+        self.isInternalOutgoing = self.isInternalOutgoingEnabled && info.documentClass === 'outgoing' && self.correspondence.isInternal;
 
         self.labels = _.map(self.partialExportList.getKeys(), function (label) {
             return label.toLowerCase();

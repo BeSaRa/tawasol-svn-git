@@ -14,7 +14,7 @@
                                    ng-change="ctrl.onSiteTypeSimpleChange($event)"
                                    md-on-close="ctrl.clearSearchText('siteTypeSimple')"
                                    data-md-container-class="select-header-container sticky-search-bar"
-                                    ng-disabled="ctrl.isSiteTypesDisabled">
+                                   ng-disabled="ctrl.isInternalOutgoing">
                             <md-select-header class="select-header">
                                 <input ng-model="ctrl.siteTypeSimpleSearchText"
                                        ng-keydown="ctrl.preventSearchKeyDown($event)"
@@ -34,7 +34,7 @@
                         <label for="mainSiteSimple">{{lang.main_site}}</label>
                         <md-select id="mainSiteSimple" ng-model="ctrl.selectedMainSiteSimple"
                                    ng-model-options="{trackBy: '$value.id'}"
-                                   ng-disabled="!ctrl.selectedSiteTypeSimple || !ctrl.selectedSiteTypeSimple.id || ctrl.isSiteTypesDisabled"
+                                   ng-disabled="!ctrl.selectedSiteTypeSimple || !ctrl.selectedSiteTypeSimple.id || ctrl.isInternalOutgoing"
                                    ng-change="ctrl.onMainSiteChangeSimple($event)"
                                    md-on-close="ctrl.clearSearchText('mainSiteSimple')"
                                    data-md-container-class="select-header-container sticky-search-bar">
@@ -76,7 +76,7 @@
                                    ng-change="ctrl.onSiteTypeChangeAdvanced($event)"
                                    md-on-close="ctrl.clearSearchText('siteTypeAdvanced')"
                                    data-md-container-class="select-header-container sticky-search-bar"
-                                   ng-disabled="ctrl.isSiteTypesDisabled">
+                                   ng-disabled="ctrl.isInternalOutgoing">
                             <md-select-header class="select-header">
                                 <input ng-model="ctrl.siteTypeAdvancedSearchText"
                                        ng-keydown="ctrl.preventSearchKeyDown($event)"
@@ -100,7 +100,7 @@
                                    ng-change="ctrl.onMainSiteChangeAdvanced($event)"
                                    md-on-close="ctrl.clearSearchText('mainSiteAdvanced')"
                                    data-md-container-class="select-header-container sticky-search-bar"
-                                   ng-disabled="ctrl.isSiteTypesDisabled">
+                                   ng-disabled="ctrl.isInternalOutgoingEnabled && (!ctrl.selectedSiteTypeAdvanced || !ctrl.selectedSiteTypeAdvanced.id || ctrl.isInternalOutgoing)">
                             <md-select-header class="select-header" layout="column">
                                 <div layout="row" flex class="size-100">
                                     <input ng-model="ctrl.mainSiteAdvancedSearchText"
@@ -131,6 +131,7 @@
                         <label for="subSiteSearchAdvanced">{{lang.sites_select_sub_site}}</label>
                         <input id="subSiteSearchAdvanced" ng-model="ctrl.subSiteAdvancedSearchText"
                                ng-enter="ctrl.onSubSiteSearchAdvanced(false)"
+                               ng-disabled="ctrl.isInternalOutgoingEnabled && !ctrl.selectedMainSiteAdvanced"
                                ng-change="ctrl.onSubSiteSearchAdvanced(false)">
                     </md-input-container>
                 </div>

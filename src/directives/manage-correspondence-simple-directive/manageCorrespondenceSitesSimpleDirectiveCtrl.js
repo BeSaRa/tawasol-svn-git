@@ -73,7 +73,7 @@ module.exports = function (app) {
         self.selectedSubSiteFollowupDate = null;
         self.isFollowupStatusMandatory = false;
         self.isInternalOutgoingEnabled = rootEntity.isInternalOutgoingEnabled();
-        self.isSiteTypesDisabled = false;
+        self.isInternalOutgoing = false;
 
 
         function _isShowRegistryUnit() {
@@ -848,7 +848,7 @@ module.exports = function (app) {
                             _initPriorityLevelWatch();
                             var info = self.correspondence.getInfo();
                             // to disable site type control if adding internal outgoing
-                            self.isSiteTypesDisabled = info.documentClass === 'outgoing' && self.correspondence.isInternal;
+                            self.isInternalOutgoing = info.documentClass === 'outgoing' && self.correspondence.isInternal;
                         }
                         _checkFollowupStatusMandatory();
                     });
