@@ -47,6 +47,7 @@ module.exports = function (app) {
         self.proxyMailInboxes = [];
         self.proxyMailInboxesCopy = angular.copy(self.proxyMailInboxes);
         self.userFolders = userFolders;
+        self.selectUser = self.proxyUsers.length === 1 ? self.proxyUsers[0] : null;
 
         /**
          * @description Contains methods for Star operations for proxy Mail inbox items
@@ -1796,6 +1797,11 @@ module.exports = function (app) {
         self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
         self.stickyActions = $filter('orderBy')(gridService.getStickyActions(self.gridActions), 'stickyIndex');
 
+        self.$onInit = function () {
+            if (self.proxyUsers.length) {
+                self.getProxyMailForUser();
+            }
+        }
         //console.log(self.shortcutActions, self.contextMenuActions);
     });
 };
