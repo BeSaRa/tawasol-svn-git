@@ -849,7 +849,6 @@ module.exports = function (app) {
                             var info = self.correspondence.getInfo();
                             // to disable site type control if adding internal outgoing
                             self.isInternalOutgoing = info.documentClass === 'outgoing' && self.correspondence.isInternal;
-                            self.isSiteTypesDisabled = info.documentClass === 'outgoing' && self.correspondence.isInternal;
                             if (self.correspondence.sitesInfoTo.length || self.correspondence.sitesInfoCC.length) {
                                 self.sitesInfoLength = self.correspondence.sitesInfoTo.length + self.correspondence.sitesInfoCC.length - 1;
                             }
