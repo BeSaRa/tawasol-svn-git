@@ -359,6 +359,8 @@ module.exports = function (app) {
                         self.loadMainSitesRecords($event);
                     } else if (fieldType === 'subSite') {
                         self.loadSubSitesRecords($event);
+                    } else if (fieldType === 'sender') {
+                        self.loadSendersByCriteria($event);
                     }
                 }
                 // prevent keydown except arrow up and arrow down keys
