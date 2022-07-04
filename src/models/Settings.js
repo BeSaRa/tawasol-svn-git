@@ -65,6 +65,9 @@ module.exports = function (app) {
             Settings.prototype.canSendRelatedDocsToSameDepartmentOnly = function () {
                 return this.wFRelatedBookStatus === 2;
             }
+            Settings.prototype.isSenderIncomingMailHidden = function () {
+                return this.hideSenderIncomingMail;
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

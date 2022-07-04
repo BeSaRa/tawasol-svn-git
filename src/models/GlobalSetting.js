@@ -72,6 +72,7 @@ module.exports = function (app) {
             self.excludedPermissionList = [];
             self.mergeCommentsWithTrackingSheet = false;
             self.wFRelatedBookStatus = 0;
+            self.hideSenderIncomingMail = false;
 
             //endregion
 

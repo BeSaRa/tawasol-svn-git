@@ -45,6 +45,7 @@ module.exports = function (app) {
          * @type {Array}
          */
         self.selectedIncomingDepartmentInboxes = [];
+        self.globalSettings = rootEntity.getGlobalSettings();
 
         /**
          * @description Mark item as read/unread

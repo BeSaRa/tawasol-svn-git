@@ -259,14 +259,12 @@
                                 <!-- Show Copyright Text -->
                                 <md-switch flex ng-model="ctrl.globalSetting.showCopyrightText"
                                            aria-label="{{lang.show_copyright}}">
-                                    <span>{{lang.show_copyright}} : </span>{{
-                                    ctrl.globalSetting.getTranslatedYesNo('showCopyrightText')}}
+                                    <span>{{lang.show_copyright}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('showCopyrightText')}}
                                 </md-switch>
                                 <!-- flip login -->
                                 <md-switch flex ng-model="ctrl.globalSetting.flipLogin"
                                            aria-label="{{lang.flip_login}}">
-                                    <span>{{lang.flip_login}} : </span>{{
-                                    ctrl.globalSetting.getTranslatedYesNo('flipLogin')}}
+                                    <span>{{lang.flip_login}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('flipLogin')}}
                                 </md-switch>
                             </div>
                             <div layout="row" class="p20">
@@ -282,7 +280,11 @@
                                         <div ng-message="required">{{lang.field_required}}</div>
                                     </div>
                                 </md-input-container>
-                                <span flex></span>
+                                <!-- Hide Sender Incoming Mail -->
+                                <md-switch flex ng-model="ctrl.globalSetting.hideSenderIncomingMail"
+                                           aria-label="{{lang.hide_sender_incoming_mail}}">
+                                    <span>{{lang.hide_sender_incoming_mail}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('hideSenderIncomingMail')}}
+                                </md-switch>
                             </div>
                             <div layout="row" class="p20">
                                 <!-- Copyright Text -->

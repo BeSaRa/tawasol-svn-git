@@ -107,7 +107,7 @@
                                             md-order-by="generalStepElm.numberOfDays">
                                             <span>{{lang.number_of_days}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length && !ctrl.globalSettings.isSenderIncomingMailHidden()" md-column
                                             md-order-by="{{ctrl.getSortingKey('sender', 'Information')}}">
                                             <span>{{lang.sender}}</span>
                                         </th>
@@ -192,7 +192,7 @@
                                         <td md-cell>{{incomingDepartmentInbox.type}}</td>
                                         <td md-cell>{{incomingDepartmentInbox.fromOU.getTranslatedName()}}</td>
                                         <td md-cell>{{incomingDepartmentInbox.generalStepElm.numberOfDays}}</td>
-                                        <td md-cell>
+                                        <td md-cell ng-if="!ctrl.globalSettings.isSenderIncomingMailHidden()">
                                             <div layout="row">
                                                 {{incomingDepartmentInbox.sender.getTranslatedName()}}
                                                 <grid-indicator-directive
