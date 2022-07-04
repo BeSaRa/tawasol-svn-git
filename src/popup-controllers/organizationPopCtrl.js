@@ -2482,14 +2482,14 @@ module.exports = function (app) {
             var reader = new FileReader();
             reader.onload = function () {
                 image = new Blob([reader.result], {type: file.type});
-                if (self[modelName]) {
-                    self[modelName].mimeType = file.type;
-                    self[modelName].fileSize = file.size;
-                    self[modelName].extension = file.name.split('.').pop();
-                    self[modelName].fileUrl = URL.createObjectURL(image);
+                if (self.organizationLogo) {
+                    self.organizationLogo.mimeType = file.type;
+                    self.organizationLogo.fileSize = file.size;
+                    self.organizationLogo.extension = file.name.split('.').pop();
+                    self.organizationLogo.fileUrl = URL.createObjectURL(image);
                 }
 
-                self[modelName] = URL.createObjectURL(image);
+                self.organizationLogo = URL.createObjectURL(image);
 
                 self.isSaveRegOULogDisabled = false;
                 if (!$scope.$$phase) {
