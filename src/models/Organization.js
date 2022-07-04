@@ -65,6 +65,8 @@ module.exports = function (app) {
             self.faxId = null;
             self.isPrivateRegistry = false;
             self.regouInfo = null;
+            self.logoId = null;
+            self.logoStore = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -316,6 +318,9 @@ module.exports = function (app) {
 
             Organization.prototype.getNotSyncOuIndicator = function () {
                 return !this.isFnSynched ? indicator.getNotSyncOuIndicator(true) : null;
+            };
+            Organization.prototype.getOrganizationLogoUrl = function () {
+                return this.logoStore ? this.logoStore.fileUrl : false;
             };
 
             // don't remove CMSModelInterceptor from last line

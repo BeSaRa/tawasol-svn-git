@@ -29,6 +29,7 @@ module.exports = function (app) {
         self.childrenOrganizations = {};
 
         self.followupOrganizations = [];
+        self.organizationLogo = null;
 
         /**
          * @description load organizations from server.
@@ -1092,5 +1093,33 @@ module.exports = function (app) {
             return [].concat(regOus, sections)
         }
 
+        /**
+         * @description save logo for selected reg ou
+         */
+        self.saveLogo = function (organization, file) {
+            var form = new FormData();
+            form.append('id', organization.id);
+            form.append('content', file);
+            return $http.post(urlService.ouLogo + organization.id, form, {
+                headers: {
+                    'Content-Type': undefined
+                }
+            }).then(function (result) {
+                return result.data.rs;
+            })
+        }
+
+        /**
+         * @description
+         * @param organization
+         * @returns {*}
+         */
+        self.downloadLogo = function (organization) {
+            var orgId = organization.hasOwnProperty('id') ? organization.id : organization;
+            return $http.get(urlService.ouLogo + orgId).then(function (result) {
+                self.organizationLogo = result.data.rs;
+                return self.organizationLogo;
+            })
+        }
     });
 };

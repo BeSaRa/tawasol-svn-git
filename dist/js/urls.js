@@ -7,7 +7,7 @@
                 .addToAllWithSegment('desktopEdit', '/goedit?mimtype={type}&vsid={vsId}&docsubject={subject}&docclassname={documentClass}&token={token}&view-only={mode}&entity={entityIdentifier}&ouid={currentOuId}&base-url={base_url}', 'desktopWord')
                 .addToAll('language', 'dist/resources/lang.json')
                 .addToAll('menus', 'dist/resources/menu.json')
-                .addToAll('pspdfLanguage','dist/resources/pspdfkitLang.json')
+                .addToAll('pspdfLanguage', 'dist/resources/pspdfkitLang.json')
                 .addToAllWithSegment('icnLogin', '/navigator/jaxrs/logon?userid={{username}}&password={{password}}', 'icn')
                 .addToAllWithSegment('icnSearch', '/navigator/bookmark.jsp?desktop=cms&repositoryId=EBLAICN&repositoryType=p8&docid=StoredSearch%2C%7BF4B4E428-6FC3-4BD3-BC91-AF46EC513DB1%7D%2C%7B76B326FF-8873-CB36-8524-6381F0800000%7D&mimeType=application%2Fx-filenet-searchtemplate&template_name=StoredSearch&version=current&vsId=%7BFF5CAE8D-D59D-CDF2-8488-6381F0800000%7D', 'icn')
                 .addToAllWithSegment('icnAdd', '/navigator/bookmark.jsp?desktop=cms&repositoryId=EBLAICN&repositoryType=p8&docid=EntryTemplate%2C%7BF4B4E428-6FC3-4BD3-BC91-AF46EC513DB1%7D%2C%7BFB387ADC-CD58-C442-87A2-6381EEA00000%7D&mimeType=application%2Fx-icn-documententrytemplate&template_name=EntryTemplate&version=current&vsId=%7B2248377B-9A84-C3F3-845F-6381EEA00000%7D', 'icn')
@@ -226,6 +226,7 @@
                 .addToAllWithBase('applicationUserLevel', '/cms-entity/admin/application-user-level')
                 .addToAllWithBase('userSpecificDistWF', '/cms-entity/admin/user-specific-dist-wf')
                 .addToAllWithBase('lastAction', 'cms-entity/user/full-history/last-action/vsid')
+                .addToAllWithBase('ouLogo', 'cms-entity/admin/ou/logo/')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('sidebarLeftDirectiveCtrl', function (sidebarService, $scope, _, rootEntity, $mdMedia) {
+    app.controller('sidebarLeftDirectiveCtrl', function (sidebarService, $scope, _, rootEntity, $mdMedia, employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'sidebarLeftDirectiveCtrl';
@@ -7,6 +7,8 @@ module.exports = function (app) {
         self.rootEntity = rootEntity;
         self.service = sidebarService;
         self.search = '';
+        self.userOrganization = employeeService.getEmployee().getExtraFields().ouInfo;
+
         self.toggleSidebarLocked = function (sidebarCode) {
             return sidebarService.getSidebar(sidebarCode).toggleLocked();
         };

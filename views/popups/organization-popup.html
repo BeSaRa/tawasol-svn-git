@@ -1857,7 +1857,7 @@
                             </div>
                         </md-content>
                     </md-tab>
-                    <!-- dynamic Followup -->
+                    <!-- DYNAMIC FOLLOWUP -->
                     <md-tab ng-if="ctrl.editMode && ctrl.showTab('dynamicFollowups')"
                             label="{{lang.dynamic_followup}}"
                             ng-click="ctrl.setCurrentTab('dynamicFollowups')">
@@ -1979,6 +1979,44 @@
                                     </md-card>
                                 </div>
                             </div>
+                        </md-content>
+                    </md-tab>
+                    <!-- UPLOAD Department LOGO-->
+                    <md-tab ng-if="ctrl.editMode && ctrl.organization.hasRegistry && ctrl.showTab('uploadLogo')"
+                            label="{{lang.upload}}" ng-click="ctrl.setCurrentTab('uploadLogo')"
+                            md-on-select="ctrl.setCurrentTab('uploadLogo')">
+                        <md-content scroll-directive>
+                            <div layout="column">
+                                <div layout="row" flex class="p20">
+                                    <!-- LOGO -->
+                                    <div layout="column" flex>
+                                        <img ng-if="ctrl.organizationLogo"
+                                             ng-src="{{ctrl.organizationLogo.fileUrl ? ctrl.organizationLogo.fileUrl : ctrl.organizationLogo }}"
+                                             class="upload-image">
+
+                                        <div layout="row" layout-align="start center">
+                                            <upload-file-directive
+                                                    selected-file="ctrl.organizationLogo"
+                                                    call-back="ctrl.viewImage"
+                                                    model-name="organizationLogo"
+                                                    model-obj='ctrl.organizationLogo'
+                                                    button-label="{{lang.upload_logo}}"
+                                                    selected-file-extension="ctrl.organizationLogoExtensions">
+                                            </upload-file-directive>
+                                            <div>
+                                                <md-button class="md-raised" ng-disabled="ctrl.isSaveRegOULogDisabled"
+                                                           ng-click="ctrl.saveOrganizationLogo()">
+                                                    {{lang.save}}
+                                                </md-button>
+                                            </div>
+                                        </div>
+                                        <div class="help-text-div">{{ctrl.imageDimensionsInfo}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
                         </md-content>
                     </md-tab>
                 </md-tabs>

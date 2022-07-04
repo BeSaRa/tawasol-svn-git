@@ -157,6 +157,11 @@ module.exports = function (app) {
         self.serialYears = _.range(configurationService.SEARCH_YEARS, ((new Date()).getFullYear() + 1));
         self.selectedSerialOrganizations = [];
 
+        self.organizationLogo = {};
+        self.currentFileData = null;
+        self.organizationLogoExtensions = ['.png'];
+        self.isSaveRegOULogDisabled = true;
+
         /**
          * @description Contains options for grid configuration
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
@@ -370,7 +375,9 @@ module.exports = function (app) {
                 || self.selectedTab === 'classifications'
                 || self.selectedTab === 'users'
                 || self.selectedTab === 'departmentUsers'
-                || self.selectedTab === 'children');
+                || self.selectedTab === 'children'
+                || self.selectedTab === 'uploadLogo'
+            );
         };
 
         /**
@@ -2442,6 +2449,56 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description load logo per department
+         */
+        self.loadOrganizationLogo = function () {
+            return organizationService.downloadLogo(self.organization)
+                .then(function (result) {
+                    self.organizationLogo = result;
+                })
+        }
+
+        /**
+         * @description save uploaded logo for current organization
+         */
+        self.saveOrganizationLogo = function () {
+            organizationService
+                .saveLogo(self.organization, self.currentFileData)
+                .then(function () {
+                    self.isSaveRegOULogDisabled = true;
+                    toast.success(langService.get('save_success'));
+                });
+        }
+
+        /**
+         * @description view organization logo after selected
+         * @param file
+         * @param modelName
+         */
+        self.viewImage = function (file, modelName) {
+            var image;
+            self.currentFileData = file;
+            var reader = new FileReader();
+            reader.onload = function () {
+                image = new Blob([reader.result], {type: file.type});
+                if (self[modelName]) {
+                    self[modelName].mimeType = file.type;
+                    self[modelName].fileSize = file.size;
+                    self[modelName].extension = file.name.split('.').pop();
+                    self[modelName].fileUrl = URL.createObjectURL(image);
+                }
+
+                self[modelName] = URL.createObjectURL(image);
+
+                self.isSaveRegOULogDisabled = false;
+                if (!$scope.$$phase) {
+                    $scope.$apply();
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
         self.tabsData = {
             'basic': {show: true, loaded: true},
             'securitySettings': {show: true, loaded: true},
@@ -2456,7 +2513,8 @@ module.exports = function (app) {
             'propertyConfiguration': {show: true, loaded: false},
             'users': {show: true, loaded: false, callback: self.reloadOuApplicationUsers},
             'departmentUsers': {show: true, loaded: false, callback: self.reloadDepartmentUsers},
-            'dynamicFollowups': {show: true, loaded: false, callback: self.reloadDynamicFollowUps}
+            'dynamicFollowups': {show: true, loaded: false, callback: self.reloadDynamicFollowUps},
+            'uploadLogo': {show: true, loaded: false, callback: self.loadOrganizationLogo}
         };
 
         self.setCurrentTab = function (tabName) {

@@ -10,11 +10,12 @@
             <md-icon md-svg-icon="pin" ng-if="!sidebar.sidebarStatus('main-sidebar')"></md-icon>
         </md-button>
         <div flex layout="row">
-            <img ng-if="!sidebar.rootEntity.returnRootEntity().getBannerLogoUrl()" class="toolbar-logo" flex="none"
-                 src="assets/images/logo.png">
-            <img ng-if="sidebar.rootEntity.returnRootEntity().getBannerLogoUrl()" class="toolbar-logo"
-                 flex="none"
-                 ng-src="{{sidebar.rootEntity.returnRootEntity().getBannerLogoUrl()}}">
+            <img ng-if="!sidebar.rootEntity.returnRootEntity().getBannerLogoUrl() && !sidebar.userOrganization.getOrganizationLogoUrl()"
+                 class="toolbar-logo" flex="none" src="assets/images/logo.png">
+            <img ng-if="sidebar.rootEntity.returnRootEntity().getBannerLogoUrl() && !sidebar.userOrganization.getOrganizationLogoUrl()"
+                 class="toolbar-logo" flex="none" ng-src="{{sidebar.rootEntity.returnRootEntity().getBannerLogoUrl()}}">
+            <img ng-if="sidebar.userOrganization.getOrganizationLogoUrl()" class="toolbar-logo"
+                 flex="none" ng-src="{{sidebar.userOrganization.getOrganizationLogoUrl()}}">
             <span id="logo-span">&nbsp;&nbsp;</span>
             <div flex layout="column">
                 <h6 id="application-name">{{sidebar.rootEntity.returnRootEntity().getTranslatedAppName()}}</h6>
