@@ -454,6 +454,11 @@
                                     </md-switch>
                                 </div>
                                 <div layout="row">
+                                    <md-switch flex ng-model="ctrl.applicationUser.enableMobileAccess"
+                                               aria-label="{{lang.enable_mobile_access}}">
+                                        <label>{{lang.enable_mobile_access}} :
+                                            {{ctrl.applicationUser.getTranslatedYesNo('enableMobileAccess')}}</label>
+                                    </md-switch>
                                     <md-switch flex ng-model="ctrl.applicationUser.pinCodePrompt"
                                                ng-if="ctrl.globalSetting.isDigitalCertificateEnabled()"
                                                ng-disabled="!ctrl.globalSetting.isDigitalCertificateEnabled()"

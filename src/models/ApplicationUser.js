@@ -58,6 +58,7 @@ module.exports = function (app) {
             self.searchDefaultView = 1;
             self.userWFDistView = 1;
             self.seqWFEmailSettings = 0;
+            self.enableMobileAccess = false;
 
             var collectionResults = [
                 'reminderSmsPriority',
