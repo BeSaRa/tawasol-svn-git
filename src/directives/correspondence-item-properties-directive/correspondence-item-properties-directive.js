@@ -4,13 +4,12 @@ module.exports = function (app) {
         return {
             restrict: 'E',
             replace: true,
-            controller: function ($scope, $timeout, LangWatcher, lookupService, _, viewTrackingSheetService) {
+            controller: function ($scope, $timeout, LangWatcher, lookupService, _) {
                 'ngInject';
                 LangWatcher($scope);
                 var self = this;
                 self.collapse = false;
                 self.site = null;
-                self.action = null;
                 var properties = {};
                 $timeout(function () {
                     self.site = self.item.getFirstSite();
@@ -26,13 +25,6 @@ module.exports = function (app) {
 
                 self.checkField = function (propertyName, fieldName) {
                     return Object.keys(properties).length && properties[propertyName.toLowerCase()][fieldName];
-                }
-
-                self.loadLastAction = function ($event) {
-                    viewTrackingSheetService.loadCorrespondenceLastAction(self.item)
-                        .then(function (result) {
-                            self.action = result;
-                        });
                 }
             },
             controllerAs: 'ctrl',
