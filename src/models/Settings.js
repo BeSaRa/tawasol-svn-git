@@ -68,6 +68,9 @@ module.exports = function (app) {
             Settings.prototype.isSenderIncomingMailHidden = function () {
                 return this.hideSenderIncomingMail;
             }
+            Settings.prototype.legacyWorkflowHistoryEnabled = function () {
+                return this.legacyWorkflowHistory;
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

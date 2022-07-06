@@ -38,6 +38,7 @@ module.exports = function (app) {
         self.trackingSheetService = viewTrackingSheetService;
         self.employee = employeeService.getEmployee();
         var docSubject = info.title ? info.title : self.document.docSubject;
+        self.globalSettings = rootEntity.getGlobalSettings();
 
         if (self.gridType !== 'tabs') {
             self.popupHeading = self.popupHeadingForPrint = langService.get(self.heading);
@@ -447,7 +448,7 @@ module.exports = function (app) {
                     || parentGridName === gridService.grids.search.outgoingIncoming
                     || parentGridName === gridService.grids.search.quick
                     || parentGridName === gridService.grids.others.linkedDoc)
-            } else if (tabName === 'view_tracking_sheet_annotation_logs'){
+            } else if (tabName === 'view_tracking_sheet_annotation_logs') {
                 return rootEntity.hasPSPDFViewer();
             }
             return (self.tabsToShow.indexOf(tabName) > -1);
@@ -533,6 +534,14 @@ module.exports = function (app) {
         self.printSheet = function ($event) {
             viewTrackingSheetService.controllerMethod.viewTrackingSheetPrint(self.heading, self.popupHeadingForPrint);
         };
+
+        /**
+         * @description print legacy tracking sheet (Actions Report)
+         * @param $event
+         */
+        self.printTrackingSheetByActions = function ($event) {
+            viewTrackingSheetService.controllerMethod.viewTrackingSheetPrintByActions(self.document);
+        }
 
         self.printSheetFromWebPage = function ($event) {
             viewTrackingSheetService.controllerMethod.viewTrackingSheetWebPage(self.heading, self.popupHeadingForPrint);

@@ -475,6 +475,10 @@ module.exports = function (app) {
                     self.printTrackingSheet(heading, popupHeading);
                 },
 
+                viewTrackingSheetPrintByActions: function (document) {
+                    self.printTrackingSheetByActions(document);
+                },
+
                 viewTrackingSheetWebPage: function (heading, popupHeading) {
                     self.printTrackingSheetFromWebPage(heading, popupHeading);
                 }
@@ -1225,6 +1229,27 @@ module.exports = function (app) {
                         });
                 }
             };
+
+            /**
+             *@description Print Legacy Tracking Sheet (Action Report)
+             * @returns {*}
+             */
+            self.printTrackingSheetByActions = function (document) {
+                if (!rootEntity.getGlobalSettings().legacyWorkflowHistoryEnabled() || !document) {
+                    toast.info(langService.get('no_data_to_print'));
+                } else {
+                    var info = document.getInfo();
+                    return $http.get(urlService.vts_userEventLog + '/print/vsid/' + info.vsId)
+                        .then(function (result) {
+                            if (!result.data.rs)
+                                toast.error(langService.get('error_print'));
+                            else
+                                downloadService.controllerMethod.fileDownload(result.data.rs);
+                        }).catch(function (error) {
+                            toast.error(langService.get('error_print'));
+                        })
+                }
+            }
 
             /**
              * @description store tracking sheet data to local storage

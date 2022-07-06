@@ -73,6 +73,7 @@ module.exports = function (app) {
             self.mergeCommentsWithTrackingSheet = false;
             self.wFRelatedBookStatus = 0;
             self.hideSenderIncomingMail = false;
+            self.legacyWorkflowHistory = false;
 
             //endregion
 

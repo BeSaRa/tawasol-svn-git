@@ -7,6 +7,8 @@
         <div class="{{(ctrl.heading === 'view_tracking_sheet_outgoing_delivery_reports' || ctrl.heading === 'view_tracking_sheet_received_incoming_history') ? '' : ' md-dialog-content cms-dialog-content' }}">
             <!-- SINGLE GRID VIEW -->
             <div md-dynamic-height>
+                <tracking-sheet-document-info-directive
+                        document="ctrl.document"></tracking-sheet-document-info-directive>
                 <!-- Workflow History Grid -->
                 <div ng-if="ctrl.heading === 'view_tracking_sheet_work_flow_history' && ctrl.showTab('view_tracking_sheet_work_flow_history')">
                     <md-card>
@@ -1002,6 +1004,12 @@
         <md-button class="md-raised md-primary" ng-click="ctrl.printSheetFromWebPage($event)"
                    ng-disabled="ctrl.checkDisabled($event)">
             {{lang.web_print}}
+        </md-button>
+        <md-button class="md-raised md-primary" ng-click="ctrl.printTrackingSheetByActions($event)"
+                   ng-disabled="ctrl.checkDisabled($event)"
+                   ng-if="ctrl.globalSettings.legacyWorkflowHistoryEnabled() &&
+                   (ctrl.heading === 'view_tracking_sheet_full_history' || ctrl.heading === 'view_tracking_sheet_work_flow_history' || ctrl.heading === 'view_tracking_sheet_content_view_history')">
+            {{lang.print_actions_report}}
         </md-button>
         <md-button class="md-raised red-text" ng-click="ctrl.closeTrackingSheetPopupFromCtrl()">
             {{lang.close}}

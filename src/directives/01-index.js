@@ -128,4 +128,5 @@ module.exports = function (app) {
     require('./simple-forward-directive/01-index')(app);
     require('./help-videos-directive/01-index')(app);
     require('./manage-correspondence-sites-filter-directive/01-index')(app);
+    require('./tracking-sheet-document-info-directive/01-index')(app);
 };

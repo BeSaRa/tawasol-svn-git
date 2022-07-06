@@ -4,7 +4,8 @@
     <popup-toolbar-directive header-text="{{ctrl.popupHeading}}"
                              full-screen-button="true" full-screen="ctrl.fullScreen"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
-        <div>
+        <div layout="column">
+            <tracking-sheet-document-info-directive document="ctrl.document"></tracking-sheet-document-info-directive>
             <!-- TABS GRID VIEW -->
             <md-tabs md-dynamic-height>
                 <!-- Workflow History Tab -->
@@ -1045,6 +1046,12 @@
         <md-button class="md-raised md-primary" ng-click="ctrl.printSheetFromWebPage($event)"
                    ng-disabled="ctrl.checkDisabled($event)">
             {{lang.web_print}}
+        </md-button>
+        <md-button class="md-raised md-primary" ng-click="ctrl.printTrackingSheetByActions($event)"
+                   ng-disabled="ctrl.checkDisabled($event)"
+                   ng-if="ctrl.globalSettings.legacyWorkflowHistoryEnabled() &&
+                   (ctrl.heading === 'view_tracking_sheet_full_history' || ctrl.heading === 'view_tracking_sheet_work_flow_history' || ctrl.heading === 'view_tracking_sheet_content_view_history')">
+            {{lang.print_actions_report}}
         </md-button>
         <md-button class="md-raised red-text" ng-click="ctrl.closeTrackingSheetPopupFromCtrl()">
             {{lang.close}}

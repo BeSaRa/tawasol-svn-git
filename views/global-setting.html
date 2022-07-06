@@ -243,6 +243,14 @@
                                         {{ctrl.globalSetting.getTranslatedYesNo('mergeCommentsWithTrackingSheet')}}
                                     </md-switch>
                                 </md-input-container>
+                                <!-- Legacy Workflow History (Actions Report) -->
+                                <md-input-container flex>
+                                    <md-switch flex ng-model="ctrl.globalSetting.legacyWorkflowHistory"
+                                               aria-label="{{lang.show_actions_workflow_history}}">
+                                        <span>{{lang.show_actions_workflow_history}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('legacyWorkflowHistory')}}
+                                    </md-switch>
+                                </md-input-container>
+                                <span flex></span>
                             </div>
                         </div>
                         <br/>

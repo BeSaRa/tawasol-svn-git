@@ -157,6 +157,9 @@ module.exports = function (app) {
             Incoming.prototype.checkIfInternalSiteTypeWhenCreateReply = function () {
                 return configurationService.INTERNAL_CORRESPONDENCE_SITES_TYPE === this.siteType;
             }
+            Incoming.prototype.getRefDocumentNumber = function () {
+                return  this.refDocNumber;
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

@@ -1,0 +1,24 @@
+<md-card id="document_info" flex layout="column">
+    <md-card-content>
+        <div layout="row" flex class="m5">
+            <!--Serial -->
+            <b flex="15">{{lang.serial_number}}</b>
+            <span>{{ctrl.document.getFullSerial()}}</span>
+        </div>
+        <div layout="row" flex class="m5">
+            <!--subject-->
+            <b flex="15">{{lang.subject}}</b>
+            <span>{{ctrl.document.getSubject()}}</span>
+        </div>
+        <div layout="row" flex class="m5">
+            <!-- Correspondence Site-->
+            <b flex="15">{{lang.correspondence_sites}}</b>
+            <main-site-sub-site-directive item="ctrl.document"></main-site-sub-site-directive>
+        </div>
+        <div ng-if="ctrl.document.hasDocumentClass('incoming')" layout="row" flex class="m5">
+            <!--Document number-->
+            <b flex="15">{{lang.document_number}}</b>
+            <span>{{ctrl.document.getRefDocumentNumber()}}</span>
+        </div>
+    </md-card-content>
+</md-card>
