@@ -99,6 +99,16 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    <tr md-row ng-if="!ctrl.applicationUsersCopy.length">
+                                        <td md-cell colspan="6" class="red-text text-center">
+                                            {{lang.no_records_found}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="ctrl.applicationUsersCopy.length && !ctrl.applicationUsers.length">
+                                        <td md-cell colspan="6" class="red-text text-center">
+                                            {{lang.no_records_found_matching_search}}
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
