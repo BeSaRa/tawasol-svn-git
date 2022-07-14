@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                   dialog,
                                                   langService,
                                                   toast,
+                                                  userWorkflowGroupService,
                                                   cmsTemplate) {
         'ngInject';
         var self = this;
@@ -48,7 +49,8 @@ module.exports = function (app) {
                         locals: {
                             editMode: false,
                             workflowGroup: new WorkflowGroup(),
-                            isUserPreference: isUserPreference
+                            isUserPreference: isUserPreference,
+                            usersWorkflowGroupByAdmin: []
                         }
                     })
             },
@@ -64,6 +66,12 @@ module.exports = function (app) {
                             workflowGroup: workflowGroup,
                             workflowGroups: self.workflowGroups,
                             isUserPreference: isUserPreference
+                        },
+                        resolve: {
+                            usersWorkflowGroupByAdmin: function () {
+                                'ngInject';
+                                return workflowGroup.isAdminAssigned ? userWorkflowGroupService.loadUsersWorkflowGroupAssignedByAdmin(workflowGroup) : $q.resolve([]);
+                            }
                         }
                     })
             },

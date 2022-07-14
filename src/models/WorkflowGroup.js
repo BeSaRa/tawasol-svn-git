@@ -15,6 +15,9 @@ module.exports = function (app) {
             self.global = true;
             self.groupMembers = [];
             self.itemOrder = null;
+            self.userWorkflowGroupList = [];
+            self.isAdminAssigned = false;
+
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [
@@ -64,8 +67,7 @@ module.exports = function (app) {
                             name = this.enName ? this.enName : this.arName;
                         else
                             name = this.arName ? this.arName : this.enName;
-                    }
-                    else if (langService.current === 'en') {
+                    } else if (langService.current === 'en') {
                         if (reverse)
                             name = this.arName ? this.arName : this.enName;
                         else
@@ -93,6 +95,10 @@ module.exports = function (app) {
             };
             WorkflowGroup.prototype.getFirstMember = function () {
                 return this.groupMembers.length ? this.groupMembers[0].applicationUser : new ApplicationUser();
+            };
+
+            WorkflowGroup.prototype.getTranslatedYesNo = function (fieldName) {
+                return this[fieldName] ? langService.get('yes') : langService.get('no');
             };
 
             // don't remove CMSModelInterceptor from last line

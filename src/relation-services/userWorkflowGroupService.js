@@ -155,6 +155,19 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Add new users to workflow group by admin
+         * @returns {*}
+         * @param workflowGroup
+         * @param applicationUserIds
+         */
+        self.addBulkUserWorkflowGroup = function (workflowGroup, applicationUserIds) {
+            return $http.post(urlService.userWorkflowGroups + '/bulk/group-id/' + workflowGroup.id, applicationUserIds)
+                .then(function (result) {
+                    return result.data.rs;
+                });
+        }
+
+        /**
          * @description Update the given user workflow group.
          * @param userWorkflowGroup
          * @return {Promise|UserWorkflowGroup}
@@ -310,6 +323,21 @@ module.exports = function (app) {
                 return matchingResult === true;
             });
         };
+
+
+        /**
+         * @description load private users workflow assigned by admin
+         * @param workflowGroup
+         * @returns {*}
+         */
+        self.loadUsersWorkflowGroupAssignedByAdmin = function (workflowGroup) {
+            return $http.get(urlService.userWorkflowGroups + '/assigned-by-admin/group-id/' + workflowGroup.id)
+                .then(function (result) {
+                    var userWorkflowGroups = generator.generateCollection(result.data.rs, UserWorkflowGroup);
+                    userWorkflowGroups = generator.interceptReceivedCollection('UserWorkflowGroup', userWorkflowGroups);
+                    return userWorkflowGroups;
+                });
+        }
 
         /**
          * @description Create the shared method to the model.

@@ -10,14 +10,18 @@ module.exports = function (app) {
                                                               groupMembers,
                                                               generator,
                                                               isUserPreference,
+                                                              isAdminAssigned,
+                                                              workflowGroup,
                                                               organizationGroups,
                                                               $filter,
+                                                              userWorkflowGroupService,
                                                               Information) {
             'ngInject';
             var self = this;
 
             self.controllerName = 'addUserToWorkflowGroupPopCtrl';
             self.inlineOUSearchText = '';
+            self.workflowGroup = workflowGroup;
 
             var _mapRegOUSections = function () {
                 // filter all regOU (has registry)
@@ -136,14 +140,22 @@ module.exports = function (app) {
              */
             self.checkIfExist = function (user) {
                 return !!_.find(groupMembers, function (groupMember) {
-                    return groupMember.applicationUser.id === user.toUserId
-                        && groupMember.ouid.id === user.appUserOUID;
+                    if (isAdminAssigned) {
+                        return groupMember.applicationUser.id === user.toUserId;
+                    } else {
+                        return groupMember.applicationUser.id === user.toUserId
+                            && groupMember.ouid.id === user.appUserOUID;
+                    }
                 });
             };
             self.checkIfAdded = function (user) {
                 return !!_.find(self.addedUsers, function (addedUser) {
-                    return addedUser.toUserId === user.toUserId
-                        && addedUser.appUserOUID === user.appUserOUID;
+                    if (isAdminAssigned) {
+                        return addedUser.toUserId === user.toUserId;
+                    } else {
+                        return addedUser.toUserId === user.toUserId
+                            && addedUser.appUserOUID === user.appUserOUID;
+                    }
                 });
             };
 
@@ -151,7 +163,18 @@ module.exports = function (app) {
              * @description Close the dialog and sends the added users to save
              */
             self.addToWorkflowGroup = function () {
-                dialog.hide(self.addedUsers);
+                if (isAdminAssigned) {
+                    var applicationUserIds = _.map(self.addedUsers, 'toUserId');
+                    var groupMembersId = _.map(groupMembers, function (member) {
+                        return member.applicationUser.id;
+                    });
+                    userWorkflowGroupService.addBulkUserWorkflowGroup(self.workflowGroup, applicationUserIds.concat(groupMembersId))
+                        .then(function (result) {
+                            dialog.hide(self.addedUsers);
+                        });
+                } else {
+                    dialog.hide(self.addedUsers);
+                }
             };
 
 
@@ -208,25 +231,25 @@ module.exports = function (app) {
             };
 
 
-        /**
-         * @description Clears the searchText for the given field
-         * @param fieldType
-         */
-        self.clearSearchText = function (fieldType) {
-            self[fieldType + 'SearchText'] = '';
-        };
+            /**
+             * @description Clears the searchText for the given field
+             * @param fieldType
+             */
+            self.clearSearchText = function (fieldType) {
+                self[fieldType + 'SearchText'] = '';
+            };
 
-        /**
-         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
-         * @param $event
-         */
-        self.preventSearchKeyDown = function ($event) {
-            if ($event){
-                var code = $event.which || $event.keyCode;
-                if (code !== 38 && code !== 40)
-                    $event.stopPropagation();
-            }
-        };
+            /**
+             * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
+             * @param $event
+             */
+            self.preventSearchKeyDown = function ($event) {
+                if ($event) {
+                    var code = $event.which || $event.keyCode;
+                    if (code !== 38 && code !== 40)
+                        $event.stopPropagation();
+                }
+            };
 
         }
     )

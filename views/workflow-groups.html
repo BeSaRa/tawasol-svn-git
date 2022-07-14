@@ -61,7 +61,6 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row
-                                        ng-if="workflowGroup.global"
                                         md-select="workflowGroup"
                                         ng-repeat="workflowGroup in ctrl.workflowGroups | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{workflowGroup.arName}}</td>

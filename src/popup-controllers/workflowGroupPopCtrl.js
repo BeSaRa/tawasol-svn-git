@@ -13,12 +13,15 @@ module.exports = function (app) {
                                                      ouApplicationUserService,
                                                      OUApplicationUser,
                                                      ApplicationUser,
+                                                     usersWorkflowGroupByAdmin,
+                                                     userWorkflowGroupService,
                                                      Organization) {
         'ngInject';
         var self = this;
         self.controllerName = 'workflowGroupPopCtrl';
         self.editMode = editMode;
         self.isUserPreference = isUserPreference;
+        self.usersWorkflowGroupByAdmin = usersWorkflowGroupByAdmin;
         self.workflowGroup = angular.copy(workflowGroup);
         self.model = angular.copy(workflowGroup);
 
@@ -139,73 +142,81 @@ module.exports = function (app) {
          * @description to add workflow group members
          * @param $event
          */
-        self.selectGroupMember = function ($event) {
-            var applicationUsers = self.getApplicationUsers(self.workflowGroup.groupMembers);
-            ouApplicationUserService
-                .controllerMethod
-                .selectOUApplicationUsers(applicationUsers, self.removeUserLabels.groupMembers, $event, isUserPreference)
-                .then(function (ouApplicationUsers) {
-                    self.addApplicationUserToArray(ouApplicationUsers);
-                });
-        };
 
-        /**
-         * @description Adds the returned ouApplication users to the group members list
-         * @param ouApplicationUsers
-         */
-        self.addApplicationUserToArray = function (ouApplicationUsers) {
-            //if user select some app users
-            if (ouApplicationUsers && ouApplicationUsers.length) {
-                self.workflowGroup.groupMembers = ouApplicationUsers;
-            }
-        };
+        /*  self.selectGroupMember = function ($event) {
+              var applicationUsers = self.getApplicationUsers(self.workflowGroup.groupMembers);
+              ouApplicationUserService
+                  .controllerMethod
+                  .selectOUApplicationUsers(applicationUsers, self.removeUserLabels.groupMembers, $event, isUserPreference)
+                  .then(function (ouApplicationUsers) {
+                      self.addApplicationUserToArray(ouApplicationUsers);
+                  });
+          };
+
+          /!**
+           * @description Adds the returned ouApplication users to the group members list
+           * @param ouApplicationUsers
+           *!/
+          self.addApplicationUserToArray = function (ouApplicationUsers) {
+              //if user select some app users
+              if (ouApplicationUsers && ouApplicationUsers.length) {
+                  self.workflowGroup.groupMembers = ouApplicationUsers;
+              }
+          };*/
 
 
         /**
          * @description Open the popup to select group member in user preference
+         * @param groupMembers
+         * @param isAdminAssigned
          * @param $event
          */
-        self.selectGroupMemberUserWorkflowGroup = function ($event) {
-            var groupMembers = self.workflowGroup.groupMembers;
+        self.selectGroupMemberUserWorkflowGroup = function (groupMembers, isAdminAssigned, $event) {
             ouApplicationUserService
                 .controllerMethod
-                .selectUsersForUserWFGroup(groupMembers, isUserPreference, $event)
+                .selectUsersForUserWFGroup(groupMembers, isUserPreference, isAdminAssigned, self.workflowGroup, $event)
                 .then(function (selectedUsers) {
-                    self.addSelectedUsersToArray(selectedUsers);
+                    if (isAdminAssigned) {
+                        userWorkflowGroupService.loadUsersWorkflowGroupAssignedByAdmin(self.workflowGroup).then(function (users) {
+                            self.usersWorkflowGroupByAdmin = users;
+                        })
+                    } else {
+                        self.addSelectedUsersToArray(selectedUsers, groupMembers);
+                    }
                 });
         };
 
         /**
          * @description Adds the returned selected users to the group members list in user preference
          * @param selectedUsers
+         * @param groupMembers
          */
-        self.addSelectedUsersToArray = function (selectedUsers) {
+        self.addSelectedUsersToArray = function (selectedUsers, groupMembers) {
             if (selectedUsers && selectedUsers.length) {
                 _.map(selectedUsers, function (selectedUser) {
-                    var isMemberExist = _.find(self.workflowGroup.groupMembers, function (member) {
+                    var isMemberExist = _.find(groupMembers, function (member) {
                         return member.applicationUser.id === selectedUser.toUserId;
                     });
 
-                    console.log(isMemberExist);
+
                     if (isMemberExist) {
-                        dialog
-                            .confirmMessage(langService.get('replace_workflow_group_member').change(
-                                {
-                                    name: isMemberExist.applicationUser.getTranslatedName(),
-                                    ou: isMemberExist.ouid.getTranslatedName()
-                                }))
+                        dialog.confirmMessage(langService.get('replace_workflow_group_member').change(
+                            {
+                                name: isMemberExist.applicationUser.getTranslatedName(),
+                                ou: isMemberExist.ouid.getTranslatedName()
+                            }))
                             .then(function () {
-                                _removeWorkflowGroupMember(isMemberExist);
-                                _addSelectedUserToArray(selectedUser);
+                                _removeWorkflowGroupMember(isMemberExist, groupMembers);
+                                _addSelectedUserToArray(selectedUser, groupMembers);
                             });
                     } else {
-                        _addSelectedUserToArray(selectedUser);
+                        _addSelectedUserToArray(selectedUser, groupMembers);
                     }
                 });
             }
         };
 
-        function _addSelectedUserToArray(selectedUser) {
+        function _addSelectedUserToArray(selectedUser, groupMembers) {
             var user = new OUApplicationUser({
                 applicationUser: new ApplicationUser({
                     arFullName: selectedUser.arName,
@@ -218,7 +229,7 @@ module.exports = function (app) {
                     enName: selectedUser.enOUName
                 })
             });
-            self.workflowGroup.groupMembers.push(user);
+            groupMembers.push(user);
         }
 
         self.getApplicationUsers = function (groupMembers) {
@@ -242,6 +253,23 @@ module.exports = function (app) {
                     _removeWorkflowGroupMember(groupMember)
                 });
         };
+
+        /**
+         * @description remove private workflow group member
+         * @param groupMember
+         * @param $event
+         */
+        self.removeUserWorkflowGroupAssignedByAdmin = function (groupMember, $event) {
+            userWorkflowGroupService
+                .controllerMethod
+                .userWorkflowGroupDelete(groupMember, self.workflowGroup, $event)
+                .then(function (result) {
+                    userWorkflowGroupService.loadUsersWorkflowGroupAssignedByAdmin(self.workflowGroup)
+                        .then(function (users) {
+                            self.usersWorkflowGroupByAdmin = users;
+                        })
+                })
+        }
 
         function _removeWorkflowGroupMember(groupMember) {
             var index = _.findIndex(self.workflowGroup.groupMembers, function (addedGroupMember) {

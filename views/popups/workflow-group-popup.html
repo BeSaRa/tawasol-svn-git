@@ -28,7 +28,7 @@
                                         <div ng-messages="workflowGroup_form.arName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 80})}}</div>
                                             <div ng-message="A1NS">{{lang.one_arabic_number_space}}</div>
                                         </div>
                                     </md-input-container>
@@ -47,7 +47,7 @@
                                         <div ng-messages="workflowGroup_form.enName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 80})}}</div>
                                             <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
                                         </div>
                                     </md-input-container>
@@ -60,13 +60,30 @@
                                         <div ng-messages="workflowGroup_form.itemOrder.$error">
                                             <div ng-message="minlength">{{lang.short}}</div>
                                             <div ng-message="number">{{lang.numberonly}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:5})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 5})}}</div>
                                         </div>
                                     </md-input-container>
-                                    <div flex class="p20">
+                                    <div flex class="p020">
                                         <md-switch ng-model="ctrl.workflowGroup.status" aria-label="{{lang.status}}">
                                             <label>{{lang.status}} :
                                                 {{ctrl.workflowGroup.getTranslatedStatus()}}</label>
+                                        </md-switch>
+                                    </div>
+                                </div>
+                                <div layout="row" ng-if="ctrl.editMode && !ctrl.isUserPreference">
+                                    <div flex>
+                                        <md-switch ng-model="ctrl.workflowGroup.global" aria-label="{{lang.global}}"
+                                                   ng-change="ctrl.workflowGroup.isAdminAssigned = false;">
+                                            <label>{{lang.global}} :
+                                                {{ctrl.workflowGroup.getTranslatedGlobal()}}</label>
+                                        </md-switch>
+                                    </div>
+                                    <div flex>
+                                        <md-switch ng-model="ctrl.workflowGroup.isAdminAssigned"
+                                                   aria-label="{{lang.admin_assign_private_wf_members}}"
+                                                   ng-disabled="ctrl.workflowGroup.global">
+                                            <label>{{lang.admin_assign_private_wf_members}} :
+                                                {{ctrl.workflowGroup.getTranslatedYesNo('isAdminAssigned')}}</label>
                                         </md-switch>
                                     </div>
                                 </div>
@@ -76,7 +93,7 @@
                     <md-tab label="{{lang.group_members}}">
                         <md-content>
                             <md-button tooltip="{{lang.group_members}}" class="md-icon-button"
-                                       ng-click="ctrl.selectGroupMemberUserWorkflowGroup($event)">
+                                       ng-click="ctrl.selectGroupMemberUserWorkflowGroup(ctrl.workflowGroup.groupMembers,false,$event)">
                                 <md-icon md-svg-icon="plus"></md-icon>
                             </md-button>
 
@@ -95,11 +112,43 @@
                                     ng-repeat="groupMember in ctrl.workflowGroup.groupMembers track by $index">
                                     <td md-cell>{{groupMember.applicationUser.arFullName}}</td>
                                     <td md-cell>{{groupMember.applicationUser.enFullName}}</td>
-                                    <!--<td md-cell>{{groupMember.applicationUser.loginName}}</td>-->
                                     <td md-cell>{{groupMember.ouid.getTranslatedName()}}</td>
                                     <td md-cell>
                                         <md-button class="md-icon-button" title="{{lang.delete}}"
                                                    ng-click="ctrl.removeWorkflowGroupMember(groupMember, $event)">
+                                            <md-icon md-svg-icon="delete"></md-icon>
+                                        </md-button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="{{lang.private_group_members}}" ng-if="ctrl.workflowGroup.isAdminAssigned">
+                        <md-content>
+                            <md-button tooltip="{{lang.private_group_members}}" class="md-icon-button"
+                                       ng-click="ctrl.selectGroupMemberUserWorkflowGroup(ctrl.usersWorkflowGroupByAdmin,true,$event)">
+                                <md-icon md-svg-icon="plus"></md-icon>
+                            </md-button>
+
+                            <table md-table>
+                                <thead md-head>
+                                <tr md-row>
+                                    <th md-column>{{lang.arabic_name}}</th>
+                                    <th md-column>{{lang.english_name}}</th>
+                                    <!--<th md-column>{{lang.organization}}</th>-->
+                                    <th md-column>{{lang.action}}</th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row
+                                    ng-repeat="userWorkflowGroupMember in ctrl.usersWorkflowGroupByAdmin track by $index">
+                                    <td md-cell>{{userWorkflowGroupMember.applicationUser.arFullName}}</td>
+                                    <td md-cell>{{userWorkflowGroupMember.applicationUser.enFullName}}</td>
+                                    <!-- <td md-cell>{{userWorkflowGroupMember.ouid.getTranslatedName()}}</td>-->
+                                    <td md-cell>
+                                        <md-button class="md-icon-button" title="{{lang.delete}}"
+                                                   ng-click="ctrl.removeUserWorkflowGroupAssignedByAdmin(userWorkflowGroupMember,$event)">
                                             <md-icon md-svg-icon="delete"></md-icon>
                                         </md-button>
                                     </td>

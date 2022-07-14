@@ -207,10 +207,12 @@ module.exports = function (app) {
              * @description Opens the popup to search and select the users to be added as group members for workflow group
              * @param groupMembers
              * @param isUserPreference
+             * @param isAdminAssigned
+             * @param workflowGroup
              * @param $event
              * @returns {promise}
              */
-            selectUsersForUserWFGroup: function (groupMembers, isUserPreference, $event) {
+            selectUsersForUserWFGroup: function (groupMembers, isUserPreference, isAdminAssigned, workflowGroup, $event) {
                 return dialog
                     .showDialog({
                         templateUrl: cmsTemplate.getPopup('add-user-to-workflow-group'),
@@ -219,7 +221,9 @@ module.exports = function (app) {
                         controllerAs: 'ctrl',
                         locals: {
                             groupMembers: !groupMembers ? [] : groupMembers,
-                            isUserPreference: isUserPreference
+                            isUserPreference: isUserPreference,
+                            isAdminAssigned: isAdminAssigned,
+                            workflowGroup: workflowGroup
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -808,7 +812,7 @@ module.exports = function (app) {
          * @param includeChildOus
          * @param excludeApplicationUserId
          */
-        self.getAvailableProxies = function (registryOuId, includeChildOus, excludeApplicationUserId,outOfOffice) {
+        self.getAvailableProxies = function (registryOuId, includeChildOus, excludeApplicationUserId, outOfOffice) {
             return self.searchByCriteria({
                 regOu: registryOuId,
                 includeChildOus: includeChildOus,

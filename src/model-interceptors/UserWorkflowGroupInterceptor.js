@@ -3,6 +3,7 @@ module.exports = function (app) {
                       ApplicationUser,
                       generator,
                       WorkflowGroup,
+                      _,
                       organizationService) {
         'ngInject';
 
@@ -18,6 +19,7 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.wfgroup = generator.interceptReceivedInstance('WorkflowGroup', generator.generateInstance(model.wfgroup, WorkflowGroup));
+            model.applicationUser = generator.interceptReceivedInstance('ApplicationUser',generator.generateInstance(model.applicationUser, ApplicationUser));
             organizationService.getOrganizations().then(function (organizations) {
                 _.map(model.wfgroup.groupMembers, function (member, key) {
                     model.wfgroup.groupMembers[key].applicationUser = new ApplicationUser(member.member);
