@@ -121,7 +121,8 @@
                                         grid-right-click-directive="readyToExport"
                                         selected-length="{{ctrl.selectedReadyToExports.length ? ctrl.selectedReadyToExports.length : 0}}"
                                         model="readyToExport"
-                                        ng-repeat="readyToExport in searchResults = (ctrl.readyToExports | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                                        ng-repeat="readyToExport in ctrl.readyToExports track by $index">
+                                         <!--searchResults = (ctrl.readyToExports | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) -->
                                         <td md-cell class="read-td">
                                             <!--ng-click="ctrl.markAsReadUnread(readyToExport, $event)"
                                             tooltip="{{readyToExport.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"
@@ -219,12 +220,12 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr md-row ng-if="!ctrl.readyToExports.length">
+                                    <tr md-row ng-if="!ctrl.readyToExportsCopy.length">
                                         <td md-cell colspan="10" class="red-text text-center">
                                             {{lang.no_records_found}}
                                         </td>
                                     </tr>
-                                    <tr md-row ng-if="ctrl.readyToExports.length && !searchResults.length">
+                                    <tr md-row ng-if="ctrl.readyToExportsCopy.length && !ctrl.readyToExports.length">
                                         <td md-cell colspan="10" class="red-text text-center">
                                             {{lang.no_records_found_matching_search}}
                                         </td>
@@ -236,7 +237,7 @@
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.readyToExports).length}}"
+                                    md-total="{{ctrl.totalRecords}}"
                                     md-page-select
                                     md-on-paginate="ctrl.grid.pagingCallback">
                             </md-table-pagination>

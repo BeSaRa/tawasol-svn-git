@@ -19,21 +19,27 @@ module.exports = function (app) {
             self.serviceName = 'readyToExportService';
 
             self.readyToExports = [];
-
+            self.totalCount = 0;
 
             /**
              * @description Load the ready To Exports from server.
              * @param ignoreTokenRefresh
+             * @param page
+             * @param limit
+             * @param criteria
              * @returns {Promise|readyToExports}
              */
-            self.loadReadyToExports = function (ignoreTokenRefresh) {
-                var params = {};
+            self.loadReadyToExports = function (ignoreTokenRefresh,page, limit,criteria) {
+                var offset = ((page - 1) * limit);
+                var params = {offset: offset, limit: limit};
+                if (criteria) {
+                    params.criteria = criteria;
+                }
                 if (ignoreTokenRefresh) {
                     params.ignoreTokenRefresh = true;
                 }
-                return $http.get(urlService.readyToExports, {
-                        params: params
-                }).then(function (result) {
+                return $http.get(urlService.readyToExports, {params: params}).then(function (result) {
+                    self.totalCount = result.data.count;
                     self.readyToExports = generator.generateCollection(result.data.rs, WorkItem, self._sharedMethods);
                     self.readyToExports = generator.interceptReceivedCollection('WorkItem', self.readyToExports);
                     return self.readyToExports;
@@ -44,8 +50,8 @@ module.exports = function (app) {
              * @description Get ready To Exports from self.readyToExports if found and if not load it from server again.
              * @returns {Promise|readyToExports}
              */
-            self.getReadyToExports = function () {
-                return self.readyToExports.length ? $q.when(self.readyToExports) : self.loadReadyToExports();
+            self.getReadyToExports = function (ignoreTokenRefresh, page, limit, criteria) {
+                return self.readyToExports.length ? $q.when(self.readyToExports) : self.loadReadyToExports(ignoreTokenRefresh, page, limit, criteria);
             };
 
             /**

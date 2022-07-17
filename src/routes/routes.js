@@ -1111,9 +1111,10 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_dep_ready_to_export',
                 resolve: {
-                    readyToExports: function (readyToExportService) {
+                    readyToExports: function (readyToExportService, gridService) {
                         'ngInject';
-                        return readyToExportService.loadReadyToExports();
+                        var limit = gridService.getGridPagingLimitByGridName(gridService.grids.department.readyToExport) || 5;
+                        return readyToExportService.loadReadyToExports(false, 1, limit);
                     },
                     emailItem: function (readyToExports, correspondenceService, $stateParams) {
                         'ngInject';

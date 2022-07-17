@@ -51,6 +51,7 @@ module.exports = function (app) {
          */
         self.readyToExports = readyToExports;
         self.readyToExportsCopy = angular.copy(self.readyToExports);
+        self.totalRecords = readyToExportService.totalCount;
 
         /**
          * @description Contains the selected ready To Exports
@@ -74,9 +75,10 @@ module.exports = function (app) {
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.department.readyToExport) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: gridService.getGridLimitOptions(gridService.grids.department.readyToExport, self.readyToExports),
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.department.readyToExport, self.totalRecords),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.department.readyToExport, limit);
+                self.reloadReadyToExports(page);
             },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.department.readyToExport),
             setTruncateSubject: function ($event) {
@@ -164,12 +166,13 @@ module.exports = function (app) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return readyToExportService
-                .loadReadyToExports(!!isAutoReload)
+                .loadReadyToExports(!!isAutoReload, self.grid.page, self.grid.limit)
                 .then(function (result) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.readyToExports = result;
                     self.readyToExportsCopy = angular.copy(self.readyToExports);
+                    self.totalRecords = readyToExportService.totalCount;
                     self.selectedReadyToExports = [];
                     defer.resolve(true);
                     if (pageNumber)
