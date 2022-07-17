@@ -49,6 +49,9 @@ module.exports = function (app) {
          */
         self.workItems = workItems;
         self.workItemsCopy = angular.copy(self.workItems);
+        self.totalRecords = correspondenceService.totalCountCAReadyToExports;
+        self.searchMode = false;
+        self.searchModel = '';
 
         /**
          * @description Contains the selected ready To Exports
@@ -72,9 +75,10 @@ module.exports = function (app) {
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.centralArchive.readyToExport) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: gridService.getGridLimitOptions(gridService.grids.centralArchive.readyToExport, self.workItems),
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.centralArchive.readyToExport, self.totalRecords),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.centralArchive.readyToExport, limit);
+                self.reloadReadyToExports(page);
             },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.centralArchive.readyToExport),
             setTruncateSubject: function ($event) {
@@ -152,6 +156,26 @@ module.exports = function (app) {
             self.workItems = $filter('orderBy')(self.workItems, self.grid.order);
         };
 
+        self.cancelSearchFilter = function () {
+            self.searchMode = false;
+            self.searchModel = '';
+            self.grid.page = 1;
+            self.grid.searchText = '';
+            self.grid.searchText = '';
+            self.reloadReadyToExports();
+        }
+
+        self.searchInReadyToExports = function (searchText) {
+            if (!searchText)
+                return;
+            self.searchMode = true;
+            return self
+                .reloadReadyToExports(1)
+                .then(function (result) {
+                    self.workItems = result;
+                })
+        };
+
         /**
          * @description Reload the grid of ready To Export
          * @param pageNumber
@@ -162,12 +186,13 @@ module.exports = function (app) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return correspondenceService
-                .loadCentralArchiveWorkItems(!!isAutoReload)
+                .loadCentralArchiveWorkItems(!!isAutoReload, self.grid.page, self.grid.limit, self.searchModel)
                 .then(function (result) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.workItems = result;
                     self.workItemsCopy = angular.copy(self.workItems);
+                    self.totalRecords = correspondenceService.totalCountCAReadyToExports;
                     self.selectedWorkItems = [];
                     defer.resolve(true);
                     if (pageNumber)

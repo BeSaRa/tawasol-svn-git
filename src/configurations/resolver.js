@@ -916,9 +916,10 @@ module.exports = function (app) {
                 }
             })
             .bulkResolveToState('app.central-archive.ready-to-export', {
-                workItems: function (correspondenceService) {
+                workItems: function (correspondenceService,gridService) {
                     'ngInject';
-                    return correspondenceService.loadCentralArchiveWorkItems();
+                    var limit = gridService.getGridPagingLimitByGridName(gridService.grids.centralArchive.readyToExport) || 5;
+                    return correspondenceService.loadCentralArchiveWorkItems(false, 1, limit);
                 }
             })
             .bulkResolveToState('app.administration.menu-items', {

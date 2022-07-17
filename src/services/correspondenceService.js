@@ -113,7 +113,7 @@ module.exports = function (app) {
         // SequentialWFResult
         util.inherits(SequentialWFResult, Information);
 
-
+        self.totalCountCAReadyToExports = 0;
         /**
          * the registered models for our CMS
          * @type {{outgoing: (Outgoing|*), internal: (Internal|*), incoming: (Incoming|*)}}
@@ -3587,15 +3587,24 @@ module.exports = function (app) {
         /**
          * @description load central archive workItems
          * @param ignoreTokenRefresh
+         * @param page
+         * @param limit
+         * @param criteria
          */
-        self.loadCentralArchiveWorkItems = function (ignoreTokenRefresh) {
-            var params = {};
+        self.loadCentralArchiveWorkItems = function (ignoreTokenRefresh, page, limit, criteria) {
+            var offset = ((page - 1) * limit);
+            var params = {offset: offset, limit: limit};
+            if (criteria) {
+                params.criteria = criteria;
+            }
             if (ignoreTokenRefresh) {
                 params.ignoreTokenRefresh = true;
             }
+
             return $http.get(urlService.departmentWF + '/ready-to-export-central-archive?optional-fields=fromRegOU', {
                 params: params
             }).then(function (result) {
+                self.totalCountCAReadyToExports = result.data.count;
                 return generator.interceptReceivedCollection('WorkItem', generator.generateCollection(result.data.rs, WorkItem));
             });
         };
