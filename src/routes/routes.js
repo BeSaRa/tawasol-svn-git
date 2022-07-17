@@ -1075,9 +1075,10 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_dep_incoming',
                 resolve: {
-                    incomingDepartmentInboxes: function (incomingDepartmentInboxService) {
+                    incomingDepartmentInboxes: function (incomingDepartmentInboxService, gridService) {
                         'ngInject';
-                        return incomingDepartmentInboxService.loadIncomingDepartmentInboxes();
+                        var limit = gridService.getGridPagingLimitByGridName(gridService.grids.department.incoming) || 5;
+                        return incomingDepartmentInboxService.loadIncomingDepartmentInboxes(false, 1, limit);
                     },
                     emailItem: function (incomingDepartmentInboxes, correspondenceService, $stateParams) {
                         'ngInject';

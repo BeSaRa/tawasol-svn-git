@@ -17,7 +17,9 @@
                     {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
                 </md-switch>
             </div>
-            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
+            <search-filter-directive change-icon-model="ctrl.searchMode" cancel-callback="ctrl.cancelSearchFilter()"
+                                     on-change="ctrl.searchInIncomingDepartmentInboxes"
+                                     model="ctrl.searchModel"></search-filter-directive>
         </div>
         <!-- end page-header -->
         <!-- page-content -->
@@ -127,7 +129,8 @@
                                         ng-class="!incomingDepartmentInbox.generalStepElm.isOpen ? 'unread-row': 'read-row'"
                                         ng-disabled="incomingDepartmentInbox.isLocked() && !incomingDepartmentInbox.isLockedByCurrentUser()"
                                         selected-length="{{ctrl.selectedIncomingDepartmentInboxes.length ? ctrl.selectedIncomingDepartmentInboxes.length : 0}}"
-                                        ng-repeat="incomingDepartmentInbox in searchResults = (ctrl.incomingDepartmentInboxes | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                                        ng-repeat="incomingDepartmentInbox in ctrl.incomingDepartmentInboxes track by $index">
+                                        <!--searchResults = (ctrl.incomingDepartmentInboxes | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))">-->
                                         <td md-cell class="read-td">
                                             <!--ng-click="ctrl.markAsReadUnread(incomingDepartmentInboxes, $event)"-->
                                             <!--   tooltip="{{incomingDepartmentInboxes.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"-->
@@ -217,11 +220,11 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr md-row ng-if="!ctrl.incomingDepartmentInboxes.length">
+                                    <tr md-row ng-if="!ctrl.incomingDepartmentInboxesCopy.length">
                                         <td md-cell colspan="11" class="red-text text-center">{{lang.no_records_found}}
                                         </td>
                                     </tr>
-                                    <tr md-row ng-if="ctrl.incomingDepartmentInboxes.length && !searchResults.length">
+                                    <tr md-row ng-if="ctrl.incomingDepartmentInboxesCopy.length && !ctrl.incomingDepartmentInboxes.length">
                                         <td md-cell colspan=11" class="red-text text-center">
                                             {{lang.no_records_found_matching_search}}
                                         </td>
@@ -233,7 +236,7 @@
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.incomingDepartmentInboxes).length}}"
+                                    md-total="{{ctrl.totalRecords}}"
                                     md-page-select
                                     md-on-paginate="ctrl.grid.pagingCallback">
                             </md-table-pagination>

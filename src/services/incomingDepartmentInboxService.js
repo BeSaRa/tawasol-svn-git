@@ -14,20 +14,29 @@ module.exports = function (app) {
         self.serviceName = 'incomingDepartmentInboxService';
 
         self.incomingDepartmentInboxes = [];
+        self.totalCount = 0;
 
         /**
          * @description Load the incoming department inbox items from server.
          * @param ignoreTokenRefresh
+         * @param page
+         * @param limit
+         * @param criteria
          * @returns {Promise|incomingDepartmentInboxes}
          */
-        self.loadIncomingDepartmentInboxes = function (ignoreTokenRefresh) {
-            var params = {};
+        self.loadIncomingDepartmentInboxes = function (ignoreTokenRefresh, page, limit, criteria) {
+            var offset = ((page - 1) * limit);
+            var params = {offset: offset, limit: limit};
+            if (criteria) {
+                params.criteria = criteria;
+            }
             if (ignoreTokenRefresh) {
                 params.ignoreTokenRefresh = true;
             }
             return $http.get(urlService.departmentInboxes + "/all-mails", {
                 params: params
             }).then(function (result) {
+                self.totalCount = result.data.count;
                 self.incomingDepartmentInboxes = generator.generateCollection(result.data.rs, WorkItem, self._sharedMethods);
                 self.incomingDepartmentInboxes = generator.interceptReceivedCollection('WorkItem', self.incomingDepartmentInboxes);
                 return self.incomingDepartmentInboxes;
@@ -38,8 +47,8 @@ module.exports = function (app) {
          * @description Get incoming department inbox items from self.incomingDepartmentInboxes if found and if not load it from server again.
          * @returns {Promise|incomingDepartmentInboxes}
          */
-        self.getIncomingDepartmentInboxes = function () {
-            return self.incomingDepartmentInboxes.length ? $q.when(self.incomingDepartmentInboxes) : self.loadIncomingDepartmentInboxes();
+        self.getIncomingDepartmentInboxes = function (ignoreTokenRefresh, page, limit, criteria) {
+            return self.incomingDepartmentInboxes.length ? $q.when(self.incomingDepartmentInboxes) : self.loadIncomingDepartmentInboxes(ignoreTokenRefresh, page, limit, criteria);
         };
 
         /**

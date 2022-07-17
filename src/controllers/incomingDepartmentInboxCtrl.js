@@ -39,6 +39,9 @@ module.exports = function (app) {
          */
         self.incomingDepartmentInboxes = incomingDepartmentInboxes;
         self.incomingDepartmentInboxesCopy = angular.copy(self.incomingDepartmentInboxes);
+        self.totalRecords = incomingDepartmentInboxService.totalCount;
+        self.searchMode = false;
+        self.searchModel = '';
 
         /**
          * @description Contains the selected incoming department inbox items
@@ -69,9 +72,10 @@ module.exports = function (app) {
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.department.incoming) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: gridService.getGridLimitOptions(gridService.grids.department.incoming, self.incomingDepartmentInboxes),
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.department.incoming, self.totalRecords),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.department.incoming, limit);
+                self.reloadIncomingDepartmentInboxes(page)
             },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.department.incoming),
             setTruncateSubject: function ($event) {
@@ -119,6 +123,26 @@ module.exports = function (app) {
             self.incomingDepartmentInboxes = $filter('orderBy')(self.incomingDepartmentInboxes, self.grid.order);
         };
 
+        self.cancelSearchFilter = function () {
+            self.searchMode = false;
+            self.searchModel = '';
+            self.grid.page = 1;
+            self.grid.searchText = '';
+            self.grid.searchText = '';
+            self.reloadIncomingDepartmentInboxes();
+        }
+
+        self.searchInIncomingDepartmentInboxes = function (searchText) {
+            if (!searchText)
+                return;
+            self.searchMode = true;
+            return self
+                .reloadIncomingDepartmentInboxes(1)
+                .then(function (result) {
+                    self.incomingDepartmentInboxes = result;
+                })
+        };
+
         /**
          * @description Reload the grid of incoming department inbox item
          * @param pageNumber
@@ -129,12 +153,13 @@ module.exports = function (app) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return incomingDepartmentInboxService
-                .loadIncomingDepartmentInboxes(!!isAutoReload)
+                .loadIncomingDepartmentInboxes(!!isAutoReload, self.grid.page, self.grid.limit, self.searchModel)
                 .then(function (result) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.incomingDepartmentInboxes = result;
                     self.incomingDepartmentInboxesCopy = angular.copy(self.incomingDepartmentInboxes);
+                    self.totalRecords = incomingDepartmentInboxService.totalCount;
                     self.selectedIncomingDepartmentInboxes = [];
                     defer.resolve(true);
                     if (pageNumber)
