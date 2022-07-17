@@ -52,6 +52,8 @@ module.exports = function (app) {
         self.readyToExports = readyToExports;
         self.readyToExportsCopy = angular.copy(self.readyToExports);
         self.totalRecords = readyToExportService.totalCount;
+        self.searchMode = false;
+        self.searchModel = '';
 
         /**
          * @description Contains the selected ready To Exports
@@ -156,6 +158,26 @@ module.exports = function (app) {
             self.readyToExports = $filter('orderBy')(self.readyToExports, self.grid.order);
         };
 
+        self.cancelSearchFilter = function () {
+            self.searchMode = false;
+            self.searchModel = '';
+            self.grid.page = 1;
+            self.grid.searchText = '';
+            self.grid.searchText = '';
+            self.reloadReadyToExports();
+        }
+
+        self.searchInReadyToExports = function (searchText) {
+            if (!searchText)
+                return;
+            self.searchMode = true;
+            return self
+                .reloadReadyToExports(1)
+                .then(function (result) {
+                    self.readyToExports = result;
+                })
+        };
+
         /**
          * @description Reload the grid of ready To Export
          * @param pageNumber
@@ -166,7 +188,7 @@ module.exports = function (app) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return readyToExportService
-                .loadReadyToExports(!!isAutoReload, self.grid.page, self.grid.limit)
+                .loadReadyToExports(!!isAutoReload, self.grid.page, self.grid.limit, self.searchModel)
                 .then(function (result) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);

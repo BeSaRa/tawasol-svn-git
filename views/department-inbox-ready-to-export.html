@@ -16,7 +16,9 @@
                     {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
                 </md-switch>
             </div>
-            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
+            <search-filter-directive change-icon-model="ctrl.searchMode" cancel-callback="ctrl.cancelSearchFilter()"
+                                     on-change="ctrl.searchInReadyToExports"
+                                     model="ctrl.searchModel"></search-filter-directive>
         </div>
         <!-- end page-header -->
         <!-- page-content -->
