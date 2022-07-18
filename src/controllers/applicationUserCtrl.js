@@ -127,7 +127,6 @@ module.exports = function (app) {
             self.searchModel = '';
             self.grid.page = 1;
             self.grid.searchText = '';
-            self.grid.searchText = '';
             self.reloadApplicationUsers();
         }
 
