@@ -152,7 +152,7 @@ module.exports = function (app) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return incomingDepartmentInboxService
-                .loadIncomingDepartmentInboxes(!!isAutoReload, self.grid.page, self.grid.limit, self.searchModel)
+                .loadIncomingDepartmentInboxes(!!isAutoReload, (pageNumber || self.grid.page), self.grid.limit, self.searchModel)
                 .then(function (result) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);

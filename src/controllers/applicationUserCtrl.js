@@ -139,7 +139,7 @@ module.exports = function (app) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return applicationUserService
-                .loadApplicationUsersView(self.grid.page, self.grid.limit, self.searchModel)
+                .loadApplicationUsersView((pageNumber || self.grid.page), self.grid.limit, self.searchModel)
                 .then(function (result) {
                     self.applicationUsers = result;
                     self.applicationUsersCopy = angular.copy(self.applicationUsers);
