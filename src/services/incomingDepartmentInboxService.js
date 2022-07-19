@@ -44,6 +44,21 @@ module.exports = function (app) {
         };
 
         /**
+         * @description load ready to export by vsId
+         * @param vsId
+         * @returns {*}
+         */
+        self.getIncomingDepartmentByVSID = function (vsId) {
+            var params = {offset: 0, limit: 5, ignoreTokenRefresh: false, criteria: vsId};
+
+            return $http.get(urlService.departmentInboxes + "/all-mails", {params: params}).then(function (result) {
+                var incomingDepartmentInboxes = generator.generateCollection(result.data.rs, WorkItem);
+                incomingDepartmentInboxes = generator.interceptReceivedCollection('WorkItem', incomingDepartmentInboxes);
+                return incomingDepartmentInboxes[0];
+            });
+        }
+
+        /**
          * @description Get incoming department inbox items from self.incomingDepartmentInboxes if found and if not load it from server again.
          * @returns {Promise|incomingDepartmentInboxes}
          */

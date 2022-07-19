@@ -5562,9 +5562,10 @@ module.exports = function (app) {
          * @description get email items by (action,source,vsid)
          * @param items
          * @param stateParams
+         * @param itemByVsIdCallback
          * @returns {boolean|*}
          */
-        self.getEmailItemByVsId = function (items, stateParams) {
+        self.getEmailItemByVsId = async function (items, stateParams, itemByVsIdCallback) {
             var action = stateParams.action, source = stateParams.source,
                 vsid = stateParams['vsid'], item;
 
@@ -5572,6 +5573,10 @@ module.exports = function (app) {
                 item = _.find(items, function (workItem) {
                     return workItem.generalStepElm.vsId === vsid;
                 });
+
+                if (!item && itemByVsIdCallback) {
+                    item = await itemByVsIdCallback(vsid);
+                }
 
                 return !item ? (dialog.errorMessage(langService.get('work_item_not_found').change({
                     wobNumber: vsid

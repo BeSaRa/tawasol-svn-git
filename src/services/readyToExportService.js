@@ -47,6 +47,21 @@ module.exports = function (app) {
             };
 
             /**
+             * @description load ready to export by vsId
+             * @param vsId
+             * @returns {*}
+             */
+            self.getReadyToExportByVSID = function (vsId) {
+                var params = {offset: 0, limit: 5, ignoreTokenRefresh: false, criteria: vsId};
+
+                return $http.get(urlService.readyToExports, {params: params}).then(function (result) {
+                    var readyToExports = generator.generateCollection(result.data.rs, WorkItem);
+                    readyToExports = generator.interceptReceivedCollection('WorkItem', readyToExports);
+                    return readyToExports[0];
+                });
+            }
+
+            /**
              * @description Get ready To Exports from self.readyToExports if found and if not load it from server again.
              * @returns {Promise|readyToExports}
              */

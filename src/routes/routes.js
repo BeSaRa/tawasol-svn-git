@@ -1081,9 +1081,9 @@ module.exports = function (app) {
                         var limit = gridService.getGridPagingLimitByGridName(gridService.grids.department.incoming) || 5;
                         return incomingDepartmentInboxService.loadIncomingDepartmentInboxes(false, 1, limit);
                     },
-                    emailItem: function (incomingDepartmentInboxes, correspondenceService, $stateParams) {
+                    emailItem: function (incomingDepartmentInboxes, correspondenceService, $stateParams,incomingDepartmentInboxService) {
                         'ngInject';
-                        return correspondenceService.getEmailItemByVsId(incomingDepartmentInboxes, $stateParams);
+                        return correspondenceService.getEmailItemByVsId(incomingDepartmentInboxes, $stateParams, incomingDepartmentInboxService.getIncomingDepartmentByVSID);
                     }
                 }
             })
@@ -1118,9 +1118,9 @@ module.exports = function (app) {
                         var limit = gridService.getGridPagingLimitByGridName(gridService.grids.department.readyToExport) || 5;
                         return readyToExportService.loadReadyToExports(false, 1, limit);
                     },
-                    emailItem: function (readyToExports, correspondenceService, $stateParams) {
+                    emailItem: function (readyToExports, correspondenceService, $stateParams,readyToExportService) {
                         'ngInject';
-                        return correspondenceService.getEmailItemByVsId(readyToExports, $stateParams);
+                        return correspondenceService.getEmailItemByVsId(readyToExports, $stateParams, readyToExportService.getReadyToExportByVSID);
                     }
                 }
             })
