@@ -22,8 +22,7 @@ module.exports = function (app) {
         self.selectedWorkItems = [];
         // default disable
         self.disabled = false;
-        // by default the client pagination true
-        self.clientPagination = true;
+
         self.employee = employeeService.getEmployee();
 
         self.page = 1;

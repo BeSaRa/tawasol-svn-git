@@ -20,7 +20,7 @@ module.exports = function (app) {
                 forwardBulk: '=',
                 pageLimit: '=',
                 page: '=',
-                totalItems: '=',
+                totalItems: '=?',
                 limitOptions: '=',
                 contextMenuActions: '=',
                 searchModel: '=',
@@ -30,8 +30,10 @@ module.exports = function (app) {
                 quickActions: '=',
                 moveToFolderBulk: '=?',
                 sortingCallback: '=',
+                pagingCallback: '=?',
                 sortOrder: '=',
-                printUserInboxBulk: '=?'
+                printUserInboxBulk: '=?',
+                serverPagination: '=?'
             }
         }
     })

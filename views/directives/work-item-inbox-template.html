@@ -116,7 +116,7 @@
                 context-menu-type="grid"
                 ng-class="!userInbox.generalStepElm.isOpen ? 'unread-row': 'read-row'"
                 selected-length="{{ctrl.selectedWorkItems.length ? ctrl.selectedWorkItems.length : 0}}"
-                ng-repeat="userInbox in searchResults = (ctrl.workItems | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                ng-repeat="userInbox in (ctrl.serverPagination ? ctrl.workItems: (ctrl.workItems | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))) track by $index">
                 <td md-cell class="read-td">
                     <div class="cursor-pointer status absolute-read"
                          ng-class="userInbox.generalStepElm.isOpen===true? 'read' : 'unread'"
@@ -217,7 +217,8 @@
                 <td md-cell>{{userInbox.action.getTranslatedName()}}</td>
                 <td md-cell class="td-data">
                     <div layout="row">
-                        <span ng-if="!userInbox.senderInfo.msTeamsChatURL || !ctrl.employee.isMSTeamsEnabled" flex>{{userInbox.senderInfo.getTranslatedName()}}</span>
+                        <span ng-if="!userInbox.senderInfo.msTeamsChatURL || !ctrl.employee.isMSTeamsEnabled"
+                              flex>{{userInbox.senderInfo.getTranslatedName()}}</span>
                         <a target="_blank" href="{{userInbox.senderInfo.msTeamsChatURL}}"
                            ng-if="userInbox.senderInfo.msTeamsChatURL && ctrl.employee.isMSTeamsEnabled"
                            flex>{{userInbox.senderInfo.getTranslatedName()}}</a>
@@ -249,11 +250,11 @@
                 <td md-cell colspan="12" class="red-text text-center">{{lang.no_records_found}}
                 </td>
             </tr>
-            <tr md-row ng-if="ctrl.workItems.length && !searchResults.length">
+            <!--<tr md-row ng-if="ctrl.workItems.length && !searchResults.length">
                 <td md-cell colspan="12" class="red-text text-center">
                     {{lang.no_records_found_matching_search}}
                 </td>
-            </tr>
+            </tr>-->
             </tbody>
         </table>
     </div>
@@ -264,7 +265,8 @@
                 md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                 md-limit-options="ctrl.grid.limitOptions"
                 md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                md-total="{{(ctrl.workItems | filter:ctrl.searchModel).length}}" md-page-select
+                md-total="{{ctrl.totalItems || (ctrl.workItems | filter:ctrl.searchModel).length}}"
+                md-page-select
                 md-on-paginate="ctrl.grid.pagingCallback">
         </md-table-pagination>
     </div>

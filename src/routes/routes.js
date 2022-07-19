@@ -1022,9 +1022,10 @@ module.exports = function (app) {
                         'ngInject';
                         return false;
                     },
-                    userInboxes: function (userInboxService) {
+                    userInboxes: function (userInboxService, gridService) {
                         'ngInject';
-                        return userInboxService.loadUserInboxes();
+                        var limit = gridService.getGridPagingLimitByGridName(gridService.grids.inbox.userInbox) || 5;
+                        return userInboxService.loadUserInboxes(false, null, false, 1, limit);
                     },
                     correspondenceSiteTypes: function (correspondenceSiteTypeService) {
                         'ngInject';

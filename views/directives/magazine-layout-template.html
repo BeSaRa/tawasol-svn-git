@@ -15,7 +15,8 @@
                                 md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                 md-limit-options="ctrl.limitOptions"
                                 md-limit="ctrl.pageLimit" md-page="ctrl.page"
-                                md-total="{{ctrl.workItems.length}}" md-page-select>
+                                md-total="{{ctrl.totalItems || ctrl.workItems.length}}" md-page-select
+                                md-on-paginate="ctrl.serverPagination ? ctrl.pagingCallback: null">
                         </md-table-pagination>
                     </div>
                     <md-input-container class="m0 cms-default">
@@ -101,7 +102,7 @@
              ng-class="{'selected':ctrl.isWorkItemSelected(workItem)}"
              magazine-item-directive="workItem"
              selected-length="{{ctrl.selectedWorkItems.length ? ctrl.selectedWorkItems.length : 0}}" md-whiteframe="1"
-             ng-repeat="workItem in ctrl.workItems | limitTo:ctrl.pageLimit:( ( ctrl.page - 1) * ctrl.pageLimit) track by $index"
+             ng-repeat="workItem in (ctrl.serverPagination ? ctrl.workItems : (ctrl.workItems | limitTo:ctrl.pageLimit:( ( ctrl.page - 1) * ctrl.pageLimit))) track by $index"
              class="magazine-item">
             <div layout="row">
                 <a href="" tooltip="{{workItem.isRead() ? lang.indicator_mark_unread: lang.indicator_mark_read}}"

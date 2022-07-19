@@ -19,6 +19,10 @@ module.exports = function (app) {
         self.serviceName = 'userInboxService';
 
         self.userInboxes = [];
+        self.totalCount = 0;
+
+        self.starredUserInboxes = [];
+        self.starredTotalCount = 0;
 
         // self.currentUser = employeeService.getEmployee();
         self.fakeUsersInboxForTest = function () {
@@ -42,24 +46,20 @@ module.exports = function (app) {
          * @param excludeLoading
          * @param afterTime - time difference between now and interval for user
          * @param ignoreTokenRefresh
+         * @param page
+         * @param limit
+         * @param criteria
          * @returns {Promise|userInboxes}
          */
-        self.loadUserInboxes = function (excludeLoading, afterTime, ignoreTokenRefresh) {
-            var params = {
-                'optional-fields': 'registeryOu'
-            };
-            if (afterTime) {
-                params.afterTime = (afterTime + '').substr(0, ('' + afterTime).length - 3);
-            }
-            if (ignoreTokenRefresh) {
-                params.ignoreTokenRefresh = true;
-            }
+        self.loadUserInboxes = function (excludeLoading, afterTime, ignoreTokenRefresh, page, limit, criteria) {
+            var params = _prepareLoadInboxParams(afterTime, ignoreTokenRefresh, page, limit, criteria);
+
             return $http.get(urlService.userInbox + '/all-mails', {
                 excludeLoading: !!excludeLoading,
                 params: params
             }).then(function (result) {
+                self.totalCount = result.data.count;
                 self.userInboxes = generator.generateCollection(result.data.rs, WorkItem, self._sharedMethods);
-                //self.userInboxes = _.sortBy(self.userInboxes, 'generalStepElm.starred').reverse();
                 self.userInboxes = generator.interceptReceivedCollection('WorkItem', self.userInboxes);
                 return self.userInboxes;
             });
@@ -69,9 +69,54 @@ module.exports = function (app) {
          * @description Get user inboxes from self.userInboxes if found and if not load it from server again.
          * @returns {Promise|userInboxes}
          */
-        self.getUserInboxes = function () {
-            return self.userInboxes.length ? $q.when(self.userInboxes) : self.loadUserInboxes();
+        self.getUserInboxes = function (excludeLoading, afterTime, ignoreTokenRefresh, page, limit, criteria) {
+            return self.userInboxes.length ? $q.when(self.userInboxes) : self.loadUserInboxes(excludeLoading, afterTime, ignoreTokenRefresh, page, limit, criteria);
         };
+
+        /**
+         * @description load starred user inbox work items
+         * @param excludeLoading
+         * @param page
+         * @param limit
+         * @param criteria
+         * @returns {*}
+         */
+        self.loadStarredUserInboxes = function (excludeLoading, page, limit, criteria) {
+            var params = _prepareLoadInboxParams(null, false, page, limit, criteria);
+
+            return $http.get(urlService.userInbox + '/starred', {
+                excludeLoading: !!excludeLoading,
+                params: params
+            }).then(function (result) {
+                self.starredTotalCount = result.data.count;
+                self.starredUserInboxes = generator.generateCollection(result.data.rs, WorkItem, self._sharedMethods);
+                self.starredUserInboxes = generator.interceptReceivedCollection('WorkItem', self.starredUserInboxes);
+                return self.starredUserInboxes;
+            });
+        }
+
+        function _prepareLoadInboxParams(afterTime, ignoreTokenRefresh, page, limit, criteria) {
+            var offset = ((page - 1) * limit);
+            var params = {
+                'optional-fields': 'registeryOu',
+                'offset': offset,
+                'limit': limit
+            };
+
+            if (criteria) {
+                params.criteria = criteria;
+            }
+            if (afterTime) {
+                params.afterTime = (afterTime + '').substr(0, ('' + afterTime).length - 3);
+            }
+            if (ignoreTokenRefresh) {
+                params.ignoreTokenRefresh = true;
+            }
+
+            return params;
+        }
+
+
 
         /**
          * @description Contains methods for operations for user inbox items

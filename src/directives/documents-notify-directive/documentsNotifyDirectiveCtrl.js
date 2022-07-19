@@ -12,6 +12,7 @@ module.exports = function (app) {
                                                              $stateParams,
                                                              desktopNotificationService,
                                                              langService,
+                                                             gridService,
                                                              followupEmployeeInboxService) {
         'ngInject';
         var self = this, interval;
@@ -148,7 +149,9 @@ module.exports = function (app) {
                     return;
                 }
                 if (Notification && Notification.permission === 'granted') {
-                    userInboxService.loadUserInboxes(true, (Date.now() - employeeService.getEmployee().getIntervalMin()), true).then(self.desktopNotify);
+                    var limit = gridService.getGridPagingLimitByGridName(gridService.grids.inbox.userInbox) || 5;
+                    userInboxService.loadUserInboxes(true, (Date.now() - employeeService.getEmployee().getIntervalMin()), true, 1, limit)
+                        .then(self.desktopNotify);
                 }
                 return self.mailService.loadMailNotifications(self.mailService.notificationsRequestCount)
                     .catch(function () {

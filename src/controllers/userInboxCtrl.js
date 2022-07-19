@@ -74,33 +74,26 @@ module.exports = function (app) {
         self.langService = langService;
         self.isUserInboxCtrl = true; // true for userInboxCtrl, false for documentsNotifyDirectiveCtrl to avoid auto-refresh of grid from documentsNotifyDirectiveCtrl
 
-        self.bySender = false;
-
         self.selectedTab = 0;
         self.selectedGridType = 'inbox';
         self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
         self.isInternalOutgoingEnabled = rootEntity.isInternalOutgoingEnabled();
 
-        self.changeCriteria = function () {
-            var local = angular.copy(self.searchModel);
+        self.searchMode = false;
+        self.searchModel = '';
 
-            if (self.bySender) {
-                self.searchModel = {
-                    senderInfo: {}
-                };
-                self.searchModel.senderInfo[langService.current + 'Name'] = local;
-            } else {
-                self.searchModel = local.hasOwnProperty('senderInfo') ? local.senderInfo[langService.current + 'Name'] : local;
-            }
-        };
+
         /**
          * @description All user inboxes
          * @type {*}
          */
         self.userInboxes = userInboxes;
         self.userInboxesCopy = angular.copy(self.userInboxes);
-        self.starredUserInboxes = _.filter(self.userInboxes, 'generalStepElm.starred');
-        self.starredUserInboxesCopy = angular.copy(self.starredUserInboxes);
+        self.totalRecords = userInboxService.totalCount;
+
+        self.starredUserInboxes = []; //_.filter(self.userInboxes, 'generalStepElm.starred');
+        self.starredUserInboxesCopy = [];// angular.copy(self.starredUserInboxes);
+        self.totalRecordsStarred = userInboxService.starredTotalCount;
         //self.userFolders = userFolders;
 
 
@@ -128,6 +121,16 @@ module.exports = function (app) {
             return model.getInfo().documentClass;
         }
 
+        self.getSelectedInboxGrid = function () {
+            var tabs = {
+                'inbox': self.userInboxes,
+                'starred': self.starredUserInboxes,
+                'filter': self.selectedFilter ? self.workItemsFilters[self.selectedFilter.index] : []
+            };
+
+            return tabs[self.selectedGridType]
+        }
+
         /**
          * @description Get the sorting key for information or lookup model
          * @param property
@@ -148,9 +151,10 @@ module.exports = function (app) {
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.userInbox) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.userInbox),
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.userInbox, self.totalRecords),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.inbox.userInbox, limit);
+                self.reloadUserInboxes(page);
             },
             searchColumns: gridSearchColumns,
             searchText: '',
@@ -169,9 +173,10 @@ module.exports = function (app) {
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.starred) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.starred, self.starredUserInboxes),
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.starred, self.totalRecordsStarred),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.inbox.starred, limit);
+                self.reloadUserInboxes(page);
             },
             searchColumns: gridSearchColumns,
             searchText: '',
@@ -193,7 +198,7 @@ module.exports = function (app) {
             if (self.showStarred) {
                 self.fixedTabsCount = 2;
                 ++self.selectedTab;
-            } else {
+            } else if (self.selectedGridType !== 'inbox') {
                 self.fixedTabsCount = 1;
                 --self.selectedTab;
             }
@@ -379,7 +384,13 @@ module.exports = function (app) {
             self.selectedFilter = null;
             self.selectedTab = $index;
             self.selectedUserInboxes = [];
+            var selectedGridTypeCopy = angular.copy(self.selectedGridType);
             self.selectedGridType = ($index === 0 ? 'inbox' : 'starred');
+            if (self.selectedGridType !== selectedGridTypeCopy) {
+                self.searchMode = false;
+                self.searchModel = '';
+                self.reloadUserInboxes(self.grid.page);
+            }
         };
         /**
          * @description Replaces the record in grid after update
@@ -417,6 +428,26 @@ module.exports = function (app) {
             }
         };
 
+        self.cancelSearchFilter = function () {
+            self.searchMode = false;
+            self.searchModel = '';
+            if (self.selectedGridType === 'starred') {
+                self.starredGrid.page = 1;
+                self.starredGrid.searchText = '';
+            } else {
+                self.grid.page = 1;
+                self.grid.searchText = '';
+            }
+            self.reloadUserInboxes();
+        }
+
+        self.searchInUserInboxItems = function (searchText) {
+            if (!searchText)
+                return;
+            self.searchMode = true;
+            return self.reloadUserInboxes(1);
+        };
+
         /**
          * @description Reload the grid of user inboxes
          * @param pageNumber
@@ -424,6 +455,7 @@ module.exports = function (app) {
          * @return {*|Promise<WorkItem>}
          */
         self.reloadUserInboxes = function (pageNumber, isAutoReload) {
+            var promise = null;
             if (ignoreReload) {
                 // ignoreReload is used from tasks
                 return $q.resolve([]);
@@ -442,32 +474,43 @@ module.exports = function (app) {
             self.grid.progress = defer.promise;
             if (self.selectedGridType === 'starred') {
                 self.starredGrid.progress = defer.promise;
+                promise = userInboxService.loadStarredUserInboxes(true, (pageNumber || self.starredGrid.page), self.starredGrid.limit, self.searchModel);
+            } else {
+                promise = userInboxService.loadUserInboxes(true, null, !!isAutoReload, (pageNumber || self.grid.page), self.grid.limit, self.searchModel)
             }
-            return userInboxService
-                .loadUserInboxes(true, null, !!isAutoReload)
-                .then(function (result) {
-                    counterService.loadCounters();
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                    self.userInboxes = result;
-                    self.userInboxesCopy = angular.copy(self.userInboxes);
-                    self.starredUserInboxes = _.filter(result, 'generalStepElm.starred');
-                    self.starredUserInboxesCopy = angular.copy(self.starredUserInboxes);
 
+            return promise.then(function (result) {
+                counterService.loadCounters();
+                mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+
+                // load starred user inbox
+                if (self.selectedGridType === 'starred') {
+                    self.starredUserInboxes = result; //_.filter(result, 'generalStepElm.starred');
+                    self.starredUserInboxesCopy = angular.copy(self.starredUserInboxes);
+                    self.totalRecordsStarred = userInboxService.starredTotalCount;
                     if (pageNumber) {
-                        self.grid.page = pageNumber;
                         self.starredGrid.page = pageNumber;
                     }
-                    self.getSortedDataForInbox();
                     self.getSortedDataForStarred();
-                    self.grid.searchCallback();
                     self.starredGrid.searchCallback();
+                } else {
+                    // load user inbox
+                    self.userInboxes = result;
+                    self.userInboxesCopy = angular.copy(self.userInboxes);
+                    self.totalRecords = userInboxService.totalCount;
+                    if (pageNumber) {
+                        self.grid.page = pageNumber;
+                    }
+                    self.getSortedDataForInbox();
+                    self.grid.searchCallback();
+                }
 
-                    self.selectedUserInboxes = _.filter(self.userInboxes, function (item) {
-                        return workItemsWobNumbers.indexOf(item.generalStepElm.workObjectNumber) !== -1;
-                    });
-                    defer.resolve(true);
-                    return result;
+                self.selectedUserInboxes = _.filter(self.getSelectedInboxGrid(), function (item) {
+                    return workItemsWobNumbers.indexOf(item.generalStepElm.workObjectNumber) !== -1;
                 });
+                defer.resolve(true);
+                return result;
+            });
         };
 
         /**
@@ -2066,11 +2109,11 @@ module.exports = function (app) {
                         count: function (action, model) {
                             var info = model.getInfo();
                             // we do filter here because we can't get the updated count of workItem inside correspondence popup
-                            var selectedWorkItem = _.find(self.userInboxes, function (item) {
+                            var selectedWorkItem = _.find(self.getSelectedInboxGrid(), function (item) {
                                 return item.generalStepElm.workObjectNumber === info.wobNumber;
                             });
 
-                            return selectedWorkItem.generalStepElm.commentsNO;
+                            return selectedWorkItem ? selectedWorkItem.generalStepElm.commentsNO : 0;
                         }
                     },
                     // Tasks
@@ -2489,7 +2532,7 @@ module.exports = function (app) {
                         callback: self.editContent,
                         class: "action-green",
                         checkShow: function (action, model) {
-                           return checkIfEditContentAllowed(model);
+                            return checkIfEditContentAllowed(model);
                         }
                     },
                     // Properties

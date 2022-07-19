@@ -54,10 +54,12 @@
                        class="md-icon-button" tooltip="{{lang.create_filter}}">
                 <md-icon md-svg-icon="add-filter"></md-icon>
             </md-button>
-            <grid-search-directive grid="ctrl.grid"
-                                   ng-if="ctrl.selectedGridType === 'inbox'"></grid-search-directive>
-            <grid-search-directive grid="ctrl.starredGrid"
-                                   ng-if="ctrl.selectedGridType === 'starred'"></grid-search-directive>
+            <search-filter-directive change-icon-model="ctrl.searchMode" cancel-callback="ctrl.cancelSearchFilter()"
+                                     on-change="ctrl.searchInUserInboxItems" model="ctrl.searchModel"
+                                     ng-if="ctrl.selectedGridType === 'inbox'"></search-filter-directive>
+            <search-filter-directive change-icon-model="ctrl.searchMode" cancel-callback="ctrl.cancelSearchFilter()"
+                                     on-change="ctrl.searchInUserInboxItems" model="ctrl.searchModel"
+                                     ng-if="ctrl.selectedGridType === 'starred'"></search-filter-directive>
             <div ng-repeat="filter in ctrl.userFilters">
                 <grid-search-directive grid="ctrl.filterGrid[$index]"
                                        ng-if="ctrl.selectedGridType === 'filter' && ctrl.selectedFilter.index === $index"
@@ -110,7 +112,9 @@
                                                 check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
                                                 selected-work-items="ctrl.selectedUserInboxes"
                                                 sorting-callback="ctrl.getSortedDataForInbox"
-                                                print-user-inbox-bulk="ctrl.printResult">
+                                                print-user-inbox-bulk="ctrl.printResult"
+                                                total-items="ctrl.totalRecords"
+                                                server-pagination="true">
                                         </work-item-inbox-directive>
                                     </md-content>
                                 </md-tab>
@@ -134,7 +138,9 @@
                                                 check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
                                                 selected-work-items="ctrl.selectedUserInboxes"
                                                 sorting-callback="ctrl.getSortedDataForStarred"
-                                                print-user-inbox-bulk="ctrl.printResult">
+                                                print-user-inbox-bulk="ctrl.printResult"
+                                                total-items="ctrl.totalRecordsStarred"
+                                                server-pagination="true">
                                         </work-item-inbox-directive>
                                     </md-content>
                                 </md-tab>
@@ -229,8 +235,11 @@
                                         selected-work-items="ctrl.selectedUserInboxes"
                                         work-items="ctrl.userInboxes"
                                         sorting-callback="ctrl.getSortedDataForInbox"
+                                        paging-callback="ctrl.grid.pagingCallback"
                                         sort-order="ctrl.grid.order"
-                                        print-user-inbox-bulk="ctrl.printResult">
+                                        print-user-inbox-bulk="ctrl.printResult"
+                                        total-items="ctrl.totalRecords"
+                                        server-pagination="true">
                                 </magazine-layout-directive>
                             </md-content>
                         </md-tab>
@@ -257,8 +266,11 @@
                                         selected-work-items="ctrl.selectedUserInboxes"
                                         work-items="ctrl.starredUserInboxes"
                                         sorting-callback="ctrl.getSortedDataForStarred"
+                                        paging-callback="ctrl.starredGrid.pagingCallback"
                                         sort-order="ctrl.starredGrid.order"
-                                        print-user-inbox-bulk="ctrl.printResult">
+                                        print-user-inbox-bulk="ctrl.printResult"
+                                        total-items="ctrl.totalRecordsStarred"
+                                        server-pagination="true">
                                 </magazine-layout-directive>
                             </md-content>
                         </md-tab>

@@ -23,7 +23,9 @@ module.exports = function (app) {
                 grid: '=',
                 searchModel: '=',
                 sortingCallback: '=',
-                printUserInboxBulk: '=?'
+                printUserInboxBulk: '=?',
+                totalItems: '=?',
+                serverPagination: '=?'
             }
         }
     })
