@@ -2771,14 +2771,19 @@ module.exports = function (app) {
                 if (item) {
                     self.openEmailItem(item);
                 } else {
-                    // if ouId exists in url, switch the organization to given ouId
-                    if (ouId) {
-                        _forceSwitchOU(ouId);
-                    } else {
-                        dialog.errorMessage(langService.get('work_item_not_found').change({
-                            wobNumber: wobNumber
-                        }));
-                    }
+                    userInboxService.getUserInboxItemByWobNumber(wobNumber)
+                        .then(function (item) {
+                            if (item) {
+                                self.openEmailItem(item);
+                            } else if (ouId) {
+                                // if ouId exists in url, switch the organization to given ouId
+                                _forceSwitchOU(ouId);
+                            } else {
+                                dialog.errorMessage(langService.get('work_item_not_found').change({
+                                    wobNumber: wobNumber
+                                }));
+                            }
+                        });
                 }
             }
         }

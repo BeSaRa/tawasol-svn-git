@@ -95,6 +95,24 @@ module.exports = function (app) {
             });
         }
 
+        /**
+         * @description get work item by vsId
+         * @returns {Promise<T>}
+         * @param wobNum
+         */
+        self.getUserInboxItemByWobNumber = function (wobNum) {
+            var params = _prepareLoadInboxParams(null, false, 1, 5, wobNum);
+
+            return $http.get(urlService.userInbox + '/all-mails', {
+                excludeLoading: false,
+                params: params
+            }).then(function (result) {
+                var userInboxes = generator.generateCollection(result.data.rs, WorkItem, self._sharedMethods);
+                userInboxes = generator.interceptReceivedCollection('WorkItem', userInboxes);
+                return userInboxes[0];
+            })
+        }
+
         function _prepareLoadInboxParams(afterTime, ignoreTokenRefresh, page, limit, criteria) {
             var offset = ((page - 1) * limit);
             var params = {
