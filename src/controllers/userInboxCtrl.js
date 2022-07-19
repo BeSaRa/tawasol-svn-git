@@ -389,7 +389,7 @@ module.exports = function (app) {
             if (self.selectedGridType !== selectedGridTypeCopy) {
                 self.searchMode = false;
                 self.searchModel = '';
-                self.reloadUserInboxes(self.grid.page);
+                self.reloadUserInboxes();
             }
         };
         /**
