@@ -3831,7 +3831,8 @@ module.exports = function (app) {
                                         additionalData: additionalData,
                                         ignoreMessage: ignoreMessage,
                                         pinCodeRequired: pinCodeRequired,
-                                        exportData: exportData
+                                        exportData: exportData,
+                                        attachment: null
                                     }
                                 });
                         }

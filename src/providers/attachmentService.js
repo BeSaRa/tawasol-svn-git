@@ -106,6 +106,10 @@ module.exports = function (app) {
              * @param tokenService
              * @param langService
              * @param errorCode
+             * @param applicationUserSignatureService
+             * @param toast
+             * @param CorrespondenceInfo
+             * @param authenticationService
              * @return {provider}
              */
             provider.$get = function (urlService,
@@ -125,6 +129,8 @@ module.exports = function (app) {
                                       tokenService,
                                       langService,
                                       errorCode,
+                                      applicationUserSignatureService,
+                                      toast,
                                       CorrespondenceInfo,
                                       authenticationService) {
                 'ngInject';
@@ -913,6 +919,61 @@ module.exports = function (app) {
                             first: selectedCorrespondence ? selectedCorrespondence.vsId : selectedCorrespondence,
                             second: selectedAttachmentIds
                         })
+                }
+
+                /**
+                 * @description authorize attachment contract
+                 * @returns {*}
+                 */
+                self.authorizeContract = function (document, attachment, signature) {
+                    return $http.put(urlService.outgoings + '/attachments/authorize-contract', {
+                        bookVsid: document.getInfo().vsId,
+                        contractVsid: attachment.getInfo().vsId,
+                        signatureVsid: signature.hasOwnProperty('vsId') ? signature.vsId : signature
+                    }).then(function (result) {
+                        return true;
+                    }).catch(function (error) {
+                        errorCode.checkIf(error, 'CAN_NOT_AUTHORIZE_CONTRACT', function () {
+                            dialog.errorMessage(generator.getTranslatedError(error));
+                        });
+                        return $q.reject();
+                    });
+                }
+
+                self.openAttachmentSignaturePopup = function (document, attachment, $event) {
+                    return applicationUserSignatureService.getApplicationUserSignatures(employeeService.getEmployee().id)
+                        .then(function (signatures) {
+                            if (signatures && signatures.length === 1) {
+                                return self.authorizeContract(document, attachment, signatures[0])
+                                    .then(function (result) {
+                                        if (result)
+                                            return true;
+                                        else {
+                                            toast.error(langService.get('something_happened_when_sign'));
+                                            return false;
+                                        }
+                                    });
+                            } else if (signatures && signatures.length > 1) {
+                                return dialog
+                                    .showDialog({
+                                        targetEvent: $event,
+                                        templateUrl: cmsTemplate.getPopup('signature'),
+                                        controller: 'signaturePopCtrl',
+                                        controllerAs: 'ctrl',
+                                        locals: {
+                                            workItem: document,
+                                            attachment: attachment,
+                                            signatures: signatures,
+                                            additionalData: false,
+                                            ignoreMessage: true,
+                                            exportData: null,
+                                            pinCodeRequired: false
+                                        }
+                                    });
+                            } else {
+                                dialog.alertMessage(langService.get('no_signature_available'));
+                            }
+                        });
                 }
 
                 _prepareExtensionGroups();

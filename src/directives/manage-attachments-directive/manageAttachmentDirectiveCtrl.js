@@ -34,6 +34,7 @@ module.exports = function (app) {
         self.allowUpload = true;
         self.attachment = null;
 
+        self.rootEntity = rootEntity;
         // current document file
         self.document = null;
 
@@ -293,6 +294,9 @@ module.exports = function (app) {
                     errorCode.checkIf(error, 'FAILED_INSERT_DOCUMENT', function () {
                         dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
                     });
+                    errorCode.checkIf(error, 'INVALID_CONTRACT_AS_CONTENT', function () {
+                        dialog.errorMessage(generator.getTranslatedError(error));
+                    });
                 })
                 .finally(function () {
                     self.showButtons();
@@ -401,10 +405,26 @@ module.exports = function (app) {
         };
 
         self.downloadAttachment = function (attachment, $event) {
+            if (attachment.isContract && attachment.isSignedContract && employeeService.hasPermissionTo("DOWNLOAD_ATTACHMENT_WITHOUT_WATERMARK")) {
+                var buttonsList = [
+                    {id: 1, type: "yes", text: "yes", value: true, cssClass: ""},
+                    {id: 2, type: "no", text: "no", value: false, cssClass: ""}
+                ];
+
+                return dialog.confirmMessageWithDynamicButtonsList(langService.get('do_you_want_to_download_without_watermark'), buttonsList, '')
+                    .then(function (selectedLabel) {
+                        return _downloadAttachment(attachment, true);
+                    })
+            } else {
+                return _downloadAttachment(attachment);
+            }
+        };
+
+        function _downloadAttachment(attachment, withoutWatermark) {
             var info = self.document.getInfo();
             downloadService.controllerMethod
-                .attachmentDownload(attachment.vsId, info.docClassId, info.vsId);
-        };
+                .attachmentDownload(attachment.vsId, info.docClassId, info.vsId, withoutWatermark);
+        }
 
         /**
          * to upload the files
@@ -523,6 +543,9 @@ module.exports = function (app) {
                     errorCode.checkIf(error, 'FAILED_INSERT_DOCUMENT', function () {
                         dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
                     });
+                    errorCode.checkIf(error, 'INVALID_CONTRACT_AS_CONTENT', function () {
+                        dialog.errorMessage(generator.getTranslatedError(error));
+                    });
                 })
                 .finally(function () {
                     self.showButtons();
@@ -637,6 +660,16 @@ module.exports = function (app) {
                     toast.success(langService.get('add_success'));
                     self.reloadAttachments();
                 });
+        }
+
+        /**
+         * @description open signature popup for approval
+         */
+        self.openApproveAttachment = function (attachment, $event) {
+            attachmentService.openAttachmentSignaturePopup(self.document, attachment, $event)
+                .then(function (result) {
+                    self.reloadAttachments();
+                })
         }
 
 

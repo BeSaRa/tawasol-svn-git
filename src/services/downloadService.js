@@ -95,9 +95,9 @@ module.exports = function (app) {
              * @param documentVsId
              * @param $event
              */
-            attachmentDownload: function (attachmentVsId, docClassId, documentVsId, $event) {
+            attachmentDownload: function (attachmentVsId, docClassId, documentVsId, withoutWatermark, $event) {
                 attachmentVsId = typeof attachmentVsId.getInfo === 'function' ? attachmentVsId.getInfo().vsId : attachmentVsId;
-                return self.downloadAttachment(attachmentVsId, docClassId, documentVsId).then(function (result) {
+                return self.downloadAttachment(attachmentVsId, docClassId, documentVsId, withoutWatermark).then(function (result) {
                     window.open(result);
                     return true;
                 });
@@ -326,10 +326,11 @@ module.exports = function (app) {
         /**
          * @description download attachment from server
          */
-        self.downloadAttachment = function (attachmentVsId, docClassId, documentVsId) {
+        self.downloadAttachment = function (attachmentVsId, docClassId, documentVsId, withoutWatermark) {
             var queryString = _generateQueryString({
                 'corVsid': documentVsId,
-                'docClassId': docClassId
+                'docClassId': docClassId,
+                'without-watermark': withoutWatermark
             });
             return $http
                 .get(urlService.downloadDocumentAttachment + '/' + attachmentVsId + queryString)

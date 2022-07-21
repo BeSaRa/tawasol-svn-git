@@ -63,6 +63,7 @@ module.exports = function (app) {
             self.allowIntegeratedClassification = false;
             self.allowDownloadWithoutWatermark = false;
             self.mailingRoomEnabled = false;
+            self.allowSigningContracts = false;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [

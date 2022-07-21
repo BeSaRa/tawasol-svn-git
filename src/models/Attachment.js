@@ -34,6 +34,8 @@ module.exports = function (app) {
             self.progress = 0;
             self.isAnnotation = false;
             self.isOfficial = false;
+            self.isContract = null;
+            self.isSignedContract = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -93,6 +95,9 @@ module.exports = function (app) {
             Attachment.prototype.canUpdateIfAuthorizedActionStatus = function () {
                 var updateActionStatus = this.updateActionStatus.hasOwnProperty('lookupKey') ? this.updateActionStatus.lookupKey : this.updateActionStatus;
                 return updateActionStatus !== 1;
+            }
+            Attachment.prototype.isContractNeedSign = function () {
+                return this.isContract && this.isSignedContract === false;
             }
 
             // don't remove CMSModelInterceptor from last line

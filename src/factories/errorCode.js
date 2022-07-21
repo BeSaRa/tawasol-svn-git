@@ -85,7 +85,9 @@ module.exports = function (app) {
                 SEARCH_OPERATION_FAILED: 2004,
                 BL_ERROR_UPDATE_GLOBAL_PROPERTY_CONFIG: 3079,
                 FAILED_DUPLICATE_EMPLOYEE_NUMBER: 1012,
-                CAN_NOT_RECALL_EXTERNAL_OUTGOING: 3083
+                CAN_NOT_RECALL_EXTERNAL_OUTGOING: 3083,
+                INVALID_CONTRACT_AS_CONTENT: 3085,
+                CAN_NOT_AUTHORIZE_CONTRACT: 3086
             },
             errorLangKeys = {
                 1001: 'no_records_found',
@@ -126,8 +128,10 @@ module.exports = function (app) {
                 2004: 'search_operation_failed',
                 3035: 'attachment_restricted_to_modify_after_book_authorization',
                 3079: 'bl_error_update_global_property_config',
-                1012:'failed_duplicate_employee_number',
-                3083: 'msg_only_internal_outgoing_can_be_recalled'
+                1012: 'failed_duplicate_employee_number',
+                3083: 'msg_only_internal_outgoing_can_be_recalled',
+                3085: 'invalid_contract_as_content',
+                3086: 'can_not_authorize_contract'
             };
 
         return {

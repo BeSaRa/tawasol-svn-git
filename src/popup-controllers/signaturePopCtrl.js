@@ -11,13 +11,18 @@ module.exports = function (app) {
                                                  additionalData,
                                                  exportData,
                                                  ignoreMessage,
+                                                 attachment,
+                                                 attachmentService,
+                                                 _,
+                                                 rootEntity,
                                                  pinCodeRequired) {
         'ngInject';
         var self = this;
 
         self.controllerName = 'signaturePopCtrl';
-
+        self.attachment = attachment;
         self.progress = null;
+        self.rootEntity = rootEntity;
 
         /**
          * @description All signatures
@@ -113,6 +118,14 @@ module.exports = function (app) {
                     return result;
                 });
         };
+
+        self.signAttachmentFromCtrl = function ($event) {
+            return attachmentService.authorizeContract(workItem, self.attachment, self.selectedSignature)
+                .then(function (result) {
+                    dialog.hide(result);
+                    return result;
+                })
+        }
 
         /**
          * @description Checks if approve button is disabled

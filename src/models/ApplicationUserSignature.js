@@ -10,6 +10,7 @@ module.exports = function (app) {
             self.appUserId = null;
             self.id = null;
             self.vsId = null;
+            self.isContractInitial = null;
 
 
             // every model has required fields
@@ -38,6 +39,10 @@ module.exports = function (app) {
             ApplicationUserSignature.prototype.getNames = function (separator) {
                 // return this.subject + ' ' + (separator ? separator : '-') + ' ' + this.subject;
                 return this.docSubject;
+            };
+
+            ApplicationUserSignature.prototype.getTranslatedYesNo = function (fieldName) {
+                return this[fieldName] ? langService.get('yes') : langService.get('no');
             };
 
 

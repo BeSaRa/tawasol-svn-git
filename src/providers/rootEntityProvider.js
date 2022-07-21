@@ -181,6 +181,9 @@ module.exports = function (app) {
                 },
                 isMailRoomIntegrationEnabled() {
                     return rootEntity && rootEntity.isMailRoomIntegrationEnabled();
+                },
+                isSigningContractsEnabled(){
+                    return rootEntity && rootEntity.isSigningContractsEnabled();
                 }
             };
         }

@@ -11,6 +11,7 @@ module.exports = function (app) {
                                                                 applicationUserSignature,
                                                                 applicationUserSignatures,
                                                                 $scope,
+                                                                rootEntity,
                                                                 attachmentService,
                                                                 $timeout) {
         'ngInject';
@@ -20,6 +21,7 @@ module.exports = function (app) {
 
         self.applicationUserSignature = angular.copy(applicationUserSignature);
         self.model = angular.copy(applicationUserSignature);
+        self.rootEntity = rootEntity;
 
         /**
          * @description Contains the labels for the fields for validation purpose
@@ -103,8 +105,7 @@ module.exports = function (app) {
         self.addApplicationUserSignatureFromCtrl = function () {
             if (!self.selectedFile) {
                 toast.error(langService.get('file_required'));
-            }
-            else {
+            } else {
                 validationService
                     .createValidation('ADD_APPLICATION_USER_SIGNATURE')
                     .addStep('check_required_fields', true, generator.checkRequiredFields, self.applicationUserSignature, function (result) {
@@ -160,42 +161,42 @@ module.exports = function (app) {
                 toast.error(langService.get('file_required'));
             }
             else {*/
-                //generator.replaceWithOriginalValues(self.applicationUserSignature, self.model, self.disabledFields);
-                validationService
-                    .createValidation('EDIT_APPLICATION_USER_SIGNATURE')
-                    .addStep('check_required', true, generator.checkRequiredFields, self.applicationUserSignature, function (result) {
-                        return !result.length;
-                    })
-                    .notifyFailure(function (step, result) {
-                        var labels = _.map(result, function (label) {
-                            return self.validateLabels[label];
-                        });
-                        generator.generateErrorFields('check_this_fields', labels);
-                    })
-                    /*.addStep('check_file_required', true, self.checkRequiredFile, function (result) {
-                        return !result.length;
-                    })
-                    .notifyFailure(function (step, result) {
-                        var labels = _.map(result, function (label) {
-                            return self.validateLabels[label];
-                        });
-                        generator.generateErrorFields('check_this_fields', labels);
-                    })*/
-                    .addStep('check_duplicate', true, applicationUserSignatureService.checkDuplicateApplicationUserSignature, [self.applicationUserSignature, true], function (result) {
-                        return !result;
-                    }, true)
-                    .notifyFailure(function () {
-                        toast.error(langService.get('name_duplication_message'));
-                    })
-                    .validate()
-                    .then(function () {
-                        applicationUserSignatureService
-                            .updateApplicationUserSignature(self.applicationUserSignature, self.selectedFile)
-                            .then(function () {
-                                dialog.hide(self.applicationUserSignature);
-                            });
-
+            //generator.replaceWithOriginalValues(self.applicationUserSignature, self.model, self.disabledFields);
+            validationService
+                .createValidation('EDIT_APPLICATION_USER_SIGNATURE')
+                .addStep('check_required', true, generator.checkRequiredFields, self.applicationUserSignature, function (result) {
+                    return !result.length;
+                })
+                .notifyFailure(function (step, result) {
+                    var labels = _.map(result, function (label) {
+                        return self.validateLabels[label];
                     });
+                    generator.generateErrorFields('check_this_fields', labels);
+                })
+                /*.addStep('check_file_required', true, self.checkRequiredFile, function (result) {
+                    return !result.length;
+                })
+                .notifyFailure(function (step, result) {
+                    var labels = _.map(result, function (label) {
+                        return self.validateLabels[label];
+                    });
+                    generator.generateErrorFields('check_this_fields', labels);
+                })*/
+                .addStep('check_duplicate', true, applicationUserSignatureService.checkDuplicateApplicationUserSignature, [self.applicationUserSignature, true], function (result) {
+                    return !result;
+                }, true)
+                .notifyFailure(function () {
+                    toast.error(langService.get('name_duplication_message'));
+                })
+                .validate()
+                .then(function () {
+                    applicationUserSignatureService
+                        .updateApplicationUserSignature(self.applicationUserSignature, self.selectedFile)
+                        .then(function () {
+                            dialog.hide(self.applicationUserSignature);
+                        });
+
+                });
             //}
         };
 

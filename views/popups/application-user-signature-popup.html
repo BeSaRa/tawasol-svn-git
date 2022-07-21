@@ -60,6 +60,13 @@
                                 <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
                             </div>
                         </md-input-container>
+                        <div flex ng-if="ctrl.rootEntity.isSigningContractsEnabled()">
+                            <md-switch flex ng-model="ctrl.applicationUserSignature.isContractInitial"
+                                       aria-label="{{lang.initials}}">
+                                <label>{{lang.initials}} :
+                                    {{ctrl.applicationUserSignature.getTranslatedYesNo('isContractInitial')}}</label>
+                            </md-switch>
+                        </div>
                     </div>
                 </div>
             </form>

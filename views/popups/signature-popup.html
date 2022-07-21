@@ -14,18 +14,23 @@
                         <div ng-messages="signaturesForm.pinCode.$error">
                             <div ng-message="required">{{lang.field_required}}</div>
                             <div ng-message="ENSS">{{lang.english_number_special_char}}</div>
-                            <div ng-message="maxlength">{{lang.max_length.change({length:15})}}</div>
+                            <div ng-message="maxlength">{{lang.max_length.change({length: 15})}}</div>
                         </div>
                     </md-input-container>
                 </div>
                 <div ng-repeat="signatureChunk in ctrl.signatureChunks track by $index">
                     <div flex layout="row">
-                        <img flex ng-repeat="signature in signatureChunk track by $index"
-                             ng-src="{{signature.contentElementUrl}}"
-                             class="cursor-pointer"
-                             ng-class="{'selected': ctrl.isSignatureSelected(signature)}"
-                             ng-click="ctrl.setSelectedSignature(signature, $event)"
-                             width="100" height="100">
+                        <div ng-repeat="signature in signatureChunk track by $index" class="position-relative">
+                            <md-icon md-svg-icon="draw" class="position-absolute"
+                                     ng-if="ctrl.rootEntity.isSigningContractsEnabled() && signature.isContractInitial"
+                                     tooltip="{{lang.initials}}"></md-icon>
+                            <img flex
+                                 ng-src="{{signature.contentElementUrl}}"
+                                 class="cursor-pointer"
+                                 ng-class="{'selected': ctrl.isSignatureSelected(signature)}"
+                                 ng-click="ctrl.setSelectedSignature(signature, $event)"
+                                 width="100" height="100">
+                        </div>
                         <div flex
                              ng-repeat="emptySignature in ctrl.getEmptySigns(signatureChunk) track by $index"></div>
                     </div>
@@ -35,7 +40,11 @@
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
         <md-button class="md-raised md-primary" ng-disabled="ctrl.checkDisabled()"
-                   ng-click="ctrl.signDocumentFromCtrl()">
+                   ng-click="ctrl.signDocumentFromCtrl()" ng-if="!ctrl.attachment">
+            {{lang.approve}}
+        </md-button>
+        <md-button class="md-raised md-primary" ng-disabled="ctrl.checkDisabled()"
+                   ng-click="ctrl.signAttachmentFromCtrl($event)" ng-if="ctrl.attachment">
             {{lang.approve}}
         </md-button>
         <md-button class="md-raised red-text" ng-click="ctrl.closeSignaturesPopupFromCtrl()">

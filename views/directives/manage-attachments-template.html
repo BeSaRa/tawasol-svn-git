@@ -167,6 +167,15 @@
                         {{ctrl.attachment.getTranslatedYesNo('isOfficial')}}</label>
                 </md-switch>
             </div>
+            <!-- IS Contract -->
+            <div flex class="cms-input-container"
+                 ng-if="ctrl.rootEntity.isSigningContractsEnabled() && ctrl.documentClass.toLowerCase() === 'outgoing'">
+                <md-switch flex ng-model="ctrl.attachment.isContract"
+                           aria-label="{{lang.to_be_signed}}">
+                    <label>{{lang.to_be_signed}} :
+                        {{ctrl.attachment.getTranslatedYesNo('isContract')}}</label>
+                </md-switch>
+            </div>
         </div>
         <div ng-if="ctrl.attachment">
             <md-button ng-if="!ctrl.attachment.vsId"
@@ -295,6 +304,13 @@
                                        ng-click="ctrl.openAnnotateAttachment(attachment, $event)">
                                 <md-icon md-svg-icon="draw"></md-icon>
                             </md-button>
+                            <md-button class="md-icon-button" tooltip="{{lang.approve_attachment_pending}}"
+                                       ng-if="ctrl.rootEntity.isSigningContractsEnabled() && attachment.isContractNeedSign()"
+                                       ng-click="ctrl.openApproveAttachment(attachment, $event)">
+                                <md-icon md-svg-icon="alert-decagram" class="red-text"></md-icon>
+                            </md-button>
+                            <md-icon ng-if="ctrl.rootEntity.isSigningContractsEnabled() && attachment.isSignedContract" md-svg-icon="check-decagram"
+                                     tooltip="{{lang.internal_approved}}"></md-icon>
                         </div>
                     </td>
                 </tr>

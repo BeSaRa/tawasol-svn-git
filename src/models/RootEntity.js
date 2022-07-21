@@ -129,6 +129,9 @@ module.exports = function (app) {
             RootEntity.prototype.isMailRoomIntegrationEnabled = function () {
                 return self.rootEntity.hasOwnProperty('mailingRoomEnabled') && !!self.rootEntity.mailingRoomEnabled;
             }
+            RootEntity.prototype.isSigningContractsEnabled = function () {
+                return self.rootEntity.hasOwnProperty('allowSigningContracts') && !!self.rootEntity.allowSigningContracts;
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
