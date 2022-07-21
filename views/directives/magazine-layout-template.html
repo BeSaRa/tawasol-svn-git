@@ -25,8 +25,7 @@
                                    ng-change="ctrl.getSortedMagazineData()">
                             <md-option ng-repeat="option in ctrl.sortingOptions track by $index"
                                        ng-value="option.value()">
-                                <md-icon md-svg-icon="{{option.icon}}"></md-icon>
-                                {{option.text()}}
+                                <md-icon md-svg-icon="{{option.icon}}"></md-icon>{{option.text()}}
                             </md-option>
                         </md-select>
                     </md-input-container>
@@ -127,9 +126,7 @@
                         <star-unstar-directive record="workItem" record-type="workItem"
                                                callback="ctrl.changeUserInboxStar"
                                                selected-records="ctrl.selectedWorkItems"></star-unstar-directive>
-                        <div layout-align="center center" class="magazine-serial serial-td">
-                            {{workItem.getFullSerialText()}}
-                        </div>
+                        <div layout-align="center center" class="magazine-serial serial-td">{{workItem.getFullSerialText()}}</div>
                         <div flex class="magazine-from">
                         <span class="font-12">
                             <span>{{lang.from}}</span>
@@ -154,10 +151,8 @@
                         <div class="magazine-sender">
                             <grid-indicator-directive record="workItem"
                                                       indicator-type="comments"
-                                                      record-type="WorkItem"></grid-indicator-directive>
-                            {{lang.sender }} -
-                            <span ng-if="!workItem.senderInfo.msTeamsChatURL"
-                                  flex>{{workItem.senderInfo.getTranslatedName()}}</span>
+                                                      record-type="WorkItem"></grid-indicator-directive>{{lang.sender }} -
+                            <span ng-if="!workItem.senderInfo.msTeamsChatURL" flex>{{workItem.senderInfo.getTranslatedName()}}</span>
                             <a target="_blank" href="{{workItem.senderInfo.msTeamsChatURL}}"
                                ng-if="workItem.senderInfo.msTeamsChatURL"
                                flex>{{workItem.senderInfo.getTranslatedName()}}</a>
@@ -170,8 +165,7 @@
                                                       indicator-type="paperElectronic"
                                                       record-type="WorkItem"></grid-indicator-directive>
                             <span flex>
-                                <a md-truncate href="" ng-click="ctrl.viewDocument(workItem , $event)"
-                                   tooltip="{{workItem.getSubject()}}">{{workItem.getSubject()}}</a>
+                                <a md-truncate href="" ng-click="ctrl.viewDocument(workItem , $event)"tooltip="{{workItem.getSubject()}}">{{workItem.getSubject()}}</a>
                             </span>
                             <span class="magazine-serial bg-red">{{lang.action}} : {{workItem.action.getTranslatedName()}}</span>
                         </div>
