@@ -37,6 +37,9 @@ module.exports = function (app) {
 
         self.workItems = [];
         self.workItemsCopy = angular.copy(self.workItems);
+        self.totalRecords = correspondenceService.totalCountFolderItems;
+        self.searchMode = false;
+        self.searchModel = '';
         self.selectedWorkItems = [];
         self.folders = folders;
         self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
@@ -71,9 +74,10 @@ module.exports = function (app) {
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.folder) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.folder, self.workItems),
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.folder, self.totalRecords),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.inbox.folder, limit);
+                self.reloadFolders(page, true);
             },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.inbox.folder),
             setTruncateSubject: function ($event) {
@@ -136,22 +140,45 @@ module.exports = function (app) {
             self.workItems = $filter('orderBy')(self.workItems, order);
         };
 
+        self.cancelSearchFilter = function () {
+            self.searchMode = false;
+            self.searchModel = '';
+            self.grid.page = 1;
+            self.grid.searchText = '';
+            self.reloadFolders(1, true);
+        }
+
+        self.searchInUserInboxByFolder = function (searchText) {
+            if (!searchText)
+                return;
+            self.searchMode = true;
+            return self
+                .reloadFolders(1, true)
+                .then(function (result) {
+                    self.workItems = result;
+                })
+        };
+
         /**
          * @description reload current folder
          * @param pageNumber
+         * @param skipCountersReload
          */
-        self.reloadFolders = function (pageNumber) {
+        self.reloadFolders = function (pageNumber, skipCountersReload) {
             if (!self.selectedFolder)
                 return;
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return correspondenceService
-                .loadUserInboxByFolder(self.selectedFolder)
+                .loadUserInboxByFolder(self.selectedFolder, (pageNumber || self.grid.page), self.grid.limit, self.searchModel)
                 .then(function (workItems) {
-                    counterService.loadCounters();
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    if (!skipCountersReload) {
+                        counterService.loadCounters();
+                        mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    }
                     self.workItems = workItems;
                     self.workItemsCopy = angular.copy(self.workItems);
+                    self.totalRecords = correspondenceService.totalCountFolderItems;
                     self.selectedWorkItems = [];
                     defer.resolve(true);
                     if (pageNumber)

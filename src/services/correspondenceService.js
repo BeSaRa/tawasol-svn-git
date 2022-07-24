@@ -115,6 +115,7 @@ module.exports = function (app) {
 
         self.totalCountCAReadyToExports = 0;
         self.totalCountGroupMails = 0;
+        self.totalCountFolderItems = 0;
         /**
          * the registered models for our CMS
          * @type {{outgoing: (Outgoing|*), internal: (Internal|*), incoming: (Incoming|*)}}
@@ -2656,12 +2657,22 @@ module.exports = function (app) {
         /**
          * @description load folder content by folder Id
          * @param folder
+         * @param page
+         * @param limit
+         * @param criteria
          */
-        self.loadUserInboxByFolder = function (folder) {
+        self.loadUserInboxByFolder = function (folder, page, limit, criteria) {
             var folderId = folder.hasOwnProperty('id') ? folder.id : folder;
+            var offset = ((page - 1) * limit);
+            var params = {offset: offset, limit: limit};
+            if (criteria) {
+                params.criteria = criteria;
+            }
+
             return $http
-                .get(urlService.inboxWF + '/folder/' + folderId + '?optional-fields=registeryOu')
+                .get(urlService.inboxWF + '/folder/' + folderId + '?optional-fields=registeryOu', {params: params})
                 .then(function (result) {
+                    self.totalCountFolderItems = result.data.count;
                     return generator.interceptReceivedCollection('WorkItem', generator.generateCollection(result.data.rs, WorkItem));
                 });
         };
