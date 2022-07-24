@@ -154,7 +154,7 @@ module.exports = function (app) {
             limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.userInbox, self.totalRecords),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.inbox.userInbox, limit);
-                self.reloadUserInboxes(page);
+                self.reloadUserInboxes(page, false, true);
             },
             searchColumns: gridSearchColumns,
             searchText: '',
@@ -176,7 +176,7 @@ module.exports = function (app) {
             limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.starred, self.totalRecordsStarred),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.inbox.starred, limit);
-                self.reloadUserInboxes(page);
+                self.reloadUserInboxes(page, false, true);
             },
             searchColumns: gridSearchColumns,
             searchText: '',
@@ -438,23 +438,24 @@ module.exports = function (app) {
                 self.grid.page = 1;
                 self.grid.searchText = '';
             }
-            self.reloadUserInboxes();
+            self.reloadUserInboxes(1, false, true);
         }
 
         self.searchInUserInboxItems = function (searchText) {
             if (!searchText)
                 return;
             self.searchMode = true;
-            return self.reloadUserInboxes(1);
+            return self.reloadUserInboxes(1, false, true);
         };
 
         /**
          * @description Reload the grid of user inboxes
          * @param pageNumber
          * @param isAutoReload
+         * @param skipCountersReload
          * @return {*|Promise<WorkItem>}
          */
-        self.reloadUserInboxes = function (pageNumber, isAutoReload) {
+        self.reloadUserInboxes = function (pageNumber, isAutoReload, skipCountersReload) {
             var promise = null;
             if (ignoreReload) {
                 // ignoreReload is used from tasks
@@ -480,8 +481,10 @@ module.exports = function (app) {
             }
 
             return promise.then(function (result) {
-                counterService.loadCounters();
-                mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                if (!skipCountersReload) {
+                    counterService.loadCounters();
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                }
 
                 // load starred user inbox
                 if (self.selectedGridType === 'starred') {

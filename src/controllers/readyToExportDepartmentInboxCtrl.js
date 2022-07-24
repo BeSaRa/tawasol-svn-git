@@ -80,7 +80,7 @@ module.exports = function (app) {
             limitOptions: gridService.getGridLimitOptions(gridService.grids.department.readyToExport, self.totalRecords),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.department.readyToExport, limit);
-                self.reloadReadyToExports(page);
+                self.reloadReadyToExports(page, false, true);
             },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.department.readyToExport),
             setTruncateSubject: function ($event) {
@@ -163,7 +163,7 @@ module.exports = function (app) {
             self.searchModel = '';
             self.grid.page = 1;
             self.grid.searchText = '';
-            self.reloadReadyToExports();
+            self.reloadReadyToExports(1, false, true);
         }
 
         self.searchInReadyToExports = function (searchText) {
@@ -171,7 +171,7 @@ module.exports = function (app) {
                 return;
             self.searchMode = true;
             return self
-                .reloadReadyToExports(1)
+                .reloadReadyToExports(1, false, true)
                 .then(function (result) {
                     self.readyToExports = result;
                 })
@@ -181,16 +181,19 @@ module.exports = function (app) {
          * @description Reload the grid of ready To Export
          * @param pageNumber
          * @param isAutoReload
+         * @param skipCountersReload
          * @return {*|Promise<U>}
          */
-        self.reloadReadyToExports = function (pageNumber, isAutoReload) {
+        self.reloadReadyToExports = function (pageNumber, isAutoReload, skipCountersReload) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return readyToExportService
                 .loadReadyToExports(!!isAutoReload, (pageNumber || self.grid.page), self.grid.limit, self.searchModel)
                 .then(function (result) {
-                    counterService.loadCounters();
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    if (!skipCountersReload) {
+                        counterService.loadCounters();
+                        mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    }
                     self.readyToExports = result;
                     self.readyToExportsCopy = angular.copy(self.readyToExports);
                     self.totalRecords = readyToExportService.totalCount;

@@ -75,7 +75,7 @@ module.exports = function (app) {
             limitOptions: gridService.getGridLimitOptions(gridService.grids.department.incoming, self.totalRecords),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.department.incoming, limit);
-                self.reloadIncomingDepartmentInboxes(page)
+                self.reloadIncomingDepartmentInboxes(page, false, true)
             },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.department.incoming),
             setTruncateSubject: function ($event) {
@@ -128,7 +128,7 @@ module.exports = function (app) {
             self.searchModel = '';
             self.grid.page = 1;
             self.grid.searchText = '';
-            self.reloadIncomingDepartmentInboxes();
+            self.reloadIncomingDepartmentInboxes(1, false, true);
         }
 
         self.searchInIncomingDepartmentInboxes = function (searchText) {
@@ -136,7 +136,7 @@ module.exports = function (app) {
                 return;
             self.searchMode = true;
             return self
-                .reloadIncomingDepartmentInboxes(1)
+                .reloadIncomingDepartmentInboxes(1, false, true)
                 .then(function (result) {
                     self.incomingDepartmentInboxes = result;
                 })
@@ -146,16 +146,19 @@ module.exports = function (app) {
          * @description Reload the grid of incoming department inbox item
          * @param pageNumber
          * @param isAutoReload
+         * @param skipCountersReload
          * @return {*|Promise<U>}
          */
-        self.reloadIncomingDepartmentInboxes = function (pageNumber, isAutoReload) {
+        self.reloadIncomingDepartmentInboxes = function (pageNumber, isAutoReload, skipCountersReload) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return incomingDepartmentInboxService
                 .loadIncomingDepartmentInboxes(!!isAutoReload, (pageNumber || self.grid.page), self.grid.limit, self.searchModel)
                 .then(function (result) {
-                    counterService.loadCounters();
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    if (!skipCountersReload) {
+                        counterService.loadCounters();
+                        mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    }
                     self.incomingDepartmentInboxes = result;
                     self.incomingDepartmentInboxesCopy = angular.copy(self.incomingDepartmentInboxes);
                     self.totalRecords = incomingDepartmentInboxService.totalCount;
