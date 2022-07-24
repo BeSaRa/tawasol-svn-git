@@ -352,10 +352,6 @@ module.exports = function (app) {
                                 'ngInject';
                                 return roleService.getRoles();
                             },
-                            permissions: function (roleService) {
-                                'ngInject';
-                                return roleService.getPermissions();
-                            },
                             ouApplicationUsers: function (ouApplicationUserService) {
                                 'ngInject';
                                 var defer = $q.defer();
@@ -370,34 +366,6 @@ module.exports = function (app) {
                                 'ngInject';
                                 return applicationUserService.getApplicationUsers();
                             },
-                            userComments: function (userCommentService) {
-                                'ngInject';
-                                return userCommentService.getUserComments()
-                                    .then(function (result) {
-                                        return _.filter(result, function (userComment) {
-                                            return userComment.userId === applicationUser.id;
-                                        });
-                                    });
-                            },
-                            workflowGroups: function (workflowGroupService) {
-                                'ngInject';
-                                return workflowGroupService.getWorkflowGroups();
-                            },
-                            userWorkflowGroups: function (userWorkflowGroupService) {
-                                'ngInject';
-                                return userWorkflowGroupService.getUserWorkflowGroupsByUser();
-                            },
-                            userFolders: function (userFolderService) {
-                                'ngInject';
-                                return userFolderService.getUserFoldersForApplicationUser()
-                                    .then(function (result) {
-                                        return result;
-                                    });
-                            },
-                            followupFolders: function (followUpUserService) {
-                                'ngInject';
-                                return followUpUserService.loadFollowupFoldersByOuAndUser(ouApplicationUser.getOuId(), applicationUser.id, true);
-                            },
                             availableProxies: function (ouApplicationUserService) {
                                 'ngInject';
                                 return isManagerOfCurrentOu ? [] : resolveOrganizations.promise.then(function () {
@@ -407,10 +375,6 @@ module.exports = function (app) {
                             proxyOrganizations: function (organizationService) {
                                 'ngInject';
                                 return isManagerOfCurrentOu ? organizationService.loadAllActiveOrganizations() : [];
-                            },
-                            predefinedActions: function (predefinedActionService) {
-                                'ngInject';
-                                return predefinedActionService.loadPredefinedActionsForUser();
                             },
                             ouApplicationUser: function (ouApplicationUserService) {
                                 'ngInject';

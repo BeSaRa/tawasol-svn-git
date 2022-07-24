@@ -1,7 +1,6 @@
 module.exports = function (app) {
     app.controller('userPreferencePopCtrl', function (_,
                                                       toast,
-                                                      followupFolders,
                                                       validationService,
                                                       LangWatcher,
                                                       generator,
@@ -19,18 +18,14 @@ module.exports = function (app) {
                                                       ranks,
                                                       themes,
                                                       roles,
-                                                      permissions,
                                                       ouApplicationUsers,
                                                       applicationUsers,
                                                       ouApplicationUserService,
                                                       userCommentService,
-                                                      userComments,
                                                       UserComment,
                                                       rootEntity,
                                                       employeeService,
                                                       workflowGroupService,
-                                                      workflowGroups,
-                                                      userWorkflowGroups,
                                                       userWorkflowGroupService,
                                                       UserWorkflowGroup,
                                                       WorkflowGroup,
@@ -52,7 +47,6 @@ module.exports = function (app) {
                                                       ProxyInfo,
                                                       $compile,
                                                       organizationService,
-                                                      predefinedActions,
                                                       predefinedActionService,
                                                       AppUserCertificate,
                                                       errorCode,
@@ -78,17 +72,14 @@ module.exports = function (app) {
         self.ranks = ranks;
         self.themes = themes;
         self.roles = roles;
-        self.permissions = permissions;
         self.applicationUsers = applicationUsers;
         self.globalSetting = rootEntity.returnRootEntity().settings;
         self.maxRowCount = angular.copy(self.globalSetting.searchAmountLimit);
-        self.userComments = userComments;
-        self.userCommentsCopy = angular.copy(self.userComments);
-        self.workflowGroups = workflowGroups;
-        self.userWorkflowGroups = userWorkflowGroups;
-        self.userWorkflowGroupsCopy = angular.copy(userWorkflowGroups);
+        self.userComments = [];
+        self.userCommentsCopy = [];
+        self.userWorkflowGroupsCopy = [];
         self.userFolderService = userFolderService;
-        self.followupFolders = followupFolders;
+        self.followupFolders = [];
         self.currentNode = null;
         self.inlineOUSearchText = '';
         self.inlineAppUserSearchText = '';
@@ -355,6 +346,36 @@ module.exports = function (app) {
                         self.isOutOfOfficeLoaded = true;
                         self.usersWhoSetYouAsProxy = result;
                         defer.resolve(tabName);
+                    })
+            } else if (tabName.toLowerCase() === 'usercomments') {
+                userCommentService.getUserComments()
+                    .then(function (result) {
+                        self.userComments = _.filter(result, function (userComment) {
+                            return userComment.userId === applicationUser.id;
+                        });
+                        self.userCommentsCopy = angular.copy(self.userComments);
+                    });
+            } else if (tabName.toLowerCase() === 'workflowgroups') {
+                userWorkflowGroupService.getUserWorkflowGroupsByUser()
+                    .then(function (result) {
+                        self.userWorkflowGroups = result;
+                        self.userWorkflowGroupsCopy = angular.copy(self.userWorkflowGroups);
+                    })
+            } else if (tabName.toLowerCase() === 'folders') {
+                userFolderService.getUserFoldersForApplicationUser()
+                    .then(function (result) {
+                        return result;
+                    });
+            } else if (tabName.toLowerCase() === 'followupfolders') {
+                followUpUserService.loadFollowupFoldersByOuAndUser(ouApplicationUser.getOuId(), applicationUser.id, true)
+                    .then(function (result) {
+                        self.followupFolders = result;
+                    })
+            } else if (tabName.toLowerCase() === 'predefinedactions') {
+                predefinedActionService.loadPredefinedActionsForUser()
+                    .then(function (result) {
+                        self.predefinedActions = result;
+                        self.predefinedActionsCopy = angular.copy(self.predefinedActions);
                     })
             } else {
                 defer.resolve(tabName);
@@ -1343,8 +1364,8 @@ module.exports = function (app) {
         };
 
 
-        self.predefinedActions = angular.copy(predefinedActions);
-        self.predefinedActionsCopy = angular.copy(self.predefinedActions);
+        self.predefinedActions = [];
+        self.predefinedActionsCopy = [];
         self.selectedPredefinedActions = [];
 
         /**
