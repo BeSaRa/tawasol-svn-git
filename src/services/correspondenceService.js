@@ -114,6 +114,7 @@ module.exports = function (app) {
         util.inherits(SequentialWFResult, Information);
 
         self.totalCountCAReadyToExports = 0;
+        self.totalCountGroupMails = 0;
         /**
          * the registered models for our CMS
          * @type {{outgoing: (Outgoing|*), internal: (Internal|*), incoming: (Incoming|*)}}
@@ -2605,9 +2606,16 @@ module.exports = function (app) {
         /**
          * @description load group inbox from service
          * @param ignoreTokenRefresh
+         * @param page
+         * @param limit
+         * @param criteria
          */
-        self.loadGroupInbox = function (ignoreTokenRefresh) {
-            var params = {};
+        self.loadGroupInbox = function (ignoreTokenRefresh, page, limit, criteria) {
+            var offset = ((page - 1) * limit);
+            var params = {offset: offset, limit: limit};
+            if (criteria) {
+                params.criteria = criteria;
+            }
             if (ignoreTokenRefresh) {
                 params.ignoreTokenRefresh = true;
             }
@@ -2616,9 +2624,25 @@ module.exports = function (app) {
                     params: params
                 })
                 .then(function (result) {
+                    self.totalCountGroupMails = result.data.count;
                     return generator.interceptReceivedCollection('WorkItem', generator.generateCollection(result.data.rs, WorkItem));
                 });
         };
+        /**
+         * @description get group mail item by wob number
+         * @param wobNumber
+         * @returns {*}
+         */
+        self.getGroupMailItemByWobNumber = function (wobNumber) {
+            var params = {offset: 0, limit: 5, ignoreTokenRefresh: false, criteria: wobNumber};
+
+            return $http.get(urlService.correspondenceWF.replace('wf', 'ou-queue/all-mails'),
+                {params: params}).then(function (result) {
+                var groupMails = generator.generateCollection(result.data.rs, WorkItem);
+                groupMails = generator.interceptReceivedCollection('WorkItem', groupMails);
+                return groupMails[0];
+            });
+        }
         /**
          * @description load user inbox
          */
@@ -5539,9 +5563,10 @@ module.exports = function (app) {
          * @description get email items by (action,source,web num)
          * @param items
          * @param stateParams
+         * @param itemByWobNumberCallback
          * @returns {boolean|*}
          */
-        self.getEmailItemByWobNum = function (items, stateParams) {
+        self.getEmailItemByWobNum = async function (items, stateParams, itemByWobNumberCallback) {
             var action = stateParams.action, source = stateParams.source,
                 wobNumber = stateParams['wob-num'], item;
 
@@ -5549,6 +5574,10 @@ module.exports = function (app) {
                 item = _.find(items, function (workItem) {
                     return workItem.generalStepElm.workObjectNumber === wobNumber;
                 });
+
+                if (!item && itemByWobNumberCallback) {
+                    item = await itemByWobNumberCallback(wobNumber);
+                }
 
                 return !item ? (dialog.errorMessage(langService.get('work_item_not_found').change({
                     wobNumber: wobNumber

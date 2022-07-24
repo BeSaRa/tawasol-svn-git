@@ -892,31 +892,18 @@ module.exports = function (app) {
                 }
             })
             .bulkResolveToState('app.inbox.group-inbox', {
-                workItems: function (correspondenceService) {
+                workItems: function (correspondenceService, gridService) {
                     'ngInject';
-                    return correspondenceService.loadGroupInbox();
+                    var limit = gridService.getGridPagingLimitByGridName(gridService.grids.inbox.group) || 5;
+                    return correspondenceService.loadGroupInbox(false, 1, limit);
                 },
-                emailItem: function (workItems, langService, dialog, _, $stateParams) {
+                emailItem: function (workItems, $stateParams, correspondenceService) {
                     'ngInject';
-                    var action = $stateParams.action, source = $stateParams.source,
-                        wobNumber = $stateParams['wob-num'], item;
-
-                    if (action && action === 'open' && source && source === 'email' && wobNumber) {
-                        item = _.find(workItems, function (workItem) {
-                            return workItem.generalStepElm.workObjectNumber === wobNumber;
-                        });
-
-                        return !item ? (dialog.errorMessage(langService.get('work_item_not_found').change({
-                            wobNumber: wobNumber
-                        })).then(function () {
-                            return false;
-                        })) : item;
-                    }
-                    return false;
+                    return correspondenceService.getEmailItemByWobNum(workItems, $stateParams, correspondenceService.getGroupMailItemByWobNumber);
                 }
             })
             .bulkResolveToState('app.central-archive.ready-to-export', {
-                workItems: function (correspondenceService,gridService) {
+                workItems: function (correspondenceService, gridService) {
                     'ngInject';
                     var limit = gridService.getGridPagingLimitByGridName(gridService.grids.centralArchive.readyToExport) || 5;
                     return correspondenceService.loadCentralArchiveWorkItems(false, 1, limit);

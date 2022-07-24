@@ -41,6 +41,10 @@ module.exports = function (app) {
 
         self.workItems = workItems;
         self.workItemsCopy = angular.copy(self.workItems);
+        self.totalRecords = correspondenceService.totalCountGroupMails;
+        self.searchMode = false;
+        self.searchModel = '';
+
         self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
 
         contextHelpService.setHelpTo('group-inbox');
@@ -64,9 +68,10 @@ module.exports = function (app) {
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.group) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.group, self.workItems),
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.group, self.totalRecords),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.inbox.group, limit);
+                self.reloadGroupInbox(page, false, true)
             },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.inbox.group),
             setTruncateSubject: function ($event) {
@@ -149,21 +154,44 @@ module.exports = function (app) {
             self.workItems = $filter('orderBy')(self.workItems, self.grid.order);
         };
 
+        self.cancelSearchFilter = function () {
+            self.searchMode = false;
+            self.searchModel = '';
+            self.grid.page = 1;
+            self.grid.searchText = '';
+            self.reloadGroupInbox(1, false, true);
+        }
+
+        self.searchInGroupMails = function (searchText) {
+            if (!searchText)
+                return;
+            self.searchMode = true;
+            return self
+                .reloadGroupInbox(1, false, true)
+                .then(function (result) {
+                    self.workItems = result;
+                })
+        };
+
         /**
          * @description reload group Inbox grid
          * @param pageNumber
          * @param isAutoReload
+         * @param skipCountersReload
          */
-        self.reloadGroupInbox = function (pageNumber, isAutoReload) {
+        self.reloadGroupInbox = function (pageNumber, isAutoReload, skipCountersReload) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return correspondenceService
-                .loadGroupInbox(!!isAutoReload)
+                .loadGroupInbox(!!isAutoReload, (pageNumber || self.grid.page), self.grid.limit, self.searchModel)
                 .then(function (workItems) {
-                    counterService.loadCounters();
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    if (!skipCountersReload) {
+                        counterService.loadCounters();
+                        mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    }
                     self.workItems = workItems;
                     self.workItemsCopy = angular.copy(self.workItems);
+                    self.totalRecords = correspondenceService.totalCountGroupMails;
                     self.selectedWorkItems = [];
                     defer.resolve(true);
                     if (pageNumber)

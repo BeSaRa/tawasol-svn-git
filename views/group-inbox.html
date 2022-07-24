@@ -16,7 +16,9 @@
                     {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
                 </md-switch>
             </div>
-            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
+            <search-filter-directive change-icon-model="ctrl.searchMode" cancel-callback="ctrl.cancelSearchFilter()"
+                                     on-change="ctrl.searchInGroupMails"
+                                     model="ctrl.searchModel"></search-filter-directive>
         </div>
         <!-- end page-header -->
         <!-- page-content -->
@@ -117,7 +119,8 @@
                                         model="workItem"
                                         ng-class="!workItem.generalStepElm.isOpen? 'unread-row': 'read-row'"
                                         selected-length="{{ctrl.selectedWorkItems.length ? ctrl.selectedWorkItems.length : 0}}"
-                                        ng-repeat="workItem in ctrl.workItems | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                        ng-repeat="workItem in ctrl.workItems track by $index">
+                                        <!--| limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)-->
                                         <td md-cell class="read-td">
                                             <div class="cursor-pointer status absolute-read"
                                                  ng-class="workItem.generalStepElm.isOpen===true? 'read' : 'unread'"
@@ -231,6 +234,16 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    <tr md-row ng-if="!ctrl.workItemsCopy.length">
+                                        <td md-cell colspan="10" class="red-text text-center">
+                                            {{lang.no_records_found}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="ctrl.workItemsCopy.length && !ctrl.workItems.length">
+                                        <td md-cell colspan="10" class="red-text text-center">
+                                            {{lang.no_records_found_matching_search}}
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -238,7 +251,7 @@
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.workItems).length}}" md-page-select
+                                    md-total="{{ctrl.totalRecords}}" md-page-select
                                     md-on-paginate="ctrl.grid.pagingCallback">
                             </md-table-pagination>
                         </md-table-container>
