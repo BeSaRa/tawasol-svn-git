@@ -6,6 +6,8 @@ module.exports = function (app) {
             ReadyToExportOption.call(this);
             self.CORRESPONDENCE_SITES = true;
             self.TAGS = true;
+            self.MAILING_ROOM = false;
+
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
