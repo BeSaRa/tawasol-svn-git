@@ -157,7 +157,7 @@ module.exports = function (app) {
         self.serialYears = _.range(configurationService.SEARCH_YEARS, ((new Date()).getFullYear() + 1));
         self.selectedSerialOrganizations = [];
 
-        self.organizationLogo = {};
+        self.organizationLogo = null;
         self.currentFileData = null;
         self.organizationLogoExtensions = ['.png'];
         self.isSaveRegOULogDisabled = true;
@@ -2453,6 +2453,10 @@ module.exports = function (app) {
          * @description load logo per department
          */
         self.loadOrganizationLogo = function () {
+            if (!self.organization.logoId) {
+                return $q.resolve();
+            }
+
             return organizationService.downloadLogo(self.organization)
                 .then(function (result) {
                     self.organizationLogo = result;

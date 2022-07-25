@@ -1116,8 +1116,10 @@ module.exports = function (app) {
          */
         self.downloadLogo = function (organization) {
             var orgId = organization.hasOwnProperty('id') ? organization.id : organization;
-            return $http.get(urlService.ouLogo + orgId).then(function (result) {
-                self.organizationLogo = result.data.rs;
+            return $http.get(urlService.ouLogo + orgId, {
+                responseType: 'blob'
+            }).then(function (result) {
+                self.organizationLogo = window.URL.createObjectURL(result.data);
                 return self.organizationLogo;
             })
         }
