@@ -99,6 +99,15 @@ module.exports = function (app) {
             Attachment.prototype.isContractNeedSign = function () {
                 return this.isContract && this.isSignedContract === false;
             }
+            Attachment.prototype.getExtension = function () {
+                if (!this.file)
+                    return;
+
+                return {
+                    ext: this.file.name.split('.').pop(),
+                    type: this.file.type
+                }
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

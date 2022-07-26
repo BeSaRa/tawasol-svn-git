@@ -37,6 +37,7 @@ module.exports = function (app) {
         self.rootEntity = rootEntity;
         // current document file
         self.document = null;
+        self.attachmentToBeSignedExtensions = ['.pdf'];
 
         $timeout(function () {
             // all attachments types
@@ -264,6 +265,11 @@ module.exports = function (app) {
         self.addFileToAttachments = function () {
             self.attachment = self.setNameToAttachment(self.attachment);
             self.activeAttachment = self.attachment;
+            if (!self.isAttachmentExtensionValid()) {
+                dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(self.attachmentToBeSignedExtensions.join(', ')));
+                return;
+            }
+
             var info = self.document.getInfo();
             var promise = attachmentService.addAttachment(self.document, self.attachment);
 
@@ -503,8 +509,12 @@ module.exports = function (app) {
 
         self.updateAttachment = function () {
             self.attachment = self.setNameToAttachment(self.attachment);
-
             self.activeAttachment = self.attachment;
+            if (!self.isAttachmentExtensionValid()) {
+                dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(self.attachmentToBeSignedExtensions.join(', ')));
+                return;
+            }
+
             var promise = null;
             /*if (self.vsId) {
                 promise = attachmentService.updateAttachmentForDocWithVsId(self.vsId, self.documentClass, self.attachment);
@@ -668,12 +678,21 @@ module.exports = function (app) {
         self.openApproveAttachment = function (attachment, $event) {
             attachmentService.openAttachmentSignaturePopup(self.document, attachment, $event)
                 .then(function (result) {
-                    self.reloadAttachments().then(function (){
+                    self.reloadAttachments().then(function () {
                         toast.success(langService.get('sign_specific_success').change({name: attachment.getTranslatedName()}));
                     })
                 })
         }
 
+        /**
+         * @description validate if attachment to be signed enable should be only pdf uploaded
+         * @returns {boolean}
+         */
+        self.isAttachmentExtensionValid = function () {
+            return !(rootEntity.isSigningContractsEnabled() && self.attachment.isContract &&
+                self.attachment.file &&
+                self.attachmentToBeSignedExtensions.indexOf('.'.concat(self.attachment.getExtension().ext)) === -1);
+        }
 
         self.$onInit = function () {
             self.isImportFromExDataSourceAllowed = false;
