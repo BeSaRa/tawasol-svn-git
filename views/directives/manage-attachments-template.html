@@ -157,9 +157,9 @@
                 </md-switch>
             </div>
         </div>
-        <div ng-if="ctrl.attachment && ctrl.hasPSPDFViewer" layout="row">
+        <div ng-if="ctrl.attachment" layout="row">
             <!-- Is Official Document -->
-            <div flex class="cms-input-container">
+            <div flex class="cms-input-container" ng-if="ctrl.hasPSPDFViewer">
                 <md-switch flex ng-model="ctrl.attachment.isOfficial"
                            aria-label="{{lang.official_document}}"
                            ng-disabled="(ctrl.attachmentCopyBeforeEdit.isOfficial && !ctrl.employeeService.hasPermissionTo('SIGN_OFFICIAL_DOCUMENT')) || !ctrl.hasPSPDFViewer">
@@ -169,7 +169,7 @@
             </div>
             <!-- IS Contract -->
             <div flex class="cms-input-container"
-                 ng-if="ctrl.rootEntity.isSigningContractsEnabled() && ctrl.documentClass.toLowerCase() === 'outgoing'">
+                 ng-if="ctrl.rootEntity.isSigningContractsEnabled() && ctrl.documentClass.toLowerCase() === 'outgoing' && !ctrl.isPaper">
                 <md-switch flex ng-model="ctrl.attachment.isContract"
                            aria-label="{{lang.to_be_signed}}" ng-disabled="ctrl.attachmentCopyBeforeEdit">
                     <label>{{lang.to_be_signed}} :
@@ -309,7 +309,8 @@
                                        ng-click="ctrl.openApproveAttachment(attachment, $event)">
                                 <md-icon md-svg-icon="alert-decagram" class="red-text"></md-icon>
                             </md-button>
-                            <md-icon ng-if="ctrl.rootEntity.isSigningContractsEnabled() && attachment.isSignedContract" md-svg-icon="check-decagram"
+                            <md-icon ng-if="ctrl.rootEntity.isSigningContractsEnabled() && attachment.isSignedContract"
+                                     md-svg-icon="check-decagram"
                                      tooltip="{{lang.internal_approved}}"></md-icon>
                         </div>
                     </td>

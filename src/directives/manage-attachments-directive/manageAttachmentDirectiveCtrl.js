@@ -696,6 +696,8 @@ module.exports = function (app) {
 
         self.$onInit = function () {
             self.isImportFromExDataSourceAllowed = false;
+            self.isPaper = self.document.getInfo().isPaper;
+
             if (rootEntity.returnRootEntity().rootEntity.importDataSourceStatus) {
                 userExternalDataSourceService.loadActiveUserExternalDataSources()
                     .then(function (result) {
