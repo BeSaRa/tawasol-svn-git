@@ -113,7 +113,6 @@ module.exports = function (app) {
         self.rootEntity = rootEntity;
         self.organizationsForAppUser = employeeService.getEmployee().ouList;
 
-
         // Current ou application user
         self.isManagerOfCurrentOu = self.globalSetting.outofofficeFromAllUsers && organizationService.isManagerOfCurrentOu(self.employee);
         self.ouApplicationUser = ouApplicationUser;// generator.interceptReceivedInstance('OUApplicationUser', angular.copy(employeeService.getCurrentOUApplicationUser()));
@@ -313,104 +312,10 @@ module.exports = function (app) {
          * @description Contains the selected tab name
          * @type {string}
          */
-        self.selectedTab = selectedTab ? selectedTab : "general";
+        self.selectedTab = 'general';
+        self.selectedTabIndex = 0;
         self.requestForApprove = (selectedTab === 'signature');
         self.usersWhoSetYouAsProxy = [];
-
-        self.isSignaturesLoaded = false;
-        self.isCertificateLoaded = false;
-        self.isOutOfOfficeLoaded = false;
-
-        /**
-         * @description Set the current tab name
-         * @param tabName
-         */
-        self.setCurrentTab = function (tabName) {
-            var defer = $q.defer();
-            if (tabName.toLowerCase() === 'signature' && !self.isSignaturesLoaded) {
-                self.loadSignatures(self.applicationUser.id)
-                    .then(function () {
-                        self.isSignaturesLoaded = true;
-                        defer.resolve(tabName);
-                    });
-            } else if (tabName.toLowerCase() === 'digitalcertificates' && !self.isCertificateLoaded) {
-                self.loadUserCertificates(self.applicationUser.id)
-                    .then(function (result) {
-                        self.isCertificateLoaded = true;
-                        self.showCertificateForm = !result; // if no user certificate exists on first load of tab, show form
-                        defer.resolve(tabName);
-                    });
-            } else if (tabName.toLowerCase() === 'outofofficesettings') {
-                ouApplicationUserService.getUsersWhoSetYouAsProxy(self.applicationUser.id)
-                    .then(function (result) {
-                        self.isOutOfOfficeLoaded = true;
-                        self.usersWhoSetYouAsProxy = result;
-                        defer.resolve(tabName);
-                    })
-            } else if (tabName.toLowerCase() === 'usercomments') {
-                userCommentService.getUserComments()
-                    .then(function (result) {
-                        self.userComments = _.filter(result, function (userComment) {
-                            return userComment.userId === applicationUser.id;
-                        });
-                        self.userCommentsCopy = angular.copy(self.userComments);
-                    });
-            } else if (tabName.toLowerCase() === 'workflowgroups') {
-                userWorkflowGroupService.getUserWorkflowGroupsByUser()
-                    .then(function (result) {
-                        self.userWorkflowGroups = result;
-                        self.userWorkflowGroupsCopy = angular.copy(self.userWorkflowGroups);
-                    })
-            } else if (tabName.toLowerCase() === 'folders') {
-                userFolderService.getUserFoldersForApplicationUser()
-                    .then(function (result) {
-                        return result;
-                    });
-            } else if (tabName.toLowerCase() === 'followupfolders') {
-                followUpUserService.loadFollowupFoldersByOuAndUser(ouApplicationUser.getOuId(), applicationUser.id, true)
-                    .then(function (result) {
-                        self.followupFolders = result;
-                    })
-            } else if (tabName.toLowerCase() === 'predefinedactions') {
-                predefinedActionService.loadPredefinedActionsForUser()
-                    .then(function (result) {
-                        self.predefinedActions = result;
-                        self.predefinedActionsCopy = angular.copy(self.predefinedActions);
-                    })
-            } else {
-                defer.resolve(tabName);
-            }
-            return defer.promise.then(function (tab) {
-                self.selectedTab = tab;
-            });
-        };
-
-        self.tabsToShow = [
-            'general',
-            'notificationSettings',
-            'outOfOfficeSettings',
-            'userComments',
-            'workflowGroups',
-            'folders',
-            'followupFolders',
-            'signature',
-            'predefinedActions',
-            'digitalCertificates'
-        ];
-        self.showTab = function (tabName) {
-            var isAvailable = (self.tabsToShow.indexOf(tabName) > -1);
-            if (tabName === 'digitalCertificates') {
-                return isAvailable && self.globalSetting.isDigitalCertificateEnabled();
-            } else if (tabName === 'predefinedActions') {
-                return isAvailable && self.employee.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW');
-            }
-            return isAvailable;
-        };
-        self.selectedTabIndex = self.tabsToShow.indexOf(self.selectedTab);
-
-        if (self.selectedTab !== 'general') {
-            self.setCurrentTab('general');
-        }
 
         self.notificationTypes = {
             sms: {
@@ -1839,6 +1744,128 @@ module.exports = function (app) {
         self.resetProxyMessage = function ($event) {
             self.ouApplicationUser.proxyMessage = null;
         }
+
+        self.loadUsersWhoSetYouAsProxy = function (appUserId) {
+            return ouApplicationUserService.getUsersWhoSetYouAsProxy(appUserId || self.applicationUser.id)
+                .then(function (result) {
+                    self.usersWhoSetYouAsProxy = result;
+                    return self.usersWhoSetYouAsProxy;
+                })
+        }
+
+        self.loadUserFolders = function () {
+            return userFolderService.getUserFoldersForApplicationUser()
+                .then(function (result) {
+                    return result;
+                });
+        }
+
+        self.loadUserComments = function () {
+            return userCommentService.getUserComments()
+                .then(function (result) {
+                    self.userComments = _.filter(result, function (userComment) {
+                        return userComment.userId === applicationUser.id;
+                    });
+                    self.userCommentsCopy = angular.copy(self.userComments);
+                    return self.userComments;
+                });
+        }
+
+        self.loadFollowupFoldersByOuAndUser = function () {
+            return followUpUserService.loadFollowupFoldersByOuAndUser(ouApplicationUser.getOuId(), applicationUser.id, true)
+                .then(function (result) {
+                    self.followupFolders = result;
+                    return self.followupFolders;
+                });
+        }
+
+
+        self.tabsData = {
+            'general': {show: true, loaded: true},
+            'notificationSettings': {show: true, loaded: true},
+            'outOfOfficeSettings': {show: true, loaded: false, callback: self.loadUsersWhoSetYouAsProxy},
+            'userComments': {show: true, loaded: false, callback: self.loadUserComments},
+            'workflowGroups': {show: true, loaded: false, callback: self.reloadUserWorkflowGroups},
+            'folders': {show: true, loaded: false, callback: self.loadUserFolders},
+            'followupFolders': {show: true, loaded: false, callback: self.loadFollowupFoldersByOuAndUser},
+            'signature': {show: true, loaded: false, callback: self.loadSignatures},
+            'predefinedActions': {show: true, loaded: false, callback: self.reloadPredefinedActions},
+            'digitalCertificates': {show: true, loaded: false, callback: self.loadUserCertificates}
+        }
+
+
+        /**
+         * @description Set the current tab name
+         * @param tabName
+         */
+        self.setCurrentTab = function (tabName) {
+            if (tabName === 'general' || tabName === 'notificationSettings') {
+                self.selectedTab = tabName;
+                self.selectedTabIndex = _getTabIndex(self.selectedTab);
+                return;
+            }
+            var defer = $q.defer();
+
+            if (self.tabsData[tabName].loaded) {
+                defer.resolve(tabName);
+            } else {
+                if (!self.tabsData[tabName].callback) {
+                    defer.resolve(tabName);
+                } else {
+                    self.tabsData[tabName].callback()
+                        .then(function (result) {
+                            defer.resolve(tabName);
+                        });
+                }
+            }
+            return defer.promise.then(function (tab) {
+                self.selectedTab = tab;
+                self.selectedTabIndex = _getTabIndex(self.selectedTab);
+                self.tabsData[tab].loaded = true;
+            });
+        };
+
+        function _getTabIndex(tabName) {
+            var index = -1,
+                tabFound = _.find(_getAvailableTabs(), function (tab, key) {
+                    index++;
+                    return key.toLowerCase() === tabName.toLowerCase();
+                });
+            return index;
+        }
+
+        function _getAvailableTabs() {
+            var availableTabs = {};
+            _.map(self.tabsData, function (item, key) {
+                if (self.showTab(key)) {
+                    availableTabs[key] = item;
+                }
+            });
+            return availableTabs;
+        }
+
+        self.showTab = function (tabName) {
+            if (!self.tabsData.hasOwnProperty(tabName) || !self.tabsData[tabName].show) {
+                return false;
+            }
+
+            if (tabName === 'digitalCertificates') {
+                return self.globalSetting.isDigitalCertificateEnabled();
+            } else if (tabName === 'predefinedActions') {
+                return self.employee.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW');
+            }
+            return true;
+        };
+
+        function _setDefaultSelectedTab() {
+            var activeTab = 'general';
+            if (selectedTab && self.showTab(selectedTab)) {
+                activeTab = selectedTab;
+            }
+            self.setCurrentTab(activeTab);
+        }
+
+        _setDefaultSelectedTab();
 
         self.$onInit = function () {
             _checkProxyDate(self.ouApplicationUser);
