@@ -1196,8 +1196,7 @@
                         </md-content>
                     </md-tab>
                     <!-- User Folders -->
-                    <md-tab label="{{lang.folders}}"
-                            ng-if="ctrl.showTab('folders') && ctrl.employee.hasPermissionTo('FOLDERS_QUEUE')"
+                    <md-tab label="{{lang.folders}}" ng-if="ctrl.showTab('folders')"
                             md-on-select="ctrl.setCurrentTab('folders')">
                         <md-content class="md-padding">
                             <div>
@@ -1213,7 +1212,7 @@
                     </md-tab>
                     <!-- Followup up Folders -->
                     <md-tab label="{{lang.followup_folders}}"
-                            ng-if="ctrl.showTab('followupFolders') && ctrl.employee.hasPermissionTo('USER_FOLLOWUP_BOOKS')"
+                            ng-if="ctrl.showTab('followupFolders')"
                             md-on-select="ctrl.setCurrentTab('followupFolders')">
                         <md-content class="md-padding">
                             <div>

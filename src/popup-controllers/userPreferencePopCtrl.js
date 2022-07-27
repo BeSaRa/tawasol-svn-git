@@ -1318,6 +1318,7 @@ module.exports = function (app) {
          * @return {*|Promise<U>}
          */
         self.reloadPredefinedActions = function (pageNumber, $event) {
+            debugger
             var defer = $q.defer();
             self.predefinedActionsGrid.progress = defer.promise;
 
@@ -1849,7 +1850,11 @@ module.exports = function (app) {
                 return false;
             }
 
-            if (tabName === 'digitalCertificates') {
+            if (tabName === 'folders') {
+                return self.employee.hasPermissionTo('FOLDERS_QUEUE');
+            } else if (tabName === 'followupFolders') {
+                return self.employee.hasPermissionTo('USER_FOLLOWUP_BOOKS')
+            } else if (tabName === 'digitalCertificates') {
                 return self.globalSetting.isDigitalCertificateEnabled();
             } else if (tabName === 'predefinedActions') {
                 return self.employee.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW');
