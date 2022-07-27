@@ -1591,8 +1591,8 @@ module.exports = function (app) {
                     toast.error(langService.get('work_item_not_found').change({wobNumber: self.correspondence.getInfo().wobNumber}));
                     dialog.hide();
                 });
-                errorCode.checkIf(error, 'AUTHORIZE_FAILED', function () {
-                    dialog.errorMessage(langService.get('authorize_failed'))
+                errorCode.checkIf(error, 'CAN_NOT_AUTHORIZE_CONTRACT', function () {
+                    dialog.errorMessage(generator.getTranslatedError(error));
                 });
             }
         };

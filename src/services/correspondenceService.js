@@ -3753,6 +3753,9 @@ module.exports = function (app) {
                                                     errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
                                                         dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                                                     });
+                                                    errorCode.checkIf(error, 'CAN_NOT_AUTHORIZE_CONTRACT', function () {
+                                                        dialog.errorMessage(generator.getTranslatedError(error));
+                                                    });
                                                     return $q.resolve(error);
                                                 });
                                         }
@@ -3780,6 +3783,9 @@ module.exports = function (app) {
                             });
                             errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
                                 dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
+                            });
+                            errorCode.checkIf(error, 'CAN_NOT_AUTHORIZE_CONTRACT', function () {
+                                dialog.errorMessage(generator.getTranslatedError(error));
                             });
                             return $q.reject(error);
                         })
