@@ -223,6 +223,10 @@ module.exports = function (app) {
                 return this.conditionalApproveComment;
             };
 
+            GeneralStepElementView.prototype.getTranslatedCorrespondenceSiteInfo = function () {
+                return this.correspondence.mainSiteSubSiteString.getTranslatedName();
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('GeneralStepElementView', 'init', this);
