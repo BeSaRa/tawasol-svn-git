@@ -1004,6 +1004,13 @@
                                                     </div>
                                                 </div>
                                             </md-input-container>
+                                            <div ng-if="ctrl.enableAdd && ctrl.rootEntity.isSigningContractsEnabled()">
+                                                <md-switch flex ng-model="ctrl.signature.isContractInitial"
+                                                           aria-label="{{lang.initials}}">
+                                                    <label>{{lang.initials}} :
+                                                        {{ctrl.signature.getTranslatedYesNo('isContractInitial')}}</label>
+                                                </md-switch>
+                                            </div>
                                         </div>
                                         <div layout="row" ng-if="ctrl.enableAdd">
                                             <div flex>
