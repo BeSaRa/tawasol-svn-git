@@ -1534,6 +1534,27 @@ module.exports = function (app) {
         };
 
         /**
+         * @description
+         * @param model
+         * @param $event
+         */
+        self.correspondenceSimpleEdit = function (model, $event) {
+            var info = model.getInfo(),
+                page = '.simple-add';
+
+            if (info.documentClass.toLowerCase() === 'outgoing' && self.isInternalOutgoingEnabled && model.isInternalOutgoing()) {
+                page = '.simple-add-internal';
+            }
+            model.correspondenceSimpleEdit().then(function () {
+                $state.go('app.' + info.documentClass + page, {
+                    wobNum: info.wobNumber,
+                    vsId: info.vsId,
+                    action: 'simpleEdit'
+                });
+            })
+        }
+
+        /**
          * @description add Correspondence To My FollowUp
          * @param item
          */

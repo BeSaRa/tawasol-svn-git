@@ -1502,6 +1502,23 @@ module.exports = function (app) {
         };
 
         /**
+         * @description
+         * @param correspondence
+         * @param $event
+         */
+        self.correspondenceSimpleEdit = function (correspondence, $event) {
+            var info = correspondence.getInfo(),
+                page = (self.isInternalOutgoingEnabled && correspondence.isInternalOutgoing()) ? 'app.outgoing.simple-add-internal' : 'app.outgoing.simple-add';
+            correspondence.correspondenceSimpleEdit().then(function () {
+                $state.go(page, {
+                    wobNum: info.wobNumber,
+                    vsId: info.vsId,
+                    action: 'simpleEdit'
+                });
+            })
+        }
+
+        /**
          * @description add Correspondence To My FollowUp
          * @param item
          */

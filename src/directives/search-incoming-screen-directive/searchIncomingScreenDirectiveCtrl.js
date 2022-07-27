@@ -1443,6 +1443,22 @@ module.exports = function (app) {
         };
 
         /**
+         * @description
+         * @param correspondence
+         * @param $event
+         */
+        self.correspondenceSimpleEdit = function (correspondence, $event) {
+            var info = correspondence.getInfo();
+            correspondence.correspondenceSimpleEdit().then(function () {
+                $state.go('app.incoming.simple-add', {
+                    wobNum: info.wobNumber,
+                    vsId: info.vsId,
+                    action: 'simpleEdit'
+                });
+            })
+        }
+
+        /**
          * @description add Correspondence To My FollowUp
          * @param item
          */
