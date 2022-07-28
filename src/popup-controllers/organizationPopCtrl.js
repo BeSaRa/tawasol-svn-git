@@ -2470,8 +2470,12 @@ module.exports = function (app) {
             organizationService
                 .saveLogo(self.organization, self.currentFileData)
                 .then(function () {
-                    self.isSaveRegOULogDisabled = true;
-                    toast.success(langService.get('save_success'));
+                    organizationService.loadOrganizationById(self.organization.id)
+                        .then(function (organization) {
+                            self.parentOrganization = organization;
+                            self.isSaveRegOULogDisabled = true;
+                            toast.success(langService.get('save_success'));
+                        });
                 });
         }
 
