@@ -1160,11 +1160,11 @@ module.exports = function (app) {
         self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
 
         self.openEmailItem = function () {
-            self.reloadSentItemDepartmentInboxes(self.grid.page).then(function () {
+            self.reloadSentItemDepartmentInboxes(self.grid.page).then(async function () {
                 var departmentSentItems = _.flatten(self.sentItemDepartmentInboxes.map((item) => {
                     return item.combinedItems;
                 }));
-                var emailItem = correspondenceService.getEmailItemByWobNum(departmentSentItems, $stateParams);
+                var emailItem = await correspondenceService.getEmailItemByWobNum(departmentSentItems, $stateParams);
                 emailItem ? self.viewDocument(emailItem) : null;
             });
         };
