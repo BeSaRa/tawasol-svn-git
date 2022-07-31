@@ -21,7 +21,7 @@
                 <div ng-repeat="signatureChunk in ctrl.signatureChunks track by $index">
                     <div flex layout="row">
                         <div ng-repeat="signature in signatureChunk track by $index" class="position-relative">
-                            <md-icon md-svg-icon="draw" class="position-absolute"
+                            <md-icon md-svg-icon="decagram" class="position-absolute"
                                      ng-if="ctrl.rootEntity.isSigningContractsEnabled() && signature.isContractInitial"
                                      tooltip="{{lang.initials}}"></md-icon>
                             <img flex
