@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                      lookupService,
                                                      _,
                                                      rootEntity,
+                                                     Information,
                                                      downloadService) {
         'ngInject';
         return function SentItemDepartmentInbox(model) {
@@ -279,6 +280,32 @@ module.exports = function (app) {
                     (this.securityLevel.lookupKey === 1 || this.securityLevel.lookupKey === 4) :
                     (this.securityLevel === 1 || this.securityLevel === 4);
             }
+            SentItemDepartmentInbox.prototype.getFullSerial = function () {
+                return this.docFullSerial;
+            };
+
+            /**
+             * @description Set the main site sub site string to display/sort in the grid
+             * @returns {*}
+             */
+            SentItemDepartmentInbox.prototype.setMainSiteSubSiteString = function () {
+                this.mainSiteSubSiteString = new Information({
+                    arName: '',
+                    enName: ''
+                });
+
+                if (this.mainSiteToIdInfo) {
+                    var mainSite = new Information(this.mainSiteToIdInfo);
+                    var subSite = (this.subSiteToIdInfo) ? new Information(this.subSiteToIdInfo) : null;
+
+                    this.mainSiteSubSiteString.arName = mainSite.getTranslatedNameByLang('ar') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('ar')) : '');
+                    this.mainSiteSubSiteString.enName = mainSite.getTranslatedNameByLang('en') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('en')) : '');
+                }
+                return this;
+            };
+            SentItemDepartmentInbox.prototype.getTranslatedCorrespondenceSiteInfo = function () {
+                return this.mainSiteSubSiteString.getTranslatedName();
+            };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('SentItemDepartmentInbox', 'init', this);

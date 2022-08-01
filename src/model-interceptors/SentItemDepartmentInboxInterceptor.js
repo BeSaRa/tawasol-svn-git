@@ -52,6 +52,7 @@ module.exports = function (app) {
             delete model.numberOfDays;
             delete model.recordGridName;
             delete model.combinedItems;
+            delete model.mainSiteSubSiteString;
 
             return model;
         });
@@ -95,6 +96,7 @@ module.exports = function (app) {
 
             model.messageStatus = new Information(model.messageStatus);
             model.numberOfDays = generator.getNumberOfDays(model.sentDate, null);
+            model.setMainSiteSubSiteString();
 
             return model;
         });
