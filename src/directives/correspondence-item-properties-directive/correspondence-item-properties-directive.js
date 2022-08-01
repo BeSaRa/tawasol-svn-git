@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.directive('correspondenceItemPropertiesDirective', function (cmsTemplate) {
+    app.directive('correspondenceItemPropertiesDirective', function (cmsTemplate, viewTrackingSheetService) {
         'ngInject';
         return {
             restrict: 'E',
@@ -10,6 +10,7 @@ module.exports = function (app) {
                 var self = this;
                 self.collapse = false;
                 self.site = null;
+                self.action = null;
                 var properties = {};
                 $timeout(function () {
                     self.site = self.item.getFirstSite();
@@ -26,13 +27,21 @@ module.exports = function (app) {
                 self.checkField = function (propertyName, fieldName) {
                     return Object.keys(properties).length && properties[propertyName.toLowerCase()][fieldName];
                 }
+
+                self.loadLastAction = function ($event) {
+                    viewTrackingSheetService.loadCorrespondenceLastAction(self.item)
+                        .then(function (result) {
+                            self.action = result;
+                        });
+                }
             },
             controllerAs: 'ctrl',
             bindToController: true,
             templateUrl: cmsTemplate.getDirective('correspondence-item-properties-template.html'),
             scope: {
                 sectionTitle: '@',
-                item: '='
+                item: '=',
+                showLastAction: '=?'
             }
         }
     });

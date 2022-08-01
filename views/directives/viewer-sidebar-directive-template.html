@@ -6,7 +6,7 @@
                                                 item="ctrl.workItem"></work-item-properties-directive>
                 <correspondence-item-properties-directive
                         section-title="general_information"
-                        item="ctrl.correspondence"></correspondence-item-properties-directive>
+                        item="ctrl.correspondence" show-last-action="!ctrl.workItem"></correspondence-item-properties-directive>
                 <!-- Quick Actions -->
                 <li>
                     <div class="viewer-actions" layout="row" ng-repeat="chunk in ctrl.stickyActionsChunk">
