@@ -274,6 +274,11 @@ module.exports = function (app) {
                 var info = this.getInfo();
                 downloadService.getCompositeDocumentEmailContent(info.vsId, info.docClassId);
             };
+            SentItemDepartmentInbox.prototype.hasNormalOrPersonalPrivateSecurityLevel = function () {
+                return this.securityLevel.hasOwnProperty('id') ?
+                    (this.securityLevel.lookupKey === 1 || this.securityLevel.lookupKey === 4) :
+                    (this.securityLevel === 1 || this.securityLevel === 4);
+            }
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('SentItemDepartmentInbox', 'init', this);
