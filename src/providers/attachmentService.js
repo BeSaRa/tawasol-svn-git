@@ -206,7 +206,7 @@ module.exports = function (app) {
                     } else if (receiveOrReceiveG2G) {
                         return employeeService.getEmployee().hasPermissionTo('DELETE_ATTACHMENT_RECEIPT');
                     }
-                    return attachment.isDeletable;
+                    return attachment.isDeletable && !attachment.isSignedContract;
                 };
 
                 self.checkAttachmentIsEditable = function (documentInfo, attachment, receiveOrReceiveG2G) {
