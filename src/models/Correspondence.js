@@ -269,8 +269,8 @@ module.exports = function (app) {
             Correspondence.prototype.isCorrespondenceApprovedBefore = function () {
                 return !!this.isApprovedBefore;
             };
-            Correspondence.prototype.updateDocument = function (skipCheck) {
-                return correspondenceService.updateCorrespondence(this, skipCheck);
+            Correspondence.prototype.updateDocument = function (skipCheck, simpleEdit) {
+                return correspondenceService.updateCorrespondence(this, skipCheck, simpleEdit);
             };
             Correspondence.prototype.createDocument = function (skipCheck) {
                 // in case if no ou and has registryOU set the ou as registryOU for document
@@ -278,10 +278,10 @@ module.exports = function (app) {
                     this.ou = this.registryOU;
                 return correspondenceService.createCorrespondence(this, skipCheck);
             };
-            Correspondence.prototype.saveDocument = function (status, skipCheck) {
+            Correspondence.prototype.saveDocument = function (status, skipCheck, simpleEdit) {
                 if (status)
                     this.docStatus = queueStatusService.getDocumentStatus(status);
-                return this.hasVsId() ? this.updateDocument(skipCheck) : this.createDocument(skipCheck);
+                return this.hasVsId() ? this.updateDocument(skipCheck, simpleEdit) : this.createDocument(skipCheck);
             };
             Correspondence.prototype.saveDocumentWithContent = function (information, sendToReview) {
                 if (sendToReview)

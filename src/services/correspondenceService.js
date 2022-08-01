@@ -701,15 +701,16 @@ module.exports = function (app) {
          * @description make an update for given correspondence.
          * @param correspondence
          * @param withoutCheck
+         * @param simpleEdit
          * @return {Promise|Correspondence}
          */
-        self.updateCorrespondence = function (correspondence, withoutCheck) {
+        self.updateCorrespondence = function (correspondence, withoutCheck, simpleEdit) {
             var route = 'metadata';
             var info = correspondence.getInfo();
             var queryString = '', queryStringValues = [];
 
             // to check weather incoming reference no already exists
-            if (!withoutCheck && info.documentClass === 'incoming') {
+            if (!withoutCheck && info.documentClass === 'incoming' && !simpleEdit) {
                 queryStringValues.push('with-check=true');
             }
             if (!!correspondence.userCommentForSave) {

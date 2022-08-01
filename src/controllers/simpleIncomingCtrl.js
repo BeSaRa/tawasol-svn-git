@@ -160,7 +160,7 @@ module.exports = function (app) {
                 promise = self.incoming.receiveG2GDocument($stateParams.vsId);
             } else {
                 promise = self.incoming
-                    .saveDocument(status, !!skipCheck);
+                    .saveDocument(status, !!skipCheck, self.simpleEdit);
             }
 
             return promise.then(function (result) {
@@ -676,8 +676,10 @@ module.exports = function (app) {
                 }
             });
 
+            self.simpleEdit = false;
             self.simpleViewUrl = null;
             self.isNewDocument = true;
+
         };
 
         /**
