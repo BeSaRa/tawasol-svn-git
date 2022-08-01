@@ -54,7 +54,7 @@ module.exports = function (app) {
                         self.sentItemDepartmentInboxes.push(records[0]);
                     });
 
-                return self.sentItemDepartmentInboxes;
+                return _.orderBy(self.sentItemDepartmentInboxes, 'sentDateTimeStamp', 'desc');
             });
         }
 

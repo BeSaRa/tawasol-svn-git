@@ -53,6 +53,7 @@ module.exports = function (app) {
             delete model.recordGridName;
             delete model.combinedItems;
             delete model.mainSiteSubSiteString;
+            delete model.sentDateTimeStamp;
 
             return model;
         });
@@ -60,6 +61,7 @@ module.exports = function (app) {
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.docClassName = 'outgoing';
             model.deliveryDate ? getDateFromUnixTimeStamp(model, ['deliveryDate']) : "";
+            model.sentDateTimeStamp = angular.copy(model.sentDate);
             model.sentDate ? getDateFromUnixTimeStamp(model, ['sentDate']) : "";
 
             model.typeOriginalCopy = (model.type === 0 ? langService.get('original') : langService.get('copy'));
