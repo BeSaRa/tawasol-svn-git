@@ -2472,7 +2472,7 @@ module.exports = function (app) {
                 .then(function () {
                     organizationService.loadOrganizationById(self.organization.id)
                         .then(function (organization) {
-                            self.parentOrganization = organization;
+                            self.organization.logoId = organization.logoId;
                             self.isSaveRegOULogDisabled = true;
                             toast.success(langService.get('save_success'));
                         });
