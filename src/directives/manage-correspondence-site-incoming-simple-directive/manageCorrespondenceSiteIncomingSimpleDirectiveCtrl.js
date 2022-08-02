@@ -87,7 +87,7 @@ module.exports = function (app) {
                         if (self.selectedSubSite) {
                             self.site = site;
                             self.selectedSubSiteFollowUpStatus = lookupService.getLookupByLookupKey(lookupService.followupStatus, self.correspondence.followupStatus);
-                            self.selectedSubSiteFollowupDate = site.followupDate;
+                            self.selectedSubSiteFollowupDate = generator.getDateFromTimeStamp(site.followupDate);
                         }
                     });
 
