@@ -254,7 +254,7 @@ module.exports = function (app) {
                 self.saveInProgress = false;
                 toast.success(langService.get(successKey));
 
-                if (ignoreLaunch || simpleEdit) {
+                if (ignoreLaunch || self.simpleEdit) {
                     return;
                 }
                 _launchAfterSave();
