@@ -85,7 +85,7 @@ module.exports = function (app) {
                 property: 'registryOrganizations'
             },
             organizations: {
-                url: urlService.distributionWFOrganization,
+                url: urlService.distributionWFOrganization + '?as-dist-wf=true',
                 property: 'organizationGroups'
             },
             centralArchivesForUser: {
