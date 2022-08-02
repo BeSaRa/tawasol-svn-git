@@ -80,7 +80,7 @@
                                                     ng-if="ctrl.outgoing.addMethod">
                                                 {{lang.outgoing_save_print_barcode}}
                                             </md-button>
-                                            <div ng-if="!ctrl.outgoing.addMethod && !ctrl.editContent && ctrl.employeeService.hasPermissionTo('COMPLETE_DRAFT_OUTGOING_DOCUMENTS')">
+                                            <div ng-if="!ctrl.outgoing.addMethod && ctrl.employeeService.hasPermissionTo('COMPLETE_DRAFT_OUTGOING_DOCUMENTS') && (!ctrl.editContent || ctrl.simpleEdit)">
                                                 <md-button
                                                         ng-disabled="!ctrl.isSaveValid(ctrl.document_properties, 'saveAsDraft', true)"
                                                         ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
