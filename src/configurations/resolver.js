@@ -134,6 +134,10 @@ module.exports = function (app) {
                     'ngInject';
                     return organizationService.loadAllOrganizationsStructureView();
                 },
+                allOrganizations: function (organizationService) {
+                    'ngInject';
+                    return organizationService.getOrganizations();
+                },
                 //Load the jobTitles, ranks, themes, roles, permissions to use in application user popup
                 viewLookups: function (applicationUserService, jobTitleService, rankService, roleService, themeService) {
                     'ngInject';
