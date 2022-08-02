@@ -678,7 +678,7 @@ module.exports = function (app) {
                         model = angular.copy(self.departmentSentItemCopy);
                     }
 
-                    return model.isSubSiteToInternalRegOu();
+                    return model.isSubSiteToInternalRegOu() && !model.isInternalOutgoing();
                 }
             },
             // Launch New Distribution Workflow

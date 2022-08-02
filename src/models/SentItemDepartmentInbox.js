@@ -52,6 +52,7 @@ module.exports = function (app) {
             self.g2GRefNo = null;
             self.docStatus = 24;
             self.combinedItems = [];
+            self.isInternal = false;
             /*Default status to show its already approved*/
 
             // every model has required fields
@@ -306,6 +307,15 @@ module.exports = function (app) {
             SentItemDepartmentInbox.prototype.getTranslatedCorrespondenceSiteInfo = function () {
                 return this.mainSiteSubSiteString.getTranslatedName();
             };
+
+            SentItemDepartmentInbox.prototype.isInternalOutgoing = function () {
+                return this.isInternal;
+            }
+
+            SentItemDepartmentInbox.prototype.getIsInternalOutgoingIndicator = function () {
+                return this.isInternal ? indicator.getIsInternalOutgoingIndicator(this.isInternal) : null;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('SentItemDepartmentInbox', 'init', this);

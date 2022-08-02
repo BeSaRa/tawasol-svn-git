@@ -54,6 +54,7 @@ module.exports = function (app) {
             delete model.combinedItems;
             delete model.mainSiteSubSiteString;
             delete model.sentDateTimeStamp;
+            delete model.isInternalOutgoingIndicator;
 
             return model;
         });
@@ -99,6 +100,7 @@ module.exports = function (app) {
             model.messageStatus = new Information(model.messageStatus);
             model.numberOfDays = generator.getNumberOfDays(model.sentDate, null);
             model.setMainSiteSubSiteString();
+            model.isInternalOutgoingIndicator = model.getIsInternalOutgoingIndicator();
 
             return model;
         });
