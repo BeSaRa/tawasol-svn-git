@@ -24,6 +24,7 @@ module.exports = function (app) {
         self.organizations = [];
         self.allOrganizationsStructure = [];
         self.allOrganizationsStructureView = [];
+        self.organizationsByUserRole = [];
 
         self.rootOrganization = {};
         self.childrenOrganizations = {};
@@ -116,6 +117,21 @@ module.exports = function (app) {
             });
         };
 
+        /**
+         * @description load all organization structure by user role
+         * @returns {*}
+         */
+        self.loadAllOrganizationsStructureByUserRole = function () {
+            return $http.get(urlService.organizations + '/structure/lookup').then(function (result) {
+                self.organizationsByUserRole = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
+                self.organizationsByUserRole = generator.interceptReceivedCollection('Organization', self.organizationsByUserRole);
+                return self.organizationsByUserRole;
+            });
+        };
+
+        self.getAllOrganizationsStructureByUserRole = function () {
+            return self.organizationsByUserRole.length ? $q.when(self.organizationsByUserRole) : self.loadAllOrganizationsStructureByUserRole();
+        };
 
         /**
          * @description Load all organizations structure as organizationUnitView

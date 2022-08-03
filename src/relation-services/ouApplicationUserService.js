@@ -236,7 +236,7 @@ module.exports = function (app) {
                                     return distributionWFService
                                         .loadDistWorkflowOrganizations('organizations');
                                 } else {
-                                    return organizationService.getAllOrganizationsStructure();
+                                    return organizationService.getAllOrganizationsStructureByUserRole();
                                 }
                             }
 
