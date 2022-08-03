@@ -22,7 +22,7 @@
                                 {{updateAction.getTranslatedName()}}
                             </md-option>
                         </md-select>
-                        <div class="red-text hint hint-reference" ng-if="!ctrl.attachment.canUpdateIfAuthorizedActionStatus()">
+                        <div class="red-text hint hint-reference" ng-if="ctrl.updateActionStatus.lookupKey === 1">
                             {{lang.hint_attachment_restricted_for_modification}}
                         </div>
                         <div ng-messages="attachment_form.updateActionStatus.$error">
