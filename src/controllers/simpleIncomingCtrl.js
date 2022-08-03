@@ -677,6 +677,9 @@ module.exports = function (app) {
             });
 
             self.simpleEdit = false;
+            self.receiveG2G = false;
+            self.receive = false;
+
             self.simpleViewUrl = null;
             self.isNewDocument = true;
 
