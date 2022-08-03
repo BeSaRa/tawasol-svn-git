@@ -125,5 +125,19 @@ module.exports = function (app) {
                 });
         }
 
+        self.checkDuplicateOuDocumentFile = function (ouDocumentFile, ouDocumentFiles, editMode) {
+            var ouDocumentFilesToFilter = ouDocumentFiles;
+            if (editMode) {
+                ouDocumentFilesToFilter = _.filter(ouDocumentFilesToFilter, function (ouDocumentFileToFilter) {
+                    return ouDocumentFileToFilter.ouid.id !== ouDocumentFile.ouid.id;
+                });
+            }
+            return _.some(_.map(ouDocumentFilesToFilter, function (existingOuDocumentFile) {
+                return existingOuDocumentFile.code && existingOuDocumentFile.code.toLowerCase() === ouDocumentFile.code.toLowerCase();
+            }), function (matchingResult) {
+                return matchingResult === true;
+            });
+        }
+
     });
 };

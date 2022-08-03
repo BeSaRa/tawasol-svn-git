@@ -491,7 +491,8 @@
                     <input name="fileSerial" custom-validate-directive="number"
                            id="fileSerial"
                            ng-model="ctrl.document.fileSerial"
-                           ng-required="ctrl.checkMandatory('fileSerial')">
+                           ng-required="ctrl.checkMandatory('fileSerial')"
+                           custom-validate-directive="number">
                     <div ng-messages="docSearchForm.fileSerial.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                         <div ng-message="number">{{lang.numberonly}}</div>

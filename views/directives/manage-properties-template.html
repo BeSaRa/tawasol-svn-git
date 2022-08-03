@@ -436,10 +436,10 @@
                             </md-select-header>
                             <md-option ng-value="null">{{lang.none}}</md-option>
                             <md-option ng-value="file.file"
-                                       ng-repeat="file in ctrl.documentFiles | translatedNameFilter: ctrl.documentFileSearchText:null:'file'">
+                                       ng-repeat="file in ctrl.documentFiles | translatedNameFilter: ctrl.documentFileSearchText:'getCodeOrIdAndNameByLanguage':'file'">
                             <span
                                     md-highlight-text="ctrl.documentFileSearchText"
-                                    md-highlight-flags="i">{{file.file.getTranslatedName()}}</span>
+                                    md-highlight-flags="i">{{file.file.getCodeOrIdAndNameByLanguage()}}</span>
                             </md-option>
                         </md-select>
                         <!-- Add File -->
@@ -478,7 +478,8 @@
                                id="fileSerial"
                                ng-disabled="!!ctrl.disableProperties || ctrl.checkAllowedEditProperties('fileSerial')"
                                ng-model="ctrl.document.fileSerial"
-                               ng-required="ctrl.checkMandatory('fileSerial')">
+                               ng-required="ctrl.checkMandatory('fileSerial')"
+                               custom-validate-directive="number">
                         <div ng-messages="outgoing_properties.fileSerial.$error">
                             <div ng-message="required">{{lang.field_required}}</div>
                             <div ng-message="number">{{lang.numberonly}}</div>

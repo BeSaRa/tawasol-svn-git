@@ -118,6 +118,18 @@ module.exports = function (app) {
                         return ouDocumentFile;
                     });
             };
+            DocumentFile.prototype.updateOfOUDocumentFile = function (ouDocumentFile) {
+                var self = this;
+                return ouDocumentFileService
+                    .updateOUDocumentFile(ouDocumentFile)
+                    .then(function (ouDocumentFile) {
+                        var index = _.findIndex(self.relatedOus, function (ou) {
+                            return ou.id === ouDocumentFile.id
+                        });
+                        self.relatedOus.splice(index, 1, ouDocumentFile)
+                        return ouDocumentFile;
+                    });
+            }
             DocumentFile.prototype.setIsGlobal = function (status) {
                 this.global = status;
                 return this;
@@ -154,6 +166,11 @@ module.exports = function (app) {
                         return self.addBulkToDocumentFiles(ouDocumentFiles);
                     });
             };
+            DocumentFile.prototype.getCodeOrIdAndNameByLanguage = function (language) {
+                language = language || langService.current;
+                return ((this.code ? this.code : this.id) + ' - ') + this[language + 'Name'];
+
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

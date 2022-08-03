@@ -474,7 +474,8 @@
                                id="fileSerial"
                                ng-disabled="!!ctrl.disableProperties"
                                ng-model="ctrl.document.fileSerial"
-                               ng-required="ctrl.checkMandatory('fileSerial')">
+                               ng-required="ctrl.checkMandatory('fileSerial')"
+                               custom-validate-directive="number">
                         <div ng-messages="outgoing_properties.fileSerial.$error">
                             <div ng-message="required">{{lang.field_required}}</div>
                             <div ng-message="number">{{lang.numberonly}}</div>

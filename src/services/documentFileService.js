@@ -62,7 +62,6 @@ module.exports = function (app) {
             return $http
                 .get(urlService.entityWithlimit.replace('{entityName}', 'document-file').replace('{number}', limit ? limit : 50))
                 .then(function (result) {
-                    //console.log('load response 50', angular.copy(result.data.rs));
                     self.documentFiles = generator.generateCollection(result.data.rs, DocumentFile, self._sharedMethods);
                     self.documentFiles = generator.interceptReceivedCollection('DocumentFile', self.documentFiles);
                     return self.documentFiles;

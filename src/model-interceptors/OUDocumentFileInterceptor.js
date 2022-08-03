@@ -13,6 +13,7 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             model.ouid = model.ouid.hasOwnProperty('id') ? model.ouid.id : model.ouid;
+            model.file = (model.file && model.file.hasOwnProperty('id')) ? model.file.id : model.file;
             return model;
         });
 

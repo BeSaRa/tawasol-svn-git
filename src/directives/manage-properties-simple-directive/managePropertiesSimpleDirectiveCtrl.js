@@ -237,8 +237,8 @@ module.exports = function (app) {
                 return file && ouDocumentFile.file.id === file.id;
             });
             if (ouDocumentFile) {
-                self.document.fileCode = ouDocumentFile.code || self.document.fileCode;
-                self.document.fileSerial = ouDocumentFile.serial || self.document.fileSerial;
+                self.document.fileCode = ouDocumentFile.file.code || self.document.fileCode;
+                self.document.fileSerial = ouDocumentFile.file.serial || self.document.fileSerial;
             }
         };
 

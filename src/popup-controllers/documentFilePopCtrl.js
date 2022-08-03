@@ -22,6 +22,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'documentFilePopCtrl';
         self.editMode = editMode;
+        self.editModeRelatedOu = false;
         self.employeeService = employeeService;
         self.ouSearchText = '';
 
@@ -155,6 +156,7 @@ module.exports = function (app) {
 
         self.toggleRelatedOuForm = function (show) {
             self.showRelatedOUForm = !!show;
+            self.editModeRelatedOu = false;
             if (show) {
                 self.ouDocumentFile = new OUDocumentFile({
                     itemOrder: generator.createNewID(self.documentFile.relatedOus, 'itemOrder'),
@@ -184,43 +186,103 @@ module.exports = function (app) {
          * @description add and save the organization for document file
          */
         self.addOuDocumentFile = function ($event) {
-            if (!self.editMode) {
-                self.documentFile.relatedOus.push(self.ouDocumentFile);
-                self.toggleRelatedOuForm();
-            } else {
-                self.documentFile
-                    .addToOUDocumentFile(self.ouDocumentFile)
-                    .then(function () {
-                        var relatedOus = angular.copy(self.documentFile.relatedOus);
-                        if (self.documentFile.relatedOus.length === 1) {
-                            self.documentFile.setRelatedOus([]);
-                            self.documentFile.setIsGlobal(false).update()
-                                .then(function () {
-                                    self.documentFile.relatedOus = relatedOus;
-                                    self.model = angular.copy(self.documentFile);
-                                    toast.success(langService.get('save_success'));
-                                    self.toggleRelatedOuForm();
-                                })
-                        } else {
-                            self.documentFile.setRelatedOus(relatedOus);
-                            self.model = angular.copy(self.documentFile);
-                            toast.success(langService.get('save_success'));
-                            self.toggleRelatedOuForm();
-                        }
-                    });
-            }
+            validationService
+                .createValidation('OU_DOCUMENT_FILE_VALIDATION')
+                .addStep('check_duplicate', true, ouDocumentFileService.checkDuplicateOuDocumentFile, [self.ouDocumentFile, self.documentFile.relatedOus, self.editModeRelatedOu], function (result) {
+                    return !result;
+                }, true)
+                .notifyFailure(function () {
+                    toast.error(langService.get('name_duplication_message'));
+                })
+                .validate()
+                .then(function () {
+                    if (!self.editMode) {
+                        self.documentFile.relatedOus.push(self.ouDocumentFile);
+                        self.toggleRelatedOuForm();
+                    } else {
+                        self.documentFile.addToOUDocumentFile(self.ouDocumentFile)
+                            .then(function () {
+                                _finishSaveOuDocumentFile();
+                            });
+                    }
+                });
         };
+
+        /**
+         * @description update the organization for document file
+         */
+        self.updateOuDocumentFile = function ($event) {
+            validationService
+                .createValidation('OU_DOCUMENT_FILE_VALIDATION')
+                .addStep('check_duplicate', true, ouDocumentFileService.checkDuplicateOuDocumentFile, [self.ouDocumentFile, self.documentFile.relatedOus, self.editModeRelatedOu], function (result) {
+                    return !result;
+                }, true)
+                .notifyFailure(function () {
+                    toast.error(langService.get('name_duplication_message'));
+                })
+                .validate()
+                .then(function () {
+                    if (!self.editMode) {
+                        var index = _.findIndex(self.documentFile.relatedOus, function (ou) {
+                            return ou.ouid.id === self.ouDocumentFile.ouid.id
+                        });
+                        self.documentFile.relatedOus.splice(index, 1, self.ouDocumentFile);
+                        self.showRelatedOUForm = false;
+                        self.editModeRelatedOu = false;
+                    } else {
+                        self.documentFile.updateOfOUDocumentFile(self.ouDocumentFile)
+                            .then(function () {
+                                _finishSaveOuDocumentFile();
+                            });
+                    }
+                });
+        };
+
+        function _finishSaveOuDocumentFile() {
+            var relatedOus = angular.copy(self.documentFile.relatedOus);
+            if (self.documentFile.relatedOus.length === 1) {
+                self.documentFile.setRelatedOus([]);
+                self.documentFile.setIsGlobal(false).update()
+                    .then(function () {
+                        self.documentFile.relatedOus = relatedOus;
+                        self.model = angular.copy(self.documentFile);
+                        toast.success(langService.get('save_success'));
+                        self.toggleRelatedOuForm();
+                    })
+            } else {
+                self.documentFile.setRelatedOus(relatedOus);
+                self.model = angular.copy(self.documentFile);
+                toast.success(langService.get('save_success'));
+                self.toggleRelatedOuForm();
+            }
+        }
 
         self.canDeleteOUDocumentFile = function (ouDocumentFile) {
             if (documentClassFromUser) {
                 var ouId = ouDocumentFile.ouid.id;
                 return (ouId !== employeeService.getEmployee().getRegistryOUID());
-            }
-            else if(!employeeService.isSuperAdminUser() && self.documentFile.relatedOus.length === 1) {
+            } else if (!employeeService.isSuperAdminUser() && self.documentFile.relatedOus.length === 1) {
                 return false;
             }
             return true;
         };
+
+        self.canEditOUDocumentFile = function (ouDocumentFile) {
+            if (documentClassFromUser) {
+                var ouId = ouDocumentFile.ouid.id;
+                return (ouId !== employeeService.getEmployee().getRegistryOUID());
+            } else if (!employeeService.isSuperAdminUser()) {
+                return false;
+            }
+            return true;
+        }
+
+        self.editOuDocumentFile = function (ouDocumentFile) {
+            self.showRelatedOUForm = true;
+            self.editModeRelatedOu = true;
+
+            self.ouDocumentFile = ouDocumentFile;
+        }
 
         /**
          * @description remove the related organization for document file
@@ -291,6 +353,9 @@ module.exports = function (app) {
          * @param organization
          */
         self.excludeOrganizationIfExists = function (organization) {
+            if (self.editModeRelatedOu) {
+                return false;
+            }
             organization = organization.hasOwnProperty('id') ? organization.id : organization;
             if (!self.editMode) {
                 return _.find(self.documentFile.relatedOus, function (relatedOU) {
@@ -309,9 +374,11 @@ module.exports = function (app) {
          * @description Validates the ouDocumentFile form
          * @returns {*}
          */
-        self.isRelatedOuFormValid = function () {
+        self.isRelatedOuFormValid = function (documentFileForm) {
             return self.ouDocumentFile.ouid
-                && self.ouDocumentFile.itemOrder;
+                && self.ouDocumentFile.itemOrder &&
+                documentFileForm.code.$valid &&
+                documentFileForm.serial.$valid;
         };
 
 
