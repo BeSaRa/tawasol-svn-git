@@ -79,7 +79,7 @@ module.exports = function (app) {
             limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.sentItem, self.totalRecords), //[5, 10, 20, 100, 200]
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.inbox.sentItem, limit);
-                self.reloadUserSentItems(page);
+                self.reloadUserSentItems(page, true);
             },
             searchColumns: {
                 securityLevel: function () {
@@ -116,6 +116,9 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.inbox.sentItem),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.inbox.sentItem, self.grid.truncateSubject);
+            },
+            selectRowsCallback: function () {
+                generator.selectedRowsHandler(self.selectedUserSentItems, 'userSentItems', 'id');
             }
         };
 
@@ -136,9 +139,10 @@ module.exports = function (app) {
         /**
          * @description Reload the grid of user sent item
          * @param pageNumber
+         * @param keepSelectedRows
          * @return {*|Promise<U>}
          */
-        self.reloadUserSentItems = function (pageNumber) {
+        self.reloadUserSentItems = function (pageNumber, keepSelectedRows) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             if (self.searchCriteriaUsed) {
@@ -158,7 +162,11 @@ module.exports = function (app) {
                     self.userSentItemsCopy = angular.copy(self.userSentItems);
                     self.totalRecords = userSentItemService.totalCount;
 
-                    self.selectedUserSentItems = [];
+                    if (keepSelectedRows) {
+                        self.grid.selectRowsCallback();
+                    } else {
+                        self.selectedUserSentItems = [];
+                    }
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     defer.resolve(true);

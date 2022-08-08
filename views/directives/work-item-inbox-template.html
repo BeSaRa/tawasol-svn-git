@@ -1,6 +1,6 @@
 <md-table-container>
     <div flex overlay-scroll-bar-directive>
-        <table md-table md-row-select multiple
+        <table id="{{ctrl.tableName || 'workItemsInbox'}}" md-table md-row-select multiple
                ng-model="ctrl.selectedWorkItems"
                md-progress="ctrl.grid.progress">
             <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.sortingCallback">
@@ -116,6 +116,7 @@
                 context-menu-type="grid"
                 ng-class="!userInbox.generalStepElm.isOpen ? 'unread-row': 'read-row'"
                 selected-length="{{ctrl.selectedWorkItems.length ? ctrl.selectedWorkItems.length : 0}}"
+                data-key="{{userInbox.generalStepElm.workObjectNumber}}"
                 ng-repeat="userInbox in (ctrl.serverPagination ? ctrl.workItems: (ctrl.workItems | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))) track by $index">
                 <td md-cell class="read-td">
                     <div class="cursor-pointer status absolute-read"

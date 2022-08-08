@@ -29,7 +29,8 @@
                     <md-card md-whiteframe="3" layout="column" class="card-overlay">
                         <md-table-container>
                             <div flex overlay-scroll-bar-directive>
-                                <table md-table md-row-select multiple ng-model="ctrl.selectedIncomingDepartmentInboxes"
+                                <table id="incomingDepartmentInboxes" md-table md-row-select multiple
+                                       ng-model="ctrl.selectedIncomingDepartmentInboxes"
                                        md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
@@ -129,6 +130,7 @@
                                         ng-class="!incomingDepartmentInbox.generalStepElm.isOpen ? 'unread-row': 'read-row'"
                                         ng-disabled="incomingDepartmentInbox.isLocked() && !incomingDepartmentInbox.isLockedByCurrentUser()"
                                         selected-length="{{ctrl.selectedIncomingDepartmentInboxes.length ? ctrl.selectedIncomingDepartmentInboxes.length : 0}}"
+                                        data-key="{{incomingDepartmentInbox.generalStepElm.vsId}}"
                                         ng-repeat="incomingDepartmentInbox in ctrl.incomingDepartmentInboxes track by $index">
                                         <!--searchResults = (ctrl.incomingDepartmentInboxes | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))">-->
                                         <td md-cell class="read-td">

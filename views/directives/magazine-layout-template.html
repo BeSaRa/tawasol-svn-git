@@ -94,7 +94,7 @@
             </div>
         </div>
     </div>
-    <div layout="column" class="magazine-layout card-overlay">
+    <div id="magazineLayout" layout="column" class="magazine-layout card-overlay">
         <div ng-click="ctrl.showThumbnails($event , workItem)" layout="column"
              model="workItem"
              grid-context-menu-directive="ctrl.contextMenuActions"
@@ -102,6 +102,7 @@
              ng-class="{'selected':ctrl.isWorkItemSelected(workItem)}"
              magazine-item-directive="workItem"
              selected-length="{{ctrl.selectedWorkItems.length ? ctrl.selectedWorkItems.length : 0}}" md-whiteframe="1"
+             data-key="{{workItem.generalStepElm.workObjectNumber}}"
              ng-repeat="workItem in (ctrl.serverPagination ? ctrl.workItems : (ctrl.workItems | limitTo:ctrl.pageLimit:( ( ctrl.page - 1) * ctrl.pageLimit))) track by $index"
              class="magazine-item">
             <div layout="row">

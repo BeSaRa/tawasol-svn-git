@@ -80,7 +80,7 @@ module.exports = function (app) {
             limitOptions: gridService.getGridLimitOptions(gridService.grids.department.readyToExport, self.totalRecords),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.department.readyToExport, limit);
-                self.reloadReadyToExports(page, false, true);
+                self.reloadReadyToExports(page, false, true, true);
             },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.department.readyToExport),
             setTruncateSubject: function ($event) {
@@ -101,6 +101,9 @@ module.exports = function (app) {
             searchText: '',
             searchCallback: function (grid) {
                 self.readyToExports = gridService.searchGridData(self.grid, self.readyToExportsCopy);
+            },
+            selectRowsCallback: function () {
+                generator.selectedRowsHandler(self.selectedReadyToExports, 'readyToExport','generalStepElm.vsId');
             }
         };
 
@@ -182,9 +185,10 @@ module.exports = function (app) {
          * @param pageNumber
          * @param isAutoReload
          * @param skipCountersReload
+         * @param keepSelectedRows
          * @return {*|Promise<U>}
          */
-        self.reloadReadyToExports = function (pageNumber, isAutoReload, skipCountersReload) {
+        self.reloadReadyToExports = function (pageNumber, isAutoReload, skipCountersReload, keepSelectedRows) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return readyToExportService
@@ -197,7 +201,13 @@ module.exports = function (app) {
                     self.readyToExports = result;
                     self.readyToExportsCopy = angular.copy(self.readyToExports);
                     self.totalRecords = readyToExportService.totalCount;
-                    self.selectedReadyToExports = [];
+
+                    if (keepSelectedRows) {
+                        self.grid.selectRowsCallback();
+                    } else {
+                        self.selectedReadyToExports = [];
+                    }
+
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;

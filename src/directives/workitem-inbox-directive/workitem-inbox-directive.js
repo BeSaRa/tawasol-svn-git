@@ -25,7 +25,8 @@ module.exports = function (app) {
                 sortingCallback: '=',
                 printUserInboxBulk: '=?',
                 totalItems: '=?',
-                serverPagination: '=?'
+                serverPagination: '=?',
+                tableName: '=?'
             }
         }
     })

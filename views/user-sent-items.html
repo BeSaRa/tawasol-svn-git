@@ -44,7 +44,7 @@
                     <md-card md-whiteframe="3" layout="column" class="card-overlay">
                         <md-table-container>
                             <div flex overlay-scroll-bar-directive>
-                                <table md-table ng-model="ctrl.selectedUserSentItems"
+                                <table id="userSentItems" md-table ng-model="ctrl.selectedUserSentItems"
                                        md-progress="ctrl.grid.progress"
                                        md-row-select multiple>
                                     <thead md-head md-order="ctrl.grid.order"
@@ -125,6 +125,7 @@
                                         grid-context-menu-directive="ctrl.contextMenuActions"
                                         context-menu-type="grid"
                                         selected-length="{{ctrl.selectedUserSentItems.length ? ctrl.selectedUserSentItems.length : 0}}"
+                                        data-key="{{userSentItem.id}}"
                                         ng-repeat="userSentItem in ctrl.userSentItems track by $index">
                                         <!-- | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) -->
                                         <td md-cell class="indicator-td">

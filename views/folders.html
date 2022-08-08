@@ -63,7 +63,7 @@
                              ng-if="ctrl.employeeService.getEmployee().viewInboxAsGrid">
                         <md-table-container>
                             <div flex overlay-scroll-bar-directive>
-                                <table md-table md-row-select multiple ng-model="ctrl.selectedWorkItems"
+                                <table id="folders" md-table md-row-select multiple ng-model="ctrl.selectedWorkItems"
                                        md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
@@ -170,6 +170,7 @@
                                         model="workItem"
                                         ng-class="!workItem.generalStepElm.isOpen? 'unread-row': 'read-row'"
                                         selected-length="{{ctrl.selectedWorkItems.length ? ctrl.selectedWorkItems.length : 0}}"
+                                        data-key="{{workItem.generalStepElm.workObjectNumber}}"
                                         ng-repeat="workItem in ctrl.workItems track by $index">
                                         <!--searchResults = (ctrl.workItems | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))-->
                                         <td md-cell class="read-td">
@@ -320,7 +321,7 @@
                         </md-table-container>
                     </md-card>
                     <div flex scroll-directive
-                         ng-if="!ctrl.employeeService.getEmployee().viewInboxAsGrid">
+                         ng-if="!ctrl.employeeService.getEmployee().viewInboxAsGrid" id="magazineFolders">
                         <magazine-layout-directive
                                 mark-as-read-unread="ctrl.markAsReadUnread"
                                 view-document="ctrl.viewDocument"
@@ -343,6 +344,7 @@
                                 sort-order="ctrl.grid.order"
                                 print-user-inbox-bulk="ctrl.printResult"
                                 total-items="ctrl.totalRecords"
+                                paging-callback="ctrl.grid.pagingCallback"
                                 server-pagination="true">
                         </magazine-layout-directive>
                     </div>

@@ -77,7 +77,7 @@ module.exports = function (app) {
             limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.folder, self.totalRecords),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.inbox.folder, limit);
-                self.reloadFolders(page, true);
+                self.reloadFolders(page, true, true);
             },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.inbox.folder),
             setTruncateSubject: function ($event) {
@@ -98,6 +98,10 @@ module.exports = function (app) {
             searchText: '',
             searchCallback: function (grid) {
                 self.workItems = gridService.searchGridData(self.grid, self.workItemsCopy);
+            },
+            selectRowsCallback: function () {
+                var tableName = self.employee.viewInboxAsGrid ? 'folders' : 'magazineFolders';
+                generator.selectedRowsHandler(self.selectedWorkItems, tableName, 'generalStepElm.workObjectNumber', !self.employee.viewInboxAsGrid);
             }
         };
 
@@ -163,8 +167,9 @@ module.exports = function (app) {
          * @description reload current folder
          * @param pageNumber
          * @param skipCountersReload
+         * @param keepSelectedRows
          */
-        self.reloadFolders = function (pageNumber, skipCountersReload) {
+        self.reloadFolders = function (pageNumber, skipCountersReload, keepSelectedRows) {
             if (!self.selectedFolder)
                 return;
             var defer = $q.defer();
@@ -179,7 +184,12 @@ module.exports = function (app) {
                     self.workItems = workItems;
                     self.workItemsCopy = angular.copy(self.workItems);
                     self.totalRecords = correspondenceService.totalCountFolderItems;
-                    self.selectedWorkItems = [];
+
+                    if (keepSelectedRows) {
+                        self.grid.selectRowsCallback();
+                    } else {
+                        self.selectedWorkItems = [];
+                    }
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;

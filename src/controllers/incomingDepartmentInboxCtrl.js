@@ -75,7 +75,7 @@ module.exports = function (app) {
             limitOptions: gridService.getGridLimitOptions(gridService.grids.department.incoming, self.totalRecords),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.department.incoming, limit);
-                self.reloadIncomingDepartmentInboxes(page, false, true)
+                self.reloadIncomingDepartmentInboxes(page, false, true, true);
             },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.department.incoming),
             setTruncateSubject: function ($event) {
@@ -98,6 +98,9 @@ module.exports = function (app) {
             searchText: '',
             searchCallback: function (grid) {
                 self.incomingDepartmentInboxes = gridService.searchGridData(self.grid, self.incomingDepartmentInboxesCopy);
+            },
+            selectRowsCallback: function () {
+                generator.selectedRowsHandler(self.selectedIncomingDepartmentInboxes, 'incomingDepartmentInboxes','generalStepElm.vsId');
             }
         };
 
@@ -147,9 +150,10 @@ module.exports = function (app) {
          * @param pageNumber
          * @param isAutoReload
          * @param skipCountersReload
+         * @param keepSelectedRows
          * @return {*|Promise<U>}
          */
-        self.reloadIncomingDepartmentInboxes = function (pageNumber, isAutoReload, skipCountersReload) {
+        self.reloadIncomingDepartmentInboxes = function (pageNumber, isAutoReload, skipCountersReload, keepSelectedRows) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return incomingDepartmentInboxService
@@ -162,7 +166,11 @@ module.exports = function (app) {
                     self.incomingDepartmentInboxes = result;
                     self.incomingDepartmentInboxesCopy = angular.copy(self.incomingDepartmentInboxes);
                     self.totalRecords = incomingDepartmentInboxService.totalCount;
-                    self.selectedIncomingDepartmentInboxes = [];
+                    if (keepSelectedRows) {
+                        self.grid.selectRowsCallback();
+                    } else {
+                        self.selectedIncomingDepartmentInboxes = [];
+                    }
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;

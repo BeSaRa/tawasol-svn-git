@@ -6,6 +6,7 @@ module.exports = function (app) {
                                        moment,
                                        $location,
                                        $q,
+                                       $timeout,
                                        $sce) {
         'ngInject';
         var self = this, dialog, langService, toast, rootEntity;
@@ -1050,5 +1051,38 @@ module.exports = function (app) {
             }
             return extension;
         };
+
+
+        /**
+         * @description reselect rows when change page if table lazy loading
+         * @param selectedRows
+         * @param tableName
+         * @param key
+         * @param isMagazineView
+         * @returns {boolean}
+         */
+        self.selectedRowsHandler = function (selectedRows, tableName, key, isMagazineView) {
+            if (!tableName || !selectedRows || !selectedRows.length) {
+                return false;
+            }
+            $timeout(function () {
+                var rows = (isMagazineView) ?
+                    document.querySelector('#' + tableName + ' div#magazineLayout').getElementsByClassName('magazine-item') :
+                    document.querySelector('table#' + tableName).getElementsByTagName('tr');
+
+                rows.forEach(item => {
+                    var selectedIndex = _.findIndex(selectedRows, function (selectedItem) {
+                        return self.getNestedPropertyValue(selectedItem, key).toString() === item.getAttribute('data-key');
+                    });
+                    if (selectedIndex !== -1) {
+                        var md_checkbox = (isMagazineView) ?
+                            item.getElementsByClassName('magazine-image')[0].getElementsByTagName('md-checkbox')[0] :
+                            item.getElementsByTagName('td')[0].getElementsByTagName('md-checkbox')[0];
+                        selectedRows.splice(selectedIndex, 1);
+                        $(md_checkbox).click();
+                    }
+                });
+            });
+        }
     })
 };

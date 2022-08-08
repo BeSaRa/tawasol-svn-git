@@ -71,7 +71,7 @@ module.exports = function (app) {
             limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.group, self.totalRecords),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.inbox.group, limit);
-                self.reloadGroupInbox(page, false, true)
+                self.reloadGroupInbox(page, false, true, true);
             },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.inbox.group),
             setTruncateSubject: function ($event) {
@@ -95,6 +95,9 @@ module.exports = function (app) {
             searchText: '',
             searchCallback: function (grid) {
                 self.workItems = gridService.searchGridData(self.grid, self.workItemsCopy);
+            },
+            selectRowsCallback: function () {
+                generator.selectedRowsHandler(self.selectedWorkItems, 'groupInbox','generalStepElm.vsId');
             }
         };
 
@@ -179,7 +182,7 @@ module.exports = function (app) {
          * @param isAutoReload
          * @param skipCountersReload
          */
-        self.reloadGroupInbox = function (pageNumber, isAutoReload, skipCountersReload) {
+        self.reloadGroupInbox = function (pageNumber, isAutoReload, skipCountersReload, keepSelectedRows) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return correspondenceService
@@ -192,7 +195,11 @@ module.exports = function (app) {
                     self.workItems = workItems;
                     self.workItemsCopy = angular.copy(self.workItems);
                     self.totalRecords = correspondenceService.totalCountGroupMails;
-                    self.selectedWorkItems = [];
+                    if (keepSelectedRows) {
+                        self.grid.selectRowsCallback();
+                    } else {
+                        self.selectedWorkItems = [];
+                    }
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;

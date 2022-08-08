@@ -51,6 +51,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'userInboxCtrl';
         self.employeeService = employeeService;
+        self.employee = self.employeeService.getEmployee();
 
         self.excludeMe = fromNotification;
         contextHelpService.setHelpTo('user-inbox', self.excludeMe);
@@ -154,7 +155,7 @@ module.exports = function (app) {
             limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.userInbox, self.totalRecords),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.inbox.userInbox, limit);
-                self.reloadUserInboxes(page, false, true);
+                self.reloadUserInboxes(page, false, true, true);
             },
             searchColumns: gridSearchColumns,
             searchText: '',
@@ -164,6 +165,10 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.inbox.userInbox),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.inbox.userInbox, self.grid.truncateSubject);
+            },
+            selectRowsCallback: function () {
+                var tableName = self.employee.viewInboxAsGrid ? 'inbox' : 'magazineInbox';
+                generator.selectedRowsHandler(self.selectedUserInboxes, tableName, 'generalStepElm.workObjectNumber', !self.employee.viewInboxAsGrid);
             }
         };
 
@@ -176,7 +181,7 @@ module.exports = function (app) {
             limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.starred, self.totalRecordsStarred),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.inbox.starred, limit);
-                self.reloadUserInboxes(page, false, true);
+                self.reloadUserInboxes(page, false, true, true);
             },
             searchColumns: gridSearchColumns,
             searchText: '',
@@ -186,6 +191,10 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.inbox.starred),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.inbox.starred, self.starredGrid.truncateSubject);
+            },
+            selectRowsCallback: function () {
+                var tableName = self.employee.viewInboxAsGrid ? 'starred' : 'magazineStarred';
+                generator.selectedRowsHandler(self.selectedUserInboxes, tableName, 'generalStepElm.workObjectNumber', !self.employee.viewInboxAsGrid);
             }
         };
 
@@ -453,9 +462,10 @@ module.exports = function (app) {
          * @param pageNumber
          * @param isAutoReload
          * @param skipCountersReload
+         * @param keepSelectedRows
          * @return {*|Promise<WorkItem>}
          */
-        self.reloadUserInboxes = function (pageNumber, isAutoReload, skipCountersReload) {
+        self.reloadUserInboxes = function (pageNumber, isAutoReload, skipCountersReload, keepSelectedRows) {
             var promise = null;
             if (ignoreReload) {
                 // ignoreReload is used from tasks
@@ -508,9 +518,14 @@ module.exports = function (app) {
                     self.grid.searchCallback();
                 }
 
-                self.selectedUserInboxes = _.filter(self.getSelectedInboxGrid(), function (item) {
-                    return workItemsWobNumbers.indexOf(item.generalStepElm.workObjectNumber) !== -1;
-                });
+                if (keepSelectedRows) {
+                    self.selectedGridType === 'starred' ? self.starredGrid.selectRowsCallback() : self.grid.selectRowsCallback();
+                } else {
+                    self.selectedUserInboxes = _.filter(self.getSelectedInboxGrid(), function (item) {
+                        return workItemsWobNumbers.indexOf(item.generalStepElm.workObjectNumber) !== -1;
+                    });
+                }
+
                 defer.resolve(true);
                 return result;
             });

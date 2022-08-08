@@ -114,7 +114,8 @@
                                                 sorting-callback="ctrl.getSortedDataForInbox"
                                                 print-user-inbox-bulk="ctrl.printResult"
                                                 total-items="ctrl.totalRecords"
-                                                server-pagination="true">
+                                                server-pagination="true"
+                                                table-name="'inbox'">
                                         </work-item-inbox-directive>
                                     </md-content>
                                 </md-tab>
@@ -140,7 +141,8 @@
                                                 sorting-callback="ctrl.getSortedDataForStarred"
                                                 print-user-inbox-bulk="ctrl.printResult"
                                                 total-items="ctrl.totalRecordsStarred"
-                                                server-pagination="true">
+                                                server-pagination="true"
+                                                table-name="'starred'">
                                         </work-item-inbox-directive>
                                     </md-content>
                                 </md-tab>
@@ -213,7 +215,7 @@
                              class="z-index-3 filter-tabs"
                              md-dynamic-height>
                         <md-tab md-on-select="ctrl.resetSelectedFilter(0)" label="{{lang.inbox}}">
-                            <md-content class="transparent-bg">
+                            <md-content class="transparent-bg" id="magazineInbox">
                                 <!-- Inbox Magazine -->
                                 <magazine-layout-directive
                                         mark-as-read-unread="ctrl.markAsReadUnread"
@@ -245,7 +247,7 @@
                         </md-tab>
                         <md-tab md-on-select="ctrl.resetSelectedFilter(1)" label="{{lang.starred_tab}}"
                                 ng-if="ctrl.showStarred">
-                            <md-content class="transparent-bg">
+                            <md-content class="transparent-bg" id="magazineStarred">
                                 <!-- Starred Magazine -->
                                 <magazine-layout-directive
                                         mark-as-read-unread="ctrl.markAsReadUnread"

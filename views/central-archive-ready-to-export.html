@@ -28,7 +28,7 @@
                     <md-card md-whiteframe="3" layout="column" class="card-overlay">
                         <md-table-container>
                             <div flex overlay-scroll-bar-directive>
-                                <table md-table md-row-select multiple ng-model="ctrl.selectedWorkItems"
+                                <table id="readyToExport" md-table md-row-select multiple ng-model="ctrl.selectedWorkItems"
                                        md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
@@ -116,6 +116,7 @@
                                         ng-disabled="workItem.isLocked() && !workItem.isLockedByCurrentUser()"
                                         grid-right-click-directive="workItem"
                                         selected-length="{{ctrl.selectedWorkItems.length ? ctrl.selectedWorkItems.length : 0}}"
+                                        data-key="{{workItem.generalStepElm.vsId}}"
                                         model="workItem"
                                         ng-repeat="workItem in ctrl.workItems track by $index">
                                         <!--searchResults = (ctrl.workItems | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))-->

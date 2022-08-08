@@ -28,7 +28,8 @@
                     <md-card md-whiteframe="3" layout="column" class="card-overlay">
                         <md-table-container>
                             <div flex overlay-scroll-bar-directive>
-                                <table md-table md-row-select multiple ng-model="ctrl.selectedReadyToExports"
+                                <table id="readyToExport" md-table md-row-select multiple
+                                       ng-model="ctrl.selectedReadyToExports"
                                        md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
@@ -123,6 +124,7 @@
                                         grid-right-click-directive="readyToExport"
                                         selected-length="{{ctrl.selectedReadyToExports.length ? ctrl.selectedReadyToExports.length : 0}}"
                                         model="readyToExport"
+                                        data-key="{{readyToExport.generalStepElm.vsId}}"
                                         ng-repeat="readyToExport in ctrl.readyToExports track by $index">
                                          <!--searchResults = (ctrl.readyToExports | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) -->
                                         <td md-cell class="read-td">
