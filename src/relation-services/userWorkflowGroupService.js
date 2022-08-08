@@ -91,14 +91,14 @@ module.exports = function (app) {
             /**
              * @description Show confirm box and delete user workflow group
              * @param userWorkflowGroup
+             * @param workflowGroup
              * @param $event
              */
             userWorkflowGroupDelete: function (userWorkflowGroup, workflowGroup, $event) {
-                return dialog.confirmMessage(langService.get('confirm_delete').change({name: new WorkflowGroup(workflowGroup).getNames()}), null, null, $event)
+                return dialog.confirmMessage(langService.get('confirm_delete').change({name: userWorkflowGroup.applicationUser.getNames()}), null, null, $event)
                     .then(function () {
                         return self.deleteUserWorkflowGroup(userWorkflowGroup)
                             .then(function (result) {
-                                // toast.success(langService.get("delete_specific_success").change({name: userWorkflowGroup.getNames()}));
                                 return result;
                             })
                     });

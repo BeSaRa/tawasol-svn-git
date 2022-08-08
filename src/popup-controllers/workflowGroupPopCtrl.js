@@ -179,6 +179,9 @@ module.exports = function (app) {
                     if (isAdminAssigned) {
                         userWorkflowGroupService.loadUsersWorkflowGroupAssignedByAdmin(self.workflowGroup).then(function (users) {
                             self.usersWorkflowGroupByAdmin = users;
+                            if (!users.length && selectedUsers.length) {
+                                self.editWorkflowGroupFromCtrl();
+                            }
                         })
                     } else {
                         self.addSelectedUsersToArray(selectedUsers, groupMembers);
