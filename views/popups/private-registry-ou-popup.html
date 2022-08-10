@@ -21,7 +21,7 @@
                                        class="select-header-input">
                             </md-select-header>
                             <md-option
-                                    ng-repeat="organization in ctrl.allRegOus | translatedNameFilter: ctrl.ouSearchText track by $index"
+                                    ng-repeat="organization in ctrl.allRegOus | translatedNameFilter: ctrl.ouSearchText"
                                     ng-if="ctrl.excludeOrganizationIfExists(organization)"
                                     ng-value="organization">
                                 <span
