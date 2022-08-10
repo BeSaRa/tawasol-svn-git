@@ -59,9 +59,10 @@ module.exports = function (app) {
          * @param securityLevel
          * @param parent
          * @param ignoreStatus
+         * @param docClassId
          * @return {*}
          */
-        self.loadClassificationsPairBySearchText = function (searchText, securityLevel, parent, ignoreStatus) {
+        self.loadClassificationsPairBySearchText = function (searchText, securityLevel, parent, ignoreStatus, docClassId) {
             if (typeof securityLevel === 'undefined') {
                 securityLevel = null;
             } else {
@@ -74,12 +75,15 @@ module.exports = function (app) {
                 if (parent.hasOwnProperty('id'))
                     parent = parent.id;
             }
+            docClassId = (typeof docClassId === 'undefined') ? null : docClassId;
+
             return $http.get(urlService.entityBySearchText.replace('{entityName}', 'classification'), {
                 params: {
                     criteria: searchText,
                     parent: parent,
                     securityLevel: securityLevel,
-                    ignoreStatus: ignoreStatus
+                    ignoreStatus: ignoreStatus,
+                    docClassId: docClassId
                 }
             }).then(function (result) {
                 result = result.data.rs;

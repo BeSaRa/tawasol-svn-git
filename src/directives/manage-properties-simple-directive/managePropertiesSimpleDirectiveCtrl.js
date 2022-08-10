@@ -500,7 +500,7 @@ module.exports = function (app) {
 
         self.loadMainClassificationRecords = function () {
             if (self.mainClassificationSearchText) {
-                classificationService.loadClassificationsPairBySearchText(self.mainClassificationSearchText, self.document.securityLevel, null, false)
+                classificationService.loadClassificationsPairBySearchText(self.mainClassificationSearchText, self.document.securityLevel, null, false, self.document.getInfo().docClassId)
                     .then(function (result) {
                         if (result.first.length || result.second.length) {
                             var lookups = {classifications: result.first, ouClassifications: result.second},
@@ -527,7 +527,7 @@ module.exports = function (app) {
                         return classification.classification.id === self.document.mainClassification.id;
                     }).classification;
 
-                classificationService.loadClassificationsPairBySearchText(self.subClassificationSearchText, self.document.securityLevel, self.document.mainClassification, false)
+                classificationService.loadClassificationsPairBySearchText(self.subClassificationSearchText, self.document.securityLevel, self.document.mainClassification, false, self.document.getInfo().docClassId)
                     .then(function (result) {
                         if (result.first.length || result.second.length) {
                             var lookups = {classifications: result.first, ouClassifications: result.second},
