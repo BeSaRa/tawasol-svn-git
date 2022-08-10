@@ -1480,7 +1480,14 @@ module.exports = function (app) {
             return $http.put(url)
                 .then(function (result) {
                     return result.data.rs;
-                });
+                }).catch(function (error) {
+                    if (errorCode.checkIf(error, 'CAN_NOT_SEND_BOOK_ALREADY_IN_READY_TO_EXPORT') === true) {
+                        dialog.errorMessage(generator.getTranslatedError(error));
+                        return $q.reject(error);
+                    } else {
+                        return $q.reject(false);
+                    }
+                })
         };
         /**
          * @description send correspondence to ready to export queue.
