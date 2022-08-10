@@ -80,6 +80,29 @@
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
+                                    <!-- Code -->
+                                    <md-input-container flex>
+                                        <label for="code">{{lang.code}}</label>
+                                        <input name="code" id="code" maxlength="150"
+                                               ng-model="ctrl.documentFile.code">
+                                        <div ng-messages="documentFileForm.code.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 150})}}</div>
+                                        </div>
+                                    </md-input-container>
+
+                                    <!-- Serial -->
+                                    <md-input-container flex>
+                                        <label for="serial">{{lang.serial_number}}</label>
+                                        <input name="serial" id="code" maxlength="150"
+                                               ng-model="ctrl.documentFile.serial">
+                                        <div ng-messages="documentFileForm.serial.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length: 150})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
                                     <div flex class="p20">
                                         <md-switch ng-model="ctrl.documentFile.status" aria-label="{{lang.status}}">
                                             <label>{{lang.status}} : {{ctrl.documentFile.getTranslatedStatus()}}</label>

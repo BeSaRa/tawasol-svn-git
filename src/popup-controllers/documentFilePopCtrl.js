@@ -86,7 +86,7 @@ module.exports = function (app) {
                     });
                     generator.generateErrorFields('check_this_fields', labels);
                 })
-                .addStep('check_duplicate', true, documentFileService.checkDuplicateClassification, [self.documentFile, self.editMode], function (result) {
+                .addStep('check_duplicate', true, documentFileService.checkDuplicateDocumentFile, [self.documentFile, self.editMode], function (result) {
                     return !result;
                 }, true)
                 .notifyFailure(function () {

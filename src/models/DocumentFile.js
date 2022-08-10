@@ -17,6 +17,8 @@ module.exports = function (app) {
             self.cmsRefId = null;
             self.id = null;
             self.parent = null;
+            self.code = null;
+            self.serial = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
