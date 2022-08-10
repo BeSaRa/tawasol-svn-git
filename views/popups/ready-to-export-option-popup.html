@@ -30,7 +30,7 @@
                                         <th md-column>
                                             <span>{{lang.export_status}}</span>
                                         </th>
-                                        <th md-column>
+                                        <th md-column ng-if="ctrl.mailRoomEnabled">
                                             <span class="break-white-space">{{lang.export_to_mailing_room}}</span>
                                         </th>
                                     </tr>
