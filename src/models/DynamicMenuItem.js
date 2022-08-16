@@ -303,6 +303,8 @@ module.exports = function (app) {
                         return rootEntity.returnRootEntity().identifier;
                     case 'CURRENT_OU_ID':
                         return employeeService.getEmployee().getOUID();
+                    case 'CURRENT_REG_OU':
+                        return employeeService.getEmployee().getRegistryOUID();
                 }
             };
 
