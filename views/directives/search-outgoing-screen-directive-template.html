@@ -720,6 +720,7 @@
                                            id="documentFile"
                                            name="documentFile"
                                            ng-change="ctrl.onFileChanged(ctrl.searchCriteria.fileId)"
+                                           ng-model-options="{trackBy: '$value.id'}"
                                            md-on-close="ctrl.documentFileSearchText = ''"
                                            ng-model="ctrl.searchCriteria.fileId">
                                     <md-select-header class="select-header" layout="column">
@@ -741,8 +742,8 @@
                                     </md-option>
                                     <md-option md-highlight-text="ctrl.documentFileSearchText" md-highlight-flags="i"
                                                ng-value="file.file"
-                                               ng-repeat="file in ctrl.documentFiles|translatedNameFilter:ctrl.documentFileSearchText:null:'file'">
-                                        {{file.file.getTranslatedName()}}
+                                               ng-repeat="file in ctrl.documentFiles|translatedNameFilter: ctrl.documentFileSearchText:'getCodeOrIdAndNameByLanguage':'file'">
+                                        {{file.file.getCodeOrIdAndNameByLanguage()}}
                                     </md-option>
                                     <md-option
                                             ng-click="ctrl.loadDocumentFilesByCriteria(ctrl.documentFileSearchText , $event)"

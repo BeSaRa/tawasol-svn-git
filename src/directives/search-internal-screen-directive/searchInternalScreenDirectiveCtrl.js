@@ -570,9 +570,13 @@ module.exports = function (app) {
                 self.previousDocumentFiles = angular.copy(self.documentFiles);
 
             documentFileService.loadDocumentFilesBySearchText(self.documentFileSearchText, self.searchCriteria.securityLevel, null, true)
-                .then(function (pair) {
-                    var lookups = {classifications: pair.first, ouClassifications: pair.second};
-                    self.documentFiles = correspondenceService.prepareLookupHierarchy(lookups).documentFiles;
+                .then(function (result) {
+                    if (result.first.length || result.second.length) {
+                        var lookups = {documentFiles: result.first, ouDocumentFiles: result.second},
+                            documentFilesUnion = correspondenceService.prepareLookupHierarchy(lookups).documentFiles;
+
+                        self.documentFiles = _.uniqBy(self.documentFiles.concat(documentFilesUnion), 'file.id');
+                    }
                 });
         };
         /**
@@ -598,8 +602,8 @@ module.exports = function (app) {
                 return file && ouDocumentFile.file.id === file.id;
             });
             if (ouDocumentFile) {
-                self.searchCriteria.fileCode = ouDocumentFile.code || self.searchCriteria.fileCode;
-                self.searchCriteria.fileSerial = ouDocumentFile.serial || self.searchCriteria.fileSerial;
+                self.searchCriteria.fileCode = ouDocumentFile.file.code || self.searchCriteria.fileCode;
+                self.searchCriteria.fileSerial = ouDocumentFile.file.serial || self.searchCriteria.fileSerial;
             }
         };
         /**
