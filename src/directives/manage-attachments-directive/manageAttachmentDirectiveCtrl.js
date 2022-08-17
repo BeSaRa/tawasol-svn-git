@@ -419,7 +419,7 @@ module.exports = function (app) {
 
                 return dialog.confirmMessageWithDynamicButtonsList(langService.get('do_you_want_to_download_without_watermark'), buttonsList, '')
                     .then(function (selectedLabel) {
-                        return _downloadAttachment(attachment, true);
+                        return _downloadAttachment(attachment, selectedLabel.value);
                     })
             } else {
                 return _downloadAttachment(attachment);
