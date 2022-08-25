@@ -55,7 +55,8 @@ module.exports = function (app) {
                 englishName: 'enFullName',
                 loginName: 'loginName',
                 domainName: 'domainName',
-                employeeNo: 'employeeNo'
+                employeeNo: 'employeeNo',
+                qid: 'qid'
             },
             searchText: '',
             searchCallback: function (grid) {

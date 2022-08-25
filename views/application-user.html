@@ -52,10 +52,10 @@
                                             md-order-by="enFullName">
                                             <span>{{lang.english_name}}</span>
                                         </th>
-                                        <!--  <th ng-if="!ctrl.selectedApplicationUsers.length" md-column
-                                              md-order-by="loginName">
-                                              <span>{{lang.login_name}}</span>
-                                          </th>-->
+                                        <th ng-if="!ctrl.selectedApplicationUsers.length" md-column
+                                            md-order-by="qid">
+                                            <span>{{lang.qid}}</span>
+                                        </th>
                                         <th ng-if="!ctrl.selectedApplicationUsers.length" md-column
                                             md-order-by="domainName">
                                             <span>{{lang.domain_name}}</span>
@@ -80,7 +80,7 @@
                                         <!--| limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)">-->
                                         <td md-cell>{{applicationUser.arFullName}}</td>
                                         <td md-cell>{{applicationUser.enFullName}}</td>
-                                        <!--<td md-cell>{{applicationUser.loginName}}</td>-->
+                                        <td md-cell>{{applicationUser.qid}}</td>
                                         <td md-cell>{{applicationUser.domainName}}</td>
                                         <td md-cell>{{applicationUser.employeeNo}}</td>
                                         <td md-cell>{{applicationUser.updatedOnString}}</td>
