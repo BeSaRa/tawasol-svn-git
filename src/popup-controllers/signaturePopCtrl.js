@@ -46,6 +46,7 @@ module.exports = function (app) {
          * @type {Array}
          */
         self.selectedSignature = null;
+        self.selectedInitialSignature = null;
         self.pinCode = null;
 
         /**
@@ -74,6 +75,10 @@ module.exports = function (app) {
         self.setSelectedSignature = function (signature, $event) {
             if (self.selectedSignature && self.selectedSignature.vsId === signature.vsId) {
                 self.selectedSignature = null;
+            } else if (self.isAttachmentSigningContractsEnabled() && self.selectedInitialSignature && self.selectedInitialSignature.vsId === signature.vsId) {
+                self.selectedInitialSignature = null;
+            } else if (self.isAttachmentSigningContractsEnabled() && signature.isContractInitial) {
+                self.selectedInitialSignature = signature;
             } else {
                 self.selectedSignature = signature;
             }
@@ -84,6 +89,19 @@ module.exports = function (app) {
                 return false;
             return self.selectedSignature.vsId === signature.vsId;
         };
+
+
+        /**
+         * @description for attachment contract only
+         * @param signature
+         * @returns {boolean}
+         */
+        self.isInitialSignatureSelected = function (signature) {
+            if (!self.isAttachmentSigningContractsEnabled() || !self.selectedInitialSignature)
+                return false;
+
+            return self.selectedInitialSignature.vsId === signature.vsId;
+        }
 
         /**
          * @description Sign the document
@@ -120,7 +138,7 @@ module.exports = function (app) {
         };
 
         self.signAttachmentFromCtrl = function ($event) {
-            return attachmentService.authorizeContract(workItem, self.attachment, self.selectedSignature)
+            return attachmentService.authorizeContract(workItem, self.attachment, self.selectedSignature, self.selectedInitialSignature)
                 .then(function (result) {
                     dialog.hide(result);
                     return result;
@@ -133,9 +151,12 @@ module.exports = function (app) {
          */
         self.checkDisabled = function () {
             if (self.pinCodeRequired) {
+                if (self.isAttachmentSigningContractsEnabled()) {
+                    return !self.selectedSignature || !self.selectedInitialSignature || !self.pinCode;
+                }
                 return !self.selectedSignature || !self.pinCode;
             }
-            return !self.selectedSignature;
+            return self.isAttachmentSigningContractsEnabled() ? (!self.selectedSignature || !self.selectedInitialSignature) : !self.selectedSignature;
         };
 
         /**
@@ -145,5 +166,8 @@ module.exports = function (app) {
             dialog.cancel();
         }
 
+        self.isAttachmentSigningContractsEnabled = function () {
+            return self.rootEntity.isSigningContractsEnabled() && self.attachment;
+        }
     });
 };

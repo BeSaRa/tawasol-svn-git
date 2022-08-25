@@ -1569,6 +1569,10 @@ form#signature-form {
   img.selected {
     border: 2px solid #ff0000 !important;
   }
+
+  img.selected-blue {
+    border: 2px solid lighten(blue, 20) !important;
+  }
 }
 
 #add-user-cert {

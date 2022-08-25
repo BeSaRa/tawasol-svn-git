@@ -22,12 +22,12 @@
                     <div flex layout="row">
                         <div ng-repeat="signature in signatureChunk track by $index" class="position-relative">
                             <md-icon md-svg-icon="decagram" class="position-absolute"
-                                     ng-if="ctrl.rootEntity.isSigningContractsEnabled() && signature.isContractInitial"
+                                     ng-if="ctrl.isAttachmentSigningContractsEnabled() && signature.isContractInitial"
                                      tooltip="{{lang.initials}}"></md-icon>
                             <img flex
                                  ng-src="{{signature.contentElementUrl}}"
                                  class="cursor-pointer"
-                                 ng-class="{'selected': ctrl.isSignatureSelected(signature)}"
+                                 ng-class="{'selected': ctrl.isSignatureSelected(signature), 'selected-blue': ctrl.isInitialSignatureSelected(signature)}"
                                  ng-click="ctrl.setSelectedSignature(signature, $event)"
                                  width="100" height="100">
                         </div>
