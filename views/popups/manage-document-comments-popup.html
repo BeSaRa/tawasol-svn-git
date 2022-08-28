@@ -3,7 +3,7 @@
            ng-attr-aria-label="{{lang.comments_manage_document_comments}}">
     <popup-toolbar-directive header-text="{{lang.comments_manage_document_comments}} : {{ctrl.documentSubject}}"
                              close-callback="ctrl.closeDocumentComments"></popup-toolbar-directive>
-    <md-dialog-content overlay-scroll-bar-directive flex>
+    <md-dialog-content scroll-directive flex class="min-w-800">
         <div class="md-dialog-content cms-dialog-content">
             <manage-comments-directive
                     correspondence="ctrl.correspondence"
