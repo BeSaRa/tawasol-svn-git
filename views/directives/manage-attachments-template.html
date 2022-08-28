@@ -299,7 +299,7 @@
                                 <md-icon md-svg-icon="file-edit-outline"></md-icon>
                             </md-button>
                             <md-button class="md-icon-button" title="{{lang.annotate_document}}"
-                                       ng-if="ctrl.hasPSPDFViewer && ctrl.isAttachmentDeletable(attachment, true) &&
+                                       ng-if="ctrl.hasPSPDFViewer && ctrl.isAttachmentDeletable(attachment, true) && !attachment.isContract &&
                                         ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS') && !ctrl.isLimitedCentralUnitAccess && attachment.canUpdateIfAuthorizedActionStatus()"
                                        ng-click="ctrl.openAnnotateAttachment(attachment, $event)">
                                 <md-icon md-svg-icon="draw"></md-icon>
