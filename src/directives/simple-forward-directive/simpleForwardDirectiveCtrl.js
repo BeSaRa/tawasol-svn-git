@@ -155,7 +155,7 @@ module.exports = function (app) {
                 self.selectedFavUsers.push(favoriteUser);
                 // self.setBulkDistWorkflowItems();
             } else {
-                var indexOfUser = _.findIndex(self.selectedFavUsers, {id: favoriteUser.id})
+                var indexOfUser = _.findIndex(self.selectedFavUsers, {toUserId: favoriteUser.toUserId})
                 self.selectedFavUsers.splice(indexOfUser, 1)
             }
         }
