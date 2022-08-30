@@ -1318,7 +1318,6 @@ module.exports = function (app) {
          * @return {*|Promise<U>}
          */
         self.reloadPredefinedActions = function (pageNumber, $event) {
-            debugger
             var defer = $q.defer();
             self.predefinedActionsGrid.progress = defer.promise;
 
