@@ -1126,6 +1126,16 @@ module.exports = function (app) {
         }
 
         /**
+         * @description remove selected logo department
+         * @param organization
+         * @returns {*}
+         */
+        self.deleteLogo = function (organization) {
+            var id = organization.hasOwnProperty('id') ? organization.id : organization;
+            return $http.delete(urlService.ouLogo + id);
+        }
+
+        /**
          * @description
          * @param organization
          * @returns {*}

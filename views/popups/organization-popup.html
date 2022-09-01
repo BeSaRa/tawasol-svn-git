@@ -2007,6 +2007,10 @@
                                                            ng-click="ctrl.saveOrganizationLogo()">
                                                     {{lang.save}}
                                                 </md-button>
+                                                <md-button class="md-raised red-text" ng-if="ctrl.organization.logoId && ctrl.isSaveRegOULogDisabled"
+                                                           ng-click="ctrl.removeOrganizationLogo()">
+                                                    {{lang.remove}}
+                                                </md-button>
                                             </div>
                                         </div>
                                         <div class="help-text-div">{{ctrl.imageDimensionsInfo}}</div>

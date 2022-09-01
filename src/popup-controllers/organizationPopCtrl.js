@@ -2480,6 +2480,25 @@ module.exports = function (app) {
         }
 
         /**
+         * @description remove organization logo
+         */
+        self.removeOrganizationLogo = function () {
+            dialog.confirmMessage(langService.get('confirm_delete_organization_logo'))
+                .then(function () {
+                    organizationService
+                        .deleteLogo(self.organization)
+                        .then(function () {
+                            organizationService.loadOrganizationById(self.organization.id)
+                                .then(function (organization) {
+                                    self.organization.logoId = null;
+                                    self.organizationLogo = null;
+                                    toast.success(langService.get('delete_success'));
+                                });
+                        });
+                });
+        }
+
+        /**
          * @description view organization logo after selected
          * @param file
          * @param modelName
