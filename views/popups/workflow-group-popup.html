@@ -73,19 +73,12 @@
                                 <div layout="row" ng-if="ctrl.editMode && !ctrl.isUserPreference">
                                     <div flex>
                                         <md-switch ng-model="ctrl.workflowGroup.global" aria-label="{{lang.global}}"
-                                                   ng-change="ctrl.workflowGroup.isAdminAssigned = false;">
+                                                   ng-change="ctrl.onChangeGlobal()">
                                             <label>{{lang.global}} :
                                                 {{ctrl.workflowGroup.getTranslatedGlobal()}}</label>
                                         </md-switch>
                                     </div>
-                                    <div flex>
-                                        <md-switch ng-model="ctrl.workflowGroup.isAdminAssigned"
-                                                   aria-label="{{lang.admin_assign_private_wf_members}}"
-                                                   ng-disabled="ctrl.workflowGroup.global">
-                                            <label>{{lang.admin_assign_private_wf_members}} :
-                                                {{ctrl.workflowGroup.getTranslatedYesNo('isAdminAssigned')}}</label>
-                                        </md-switch>
-                                    </div>
+                                    <span flex></span>
                                 </div>
                             </div>
                         </md-content>
@@ -168,7 +161,7 @@
                    ng-click="ctrl.addWorkflowGroupFromCtrl()">{{lang.add}}
         </md-button>
         <md-button class="md-raised md-primary" ng-if="ctrl.editMode"
-                   ng-disabled="workflowGroup_form.$invalid|| ctrl.workflowGroup.groupMembers.length===0"
+                   ng-disabled="workflowGroup_form.$invalid || ctrl.checkWorkflowGroupDisabled()"
                    ng-click="ctrl.editWorkflowGroupFromCtrl()">{{lang.save}}
         </md-button>
         <md-button class="md-raised"

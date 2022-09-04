@@ -293,5 +293,13 @@ module.exports = function (app) {
             dialog.cancel();
         };
 
+
+        self.onChangeGlobal = function () {
+            self.workflowGroup.isAdminAssigned = !self.workflowGroup.global;
+        }
+
+        self.checkWorkflowGroupDisabled = function () {
+            return self.workflowGroup.groupMembers.length === 0 || (!self.workflowGroup.global && self.usersWorkflowGroupByAdmin.length === 0);
+        }
     });
 };
