@@ -159,7 +159,8 @@ module.exports = function (app) {
         self.isFilterDisabled = function () {
             var hasValue = !!self.searchCriteria.docSubject ||
                 !!self.searchCriteria.docFullSerial ||
-                !!self.searchCriteria.selectedSiteType;
+                !!self.searchCriteria.selectedSiteType ||
+                self.searchCriteria.status !== null;
                 /*!!(self.searchCriteria.fromFollowupDate && self.searchCriteria.toFollowupDate) ||
                 !!(self.searchCriteria.fromDocDate && self.searchCriteria.toDocDate)*/
             return !hasValue;
