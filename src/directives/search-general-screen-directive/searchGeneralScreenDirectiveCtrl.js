@@ -1392,24 +1392,6 @@ module.exports = function (app) {
                 });
         };
 
-        /**
-         * @description Recall internal-outgoing correspondence
-         * @param correspondence
-         * @param $event
-         * @param defer
-         */
-        self.recallInternalOutgoing = function (correspondence, $event, defer) {
-            correspondenceService
-                .recallInternalOutgoingCorrespondence(correspondence)
-                .then(function () {
-                    self.reloadSearchCorrespondence(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get("selected_recall_success"));
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                            new ResolveDefer(defer);
-                        });
-                });
-        };
 
         /**
          * @description annotate document
@@ -1849,23 +1831,6 @@ module.exports = function (app) {
                         ((model.hasDocumentClass('outgoing') && employeeService.hasPermissionTo('DELETE_OUTGOING')) ||
                             (model.hasDocumentClass('incoming') && employeeService.hasPermissionTo('DELETE_INCOMING')) ||
                             (model.hasDocumentClass('internal') && employeeService.hasPermissionTo('DELETE_INTERNAL')))
-                }
-            },
-            // Recall Internal Outgoing
-            {
-                type: 'action',
-                icon: 'tag',
-                text: 'grid_action_recall_internal_outgoing',
-                shortcut: false,
-                permissionKey: "RECALL_ALL_INTERNAL_OUTGOING",
-                callback: self.recallInternalOutgoing,
-                class: "action-green",
-                checkShow: function (action, model) {
-                    var info = model.getInfo();
-                    if (!info.isOutgoingDocument()) {
-                        return false;
-                    }
-                    return model.isInternalOutgoing() && info.docStatus >= 24;
                 }
             },
             // Annotate Document
