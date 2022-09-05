@@ -218,6 +218,12 @@
                                     icon="file-sync"
                                     callback="workItem.getIndicatorOutgoingInternal"
                                     model="workItem"></magazine-indicator>
+                            <magazine-indicator
+                                    icon="clock"
+                                    key="number_of_days"
+                                    tooltip-text="workItem.generalStepElm.numberOfReceivedDays.label"
+                                    callback="workItem.getIndicatorNumberOfReceivedDays"
+                                    model="workItem"></magazine-indicator>
                         </div>
                         <div ng-if="workItem.getInfo().documentClass !== 'internal'">
                             <main-site-sub-site-directive class="magazine-serial font-12"

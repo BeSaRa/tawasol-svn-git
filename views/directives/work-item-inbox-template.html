@@ -100,6 +100,10 @@
                     md-order-by="{{ctrl.getSortingKey('mainSiteSubSiteString','Information')}}">
                     <span>{{lang.correspondence_sites}}</span>
                 </th>
+                <th ng-if="!ctrl.selectedWorkItems.length" md-column
+                    md-order-by="generalStepElm.numberOfReceivedDays.days">
+                    <span>{{lang.number_of_days}}</span>
+                </th>
                 <th ng-if="!ctrl.selectedWorkItems.length" md-column>
                     <!-- Grid Actions -->
                     <md-button tooltip="{{lang.view_magazine}}"
@@ -236,6 +240,10 @@
                 </td>
                 <td md-cell class="td-data">
                     <main-site-sub-site-directive item="userInbox"></main-site-sub-site-directive>
+                </td>
+                <td md-cell>
+                        <span tooltip="{{userInbox.generalStepElm.numberOfReceivedDays.label}}">
+                            {{userInbox.generalStepElm.numberOfReceivedDays.days}}</span>
                 </td>
                 <td md-cell class="p-r0"
                     ng-if="ctrl.selectedWorkItems.length < 2">

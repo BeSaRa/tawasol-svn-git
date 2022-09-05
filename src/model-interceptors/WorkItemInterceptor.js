@@ -41,6 +41,7 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             delete model.generalStepElm.numberOfDays;
+            delete model.generalStepElm.numberOfReceivedDays;
             // delete model.senderInfo.domainName;
             // delete model.senderInfo.ouId;
             // delete model.senderInfo.ouArName;
@@ -86,6 +87,7 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.generalStepElm.numberOfDays = getNumberOfDays(model.generalStepElm.receivedDate);
+            model.generalStepElm.numberOfReceivedDays = getNumberOfReceivedDays(model.generalStepElm.receivedDate);
             model.generalStepElm.receivedTime = generator.getTimeFromTimeStamp(angular.copy(model.generalStepElm.receivedDate));
             model.receivedDateTime = generator.getDateFromTimeStamp(model.generalStepElm.receivedDate, true);
             model.generalStepElm.receivedDate ? getDateFromUnixTimeStamp(model.generalStepElm, ["receivedDate"]) : "";
@@ -154,6 +156,23 @@ module.exports = function (app) {
         var getNumberOfDays = function (receivedDate) {
             return (receivedDate) ? -(moment(receivedDate).diff(moment(), 'days')) : "";
         };
+
+        var getNumberOfReceivedDays = function (receivedDate) {
+            var today = new Date();
+            if (!receivedDate)
+                return;
+
+            var millisecondsPerHour = 1000 * 60 * 60;
+            var milliseconds = (today - receivedDate); // milliseconds between now & received date
+            var days = Math.floor(milliseconds / (millisecondsPerHour * 24)); // days
+            var hours = Math.floor((milliseconds % (millisecondsPerHour * 24)) / millisecondsPerHour); // hours
+            var minutes = Math.round(((milliseconds % (millisecondsPerHour * 24)) % millisecondsPerHour) / (60 * 1000)); // minutes
+
+            return {
+                days: days,
+                label: hours + ' ' + langService.get('hours') + " - " + minutes + ' ' + langService.get('minutes')
+            };
+        }
 
         /**
          * convert unix timestamp to Original Date Format (YYYY-MM-DD)

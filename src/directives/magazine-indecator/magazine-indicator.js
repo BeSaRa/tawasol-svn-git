@@ -17,6 +17,7 @@ module.exports = function (app) {
                 icon: '@',
                 // tooltip to diplay it when user hover on the indicator [ it is working when no key provide]
                 showTooltip: '=',
+                tooltipText: '=?',
                 // the call back for display the value of the indicator
                 callback: '=',
                 // color of the icon

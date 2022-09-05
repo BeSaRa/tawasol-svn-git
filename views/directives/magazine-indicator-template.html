@@ -3,7 +3,7 @@
         <md-icon class="small-icon {{ctrl.iconClass}}" ng-style="{'color':ctrl.color}"
                  md-svg-icon="{{ctrl.iconCallback ? ctrl.iconCallback(ctrl.model) : ctrl.icon}}"></md-icon>
     </div>
-    <div class="magazine-indicator-data" layout="row">
+    <div class="magazine-indicator-data" layout="row" tooltip="{{ctrl.tooltipText}}">
         <span class="magazine-indicator-key" ng-if="ctrl.key">{{lang[ctrl.key]}}&nbsp;:&nbsp;</span>
         <span class="magazine-indicator-value">{{ctrl.callback(ctrl.model)}}</span>
     </div>

@@ -874,6 +874,9 @@ module.exports = function (app) {
             WorkItem.prototype.getIndicatorTransfer = function (model) {
                 return model.generalStepElm.isReassigned ? langService.get('reassigned') : null;
             };
+            WorkItem.prototype.getIndicatorNumberOfReceivedDays = function (model) {
+                return model.generalStepElm.numberOfReceivedDays.days;
+            };
             WorkItem.prototype.getBroadCastedText = function (model) {
                 return model.generalStepElm.isBrodcasted ? langService.get('broadcasted') : null;
             };
