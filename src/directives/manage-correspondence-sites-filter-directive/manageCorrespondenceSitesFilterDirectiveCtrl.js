@@ -105,8 +105,7 @@ module.exports = function (app) {
                     type: self.selectedSiteType.hasOwnProperty('lookupKey') ? self.selectedSiteType.lookupKey : self.selectedSiteType,
                     parent: mainSite,
                     criteria: null,
-                    excludeOuSites: false,
-                    includeDisabled: true // to include private regOu
+                    excludeOuSites: false
                 }).then(function (result) {
                     if (result.length) {
                         self.subSitesCopy = angular.copy(_.map(result, _mapSubSites));
