@@ -36,7 +36,10 @@ module.exports = function (app) {
         self.mainSubSearchModel = '';
 
         self.subSitesResultIds = [];
-        self.mainSItesResultId = [];
+        self.mainSitesResultId = [];
+
+        // selected subCorrespondence sites from search box
+        self.selectedSubSite = null;
 
         correspondenceSiteTypeService.getCorrespondenceSiteTypes().then((correspondenceSiteTypes) => {
             self.correspondenceSiteTypes = correspondenceSiteTypes;
@@ -78,6 +81,7 @@ module.exports = function (app) {
                         self.subSites = [];
                         self.subSitesCopy = [];
                         self.subSiteSearchText = '';
+                        self.selectedSubSite = null;
                     } else {
                         self.mainSites = angular.copy(self.mainSitesCopy);
                     }
@@ -101,19 +105,29 @@ module.exports = function (app) {
         self.loadSubSitesRecords = function ($event) {
             if (self.selectedMainSite) {
                 var mainSite = self.selectedMainSite && self.selectedMainSite.hasOwnProperty('id') ? self.selectedMainSite.id : self.selectedMainSite;
-                correspondenceViewService.correspondenceSiteSearch('sub', {
+                return correspondenceViewService.correspondenceSiteSearch('sub', {
                     type: self.selectedSiteType.hasOwnProperty('lookupKey') ? self.selectedSiteType.lookupKey : self.selectedSiteType,
                     parent: mainSite,
-                    criteria: null,
+                    criteria: self.subSiteSearchText,
                     excludeOuSites: false
                 }).then(function (result) {
                     if (result.length) {
-                        self.subSitesCopy = angular.copy(_.map(result, _mapSubSites));
                         _mapSubSitesResultIds();
-                        self.subSites = _.filter(_.map(result, _mapSubSites), _filterSubSites);
+                        var availableSubSitesIds = _.map(self.subSitesCopy, 'subSiteId');
+                        result = _.filter(result, function (corrSite) {
+                            return availableSubSitesIds.indexOf(corrSite.id) === -1;
+                        });
+                        result = _.filter(_.map(result, _mapSubSites), _filterSubSites);
+
+                        self.subSites = self.subSites.concat(result);
+                        self.subSitesCopy = angular.copy(self.subSites);
+
+                        self.subSiteSearchCopy = angular.copy(self.subSites);
                     } else {
                         self.subSites = angular.copy(self.subSitesCopy);
                     }
+
+                    return self.subSites;
                 }).catch(function (error) {
                     return self.subSites = angular.copy(self.subSitesCopy);
                 });
@@ -122,6 +136,7 @@ module.exports = function (app) {
                 self.subSitesCopy = [];
                 self.subSiteSearchText = '';
                 self.subSitesResultIds = [];
+                self.selectedSubSite = null;
             }
         };
 
@@ -194,12 +209,14 @@ module.exports = function (app) {
                         self.subSiteSearchText = '';
                         self.subSitesSelected = [];
                         self.mainSubSitesSelected = [];
+                        self.selectedSubSite = null;
                     });
             } else {
                 self.mainSubSites.push(mainSite);
                 self.subSiteSearchText = '';
                 self.subSitesSelected = [];
                 self.mainSubSitesSelected = [];
+                self.selectedSubSite = null;
             }
         }
 
@@ -217,8 +234,10 @@ module.exports = function (app) {
             self.mainSubSites = self.mainSubSites.concat(Array.isArray(sites) ? sites : [sites]);
             _mapSubSitesResultIds();
             self.subSites = _.filter(self.subSitesCopy, _filterSubSites);
+            self.subSiteSearchCopy = angular.copy(self.subSites);
             self.subSiteSearchText = '';
             self.subSitesSelected = [];
+            self.selectedSubSite = null;
         }
 
 
@@ -234,6 +253,7 @@ module.exports = function (app) {
                     _removeSelectedSites(site);
                     self.subSiteSearchText = '';
                     self.subSitesSelected = [];
+                    self.selectedSubSite = null;
                 });
         }
 
@@ -247,6 +267,7 @@ module.exports = function (app) {
             self.mainSubSites.splice(index, 1)
             _mapSubSitesResultIds();
             self.subSites = _.filter(self.subSitesCopy, _filterSubSites);
+            self.subSiteSearchCopy = angular.copy(self.subSites);
         }
 
         /**
@@ -316,7 +337,7 @@ module.exports = function (app) {
         }
 
         function _mapSubSitesResultIds() {
-            self.subSitesResultIds = _.map(self.mainSubSites, 'subSiteId').filter(item => item);
+            self.subSitesResultIds = _.map(self.mainSubSites, 'subSiteId');
         }
 
         /**
@@ -354,6 +375,29 @@ module.exports = function (app) {
             }
         };
 
+        self.onSubSiteSelectedChange = function (subSite) {
+            if (subSite) {
+                self.subSites = _.filter(self.subSitesCopy, function (resultCopy) {
+                    return resultCopy.subSiteId === subSite.subSiteId;
+                });
+            } else
+                self.subSites = _.filter(self.subSitesCopy, _filterSubSites);
+        };
+
+        /**
+         * @description drop down values for sub site result search
+         * @param searchText
+         * @returns {Array}
+         */
+        self.getSubSearchOptions = function (searchText) {
+            if (searchText) {
+                return _.filter(self.subSiteSearchCopy, function (searchSite) {
+                    return searchSite.getTranslatedName().toLowerCase().indexOf(searchText.toLowerCase()) !== -1;
+                });
+            }
+            return self.subSiteSearchCopy;
+        };
+
         $scope.$watch(function () {
             return self.emptyMainSubSites;
         }, function (value) {
@@ -367,6 +411,7 @@ module.exports = function (app) {
                 self.mainSubSearchModel = '';
                 self.subSitesSelected = [];
                 self.subSites = [];
+                self.selectedSubSite = null;
             }
 
         });

@@ -83,10 +83,38 @@
                     <div layout="row" ng-if="!ctrl.subSitesSelected.length" flex
                          layout-align="start center">
                         <div flex>{{lang.sub_correspondence_sites_to}}</div>
-                        <md-input-container class="mb0" flex>
-                            <input id="subSiteSearchText" ng-model="ctrl.grid.subSearchResult.searchText"
-                                   ng-change="ctrl.grid.subSearchResult.searchCallback()">
-                        </md-input-container>
+                        <div class="cms-autocomplete-wrapper" flex>
+                                            <span class="button-container">
+                                                <md-button ng-click="ctrl.loadSubSitesRecords($event)"
+                                                           class="md-icon-button search-button"
+                                                           tooltip="{{lang.load_more_records}}"
+                                                           ng-if="ctrl.subSiteSearchText">
+                                                    <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                                </md-button>
+                                            </span>
+                            <div class="help-text-div text-center"
+                                 ng-if="ctrl.subSiteSearchText">
+                                {{lang.press_enter_to_load_more_records}}
+                            </div>
+                            <md-autocomplete
+                                    class="ac-search-button"
+                                    md-no-cache="true"
+                                    md-select-on-match="true"
+                                    md-selected-item="ctrl.selectedSubSite"
+                                    md-selected-item-change="ctrl.onSubSiteSelectedChange(item)"
+                                    md-search-text="ctrl.subSiteSearchText"
+                                    md-items="item in ctrl.getSubSearchOptions(ctrl.subSiteSearchText)"
+                                    md-item-text="item.getTranslatedName()"
+                                    md-min-length="0"
+                                    placeholder="{{lang.sub_site}}"
+                                    md-autofocus
+                                    ng-keydown="ctrl.handleSearchKeyDown($event, 'subSite')">
+                                <md-item-template>
+                                                    <span md-highlight-text="ctrl.subSiteSearchText"
+                                                          md-highlight-flags="i">{{item.getTranslatedName()}}</span>
+                                </md-item-template>
+                            </md-autocomplete>
+                        </div>
                         <!-- Add all -->
                         <div ng-if="!ctrl.subSitesSelected.length" layout="row">
                             <md-button class="md-raised"
@@ -230,8 +258,7 @@
                             <td md-cell>
                                 <!-- Sub Site -->
                                 <div flex layout="column">
-                                                <span md-highlight-text="ctrl.subSiteSearchText"
-                                                      md-highlight-flags="i">{{site.getTranslatedName()}}</span>
+                                                <span>{{site.getTranslatedName()}}</span>
                                 </div>
                             </td>
                             <td md-cell>
