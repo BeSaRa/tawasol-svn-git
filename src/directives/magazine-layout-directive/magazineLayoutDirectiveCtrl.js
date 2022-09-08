@@ -462,5 +462,17 @@ module.exports = function (app) {
             self.sortingCallback(self.sortOrder);
         }
 
+        self.canShowBulkStar = function (starUnStar) {
+            var starOption = {
+                'starBulk': false,
+                'unStarBulk': true
+            };
+            if (!self.selectedWorkItems.length)
+                return false;
+
+            return _.some(self.selectedWorkItems, (workItem) => {
+                return workItem.generalStepElm.starred === starOption[starUnStar];
+            })
+        }
     });
 };

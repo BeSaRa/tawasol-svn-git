@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                            employeeService,
                                                            LangWatcher,
                                                            langService,
+                                                           _,
                                                            generator) {
         'ngInject';
         var self = this;
@@ -18,6 +19,18 @@ module.exports = function (app) {
             'outgoingInternal'
         ];//, 'broadcast'
 
+        self.canShowBulkStar = function (starUnStar) {
+            var starOption = {
+                'starBulk': false,
+                'unStarBulk': true
+            };
+            if (!self.selectedWorkItems.length)
+                return false;
+
+            return _.some(self.selectedWorkItems, (workItem) => {
+                return workItem.generalStepElm.starred === starOption[starUnStar];
+            })
+        }
 
         /**
          * @description Get the sorting key for information or lookup model

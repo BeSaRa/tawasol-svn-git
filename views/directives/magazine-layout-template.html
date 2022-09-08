@@ -71,6 +71,7 @@
                         <md-button class="md-icon-button action-green"
                                    aria-label="{{lang.star}}"
                                    tooltip="{{lang.star}}"
+                                   ng-if="ctrl.canShowBulkStar('starBulk')"
                                    ng-click="ctrl.changeUserInboxStarBulk('starBulk',$event)">
                             <md-icon class="star-yellow"
                                      md-svg-icon="star"></md-icon>
@@ -78,6 +79,7 @@
                         <md-button class="md-icon-button action-green"
                                    aria-label="{{lang.un_star}}"
                                    tooltip="{{lang.un_star}}"
+                                   ng-if="ctrl.canShowBulkStar('unStarBulk')"
                                    ng-click="ctrl.changeUserInboxStarBulk('unStarBulk' ,$event)">
                             <md-icon class="star-yellow"
                                      md-svg-icon="star-outline"></md-icon>
