@@ -126,7 +126,6 @@ module.exports = function (app) {
                     } else {
                         self.subSites = angular.copy(self.subSitesCopy);
                     }
-
                     return self.subSites;
                 }).catch(function (error) {
                     return self.subSites = angular.copy(self.subSitesCopy);
@@ -137,6 +136,7 @@ module.exports = function (app) {
                 self.subSiteSearchText = '';
                 self.subSitesResultIds = [];
                 self.selectedSubSite = null;
+                return self.subSites;
             }
         };
 
@@ -365,7 +365,9 @@ module.exports = function (app) {
                     if (fieldType === 'mainSite') {
                         self.loadMainSitesRecords(false, $event);
                     } else if (fieldType === 'subSite') {
-                        self.loadSubSitesRecords($event);
+                        self.loadSubSitesRecords($event).then(function () {
+                            angular.element($event.target).focus();
+                        });
                     }
                 }
                 // prevent keydown except arrow up and arrow down keys
