@@ -47,13 +47,53 @@
                             </div>
                         </md-card-content>
                     </md-card>
+                    <div ng-if="ctrl.resend">
+                        <fieldset layout="column">
+                            <legend>{{lang.comments}}</legend>
+                            <md-input-container flex>
+                                <label for="comment">{{lang.comment}}</label>
+                                <md-select ng-change="ctrl.setComment()" id="comment"
+                                           ng-model="ctrl.selectedComment"
+                                           md-on-close="ctrl.clearSearchText('comment')"
+                                           data-md-container-class="select-header-container sticky-search-bar">
+                                    <md-select-header class="select-header">
+                                        <input ng-model="ctrl.commentSearchText"
+                                               ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                               placeholder="{{lang.search}}"
+                                               class="select-header-input">
+                                    </md-select-header>
+                                    <md-option
+                                            ng-repeat="comment in ctrl.comments | translatedNameFilter: ctrl.commentSearchText"
+                                            ng-value="comment">
+                                    <span
+                                            md-highlight-text="ctrl.commentSearchText"
+                                            md-highlight-flags="i">{{comment.getCommentTitle()}}</span>
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+
+                            <md-input-container flex>
+                                <label for="comments">{{lang.comments}}</label>
+                                <textarea id="comments" name="comments"
+                                          maxlength="2000" minlength="3"
+                                          md-maxlength="2000" rows="4"
+                                          ng-model="ctrl.comment">
+                                        </textarea>
+                                <div ng-messages="bulkExportOptionsForm.comments.$error">
+                                    <div ng-message="maxlength">
+                                        {{lang.max_length.change({length: 2000})}}
+                                    </div>
+                                </div>
+                            </md-input-container>
+                        </fieldset>
+                    </div>
                 </div>
             </form>
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
         <md-button class="md-raised md-primary" ng-click="ctrl.exportCorrespondenceWorkItem()"
-                    ng-disabled="ctrl.disableExport">
+                   ng-disabled="ctrl.disableExport || bulkExportOptionsForm.$invalid">
             {{ctrl.resend ? lang.resend : lang.export}}
         </md-button>
         <md-button ng-if="!ctrl.resend" class="md-raised md-primary"

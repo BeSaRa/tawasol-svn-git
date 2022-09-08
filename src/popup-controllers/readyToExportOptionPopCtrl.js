@@ -18,6 +18,7 @@ module.exports = function (app) {
                                                            PartialExportCollection,
                                                            g2gData,
                                                            WorkItem,
+                                                           comments,
                                                            prepareExport) {
         'ngInject';
         var self = this;
@@ -32,8 +33,11 @@ module.exports = function (app) {
         self.settings = rootEntity.getGlobalSettings();
         // if selective export from global settings then false, otherwise true
         self.isGroupExport = self.settings.defaultExportTypeGrouping;
-        self.mailRoomEnabled = rootEntity.isMailRoomIntegrationEnabled()
+        self.mailRoomEnabled = rootEntity.isMailRoomIntegrationEnabled() && !self.resend;
 
+        self.selectedComment = null;
+        self.commentSearchText = '';
+        self.comments = comments;
 
         /*self.correspondenceSites = [].concat(sites.first, _.map(sites.second, function (item) {
             item.ccVerion = true;
@@ -235,7 +239,7 @@ module.exports = function (app) {
                 }
 
                 return correspondenceService
-                    .resendCorrespondenceWorkItem(self.readyToExport, exportData, g2gData)
+                    .resendCorrespondenceWorkItem(self.readyToExport, exportData, g2gData, self.comment)
                     .then(function (result) {
                         dialog.hide(result);
                     })
@@ -416,6 +420,31 @@ module.exports = function (app) {
         self.getTranslatedError = function (error) {
             var errorObj = error.data.eo;
             return langService.current === 'ar' ? errorObj.arName : errorObj.enName;
+        };
+
+        self.setComment = function () {
+            self.comment = self.selectedComment.getComment();
+        };
+
+
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of workflow action dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            if ($event) {
+                var code = $event.which || $event.keyCode;
+                if (code !== 38 && code !== 40)
+                    $event.stopPropagation();
+            }
         };
 
         // set linkedDocList from prepareExport to attachmentLinkedDocs in model to set them as selected by default

@@ -3375,6 +3375,10 @@ module.exports = function (app) {
                         prepareExport: function () {
                             'ngInject';
                             return self.prepareExportedDataFromBackend(workItem)
+                        },
+                        comments: function (userCommentService) {
+                            'ngInject';
+                            return resend ? userCommentService.loadUserCommentsForDistribution() : [];
                         }
                     }
                 });
@@ -3406,6 +3410,10 @@ module.exports = function (app) {
                         prepareExport: function () {
                             'ngInject';
                             return self.prepareExportedNewDataFromBackend(g2gItem.g2gActionID)
+                        },
+                        comments: function (userCommentService) {
+                            'ngInject';
+                            return userCommentService.loadUserCommentsForDistribution();
                         }
                     }
                 });
@@ -3470,6 +3478,12 @@ module.exports = function (app) {
                     locals: {
                         workItems: workItems,
                         resend: resend
+                    },
+                    resolve: {
+                        comments: function (userCommentService) {
+                            'ngInject';
+                            return resend ? userCommentService.loadUserCommentsForDistribution() : [];
+                        }
                     }
                 });
         };
@@ -3539,14 +3553,16 @@ module.exports = function (app) {
          * @param workItem
          * @param resendOptions
          * @param g2gData
+         * @param comment
          */
-        self.resendCorrespondenceWorkItem = function (workItem, resendOptions, g2gData) {
+        self.resendCorrespondenceWorkItem = function (workItem, resendOptions, g2gData, comment) {
             var regular = !resendOptions.isSelective();
             resendOptions = !regular ? generator.interceptSendInstance('PartialExportSelective', resendOptions) : generator.interceptSendInstance('ReadyToExportOption', resendOptions);
             var resendModel = {
                 type: regular,
                 regularExport: regular ? resendOptions : {},
-                selectiveExport: regular ? {} : resendOptions.prepareResendModel()
+                selectiveExport: regular ? {} : resendOptions.prepareResendModel(),
+                comment: comment
             };
             if (g2gData)
                 return self.resendG2GCorrespondence(resendModel, g2gData);
@@ -3575,8 +3591,9 @@ module.exports = function (app) {
         /**
          * @description resend the bulk workItems again to correspondences sites
          * @param workItems
+         * @param comment
          */
-        self.resendBulkCorrespondenceWorkItems = function (workItems) {
+        self.resendBulkCorrespondenceWorkItems = function (workItems, comment) {
             var regular, resendOptions, resendModels = [];
             for (var i = 0; i < workItems.length; i++) {
                 resendOptions = workItems[i].isGroupExport ? workItems[i].model : workItems[i].partialExportList;
@@ -3589,7 +3606,8 @@ module.exports = function (app) {
                     resendOptions: {
                         type: regular,
                         regularExport: regular ? resendOptions : {},
-                        selectiveExport: regular ? {} : resendOptions.prepareResendModel()
+                        selectiveExport: regular ? {} : resendOptions.prepareResendModel(),
+                        comment: comment
                     }
                 });
             }

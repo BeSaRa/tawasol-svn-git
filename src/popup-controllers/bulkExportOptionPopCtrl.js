@@ -15,7 +15,8 @@ module.exports = function (app) {
                                                         dialog,
                                                         correspondenceService,
                                                         PartialExportCollection,
-                                                        WorkItem) {
+                                                        WorkItem,
+                                                        comments) {
         'ngInject';
         var self = this;
 
@@ -47,6 +48,10 @@ module.exports = function (app) {
         self.labels = _.map(self.partialExportList.getKeys(), function (label) {
             return label.toLowerCase();
         });
+
+        self.selectedComment = null;
+        self.commentSearchText = '';
+        self.comments = comments;
 
         // if selective export from global settings then false, otherwise true
         self.isGroupExport = self.settings.defaultExportTypeGrouping;
@@ -139,7 +144,7 @@ module.exports = function (app) {
             self.disableExport = true;
             self.validateAllWorkItemsExportOption();
             return correspondenceService
-                .resendBulkCorrespondenceWorkItems(self.workItems)
+                .resendBulkCorrespondenceWorkItems(self.workItems, self.comment)
                 .then(function (result) {
                     dialog.hide(result);
                 })
@@ -194,6 +199,31 @@ module.exports = function (app) {
         self.getTranslatedError = function (error) {
             var errorObj = error.data.eo;
             return langService.current === 'ar' ? errorObj.arName : errorObj.enName;
+        };
+
+
+        self.setComment = function () {
+            self.comment = self.selectedComment.getComment();
+        };
+
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of workflow action dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            if ($event) {
+                var code = $event.which || $event.keyCode;
+                if (code !== 38 && code !== 40)
+                    $event.stopPropagation();
+            }
         };
     });
 };
