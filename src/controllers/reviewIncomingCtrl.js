@@ -794,7 +794,7 @@ module.exports = function (app) {
                     // add to employee follow up
                     {
                         type: 'action',
-                        icon: 'book-search-outline',
+                        icon: 'book-search',
                         text: 'grid_action_to_employee_followup',
                         shortcut: true,
                         callback: self.addToEmployeeFollowUp,
@@ -807,7 +807,7 @@ module.exports = function (app) {
                     // add to broadcast follow up
                     {
                         type: 'action',
-                        icon: 'book-search-outline',
+                        icon: 'book-multiple',
                         text: 'grid_action_to_broadcast_followup',
                         shortcut: true,
                         callback: self.addToBroadcastFollowUp,
