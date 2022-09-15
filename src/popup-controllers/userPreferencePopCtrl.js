@@ -51,6 +51,7 @@ module.exports = function (app) {
                                                       AppUserCertificate,
                                                       errorCode,
                                                       ouApplicationUser,
+                                                      isManagerOfCurrentOrganization,
                                                       proxyOrganizations) {
         'ngInject';
         var self = this;
@@ -114,7 +115,7 @@ module.exports = function (app) {
         self.organizationsForAppUser = employeeService.getEmployee().ouList;
 
         // Current ou application user
-        self.isManagerOfCurrentOu = self.globalSetting.outofofficeFromAllUsers && organizationService.isManagerOfCurrentOu(self.employee);
+        self.isManagerOfCurrentOu = isManagerOfCurrentOrganization;
         self.ouApplicationUser = ouApplicationUser;// generator.interceptReceivedInstance('OUApplicationUser', angular.copy(employeeService.getCurrentOUApplicationUser()));
 
         // security levels for current OUApplicationUser

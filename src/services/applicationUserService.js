@@ -313,7 +313,7 @@ module.exports = function (app) {
                 var ouApplicationUser = employeeService.getCurrentOUApplicationUser();
                 var employee = employeeService.getEmployee();
                 self.globalSetting = rootEntity.returnRootEntity().settings;
-                var isManagerOfCurrentOu = self.globalSetting.outofofficeFromAllUsers && organizationService.isManagerOfCurrentOu(employee);
+                var isManagerOfCurrentOu = self.globalSetting.outofofficeFromAllUsers && organizationService.isManagerOfCurrentOrganization(employee);
                 var resolveOrganizations = $q.defer();
                 return dialog
                     .showDialog({
@@ -322,7 +322,8 @@ module.exports = function (app) {
                         controller: 'userPreferencePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
-                            selectedTab: selectedTab
+                            selectedTab: selectedTab,
+                            isManagerOfCurrentOrganization: isManagerOfCurrentOu
                         },
                         resolve: {
                             applicationUser: function (applicationUserService) {

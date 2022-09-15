@@ -1059,15 +1059,14 @@ module.exports = function (app) {
             });
         }
 
-        self.isManagerOfCurrentOu = function (currentUser) {
-            var currentUserOrg = currentUser.userOrganization;
-
-            if (!currentUserOrg.managerId) {
-                return false;
-            }
-
-            var managerId = currentUserOrg.managerId.hasOwnProperty('id') ? currentUserOrg.managerId.id : currentUserOrg.managerId;
-            return managerId === generator.getNormalizedValue(currentUser, 'id');
+        self.isManagerOfCurrentOrganization = function (currentUser) {
+            return currentUser.getRegistryOrganization().then((regOU) => {
+                if (!regOU.managerId) {
+                    return false;
+                }
+                var managerId = regOU.managerId.hasOwnProperty('id') ? regOU.managerId.id : regOU.managerId;
+                return managerId === generator.getNormalizedValue(currentUser, 'id');
+            });
         }
 
         self.mapRegOUSections = function (list) {
