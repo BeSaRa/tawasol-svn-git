@@ -78,17 +78,17 @@
                 <md-switch aria-label="{{lang.send_sms}}"
                            tooltip="{{lang.send_sms}}"
                            ng-change="ctrl.resetSMSTemplate(ctrl.entity, $event)"
-                           ng-model="ctrl.entity.sendSMS">
+                           ng-model="ctrl.entity.xsendSMS">
                     <span>{{lang.send_sms}} : </span>
-                    {{ctrl.entity.sendSMS ? lang.yes : lang.no }}
+                    {{ctrl.entity.xsendSMS ? lang.yes : lang.no }}
                 </md-switch>
             </div>
             <md-input-container flex>
                 <label for="smsTemplateId">{{lang.sms_template}}</label>
                 <md-select id="smsTemplateId" name="smsTemplateId"
-                           ng-required="ctrl.entity.sendSMS"
-                           ng-disabled="!ctrl.entity.sendSMS"
-                           ng-model="ctrl.entity.smsTemplateId">
+                           ng-required="ctrl.entity.xsendSMS"
+                           ng-disabled="!ctrl.entity.xsendSMS"
+                           ng-model="ctrl.entity.xsmsTemplateId">
                     <md-option ng-value="null">{{lang.none}}</md-option>
                     <md-option ng-repeat="smsTemplate in ctrl.smsTemplates track by $index"
                                ng-value="smsTemplate.id">

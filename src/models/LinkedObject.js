@@ -20,8 +20,8 @@ module.exports = function (app) {
 
             self.typeId = null;
             // will be used by backend but will not be returned
-            self.sendSMS = false;
-            self.smsTemplateId = null;
+            self.xsendSMS = false;
+            self.xsmsTemplateId = null;
             self.xJobRank = null;
             self.xJobTitle = null;
             self.xOU = null;
@@ -92,14 +92,14 @@ module.exports = function (app) {
                             required: false,
                             fieldIdentifier: 'address'
                         },
-                        sendSMS: {
+                        xsendSMS: {
                             required: false,
-                            fieldIdentifier: 'sendSMS',
+                            fieldIdentifier: 'xsendSMS',
                             manualDisplay: true
                         },
-                        smsTemplateId: {
+                        xsmsTemplateId: {
                             required: false,
-                            fieldIdentifier: 'smsTemplateId',
+                            fieldIdentifier: 'xsmsTemplateId',
                             manualDisplay: true
                         }
                     },

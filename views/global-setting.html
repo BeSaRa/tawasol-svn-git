@@ -777,7 +777,14 @@
                                     ctrl.globalSetting.getTranslatedYesNo('useCentralArchiveInternally')}}
                                 </md-switch>
                             </div>
-
+                            <div layout="row" class="p20">
+                                <md-switch flex ng-model="ctrl.globalSetting.legacySMSCorNotification "
+                                           aria-label="{{lang.receive_sms_from_linked_users}}">
+                                    <span>{{lang.receive_sms_from_linked_users}} : </span>{{
+                                    ctrl.globalSetting.getTranslatedYesNo('legacySMSCorNotification')}}
+                                </md-switch>
+                                <span flex></span>
+                            </div>
                             <div layout="row" class="p20">
                                 <!-- Escalation process -->
                                 <md-input-container flex>

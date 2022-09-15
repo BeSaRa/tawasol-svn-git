@@ -17,10 +17,10 @@ module.exports = function (app) {
             if (model.hasOwnProperty('employeeNum') && model.employeeNum)
                 model.employeeNum = '' + model.employeeNum;
 
-            if (model.sendSMS && model.smsTemplateId) {
-                model.smsTemplateId = model.smsTemplateId.hasOwnProperty('id') ? model.smsTemplateId.id : model.smsTemplateId;
+            if (model.xsendSMS && model.xsmsTemplateId) {
+                model.xsmsTemplateId = model.xsmsTemplateId.hasOwnProperty('id') ? model.xsmsTemplateId.id : model.xsmsTemplateId;
             } else {
-                model.smsTemplateId = null;
+                model.xsmsTemplateId = null;
             }
             return model;
         });
@@ -32,8 +32,8 @@ module.exports = function (app) {
             } else {
                 model.typeId = entityTypeService.getLinkedType(model.typeId);
             }
-            model.sendSMS = false;
-            model.smsTemplateId = null;
+            model.xsendSMS = false;
+            model.xsmsTemplateId = null;
             delete model.documentClass;
             return model;
         });

@@ -204,7 +204,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.resetSMSTemplate = function (entity, $event) {
-            entity.smsTemplateId = null;
+            entity.xsmsTemplateId = null;
         };
 
         /**
@@ -263,7 +263,7 @@ module.exports = function (app) {
                     toast.error(langService.get('record_already_exists').change({entity: langService.get('entities_qid')}));
                     return;
                 }
-                if (self.entity.sendSMS && !self.entity.smsTemplateId) {
+                if (self.entity.xsendSMS && !self.entity.xsmsTemplateId) {
                     toast.error(langService.get('please_select_sms_template'));
                     return;
                 }
