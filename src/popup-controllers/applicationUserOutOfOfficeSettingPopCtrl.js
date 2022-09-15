@@ -32,7 +32,7 @@ module.exports = function (app) {
         self.applicationUsers = applicationUserService.applicationUsers;
         self.ouApplicationUser = angular.copy(ouApplicationUser);
         self.model = angular.copy(ouApplicationUser);
-        //self.currentEmployee = employeeService.getEmployee();
+        self.employee = employeeService.getEmployee();
         self.applicationUser = self.model.applicationUser;
         self.applicationUserCopy = angular.copy(self.applicationUser);
         self.authorityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
@@ -439,6 +439,14 @@ module.exports = function (app) {
 
         self.resetProxyMessage = function ($event) {
             self.ouApplicationUser.proxyMessage = null;
+        }
+
+        self.showUseProxyWFSecurity = function () {
+            if (!self.selectedProxyUser) {
+                return false;
+            }
+
+            return self.selectedProxyUser.organization.id !== self.employee.getRegistryOUID();
         }
 
         self.$onInit = function () {

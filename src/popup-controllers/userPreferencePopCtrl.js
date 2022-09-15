@@ -622,6 +622,7 @@ module.exports = function (app) {
                 self.ouApplicationUser.proxyAuthorityLevels = null;
                 self.ouApplicationUser.viewProxyMessage = false;
                 self.ouApplicationUser.proxyMessage = null;
+                self.ouApplicationUser.useProxyWFSecurity = false;
                 _setProxyStartEndDatesString();
 
                 self.calculatedMaxProxyStartDate = null;
@@ -1685,6 +1686,7 @@ module.exports = function (app) {
             self.ouApplicationUser.proxyEndDate = null;
             self.ouApplicationUser.proxyStartDateString = '';
             self.ouApplicationUser.proxyEndDateString = '';
+            self.ouApplicationUser.useProxyWFSecurity = false;
             self.filteredSecurityLevels = [];
             self.proxyUsers = [];
 
@@ -1860,6 +1862,10 @@ module.exports = function (app) {
             }
             return true;
         };
+
+        self.showUseProxyWFSecurity = function () {
+            return self.isManagerOfCurrentOu && self.selectedProxyUser && self.selectedOrganization !== self.employee.getRegistryOUID();
+        }
 
         function _setDefaultSelectedTab() {
             var activeTab = 'general';

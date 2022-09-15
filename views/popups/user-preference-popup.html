@@ -962,6 +962,15 @@
                                                 </div>
                                             </md-input-container>
                                         </div>
+                                        <div layout="row" ng-if="ctrl.showUseProxyWFSecurity()">
+                                            <!-- allow sending delegated user from another department -->
+                                            <md-switch flex ng-model="ctrl.ouApplicationUser.useProxyWFSecurity"
+                                                       aria-label="{{lang.allow_send_to_department}}">
+                                                {{lang.allow_send_to_department}} :
+                                                <label>{{ctrl.ouApplicationUser.getTranslatedYesNo(ctrl.ouApplicationUser.useProxyWFSecurity)}}</label>
+                                            </md-switch>
+                                            <span flex></span>
+                                        </div>
                                     </div>
                                 </div>
                             </ng-form>

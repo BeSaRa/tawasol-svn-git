@@ -35,6 +35,7 @@ module.exports = function (app) {
             self.proxyStartDateString = '';
             self.proxyEndDateString = '';
             self.userLevelId = null;
+            self.useProxyWFSecurity = false;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -256,6 +257,10 @@ module.exports = function (app) {
 
             OUApplicationUser.prototype.getUserIdAndOuIdCombination = function () {
                 return this.getApplicationUserId() + '-' + this.getOuId();
+            };
+
+            OUApplicationUser.prototype.getTranslatedYesNo = function (fieldName) {
+                return self[fieldName] ? langService.get('yes') : langService.get('no');
             };
 
             // don't remove CMSModelInterceptor from last line
