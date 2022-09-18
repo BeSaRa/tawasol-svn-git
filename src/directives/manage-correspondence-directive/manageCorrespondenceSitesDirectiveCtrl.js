@@ -413,7 +413,7 @@ module.exports = function (app) {
                         self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
                         self.subSearchResult_DL = _.filter(self.subSearchResult_DL_Copy, _filterSubSites);
                         self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
-                        _setSitesTypeIfInternalOutgoingActive();
+                        _setSitesTypeIfInternalOutgoingActive(true);
                     });
                 })
         };
@@ -439,7 +439,7 @@ module.exports = function (app) {
                         self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
                         self.subSearchResult_DL = _.filter(self.subSearchResult_DL_Copy, _filterSubSites);
                         self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
-                        _setSitesTypeIfInternalOutgoingActive();
+                        _setSitesTypeIfInternalOutgoingActive(true);
                     });
                 });
         };
@@ -646,7 +646,7 @@ module.exports = function (app) {
          */
         self.changeSiteTo = function (type, site, index) {
             self['sitesInfo' + type] = self['sitesInfo' + type].concat(self['sitesInfo' + self.reversedMap[type]].splice(_findSiteIndex(self['sitesInfo' + self.reversedMap[type]], site), 1));
-            _setSitesTypeIfInternalOutgoingActive();
+            _setSitesTypeIfInternalOutgoingActive(true);
         };
 
         function _findSiteIndex(list, site) {
@@ -927,7 +927,7 @@ module.exports = function (app) {
                         }
                         self.subSearchResult_DL = _.filter(self.subSearchResult_DL_Copy, _filterSubSites);
                         self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
-                        _setSitesTypeIfInternalOutgoingActive();
+                        _setSitesTypeIfInternalOutgoingActive(true);
                     });
                 });
         };
@@ -1079,7 +1079,7 @@ module.exports = function (app) {
          * @description disable sites weather internal or external sites based on page internal outgoing or outgoing page
          * @private
          */
-        function _setSitesTypeIfInternalOutgoingActive() {
+        function _setSitesTypeIfInternalOutgoingActive(ignoreReload) {
             if (!self.correspondence) {
                 return;
             }
@@ -1109,10 +1109,10 @@ module.exports = function (app) {
                     }
                     return siteType;
                 });
-                if (info.documentClass === 'outgoing' && self.correspondence.isInternal) {
-                    if (self.isSimpleCorrespondenceSiteSearchType && !self.disableCorrespondence) {
+                if (info.documentClass === 'outgoing' && !self.disableCorrespondence && !ignoreReload) {
+                    if (self.isSimpleCorrespondenceSiteSearchType) {
                         self.onSiteTypeSimpleChange(null);
-                    } else if (!self.isSimpleCorrespondenceSiteSearchType && !self.disableCorrespondence) {
+                    } else {
                         self.onSiteTypeChangeAdvanced(null);
                     }
                 }
