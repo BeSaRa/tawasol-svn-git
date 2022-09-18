@@ -30,10 +30,9 @@ module.exports = function (app) {
                 .showDialog({
                     templateUrl: self.currentHelpUrl + '_' + langService.current + '_help.html',
                     targetEvent: $event || false,
-                    controller: function ($compile, $scope, $element, $timeout, configurationService) {
+                    controller: function ($compile, $scope, $element, $timeout, rootEntity) {
                         'ngInject';
-
-                        if (!configurationService.G2G_QATAR_SOURCE) {
+                        if (!rootEntity.isQatarVersion()) {
                             var scope = $scope.$new(true);
                             scope.ctrl = {
                                 url: self.defaultVideoHelpUrl + self.currentHelpID + '.mp4'

@@ -45,6 +45,7 @@ module.exports = function (app) {
 
             rootEntity.setRootEntityGlobalSetting(result.data.rs.globalSetting, true);
             rootEntity.returnRootEntity().updateRootEntity(result.data.rs.tawasolEntity);
+            rootEntity.setCountryVersion(result.data.rs.versionCountry);
             if (!result.data.rs.isAdminUser) {
                 self.setLastLoginOrganizationId(result.data.rs.ou);
             }

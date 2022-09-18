@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                  configurationService,
                                                  Outgoing,
                                                  Indicator,
+                                                 rootEntity,
                                                  langService) {
         'ngInject';
         return function G2GMessagingHistory(model) {
@@ -192,7 +193,7 @@ module.exports = function (app) {
             G2GMessagingHistory.prototype.manageG2GDocumentProperties = function ($event) {
                 var info = this.getInfo();
 
-                if (configurationService.G2G_QATAR_SOURCE) {
+                if (rootEntity.isQatarVersion()) {
                     return managerService.manageDocumentProperties(this.refDocId, 'outgoing', info.title, $event)
                 } else {
                     return managerService.manageG2GKuwaitDocumentProperties(this, $event);
@@ -213,7 +214,7 @@ module.exports = function (app) {
                     vsId: this.refDocId,
                     securityLevel: this.securityLevel
                 });
-                if (configurationService.G2G_QATAR_SOURCE) {
+                if (rootEntity.isQatarVersion()) {
                     return managerService.manageDocumentAttachments.apply(managerService, [correspondence, this.refDocId, info.documentClass, info.title, $event]);
                 }
                 return managerService.manageDocumentAttachmentsG2GKuwait(this, $event);
@@ -235,7 +236,7 @@ module.exports = function (app) {
             };
 
             G2GMessagingHistory.prototype.terminate = function ($event) {
-                var method = configurationService.G2G_QATAR_SOURCE ? 'terminateG2G' : 'terminateG2GKuwait';
+                var method = rootEntity.isQatarVersion() ? 'terminateG2G' : 'terminateG2GKuwait';
                 return g2gReturnedService[method](this, $event);
             };
 

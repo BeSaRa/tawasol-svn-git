@@ -21,6 +21,7 @@ module.exports = function (app) {
                                                 gridService,
                                                 _,
                                                 managerService,
+                                                rootEntity,
                                                 emailItem,
                                                 G2GMessagingHistory) {
         'ngInject';
@@ -173,7 +174,7 @@ module.exports = function (app) {
          */
         self.resend = function (g2gItem, $event, defer) {
 
-            if (!configurationService.G2G_QATAR_SOURCE) {
+            if (!rootEntity.isQatarVersion()) {
                 return g2gItem
                     .resendNewG2GItem($event)
                     .then(function (result) {
@@ -226,7 +227,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.viewDeliveryReport = function (g2gItem, $event) {
-            if (!configurationService.G2G_QATAR_SOURCE) {
+            if (!rootEntity.isQatarVersion()) {
                 return viewDeliveryReportService.viewG2GNewDeliveryReport(g2gItem, $event);
             }
             return viewDeliveryReportService.viewDeliveryReport(g2gItem, $event);
@@ -503,8 +504,8 @@ module.exports = function (app) {
                     /*if (!(model instanceof G2GMessagingHistory)) {
                         model = angular.copy(self.g2gItemCopy);
                     }
-                    return !model.isInternalG2G() && configurationService.G2G_QATAR_SOURCE;*/
-                    return configurationService.G2G_QATAR_SOURCE;
+                    return !model.isInternalG2G() && rootEntity.isQatarVersion();*/
+                    return rootEntity.isQatarVersion();
                 }
             },
             // Manage
@@ -586,7 +587,7 @@ module.exports = function (app) {
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         checkShow: function (action, model) {
-                            return configurationService.G2G_QATAR_SOURCE;
+                            return rootEntity.isQatarVersion();
                         }
                     },
                     // Linked Entities
@@ -598,7 +599,7 @@ module.exports = function (app) {
                         class: "action-green",
                         permissionKey: "MANAGE_LINKED_ENTITIES",
                         checkShow: function (action, model) {
-                            return configurationService.G2G_QATAR_SOURCE;
+                            return rootEntity.isQatarVersion();
                         }
                     },
                     // Destinations

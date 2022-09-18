@@ -19,6 +19,7 @@ module.exports = function (app) {
                                                  printService,
                                                  gridService,
                                                  _,
+                                                 rootEntity,
                                                  $stateParams,
                                                  G2GMessagingHistory) {
         'ngInject';
@@ -257,7 +258,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.viewDeliveryReport = function (g2gItem, $event) {
-            if (!configurationService.G2G_QATAR_SOURCE) {
+            if (!rootEntity.isQatarVersion()) {
                 return viewDeliveryReportService.viewG2GNewDeliveryReport(g2gItem, $event);
             }
             return viewDeliveryReportService.viewDeliveryReport(g2gItem, $event);
@@ -374,7 +375,7 @@ module.exports = function (app) {
                     if (!(model instanceof G2GMessagingHistory)) {
                         model = angular.copy(self.g2gItemCopy);
                     }
-                    return !model.isInternalG2G() && configurationService.G2G_QATAR_SOURCE;
+                    return !model.isInternalG2G() && rootEntity.isQatarVersion();
                 }
             },
             // Recall and terminate
@@ -387,7 +388,7 @@ module.exports = function (app) {
                 class: "action-green",
                 showInView: true,
                 checkShow: function (action, model) {
-                    return !configurationService.G2G_QATAR_SOURCE;
+                    return !rootEntity.isQatarVersion();
                 }
             },
             // Recall and forward
@@ -400,7 +401,7 @@ module.exports = function (app) {
                 class: "action-green",
                 showInView: true,
                 checkShow: function (action, model) {
-                    return !configurationService.G2G_QATAR_SOURCE;
+                    return !rootEntity.isQatarVersion();
                 }
             },
             // View Delivery Report

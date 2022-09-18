@@ -144,6 +144,7 @@ module.exports = function (app) {
                                     lookupService.setLookups(result.globalLookup); // set lookups
                                     rootEntity.setRootEntityGlobalSetting(result.globalSetting, true);
                                     rootEntity.returnRootEntity().updateRootEntity(result.tawasolEntity);
+                                    rootEntity.setCountryVersion(result.versionCountry);
                                     var themeId = result.userInfo.defaultThemeID;
                                     var promise = $q.defer();
                                     $timeout(function () {

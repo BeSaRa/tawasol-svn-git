@@ -5,7 +5,8 @@ module.exports = function (app) {
             rootEntityIdentifier = null,
             rootEntity = null,
             privateKey = 'LAST_ROOT',
-            loaded = false;
+            loaded = false,
+            countryKey = 'COUNTRY';
 
         self.setRootEntityIdentifier = function (identifier) {
             rootEntityIdentifier = identifier;
@@ -184,6 +185,12 @@ module.exports = function (app) {
                 },
                 isSigningContractsEnabled(){
                     return rootEntity && rootEntity.isSigningContractsEnabled();
+                },
+                setCountryVersion: function (versionCountry) {
+                    $cookies.put(countryKey, versionCountry);
+                },
+                isQatarVersion: function () {
+                    return $cookies.get(countryKey) && $cookies.get(countryKey) === 'qa';
                 }
             };
         }

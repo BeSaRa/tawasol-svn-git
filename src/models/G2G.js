@@ -5,6 +5,7 @@ module.exports = function (app) {
                                  configurationService,
                                  downloadService,
                                  viewDocumentService,
+                                 rootEntity,
                                  Indicator) {
         'ngInject';
         return function G2G(model) {
@@ -165,7 +166,7 @@ module.exports = function (app) {
 
 
             G2G.prototype.terminate = function ($event) {
-                var method = configurationService.G2G_QATAR_SOURCE ? 'terminateG2G' : 'terminateG2GKuwait';
+                var method = rootEntity.isQatarVersion() ? 'terminateG2G' : 'terminateG2GKuwait';
                 return g2gReturnedService[method](this, $event);
             };
 

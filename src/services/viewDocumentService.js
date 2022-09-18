@@ -40,6 +40,7 @@ module.exports = function (app) {
                                   EditInDesktopCallback,
                                   LinkedObject,
                                   errorCode,
+                                  rootEntity,
                                   Information) {
             'ngInject';
             var self = this,
@@ -1541,7 +1542,7 @@ module.exports = function (app) {
 
                         result.data.rs.metaData = metaData;
 
-                        if (!configurationService.G2G_QATAR_SOURCE && g2gItemCopy.hasOwnProperty('correspondence') && g2gItemCopy.correspondence.hasOwnProperty('isReceived')) {
+                        if (!rootEntity.isQatarVersion() && g2gItemCopy.hasOwnProperty('correspondence') && g2gItemCopy.correspondence.hasOwnProperty('isReceived')) {
                             // temporary property added to correspondence(will be removed before send)
                             result.data.rs.metaData.isReceived = g2gItemCopy.correspondence.isReceived;
                         }

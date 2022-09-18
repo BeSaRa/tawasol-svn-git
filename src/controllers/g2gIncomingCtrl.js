@@ -19,6 +19,7 @@ module.exports = function (app) {
                                                 mailNotificationService,
                                                 ResolveDefer,
                                                 $state,
+                                                rootEntity,
                                                 $stateParams,
                                                 emailItem,
                                                 gridService) {
@@ -349,7 +350,7 @@ module.exports = function (app) {
                 //permissionKey: 'VIEW_DOCUMENT',
                 showInView: true,
                 checkShow: function (action, model) {
-                    return !configurationService.G2G_QATAR_SOURCE;
+                    return !rootEntity.isQatarVersion();
                 }
             },
             // Receive
@@ -365,7 +366,7 @@ module.exports = function (app) {
                 showInViewOnly: true,
                 checkShow: function (action, model) {
                     var show = model instanceof G2G ? !model.correspondence.isReceived : !model.isReceived;
-                    return configurationService.G2G_QATAR_SOURCE ? true : show;
+                    return rootEntity.isQatarVersion() ? true : show;
                 }
             },
             // Return

@@ -23,8 +23,6 @@
                 .updateConfiguration('OFFICE_ONLINE_DELAY', 5000)
                 // CORRESPONDENCE_SITES_TYPES_LOOKUPS
                 .updateConfiguration('CORRESPONDENCE_SITES_TYPES_LOOKUPS', [], true)
-                // Make it  false if Tawasol Deployed in Kuwait
-                .updateConfiguration('G2G_QATAR_SOURCE', true)
                 // just for test
                 .updateConfiguration('ENABLE_ACTIVE_SENDER_LINKS', false)
                 // Evaluation license PSPDF
