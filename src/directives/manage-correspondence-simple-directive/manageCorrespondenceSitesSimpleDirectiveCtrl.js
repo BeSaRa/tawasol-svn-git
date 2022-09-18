@@ -194,9 +194,8 @@ module.exports = function (app) {
                     });
 
                 });
-            } else if (self.isInternalOutgoingEnabled) {
-                _setSitesTypeIfInternalOutgoingActive();
             }
+            _setSitesTypeIfInternalOutgoingActive();
         });
 
         function _setSitesTypeIfInternalOutgoingActive() {
