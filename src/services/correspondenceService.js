@@ -3553,16 +3553,16 @@ module.exports = function (app) {
          * @param workItem
          * @param resendOptions
          * @param g2gData
-         * @param comment
+         * @param comments
          */
-        self.resendCorrespondenceWorkItem = function (workItem, resendOptions, g2gData, comment) {
+        self.resendCorrespondenceWorkItem = function (workItem, resendOptions, g2gData, comments) {
             var regular = !resendOptions.isSelective();
             resendOptions = !regular ? generator.interceptSendInstance('PartialExportSelective', resendOptions) : generator.interceptSendInstance('ReadyToExportOption', resendOptions);
             var resendModel = {
                 type: regular,
                 regularExport: regular ? resendOptions : {},
                 selectiveExport: regular ? {} : resendOptions.prepareResendModel(),
-                comment: comment
+                comments: comments
             };
             if (g2gData)
                 return self.resendG2GCorrespondence(resendModel, g2gData);
@@ -3591,9 +3591,9 @@ module.exports = function (app) {
         /**
          * @description resend the bulk workItems again to correspondences sites
          * @param workItems
-         * @param comment
+         * @param comments
          */
-        self.resendBulkCorrespondenceWorkItems = function (workItems, comment) {
+        self.resendBulkCorrespondenceWorkItems = function (workItems, comments) {
             var regular, resendOptions, resendModels = [];
             for (var i = 0; i < workItems.length; i++) {
                 resendOptions = workItems[i].isGroupExport ? workItems[i].model : workItems[i].partialExportList;
@@ -3607,7 +3607,7 @@ module.exports = function (app) {
                         type: regular,
                         regularExport: regular ? resendOptions : {},
                         selectiveExport: regular ? {} : resendOptions.prepareResendModel(),
-                        comment: comment
+                        comments: comments
                     }
                 });
             }
