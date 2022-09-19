@@ -6,6 +6,7 @@ module.exports = function (app) {
             link: function (scope, element, attrs) {
                 var callback = $parse(attrs.catchUploadFileDirective)(scope);
                 var reset = attrs.resetAfterChange === 'true';
+                var mdMenu = attrs.mdMenu ? $parse(attrs.mdMenu)(scope) : null;
                 var resetByCallback = attrs.resetByCallback ? attrs.resetByCallback : false;
 
                 function _resetField() {
@@ -26,6 +27,9 @@ module.exports = function (app) {
                             }
                             if (reset && !resetByCallback) {
                                 _resetField();
+                            }
+                            if(mdMenu){
+                                mdMenu.close();
                             }
                         });
                     } else if (!this.files.length && typeof callback === 'function') {
