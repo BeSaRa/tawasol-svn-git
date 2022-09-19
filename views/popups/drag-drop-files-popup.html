@@ -73,7 +73,7 @@
                             </md-option>
                         </md-select>
                     </md-input-container>
-                    <span ng-if="!ctrl.inheritSecurity"></span>
+                    <span flex ng-if="ctrl.inheritSecurity"></span>
                 </div>
 
                 <div layout="row">
@@ -88,7 +88,7 @@
                         </md-switch>
                     </div>
                     <!-- Is Official Document -->
-                    <div flex class="cms-input-container">
+                    <div flex class="cms-input-container" ng-if="ctrl.hasPSPDFViewer">
                         <md-switch flex ng-model="ctrl.isOfficial"
                                    aria-label="{{lang.official_document}}"
                                    ng-change="ctrl.changeValueOf('isOfficial', ctrl.isOfficial)">
@@ -212,9 +212,9 @@
                         </md-switch>
                     </div>
                 </div>
-                <div layout="row" ng-if="ctrl.hasPSPDFViewer">
+                <div layout="row">
                     <!-- Is Official Document -->
-                    <div flex class="cms-input-container">
+                    <div flex class="cms-input-container" ng-if="ctrl.hasPSPDFViewer">
                         <md-switch flex ng-model="ctrl.attachment.isOfficial"
                                    aria-label="{{lang.official_document}}"
                                    ng-change="ctrl.changeValueOf('isOfficial',ctrl.attachment.isOfficial)"
