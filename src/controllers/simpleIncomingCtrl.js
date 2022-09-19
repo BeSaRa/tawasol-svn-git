@@ -494,6 +494,15 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Print Correspondence Receipt
+         * @param document
+         * @param $event
+         */
+        self.printCorrespondenceReceipt = function (document, $event) {
+            document.printReceipt($event);
+        }
+
         self.documentAction = null;
         self.performDocumentAction = function ($event) {
             self.documentAction.callback(self.incoming, $event);
@@ -617,6 +626,17 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: function (action, model, index) {
                     isVisible = gridService.checkToShowAction(action) && _hasContent();
+                    self.setDropdownAvailability(index, isVisible);
+                    return isVisible;
+                }
+            },
+            // print correspondence receipt
+            {
+                text: langService.get('print_receipt'),
+                callback: self.printCorrespondenceReceipt,
+                class: "action-green",
+                checkShow: function (action, model, index) {
+                    isVisible = gridService.checkToShowAction(action) && _hasContent() && rootEntity.getGlobalSettings().isAllowPrintCorrespondenceReceipt();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }

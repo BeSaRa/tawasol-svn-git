@@ -5846,6 +5846,20 @@ module.exports = function (app) {
                 });
         }
 
+        /**
+         *  @description print receipt
+         * @param correspondence
+         * @returns {*}
+         */
+        self.printReceipt = function (correspondence) {
+            var info = correspondence.getInfo();
+            return $http.get(urlService.correspondenceCommon + '/print-cor-receipt/' + info.vsId)
+                .then(function (result) {
+                    window.open(result.data.rs);
+                    return true;
+                });
+        }
+
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);
         }, 100);

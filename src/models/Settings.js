@@ -71,6 +71,9 @@ module.exports = function (app) {
             Settings.prototype.legacyWorkflowHistoryEnabled = function () {
                 return this.legacyWorkflowHistory;
             }
+            Settings.prototype.isAllowPrintCorrespondenceReceipt = function () {
+                return this.allowPrintCorReceipt;
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

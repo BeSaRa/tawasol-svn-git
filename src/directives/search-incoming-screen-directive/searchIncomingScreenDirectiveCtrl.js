@@ -963,6 +963,15 @@ module.exports = function (app) {
             searchedIncomingDocument.barcodePrint($event);
         };
 
+        /**
+         * @description Print Correspondence Receipt
+         * @param searchedIncomingDocument
+         * @param $event
+         */
+        self.printCorrespondenceReceipt = function (searchedIncomingDocument, $event) {
+            searchedIncomingDocument.printReceipt($event);
+        }
+
         self.addDocumentTask = function (correspondence, $event) {
             correspondence.createDocumentTask($event)
         };
@@ -1808,6 +1817,18 @@ module.exports = function (app) {
                 permissionKey: 'PRINT_BARCODE',
                 checkShow: function (action, model) {
                     return true;
+                }
+            },
+            // Print Receipt
+            {
+                type: 'action',
+                icon: 'receipt',
+                text: 'print_receipt',
+                shortcut: true,
+                callback: self.printCorrespondenceReceipt,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return model.hasContent() && rootEntity.getGlobalSettings().isAllowPrintCorrespondenceReceipt();
                 }
             },
             // View Tracking Sheet

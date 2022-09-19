@@ -721,6 +721,14 @@
                                     </md-switch>
                                 </div>
                             </div>
+                            <div layout="row" flex class="p20">
+                                <md-switch flex ng-model="ctrl.globalSetting.allowPrintCorReceipt "
+                                           aria-label="{{lang.allow_print_correspondence_receipt}}">
+                                    <span>{{lang.allow_print_correspondence_receipt}} : </span>{{
+                                    ctrl.globalSetting.getTranslatedYesNo('allowPrintCorReceipt')}}
+                                </md-switch>
+                                <span flex></span>
+                            </div>
                         </div>
                         <br/>
                         <br/>

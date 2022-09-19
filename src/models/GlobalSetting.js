@@ -74,6 +74,8 @@ module.exports = function (app) {
             self.wFRelatedBookStatus = 0;
             self.hideSenderIncomingMail = false;
             self.legacyWorkflowHistory = false;
+            self.legacySMSCorNotification = false;
+            self.allowPrintCorReceipt = false;
 
             //endregion
 
@@ -182,6 +184,9 @@ module.exports = function (app) {
             };
             GlobalSetting.prototype.canSendRelatedDocsToSameDepartmentOnly = function () {
                 return this.wFRelatedBookStatus === 2;
+            }
+            GlobalSetting.prototype.isAllowPrintCorrespondenceReceipt = function () {
+                return this.allowPrintCorReceipt;
             }
 
             // don't remove CMSModelInterceptor from last line
