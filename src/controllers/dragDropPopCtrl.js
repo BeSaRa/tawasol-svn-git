@@ -19,6 +19,7 @@ module.exports = function (app) {
                                                 errorCode,
                                                 employeeService,
                                                 $q,
+                                                generator,
                                                 attachmentCopy) {
         'ngInject';
         var self = this;
@@ -32,6 +33,7 @@ module.exports = function (app) {
 
         var info = correspondence.getInfo();
         self.documentClass = info.documentClass;
+        self.isPaper = info.isPaper;
         self.securityLevels = correspondenceService.getLookup(info.documentClass, 'securityLevels');
         // all attachment types
         self.attachmentTypes = attachmentTypeService.returnAttachmentTypes(info.documentClass);
@@ -48,6 +50,7 @@ module.exports = function (app) {
         self.securityLevel = lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel);
         // attachment title for all
         self.attachmentTitle = null;
+        self.rootEntity = rootEntity;
 
         // the selected attachment type.
         var activeAttachmentTypes = _.filter(self.attachmentTypes, function (attachmentType) {
@@ -185,7 +188,8 @@ module.exports = function (app) {
                                         exportStatus: self.exportStatus,
                                         documentTitle: files[i].name,
                                         docSubject: files[i].name,
-                                        progress: 0
+                                        progress: 0,
+                                        isContract: self.isContract
                                     }));
                                 } else {
                                     failedFiles.push(files[i]);
@@ -250,6 +254,9 @@ module.exports = function (app) {
                     errorCode.checkIf(error, 'FAILED_INSERT_DOCUMENT', function () {
                         dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
                     });
+                    errorCode.checkIf(error, 'INVALID_CONTRACT_AS_CONTENT', function () {
+                        dialog.errorMessage(generator.getTranslatedError(error));
+                    });
                 });
         };
         /**
@@ -280,10 +287,14 @@ module.exports = function (app) {
                         return true;
                     });
                 }).catch(function (error) {
-                    if (single)
+                    if (single) {
                         errorCode.checkIf(error, 'FAILED_INSERT_DOCUMENT', function () {
                             dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
                         });
+                        errorCode.checkIf(error, 'INVALID_CONTRACT_AS_CONTENT', function () {
+                            dialog.errorMessage(generator.getTranslatedError(error));
+                        });
+                    }
                     else
                         return $q.reject(error);
                 });
@@ -342,6 +353,9 @@ module.exports = function (app) {
             }).catch(function (error) {
                 errorCode.checkIf(error, 'FAILED_INSERT_DOCUMENT', function () {
                     dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
+                });
+                errorCode.checkIf(error, 'INVALID_CONTRACT_AS_CONTENT', function () {
+                    dialog.errorMessage(generator.getTranslatedError(error));
                 });
             });
         };

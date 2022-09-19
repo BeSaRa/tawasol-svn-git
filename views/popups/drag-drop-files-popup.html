@@ -60,19 +60,6 @@
                             </md-option>
                         </md-select>
                     </md-input-container>
-                    <!-- Export Status -->
-                    <div flex class="cms-input-container">
-                        <md-switch flex ng-if="ctrl.documentClass === 'outgoing'"
-                                   ng-model="ctrl.exportStatus"
-                                   ng-change="ctrl.changeValueOf('exportStatus', ctrl.exportStatus)"
-                                   aria-label="{{lang.export_status}}">
-                            <label>{{lang.export_status}} : {{ctrl.exportStatus ? lang.save_and_export :
-                                    lang.save_only}}</label>
-                        </md-switch>
-                    </div>
-                </div>
-
-                <div layout="row">
                     <!-- Security Level -->
                     <md-input-container ng-if="!ctrl.inheritSecurity" flex>
                         <label for="securityLevel">{{lang.attachment_attachment_security_level}}</label>
@@ -86,6 +73,20 @@
                             </md-option>
                         </md-select>
                     </md-input-container>
+                    <span ng-if="!ctrl.inheritSecurity"></span>
+                </div>
+
+                <div layout="row">
+                    <!-- Export Status -->
+                    <div flex class="cms-input-container">
+                        <md-switch flex ng-if="ctrl.documentClass === 'outgoing'"
+                                   ng-model="ctrl.exportStatus"
+                                   ng-change="ctrl.changeValueOf('exportStatus', ctrl.exportStatus)"
+                                   aria-label="{{lang.export_status}}">
+                            <label>{{lang.export_status}} : {{ctrl.exportStatus ? lang.save_and_export :
+                                    lang.save_only}}</label>
+                        </md-switch>
+                    </div>
                     <!-- Is Official Document -->
                     <div flex class="cms-input-container">
                         <md-switch flex ng-model="ctrl.isOfficial"
@@ -95,6 +96,19 @@
                                 {{ctrl.isOfficial ? lang.yes : lang.no}}</label>
                         </md-switch>
                     </div>
+                </div>
+                <div layout="row">
+                    <!-- IS Contract -->
+                    <div flex class="cms-input-container"
+                         ng-if="ctrl.rootEntity.isSigningContractsEnabled() && ctrl.documentClass.toLowerCase() === 'outgoing' && !ctrl.isPaper">
+                        <md-switch flex ng-model="ctrl.isContract"
+                                   aria-label="{{lang.to_be_signed}}"
+                                   ng-change="ctrl.changeValueOf('isContract', ctrl.isContract)">
+                            <label>{{lang.to_be_signed}} :
+                                {{ctrl.isContract ? lang.yes : lang.no}}</label>
+                        </md-switch>
+                    </div>
+                    <span flex></span>
                 </div>
 
                 <div layout="row">
@@ -132,7 +146,8 @@
                                 {{updateAction.getTranslatedName()}}
                             </md-option>
                         </md-select>
-                        <div class="red-text hint hint-reference" ng-if="!ctrl.attachment.canUpdateIfAuthorizedActionStatus()">
+                        <div class="red-text hint hint-reference"
+                             ng-if="!ctrl.attachment.canUpdateIfAuthorizedActionStatus()">
                             {{lang.hint_attachment_restricted_for_modification}}
                         </div>
                         <div ng-messages="attachment_form.updateActionStatus.$error">
@@ -208,7 +223,15 @@
                                 {{ctrl.attachment.getTranslatedYesNo('isOfficial')}}</label>
                         </md-switch>
                     </div>
-                    <span flex></span>
+                    <!-- IS Contract -->
+                    <div flex class="cms-input-container"
+                         ng-if="ctrl.rootEntity.isSigningContractsEnabled() && ctrl.documentClass.toLowerCase() === 'outgoing' && !ctrl.isPaper">
+                        <md-switch flex ng-model="ctrl.attachment.isContract"
+                                   aria-label="{{lang.to_be_signed}}" disabled>
+                            <label>{{lang.to_be_signed}} :
+                                {{ctrl.attachment.getTranslatedYesNo('isContract')}}</label>
+                        </md-switch>
+                    </div>
                 </div>
 
                 <div class="cms-input-container" flex>
@@ -335,6 +358,13 @@
                                     </md-switch>
                                 </div>
                             </div>
+                            <!-- IS Contract -->
+                           <!-- <div ng-if="ctrl.rootEntity.isSigningContractsEnabled() && ctrl.documentClass.toLowerCase() === 'outgoing' && !ctrl.isPaper">
+                                <md-switch flex ng-model="attachment.isContract"
+                                           aria-label="{{lang.to_be_signed}}">
+                                    <label>{{attachment.getTranslatedYesNo('isContract')}}</label>
+                                </md-switch>
+                            </div>-->
                             <div>
                                 <md-button ng-if="!ctrl.attachment"
                                            ng-click="ctrl.startUploadAttachment(attachment, true)"
@@ -398,6 +428,11 @@
                                     {{attachment.getTranslatedYesNo('isOfficial')}}
                                 </md-button>
                             </div>
+                            <!--<div ng-if="ctrl.rootEntity.isSigningContractsEnabled() && ctrl.documentClass.toLowerCase() === 'outgoing' && !ctrl.isPaper">
+                                <md-button>
+                                    {{attachment.getTranslatedYesNo('isContract')}}
+                                </md-button>
+                            </div>-->
                             <div ng-if="!ctrl.attachment">
                                 <md-button ng-if="ctrl.isAttachmentDeletable(attachment)"
                                            ng-click="ctrl.editDragAttachment(attachment)" class="md-icon">
