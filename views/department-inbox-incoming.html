@@ -195,7 +195,12 @@
                                         </td>
                                         <td md-cell>{{incomingDepartmentInbox.generalStepElm.receivedDate}}</td>
                                         <td md-cell>{{incomingDepartmentInbox.type}}</td>
-                                        <td md-cell>{{incomingDepartmentInbox.fromOU.getTranslatedName()}}</td>
+                                        <td md-cell>{{incomingDepartmentInbox.fromOU.getTranslatedName()}}
+                                            <grid-indicator-directive record="incomingDepartmentInbox"
+                                                                      indicator-type="comments"
+                                                                      class="p0p5"
+                                                                      record-type="WorkItem"></grid-indicator-directive>
+                                        </td>
                                         <td md-cell>{{incomingDepartmentInbox.generalStepElm.numberOfDays}}</td>
                                         <td md-cell ng-if="!ctrl.globalSettings.isSenderIncomingMailHidden()">
                                             <div layout="row">
