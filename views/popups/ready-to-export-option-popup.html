@@ -136,7 +136,7 @@
                             <span flex></span>
                         </div>
                     </div>
-                    <div ng-if="ctrl.resend">
+                    <div ng-if="ctrl.resend && !ctrl.g2gData">
                         <fieldset layout="column">
                             <legend>{{lang.comments}}</legend>
                             <md-input-container flex>
