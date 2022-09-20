@@ -22,7 +22,7 @@ module.exports = function (app) {
                 'isGlobal',
                 'arMessage',
                 'enMessage',
-                'smstemplateSubscribers'
+                //'smstemplateSubscribers'
             ];
 
 
