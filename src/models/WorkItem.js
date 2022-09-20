@@ -1469,6 +1469,10 @@ module.exports = function (app) {
                 var info = this.getInfo();
                 return info.documentClass.toLowerCase() === 'incoming' ? this.generalStepElm.refDocNumber : null;
             }
+            WorkItem.prototype.getHoursMinutesOfReceivedDays = function () {
+                var receivedDays = this.generalStepElm.numberOfReceivedDays;
+                return receivedDays.hours + ' ' + langService.get('hours') + " - " + receivedDays.minutes + ' ' + langService.get('minutes')
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

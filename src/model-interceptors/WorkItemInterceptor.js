@@ -170,7 +170,8 @@ module.exports = function (app) {
 
             return {
                 days: days,
-                label: hours + ' ' + langService.get('hours') + " - " + minutes + ' ' + langService.get('minutes')
+                hours: hours,
+                minutes: minutes
             };
         }
 
