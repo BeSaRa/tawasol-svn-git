@@ -944,37 +944,35 @@ module.exports = function (app) {
                 self.openAttachmentSignaturePopup = function (document, attachment, $event) {
                     return applicationUserSignatureService.getApplicationUserSignatures(employeeService.getEmployee().id)
                         .then(function (signatures) {
-                            if (signatures) {
-                                var initialSignatures =  _.filter(signatures, signature => signature.isContractInitial);
-                                var normalSignatures = _.filter(signatures, signature => !signature.isContractInitial);
-                                if (initialSignatures.length === 1 && normalSignatures.length === 1) {
-                                    return self.authorizeContract(document, attachment, normalSignatures[0], initialSignatures[0])
-                                        .then(function (result) {
-                                            if (result)
-                                                return true;
-                                            else {
-                                                toast.error(langService.get('something_happened_when_sign'));
-                                                return false;
-                                            }
-                                        });
-                                } else if (signatures.length > 1) {
-                                    return dialog
-                                        .showDialog({
-                                            targetEvent: $event,
-                                            templateUrl: cmsTemplate.getPopup('signature'),
-                                            controller: 'signaturePopCtrl',
-                                            controllerAs: 'ctrl',
-                                            locals: {
-                                                workItem: document,
-                                                attachment: attachment,
-                                                signatures: signatures,
-                                                additionalData: false,
-                                                ignoreMessage: true,
-                                                exportData: null,
-                                                pinCodeRequired: false
-                                            }
-                                        });
-                                }
+                            var initialSignatures = _.filter(signatures, signature => signature.isContractInitial);
+                            var normalSignatures = _.filter(signatures, signature => !signature.isContractInitial);
+                            if (initialSignatures.length === 1 && normalSignatures.length === 1) {
+                                return self.authorizeContract(document, attachment, normalSignatures[0], initialSignatures[0])
+                                    .then(function (result) {
+                                        if (result)
+                                            return true;
+                                        else {
+                                            toast.error(langService.get('something_happened_when_sign'));
+                                            return false;
+                                        }
+                                    });
+                            } else if (signatures && signatures.length > 1) {
+                                return dialog
+                                    .showDialog({
+                                        targetEvent: $event,
+                                        templateUrl: cmsTemplate.getPopup('signature'),
+                                        controller: 'signaturePopCtrl',
+                                        controllerAs: 'ctrl',
+                                        locals: {
+                                            workItem: document,
+                                            attachment: attachment,
+                                            signatures: signatures,
+                                            additionalData: false,
+                                            ignoreMessage: true,
+                                            exportData: null,
+                                            pinCodeRequired: false
+                                        }
+                                    });
                             } else {
                                 dialog.alertMessage(langService.get('no_signature_available'));
                             }

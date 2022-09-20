@@ -678,9 +678,11 @@ module.exports = function (app) {
         self.openApproveAttachment = function (attachment, $event) {
             attachmentService.openAttachmentSignaturePopup(self.document, attachment, $event)
                 .then(function (result) {
-                    self.reloadAttachments().then(function () {
-                        toast.success(langService.get('sign_specific_success').change({name: attachment.getTranslatedName()}));
-                    })
+                    if (result) {
+                        self.reloadAttachments().then(function () {
+                            toast.success(langService.get('sign_specific_success').change({name: attachment.getTranslatedName()}));
+                        })
+                    }
                 })
         }
 
