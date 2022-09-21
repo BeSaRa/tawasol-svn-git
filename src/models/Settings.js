@@ -74,7 +74,9 @@ module.exports = function (app) {
             Settings.prototype.isAllowPrintCorrespondenceReceipt = function () {
                 return this.allowPrintCorReceipt;
             }
-
+            Settings.prototype.isLegacySMSCorNotification = function (){
+                return this.legacySMSCorNotification;
+            }
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Settings', 'init', this);

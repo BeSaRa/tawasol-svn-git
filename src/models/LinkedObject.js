@@ -20,7 +20,7 @@ module.exports = function (app) {
 
             self.typeId = null;
             // will be used by backend but will not be returned
-            self.xsendSMS = false;
+            self.xsendSMS = rootEntity.getGlobalSettings().isLegacySMSCorNotification();
             self.xsmsTemplateId = null;
             self.xJobRank = null;
             self.xJobTitle = null;
