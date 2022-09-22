@@ -3842,6 +3842,10 @@ module.exports = function (app) {
             return applicationUserSignatureService
                 .loadApplicationUserSignatures(employeeService.getEmployee().id)
                 .then(function (signatures) {
+                    // hide initial signatures
+                    if (rootEntity.isSigningContractsEnabled()) {
+                        signatures = _.filter(signatures, (signature) => !signature.isContractInitial);
+                    }
                     if (!signatures || signatures.length === 0) {
                         dialog.alertMessage(langService.get('no_signature_available'));
                         return $q.reject(langService.get('no_signature_available'));
