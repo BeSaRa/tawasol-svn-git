@@ -51,7 +51,7 @@ module.exports = function (app) {
                                                       AppUserCertificate,
                                                       errorCode,
                                                       ouApplicationUser,
-                                                      isManagerOfCurrentOrganization,
+                                                      isManagerOfCurrentOu,
                                                       proxyOrganizations) {
         'ngInject';
         var self = this;
@@ -115,7 +115,7 @@ module.exports = function (app) {
         self.organizationsForAppUser = employeeService.getEmployee().ouList;
 
         // Current ou application user
-        self.isManagerOfCurrentOu = isManagerOfCurrentOrganization;
+        self.isManagerOfCurrentOu = isManagerOfCurrentOu;
         self.ouApplicationUser = ouApplicationUser;// generator.interceptReceivedInstance('OUApplicationUser', angular.copy(employeeService.getCurrentOUApplicationUser()));
 
         // security levels for current OUApplicationUser
@@ -1865,7 +1865,9 @@ module.exports = function (app) {
         };
 
         self.showUseProxyWFSecurity = function () {
-            return self.isManagerOfCurrentOu && self.selectedProxyUser && self.selectedOrganization !== self.employee.getRegistryOUID();
+            return self.isManagerOfCurrentOu && self.selectedProxyUser &&
+                self.selectedOrganization !== self.employee.getRegistryOUID() &&
+                self.selectedOrganization !== self.employee.getOUID();
         }
 
         function _setDefaultSelectedTab() {

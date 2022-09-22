@@ -322,7 +322,7 @@ module.exports = function (app) {
                         controllerAs: 'ctrl',
                         locals: {
                             selectedTab: selectedTab,
-                            isManagerOfCurrentOrganization: isManagerOfCurrentOu
+                            isManagerOfCurrentOu: isManagerOfCurrentOu
                         },
                         resolve: {
                             applicationUser: function (applicationUserService) {

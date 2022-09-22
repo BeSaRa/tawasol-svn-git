@@ -446,7 +446,8 @@ module.exports = function (app) {
                 return false;
             }
 
-            return self.selectedProxyUser.organization.id !== self.employee.getRegistryOUID();
+            return self.selectedProxyUser.organization.id !== self.employee.getRegistryOUID() &&
+                self.selectedProxyUser.organization.id !== self.employee.getOUID();
         }
 
         self.$onInit = function () {
