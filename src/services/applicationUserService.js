@@ -305,15 +305,14 @@ module.exports = function (app) {
              * @description Opens dialog to manage user preferences
              * @param {ApplicationUser}applicationUser
              * @param selectedTab
+             * @param isManagerOfCurrentOu
              * @param $event
              * @returns {promise}
              */
-            manageUserPreference: function (applicationUser, selectedTab, $event) {
+            manageUserPreference: function (applicationUser, selectedTab, isManagerOfCurrentOu, $event) {
                 applicationUser = applicationUser ? applicationUser : employeeService.getEmployee();
                 var ouApplicationUser = employeeService.getCurrentOUApplicationUser();
-                var employee = employeeService.getEmployee();
-                self.globalSetting = rootEntity.returnRootEntity().settings;
-                var isManagerOfCurrentOu = self.globalSetting.outofofficeFromAllUsers && organizationService.isManagerOfCurrentOrganization(employee);
+
                 var resolveOrganizations = $q.defer();
                 return dialog
                     .showDialog({

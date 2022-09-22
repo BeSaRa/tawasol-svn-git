@@ -13,6 +13,7 @@ module.exports = function (app) {
                                                       langService,
                                                       correspondenceService,
                                                       $window,
+                                                      organizationService,
                                                       errorCode) {
         'ngInject';
         var self = this;
@@ -164,9 +165,12 @@ module.exports = function (app) {
          * @param $event
          */
         self.userPreferences = function ($event) {
-            applicationUserService
-                .controllerMethod
-                .manageUserPreference(null, 'general', $event)
+            organizationService.isManagerOfCurrentOrganization(self.employee).then(function (isManagerOfCurrentOu) {
+                applicationUserService
+                    .controllerMethod
+                    .manageUserPreference(null, 'general',
+                        self.globalSettings.outofofficeFromAllUsers && isManagerOfCurrentOu, $event)
+            });
         };
 
         /**
