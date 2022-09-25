@@ -3,7 +3,8 @@ module.exports = function (app) {
                                         _,
                                         langService,
                                         CorrespondenceInfo,
-                                        Indicator) {
+                                        Indicator,
+                                        rootEntity) {
         'ngInject';
         return function Attachment(model) {
             var self = this;
@@ -107,6 +108,10 @@ module.exports = function (app) {
                     ext: this.file.name.split('.').pop(),
                     type: this.file.type
                 }
+            }
+            Attachment.prototype.checkMaxValidAttachmentsSize = function () {
+                var fileSize = rootEntity.getGlobalSettings().fileSize;
+                return this.file.size > (fileSize * 1000 * 1000);
             }
 
             // don't remove CMSModelInterceptor from last line

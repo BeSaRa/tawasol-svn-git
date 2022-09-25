@@ -257,6 +257,9 @@ module.exports = function (app) {
                     errorCode.checkIf(error, 'INVALID_CONTRACT_AS_CONTENT', function () {
                         dialog.errorMessage(generator.getTranslatedError(error));
                     });
+                    if (self.validFiles[0].checkMaxValidAttachmentsSize()) {
+                        dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
+                    }
                 });
         };
         /**
@@ -294,8 +297,10 @@ module.exports = function (app) {
                         errorCode.checkIf(error, 'INVALID_CONTRACT_AS_CONTENT', function () {
                             dialog.errorMessage(generator.getTranslatedError(error));
                         });
-                    }
-                    else
+                        if (attachment.checkMaxValidAttachmentsSize()) {
+                            dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
+                        }
+                    } else
                         return $q.reject(error);
                 });
             })(attachment);
@@ -357,6 +362,9 @@ module.exports = function (app) {
                 errorCode.checkIf(error, 'INVALID_CONTRACT_AS_CONTENT', function () {
                     dialog.errorMessage(generator.getTranslatedError(error));
                 });
+                if (self.attachment.checkMaxValidAttachmentsSize()) {
+                    dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
+                }
             });
         };
 
