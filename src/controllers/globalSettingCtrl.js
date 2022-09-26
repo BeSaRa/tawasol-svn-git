@@ -506,6 +506,10 @@ module.exports = function (app) {
             return self.globalSetting.excludedPermissionList.length === self.totalPermissionsCount;
         };
 
+        self.isStampModuleDisabled = function () {
+            return rootEntity.isQatarVersion() ? !self.hasPSPDFViewer : (!self.hasPSPDFViewer || !self.kwtAlDiyarDigitalEnabled);
+        }
+
         /**
          * @description parent checkbox
          */
