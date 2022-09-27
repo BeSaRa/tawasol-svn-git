@@ -885,7 +885,8 @@ module.exports = function (app) {
                         id: self.document.mainClassificationInfo.id,
                         arName: self.document.mainClassificationInfo.arName,
                         enName: self.document.mainClassificationInfo.enName,
-                        securityLevels: documentSecurityLevelLookupKey
+                        securityLevels: documentSecurityLevelLookupKey,
+                        code: self.document.mainClassificationInfo.code
                     })
                 });
             }
