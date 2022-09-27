@@ -314,6 +314,7 @@ module.exports = function (app) {
                 var ouApplicationUser = employeeService.getCurrentOUApplicationUser();
 
                 var resolveOrganizations = $q.defer();
+                var resolveRoles = $q.defer();
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -350,12 +351,15 @@ module.exports = function (app) {
                             },
                             roles: function (roleService) {
                                 'ngInject';
-                                return roleService.getRoles();
+                                return roleService.getRoles().then(function (result) {
+                                    resolveRoles.resolve(result);
+                                    return result;
+                                })
                             },
                             ouApplicationUsers: function (ouApplicationUserService) {
                                 'ngInject';
                                 var defer = $q.defer();
-                                resolveOrganizations.promise.then(function () {
+                                $q.all([resolveOrganizations.promise, resolveRoles.promise]).then(function () {
                                     ouApplicationUserService.loadOUApplicationUsersByUserId(applicationUser.id).then(function (result) {
                                         defer.resolve(result);
                                     });
@@ -378,7 +382,14 @@ module.exports = function (app) {
                             },
                             ouApplicationUser: function (ouApplicationUserService) {
                                 'ngInject';
-                                return ouApplicationUserService.loadOUApplicationUserByUserIdAndOUId(applicationUser.id, ouApplicationUser.getOuId());
+                                var defer = $q.defer();
+                                resolveRoles.promise.then(function () {
+                                    ouApplicationUserService.loadOUApplicationUserByUserIdAndOUId(applicationUser.id, ouApplicationUser.getOuId())
+                                        .then(function (result) {
+                                            defer.resolve(result);
+                                        });
+                                });
+                                return defer.promise
                             }
                         }
                     });
