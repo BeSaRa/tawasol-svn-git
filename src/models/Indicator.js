@@ -731,6 +731,23 @@ module.exports = function (app) {
                 }) : false;
             };
 
+
+            /**
+             * @description get is From Central Archive Indicator
+             * @returns {Indicator}
+             */
+            Indicator.prototype.getIsFromCentralArchiveIndicator = function (fromCentralArchive) {
+                return fromCentralArchive ? new Indicator({
+                    class: 'indicator',
+                    text: 'indicator_from_central_archive',
+                    icon: self.getIndicatorIcons('centralArchiveOu'),
+                    tooltip: 'indicator_from_central_archive',
+                    legendText: function (indicator) {
+                        return '';
+                    }
+                }) : null;
+            }
+
             /**
              * @description Returns the difference in days and date status(passed/today/coming)
              * @param dateToCheck

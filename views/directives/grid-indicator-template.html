@@ -344,3 +344,11 @@
              tooltip="{{ctrl.langService.get(ctrl.record.isInternalOutgoingIndicator.tooltip)}}"
     ></md-icon>
 </span>
+<span ng-if="ctrl.indicatorType === 'fromCentralArchive'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.fromCentralArchiveIndicator}">
+    <md-icon ng-if="ctrl.record.fromCentralArchiveIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.fromCentralArchiveIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.fromCentralArchiveIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.fromCentralArchiveIndicator.tooltip)}}"
+    ></md-icon>
+</span>
