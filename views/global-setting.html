@@ -298,13 +298,13 @@
                                 <!-- Copyright Text -->
                                 <md-input-container flex>
                                     <label for="copyrightText">{{lang.copyright_text}}</label>
-                                    <textarea id="copyrightText" name="copyrightText" required maxlength="50"
+                                    <textarea id="copyrightText" name="copyrightText" required maxlength="100"
                                               rows="4" md-select-on-focus
                                               ng-model="ctrl.globalSetting.copyrightText">
                                 </textarea>
                                     <div ng-messages="globalSettingForm.copyrightText.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
-                                        <div ng-message="maxlength">{{lang.max_length.change({length: 50})}}</div>
+                                        <div ng-message="maxlength">{{lang.max_length.change({length: 100})}}</div>
                                     </div>
                                 </md-input-container>
                                 <!-- Login Page Additional Content -->
