@@ -171,9 +171,9 @@ module.exports = function (app) {
             var minutes = Math.round(((milliseconds % (millisecondsPerHour * 24)) % millisecondsPerHour) / (60 * 1000)); // minutes
 
             return {
-                days: days,
-                hours: hours,
-                minutes: minutes
+                days: days < 0 ? 0 : days,
+                hours: hours < 0 ? 0 : hours,
+                minutes: minutes < 0 ? 0 : minutes
             };
         }
 
