@@ -195,10 +195,10 @@ module.exports = function (app) {
 
                 });
             }
-            _setSitesTypeIfInternalOutgoingActive();
+            _setSitesTypeIfInternalOutgoingActive(true);
         });
 
-        function _setSitesTypeIfInternalOutgoingActive() {
+        function _setSitesTypeIfInternalOutgoingActive(ignoreReloadSubSite) {
             var info = self.correspondence.getInfo();
             if (self.isInternalOutgoingEnabled && self.correspondenceSiteTypes) {
                 self.correspondenceSiteTypes.map(siteType => {
@@ -215,7 +215,7 @@ module.exports = function (app) {
                     }
                     return siteType;
                 });
-                if (info.documentClass === 'outgoing' && self.correspondence.isInternal) {
+                if (info.documentClass === 'outgoing' && self.correspondence.isInternal && !ignoreReloadSubSite) {
                     self.onSiteTypeChange(null);
                 }
             }
