@@ -864,7 +864,7 @@ module.exports = function (app) {
             })
             // add simple outgoing
             .state('app.outgoing.simple-add', {
-                url: '/simpleAdd?vsId?wobNum?action?createAsAttachment?sourceDocClass?addMethod?versionNumber',
+                url: '/simpleAdd?vsId?wobNum?action?createAsAttachment?sourceDocClass?addMethod?versionNumber?prevPage',
                 templateUrl: templateProvider.getView('outgoing-simple-add'),
                 controller: 'simpleOutgoingCtrl',
                 controllerAs: 'ctrl',
@@ -872,7 +872,7 @@ module.exports = function (app) {
             })
             // add simple outgoing internal
             .state('app.outgoing.simple-add-internal', {
-                url: '/simpleInternalAdd?vsId?wobNum?action?createAsAttachment?sourceDocClass?addMethod?versionNumber',
+                url: '/simpleInternalAdd?vsId?wobNum?action?createAsAttachment?sourceDocClass?addMethod?versionNumber?prevPage',
                 templateUrl: templateProvider.getView('outgoing-simple-add'),
                 controller: 'simpleOutgoingCtrl',
                 controllerAs: 'ctrl',
@@ -1181,7 +1181,7 @@ module.exports = function (app) {
             })
             // add simple incoming
             .state('app.incoming.simple-add', {
-                url: '/simpleAdd?action?wobNum?vsId',
+                url: '/simpleAdd?action?wobNum?vsId?prevPage',
                 templateUrl: templateProvider.getView('incoming-simple-add'),
                 controller: 'simpleIncomingCtrl',
                 controllerAs: 'ctrl',
@@ -1285,7 +1285,7 @@ module.exports = function (app) {
 
             // add simple internal
             .state('app.internal.simple-add', {
-                url: '/simpleAdd?vsId?wobNum?action?createAsAttachment?sourceDocClass?addMethod?versionNumber',
+                url: '/simpleAdd?vsId?wobNum?action?createAsAttachment?sourceDocClass?addMethod?versionNumber?prevPage',
                 templateUrl: templateProvider.getView('internal-simple-add'),
                 controller: 'simpleInternalCtrl',
                 controllerAs: 'ctrl',

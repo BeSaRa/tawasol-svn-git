@@ -1526,7 +1526,8 @@ module.exports = function (app) {
                 $state.go(page, {
                     wobNum: info.wobNumber,
                     vsId: info.vsId,
-                    action: 'simpleEdit'
+                    action: 'simpleEdit',
+                    prevPage: 'searchScreen'
                 });
             })
         }

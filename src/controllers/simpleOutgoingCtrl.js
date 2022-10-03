@@ -368,8 +368,11 @@ module.exports = function (app) {
                 self.saveInProgress = false;
                 toast.success(langService.get(successKey));
 
-                if (ignoreLaunch || simpleEdit) {
+                if (ignoreLaunch) {
                     return;
+                }
+                if (self.simpleEdit) {
+                    $state.go($stateParams.prevPage === 'userInbox' ? 'app.inbox.user-inbox' : 'app.search-screen');
                 }
                 _launchAfterSave();
 

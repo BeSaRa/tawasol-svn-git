@@ -1294,7 +1294,8 @@ module.exports = function (app) {
                 $state.go('app.' + info.documentClass + page, {
                     wobNum: info.wobNumber,
                     vsId: info.vsId,
-                    action: 'simpleEdit'
+                    action: 'simpleEdit',
+                    prevPage: 'userInbox'
                 });
             })
         }

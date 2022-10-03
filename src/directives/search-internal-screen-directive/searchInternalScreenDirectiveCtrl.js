@@ -1401,7 +1401,8 @@ module.exports = function (app) {
                 $state.go('app.internal.simple-add', {
                     wobNum: info.wobNumber,
                     vsId: info.vsId,
-                    action: 'simpleEdit'
+                    action: 'simpleEdit',
+                    prevPage: 'searchScreen'
                 });
             })
         }
