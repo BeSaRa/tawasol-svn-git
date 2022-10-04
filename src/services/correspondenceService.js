@@ -1714,7 +1714,8 @@ module.exports = function (app) {
                             disableEverything: !!departmentIncoming,
                             pageName: 'none',
                             reloadCallback: undefined,
-                            allowedEditProperties: false
+                            allowedEditProperties: false,
+                            resetCorrespondenceCallback: undefined
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1788,7 +1789,8 @@ module.exports = function (app) {
                             disableEverything: true,
                             pageName: 'none',
                             reloadCallback: undefined,
-                            allowedEditProperties: false
+                            allowedEditProperties: false,
+                            resetCorrespondenceCallback: undefined
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1867,7 +1869,8 @@ module.exports = function (app) {
                             disableEverything: false,
                             popupNumber: generator.getPopupNumber(),
                             reloadCallback: undefined,
-                            allowedEditProperties: false
+                            allowedEditProperties: false,
+                            resetCorrespondenceCallback: undefined
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1927,7 +1930,8 @@ module.exports = function (app) {
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: 'none',
                                 reloadCallback: undefined,
-                                allowedEditProperties: false
+                                allowedEditProperties: false,
+                                resetCorrespondenceCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1991,7 +1995,8 @@ module.exports = function (app) {
                             popupNumber: generator.getPopupNumber(),
                             pageName: 'none',
                             reloadCallback: undefined,
-                            allowedEditProperties: false
+                            allowedEditProperties: false,
+                            resetCorrespondenceCallback: undefined
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -2208,7 +2213,8 @@ module.exports = function (app) {
                     popupNumber: generator.getPopupNumber(),
                     editMode: !justView,
                     reloadCallback: undefined,
-                    allowedEditProperties: false
+                    allowedEditProperties: false,
+                    resetCorrespondenceCallback: undefined
                 }
             });
         };
@@ -2407,7 +2413,7 @@ module.exports = function (app) {
             });
         };
 
-        function _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers, reloadCallback) {
+        function _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers, reloadCallback, resetCorrespondenceCallback) {
             var multi = angular.isArray(correspondence) && correspondence.length > 1;
             action = action || 'forward';
             var errorMessage = [];
@@ -2429,7 +2435,8 @@ module.exports = function (app) {
                         predefinedActionMembers: predefinedActionMembers,
                         fromQuickSend: (predefinedActionMembers && predefinedActionMembers.length > 0),
                         reloadCallback: reloadCallback,
-                        allowedEditProperties: false
+                        allowedEditProperties: false,
+                        resetCorrespondenceCallback: resetCorrespondenceCallback
                     },
                     resolve: {
                         favoritesUsers: function (distributionWFService) {
@@ -2506,9 +2513,10 @@ module.exports = function (app) {
          * @param fromSimplePopup
          * @param predefinedActionMembers
          * @param reloadCallback
+         * @param resetCorrespondenceCallback
          * @returns {promise|*}
          */
-        self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers, reloadCallback) {
+        self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers, reloadCallback, resetCorrespondenceCallback) {
             var normalCorrespondence = false;
             if (!isDeptSent) {
                 normalCorrespondence = angular.isArray(correspondence) ? !correspondence[0].isWorkItem() : !correspondence.isWorkItem();
@@ -2524,14 +2532,14 @@ module.exports = function (app) {
                             return managerService
                                 .manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event)
                                 .then(function (result) {
-                                    return result.hasSite() ? _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers, reloadCallback) : null;
+                                    return result.hasSite() ? _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers, reloadCallback, resetCorrespondenceCallback) : null;
                                 })
                         })
                 } else {
-                    return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers, reloadCallback);
+                    return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers, reloadCallback, resetCorrespondenceCallback);
                 }
             }
-            return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers, reloadCallback);
+            return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers, reloadCallback, resetCorrespondenceCallback);
 
         };
 
@@ -4083,7 +4091,8 @@ module.exports = function (app) {
                             disableEverything: false,
                             popupNumber: generator.getPopupNumber(),
                             reloadCallback: undefined,
-                            allowedEditProperties: false
+                            allowedEditProperties: false,
+                            resetCorrespondenceCallback: undefined
                         },
                         resolve: {
                             organizations: function (organizationService) {

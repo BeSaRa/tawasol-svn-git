@@ -394,7 +394,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-            document.launchWorkFlow($event, 'forward', 'favorites')
+            document.launchWorkFlow($event, 'forward', 'favorites', null, self.resetAddCorrespondence)
                 .then(function () {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);

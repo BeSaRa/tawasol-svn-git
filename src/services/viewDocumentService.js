@@ -261,7 +261,8 @@ module.exports = function (app) {
                                 disableEverything: disabled.disableAll,
                                 pageName: pageName,
                                 reloadCallback: undefined,
-                                allowedEditProperties: false
+                                allowedEditProperties: false,
+                                resetCorrespondenceCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -347,7 +348,8 @@ module.exports = function (app) {
                                 disableEverything: disabled.disableAll,
                                 pageName: pageName,
                                 reloadCallback: undefined,
-                                allowedEditProperties: allowedEditProperties || false
+                                allowedEditProperties: allowedEditProperties || false,
+                                resetCorrespondenceCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -422,7 +424,8 @@ module.exports = function (app) {
                                 disableEverything: disabled.disableAll,
                                 pageName: pageName,
                                 reloadCallback: undefined,
-                                allowedEditProperties: false
+                                allowedEditProperties: false,
+                                resetCorrespondenceCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -508,7 +511,8 @@ module.exports = function (app) {
                                 disableEverything: disabled.disableAll,
                                 pageName: pageName,
                                 reloadCallback: undefined,
-                                allowedEditProperties: false
+                                allowedEditProperties: false,
+                                resetCorrespondenceCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -582,7 +586,8 @@ module.exports = function (app) {
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: pageName,
                                 reloadCallback: reloadCallback,
-                                allowedEditProperties: false
+                                allowedEditProperties: false,
+                                resetCorrespondenceCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -658,7 +663,8 @@ module.exports = function (app) {
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: pageName,
                                 reloadCallback: undefined,
-                                allowedEditProperties: false
+                                allowedEditProperties: false,
+                                resetCorrespondenceCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -744,7 +750,8 @@ module.exports = function (app) {
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: pageName,
                                 reloadCallback: undefined,
-                                allowedEditProperties: false
+                                allowedEditProperties: false,
+                                resetCorrespondenceCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -821,7 +828,8 @@ module.exports = function (app) {
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: pageName,
                                 reloadCallback: undefined,
-                                allowedEditProperties: false
+                                allowedEditProperties: false,
+                                resetCorrespondenceCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -912,7 +920,8 @@ module.exports = function (app) {
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: pageName,
                                 reloadCallback: undefined,
-                                allowedEditProperties: false
+                                allowedEditProperties: false,
+                                resetCorrespondenceCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -980,7 +989,8 @@ module.exports = function (app) {
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: pageName,
                                 reloadCallback: undefined,
-                                allowedEditProperties: false
+                                allowedEditProperties: false,
+                                resetCorrespondenceCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1060,7 +1070,8 @@ module.exports = function (app) {
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: pageName,
                                 reloadCallback: undefined,
-                                allowedEditProperties: false
+                                allowedEditProperties: false,
+                                resetCorrespondenceCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1150,7 +1161,8 @@ module.exports = function (app) {
                                 disableEverything: disabled.disableAll,
                                 pageName: pageName,
                                 reloadCallback: undefined,
-                                allowedEditProperties: false
+                                allowedEditProperties: false,
+                                resetCorrespondenceCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1228,7 +1240,8 @@ module.exports = function (app) {
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: pageName,
                                 reloadCallback: undefined,
-                                allowedEditProperties: false
+                                allowedEditProperties: false,
+                                resetCorrespondenceCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1319,7 +1332,8 @@ module.exports = function (app) {
                                 disableEverything: disabled.disableAll,
                                 pageName: pageName,
                                 reloadCallback: undefined,
-                                allowedEditProperties: false
+                                allowedEditProperties: false,
+                                resetCorrespondenceCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1393,7 +1407,8 @@ module.exports = function (app) {
                                 disableEverything: disabled.disableAll,
                                 pageName: pageName,
                                 reloadCallback: undefined,
-                                allowedEditProperties: false
+                                allowedEditProperties: false,
+                                resetCorrespondenceCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1461,7 +1476,8 @@ module.exports = function (app) {
                                 popupNumber: generator.getPopupNumber(),
                                 pageName: pageName,
                                 reloadCallback: undefined,
-                                allowedEditProperties: false
+                                allowedEditProperties: false,
+                                resetCorrespondenceCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1577,7 +1593,8 @@ module.exports = function (app) {
                                 g2gItemCopy: g2gItemCopy,
                                 pageName: pageName,
                                 reloadCallback: undefined,
-                                allowedEditProperties: false
+                                allowedEditProperties: false,
+                                resetCorrespondenceCallback: undefined
                             }
                         }).then(function (result) {
                             generator.removePopupNumber();
@@ -1656,7 +1673,8 @@ module.exports = function (app) {
                                 g2gItemCopy: g2gItemCopy,
                                 pageName: pageName,
                                 reloadCallback: undefined,
-                                allowedEditProperties: false
+                                allowedEditProperties: false,
+                                resetCorrespondenceCallback: undefined
                             }
                         }).then(function (result) {
                             generator.removePopupNumber();
@@ -1737,7 +1755,8 @@ module.exports = function (app) {
                                 disableEverything: disabled.disableAll,
                                 pageName: pageName,
                                 reloadCallback: reloadCallback,
-                                allowedEditProperties: false
+                                allowedEditProperties: false,
+                                resetCorrespondenceCallback: undefined
                             },
                             resolve: {
                                 organizations: function (organizationService) {

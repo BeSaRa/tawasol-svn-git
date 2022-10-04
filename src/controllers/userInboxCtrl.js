@@ -741,7 +741,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.forward = function (userInbox, $event, defer) {
-            userInbox.launchWorkFlow($event, userInbox.hasActiveSeqWF() ? 'launch' : 'forward', 'favorites')
+            userInbox.launchWorkFlow($event, userInbox.hasActiveSeqWF() ? 'launch' : 'forward', 'favorites', null, null, self.reloadUserInboxes)
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {

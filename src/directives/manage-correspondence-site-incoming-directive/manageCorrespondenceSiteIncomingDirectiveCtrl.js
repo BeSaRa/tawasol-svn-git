@@ -99,7 +99,7 @@ module.exports = function (app) {
         }
 
         var _resetDefaultNeedReplyFollowupDate = function () {
-            $timeout(function (){
+            $timeout(function () {
                 if (self.correspondence) {
                     var priorityLevel = self.correspondence.getInfo().priorityLevel;
                     priorityLevel = priorityLevel.hasOwnProperty('lookupKey') ? priorityLevel.lookupKey : priorityLevel;
@@ -570,7 +570,7 @@ module.exports = function (app) {
             } else {
                 promise = $timeout(function () {
                     self.site = site;
-                    self.notifyAfterChanges('add');
+                    self.notifyAfterChanges && self.notifyAfterChanges('add');
                 });
             }
             promise.then(function () {
@@ -750,7 +750,7 @@ module.exports = function (app) {
 
         var _selectDefaultMainSiteAndGetSubSites = function () {
             if (self.selectedSiteTypeSimple && self.mainSites && self.mainSites.length > 0) {
-                if (configurationService.SELECT_MAIN_SITE_IF_ONLY_ONE && self.mainSites.length === 1){
+                if (configurationService.SELECT_MAIN_SITE_IF_ONLY_ONE && self.mainSites.length === 1) {
                     self.selectedMainSiteSimple = self.mainSites[0];
                 } else if (self.selectedSiteTypeSimple.lookupKey === 1) {
                     self.selectedMainSiteSimple = _.find(self.mainSites, function (site) {
@@ -763,7 +763,7 @@ module.exports = function (app) {
 
         var _selectDefaultMainSiteAndGetSubSitesAdvanced = function () {
             if (self.selectedSiteTypeAdvanced && self.mainSites && self.mainSites.length > 0) {
-                if (configurationService.SELECT_MAIN_SITE_IF_ONLY_ONE && self.mainSites.length === 1){
+                if (configurationService.SELECT_MAIN_SITE_IF_ONLY_ONE && self.mainSites.length === 1) {
                     self.selectedMainSiteAdvanced = self.mainSites[0];
                 } else if (self.selectedSiteTypeAdvanced.lookupKey === 1) {
                     self.selectedMainSiteAdvanced = _.find(self.mainSites, function (site) {

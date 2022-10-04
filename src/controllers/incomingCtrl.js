@@ -427,7 +427,7 @@ module.exports = function (app) {
                     ou: self.incoming.ou || self.incoming.registryOU
                 }
             }
-            document.launchWorkFlow($event, 'forward', defaultTab)
+            document.launchWorkFlow($event, 'forward', defaultTab, null, self.resetAddCorrespondence)
                 .then(function () {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
@@ -565,7 +565,7 @@ module.exports = function (app) {
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model, index) {
                     //Show if content is uploaded
-                    isVisible = gridService.checkToShowAction(action) && _hasContent() ;
+                    isVisible = gridService.checkToShowAction(action) && _hasContent();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }

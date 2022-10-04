@@ -630,8 +630,8 @@ module.exports = function (app) {
             Correspondence.prototype.hasDocumentClass = function (documentClass) {
                 return this.getInfo().documentClass.toLowerCase() === documentClass.toLowerCase();
             };
-            Correspondence.prototype.launchWorkFlow = function ($event, action, tab, isDeptIncoming, reloadCallback) {
-                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming, null, null, [], reloadCallback);
+            Correspondence.prototype.launchWorkFlow = function ($event, action, tab, isDeptIncoming, reloadCallback, resetCorrespondenceCallback) {
+                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming, null, null, [], reloadCallback, resetCorrespondenceCallback);
             };
             Correspondence.prototype.launchWorkFlowFromPredefinedAction = function ($event, action, tab, isDeptIncoming, isDeptSent, actionMembers) {
                 return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming, isDeptSent, false, actionMembers);

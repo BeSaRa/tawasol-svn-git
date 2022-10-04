@@ -403,7 +403,7 @@ module.exports = function (app) {
                     ou: self.incoming.ou || self.incoming.registryOU
                 };
             }
-            document.launchWorkFlow($event, 'forward', defaultTab)
+            document.launchWorkFlow($event, 'forward', defaultTab, null, self.resetAddCorrespondence)
                 .then(function () {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);

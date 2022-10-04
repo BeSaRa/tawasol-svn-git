@@ -44,6 +44,7 @@ module.exports = function (app) {
                                                                     SentItemDepartmentInbox,
                                                                     lookupService,
                                                                     reloadCallback,
+                                                                    resetCorrespondenceCallback,
                                                                     manageLaunchWorkflowService,
                                                                     workflowActionService,
                                                                     $state) {
@@ -1604,6 +1605,8 @@ module.exports = function (app) {
             self.correspondence.quickSendLaunchWorkflow($event, 'favorites', null, isDeptIncoming, isDeptSent, true)
                 .then(function (result) {
                     dialog.hide();
+                    resetCorrespondenceCallback && resetCorrespondenceCallback();
+                    reloadCallback && reloadCallback();
                 })
         };
 
