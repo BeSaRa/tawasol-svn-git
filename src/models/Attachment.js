@@ -37,6 +37,7 @@ module.exports = function (app) {
             self.isOfficial = false;
             self.isContract = null;
             self.isSignedContract = null;
+            self.viewable = false;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -112,6 +113,10 @@ module.exports = function (app) {
             Attachment.prototype.checkMaxValidAttachmentsSize = function () {
                 var fileSize = rootEntity.getGlobalSettings().fileSize;
                 return this.file.size > (fileSize * 1000 * 1000);
+            }
+
+            Attachment.prototype.isViewable = function () {
+                return this.viewable;
             }
 
             // don't remove CMSModelInterceptor from last line

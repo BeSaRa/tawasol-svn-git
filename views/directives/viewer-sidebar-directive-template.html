@@ -47,14 +47,15 @@
                             ng-repeat="attachment in ctrl.correspondence.attachments track by $index"
                             ng-if="!attachment.isAnnotation">
                             <a flex href="#" ng-click="ctrl.showAttachment(attachment , $index , $event)"
-                               ng-if="!ctrl.isLimitedCentralUnitAccess">
+                               ng-if="!ctrl.isLimitedCentralUnitAccess && attachment.isViewable()">
                                 {{attachment.getTranslatedName()}}
                             </a>
-                            <span flex ng-if="ctrl.isLimitedCentralUnitAccess">{{attachment.getTranslatedName()}}</span>
+                            <span flex ng-if="ctrl.isLimitedCentralUnitAccess || !attachment.isViewable()">{{attachment.getTranslatedName()}}</span>
+                            {{attachment}}
                             <md-button title="{{lang.annotate_document}}"
                                        ng-click="ctrl.openAnnotateAttachment(attachment , $event)"
                                        class="md-icon-button view-icon-button"
-                                       ng-if="!ctrl.isLimitedCentralUnitAccess && attachment.canUpdateIfAuthorizedActionStatus()">
+                                       ng-if="!ctrl.isLimitedCentralUnitAccess && attachment.canUpdateIfAuthorizedActionStatus() && attachment.isViewable()">
                                 <md-icon md-svg-icon="draw"></md-icon>
                             </md-button>
                             <grid-indicator-directive record="attachment"
@@ -76,14 +77,14 @@
                             ng-repeat="attachment in ctrl.correspondence.attachments track by $index"
                             ng-if="attachment.isAnnotation">
                             <a flex href="#" ng-click="ctrl.showAttachment(attachment , $index , $event)"
-                               ng-if="!ctrl.isLimitedCentralUnitAccess">
+                               ng-if="!ctrl.isLimitedCentralUnitAccess && attachment.isViewable()">
                                 {{attachment.getTranslatedName()}}
                             </a>
-                            <span flex ng-if="ctrl.isLimitedCentralUnitAccess">{{attachment.getTranslatedName()}}</span>
+                            <span flex ng-if="ctrl.isLimitedCentralUnitAccess || !attachment.isViewable()">{{attachment.getTranslatedName()}}</span>
                             <md-button title="{{lang.annotate_document}}"
                                        ng-click="ctrl.openAnnotateAttachment(attachment , $event)"
                                        class="md-icon-button view-icon-button"
-                                       ng-if="!ctrl.isLimitedCentralUnitAccess && attachment.canUpdateIfAuthorizedActionStatus()">
+                                       ng-if="!ctrl.isLimitedCentralUnitAccess && attachment.canUpdateIfAuthorizedActionStatus() && attachment.isViewable()">
                                 <md-icon md-svg-icon="draw"></md-icon>
                             </md-button>
                             <grid-indicator-directive record="attachment"

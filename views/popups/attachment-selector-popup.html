@@ -57,6 +57,7 @@
                             <td md-cell>
                                 <div flex layout="row" layout-align="start center">
                                     <md-button class="md-icon-button" title="{{lang.attachment_view}}"
+                                               ng-if="attachment.isViewable()"
                                                ng-click="ctrl.openViewDocumentAttachment(attachment, $event)">
                                         <md-icon md-svg-icon="eye"></md-icon>
                                     </md-button>

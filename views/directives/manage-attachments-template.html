@@ -275,7 +275,7 @@
                         <div flex layout="row" layout-align="start center">
                             <md-button class="md-icon-button" title="{{lang.attachment_view}}"
                                        ng-click="ctrl.openViewDocumentAttachment(attachment, $event)"
-                                       ng-if="!ctrl.isLimitedCentralUnitAccess">
+                                       ng-if="!ctrl.isLimitedCentralUnitAccess && attachment.isViewable()">
                                 <md-icon md-svg-icon="book-open-variant"></md-icon>
                             </md-button>
                             <md-button class="md-icon-button" title="{{lang.download}}"
@@ -300,7 +300,7 @@
                             </md-button>
                             <md-button class="md-icon-button" title="{{lang.annotate_document}}"
                                        ng-if="ctrl.hasPSPDFViewer && ctrl.isAttachmentDeletable(attachment, true) && !attachment.isContract &&
-                                        ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS') && !ctrl.isLimitedCentralUnitAccess && attachment.canUpdateIfAuthorizedActionStatus()"
+                                        ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS') && !ctrl.isLimitedCentralUnitAccess && attachment.canUpdateIfAuthorizedActionStatus() && attachment.isViewable()"
                                        ng-click="ctrl.openAnnotateAttachment(attachment, $event)">
                                 <md-icon md-svg-icon="draw"></md-icon>
                             </md-button>
