@@ -103,10 +103,25 @@ module.exports = function (app) {
         };
 
         self.downloadAttachment = function (attachment, $event) {
-            downloadService.controllerMethod
-                .attachmentDownload(attachment.vsId, info.docClassId, info.vsId, $event);
+            if (attachment.isViewable() && employeeService.hasPermissionTo("DOWNLOAD_ATTACHMENT_WITHOUT_WATERMARK")) {
+                var buttonsList = [
+                    {id: 1, type: "yes", text: "yes", value: true, cssClass: ""},
+                    {id: 2, type: "no", text: "no", value: false, cssClass: ""}
+                ];
+
+                return dialog.confirmMessageWithDynamicButtonsList(langService.get('do_you_want_to_download_without_watermark'), buttonsList, '')
+                    .then(function (selectedLabel) {
+                        return _downloadAttachment(attachment, selectedLabel.value);
+                    })
+            } else {
+                return _downloadAttachment(attachment);
+            }
         };
 
+        function _downloadAttachment(attachment, withoutWatermark) {
+            downloadService.controllerMethod
+                .attachmentDownload(attachment.vsId, info.docClassId, info.vsId, withoutWatermark);
+        }
 
     });
 };

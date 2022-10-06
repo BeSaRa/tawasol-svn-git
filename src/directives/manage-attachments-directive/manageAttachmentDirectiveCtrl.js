@@ -414,7 +414,7 @@ module.exports = function (app) {
         };
 
         self.downloadAttachment = function (attachment, $event) {
-            if (employeeService.hasPermissionTo("DOWNLOAD_ATTACHMENT_WITHOUT_WATERMARK")) {
+            if (attachment.isViewable() && employeeService.hasPermissionTo("DOWNLOAD_ATTACHMENT_WITHOUT_WATERMARK")) {
                 var buttonsList = [
                     {id: 1, type: "yes", text: "yes", value: true, cssClass: ""},
                     {id: 2, type: "no", text: "no", value: false, cssClass: ""}

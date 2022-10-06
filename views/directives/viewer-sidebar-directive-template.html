@@ -51,7 +51,6 @@
                                 {{attachment.getTranslatedName()}}
                             </a>
                             <span flex ng-if="ctrl.isLimitedCentralUnitAccess || !attachment.isViewable()">{{attachment.getTranslatedName()}}</span>
-                            {{attachment}}
                             <md-button title="{{lang.annotate_document}}"
                                        ng-click="ctrl.openAnnotateAttachment(attachment , $event)"
                                        class="md-icon-button view-icon-button"
