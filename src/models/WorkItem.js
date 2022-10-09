@@ -967,7 +967,7 @@ module.exports = function (app) {
             };
 
             WorkItem.prototype.isLocked = function () {
-                return !!this.generalStepElm.lockingInfo;
+                return rootEntity.returnRootEntity().settings.isHidePELocksEnabled() ? false : !!this.generalStepElm.lockingInfo;
             };
 
             WorkItem.prototype.getLockingInfo = function () {

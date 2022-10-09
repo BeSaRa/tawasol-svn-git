@@ -58,6 +58,9 @@ module.exports = function (app) {
             Settings.prototype.isLimitedCentralUnitAccessEnabled = function () {
                 return this.limitedCentralUnitAccess;
             }
+            Settings.prototype.isHidePELocksEnabled = function () {
+                return this.hidePELocks;
+            };
 
             Settings.prototype.isSendRelatedDocsAllowed = function () {
                 return this.wFRelatedBookStatus !== 0;

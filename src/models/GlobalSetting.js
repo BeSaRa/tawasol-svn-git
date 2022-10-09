@@ -76,6 +76,7 @@ module.exports = function (app) {
             self.legacyWorkflowHistory = false;
             self.legacySMSCorNotification = false;
             self.allowPrintCorReceipt = false;
+            self.hidePELocks = false;
 
             //endregion
 
