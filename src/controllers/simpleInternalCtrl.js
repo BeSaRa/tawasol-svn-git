@@ -281,6 +281,7 @@ module.exports = function (app) {
                 }
                 if (self.simpleEdit) {
                     $state.go($stateParams.prevPage === 'userInbox' ? 'app.inbox.user-inbox' : 'app.search-screen');
+                    return;
                 }
                 _launchAfterSave()
             }
@@ -767,7 +768,7 @@ module.exports = function (app) {
             self.contentFileExist = false;
 
             self.document_properties.$setUntouched();
-
+            self.simpleEdit = false;
             self.simpleViewUrl = null;
             self.isNewDocument = true;
 
@@ -791,7 +792,7 @@ module.exports = function (app) {
         };
 
         self.checkChangeInternalType = function () {
-            if (self.employee.isBacklogMode()) {
+            if (self.employee.isBacklogMode() || self.simpleEdit) {
                 return;
             }
             // self.checkCentralArchive();

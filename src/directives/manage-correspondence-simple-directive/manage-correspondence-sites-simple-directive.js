@@ -16,7 +16,8 @@ module.exports = function (app) {
                 emptySubRecords: '=',
                 disableCorrespondence: '=',
                 emptySiteSearch: '=',
-                correspondence: '='
+                correspondence: '=',
+                simpleEdit: '=?'
             }
         }
     });

@@ -259,6 +259,7 @@ module.exports = function (app) {
                 }
                 if (self.simpleEdit) {
                     $state.go($stateParams.prevPage === 'userInbox' ? 'app.inbox.user-inbox' : 'app.search-screen');
+                    return;
                 }
                 _launchAfterSave();
             }

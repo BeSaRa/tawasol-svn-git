@@ -187,6 +187,9 @@ module.exports = function (app) {
         };
 
         self.checkChangeOutgoingType = function () {
+            if (self.simpleEdit) {
+                return;
+            }
             if (self.documentInformation || self.outgoing.contentFile) {
                 return dialog
                     .confirmMessage(langService.get('content_will_remove_confirm'))
@@ -373,6 +376,7 @@ module.exports = function (app) {
                 }
                 if (self.simpleEdit) {
                     $state.go($stateParams.prevPage === 'userInbox' ? 'app.inbox.user-inbox' : 'app.search-screen');
+                    return;
                 }
                 _launchAfterSave();
 
@@ -1007,6 +1011,7 @@ module.exports = function (app) {
 
             self.simpleViewUrl = null;
             self.isNewDocument = true;
+            self.simpleEdit = false;
         };
 
         /**

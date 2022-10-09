@@ -724,7 +724,7 @@ module.exports = function (app) {
 
             self.receiveG2G = false;
             self.receive = false;
-
+            self.simpleEdit = false;
             self.isNewDocument = true;
         };
 

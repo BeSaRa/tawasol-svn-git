@@ -176,8 +176,19 @@ module.exports = function (app) {
                     }
 
                     self.getSubSites(true).then(function () {
-                        var _subSite = new Site(oldSites[0]);
-                        _subSite.followupStatus = self.isFollowupStatusMandatory ? angular.copy(followupStatusNeedReply) : angular.copy(followupStatusWithoutReply);
+                        var _subSite = new Site(oldSites[0])
+                            .setParentSiteText()
+                            .setSubSiteText()
+                            .setCorrespondenceSiteType(_getTypeByLookupKey(oldSites[0].siteType));
+
+                        if (self.simpleEdit) {
+                            _subSite.setFollowupStatus(_.find(self.followUpStatuses, function (item) {
+                                return item.lookupKey === _subSite.followupStatus
+                            }));
+                            self.simpleEditSubSiteCopy = angular.copy(_subSite);
+                        } else {
+                            _subSite.followupStatus = self.isFollowupStatusMandatory ? angular.copy(followupStatusNeedReply) : angular.copy(followupStatusWithoutReply);
+                        }
                         var selected = _.find(self.subSites, function (item) {
                             return item.mainSiteId === _subSite.mainSiteId && item.subSiteId === _subSite.subSiteId;
                         });
@@ -187,8 +198,11 @@ module.exports = function (app) {
                         self.selectedSubSite = _subSite;
                         if (self.simpleSearch) {
                             self.changeSubCorrespondence(self.selectedSubSite);
+                            self.selectedSiteType = _subSite.siteType;
                         } else {
-                            self.subSiteChanged();
+                            // subSiteChanged event called twice avoid in simpleEdit mode
+                            if (!self.simpleEdit)
+                                self.subSiteChanged();
                         }
                         self.correspondence.sitesToList = oldSites;
                     });
@@ -452,9 +466,14 @@ module.exports = function (app) {
         self.changeSubCorrespondence = function (item) {
             if (item) {
                 self.addSiteTo(item);
-                self.selectedSubSiteFollowUpStatus = item.followupStatus;
-                self.selectedSubSiteFollowupDate = item.followupDate ? generator.getDateFromTimeStamp(new Date(item.followupDate).valueOf()) : item.followupDate;
-
+                if (self.simpleEdit && !self.forceResetFollowup) {
+                    self.selectedSubSiteFollowUpStatus = self.simpleEditSubSiteCopy.followupStatus;
+                    self.selectedSubSiteFollowupDate = self.simpleEditSubSiteCopy.followupDate ? generator.getDateFromTimeStamp(new Date(self.simpleEditSubSiteCopy.followupDate).valueOf()) : self.simpleEditSubSiteCopy.followupDate;
+                    self.forceResetFollowup = true;
+                } else {
+                    self.selectedSubSiteFollowUpStatus = item.followupStatus;
+                    self.selectedSubSiteFollowupDate = item.followupDate ? generator.getDateFromTimeStamp(new Date(item.followupDate).valueOf()) : item.followupDate;
+                }
             } else {
                 self['sitesInfoTo'] = [];
                 self.selectedSubSiteFollowUpStatus = followupStatusWithoutReply;
@@ -736,6 +755,7 @@ module.exports = function (app) {
                 self.subSitesCopy = [];
                 self.subSiteSearchText = '';
                 self.emptySiteSearch = false;
+                self.simpleEdit = false;
             }
 
             if (self.correspondence.isInternal) {

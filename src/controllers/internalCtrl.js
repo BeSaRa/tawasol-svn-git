@@ -757,7 +757,7 @@ module.exports = function (app) {
             self.contentFileExist = false;
             self.editContent = false;
             self.document_properties.$setUntouched();
-
+            self.simpleEdit = false;
             self.isNewDocument = true;
         };
 
