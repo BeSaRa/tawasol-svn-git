@@ -174,8 +174,9 @@ module.exports = function (app) {
                         gridService.setDueDatePassed(gridService.grids.inbox.userFollowupBookByUser, self.grid.isDueDatePassed);
                         if (hasQueryParams()) {
                             self.reloadFollowupBooks(1, true);
+                        } else {
+                            self.filterDueDatePassed();
                         }
-                        self.filterDueDatePassed();
                     });
             }
         };
@@ -185,7 +186,7 @@ module.exports = function (app) {
          */
         self.filterDueDatePassed = function () {
             self.followupBooks = self.grid.isDueDatePassed ? $filter('filter')(self.followupBooks, function (item) {
-                return item.isDueDatePassed();
+                return item.isDueDatePassed() && !item.isTerminated();
             }) : self.followupBooksCopy;
         }
 
@@ -219,7 +220,7 @@ module.exports = function (app) {
                 userId: self.selectedUser,
                 userOUID: self.selectedOrganization,
                 securityLevel: self.selectedSecurityLevels,
-                isDelayed: self.grid.isDueDatePassed,
+                isDelayed: false,//self.grid.isDueDatePassed,
                 status: null
             });
             if (!skipDates) {
@@ -618,6 +619,7 @@ module.exports = function (app) {
          */
         self.printResult = function (printSelectedBulk, $event) {
             var printCriteria = angular.copy(self.searchCriteriaCopy);
+            printCriteria.isDelayed = self.grid.isDueDatePassed;
             if (!self.isValidBasicCriteria()) {
                 return;
             }
@@ -638,6 +640,7 @@ module.exports = function (app) {
          */
         self.print = function (record, $event) {
             var printCriteria = angular.copy(self.searchCriteriaCopy);
+            printCriteria.isDelayed = self.grid.isDueDatePassed;
             printCriteria.idList.push(record.id);
             followUpUserService.setFollowupReportHeading(self.searchCriteriaUsed, printCriteria, (self.selectedFolder ? self.selectedFolder.getTranslatedName() : null))
                 .then(function (heading) {
