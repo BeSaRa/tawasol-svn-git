@@ -1827,7 +1827,7 @@ module.exports = function (app) {
             {
                 type: 'action',
                 icon: 'pen',
-                text: 'grid_action_create_reply',
+                text: 'grid_action_create_reply_specific_version',
                 callback: self.createReplySpecificVersion,
                 class: "action-green",
                 checkShow: function (action, model) {
