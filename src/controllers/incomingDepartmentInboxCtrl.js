@@ -1078,6 +1078,8 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.returnWorkItem,
                 class: "action-green",
+                sticky: true,
+                stickyIndex: 1,
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
@@ -1114,6 +1116,8 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.receiveWorkItem,
                 class: "action-green",
+                sticky: true,
+                stickyIndex: 2,
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
@@ -1158,6 +1162,8 @@ module.exports = function (app) {
                 callback: self.quickReceiveWorkItem,
                 class: "action-green",
                 permissionKey: "QUICK_RECEIVE_INCOMING",
+                sticky: true,
+                stickyIndex: 3,
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },

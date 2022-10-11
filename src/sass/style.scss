@@ -1983,6 +1983,7 @@ table td.cms-comment {
 
 .viewer-actions {
   margin-bottom: 10px;
+  text-align: center;
 
   button.md-fab {
     background: none !important;
@@ -2823,4 +2824,9 @@ html.rtl {
 
 .break-white-space {
   white-space: break-spaces !important;
+}
+
+.quick-action-label {
+  width: 65px;
+  font-size: 11px;
 }

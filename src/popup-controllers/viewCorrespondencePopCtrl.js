@@ -950,7 +950,7 @@ module.exports = function (app) {
                 return true;
             });
             self.stickyActions = $filter('orderBy')(self.stickyActions, 'stickyIndex');
-            self.stickyActionsChunk = _.chunk(self.stickyActions, 6);
+            self.stickyActionsChunk = _.chunk(self.stickyActions, 4);
         };
 
 

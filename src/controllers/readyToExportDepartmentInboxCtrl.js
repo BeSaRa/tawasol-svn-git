@@ -1393,6 +1393,8 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.exportReadyToExport,
                 class: "action-green",
+                sticky: true,
+                stickyIndex: 1,
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },

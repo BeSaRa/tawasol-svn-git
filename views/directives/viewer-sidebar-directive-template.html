@@ -6,12 +6,15 @@
                                                 item="ctrl.workItem"></work-item-properties-directive>
                 <correspondence-item-properties-directive
                         section-title="general_information"
-                        item="ctrl.correspondence" show-last-action="!ctrl.workItem"></correspondence-item-properties-directive>
+                        item="ctrl.correspondence"
+                        show-last-action="!ctrl.workItem"></correspondence-item-properties-directive>
                 <!-- Quick Actions -->
                 <li>
-                    <div class="viewer-actions" layout="row" ng-repeat="chunk in ctrl.stickyActionsChunk">
+                    <div class="viewer-actions" flex layout="row" layout-align="start start"
+                         ng-repeat="chunk in ctrl.stickyActionsChunk">
                         <div ng-repeat="quickAction in chunk track by $index"
-                             ng-class="{'icon-relative':ctrl.isShowActionCount(quickAction)}">
+                             ng-class="{'icon-relative':ctrl.isShowActionCount(quickAction)}"
+                             layout="column" class="quick-action-label" layout-align="center center">
                             <!-- ng-if="ctrl.isShowViewerAction(quickAction)"-->
                             <md-button
                                     class="md-fab md-mini"
@@ -22,6 +25,7 @@
                                 <md-icon md-svg-icon="{{quickAction.icon}}"
                                          class="{{quickAction.class}}"></md-icon>
                             </md-button>
+                            <span>{{ctrl.getViewerActionText(quickAction, true)}}</span>
                             <span ng-if="ctrl.isShowActionCount(quickAction)"
                                   class="counter blue">{{quickAction.count(quickAction, ctrl.workItem)}}</span>
                         </div>
@@ -50,7 +54,8 @@
                                ng-if="!ctrl.isLimitedCentralUnitAccess && attachment.isViewable()">
                                 {{attachment.getTranslatedName()}}
                             </a>
-                            <span flex ng-if="ctrl.isLimitedCentralUnitAccess || !attachment.isViewable()">{{attachment.getTranslatedName()}}</span>
+                            <span flex
+                                  ng-if="ctrl.isLimitedCentralUnitAccess || !attachment.isViewable()">{{attachment.getTranslatedName()}}</span>
                             <md-button title="{{lang.annotate_document}}"
                                        ng-click="ctrl.openAnnotateAttachment(attachment , $event)"
                                        class="md-icon-button view-icon-button"
@@ -79,7 +84,8 @@
                                ng-if="!ctrl.isLimitedCentralUnitAccess && attachment.isViewable()">
                                 {{attachment.getTranslatedName()}}
                             </a>
-                            <span flex ng-if="ctrl.isLimitedCentralUnitAccess || !attachment.isViewable()">{{attachment.getTranslatedName()}}</span>
+                            <span flex
+                                  ng-if="ctrl.isLimitedCentralUnitAccess || !attachment.isViewable()">{{attachment.getTranslatedName()}}</span>
                             <md-button title="{{lang.annotate_document}}"
                                        ng-click="ctrl.openAnnotateAttachment(attachment , $event)"
                                        class="md-icon-button view-icon-button"

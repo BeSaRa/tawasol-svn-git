@@ -64,7 +64,7 @@
                             </md-input-container>
                         </div>
                         <div ng-if="ctrl.incoming.hasVsId() && ctrl.requestCompleted">
-                            <md-button class="md-raised" ng-disabled="!ctrl.documentAction || ctrl.saveInProgress"
+                            <md-button class="md-raised md-primary" ng-disabled="!ctrl.documentAction || ctrl.saveInProgress"
                                        ng-click="ctrl.performDocumentAction($event)">{{lang.action_submit}}
                             </md-button>
                         </div>
@@ -276,7 +276,7 @@
                             </md-input-container>
                         </div>
                         <div ng-if="ctrl.incoming.hasVsId() && ctrl.requestCompleted">
-                            <md-button class="md-raised" ng-disabled="!ctrl.documentAction || ctrl.saveInProgress"
+                            <md-button class="md-raised md-primary" ng-disabled="!ctrl.documentAction || ctrl.saveInProgress"
                                        ng-click="ctrl.performDocumentAction($event)">{{lang.action_submit}}
                             </md-button>
                         </div>

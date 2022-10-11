@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('viewerSidebarDirectiveCtrl', function ($scope, AnnotationType, $state, viewTrackingSheetService, correspondenceService, attachmentService, employeeService, $q, dialog, manageLaunchWorkflowService, LangWatcher, $filter, langService, gridService, generator) {
+    app.controller('viewerSidebarDirectiveCtrl', function ($scope, AnnotationType, $state, viewTrackingSheetService, correspondenceService, attachmentService, employeeService, $q, dialog, manageLaunchWorkflowService, LangWatcher, $filter, langService, gridService, generator,_) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewerSidebarDirectiveCtrl';
@@ -52,7 +52,7 @@ module.exports = function (app) {
                 return true;
             });
             self.stickyActions = $filter('orderBy')(self.stickyActions, 'stickyIndex');
-            self.stickyActionsChunk = _.chunk(self.stickyActions, 6);
+            self.stickyActionsChunk = _.chunk(self.stickyActions, 4);
         };
 
         self.recordType = 'normalDocument';
