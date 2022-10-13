@@ -220,8 +220,7 @@ module.exports = function (app) {
                 userId: self.selectedUser,
                 userOUID: self.selectedOrganization,
                 securityLevel: self.selectedSecurityLevels,
-                isDelayed: false,//self.grid.isDueDatePassed,
-                status: null
+                isDelayed: false//self.grid.isDueDatePassed,
             });
             if (!skipDates) {
                 self.searchCriteria.fromFollowupDate = moment().subtract(configurationService.FOLLOWUP_BOOK_FILTER_START_BEFORE_VALUE, configurationService.FOLLOWUP_BOOK_FILTER_START_BEFORE_TYPE).toDate();
