@@ -60,6 +60,7 @@ module.exports = function (app) {
             self.seqWFEmailSettings = 0;
             self.enableMobileAccess = false;
             self.isFavSendSecreenDefault = false;
+            self.isInboxDefaultAfterEntry = false;
 
             var collectionResults = [
                 'reminderSmsPriority',
@@ -384,6 +385,9 @@ module.exports = function (app) {
 
             ApplicationUser.prototype.isDefaultTabFavoriteAtLaunch = function () {
                 return this.isFavSendSecreenDefault;
+            }
+            ApplicationUser.prototype.isRedirectToUserInboxEnabled = function () {
+                return this.isInboxDefaultAfterEntry;
             }
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

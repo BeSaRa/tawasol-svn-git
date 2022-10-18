@@ -477,7 +477,11 @@
                                         <label>{{lang.default_favorite_screen_when_send}} :
                                             {{ctrl.applicationUser.getTranslatedYesNo('isFavSendSecreenDefault')}}</label>
                                     </md-switch>
-                                    <span flex></span>
+                                    <md-switch flex ng-model="ctrl.applicationUser.isInboxDefaultAfterEntry"
+                                               aria-label="{{lang.redirect_to_user_inbox_after_add}}">
+                                        <label>{{lang.redirect_to_user_inbox_after_add}} :
+                                            {{ctrl.applicationUser.getTranslatedYesNo('isInboxDefaultAfterEntry')}}</label>
+                                    </md-switch>
                                 </div>
                             </div>
                         </md-content>

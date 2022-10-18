@@ -68,6 +68,7 @@ module.exports = function (app) {
             self.searchDefaultView = 1;
             self.userWFDistView = 1;
             self.isFavSendSecreenDefault = false;
+            self.isInboxDefaultAfterEntry = false;
 
             var collectionResults = [
                 'reminderSmsPriority',
@@ -478,6 +479,11 @@ module.exports = function (app) {
             Employee.prototype.isDefaultTabFavoriteAtLaunch = function () {
                 return this.isFavSendSecreenDefault;
             }
+
+            Employee.prototype.isRedirectToUserInboxEnabled = function () {
+                return this.isInboxDefaultAfterEntry;
+            }
+
 
             CMSModelInterceptor.runEvent('Employee', 'init', this);
 

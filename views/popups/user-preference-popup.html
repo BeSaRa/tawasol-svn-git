@@ -422,6 +422,14 @@
                                             {{ctrl.applicationUser.getTranslatedYesNo('otpEnabled')}}</label>
                                     </md-switch>-->
                                 </div>
+                                <div layout="row">
+                                    <md-switch flex ng-model="ctrl.applicationUser.isInboxDefaultAfterEntry"
+                                               aria-label="{{lang.redirect_to_user_inbox_after_add}}">
+                                        <label>{{lang.redirect_to_user_inbox_after_add}} :
+                                            {{ctrl.applicationUser.getTranslatedYesNo('isInboxDefaultAfterEntry')}}</label>
+                                    </md-switch>
+                                    <span flex></span>
+                                </div>
                             </div>
                         </md-content>
                     </md-tab>

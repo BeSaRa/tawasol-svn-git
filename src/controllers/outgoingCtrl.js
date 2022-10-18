@@ -458,6 +458,9 @@ module.exports = function (app) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.resetAddCorrespondence();
+                    if (self.employee.isRedirectToUserInboxEnabled()) {
+                        $state.go('app.inbox.user-inbox');
+                    }
                 });
         };
 
@@ -471,6 +474,9 @@ module.exports = function (app) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.resetAddCorrespondence();
+                    if (self.employee.isRedirectToUserInboxEnabled()) {
+                        $state.go('app.inbox.user-inbox');
+                    }
                 });
         };
 
@@ -489,6 +495,9 @@ module.exports = function (app) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.resetAddCorrespondence();
+                    if (self.employee.isRedirectToUserInboxEnabled()) {
+                        $state.go('app.inbox.user-inbox');
+                    }
                 })
         };
 
