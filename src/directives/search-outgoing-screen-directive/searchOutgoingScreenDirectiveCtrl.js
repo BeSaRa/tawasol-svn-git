@@ -910,11 +910,11 @@ module.exports = function (app) {
             }
             // we can launch the document if the document not in inbox
             if (searchedOutgoingDocument.docStatus !== 22) {
-                return searchedOutgoingDocument.launchWorkFlow($event, null, 'favorites');
+                return searchedOutgoingDocument.launchWorkFlow($event, null, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users');
             }
 
             // if the document status === 22 we should check if the document have active workflow
-            searchedOutgoingDocument.launchWorkFlowAndCheckExists($event, null, 'favorites')
+            searchedOutgoingDocument.launchWorkFlowAndCheckExists($event, null, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadSearchCorrespondence(self.grid.page)
                         .then(function () {

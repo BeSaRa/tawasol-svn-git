@@ -67,6 +67,7 @@ module.exports = function (app) {
             self.signAnnotationSettings = '';
             self.searchDefaultView = 1;
             self.userWFDistView = 1;
+            self.isFavSendSecreenDefault = false;
 
             var collectionResults = [
                 'reminderSmsPriority',
@@ -473,6 +474,10 @@ module.exports = function (app) {
             Employee.prototype.removeFollowupOrganizations = function () {
                 organizationService.followupOrganizations = [];
             };
+
+            Employee.prototype.isDefaultTabFavoriteAtLaunch = function () {
+                return this.isFavSendSecreenDefault;
+            }
 
             CMSModelInterceptor.runEvent('Employee', 'init', this);
 

@@ -621,7 +621,7 @@ module.exports = function (app) {
                         if (result === correspondenceService.authorizeStatus.PARTIALLY_AUTHORIZED.text && !ignoreLaunch) {
                             return dialog.confirmMessage(langService.get('book_needs_more_signatures_launch_to_user').change({name: correspondence.getTranslatedName()}))
                                 .then(function () {
-                                    return correspondence.launchWorkFlow($event, 'forward', 'favorites');
+                                    return correspondence.launchWorkFlow($event, 'forward', employeeService.getEmployee().isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users');
                                 });
                         }
                         return result;

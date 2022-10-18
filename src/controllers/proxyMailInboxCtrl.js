@@ -48,6 +48,7 @@ module.exports = function (app) {
         self.proxyMailInboxesCopy = angular.copy(self.proxyMailInboxes);
         self.userFolders = userFolders;
         self.selectUser = self.proxyUsers.length === 1 ? self.proxyUsers[0] : null;
+        self.employee = employeeService.getEmployee();
 
         /**
          * @description Contains methods for Star operations for proxy Mail inbox items
@@ -304,7 +305,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.forward = function (workItem, $event, defer) {
-            workItem.launchWorkFlow($event, 'forward', 'favorites')
+            workItem.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadProxyMailInboxes(self.grid.page)
                         .then(function () {

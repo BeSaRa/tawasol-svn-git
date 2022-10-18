@@ -43,6 +43,7 @@ module.exports = function (app) {
          */
         self.sentItemDepartmentInboxes = angular.copy(departmentSentItem.combinedItems);
         self.sentItemDepartmentInboxesCopy = angular.copy(self.sentItemDepartmentInboxes);
+        self.employee = employeeService.getEmployee();
 
         /**
          * @description Contains the selected sent items
@@ -190,7 +191,7 @@ module.exports = function (app) {
          */
         self.launchNewDistributionWorkflow = function (sentItemDepartmentInbox, $event, defer) {
             sentItemDepartmentInbox.recordGridName = gridService.grids.department.sentItem;
-            sentItemDepartmentInbox.launchWorkFlow($event, 'forward', 'favorites')
+            sentItemDepartmentInbox.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadSentItemDepartmentInboxes(self.grid.page)
                         .then(function () {
@@ -209,7 +210,7 @@ module.exports = function (app) {
          */
         self.quickSend = function (record, $event, defer) {
             record.recordGridName = gridService.grids.department.sentItem;
-            record.quickSendLaunchWorkflow($event, 'favorites')
+            record.quickSendLaunchWorkflow($event, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadSentItemDepartmentInboxes(self.grid.page)
                         .then(function () {

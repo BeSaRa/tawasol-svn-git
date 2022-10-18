@@ -30,6 +30,7 @@ module.exports = function (app) {
         contextHelpService.setHelpTo('outgoing-ready-to-send');
         // employee service to check the permission in html
         self.employeeService = employeeService;
+        self.employee = employeeService.getEmployee();
 
         /**
          * @description All ready to send outgoing mails
@@ -142,7 +143,7 @@ module.exports = function (app) {
                 return;
             }
             return correspondenceService
-                .launchCorrespondenceWorkflow(self.selectedReadyToSendOutgoings, $event, 'forward', 'favorites')
+                .launchCorrespondenceWorkflow(self.selectedReadyToSendOutgoings, $event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadReadyToSendOutgoings(self.grid.page)
                         .then(function () {
@@ -208,7 +209,7 @@ module.exports = function (app) {
                 return;
             }
 
-            readyToSendOutgoing.launchWorkFlow($event, 'forward', 'favorites')
+            readyToSendOutgoing.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadReadyToSendOutgoings(self.grid.page)
                         .then(function () {
@@ -229,7 +230,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
             }
-            record.quickSendLaunchWorkflow($event, 'favorites')
+            record.quickSendLaunchWorkflow($event, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadReadyToSendOutgoings(self.grid.page)
                         .then(function () {

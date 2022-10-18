@@ -70,6 +70,7 @@ module.exports = function (app) {
         ];
 
         self.viewURL = '';
+        self.employee = employeeService.getEmployee();
 
         self.isOfficeOnlineViewer = function (url) {
             return url && url.$$unwrapTrustedValue().indexOf('.aspx') !== -1;
@@ -1002,7 +1003,7 @@ module.exports = function (app) {
                         dialog.hide();
                     });
             } else if (launchData.wfType === manageLaunchWorkflowService.workflowType.quickSend) {
-                record.quickSendLaunchWorkflow($event, 'favorites', null, launchData.isDeptIncoming)
+                record.quickSendLaunchWorkflow($event, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users', null, launchData.isDeptIncoming)
                     .then(function (result) {
                         dialog.hide();
                     })

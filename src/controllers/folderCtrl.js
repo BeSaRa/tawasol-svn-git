@@ -43,6 +43,8 @@ module.exports = function (app) {
         self.selectedWorkItems = [];
         self.folders = folders;
         self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
+        self.employee = employeeService.getEmployee();
+
 
         self.sidebarStatus = false;
         // to display the user Inbox folder
@@ -262,7 +264,7 @@ module.exports = function (app) {
 
         function forwardBulk(selectedItems, $event) {
             return correspondenceService
-                .launchCorrespondenceWorkflow(selectedItems, $event, 'forward', 'favorites')
+                .launchCorrespondenceWorkflow(selectedItems, $event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadFolders(self.grid.page);
                 });
@@ -392,7 +394,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.forward = function (workItem, $event, defer) {
-            workItem.launchWorkFlow($event, 'forward', 'favorites')
+            workItem.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadFolders(self.grid.page)
                         .then(function () {
@@ -408,7 +410,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.quickSend = function (record, $event, defer) {
-            record.quickSendLaunchWorkflow($event, 'favorites')
+            record.quickSendLaunchWorkflow($event, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadFolders(self.grid.page)
                         .then(function () {

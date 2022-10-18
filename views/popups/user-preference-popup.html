@@ -403,6 +403,11 @@
                                     </md-switch>
                                 </div>
                                 <div layout="row">
+                                    <md-switch flex ng-model="ctrl.applicationUser.isFavSendSecreenDefault"
+                                               aria-label="{{lang.default_favorite_screen_when_send}}">
+                                        <label>{{lang.default_favorite_screen_when_send}} :
+                                            {{ctrl.applicationUser.getTranslatedYesNo('isFavSendSecreenDefault')}}</label>
+                                    </md-switch>
                                     <md-switch flex ng-model="ctrl.applicationUser.pinCodePrompt"
                                                ng-if="ctrl.globalSetting.isDigitalCertificateEnabled()"
                                                ng-disabled="!ctrl.globalSetting.isDigitalCertificateEnabled()"

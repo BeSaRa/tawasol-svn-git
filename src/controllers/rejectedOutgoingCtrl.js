@@ -30,6 +30,8 @@ module.exports = function (app) {
         contextHelpService.setHelpTo('outgoing-rejected');
         // employee service to check the permission in html
         self.employeeService = employeeService;
+        self.employee = employeeService.getEmployee();
+
         /**
          * @description All rejected outgoing mails
          * @type {*}
@@ -203,7 +205,7 @@ module.exports = function (app) {
                 return;
             }
             return correspondenceService
-                .launchCorrespondenceWorkflow(self.selectedRejectedOutgoings, $event, 'forward', 'favorites')
+                .launchCorrespondenceWorkflow(self.selectedRejectedOutgoings, $event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadRejectedOutgoings(self.grid.page)
                         .then(function () {
@@ -283,7 +285,7 @@ module.exports = function (app) {
             }
 
             rejectedOutgoing.recordGridName = gridService.grids.outgoing.rejected;
-            rejectedOutgoing.launchWorkFlow($event, 'forward', 'favorites')
+            rejectedOutgoing.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadRejectedOutgoings(self.grid.page)
                         .then(function () {
@@ -305,7 +307,7 @@ module.exports = function (app) {
                 return;
             }
             record.recordGridName = gridService.grids.outgoing.rejected;
-            record.quickSendLaunchWorkflow($event, 'favorites')
+            record.quickSendLaunchWorkflow($event, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadRejectedOutgoings(self.grid.page)
                         .then(function () {

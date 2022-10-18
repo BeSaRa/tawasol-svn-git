@@ -936,12 +936,12 @@ module.exports = function (app) {
             correspondence.recordGridName = gridService.grids.search.general;
             // run launch for any incoming document or other documents not in the inbox
             if (correspondence.hasDocumentClass('incoming') || correspondence.docStatus !== 22) {
-                promise = correspondence.launchWorkFlow($event, null, 'favorites');
+                promise = correspondence.launchWorkFlow($event, null, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users');
             } else {
                 if (correspondence.hasDocumentClass('internal')) {
-                    promise = correspondence.launchWorkFlowAndCheckApprovedInternal($event, null, 'favorites');
+                    promise = correspondence.launchWorkFlowAndCheckApprovedInternal($event, null, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users');
                 } else {
-                    promise = correspondence.launchWorkFlowAndCheckExists($event, null, 'favorites');
+                    promise = correspondence.launchWorkFlowAndCheckExists($event, null, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users');
                 }
             }
 

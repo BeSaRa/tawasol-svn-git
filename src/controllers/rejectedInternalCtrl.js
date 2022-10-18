@@ -28,6 +28,7 @@ module.exports = function (app) {
 
         // employee service to check the permission in html
         self.employeeService = employeeService;
+        self.employee = employeeService.getEmployee();
 
         contextHelpService.setHelpTo('internal-rejected');
         /**
@@ -184,7 +185,7 @@ module.exports = function (app) {
                 return;
             }
             return correspondenceService
-                .launchCorrespondenceWorkflow(self.selectedRejectedInternals, $event, 'forward', 'favorites')
+                .launchCorrespondenceWorkflow(self.selectedRejectedInternals, $event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadRejectedInternals(self.grid.page)
                         .then(function () {
@@ -265,7 +266,7 @@ module.exports = function (app) {
                 return;
             }
             rejectedInternal.recordGridName = gridService.grids.internal.rejected;
-            rejectedInternal.launchWorkFlow($event, 'forward', 'favorites')
+            rejectedInternal.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadRejectedInternals(self.grid.page)
                         .then(function () {
@@ -287,7 +288,7 @@ module.exports = function (app) {
                 return;
             }
             record.recordGridName = gridService.grids.internal.rejected;
-            record.quickSendLaunchWorkflow($event, 'favorites')
+            record.quickSendLaunchWorkflow($event, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadRejectedInternals(self.grid.page)
                         .then(function () {

@@ -40,6 +40,7 @@ module.exports = function (app) {
         // employee service to check the permission in html
         self.employeeService = employeeService;
         self.isInternalOutgoingEnabled = rootEntity.isInternalOutgoingEnabled();
+        self.employee = employeeService.getEmployee();
 
         /**
          * @description All returned department inbox items
@@ -278,7 +279,7 @@ module.exports = function (app) {
             workItem.hideForwardSenderInfo = true;
             workItem.recordGridName = gridService.grids.department.returned;
             dialog.confirmMessage(langService.get("confirm_launch_workflow")).then(function () {
-                workItem.launchWorkFlow($event, 'forward', 'favorites')
+                workItem.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                     .then(function () {
                         self.reloadReturnedDepartmentInboxes(self.grid.page)
                             .then(function () {
@@ -303,7 +304,7 @@ module.exports = function (app) {
             workItem.generalStepElm.workFlowName = "Outgoing";
             workItem.recordGridName = gridService.grids.department.returned;
             dialog.confirmMessage(langService.get("confirm_launch_workflow")).then(function () {
-                workItem.quickSendLaunchWorkflow($event, 'favorites')
+                workItem.quickSendLaunchWorkflow($event, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                     .then(function () {
                         self.reloadReturnedDepartmentInboxes(self.grid.page)
                             .then(function () {

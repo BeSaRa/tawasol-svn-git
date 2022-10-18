@@ -29,6 +29,7 @@ module.exports = function (app) {
 
         // employee service to check the permission in html
         self.employeeService = employeeService;
+        self.employee = employeeService.getEmployee();
 
         contextHelpService.setHelpTo('internal-draft');
 
@@ -185,7 +186,7 @@ module.exports = function (app) {
                 return;
             }
             return correspondenceService
-                .launchCorrespondenceWorkflow(self.selectedDraftInternals, $event, 'forward', 'favorites')
+                .launchCorrespondenceWorkflow(self.selectedDraftInternals, $event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadDraftInternals(self.grid.page)
                         .then(function () {
@@ -278,7 +279,7 @@ module.exports = function (app) {
             }
 
             draftInternal.recordGridName = gridService.grids.internal.draft;
-            draftInternal.launchWorkFlow($event, 'forward', 'favorites')
+            draftInternal.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadDraftInternals(self.grid.page)
                         .then(function () {
@@ -301,7 +302,7 @@ module.exports = function (app) {
             }
 
             record.recordGridName = gridService.grids.internal.draft;
-            record.quickSendLaunchWorkflow($event, 'favorites')
+            record.quickSendLaunchWorkflow($event, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadDraftInternals(self.grid.page)
                         .then(function () {

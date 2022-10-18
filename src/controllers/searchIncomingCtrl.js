@@ -41,6 +41,7 @@ module.exports = function (app) {
 
         // employee service to check the permission in html
         self.employeeService = employeeService;
+        self.employee = employeeService.getEmployee();
 
         self.searchIncoming = new IncomingSearch({dummySearchDocClass: 'incoming'});
         self.searchIncomingModel = angular.copy(self.searchIncoming);
@@ -394,7 +395,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-            searchedIncomingDocument.launchWorkFlow($event, null, 'favorites')
+            searchedIncomingDocument.launchWorkFlow($event, null, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadSearchedIncomingDocument(self.grid.page)
                         .then(function () {

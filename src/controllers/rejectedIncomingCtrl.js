@@ -213,7 +213,7 @@ module.exports = function (app) {
                 return;
             }
             return correspondenceService
-                .launchCorrespondenceWorkflow(self.selectedRejectedIncomings, $event, 'forward', 'favorites')
+                .launchCorrespondenceWorkflow(self.selectedRejectedIncomings, $event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadRejectedIncomings(self.grid.page)
                         .then(function () {
@@ -294,7 +294,7 @@ module.exports = function (app) {
                 return;
             }
             rejectedIncoming.recordGridName = gridService.grids.incoming.rejected;
-            rejectedIncoming.launchWorkFlow($event, 'forward', 'favorites')
+            rejectedIncoming.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadRejectedIncomings(self.grid.page)
                         .then(function () {
@@ -317,7 +317,7 @@ module.exports = function (app) {
             }
 
             record.recordGridName = gridService.grids.incoming.rejected;
-            record.quickSendLaunchWorkflow($event, 'favorites')
+            record.quickSendLaunchWorkflow($event, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadRejectedIncomings(self.grid.page)
                         .then(function () {

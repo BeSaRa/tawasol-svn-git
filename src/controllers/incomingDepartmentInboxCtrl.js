@@ -42,6 +42,7 @@ module.exports = function (app) {
         self.totalRecords = incomingDepartmentInboxService.totalCount;
         self.searchMode = false;
         self.searchModel = '';
+        self.employee = employeeService.getEmployee();
 
         /**
          * @description Contains the selected incoming department inbox items
@@ -371,7 +372,7 @@ module.exports = function (app) {
                                 }))
                             }
                             correspondenceService
-                                .launchCorrespondenceWorkflow(correspondences, $event, 'forward', 'favorites', true)
+                                .launchCorrespondenceWorkflow(correspondences, $event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users', true)
                                 .then(function () {
                                     self.reloadIncomingDepartmentInboxes(self.grid.page)
                                         .then(function () {
@@ -423,7 +424,7 @@ module.exports = function (app) {
                                 mainSiteId: true // to avoid the check correspondence sites for the document before launch it.
                             });
                             /* isDeptIncoming is sent true to avoid alert message */
-                            correspondence.launchWorkFlow($event, 'forward', 'favorites', true)
+                            correspondence.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users', true)
                                 .then(function () {
                                     self.reloadIncomingDepartmentInboxes(self.grid.page)
                                         .then(function () {
@@ -472,7 +473,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-            workItem.launchWorkFlow($event, 'forward', 'favorites', true)
+            workItem.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users', true)
                 .then(function () {
                     self.reloadIncomingDepartmentInboxes(self.grid.page)
                         .then(function () {
@@ -488,7 +489,7 @@ module.exports = function (app) {
          */
         self.launchBulkDistributionWorkflow = function ($event) {
             return correspondenceService
-                .launchCorrespondenceWorkflow(self.selectedIncomingDepartmentInboxes, $event, 'forward', 'favorites', true)
+                .launchCorrespondenceWorkflow(self.selectedIncomingDepartmentInboxes, $event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users', true)
                 .then(function () {
                     self.reloadIncomingDepartmentInboxes(self.grid.page);
                 });
@@ -505,7 +506,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-            workItem.quickSendLaunchWorkflow($event, 'favorites', 'forward', true)
+            workItem.quickSendLaunchWorkflow($event, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users', 'forward', true)
                 .then(function () {
                     self.reloadIncomingDepartmentInboxes(self.grid.page)
                         .then(function () {

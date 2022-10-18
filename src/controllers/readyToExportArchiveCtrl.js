@@ -52,6 +52,7 @@ module.exports = function (app) {
         self.totalRecords = correspondenceService.totalCountCAReadyToExports;
         self.searchMode = false;
         self.searchModel = '';
+        self.employee = employeeService.getEmployee();
 
         /**
          * @description Contains the selected ready To Exports
@@ -316,7 +317,7 @@ module.exports = function (app) {
             readyToExport
                 .exportWorkItem($event)
                 .then(function () {
-                    return correspondenceToLaunch.launchWorkFlow($event, 'forward', 'favorites')
+                    return correspondenceToLaunch.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                         .then(function () {
                             self.reloadReadyToExports(self.grid.page);
                             new ResolveDefer(defer);
@@ -1018,7 +1019,7 @@ module.exports = function (app) {
                 return;
             }
             workItem.recordGridName = gridService.grids.centralArchive.readyToExport;
-            workItem.launchWorkFlow($event, 'launch', 'favorites')
+            workItem.launchWorkFlow($event, 'launch', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadReadyToExports(self.grid.page)
                         .then(function () {

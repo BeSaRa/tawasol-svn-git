@@ -40,6 +40,7 @@ module.exports = function (app) {
         contextHelpService.setHelpTo('search-general');
         // employee service to check the permission in html
         self.employeeService = employeeService;
+        self.employee = employeeService.getEmployee();
 
         self.searchGeneral = new GeneralSearch({dummySearchDocClass: 'correspondence'});
         self.searchGeneralModel = angular.copy(self.searchGeneral);
@@ -419,12 +420,12 @@ module.exports = function (app) {
 
             // run launch for any incoming document or other documents not in the inbox
             if (correspondence.hasDocumentClass('incoming') || correspondence.docStatus !== 22) {
-                promise = correspondence.launchWorkFlow($event, null, 'favorites');
+                promise = correspondence.launchWorkFlow($event, null, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users');
             } else {
                 if (correspondence.hasDocumentClass('internal')) {
-                    promise = correspondence.launchWorkFlowAndCheckApprovedInternal($event, null, 'favorites');
+                    promise = correspondence.launchWorkFlowAndCheckApprovedInternal($event, null, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users');
                 } else {
-                    promise = correspondence.launchWorkFlowAndCheckExists($event, null, 'favorites');
+                    promise = correspondence.launchWorkFlowAndCheckExists($event, null, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users');
                 }
             }
 

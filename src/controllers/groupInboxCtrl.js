@@ -46,6 +46,7 @@ module.exports = function (app) {
         self.searchModel = '';
 
         self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
+        self.employee = employeeService.getEmployee();
 
         contextHelpService.setHelpTo('group-inbox');
 
@@ -244,7 +245,7 @@ module.exports = function (app) {
 
         function forwardBulk(selectedItems, $event) {
             return correspondenceService
-                .launchCorrespondenceWorkflow(selectedItems, $event, 'forward', 'favorites')
+                .launchCorrespondenceWorkflow(selectedItems, $event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadGroupInbox(self.grid.page);
                 });
@@ -310,7 +311,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-            workItem.launchWorkFlow($event, 'forward', 'favorites')
+            workItem.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadGroupInbox(self.grid.page)
                         .then(function () {
@@ -330,7 +331,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-            workItem.quickSendLaunchWorkflow($event, 'favorites')
+            workItem.quickSendLaunchWorkflow($event, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadGroupInbox(self.grid.page)
                         .then(function () {

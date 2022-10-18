@@ -32,7 +32,7 @@ module.exports = function (app) {
         contextHelpService.setHelpTo('outgoing-draft');
         // employee service to check the permission in html
         self.employeeService = employeeService;
-
+        self.employee = employeeService.getEmployee();
         /**
          * @description All draft outgoing mails
          * @type {*}
@@ -225,7 +225,7 @@ module.exports = function (app) {
                 return;
             }
             return correspondenceService
-                .launchCorrespondenceWorkflow(self.selectedDraftOutgoings, $event, 'forward', 'favorites')
+                .launchCorrespondenceWorkflow(self.selectedDraftOutgoings, $event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadDraftOutgoings(self.grid.page)
                         .then(function () {
@@ -318,7 +318,7 @@ module.exports = function (app) {
             }
 
             draftOutgoing.recordGridName = gridService.grids.outgoing.draft;
-            draftOutgoing.launchWorkFlow($event, 'forward', 'favorites')
+            draftOutgoing.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadDraftOutgoings(self.grid.page)
                         .then(function () {
@@ -341,7 +341,7 @@ module.exports = function (app) {
             }
 
             record.recordGridName = gridService.grids.outgoing.draft;
-            record.quickSendLaunchWorkflow($event, 'favorites')
+            record.quickSendLaunchWorkflow($event, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadDraftOutgoings(self.grid.page)
                         .then(function () {

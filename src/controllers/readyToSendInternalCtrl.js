@@ -29,6 +29,7 @@ module.exports = function (app) {
 
         // employee service to check the permission in html
         self.employeeService = employeeService;
+        self.employee = employeeService.getEmployee();
 
         contextHelpService.setHelpTo('internal-ready-to-send');
 
@@ -153,7 +154,7 @@ module.exports = function (app) {
                 return;
             }
             return correspondenceService
-                .launchCorrespondenceWorkflow(self.selectedReadyToSendInternals, $event, 'forward', 'favorites')
+                .launchCorrespondenceWorkflow(self.selectedReadyToSendInternals, $event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadReadyToSendInternals(self.grid.page)
                         .then(function () {
@@ -224,7 +225,7 @@ module.exports = function (app) {
                 return;
             }
 
-            readyToSendInternal.launchWorkFlow($event, 'forward', 'favorites')
+            readyToSendInternal.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadReadyToSendInternals(self.grid.page)
                         .then(function () {
@@ -245,7 +246,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-            record.quickSendLaunchWorkflow($event, 'favorites')
+            record.quickSendLaunchWorkflow($event, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadReadyToSendInternals(self.grid.page)
                         .then(function () {

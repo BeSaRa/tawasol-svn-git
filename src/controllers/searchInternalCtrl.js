@@ -41,6 +41,7 @@ module.exports = function (app) {
         contextHelpService.setHelpTo('search-internal' , ignoreHelp);
         // employee service to check the permission in html
         self.employeeService = employeeService;
+        self.employee = employeeService.getEmployee();
 
         self.searchInternal = new InternalSearch({dummySearchDocClass: 'internal'});
         self.searchInternalModel = angular.copy(self.searchInternal);
@@ -373,7 +374,7 @@ module.exports = function (app) {
                 return;
             }
 
-            searchedInternalDocument.launchWorkFlowAndCheckApprovedInternal($event, null, 'favorites')
+            searchedInternalDocument.launchWorkFlowAndCheckApprovedInternal($event, null, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadSearchedInternalDocuments(self.grid.page)
                         .then(function () {

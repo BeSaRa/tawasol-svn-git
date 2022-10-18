@@ -467,6 +467,14 @@
                                             {{ctrl.applicationUser.getTranslatedYesNo('pinCodePrompt')}}</label>
                                     </md-switch>
                                 </div>
+                                <div layout="row">
+                                    <md-switch flex ng-model="ctrl.applicationUser.isFavSendSecreenDefault"
+                                               aria-label="{{lang.default_favorite_screen_when_send}}">
+                                        <label>{{lang.default_favorite_screen_when_send}} :
+                                            {{ctrl.applicationUser.getTranslatedYesNo('isFavSendSecreenDefault')}}</label>
+                                    </md-switch>
+                                    <span flex></span>
+                                </div>
                             </div>
                         </md-content>
                     </md-tab>

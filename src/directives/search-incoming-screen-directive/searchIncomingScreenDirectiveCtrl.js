@@ -915,7 +915,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-            searchedIncomingDocument.launchWorkFlow($event, null, 'favorites')
+            searchedIncomingDocument.launchWorkFlow($event, null, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadSearchCorrespondence(self.grid.page)
                         .then(function () {

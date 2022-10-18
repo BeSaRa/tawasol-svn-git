@@ -40,6 +40,8 @@ module.exports = function (app) {
         contextHelpService.setHelpTo('approved-internal');
         // employee service to check the permission in html
         self.employeeService = employeeService;
+        self.employee = employeeService.getEmployee();
+
 
         /**
          * @description All approved internals
@@ -347,7 +349,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(record, null));
                 return;
             }
-            record.quickSendLaunchWorkflow($event, 'favorites')
+            record.quickSendLaunchWorkflow($event, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadApprovedInternals(self.grid.page)
                         .then(function () {

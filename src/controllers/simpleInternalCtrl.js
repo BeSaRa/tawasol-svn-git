@@ -395,7 +395,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-            document.launchWorkFlow($event, 'forward', 'favorites', null, self.resetAddCorrespondence)
+            document.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users', null, self.resetAddCorrespondence)
                 .then(function () {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
@@ -408,7 +408,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-            document.quickSendLaunchWorkflow($event, 'favorites')
+            document.quickSendLaunchWorkflow($event, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
@@ -460,7 +460,7 @@ module.exports = function (app) {
 
             model.approveDocument($event, defer, false, true)
                 .then(function (result) {
-                    model.launchWorkFlow($event, 'forward', 'favorites')
+                    model.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                         .then(function () {
                             counterService.loadCounters();
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);

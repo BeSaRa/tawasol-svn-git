@@ -577,7 +577,7 @@ module.exports = function (app) {
 
         function forwardBulk(selectedItems, $event) {
             return correspondenceService
-                .launchCorrespondenceWorkflow(selectedItems, $event, 'forward', 'favorites')
+                .launchCorrespondenceWorkflow(selectedItems, $event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page);
                 });
@@ -741,7 +741,8 @@ module.exports = function (app) {
          * @param defer
          */
         self.forward = function (userInbox, $event, defer) {
-            userInbox.launchWorkFlow($event, userInbox.hasActiveSeqWF() ? 'launch' : 'forward', 'favorites', null, null, self.reloadUserInboxes)
+            userInbox.launchWorkFlow($event, userInbox.hasActiveSeqWF() ? 'launch' : 'forward',
+                self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users', null, null, self.reloadUserInboxes)
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {
@@ -757,7 +758,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.quickSend = function (record, $event, defer) {
-            record.quickSendLaunchWorkflow($event, 'favorites')
+            record.quickSendLaunchWorkflow($event, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {
@@ -790,7 +791,7 @@ module.exports = function (app) {
          */
         self.launchWorkFlow = function (workItem, $event, defer) {
             workItem
-                .launchWorkflowByVsIdAfterApprove($event, 'forward', 'favorites')
+                .launchWorkflowByVsIdAfterApprove($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {

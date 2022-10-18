@@ -34,6 +34,7 @@ module.exports = function (app) {
         self.favoriteDocuments = favoriteDocuments;
         self.favoriteDocumentsCopy = angular.copy(self.favoriteDocuments);
         self.favoriteDocumentsService = favoriteDocumentsService;
+        self.employee = employeeService.getEmployee();
 
         /**
          * @description Contains the selected favorite documents
@@ -195,7 +196,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-            favoriteDocument.launchWorkFlow($event, 'forward', 'favorites')
+            favoriteDocument.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadFavoriteDocuments(self.grid.page)
                         .then(function () {

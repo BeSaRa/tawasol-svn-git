@@ -111,6 +111,7 @@ module.exports = function (app) {
 
         self.officialAttachmentExcludedList = configurationService.OFFICIAL_ATTACHMENT_EXCLUDED_TOOLBAR_ITEMS;
         self.employeeService = employeeService;
+        self.employee = employeeService.getEmployee();
 
         self.generalStepElementView = generalStepElementView;
         // used to store value of attach user name and date toggle
@@ -1484,7 +1485,7 @@ module.exports = function (app) {
                 dialog
                     .confirmMessage(langService.get('book_needs_more_signatures_launch_to_user').change({name: self.correspondence.getTranslatedName()}))
                     .then(function () {
-                        return self.correspondence.launchWorkFlow(null, 'forward', 'favorites')
+                        return self.correspondence.launchWorkFlow(null, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                             .then(function () {
                                 dialog.hide({
                                     content: self.savedPdfContent,
@@ -1498,7 +1499,7 @@ module.exports = function (app) {
                             return self.loadUpdatedContent(self.annotationType !== AnnotationType.SIGNATURE);
                         }
                         if (self.launchAfterSave) {
-                            self.correspondence.launchWorkFlow(null, 'forward', 'favorites')
+                            self.correspondence.launchWorkFlow(null, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                                 .then(function () {
                                     dialog.hide({
                                         content: self.savedPdfContent,
@@ -1533,7 +1534,7 @@ module.exports = function (app) {
                     }
 
                     if (self.launchAfterSave) {
-                        self.correspondence.launchWorkFlow(null, 'forward', 'favorites')
+                        self.correspondence.launchWorkFlow(null, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                             .then(function () {
                                 dialog.hide({
                                     content: self.savedPdfContent,
@@ -1672,7 +1673,7 @@ module.exports = function (app) {
                 }
 
                 if (self.launchAfterSave) {
-                    var defaultTab = 'favorites';
+                    var defaultTab = self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users';
                     if (employeeService.isCentralArchive() && self.correspondence.hasContent()) {
                         defaultTab = {
                             tab: 'registry_organizations',
@@ -1713,7 +1714,7 @@ module.exports = function (app) {
                     return self.loadUpdatedContent(self.annotationType !== AnnotationType.SIGNATURE);
                 }
                 if (self.launchAfterSave) {
-                    self.correspondence.launchWorkFlow(null, 'forward', 'favorites')
+                    self.correspondence.launchWorkFlow(null, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                         .then(function () {
                             dialog.hide({
                                 content: self.savedPdfContent,

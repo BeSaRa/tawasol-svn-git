@@ -34,6 +34,7 @@ module.exports = function (app) {
         contextHelpService.setHelpTo('incoming-review');
         // employee service to check the permission in html
         self.employeeService = employeeService;
+        self.employee = employeeService.getEmployee();
 
         /**
          * @description All review incoming emails
@@ -215,7 +216,7 @@ module.exports = function (app) {
                 return;
             }
             return correspondenceService
-                .launchCorrespondenceWorkflow(self.selectedReviewIncomings, $event, 'forward', 'favorites')
+                .launchCorrespondenceWorkflow(self.selectedReviewIncomings, $event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadReviewIncomings(self.grid.page)
                         .then(function () {
@@ -307,7 +308,7 @@ module.exports = function (app) {
                 return;
             }
 
-            reviewIncoming.launchWorkFlow($event, 'forward', 'favorites')
+            reviewIncoming.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadReviewIncomings(self.grid.page)
                         .then(function () {
@@ -328,7 +329,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-            record.quickSendLaunchWorkflow($event, 'favorites')
+            record.quickSendLaunchWorkflow($event, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadReviewIncomings(self.grid.page)
                         .then(function () {

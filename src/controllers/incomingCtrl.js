@@ -419,7 +419,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-            var defaultTab = 'favorites';
+            var defaultTab = self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users';
             if (centralArchives && self.incoming.hasContent()) {
                 defaultTab = {
                     tab: 'registry_organizations',
@@ -440,7 +440,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-            var defaultTab = 'favorites';
+            var defaultTab = self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users';
             if (centralArchives && self.incoming.hasContent()) {
                 defaultTab = {
                     tab: 'registry_organizations',

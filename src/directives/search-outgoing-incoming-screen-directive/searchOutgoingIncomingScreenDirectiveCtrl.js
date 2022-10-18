@@ -948,10 +948,10 @@ module.exports = function (app) {
 
             // run launch for any incoming document or other documents not in the inbox
             if (correspondence.hasDocumentClass('incoming') || correspondence.docStatus !== 22) {
-                return correspondence.launchWorkFlow($event, null, 'favorites');
+                return correspondence.launchWorkFlow($event, null, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users');
             }
 
-            correspondence.launchWorkFlowAndCheckExists($event, null, 'favorites')
+            correspondence.launchWorkFlowAndCheckExists($event, null, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadSearchCorrespondence(self.grid.page)
                         .then(function () {

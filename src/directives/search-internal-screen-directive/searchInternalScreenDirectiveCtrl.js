@@ -925,7 +925,7 @@ module.exports = function (app) {
                 return;
             }
 
-            searchedInternalDocument.launchWorkFlowAndCheckApprovedInternal($event, null, 'favorites')
+            searchedInternalDocument.launchWorkFlowAndCheckApprovedInternal($event, null, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadSearchCorrespondence(self.grid.page)
                         .then(function () {

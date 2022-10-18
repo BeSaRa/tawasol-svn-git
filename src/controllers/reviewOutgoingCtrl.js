@@ -36,6 +36,7 @@ module.exports = function (app) {
         // employee service to check the permission in html
         self.employeeService = employeeService;
         self.isInternalOutgoingEnabled = rootEntity.isInternalOutgoingEnabled();
+        self.employee = employeeService.getEmployee();
 
         /**
          * @description All review outgoing emails
@@ -212,7 +213,7 @@ module.exports = function (app) {
                 return;
             }
             return correspondenceService
-                .launchCorrespondenceWorkflow(self.selectedReviewOutgoings, $event, 'forward', 'favorites')
+                .launchCorrespondenceWorkflow(self.selectedReviewOutgoings, $event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadReviewOutgoings(self.grid.page)
                         .then(function () {
@@ -296,7 +297,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-            reviewOutgoing.launchWorkFlow($event, 'forward', 'favorites')
+            reviewOutgoing.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadReviewOutgoings(self.grid.page)
                         .then(function () {
@@ -317,7 +318,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-            record.quickSendLaunchWorkflow($event, 'favorites')
+            record.quickSendLaunchWorkflow($event, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadReviewOutgoings(self.grid.page)
                         .then(function () {

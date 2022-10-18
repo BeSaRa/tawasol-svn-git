@@ -59,6 +59,7 @@ module.exports = function (app) {
         self.canMinimize = false;
         self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
         self.isCentralArchive = employeeService.getEmployee().inCentralArchive();
+        self.employee = employeeService.getEmployee();
 
 
         /**
@@ -1602,7 +1603,7 @@ module.exports = function (app) {
          */
         self.quickSendCorrespondenceWorkFlow = function ($event) {
             dialog.cancel();
-            self.correspondence.quickSendLaunchWorkflow($event, 'favorites', null, isDeptIncoming, isDeptSent, true)
+            self.correspondence.quickSendLaunchWorkflow($event, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users', null, isDeptIncoming, isDeptSent, true)
                 .then(function (result) {
                     dialog.hide();
                     resetCorrespondenceCallback && resetCorrespondenceCallback();

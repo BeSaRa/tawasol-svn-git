@@ -32,6 +32,7 @@ module.exports = function (app) {
 
         // employee service to check the permission in html
         self.employeeService = employeeService;
+        self.employee = employeeService.getEmployee();
 
         contextHelpService.setHelpTo('internal-review');
 
@@ -210,7 +211,7 @@ module.exports = function (app) {
                 return;
             }
             return correspondenceService
-                .launchCorrespondenceWorkflow(self.selectedReviewInternals, $event, 'forward', 'favorites')
+                .launchCorrespondenceWorkflow(self.selectedReviewInternals, $event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadReviewInternals(self.grid.page)
                         .then(function () {
@@ -317,7 +318,7 @@ module.exports = function (app) {
                 return;
             }
 
-            reviewInternal.launchWorkFlow($event, 'forward', 'favorites')
+            reviewInternal.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadReviewInternals(self.grid.page)
                         .then(function () {
@@ -338,7 +339,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-            record.quickSendLaunchWorkflow($event, 'favorites')
+            record.quickSendLaunchWorkflow($event, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadReviewInternals(self.grid.page)
                         .then(function () {

@@ -59,6 +59,7 @@ module.exports = function (app) {
             self.userWFDistView = 1;
             self.seqWFEmailSettings = 0;
             self.enableMobileAccess = false;
+            self.isFavSendSecreenDefault = false;
 
             var collectionResults = [
                 'reminderSmsPriority',
@@ -381,6 +382,9 @@ module.exports = function (app) {
                 return this.signAnnotationSettings;
             };
 
+            ApplicationUser.prototype.isDefaultTabFavoriteAtLaunch = function () {
+                return this.isFavSendSecreenDefault;
+            }
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('ApplicationUser', 'init', this);

@@ -47,6 +47,7 @@ module.exports = function (app) {
          */
         self.selectedSentItemCentralArchives = [];
         self.globalSetting = rootEntity.returnRootEntity().settings;
+        self.employee = employeeService.getEmployee();
 
         /**
          * @description Contains options for grid configuration
@@ -186,7 +187,7 @@ module.exports = function (app) {
          */
         self.launchNewDistributionWorkflow = function (centralArchiveItem, $event, defer) {
             centralArchiveItem.recordGridName = gridService.grids.centralArchive.sentItem;
-            centralArchiveItem.launchWorkFlow($event, 'forward', 'favorites')
+            centralArchiveItem.launchWorkFlow($event, 'forward', self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadSentItemCentralArchives(self.grid.page)
                         .then(function () {
@@ -205,7 +206,7 @@ module.exports = function (app) {
          */
         self.quickSend = function (record, $event, defer) {
             record.recordGridName = gridService.grids.centralArchive.sentItem;
-            record.quickSendLaunchWorkflow($event, 'favorites')
+            record.quickSendLaunchWorkflow($event, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadSentItemCentralArchives(self.grid.page)
                         .then(function () {

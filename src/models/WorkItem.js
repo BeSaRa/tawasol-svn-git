@@ -789,7 +789,7 @@ module.exports = function (app) {
                         if (result === correspondenceService.authorizeStatus.PARTIALLY_AUTHORIZED.text) {
                             return dialog.confirmMessage(langService.get('book_needs_more_signatures_launch_to_user').change({name: workItem.getTranslatedName()}))
                                 .then(function () {
-                                    return workItem.launchWorkFlow($event, 'forward', 'favorites');
+                                    return workItem.launchWorkFlow($event, 'forward', employeeService.getEmployee().isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users');
                                 })
                                 .catch(function (error) {
                                     return $q.reject('PARTIAL_AUTHORIZE_LAUNCH_CANCELLED');
@@ -808,7 +808,7 @@ module.exports = function (app) {
                         if (result === correspondenceService.authorizeStatus.PARTIALLY_AUTHORIZED.text && !ignoreLaunch) {
                             return dialog.confirmMessage(langService.get('book_needs_more_signatures_launch_to_user').change({name: workItem.getTranslatedName()}))
                                 .then(function () {
-                                    return workItem.launchWorkFlow($event, 'forward', 'favorites');
+                                    return workItem.launchWorkFlow($event, 'forward', employeeService.getEmployee().isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users');
                                 });
                         }
                         return result;
@@ -840,7 +840,7 @@ module.exports = function (app) {
                                 if (result === correspondenceService.authorizeStatus.PARTIALLY_AUTHORIZED.text && !ignoreLaunch) {
                                     return dialog.confirmMessage(langService.get('book_needs_more_signatures_launch_to_user').change({name: workItem.getTranslatedName()}))
                                         .then(function () {
-                                            return workItem.launchWorkFlow($event, 'forward', 'favorites');
+                                            return workItem.launchWorkFlow($event, 'forward', employeeService.getEmployee().isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users');
                                         });
                                 }
                                 return result;

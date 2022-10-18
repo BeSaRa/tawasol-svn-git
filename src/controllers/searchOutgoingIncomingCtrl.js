@@ -39,6 +39,7 @@ module.exports = function (app) {
 
         // employee service to check the permission in html
         self.employeeService = employeeService;
+        self.employee = employeeService.getEmployee();
 
         self.searchOutgoingIncoming = new OutgoingIncomingSearch({dummySearchDocClass: 'outgoingIncoming'});
         self.searchOutgoingIncomingModel = angular.copy(self.searchOutgoingIncoming);
@@ -405,10 +406,10 @@ module.exports = function (app) {
 
             // run launch for any incoming document or other documents not in the inbox
             if (correspondence.hasDocumentClass('incoming') || correspondence.docStatus !== 22) {
-                return correspondence.launchWorkFlow($event, null, 'favorites');
+                return correspondence.launchWorkFlow($event, null, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users');
             }
 
-            correspondence.launchWorkFlowAndCheckExists($event, null, 'favorites')
+            correspondence.launchWorkFlowAndCheckExists($event, null, self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users')
                 .then(function () {
                     self.reloadSearchedOutgoingIncomingDocument(self.grid.page)
                         .then(function () {
