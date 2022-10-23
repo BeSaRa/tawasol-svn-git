@@ -1044,8 +1044,7 @@ module.exports = function (app) {
             var _initSearchCriteria = function (skipDates) {
                 self.searchCriteria = new FollowupBookCriteria({
                     userId: employeeService.getEmployee().id,
-                    userOUID: employeeService.getEmployee().getOUID(),
-                    status: null
+                    userOUID: employeeService.getEmployee().getOUID()
                 });
                 self.searchCriteriaCopy = angular.copy(self.searchCriteria);
                 if (!skipDates) {
