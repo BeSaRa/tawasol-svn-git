@@ -403,9 +403,9 @@ module.exports = function (app) {
             });
 
 
-            if (_checkForDocumentAllowedSignatures('internal', 'ELECTRONIC_SIGNATURE_MEMO')) {
+            if (_checkForDocumentAllowedSignatures('internal', 'SIGN_OFFICIAL_DOCUMENT')) {
                 _addButtonToToolbar(toolbarInstance, approveButton)
-            } else if (_checkForDocumentAllowedSignatures('outgoing', 'ELECTRONIC_SIGNATURE')) {
+            } else if (_checkForDocumentAllowedSignatures('outgoing', 'SIGN_OFFICIAL_DOCUMENT')) {
                 _addButtonToToolbar(toolbarInstance, approveButton)
             } else if (_checkForDocumentAllowedSignatures('incoming')) {
                 _addButtonToToolbar(toolbarInstance, approveButton)
