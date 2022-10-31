@@ -681,9 +681,9 @@ module.exports = function (app) {
                                 generator.removePopupNumber();
                                 return true;
                             })
-                            .catch(function () {
+                            .catch(function (error) {
                                 generator.removePopupNumber();
-                                return false;
+                                return error ?? false;
                             });
                     })
                     .catch(function (error) {
@@ -847,9 +847,9 @@ module.exports = function (app) {
 
                                 return true;
                             })
-                            .catch(function () {
+                            .catch(function (error) {
                                 generator.removePopupNumber();
-                                return false;
+                                return error ?? false;
                             });
                     })
                     .catch(function (error) {
@@ -1007,9 +1007,9 @@ module.exports = function (app) {
                                 generator.removePopupNumber();
                                 return true;
                             })
-                            .catch(function () {
+                            .catch(function (error) {
                                 generator.removePopupNumber();
-                                return false;
+                                return error ?? false;
                             });
                     })
                     .catch(function (error) {
@@ -1088,9 +1088,9 @@ module.exports = function (app) {
                                 generator.removePopupNumber();
                                 return true;
                             })
-                            .catch(function () {
+                            .catch(function (error) {
                                 generator.removePopupNumber();
-                                return false;
+                                return error ?? false;
                             });
                     })
                     .catch(function (error) {
@@ -1258,9 +1258,9 @@ module.exports = function (app) {
                                 generator.removePopupNumber();
                                 return true;
                             })
-                            .catch(function () {
+                            .catch(function (error) {
                                 generator.removePopupNumber();
-                                return false;
+                                return error ?? false;
                             });
                     })
                     .catch(function (error) {
@@ -1494,9 +1494,9 @@ module.exports = function (app) {
                                 generator.removePopupNumber();
                                 return true;
                             })
-                            .catch(function () {
+                            .catch(function (error) {
                                 generator.removePopupNumber();
-                                return false;
+                                return error ?? false;
                             });
                     })
                     .catch(function (error) {

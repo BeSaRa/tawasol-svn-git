@@ -546,10 +546,12 @@ module.exports = function (app) {
             var disableProperties = checkIfEditPropertiesAllowed(incomingDepartmentInbox, true) && !incomingDepartmentInbox.isTransferredDocument();
 
             correspondenceService.viewCorrespondenceWorkItem(incomingDepartmentInbox.getInfo(), self.gridActions, disableProperties, checkIfEditCorrespondenceSiteAllowed(incomingDepartmentInbox, true), true, false, false, true)
-                .then(function () {
-                    correspondenceService.unlockWorkItem(incomingDepartmentInbox, true, $event).then(function () {
-                        return self.reloadIncomingDepartmentInboxes(self.grid.page);
-                    });
+                .then(function (result) {
+                    if (result !== 'ignoreUnlock') {
+                        correspondenceService.unlockWorkItem(incomingDepartmentInbox, true, $event).then(function () {
+                            return self.reloadIncomingDepartmentInboxes(self.grid.page);
+                        });
+                    }
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked') {
@@ -573,10 +575,12 @@ module.exports = function (app) {
                 return;
             }
             workItem.viewNewDepartmentIncomingAsWorkItem(self.gridActions, 'departmentIncoming', $event)
-                .then(function () {
-                    correspondenceService.unlockWorkItem(workItem, true, $event).then(function () {
-                        self.reloadIncomingDepartmentInboxes(self.grid.page);
-                    });
+                .then(function (result) {
+                    if (result !== 'ignoreUnlock') {
+                        correspondenceService.unlockWorkItem(workItem, true, $event).then(function () {
+                            self.reloadIncomingDepartmentInboxes(self.grid.page);
+                        });
+                    }
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')

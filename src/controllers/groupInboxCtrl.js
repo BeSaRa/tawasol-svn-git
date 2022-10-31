@@ -475,10 +475,12 @@ module.exports = function (app) {
                 return;
             }
             correspondenceService.viewCorrespondenceGroupMail(workItem, self.gridActions, checkIfEditPropertiesAllowed(workItem, true), checkIfEditCorrespondenceSiteAllowed(workItem, true))
-                .then(function () {
-                    correspondenceService.unlockWorkItem(workItem, true, $event).then(function () {
-                        return self.reloadGroupInbox(self.grid.page);
-                    });
+                .then(function (result) {
+                    if (result !== 'ignoreUnlock') {
+                        correspondenceService.unlockWorkItem(workItem, true, $event).then(function () {
+                            return self.reloadGroupInbox(self.grid.page);
+                        });
+                    }
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')
@@ -513,10 +515,12 @@ module.exports = function (app) {
             }
 
             workItem.viewNewGroupMailDocument(self.gridActions, 'groupMail', $event)
-                .then(function () {
-                    correspondenceService.unlockWorkItem(workItem, true, $event).then(function () {
-                        return self.reloadGroupInbox(self.grid.page);
-                    });
+                .then(function (result) {
+                    if (result !== 'ignoreUnlock') {
+                        correspondenceService.unlockWorkItem(workItem, true, $event).then(function () {
+                            return self.reloadGroupInbox(self.grid.page);
+                        });
+                    }
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')

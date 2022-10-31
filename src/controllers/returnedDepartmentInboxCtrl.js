@@ -620,10 +620,12 @@ module.exports = function (app) {
             }
             var info = workItem.getInfo();
             correspondenceService.viewCorrespondenceReturnedWorkItem(info, self.gridActions, checkIfEditPropertiesAllowed(workItem, true), true, true)
-                .then(function () {
-                    correspondenceService.unlockWorkItem(workItem, true, $event).then(function () {
-                        self.reloadReturnedDepartmentInboxes(self.grid.page);
-                    });
+                .then(function (result) {
+                    if (result !== 'ignoreUnlock') {
+                        correspondenceService.unlockWorkItem(workItem, true, $event).then(function () {
+                            self.reloadReturnedDepartmentInboxes(self.grid.page);
+                        });
+                    }
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')
@@ -647,10 +649,12 @@ module.exports = function (app) {
                 return;
             }
             workItem.viewNewDepartmentReturned(self.gridActions, 'departmentReturned', $event)
-                .then(function () {
-                    correspondenceService.unlockWorkItem(workItem, true, $event).then(function () {
-                        self.reloadReturnedDepartmentInboxes(self.grid.page);
-                    });
+                .then(function (result) {
+                    if (result !== 'ignoreUnlock') {
+                        correspondenceService.unlockWorkItem(workItem, true, $event).then(function () {
+                            self.reloadReturnedDepartmentInboxes(self.grid.page);
+                        })
+                    }
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')

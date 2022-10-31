@@ -565,10 +565,12 @@ module.exports = function (app) {
                 return;
             }
             return correspondenceService.viewCorrespondence(approvedInternal, self.gridActions, checkIfEditPropertiesAllowed(approvedInternal, true), true, false, false, true)
-                .then(function () {
-                    correspondenceService.unlockWorkItem(approvedInternal, true, $event).then(function () {
-                        return self.reloadApprovedInternals(self.grid.page);
-                    });
+                .then(function (result) {
+                    if (result !== 'ignoreUnlock') {
+                        correspondenceService.unlockWorkItem(approvedInternal, true, $event).then(function () {
+                            return self.reloadApprovedInternals(self.grid.page);
+                        });
+                    }
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')
@@ -591,10 +593,12 @@ module.exports = function (app) {
                 return;
             }
             workItem.viewNewApprovedInternalWorkItemDocument(self.gridActions, 'approvedInternal', $event)
-                .then(function () {
-                    correspondenceService.unlockWorkItem(workItem, true, $event).then(function () {
-                        self.reloadApprovedInternals(self.grid.page);
-                    });
+                .then(function (result) {
+                    if (result !== 'ignoreUnlock') {
+                        correspondenceService.unlockWorkItem(workItem, true, $event).then(function () {
+                            self.reloadApprovedInternals(self.grid.page);
+                        });
+                    }
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')

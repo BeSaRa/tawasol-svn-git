@@ -25,13 +25,16 @@ module.exports = function (app) {
                 .then(function () {
                     var defer = $q.defer();
                     defer.promise.then(function () {
-                        if (workItem) {
+                        var ignoreUnlockCall = ['grid_action_terminate', 'grid_action_export', 'grid_action_export_and_send']
+                            .indexOf(action.text) === -1;
+
+                        if (workItem && ignoreUnlockCall) {
                             try {
                                 correspondenceService.unlockWorkItem(workItem, true, $event)
                             } catch (e) {
                             }
                         }
-                        dialog.cancel();
+                        ignoreUnlockCall ? dialog.cancel() : dialog.cancel('ignoreUnlock');
                     });
                     var record = self.g2gItemCopy ? self.g2gItemCopy : (workItem || correspondence),
                         authorizeKeys = ['grid_action_electronic_approve_and_send', 'grid_action_electronic_approve'],

@@ -930,11 +930,13 @@ module.exports = function (app) {
                 return;
             }
             correspondenceService.viewCorrespondence(readyToExport, self.gridActions, checkIfEditPropertiesAllowed(readyToExport, true), false, true, true)
-                .then(function () {
-                    correspondenceService.unlockWorkItem(readyToExport, true, $event)
-                        .then(function () {
-                            self.reloadReadyToExports(self.grid.page);
-                        });
+                .then(function (result) {
+                    if (result !== 'ignoreUnlock') {
+                        correspondenceService.unlockWorkItem(readyToExport, true, $event)
+                            .then(function () {
+                                self.reloadReadyToExports(self.grid.page);
+                            });
+                    }
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')
@@ -957,11 +959,13 @@ module.exports = function (app) {
                 return;
             }
             workItem.viewNewDepartmentReadyToExport(self.gridActions, 'departmentReadyToExport', $event)
-                .then(function () {
-                    correspondenceService.unlockWorkItem(workItem, true, $event)
-                        .then(function () {
-                            self.reloadReadyToExports(self.grid.page);
-                        });
+                .then(function (result) {
+                    if (result !== 'ignoreUnlock') {
+                        correspondenceService.unlockWorkItem(workItem, true, $event)
+                            .then(function () {
+                                self.reloadReadyToExports(self.grid.page);
+                            });
+                    }
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')
