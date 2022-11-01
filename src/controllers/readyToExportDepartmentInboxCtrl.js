@@ -104,7 +104,7 @@ module.exports = function (app) {
                 self.readyToExports = gridService.searchGridData(self.grid, self.readyToExportsCopy);
             },
             selectRowsCallback: function () {
-                generator.selectedRowsHandler(self.selectedReadyToExports, 'readyToExport','generalStepElm.vsId');
+                generator.selectedRowsHandler(self.selectedReadyToExports, 'readyToExport', 'generalStepElm.vsId');
             }
         };
 
@@ -1461,6 +1461,7 @@ module.exports = function (app) {
                 callback: self.editAfterApprove,
                 class: "action-green",
                 showInView: true,
+                sticky: true,
                 permissionKey: "EDIT_AFTER_AUTHORIZATION_OUTGOING",
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
