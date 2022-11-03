@@ -32,6 +32,7 @@
                             <label for="fromFollowupDate">{{lang.follow_up_date_from}}</label>
                             <md-datepicker id="fromFollowupDate" name="fromFollowupDate"
                                            ng-change="ctrl.onChangeFromFollowupDate($event)"
+                                           ng-required="ctrl.searchCriteria.toFollowupDate"
                                            ng-model="ctrl.searchCriteria.fromFollowupDate"
                                            md-max-date="ctrl.searchCriteria.toFollowupDate"
                             ></md-datepicker>
@@ -41,6 +42,7 @@
                             <label for="toFollowupDate">{{lang.follow_up_date_to}}</label>
                             <md-datepicker id="toFollowupDate" name="toFollowupDate"
                                            ng-model="ctrl.searchCriteria.toFollowupDate"
+                                           ng-required="ctrl.searchCriteria.fromFollowupDate"
                                            md-min-date="ctrl.searchCriteria.fromFollowupDate"
                             ></md-datepicker>
                         </md-input-container>
