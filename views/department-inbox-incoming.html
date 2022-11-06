@@ -110,7 +110,8 @@
                                             md-order-by="generalStepElm.numberOfDays">
                                             <span>{{lang.number_of_days}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length && !ctrl.globalSettings.isSenderIncomingMailHidden()" md-column
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length && !ctrl.globalSettings.isSenderIncomingMailHidden()"
+                                            md-column
                                             md-order-by="{{ctrl.getSortingKey('sender', 'Information')}}">
                                             <span>{{lang.sender}}</span>
                                         </th>
@@ -206,7 +207,8 @@
                                                                       record-type="WorkItem"></grid-indicator-directive>
                                         </td>
                                         <td md-cell>{{incomingDepartmentInbox.generalStepElm.numberOfDays}}</td>
-                                        <td md-cell ng-if="!ctrl.globalSettings.isSenderIncomingMailHidden()">
+                                        <td md-cell class="drag-attachment-title"
+                                            ng-if="!ctrl.globalSettings.isSenderIncomingMailHidden()">
                                             <div layout="row">
                                                 {{incomingDepartmentInbox.sender.getTranslatedName()}}
                                                 <grid-indicator-directive
@@ -235,7 +237,8 @@
                                         <td md-cell colspan="11" class="red-text text-center">{{lang.no_records_found}}
                                         </td>
                                     </tr>
-                                    <tr md-row ng-if="ctrl.incomingDepartmentInboxesCopy.length && !ctrl.incomingDepartmentInboxes.length">
+                                    <tr md-row
+                                        ng-if="ctrl.incomingDepartmentInboxesCopy.length && !ctrl.incomingDepartmentInboxes.length">
                                         <td md-cell colspan=11" class="red-text text-center">
                                             {{lang.no_records_found_matching_search}}
                                         </td>
