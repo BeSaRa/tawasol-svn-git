@@ -364,6 +364,7 @@ module.exports = function (app) {
                 //permissionKey: '',
                 showInView: true,
                 showInViewOnly: true,
+                sticky: true,
                 checkShow: function (action, model) {
                     var show = model instanceof G2G ? !model.correspondence.isReceived : !model.isReceived;
                     return rootEntity.isQatarVersion() ? true : show;
@@ -379,6 +380,7 @@ module.exports = function (app) {
                 class: "action-green",
                 //permissionKey: '',
                 showInView: true,
+                sticky: true,
                 //showInViewOnly: true,
                 checkShow: function (action, model, viewExtraOptions) {
                     if (viewExtraOptions) {
@@ -392,6 +394,7 @@ module.exports = function (app) {
 
         self.shortcutActions = gridService.getShortcutActions(self.gridActions);
         self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
+        self.stickyActions = $filter('orderBy')(gridService.getStickyActions(self.gridActions), 'stickyIndex');
 
 
         self.openEmailItem = function () {

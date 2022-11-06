@@ -793,7 +793,7 @@ module.exports = function (app) {
                 }
                 return action.checkShow(action, self.workItem, {g2gItem: self.g2gItemCopy});
             } else {
-                if (!self.workItem)
+                if (!self.workItem && !self.correspondence)
                     return false;
                 if (action.hasOwnProperty('checkAnyPermission')) {
                     return action.checkShow(action, self.workItem, {g2gItem: self.g2gItemCopy});
