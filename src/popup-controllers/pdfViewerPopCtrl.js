@@ -1735,16 +1735,21 @@ module.exports = function (app) {
         /**
          * @description handle none signature save part
          */
-        self.handleSaveNoneSignaturePart = function (ignoreValidationSignature, ignoreClosePopup) {
+        self.handleSaveNoneSignaturePart = async function (ignoreValidationSignature, ignoreClosePopup) {
+            await self.currentInstance.save();
+
             self.currentInstance.exportInstantJSON().then(async function (instantJSON) {
                 delete instantJSON.pdfId;
-                instantJSON.skippedPdfObjectIds = _.difference(instantJSON.skippedPdfObjectIds, self.skippedPdfObjectIds);
+                // instantJSON.skippedPdfObjectIds = _.difference(instantJSON.skippedPdfObjectIds, self.skippedPdfObjectIds);
                 var hasMySignature = await self.isDocumentHasCurrentUserSignature().catch(result => result);
+
+                instantJSON = await self.handleInstantJSONWhenChangePosition(instantJSON);
 
                 PDFService.applyAnnotationsOnPDFDocument(self.correspondence, AnnotationType.ANNOTATION, instantJSON, self.documentOperations, _getFlattenStatus(hasMySignature))
                     .then(function (pdfContent) {
                         self.savedPdfContent = pdfContent;
-                        self.skippedPdfObjectIds = self.skippedPdfObjectIds.concat(instantJSON.skippedPdfObjectIds);
+                        // self.skippedPdfObjectIds = self.skippedPdfObjectIds.concat(instantJSON.skippedPdfObjectIds);
+
                         if (self.correspondence instanceof Attachment) {
                             self.handleSaveAttachment(pdfContent, ignoreClosePopup);
                         } else {
@@ -1952,6 +1957,7 @@ module.exports = function (app) {
          * @description start Next Step Validation to launch or advance seq workflow.
          */
         self.startNextStepValidation = async function (withComment) {
+            await self.currentInstance.save();
             self.launchAfterSave = false;
             var defer = $q.defer();
             if (self.disableSaveButton || !self.nextSeqStep) {
@@ -2000,9 +2006,9 @@ module.exports = function (app) {
                                             }
                                         });
                                 } else {
-                                    self.currentInstance.exportInstantJSON().then(function (instantJSON) {
+                                    self.currentInstance.exportInstantJSON().then(async function (instantJSON) {
                                         delete instantJSON.pdfId;
-
+                                        instantJSON = await self.handleInstantJSONWhenChangePosition(instantJSON);
                                         PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON, self.documentOperations, _getFlattenStatus()).then(function (pdfContent) {
                                             if (_isFromBackStep()) {
                                                 self.applyNextStepOnCorrespondence(pdfContent, null, true, comments).catch(self.handleSeqExceptions);
@@ -2024,9 +2030,9 @@ module.exports = function (app) {
                         if (!hasChanges.length) {
                             return self.applyNextStepOnCorrespondence(null, null, null, comments).catch(self.handleSeqExceptions);
                         }
-                        self.currentInstance.exportInstantJSON().then(function (instantJSON) {
+                        self.currentInstance.exportInstantJSON().then(async function (instantJSON) {
                             delete instantJSON.pdfId;
-
+                            instantJSON = await self.handleInstantJSONWhenChangePosition(instantJSON);
                             PDFService.applyAnnotationsOnPDFDocument(self.correspondence, self.annotationType, instantJSON, self.documentOperations, _getFlattenStatus()).then(function (pdfContent) {
                                 if (self.info.isPaper || _isElectronicAndAuthorizeByAnnotationBefore()) {
                                     self.applyNextStepOnCorrespondence(pdfContent, null, true, comments).catch(self.handleSeqExceptions);
@@ -2182,7 +2188,7 @@ module.exports = function (app) {
                     var currentPageIndex = annotation.pageIndex, boundingBox = annotation.boundingBox,
                         totalPages = self.currentInstance.totalPageCount, duplicated = [],
                         customData = angular.copy(annotation.customData) || {}, updatedAnnotation = null,
-                        parentId = uuidv4();
+                        parentId = PSPDFKit.generateInstantId();
 
                     var isImageAnnotation = annotation instanceof PSPDFKit.Annotations.ImageAnnotation;
                     if (isImageAnnotation) {
@@ -2381,7 +2387,8 @@ module.exports = function (app) {
                 instantJSON: operations.length ? null : instantJSON,
                 licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
                 customFonts: PDFService.customFonts,
-                isAPStreamRendered: () => false
+                isAPStreamRendered: () => false,
+                autoSaveMode: "DISABLED"
             }
 
 
@@ -2400,6 +2407,7 @@ module.exports = function (app) {
                     instantJSON: instantJSON,
                     licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
                     customFonts: PDFService.customFonts,
+                    autoSaveMode: "DISABLED",
                     isAPStreamRendered: () => false
                 };
 
@@ -2502,6 +2510,7 @@ module.exports = function (app) {
                     licenseKey: configurationService.PSPDF_LICENSE_KEY ? configurationService.PSPDF_LICENSE_KEY : self.licenseKey,
                     annotationTooltipCallback: self.annotationTooltipCallback,
                     customFonts: PDFService.customFonts,
+                    autoSaveMode: "DISABLED",
                     isAPStreamRendered: () => false
                 }
 
@@ -2746,6 +2755,54 @@ module.exports = function (app) {
             titleTemplate.append(table.getTable(true));
 
             return titleTemplate.html();
+        }
+
+        /**
+         * @description workaround for moving image annotations
+         */
+        self.handleInstantJSONWhenChangePosition = async function (instantJSON) {
+            // noinspection JSCheckFunctionSignatures
+            var randomIds = instantJSON.annotations.reduce((annotations, annotation, index) => {
+                // noinspection UnnecessaryReturnStatementJS
+                return {...annotations, ...(annotation.imageAttachmentId ? {[annotation.imageAttachmentId]: PSPDFKit.generateInstantId()} : false)};
+            }, {});
+
+            var randomIdsArray = Array.from(new Set(Object.entries(randomIds)));
+
+            var attachments = await $q.all(randomIdsArray.map(async ([oldId, newId]) => {
+                    return {
+                        id: newId,
+                        binary: (
+                            await blobToDataURL(await self.currentInstance.getAttachment(oldId))
+                        ).split(",")[1],
+                        contentType: "image/jpeg"
+                    }
+                }
+            ));
+
+            return {
+                ...instantJSON,
+                annotations: instantJSON.annotations.map(annotation => {
+                    annotation.imageAttachmentId = randomIds[annotation.imageAttachmentId] || null;
+                    return annotation;
+                }),
+                attachments: attachments.reduce((annotations, annotation) => {
+                    return {
+                        ...annotations,
+                        [annotation.id]: {binary: annotation.binary, contentType: annotation.contentType}
+                    }
+                }, {})
+            }
+        }
+
+        function blobToDataURL(blob) {
+            return new Promise((resolve) => {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    resolve(e.target.result);
+                };
+                reader.readAsDataURL(blob);
+            });
         }
 
         /**

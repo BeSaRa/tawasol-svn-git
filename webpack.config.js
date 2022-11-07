@@ -48,7 +48,7 @@ module.exports = function (env) {
 
     return {
         mode: isProduction(env) ? env.mode : 'development',
-        entry: './src/app.js',
+        entry: ["babel-regenerator-runtime",'./src/app.js'],
         output: {
             path: path.resolve(__dirname),
             publicPath: '',
