@@ -168,16 +168,16 @@
                     </td>
                     <td md-cell>
                         <div layout="row">
+                            <!--ng-class="{'no-value': !workflowItem.getComments()}"-->
                             <div md-truncate style="max-width: 100px;" ng-if="!workflowItem.showCommentDropdown"
                                  class="select-wf-action-text"
-                                 ng-class="{'no-value': !workflowItem.getComments()}"
                                  ng-click="ctrl.toggleCommentDropdown(workflowItem, $event)"
                                  tooltip="{{ctrl.getCommentText(workflowItem)}}">
                                 {{ctrl.getCommentText(workflowItem)}}
                             </div>
                             <md-select ng-if="workflowItem.showCommentDropdown"
                                        ng-model="workflowItem.selectedWFComment"
-                                       class="select-wf-action" style="width: 150px !important;"
+                                       class="select-wf-action not-required" style="width: 150px !important;"
                                        ng-change="ctrl.setWFComment(workflowItem, $event)"
                                        aria-label="workflow action"
                                        md-on-close="ctrl.onCloseCommentsDropdown(workflowItem)"

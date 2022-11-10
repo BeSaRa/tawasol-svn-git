@@ -8,6 +8,11 @@
     color: red;
     font-weight: bold !important;
   }
+  &.not-required {
+    .md-select-value.md-select-placeholder span {
+      color: black !important;
+    }
+  }
 }
 .select-wf-action-text{
   font-weight: bold !important;
