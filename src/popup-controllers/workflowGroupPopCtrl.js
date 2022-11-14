@@ -299,7 +299,7 @@ module.exports = function (app) {
         }
 
         self.checkWorkflowGroupDisabled = function () {
-            return self.workflowGroup.groupMembers.length === 0 || (!self.workflowGroup.global && self.usersWorkflowGroupByAdmin.length === 0);
+            return self.workflowGroup.groupMembers.length === 0 || (!self.isUserPreference && !self.workflowGroup.global && self.usersWorkflowGroupByAdmin.length === 0);
         }
     });
 };
