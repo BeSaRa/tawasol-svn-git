@@ -344,7 +344,7 @@ module.exports = function (app) {
                             },
                             organizations: function (organizationService) {
                                 'ngInject';
-                                return organizationService.getOrganizations().then(function (result) {
+                                return organizationService.getOrganizations(true).then(function (result) {
                                     resolveOrganizations.resolve(result);
                                     return result
                                 });
