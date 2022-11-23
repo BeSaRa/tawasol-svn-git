@@ -96,6 +96,8 @@ module.exports = function (app) {
          * @returns {promise}
          */
         self.openHiddenPDFViewer = function (pdfData, correspondence, annotationType, instantJSON, operations, flatten) {
+            instantJSON.annotations = _.uniqBy(instantJSON.annotations, 'id');
+
             if (!annotationType)
                 annotationType = AnnotationType.ANNOTATION;
             return dialog.showDialog({
