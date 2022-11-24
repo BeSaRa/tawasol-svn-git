@@ -2761,6 +2761,10 @@ module.exports = function (app) {
          * @description workaround for moving image annotations
          */
         self.handleInstantJSONWhenChangePosition = async function (instantJSON) {
+            if (!instantJSON.hasOwnProperty('annotations')) {
+                return instantJSON;
+            }
+
             // noinspection JSCheckFunctionSignatures
             var randomIds = instantJSON.annotations.reduce((annotations, annotation, index) => {
                 // noinspection UnnecessaryReturnStatementJS
