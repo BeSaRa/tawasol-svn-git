@@ -88,8 +88,9 @@ module.exports = function (app) {
          * this method to make authentication by given credentials
          * @param credentials
          * @param reference
+         * @param allowCurrentSessionInvalidation
          */
-        self.authenticate = function (credentials, reference) {
+        self.authenticate = function (credentials, reference, allowCurrentSessionInvalidation) {
             // check if the login came from inside application.
             if (credentials instanceof Credentials === false) {
                 return;
@@ -104,7 +105,9 @@ module.exports = function (app) {
                 cacheCredentials.otp = reference.otp;
                 cacheCredentials.otpReference = reference.otpReference;
             }
-
+            if (allowCurrentSessionInvalidation) {
+                cacheCredentials.allowConcurrentSessionInvalidation = allowCurrentSessionInvalidation;
+            }
             return $http.post(urlService.login, cacheCredentials, {
                 params: {
                     withEncryption: true

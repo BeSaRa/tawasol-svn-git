@@ -88,7 +88,8 @@ module.exports = function (app) {
                 CAN_NOT_RECALL_EXTERNAL_OUTGOING: 3083,
                 INVALID_CONTRACT_AS_CONTENT: 3085,
                 CAN_NOT_AUTHORIZE_CONTRACT: 3086,
-                CAN_NOT_SEND_BOOK_ALREADY_IN_READY_TO_EXPORT: 3017
+                CAN_NOT_SEND_BOOK_ALREADY_IN_READY_TO_EXPORT: 3017,
+                CAN_NOT_LOGIN_TWO_USER_SAME_TIME: 9025
             },
             errorLangKeys = {
                 1001: 'no_records_found',
@@ -133,7 +134,8 @@ module.exports = function (app) {
                 3083: 'msg_only_internal_outgoing_can_be_recalled',
                 3085: 'invalid_contract_as_content',
                 3086: 'can_not_authorize_contract',
-                3017: 'can_not_send_book_already_in_ready_to_export'
+                3017: 'can_not_send_book_already_in_ready_to_export',
+                9025: 'can_not_login_two_user_same_time'
             };
 
         return {

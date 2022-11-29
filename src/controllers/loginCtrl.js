@@ -148,8 +148,9 @@ module.exports = function (app) {
          * @description Login method
          * @param event
          * @param callback
+         * @param allowCurrentSessionInvalidation
          */
-        self.login = function (event, callback) {
+        self.login = function (event, callback, allowCurrentSessionInvalidation) {
             // if already login request is sent, don't request again until request is finished(loginStatus = false)
             if (self.loginStatus) {
                 return;
@@ -161,12 +162,18 @@ module.exports = function (app) {
             self.loginStatus = true;
             self.handleRememberMe();
             authenticationService
-                .authenticate(self.credentials)
+                .authenticate(self.credentials, null, allowCurrentSessionInvalidation)
                 .then(function (result) {
                     _hideFixOverlay();
                     _completeLogin(callback, result);
                 })
                 .catch(function (error) {
+                    if (errorCode.checkIf(error, 'CAN_NOT_LOGIN_TWO_USER_SAME_TIME') === true) {
+                        dialog.confirmMessage(generator.getTranslatedError(error))
+                            .then(function () {
+                                self.login(event, callback, true);
+                            });
+                    }
                     // enable button after some delay to avoid request while error message is being displayed
                     $timeout(function () {
                         self.loginStatus = false;

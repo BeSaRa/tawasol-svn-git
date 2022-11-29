@@ -38,8 +38,7 @@ module.exports = function (app) {
                 return;
             }
             */
-
-            if (url === urlService.login) {
+            if (url === urlService.login && xhr.data.ec !== 9025) {
                 errorCode.showErrorDialog(xhr);
             } else {
                 if ((xhr.data.ec === 9001 || xhr.data.ec === 9002) && localStorageService.get('CR')) {
