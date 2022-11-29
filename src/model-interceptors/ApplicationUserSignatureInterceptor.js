@@ -14,6 +14,11 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
+            if (model.hasOwnProperty('metaData')) {
+                var imageUrl = "data:" + model.mimeType + ";base64," + model.content;
+                model = model.metaData;
+                model.contentElementUrl = imageUrl;
+            }
             return model;
         });
 
