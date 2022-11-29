@@ -183,7 +183,7 @@ module.exports = function (app) {
                         oldIframe ? oldIframe.parentNode.removeChild(oldIframe) : null;
 
                         if (exportOption.type === 'excel') {
-                            window.open(file.physicalPath, '_blank');
+                            window.open(file.url, '_blank');
                             return;
                         }
 
