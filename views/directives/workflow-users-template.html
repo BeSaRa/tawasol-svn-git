@@ -79,6 +79,17 @@
                     <!-- Properties and menu -->
                     <th md-column>
                         <div layout="row">
+                            <div class="p10" ng-if="ctrl.globalSettings.isSendRelatedDocsAllowed()">
+                                <md-checkbox
+                                        ng-disabled="!ctrl.gridItems.length"
+                                        ng-model="ctrl.sendRelatedDocsBulk"
+                                        ng-click="ctrl.toggleBulkSendRelatedDocs($event)"
+                                        tooltip="{{lang.send_related_documents}}"
+                                        ng-checked="ctrl.isCheckedSendRelatedDocs()"
+                                        md-indeterminate="ctrl.isIndeterminateSendRelatedDocs()"
+                                        aria-label="{{lang.send_related_documents}}">
+                                </md-checkbox>
+                            </div>
                             <div>
                                 <md-button ng-disabled="!ctrl.gridItems.length" class="md-icon-button"
                                            tooltip="{{lang.advanced_settings}}"
@@ -189,6 +200,14 @@
                     </td>
                     <td md-cell>
                         <div layout="row">
+                            <!-- Send related documents -->
+                            <div class="p10" ng-if="ctrl.globalSettings.isSendRelatedDocsAllowed()">
+                                <md-checkbox ng-model="workflowUser.sendRelatedDocs"
+                                             tooltip="{{lang.send_related_documents}}"
+                                             aria-label="{{lang.send_related_documents}}"
+                                             ng-disabled="ctrl.globalSettings.canSendRelatedDocsToSameDepartmentOnly() && !workflowUser.isSendRelatedDocsAllowed()">
+                                </md-checkbox>
+                            </div>
                             <div>
                                 <md-button tooltip="{{lang.advanced_settings}}"
                                         class="md-icon-button"
@@ -309,6 +328,14 @@
                     </td>
                     <td md-cell>
                         <div layout="row">
+                            <!-- Send related documents -->
+                            <div class="p10" ng-if="ctrl.globalSettings.isSendRelatedDocsAllowed()">
+                                <md-checkbox ng-model="workflowUser.sendRelatedDocs"
+                                             tooltip="{{lang.send_related_documents}}"
+                                             aria-label="{{lang.send_related_documents}}"
+                                             ng-disabled="ctrl.globalSettings.canSendRelatedDocsToSameDepartmentOnly() && !workflowUser.isSendRelatedDocsAllowed()">
+                                </md-checkbox>
+                            </div>
                             <div>
                                 <md-button tooltip="{{lang.advanced_settings}}"
                                         class="md-icon-button"

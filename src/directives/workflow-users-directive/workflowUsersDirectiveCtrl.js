@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                            DistributionWFItem,
                                                            rootEntity,
                                                            LangWatcher,
+                                                           generator,
                                                            $filter,
                                                            _) {
         'ngInject';
@@ -14,6 +15,7 @@ module.exports = function (app) {
         self.globalSettings = rootEntity.getGlobalSettings();
 
         self.selectedWorkflowItems = [];
+        self.sendRelatedDocsBulk = false;
 
         self.defaultWorkflowItemsSettings = new DistributionWFItem();
         /**
@@ -103,11 +105,73 @@ module.exports = function (app) {
 
         self.getColspan = function () {
             var colspan = 4;
-            if (!self.isAnyOutOfOffice()){
+            if (!self.isAnyOutOfOffice()) {
                 colspan--;
             }
             return colspan;
         }
+
+        var getAvailableGridItems = function () {
+            if (!self.gridItems) {
+                return [];
+            }
+            if (!self.excludeSelected) {
+                return self.gridItems.filter(x => true);
+            } else {
+                return self.gridItems.filter(function (item) {
+                    return self.runUserNotExists(item);
+                })
+            }
+        }
+
+        self.isCheckedSendRelatedDocs = function () {
+            var allItems = getAvailableGridItems();
+            return !!(allItems.length && _getWorkflowItemsWithSendRelatedDocs().length === allItems.length);
+        };
+
+        self.isIndeterminateSendRelatedDocs = function () {
+            var allItems = getAvailableGridItems();
+            return !!(_getWorkflowItemsWithSendRelatedDocs().length && _getWorkflowItemsWithSendRelatedDocs().length < allItems.length);
+        };
+
+        var _getWorkflowItemsWithSendRelatedDocs = function () {
+            var allItems = getAvailableGridItems();
+            return _.filter(allItems, function (workflowItem) {
+                return !!workflowItem.sendRelatedDocs;
+            });
+        };
+
+        var _toggleAllSendRelatedDocs = function (value) {
+            self.gridItems = _.map(self.gridItems, function (workflowItem) {
+                if (self.excludeSelected) {
+                    if (self.runUserNotExists(workflowItem)) {
+                        // ignore sending related docs to user with different departments
+                        workflowItem.sendRelatedDocs = (self.globalSettings.canSendRelatedDocsToSameDepartmentOnly() && !workflowItem.isSendRelatedDocsAllowed()) ? false : value;
+                    }
+                } else {
+                    // ignore sending related docs to user with different departments
+                    workflowItem.sendRelatedDocs = (self.globalSettings.canSendRelatedDocsToSameDepartmentOnly() && !workflowItem.isSendRelatedDocsAllowed()) ? false : value;
+                }
+                return workflowItem;
+            });
+        };
+
+        /**
+         * @description Toggle the sendRelatedDocs checkbox for all added items
+         * @param $event
+         */
+        self.toggleBulkSendRelatedDocs = function ($event) {
+            var allItems = getAvailableGridItems();
+            if (self.sendRelatedDocsBulk) {
+                if (_getWorkflowItemsWithSendRelatedDocs().length === allItems.length) {
+                    _toggleAllSendRelatedDocs(false);
+                } else {
+                    _toggleAllSendRelatedDocs(true);
+                }
+            } else {
+                _toggleAllSendRelatedDocs(true);
+            }
+        };
 
     });
 };
