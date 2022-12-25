@@ -539,6 +539,20 @@ module.exports = function (app) {
             document.printReceipt($event);
         }
 
+        /**
+         * @description Archive the review incoming item
+         * @param document
+         * @param $event
+         */
+        self.archive = function (document, $event) {
+            document.archiveDocument($event)
+                .then(function () {
+                    counterService.loadCounters();
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    self.resetAddCorrespondence();
+                });
+        };
+
         self.documentAction = null;
         self.performDocumentAction = function ($event) {
             self.documentAction.callback(self.incoming, $event);
@@ -675,6 +689,16 @@ module.exports = function (app) {
                     isVisible = gridService.checkToShowAction(action) && _hasContent() && rootEntity.getGlobalSettings().isAllowPrintCorrespondenceReceipt();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
+                }
+            },
+            {
+                text: langService.get('grid_action_archive'),
+                callback: self.archive,
+                class: "action-green",
+                checkShow: function (action, model, index) {
+                    isVisible = gridService.checkToShowAction(action) && _hasContent();
+                    self.setDropdownAvailability(index, isVisible);
+                    return isVisible
                 }
             }
         ];
