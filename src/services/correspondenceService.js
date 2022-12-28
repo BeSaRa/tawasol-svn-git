@@ -1356,10 +1356,10 @@ module.exports = function (app) {
                         var WinPrint = window.open('', '', 'left=0,top=0,width=0,height=0,toolbar=0,scrollbars=0,status=0');
                         $timeout(function () {
                             WinPrint.document.write($element.find("#barcode-area")[0].innerHTML);
-                            WinPrint.document.close();
-                            WinPrint.focus();
-                            WinPrint.print();
                             $timeout(function () {
+                                WinPrint.document.close();
+                                WinPrint.focus();
+                                WinPrint.print();
                                 WinPrint.close();
                             }, 100)
                         });
