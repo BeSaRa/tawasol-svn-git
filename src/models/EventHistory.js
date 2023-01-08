@@ -341,6 +341,9 @@ module.exports = function (app) {
             EventHistory.prototype.isSentToDepartmentOnly = function () {
                 return this.userToRegOuId === null && this.userToOuId !== null && this.userToId === null;
             }
+            EventHistory.prototype.openSendSMSDialog = function ($event) {
+                return correspondenceService.openSendSMSDialog(this, null, $event);
+            };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

@@ -480,9 +480,13 @@ module.exports = function (app) {
          * @description Send SMS
          * @param userSentItem
          * @param $event
+         * @param defer
          */
-        self.sendSMS = function (userSentItem, $event) {
-            //  console.log('sendSMS : ', userSentItem);
+        self.sendSMS = function (userSentItem, $event, defer) {
+            userSentItem.openSendSMSDialog($event)
+                .then(function (result) {
+                    new ResolveDefer(defer);
+                });
         };
 
         self.sendReminderEmail = function (userSetItem, $event) {
