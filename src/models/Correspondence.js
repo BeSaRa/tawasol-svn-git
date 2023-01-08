@@ -522,7 +522,7 @@ module.exports = function (app) {
                     return false;
                 }
                 // if endFollowDate has value, show indicator
-                if (this.getSiteFollowupEndDate()) {
+                if (this.isTerminatedFollowupStatus() || this.getSiteFollowupEndDate()) {
                     return indicator.getSiteFollowUpEndedIndicator(true);
                 }
                 return false;
@@ -1102,6 +1102,9 @@ module.exports = function (app) {
                     return this.followupEndDate;
                 }
             };
+            Correspondence.prototype.isTerminatedFollowupStatus = function () {
+                return this.followupStatus === 2;
+            }
 
             Correspondence.prototype.getSiteMaxFollowupDate = function () {
                 var info = this.getInfo();
