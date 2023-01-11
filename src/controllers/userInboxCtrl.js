@@ -822,6 +822,22 @@ module.exports = function (app) {
         };
 
         /**
+         * @description send to minister
+         * @param userInbox
+         * @param $event
+         * @param defer
+         */
+        self.sendToMinister = function (userInbox, $event, defer) {
+            userInbox.launchMinisterWorkFlow($event, 'launch')
+                .then(function () {
+                    self.reloadUserInboxes(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
+                });
+        }
+
+        /**
          * @description Get the link of user inbox
          * @param workItem
          * @param $event
@@ -1892,6 +1908,20 @@ module.exports = function (app) {
                     return rootEntity.hasPSPDFViewer() && !model.hasActiveSeqWF()
                         && !model.isCorrespondenceApprovedBefore() && !model.isComposite()
                         && !model.isTerminatedSEQ() && !model.isBroadcasted() && !model.generalStepElm.isSeqWFLaunch;
+                }
+            },
+            // Send To Minister
+            {
+                type: 'action',
+                icon: 'shield-account',
+                text: 'grid_send_to_minister',
+                permissionKey: 'SEND_TO_MINISTRY_ASSISTANT',
+                callback: self.sendToMinister,
+                class: "action-green",
+                sticky: true,
+                stickyIndex: 9,
+                checkShow: function (action, model) {
+                    return rootEntity.getGlobalSettings().isAllowToSendToMinister();
                 }
             },
             // Broadcast

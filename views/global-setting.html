@@ -732,6 +732,41 @@
                                 </div>
                             </div>
                             <div layout="row" flex class="p20">
+                                <md-switch flex ng-model="ctrl.globalSetting.sendMinisterAsNewWF"
+                                           aria-label="{{lang.send_to_minister}}"
+                                           ng-change="ctrl.sendMinisterChanged()">
+                                    <span>{{lang.send_to_minister}} : </span>{{
+                                    ctrl.globalSetting.getTranslatedYesNo('send_to_minister')}}
+                                </md-switch>
+                                <!-- Action -->
+                                <md-input-container flex>
+                                    <label for="action">{{lang.select_minister_action}}</label>
+                                    <md-select ng-required="ctrl.globalSetting.sendMinisterAsNewWF"
+                                               ng-disabled="!ctrl.globalSetting.sendMinisterAsNewWF"
+                                               id="action"
+                                               name="defaultMinisterAction"
+                                               ng-model="ctrl.globalSetting.defaultMinisterAction"
+                                               md-on-close="ctrl.clearSearchText('defaultMinisterAction')"
+                                               data-md-container-class="select-header-container sticky-search-bar">
+                                        <md-select-header class="select-header">
+                                            <input ng-model="ctrl.actionSearchText"
+                                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                        </md-select-header>
+                                        <md-option ng-value="action.id"
+                                                   ng-repeat="action in ctrl.ministerWorkflowActions | translatedNameFilter: ctrl.actionSearchText">
+                                    <span
+                                            md-highlight-text="ctrl.actionSearchText"
+                                            md-highlight-flags="i">{{action.getTranslatedName()}}</span>
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="distWorkflowItem_form.action.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout="row" flex class="p20">
                                 <md-switch flex ng-model="ctrl.globalSetting.allowPrintCorReceipt "
                                            aria-label="{{lang.allow_print_correspondence_receipt}}">
                                     <span>{{lang.allow_print_correspondence_receipt}} : </span>{{

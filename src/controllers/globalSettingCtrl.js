@@ -22,6 +22,7 @@ module.exports = function (app) {
                                                   permissions,
                                                   roleService,
                                                   $filter,
+                                                  ministerWorkflowActions,
                                                   _) {
         'ngInject';
         var self = this;
@@ -65,6 +66,7 @@ module.exports = function (app) {
         self.employeeService = employeeService;
         self.permissionsList = permissions;
         self.sendRelatedDocsStatusList = lookupService.returnLookups(lookupService.wfRelatedBookStatus);
+        self.ministerWorkflowActions = ministerWorkflowActions;
 
         self.loginLogoExtensions = ['.png'];
         self.bannerLogoExtensions = ['.png'];
@@ -535,5 +537,28 @@ module.exports = function (app) {
             }
         };
 
+        self.sendMinisterChanged = function () {
+            self.globalSetting.defaultMinisterAction = null;
+        }
+
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            if ($event) {
+                var code = $event.which || $event.keyCode;
+                if (code !== 38 && code !== 40)
+                    $event.stopPropagation();
+            }
+        };
     });
 };

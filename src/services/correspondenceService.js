@@ -83,6 +83,8 @@ module.exports = function (app) {
                                                    TawasolDocument,
                                                    ManualDeliveryReport,
                                                    roleService,
+                                                   distributionWFService,
+                                                   DistributionUserWFItem,
                                                    SequentialWFResult) {
         'ngInject';
         var self = this, managerService, correspondenceStorageService;
@@ -2619,6 +2621,34 @@ module.exports = function (app) {
                     }
                 });
         };
+
+        /**
+         * @description launch minister as new workflow
+         * @param workItem
+         * @param action
+         */
+        self.launchMinisterAsNewWorkflow = function (workItem, action) {
+            var distributionWF = new DistributionWF();
+            var defaultMinisterAction = rootEntity.getGlobalSettings().getDefaultMinisterAction();
+            if (!defaultMinisterAction) {
+                toast.error(langService.get('no_minister_action_selected'));
+                return $q.reject();
+            }
+
+            return distributionWFService.loadDistWorkflowUsers('heads')
+                .then(ministers => {
+                    // only first minister selected
+                    var ministerWFItem = (new DistributionUserWFItem()).mapFromWFUser(ministers[0]);
+                    ministerWFItem = ministerWFItem.setAction(defaultMinisterAction);
+
+                    distributionWF.setNormalUsers([ministerWFItem]);
+                    distributionWFService.startLaunchWorkflow(distributionWF, workItem, action)
+                        .then(function (result) {
+                            toast.success(langService.get('launch_success_distribution_workflow'));
+                        }).catch(function (error) {
+                    });
+                });
+        }
 
         /**
          * @description load group inbox from service

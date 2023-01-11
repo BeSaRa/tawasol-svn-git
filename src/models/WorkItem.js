@@ -425,6 +425,9 @@ module.exports = function (app) {
                 action = action || 'forward';
                 return correspondenceService.openQuickSendDialog(this, tab, action, isDeptIncoming, isDeptSent, fromLaunchPopup, $event);
             };
+            WorkItem.prototype.launchMinisterWorkFlow = function ($event, action) {
+                return correspondenceService.launchMinisterAsNewWorkflow(this, action);
+            }
             WorkItem.prototype.openLaunchSequentialWorkflowDialog = function ($event) {
                 return correspondenceService.openLaunchSeqWFDialog(this, $event);
             };

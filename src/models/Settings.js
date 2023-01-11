@@ -80,6 +80,12 @@ module.exports = function (app) {
             Settings.prototype.isLegacySMSCorNotification = function (){
                 return this.legacySMSCorNotification;
             }
+            Settings.prototype.isAllowToSendToMinister = function () {
+                return this.sendMinisterAsNewWF;
+            }
+            Settings.prototype.getDefaultMinisterAction = function () {
+                return this.defaultMinisterAction;
+            }
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Settings', 'init', this);

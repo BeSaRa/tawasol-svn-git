@@ -77,7 +77,8 @@ module.exports = function (app) {
             self.legacySMSCorNotification = false;
             self.allowPrintCorReceipt = false;
             self.hidePELocks = false;
-
+            self.sendMinisterAsNewWF = false;
+            self.defaultMinisterAction = null;
             //endregion
 
             // every model has required fields
@@ -189,7 +190,9 @@ module.exports = function (app) {
             GlobalSetting.prototype.isAllowPrintCorrespondenceReceipt = function () {
                 return this.allowPrintCorReceipt;
             }
-
+            GlobalSetting.prototype.isAllowToSendToMinister = function () {
+                return this.sendMinisterAsNewWF;
+            }
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('GlobalSetting', 'init', this);

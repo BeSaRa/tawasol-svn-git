@@ -436,6 +436,10 @@ module.exports = function (app) {
                     }, permissions: function (roleService, employeeService) {
                         'ngInject';
                         return employeeService.isSuperAdminUser() ? roleService.getPermissionByGroup() : [];
+                    },
+                    ministerWorkflowActions: function (workflowActionService) {
+                        'ngInject';
+                        return workflowActionService.loadWorkflowActions();
                     }
                 }
             })
@@ -584,6 +588,10 @@ module.exports = function (app) {
                     permissions: function (roleService, employeeService) {
                         'ngInject';
                         return employeeService.isSuperAdminUser() ? roleService.getPermissionByGroup() : [];
+                    },
+                    ministerWorkflowActions: function (workflowActionService) {
+                        'ngInject';
+                        return workflowActionService.loadWorkflowActions();
                     }
                 }
             })
