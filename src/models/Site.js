@@ -117,7 +117,7 @@ module.exports = function (app) {
              * @param faxNumber
              */
             Site.prototype.setFaxNumber = function (faxNumber) {
-                this.faxNumber = faxNumber;
+                this.faxNumber = faxNumber || '';
                 return this;
             };
 
