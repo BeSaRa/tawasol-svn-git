@@ -23,6 +23,8 @@ module.exports = function (app) {
                                                   roleService,
                                                   $filter,
                                                   ministerWorkflowActions,
+                                                  distributionWFService,
+                                                  organizationService,
                                                   _) {
         'ngInject';
         var self = this;
@@ -127,7 +129,8 @@ module.exports = function (app) {
             'upload',
             'barcodeSettings',
             'watermarkSettings',
-            'limitPrivileges'
+            'limitPrivileges',
+            'ministerAssistants'
         ];
 
         self.showTab = function (tabName) {
@@ -145,7 +148,21 @@ module.exports = function (app) {
          * @param tabName
          */
         self.setCurrentTab = function (tabName) {
-            self.selectedTabName = tabName;
+            var defer = $q.defer();
+            if (tabName === 'ministerAssistants') {
+                $q.all([
+                    organizationService.loadOrganizations(true),
+                    distributionWFService.loadMinisterAssistants()
+                ]).then(function (result) {
+                    self.ministerAssistants = result[1];
+                    defer.resolve(tabName);
+                });
+            } else {
+                defer.resolve(tabName);
+            }
+            return defer.promise.then(function (tab) {
+                self.selectedTabName = tab;
+            });
         };
 
         self.imageDimensionsInfo = langService.get('image_dimensions_info').change({height: 283, width: 283});

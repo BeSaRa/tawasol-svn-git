@@ -13,6 +13,7 @@ module.exports = function (app) {
                                                    dialog,
                                                    errorCode,
                                                    langService,
+                                                   MinistryAssistant,
                                                    _) {
         'ngInject';
         var self = this;
@@ -474,6 +475,53 @@ module.exports = function (app) {
             })
         };
 
+
+        /**
+         *@description load ministry assistants
+         */
+        self.loadMinisterAssistants = function () {
+            return $http.get(urlService.ministerAssistant).then(function (result) {
+                return generator.interceptReceivedCollection('MinistryAssistant', generator.generateCollection(result.data.rs, MinistryAssistant))
+            }).catch(function (e) {
+                return [];
+            });
+        }
+
+        /**
+         *@description add ministry assistant
+         */
+        self.addMinistryAssistant = function (organization, user) {
+            return $http.post(urlService.ministerAssistant, {
+                "userId": user.hasOwnProperty('id') ? user.id : user,
+                "ouId": organization.hasOwnProperty('id') ? organization.id : organization
+            }).then(function (result) {
+                return true;
+            });
+        }
+
+        /**
+         * @description remove workflowItem from fav list.
+         * @param assistant
+         */
+        self.removeMinistryAssistant = function (assistant) {
+            return $http
+                .delete(urlService.ministerAssistant + '/' + assistant.id)
+                .then(function (result) {
+                    return result.data.rs;
+                });
+        };
+
+        /**
+         * @description load added from global setting the minister assistants
+         * @returns {*}
+         */
+        self.loadSelectedMinisterAssistants = function () {
+            return $http.get(urlService.distributionWF + '/ministry-assistants').then(function (result) {
+                return generator.generateCollection(result.data.rs, WFUser);
+            }).catch(function (e) {
+                return [];
+            });
+        }
 
     });
 };

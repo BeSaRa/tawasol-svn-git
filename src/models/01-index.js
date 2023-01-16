@@ -216,4 +216,5 @@ module.exports = function (app) {
     require('./PersonalFollowupStatistics')(app);
     require('./CustomLevelGroup')(app);
     require('./UserSpecifiedDistWF')(app);
+    require('./MinistryAssistant')(app);
 };

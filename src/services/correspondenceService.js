@@ -2650,6 +2650,26 @@ module.exports = function (app) {
                 });
         }
 
+        self.openMinisterAssistantsDialog = function (correspondence, action, $event) {
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('minister-assistants'),
+                    controller: 'ministerAssistantsPopCtrl',
+                    controllerAs: 'ctrl',
+                    targetEvent: $event,
+                    locals: {
+                        correspondence: correspondence,
+                        actionKey: action
+                    },
+                    resolve: {
+                        ministerAssistants: function (distributionWFService) {
+                            'ngInject';
+                            return distributionWFService.loadSelectedMinisterAssistants();
+                        }
+                    }
+                });
+        };
+
         /**
          * @description load group inbox from service
          * @param ignoreTokenRefresh

@@ -56,7 +56,9 @@ module.exports = function (app) {
             WFUser.prototype.isSendRelatedDocsAllowed = function () {
                 return this.regouId && this.regouId === employeeService.getEmployee().getRegistryOUID();
             }
-
+            WFUser.prototype.getNames = function (separator) {
+                return this.arName + ' ' + (separator ? separator : '-') + ' ' + this.enName;
+            }
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('WFUser', 'init', this);

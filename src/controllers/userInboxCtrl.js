@@ -838,6 +838,22 @@ module.exports = function (app) {
         }
 
         /**
+         * @description send document to minster assistants
+         * @param userInbox
+         * @param $event
+         * @param defer
+         */
+        self.sendToMinisterAssistants = function (userInbox, $event, defer) {
+            userInbox.launchMinisterAssistantsWorkFlow($event, rootEntity.getGlobalSettings().isAllowToSendToMinister() ? 'launch' : 'forward')
+                .then(function () {
+                    self.reloadUserInboxes(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
+                });
+        }
+
+        /**
          * @description Get the link of user inbox
          * @param workItem
          * @param $event
@@ -1915,13 +1931,27 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'shield-account',
                 text: 'grid_send_to_minister',
-                permissionKey: 'SEND_TO_MINISTRY_ASSISTANT',
+                permissionKey: 'SEND_TO_HEAD_OF_GOVERNMENT_ENTITY',
                 callback: self.sendToMinister,
                 class: "action-green",
                 sticky: true,
                 stickyIndex: 9,
                 checkShow: function (action, model) {
                     return rootEntity.getGlobalSettings().isAllowToSendToMinister();
+                }
+            },
+            // Send To Minister Assistants
+            {
+                type: 'action',
+                icon: 'account-supervisor',
+                text: 'grid_send_to_minister_assistants',
+                permissionKey: 'SEND_TO_MINISTRY_ASSISTANT',
+                callback: self.sendToMinisterAssistants,
+                class: "action-green",
+                sticky: true,
+                stickyIndex: 10,
+                checkShow: function (action, model) {
+                    return true;
                 }
             },
             // Broadcast

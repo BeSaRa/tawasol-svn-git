@@ -139,4 +139,5 @@ module.exports = function (app) {
     require('./ApplicationUserViewInterceptor')(app);
     require('./CustomLevelGroupInterceptor')(app);
     require('./UserSpecifiedDistWFInterceptor')(app);
+    require('./MinistryAssistantInterceptor')(app);
 };

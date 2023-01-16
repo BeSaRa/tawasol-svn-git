@@ -428,6 +428,9 @@ module.exports = function (app) {
             WorkItem.prototype.launchMinisterWorkFlow = function ($event, action) {
                 return correspondenceService.launchMinisterAsNewWorkflow(this, action);
             }
+            WorkItem.prototype.launchMinisterAssistantsWorkFlow = function ($event, action) {
+                return correspondenceService.openMinisterAssistantsDialog(this, action, $event);
+            }
             WorkItem.prototype.openLaunchSequentialWorkflowDialog = function ($event) {
                 return correspondenceService.openLaunchSeqWFDialog(this, $event);
             };

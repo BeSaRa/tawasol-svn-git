@@ -227,6 +227,7 @@
                 .addToAllWithBase('userSpecificDistWF', '/cms-entity/admin/user-specific-dist-wf')
                 .addToAllWithBase('lastAction', 'cms-entity/user/full-history/last-action/vsid')
                 .addToAllWithBase('ouLogo', 'cms-entity/admin/ou/logo/')
+                .addToAllWithBase('ministerAssistant', 'cms-entity/admin/minsitry-assistant')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

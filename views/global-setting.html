@@ -741,9 +741,9 @@
                                 <!-- Action -->
                                 <md-input-container flex>
                                     <label for="action">{{lang.select_minister_action}}</label>
-                                    <md-select ng-required="ctrl.globalSetting.sendMinisterAsNewWF"
-                                               ng-disabled="!ctrl.globalSetting.sendMinisterAsNewWF"
-                                               id="action"
+                                    <!--ng-required="ctrl.globalSetting.sendMinisterAsNewWF"
+                                    ng-disabled="!ctrl.globalSetting.sendMinisterAsNewWF"-->
+                                    <md-select id="action"
                                                name="defaultMinisterAction"
                                                ng-model="ctrl.globalSetting.defaultMinisterAction"
                                                md-on-close="ctrl.clearSearchText('defaultMinisterAction')"
@@ -1035,6 +1035,12 @@
                         </div>
                     </md-content>
                 </md-tab>
+                <md-tab label="{{lang.minister_assistants}}"
+                        ng-if="ctrl.showTab('ministerAssistants') && ctrl.employeeService.isSuperAdminUser()"
+                        md-on-select="ctrl.setCurrentTab('ministerAssistants')">
+                    <minister-assistants-directive ng-if="ctrl.selectedTabName === 'ministerAssistants'"
+                                                   minister-assistants="ctrl.ministerAssistants"></minister-assistants-directive>
+                </md-tab>
             </md-tabs>
             <div id="global-settings-buttons">
                 <md-button class="md-raised" ng-disabled="globalSettingForm.$invalid"
@@ -1042,7 +1048,7 @@
                            ng-click="ctrl.addGlobalSettingFromCtrl()">{{lang.add}}
                 </md-button>
                 <md-button class="md-raised" ng-disabled="globalSettingForm.$invalid"
-                           ng-if="ctrl.globalSetting.id && ctrl.selectedTabName!=='upload' && ctrl.selectedTabName !== 'watermarkSettings'"
+                           ng-if="ctrl.globalSetting.id && ctrl.selectedTabName!=='upload' && ctrl.selectedTabName !== 'watermarkSettings' && ctrl.selectedTabName !=='ministerAssistants'"
                            ng-click="ctrl.editGlobalSettingFromCtrl()">{{lang.save}}
                 </md-button>
             </div>
