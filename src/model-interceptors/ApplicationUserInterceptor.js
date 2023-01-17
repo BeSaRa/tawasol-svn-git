@@ -3,6 +3,7 @@ module.exports = function (app) {
                       jobTitleService,
                       generator,
                       lookupService,
+                      Lookup,
                       organizationService) {
         'ngInject';
 
@@ -23,12 +24,12 @@ module.exports = function (app) {
                 model.seqWFEmailSettings = generator.getResultFromSelectedCollection(model.seqWFEmailSettings, 'lookupKey')
             }
 
-            model.newItemSmspriority = (!model.newsmsEmailNotify) ? null : generator.getResultFromSelectedCollection(model.newItemSmspriority, 'lookupKey');
-            model.deadlineSmspriority = (!model.deadlinesmsNotify) ? null : generator.getResultFromSelectedCollection(model.deadlineSmspriority, 'lookupKey');
-            model.reminderSmsPriority = (!model.reminderSmsnotify) ? null : generator.getResultFromSelectedCollection(model.reminderSmsPriority, 'lookupKey');
-            model.newItemEmailPriority = (!model.newItemEmailNotify) ? null : generator.getResultFromSelectedCollection(model.newItemEmailPriority, 'lookupKey');
-            model.deadlineEmailPriority = (!model.deadlineEmailNotify) ? null : generator.getResultFromSelectedCollection(model.deadlineEmailPriority, 'lookupKey');
-            model.reminderEmailPriority = (!model.reminderEmailNotify) ? null : generator.getResultFromSelectedCollection(model.reminderEmailPriority, 'lookupKey');
+            model.newItemSmspriority = (!model.newsmsEmailNotify) ? null : (model.newItemSmspriority instanceof Lookup) ? generator.getResultFromSelectedCollection(model.newItemSmspriority, 'lookupKey') : model.newItemSmspriority;
+            model.deadlineSmspriority = (!model.deadlinesmsNotify) ? null : (model.deadlineSmspriority instanceof Lookup) ? generator.getResultFromSelectedCollection(model.deadlineSmspriority, 'lookupKey') : model.deadlineSmspriority;
+            model.reminderSmsPriority = (!model.reminderSmsnotify) ? null : (model.reminderSmsPriority instanceof Lookup) ? generator.getResultFromSelectedCollection(model.reminderSmsPriority, 'lookupKey') : model.reminderSmsPriority;
+            model.newItemEmailPriority = (!model.newItemEmailNotify) ? null : (model.newItemEmailPriority instanceof Lookup) ? generator.getResultFromSelectedCollection(model.newItemEmailPriority, 'lookupKey') : model.newItemEmailPriority;
+            model.deadlineEmailPriority = (!model.deadlineEmailNotify) ? null : (model.deadlineEmailPriority instanceof Lookup) ? generator.getResultFromSelectedCollection(model.deadlineEmailPriority, 'lookupKey') : model.deadlineEmailPriority;
+            model.reminderEmailPriority = (!model.reminderEmailNotify) ? null : (model.reminderEmailPriority instanceof Lookup) ? generator.getResultFromSelectedCollection(model.reminderEmailPriority, 'lookupKey') : model.reminderEmailPriority;
 
             if (model.signature) {
                 delete model.signature;
@@ -53,12 +54,12 @@ module.exports = function (app) {
             }
 
             var notificationPriorityLevel = lookupService.returnLookups(lookupService.notificationPriorityLevel);
-            model.newItemSmspriority = generator.getSelectedCollectionFromResult(notificationPriorityLevel, model.newItemSmspriority, 'lookupKey');
-            model.deadlineSmspriority = generator.getSelectedCollectionFromResult(notificationPriorityLevel, model.deadlineSmspriority, 'lookupKey');
-            model.reminderSmsPriority = generator.getSelectedCollectionFromResult(notificationPriorityLevel, model.reminderSmsPriority, 'lookupKey');
-            model.newItemEmailPriority = generator.getSelectedCollectionFromResult(notificationPriorityLevel, model.newItemEmailPriority, 'lookupKey');
-            model.deadlineEmailPriority = generator.getSelectedCollectionFromResult(notificationPriorityLevel, model.deadlineEmailPriority, 'lookupKey');
-            model.reminderEmailPriority = generator.getSelectedCollectionFromResult(notificationPriorityLevel, model.reminderEmailPriority, 'lookupKey');
+            model.newItemSmspriority = Array.isArray(model.newItemSmspriority) ? model.newItemSmspriority : generator.getSelectedCollectionFromResult(notificationPriorityLevel, model.newItemSmspriority, 'lookupKey');
+            model.deadlineSmspriority = Array.isArray(model.deadlineSmspriority) ? model.deadlineSmspriority : generator.getSelectedCollectionFromResult(notificationPriorityLevel, model.deadlineSmspriority, 'lookupKey');
+            model.reminderSmsPriority = Array.isArray(model.reminderSmsPriority) ? model.reminderSmsPriority : generator.getSelectedCollectionFromResult(notificationPriorityLevel, model.reminderSmsPriority, 'lookupKey');
+            model.newItemEmailPriority = Array.isArray(model.newItemEmailPriority) ? model.newItemEmailPriority : generator.getSelectedCollectionFromResult(notificationPriorityLevel, model.newItemEmailPriority, 'lookupKey');
+            model.deadlineEmailPriority = Array.isArray(model.deadlineEmailPriority) ? model.deadlineEmailPriority : generator.getSelectedCollectionFromResult(notificationPriorityLevel, model.deadlineEmailPriority, 'lookupKey');
+            model.reminderEmailPriority = Array.isArray(model.reminderEmailPriority) ? model.reminderEmailPriority : generator.getSelectedCollectionFromResult(notificationPriorityLevel, model.reminderEmailPriority, 'lookupKey');
 
             model.mapReceived();
             return model;
