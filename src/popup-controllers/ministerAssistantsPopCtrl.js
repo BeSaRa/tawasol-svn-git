@@ -25,14 +25,14 @@ module.exports = function (app) {
         self.distWorkflowItem = new DistributionWFItem();
         self.distributionWF = new DistributionWF();
         self.actionKey = actionKey;
-        self.defaultMinisterAction = rootEntity.getGlobalSettings().getDefaultMinisterAction();
+        self.defaultMinisterAssistantAction = rootEntity.getGlobalSettings().getDefaultMinisterAssistantAction();
 
 
         /**
          * @description launch Minister Assistants WorkFlow
          */
         self.launchMinisterAssistantsWorkFlow = function () {
-            if (!self.defaultMinisterAction) {
+            if (!self.defaultMinisterAssistantAction) {
                 toast.error(langService.get('no_minister_action_selected'));
                 return false;
             }
@@ -50,7 +50,7 @@ module.exports = function (app) {
 
         function _setDistWorkflowItem(distWorkflowItem, result) {
             distWorkflowItem
-                .setAction(self.defaultMinisterAction)
+                .setAction(self.defaultMinisterAssistantAction)
         }
 
         self.setBulkDistWorkflowItems = function () {

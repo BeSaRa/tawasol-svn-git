@@ -77,7 +77,7 @@ module.exports = function (app) {
             Settings.prototype.isAllowPrintCorrespondenceReceipt = function () {
                 return this.allowPrintCorReceipt;
             }
-            Settings.prototype.isLegacySMSCorNotification = function (){
+            Settings.prototype.isLegacySMSCorNotification = function () {
                 return this.legacySMSCorNotification;
             }
             Settings.prototype.isAllowToSendToMinister = function () {
@@ -85,6 +85,9 @@ module.exports = function (app) {
             }
             Settings.prototype.getDefaultMinisterAction = function () {
                 return this.defaultMinisterAction;
+            }
+            Settings.prototype.getDefaultMinisterAssistantAction = function () {
+                return this.defaultMinisterAssistantAction;
             }
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

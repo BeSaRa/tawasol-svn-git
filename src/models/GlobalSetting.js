@@ -79,6 +79,7 @@ module.exports = function (app) {
             self.hidePELocks = false;
             self.sendMinisterAsNewWF = false;
             self.defaultMinisterAction = null;
+            self.defaultMinisterAssistantAction = null;
             //endregion
 
             // every model has required fields

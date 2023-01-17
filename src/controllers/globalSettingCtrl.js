@@ -69,6 +69,8 @@ module.exports = function (app) {
         self.permissionsList = permissions;
         self.sendRelatedDocsStatusList = lookupService.returnLookups(lookupService.wfRelatedBookStatus);
         self.ministerWorkflowActions = ministerWorkflowActions;
+        self.ministerActionSearchText = '';
+        self.ministerAssistantActionSearchText = '';
 
         self.loginLogoExtensions = ['.png'];
         self.bannerLogoExtensions = ['.png'];

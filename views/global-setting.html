@@ -738,10 +738,10 @@
                                     <span>{{lang.send_to_minister}} : </span>{{
                                     ctrl.globalSetting.getTranslatedYesNo('send_to_minister')}}
                                 </md-switch>
-                                <!-- Action -->
+                                <!-- Minister Actions -->
                                 <md-input-container flex>
-                                    <label for="action">{{lang.select_minister_action}}</label>
-                                    <md-select id="action"
+                                    <label for="ministerAction">{{lang.select_minister_action}}</label>
+                                    <md-select id="ministerAction"
                                                name="defaultMinisterAction"
                                                ng-model="ctrl.globalSetting.defaultMinisterAction"
                                                ng-required="ctrl.globalSetting.sendMinisterAsNewWF"
@@ -749,30 +749,54 @@
                                                md-on-close="ctrl.clearSearchText('defaultMinisterAction')"
                                                data-md-container-class="select-header-container sticky-search-bar">
                                         <md-select-header class="select-header">
-                                            <input ng-model="ctrl.actionSearchText"
+                                            <input ng-model="ctrl.ministerActionSearchText"
                                                    ng-keydown="ctrl.preventSearchKeyDown($event)"
                                                    placeholder="{{lang.search}}"
                                                    class="select-header-input">
                                         </md-select-header>
                                         <md-option ng-value="action.id"
-                                                   ng-repeat="action in ctrl.ministerWorkflowActions | translatedNameFilter: ctrl.actionSearchText">
+                                                   ng-repeat="action in ctrl.ministerWorkflowActions | translatedNameFilter: ctrl.ministerActionSearchText">
                                     <span
-                                            md-highlight-text="ctrl.actionSearchText"
+                                            md-highlight-text="ctrl.ministerActionSearchText"
                                             md-highlight-flags="i">{{action.getTranslatedName()}}</span>
                                         </md-option>
                                     </md-select>
-                                    <div ng-messages="distWorkflowItem_form.action.$error">
+                                    <div ng-messages="globalSettingForm.action.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
                                     </div>
                                 </md-input-container>
                             </div>
                             <div layout="row" flex class="p20">
+                                <!-- Minister Assistant Actions -->
+                                <md-input-container flex>
+                                    <label for="ministerAssistantAction">{{lang.select_minister_assistant_action}}</label>
+                                    <md-select id="ministerAssistantAction"
+                                               name="defaultMinisterAssistantAction"
+                                               ng-model="ctrl.globalSetting.defaultMinisterAssistantAction"
+                                               md-on-close="ctrl.clearSearchText('defaultMinisterAssistantAction')"
+                                               data-md-container-class="select-header-container sticky-search-bar">
+                                        <md-select-header class="select-header">
+                                            <input ng-model="ctrl.ministerAssistantActionSearchText"
+                                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                        </md-select-header>
+                                        <md-option ng-value="action.id"
+                                                   ng-repeat="action in ctrl.ministerWorkflowActions | translatedNameFilter: ctrl.ministerAssistantActionSearchText">
+                                    <span
+                                            md-highlight-text="ctrl.ministerAssistantActionSearchText"
+                                            md-highlight-flags="i">{{action.getTranslatedName()}}</span>
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="globalSettingForm.defaultMinisterAssistantAction.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
                                 <md-switch flex ng-model="ctrl.globalSetting.allowPrintCorReceipt "
                                            aria-label="{{lang.allow_print_correspondence_receipt}}">
                                     <span>{{lang.allow_print_correspondence_receipt}} : </span>{{
                                     ctrl.globalSetting.getTranslatedYesNo('allowPrintCorReceipt')}}
                                 </md-switch>
-                                <span flex></span>
                             </div>
                         </div>
                         <br/>
