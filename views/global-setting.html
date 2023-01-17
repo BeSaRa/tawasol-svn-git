@@ -741,11 +741,11 @@
                                 <!-- Action -->
                                 <md-input-container flex>
                                     <label for="action">{{lang.select_minister_action}}</label>
-                                    <!--ng-required="ctrl.globalSetting.sendMinisterAsNewWF"
-                                    ng-disabled="!ctrl.globalSetting.sendMinisterAsNewWF"-->
                                     <md-select id="action"
                                                name="defaultMinisterAction"
                                                ng-model="ctrl.globalSetting.defaultMinisterAction"
+                                               ng-required="ctrl.globalSetting.sendMinisterAsNewWF"
+                                               ng-disabled="!ctrl.globalSetting.sendMinisterAsNewWF"
                                                md-on-close="ctrl.clearSearchText('defaultMinisterAction')"
                                                data-md-container-class="select-header-container sticky-search-bar">
                                         <md-select-header class="select-header">
