@@ -1157,7 +1157,8 @@ module.exports = function (app) {
                             return quickSearchCorrespondenceService['load' + generator.ucFirst($stateParams.q)]();
                         }
                         var searchJSON = {};
-                        searchJSON[$stateParams.key] = $stateParams.q;
+                        searchJSON[$stateParams.key] = ($stateParams.key.toLowerCase() === 'content' && !isNaN($stateParams.q)) ?
+                            $stateParams.q + ' ' + $stateParams.q.split('').reverse().join('') : $stateParams.q;
                         return quickSearchCorrespondenceService.loadQuickSearchCorrespondence(searchJSON);
                     }
                 }

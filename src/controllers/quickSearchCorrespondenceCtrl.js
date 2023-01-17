@@ -134,7 +134,8 @@ module.exports = function (app) {
             self.grid.progress = defer.promise;
 
             var searchJSON = {};
-            searchJSON[$stateParams.key] = $stateParams.q;
+            searchJSON[$stateParams.key] = ($stateParams.key.toLowerCase() === 'content' && !isNaN($stateParams.q)) ?
+                $stateParams.q + ' ' + $stateParams.q.split('').reverse().join('') : $stateParams.q;
 
             if (self.isOverdueSearch())
                 return self.reloadQuickSearchOverdueCorrespondence(pageNumber, defer);
