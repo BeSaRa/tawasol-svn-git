@@ -2646,29 +2646,55 @@ module.exports = function (app) {
                         .then(function (result) {
                             toast.success(langService.get('launch_success_distribution_workflow'));
                         }).catch(function (error) {
-                    });
+                        });
                 });
         }
 
         self.openMinisterAssistantsDialog = function (correspondence, action, $event) {
-            return dialog
-                .showDialog({
-                    templateUrl: cmsTemplate.getPopup('minister-assistants'),
-                    controller: 'ministerAssistantsPopCtrl',
-                    controllerAs: 'ctrl',
-                    targetEvent: $event,
-                    locals: {
-                        correspondence: correspondence,
-                        actionKey: action
-                    },
-                    resolve: {
-                        ministerAssistants: function (distributionWFService) {
-                            'ngInject';
-                            return distributionWFService.loadSelectedMinisterAssistants();
-                        }
+            var defaultMinisterAssistantAction = rootEntity.getGlobalSettings().getDefaultMinisterAssistantAction();
+            if (!defaultMinisterAssistantAction) {
+                toast.error(langService.get('no_minister_action_selected'));
+                return $q.reject();
+            }
+
+            return distributionWFService.loadSelectedMinisterAssistants()
+                .then(function (ministerAssistants) {
+                    if (ministerAssistants.length <= 1) {
+                        return _launchMinisterAssistantsWorkFlow(correspondence, ministerAssistants, defaultMinisterAssistantAction, action);
+                    } else {
+                        return dialog
+                            .showDialog({
+                                templateUrl: cmsTemplate.getPopup('minister-assistants'),
+                                controller: 'ministerAssistantsPopCtrl',
+                                controllerAs: 'ctrl',
+                                targetEvent: $event,
+                                locals: {
+                                    ministerAssistants: ministerAssistants,
+                                    correspondence: correspondence,
+                                    actionKey: action
+                                }
+                            });
                     }
                 });
         };
+
+        var _launchMinisterAssistantsWorkFlow = function (correspondence, ministerAssistants, defaultMinisterAssistantAction, action) {
+            var distributionWF = new DistributionWF();
+            if (ministerAssistants.length === 0) {
+                toast.error(langService.get('no_minister_assistants_found'));
+                return $q.reject();
+            }
+
+            var ministerAssistantsWFItem = (new DistributionUserWFItem()).mapFromWFUser(ministerAssistants[0]);
+            ministerAssistantsWFItem = ministerAssistantsWFItem.setAction(defaultMinisterAssistantAction);
+            distributionWF.setNormalUsers([ministerAssistantsWFItem]);
+
+            return distributionWFService.startLaunchWorkflow(distributionWF, correspondence, action)
+                .then(function (result) {
+                    toast.success(langService.get('launch_success_distribution_workflow'));
+                }).catch(function (error) {
+                });
+        }
 
         /**
          * @description load group inbox from service
