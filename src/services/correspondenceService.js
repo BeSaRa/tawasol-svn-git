@@ -2624,10 +2624,10 @@ module.exports = function (app) {
 
         /**
          * @description launch minister as new workflow
-         * @param workItem
+         * @param correspondence
          * @param action
          */
-        self.launchMinisterAsNewWorkflow = function (workItem, action) {
+        self.launchMinisterAsNewWorkflow = function (correspondence, action) {
             var distributionWF = new DistributionWF();
             var defaultMinisterAction = rootEntity.getGlobalSettings().getDefaultMinisterAction();
             if (!defaultMinisterAction) {
@@ -2642,7 +2642,7 @@ module.exports = function (app) {
                     ministerWFItem = ministerWFItem.setAction(defaultMinisterAction);
 
                     distributionWF.setNormalUsers([ministerWFItem]);
-                    distributionWFService.startLaunchWorkflow(distributionWF, workItem, action)
+                    return distributionWFService.startLaunchWorkflow(distributionWF, correspondence, action)
                         .then(function (result) {
                             toast.success(langService.get('launch_success_distribution_workflow'));
                         }).catch(function (error) {

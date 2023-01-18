@@ -1505,6 +1505,40 @@ module.exports = function (app) {
             record.showSeqWFStatusSteps($event)
         };
 
+        /**
+         * @description send to minister
+         * @param record
+         * @param $event
+         * @param defer
+         */
+        self.sendToMinister = function (record, $event, defer) {
+            record.launchMinisterWorkFlow($event, 'launch')
+                .then(function () {
+                    self.reloadSearchCorrespondence(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        });
+                });
+        }
+
+        /**
+         * @description send document to minster assistants
+         * @param record
+         * @param $event
+         * @param defer
+         */
+        self.sendToMinisterAssistants = function (record, $event, defer) {
+            record.launchMinisterAssistantsWorkFlow($event, rootEntity.getGlobalSettings().isAllowToSendToMinister() ? 'launch' : 'forward')
+                .then(function () {
+                    self.reloadSearchCorrespondence(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        });
+                });
+        }
+
         self.gridActions = [
             // Document Information
             {
@@ -1753,6 +1787,30 @@ module.exports = function (app) {
                 class: "action-red",
                 checkShow: function (action, model) {
                     return model.hasActiveSeqWF();
+                }
+            },
+            // Send To Minister
+            {
+                type: 'action',
+                icon: 'shield-account',
+                text: 'grid_send_to_minister',
+                permissionKey: 'SEND_TO_HEAD_OF_GOVERNMENT_ENTITY',
+                callback: self.sendToMinister,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return rootEntity.getGlobalSettings().isAllowToSendToMinister();
+                }
+            },
+            // Send To Minister Assistants
+            {
+                type: 'action',
+                icon: 'account-supervisor',
+                text: 'grid_send_to_minister_assistants',
+                permissionKey: 'SEND_TO_MINISTRY_ASSISTANT',
+                callback: self.sendToMinisterAssistants,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return true;
                 }
             },
             // Subscribe

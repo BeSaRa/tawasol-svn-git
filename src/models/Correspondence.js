@@ -643,6 +643,12 @@ module.exports = function (app) {
             Correspondence.prototype.openLaunchSequentialWorkflowDialog = function ($event) {
                 return correspondenceService.openLaunchSeqWFDialog(this, $event);
             };
+            Correspondence.prototype.launchMinisterWorkFlow = function ($event, action) {
+                return correspondenceService.launchMinisterAsNewWorkflow(this, action);
+            };
+            Correspondence.prototype.launchMinisterAssistantsWorkFlow = function ($event, action) {
+                return correspondenceService.openMinisterAssistantsDialog(this, action, $event);
+            };
 
             Correspondence.prototype.launchWorkFlowAndCheckExists = function ($event, action, tab, isDeptIncoming, ignoreConfirmation) {
                 var info = this.getInfo();
