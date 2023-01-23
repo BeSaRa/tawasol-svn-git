@@ -138,6 +138,13 @@ module.exports = function (app) {
             }
         });
 
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
 
         /**
          * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
