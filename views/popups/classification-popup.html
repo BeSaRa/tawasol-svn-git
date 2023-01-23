@@ -50,11 +50,21 @@
                                                    ng-change="ctrl.onChangeParent($event)"
                                                    ng-model-options="{trackBy: '$value.id'}"
                                                    ng-disabled="ctrl.classification.hasChildren() || (ctrl.editMode && ctrl.classification.isUserPrivate)"
-                                                   ng-model="ctrl.classification.parent">
+                                                   ng-model="ctrl.classification.parent"
+                                                   md-on-close="ctrl.clearSearchText('classification')"
+                                                   data-md-container-class="select-header-container sticky-search-bar">
+                                            <md-select-header class="select-header">
+                                                <input ng-model="ctrl.classificationSearchText"
+                                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                       placeholder="{{lang.search}}"
+                                                       class="select-header-input">
+                                            </md-select-header>
                                             <md-option ng-value="">{{lang.no_parent}}</md-option>
                                             <md-option ng-value="classification"
-                                                       ng-repeat="classification in ctrl.parentClassifications track by $index">
-                                                {{classification.getNames()}}
+                                                       ng-repeat="classification in ctrl.parentClassifications| translatedNameFilter: ctrl.classificationSearchText:'getNames'">
+                                                <span
+                                                        md-highlight-text="ctrl.classificationSearchText"
+                                                        md-highlight-flags="i">{{classification.getNames()}}</span>
                                             </md-option>
                                         </md-select>
                                         <div ng-messages="classificationForm.parent.$error">

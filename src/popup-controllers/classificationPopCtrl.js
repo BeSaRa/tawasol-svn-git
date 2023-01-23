@@ -28,7 +28,7 @@ module.exports = function (app) {
         self.model = angular.copy(self.classification);
 
         self.employeeService = employeeService;
-        self.ouSearchText = '';
+        self.classificationSearchText = '';
 
         self.selectedTabIndex = 0;
         self.selectedTabName = "basic";
