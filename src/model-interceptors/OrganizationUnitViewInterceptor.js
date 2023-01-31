@@ -1,5 +1,7 @@
 module.exports = function (app) {
     app.run(function (CMSModelInterceptor,
+                      OrganizationUnitView,
+                      langService,
                       organizationService) {
         'ngInject';
         var modelName = 'OrganizationUnitView';
@@ -16,11 +18,13 @@ module.exports = function (app) {
             delete model.privateRegOuIndicator;
             delete model.notSyncOuIndicator;
             delete model.tempRegOUSection;
+            delete model.isOUParentDeleted;
             return model;
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.parentOrReportingToInfo =  model.parent ? model.getParent() : null;
+            model.isOUParentDeleted = model.parent && (!model.parentOrReportingToInfo || model.parentOrReportingToInfo.isOUParentDeleted);
 
             model.registryOuIndicator = model.getRegistryOuIndicator();
             model.privateRegOuIndicator = model.getPrivateRegOuIndicator();

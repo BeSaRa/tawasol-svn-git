@@ -172,6 +172,7 @@
                         <td md-cell>
                             <md-button class="md-icon-button md-raised"
                                        tooltip="{{lang.childs}}"
+                                       ng-disabled="organization.isOUParentDeleted"
                                        ng-click="ctrl.openChildrenDialog(organization, $event)">
                                 <md-icon md-svg-icon="coins"></md-icon>
                             </md-button>
@@ -184,7 +185,7 @@
                             <div class="cms-input-container">
                                 <md-switch aria-label="{{lang.status}}" flex
                                            ng-if="organization.id && organization.manageable"
-                                           ng-disabled="ctrl.employeeService.getEmployee().organization.ouid === organization.id"
+                                           ng-disabled="ctrl.employeeService.getEmployee().organization.ouid === organization.id || organization.isOUParentDeleted"
                                            ng-model="organization.status"
                                            ng-change="ctrl.changeOrganizationStatus(organization)"
                                            title="{{organization.getTranslatedStatus()}}"></md-switch>
@@ -193,13 +194,13 @@
                         <td md-cell>
                             <div flex layout="row" layout-align="start center">
                                 <md-button class="md-icon-button"
-                                           ng-if="organization.id && organization.manageable"
+                                           ng-if="organization.id && organization.manageable || !organization.isOUParentDeleted"
                                            ng-click="ctrl.openAddOrganizationDialog(organization, $event)"
                                            title="{{lang.add}}">
                                     <md-icon md-svg-icon="plus"></md-icon>
                                 </md-button>
                                 <md-button class="md-icon-button"
-                                           ng-if="organization.id && organization.manageable"
+                                           ng-if="organization.id && organization.manageable || !organization.isOUParentDeleted"
                                            ng-click="ctrl.openEditOrganizationDialog(organization, $event)"
                                            title="{{lang.edit}}">
                                     <md-icon md-svg-icon="pencil"></md-icon>

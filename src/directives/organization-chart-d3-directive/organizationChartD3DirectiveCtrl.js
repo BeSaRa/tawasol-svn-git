@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('organizationChartD3DirectiveCtrl', function ($element, employeeService, LangWatcher, $scope, cmsTemplate, $mdPanel, generator, langService, $timeout, rootEntity, organizationService, d3) {
+    app.controller('organizationChartD3DirectiveCtrl', function ($element, employeeService, LangWatcher, $scope, cmsTemplate, $mdPanel, generator, langService, $timeout, rootEntity, organizationService, d3, OrganizationUnitView, _) {
         'ngInject';
 
         var self = this;
@@ -82,11 +82,22 @@ module.exports = function (app) {
         }
 
         function _prepareOrganizations() {
+            var deletedOUParents = [];
             var organizations = angular.copy(organizationService.allOrganizationsStructureView).map(function (item) {
                 item.parent = item.parent ? item.parent : -1;
+                if (!item.parentOrReportingToInfo && item.isOUParentDeleted) {
+                    item.parentOrReportingToInfo = new OrganizationUnitView({
+                        id: item.parent,
+                        enName: langService.getByLangKey('deleted_ou', 'en'),
+                        arName: langService.getByLangKey('deleted_ou', 'ar'),
+                        parent: -1,
+                        isOUParentDeleted: true
+                    });
+                    deletedOUParents.push(item.parentOrReportingToInfo);
+                }
                 return item;
             });
-
+            organizations = _.uniqBy(deletedOUParents, 'id').concat(organizations);
             organizations.push(self.rootEntity);
             self.nodes = organizations.map(function (item) {
                 return {
@@ -178,6 +189,10 @@ module.exports = function (app) {
                 })
                 .attr('d', function (d) {
                     var check = 'M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z';
+                    var deleted = 'M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z';
+                    if (d.data.isOUParentDeleted) {
+                        return deleted;
+                    }
                     return !d.data.itIsRoot ? (d.data.manageable ? check : '') : employeeService.isSuperAdminUser() ? check : '';
                 });
 
@@ -530,7 +545,7 @@ module.exports = function (app) {
             console.log('node', node);
             var event = d3.event;
             event.preventDefault();
-            if ((!node.data.itIsRoot && !node.data.manageable) || node.data.itIsRoot && !employeeService.isSuperAdminUser()) {
+            if ((!node.data.itIsRoot && !node.data.manageable) || node.data.itIsRoot && !employeeService.isSuperAdminUser() || node.data.isOUParentDeleted) {
                 return;
             }
             var parent = node.parent;
