@@ -53,12 +53,22 @@ module.exports = function (app) {
             };
             DistributionGroupWFItem.prototype.mapFromWFGroup = function (workflowGroup) {
                 var globalSettings = rootEntity.getGlobalSettings();
+                var sendNotify = workflowGroup.members.reduce((prev, current) => {
+                    if (!prev) {
+                        return {sendEmail: !!current.sendEmail, sendSMS: !!current.sendSMS}
+                    }
+                    return {
+                        sendEmail: prev.sendEmail && current.sendEmail,
+                        sendSMS: prev.sendSMS && current.sendSMS
+                    };
+                }, null);
+
                 return this
                     .setArName(workflowGroup.arName)
                     .setEnName(workflowGroup.enName)
                     .setWfGroupId(workflowGroup.id)
-                    .setSendSMS(workflowGroup.sendSMS)
-                    .setSendSMS(workflowGroup.sendEmail)
+                    .setSendSMS(sendNotify ? sendNotify.sendSMS : workflowGroup.sendSMS)
+                    .setSendEmail(sendNotify ? sendNotify.sendEmail : workflowGroup.sendEmail)
                     .setWfMembers(workflowGroup.members)
                     .setSendRelatedDocs(globalSettings.canSendRelatedDocsToSameDepartmentOnly() ?
                         this.isSendRelatedDocsAllowed() : globalSettings.isSendRelatedDocsAllowed());
