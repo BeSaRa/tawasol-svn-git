@@ -404,9 +404,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.setBulkWorkflowAction = function (selectedAction, $event) {
-            _.map(self.workflowItems, function (item) {
-                var result = {action: selectedAction};
-                _setDistWorkflowItem(item, result);
+            _.map(self.workflowItems, function (wfItem) {
+                wfItem.setAction(selectedAction);
             });
         }
     });
