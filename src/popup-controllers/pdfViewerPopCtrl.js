@@ -1748,6 +1748,7 @@ module.exports = function (app) {
                 PDFService.applyAnnotationsOnPDFDocument(self.correspondence, AnnotationType.ANNOTATION, instantJSON, self.documentOperations, _getFlattenStatus(hasMySignature))
                     .then(function (pdfContent) {
                         self.savedPdfContent = pdfContent;
+                        self.documentOperations = [];
                         // self.skippedPdfObjectIds = self.skippedPdfObjectIds.concat(instantJSON.skippedPdfObjectIds);
 
                         if (self.correspondence instanceof Attachment) {
