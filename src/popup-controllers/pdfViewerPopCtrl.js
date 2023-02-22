@@ -2400,6 +2400,7 @@ module.exports = function (app) {
             instance = await PSPDFKit.load(configuration);
 
             if (operations.length) {
+                operations = self.treatImportedDocumentPagesSeparately(operations);
                 documentWithOperationsBuffer = await instance.exportPDFWithOperations(operations);
                 configuration = {
                     baseUrl: self.baseUrl,
@@ -2807,6 +2808,16 @@ module.exports = function (app) {
                     resolve(e.target.result);
                 };
                 reader.readAsDataURL(blob);
+            });
+        }
+
+        self.treatImportedDocumentPagesSeparately = function (operations) {
+            return _.map(operations, operation => {
+                if (operation.type.toLowerCase() === 'importdocument') {
+                    // All the imported document pages will be treated separately for other operations
+                    operation.treatImportedDocumentAsOnePage = false;
+                }
+                return operation;
             });
         }
 
