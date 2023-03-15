@@ -579,7 +579,10 @@ module.exports = function (app) {
             }
             var pageInfo = self.currentInstance.pageInfoForIndex(self.currentInstance.viewState.currentPageIndex);
             var usernameAnnotation = new PSPDFKit.Annotations.TextAnnotation({
-                text: employeeService.getEmployee().getTranslatedName() + '\r\n' + jobTitle.getTranslatedName(),
+                text: {
+                    format: 'plain',
+                    value: employeeService.getEmployee().getTranslatedName() + '\r\n' + jobTitle.getTranslatedName()
+                },
                 pageIndex: self.currentInstance.viewState.currentPageIndex,
                 boundingBox: new PSPDFKit.Geometry.Rect({
                     left: 10,
@@ -617,7 +620,10 @@ module.exports = function (app) {
             var date = moment().format('DD-MM-YYYY');
             var pageInfo = self.currentInstance.pageInfoForIndex(self.currentInstance.viewState.currentPageIndex);
             var usernameAnnotation = new PSPDFKit.Annotations.TextAnnotation({
-                text: employeeService.getEmployee().getTranslatedName() + '\r\n' + date.toString(),
+                text: {
+                    format: 'plain',
+                    value: employeeService.getEmployee().getTranslatedName() + '\r\n' + date.toString()
+                },
                 pageIndex: self.currentInstance.viewState.currentPageIndex,
                 boundingBox: new PSPDFKit.Geometry.Rect({
                     left: 10,
@@ -671,7 +677,10 @@ module.exports = function (app) {
 
             var pageInfo = self.currentInstance.pageInfoForIndex(self.currentInstance.viewState.currentPageIndex);
             var infoAnnotation = new PSPDFKit.Annotations.TextAnnotation({
-                text: annotationText,
+                text: {
+                    format: 'plain',
+                    value: annotationText
+                },
                 pageIndex: self.currentInstance.viewState.currentPageIndex,
                 boundingBox: new PSPDFKit.Geometry.Rect({
                     left: 10,
@@ -748,7 +757,10 @@ module.exports = function (app) {
 
                 // var pageInfo = self.currentInstance.pageInfoForIndex(self.currentInstance.viewState.currentPageIndex);
                 var userInfoAnnotation = new PSPDFKit.Annotations.TextAnnotation({
-                    text: annotationTextItems.join('\r\n'),
+                    text: {
+                        format: 'plain',
+                        value: annotationTextItems.join('\r\n')
+                    },
                     pageIndex: self.currentInstance.viewState.currentPageIndex,
                     boundingBox: new PSPDFKit.Geometry.Rect({
                         left: 10,
