@@ -31,7 +31,7 @@ module.exports = function (app) {
          * @private
          */
         function _getImageType(annotation) {
-            if (!annotation.customData || annotation.customData.additionalData.type === AnnotationType.ANNOTATION) {
+            if (!annotation.customData || !annotation.customData.hasOwnProperty("additionalData") || annotation.customData.additionalData.type === AnnotationType.ANNOTATION) {
                 return AnnotationLogType.ImageAnnotation;
             } else if (annotation.customData.additionalData.type === AnnotationType.SIGNATURE) {
                 return AnnotationLogType.TawasolSignature;

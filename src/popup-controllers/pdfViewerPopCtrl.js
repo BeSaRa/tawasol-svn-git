@@ -513,7 +513,7 @@ module.exports = function (app) {
         function _isSignature(annotation) {
             if (annotation instanceof PSPDFKit.Annotations.InkAnnotation && annotation.isSignature) {
                 return true;
-            } else return !!(annotation instanceof PSPDFKit.Annotations.ImageAnnotation && annotation.customData && annotation.customData.additionalData.type === AnnotationType.SIGNATURE);
+            } else return !!(annotation instanceof PSPDFKit.Annotations.ImageAnnotation && annotation.customData && annotation.customData.hasOwnProperty("additionalData") && annotation.customData.additionalData.type === AnnotationType.SIGNATURE);
         }
 
         /**
@@ -2198,6 +2198,8 @@ module.exports = function (app) {
                 id: "tooltip-Replication-annotation",
                 className: "TooltipItem-Replication",
                 onPress: async function () {
+                    console.log(annotation);
+                    console.log(annotation.customData);
                     var currentPageIndex = annotation.pageIndex, boundingBox = annotation.boundingBox,
                         totalPages = self.currentInstance.totalPageCount, duplicated = [],
                         customData = angular.copy(annotation.customData) || {}, updatedAnnotation = null,
