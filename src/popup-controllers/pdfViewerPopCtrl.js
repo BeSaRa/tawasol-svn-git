@@ -2198,8 +2198,6 @@ module.exports = function (app) {
                 id: "tooltip-Replication-annotation",
                 className: "TooltipItem-Replication",
                 onPress: async function () {
-                    console.log(annotation);
-                    console.log(annotation.customData);
                     var currentPageIndex = annotation.pageIndex, boundingBox = annotation.boundingBox,
                         totalPages = self.currentInstance.totalPageCount, duplicated = [],
                         customData = angular.copy(annotation.customData) || {}, updatedAnnotation = null,
