@@ -30,7 +30,8 @@ module.exports = function (app) {
                                                emailItem,
                                                gridService,
                                                $timeout,
-                                               sequentialWorkflowService) {
+                                               sequentialWorkflowService,
+                                               configurationService) {
         'ngInject';
         var self = this;
         self.controllerName = 'groupInboxCtrl';
@@ -148,6 +149,25 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadGroupInbox(self.grid.page);
                     new ResolveDefer(defer);
+                });
+        };
+
+        /**
+         * @description annotate document
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.annotateDocument = function (workItem, $event, defer) {
+            workItem.openForAnnotation()
+                .then(function () {
+                    self.reloadGroupInbox(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
+                })
+                .catch(function () {
+                    self.reloadGroupInbox(self.grid.page);
                 });
         };
 
@@ -1144,6 +1164,23 @@ module.exports = function (app) {
                     }
 
                     return true;
+                }
+            },
+            // Annotate Document
+            {
+                type: 'action',
+                icon: 'draw',
+                text: 'grid_action_annotate_document',
+                shortcut: true,
+                callback: self.annotateDocument,
+                class: "action-green",
+                sticky: true,
+                stickyIndex: 1,
+                checkShow: function (action, model) {
+                    return model.userCanAnnotate() && rootEntity.hasPSPDFViewer() &&
+                        employeeService.hasPermissionTo(configurationService.ANNOTATE_DOCUMENT_PERMISSION) &&
+                        !model.isTerminatedSEQ() &&
+                        !correspondenceService.isLimitedCentralUnitAccess(model);
                 }
             },
             // Add To
