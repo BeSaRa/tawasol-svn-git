@@ -39,6 +39,7 @@ module.exports = function (env) {
         {source: './guides', destination: toFolder + '/guides'},
         {source: './help', destination: toFolder + '/help'},
         {source: './node_modules/pspdfkit/dist/pspdfkit-lib', destination: toFolder + '/pspdfkit-lib'},
+        {source: './WEB-INF', destination:  toFolder + '/WEB-INF'}
     ];
 
     const copyDevFiles = [
