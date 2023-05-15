@@ -115,6 +115,12 @@
                                             <grid-indicator-directive record="quickSearch"
                                                                       indicator-type="sequentialWF"
                                                                       record-type="Correspondence"></grid-indicator-directive>
+                                            <!-- View Tracking Sheet -->
+                                            <grid-indicator-directive record="quickSearch"
+                                                                      indicator-type="trackingSheet"
+                                                                      record-type="Correspondence"
+                                                                      callback="ctrl.getTrackingSheetCallback">
+                                            </grid-indicator-directive>
                                         </td>
                                         <td md-cell><span class="serial-td">{{quickSearch.docFullSerial}}</span></td>
                                         <td md-cell class="subject">

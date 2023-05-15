@@ -352,3 +352,12 @@
              tooltip="{{ctrl.langService.get(ctrl.record.fromCentralArchiveIndicator.tooltip)}}"
     ></md-icon>
 </span>
+<span ng-if="ctrl.indicatorType === 'trackingSheet'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.trackingSheetIndicator, 'cursor-pointer': !!ctrl.callback}">
+    <md-icon ng-if="ctrl.record.trackingSheetIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.trackingSheetIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.trackingSheetIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.trackingSheetIndicator.tooltip)}}"
+             ng-click="ctrl.indicatorCallback(ctrl.record ,$event)"
+    ></md-icon>
+</span>

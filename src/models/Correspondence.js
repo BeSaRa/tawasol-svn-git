@@ -528,6 +528,11 @@ module.exports = function (app) {
                 return false;
             };
 
+            Correspondence.prototype.getTrackingSheetIndicator = function () {
+                var employee = employeeService.getEmployee();
+                return employee.hasPermissionTo("VIEW_DOCUMENT'S_TRACKING_SHEET") ? indicator.getTrackingSheetIndicator() : false;
+            }
+
             Correspondence.prototype.getTagsCount = function ($event) {
                 return this.tags && this.tags.length ? this.tags.length : 0;
             };

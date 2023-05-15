@@ -136,6 +136,12 @@
                                             <grid-indicator-directive record="sentItemDepartmentInbox"
                                                                       indicator-type="isInternalOutgoing"
                                                                       record-type="SentItemDepartmentInbox"></grid-indicator-directive>
+                                            <!-- View Tracking Sheet -->
+                                            <grid-indicator-directive record="sentItemDepartmentInbox"
+                                                                      indicator-type="trackingSheet"
+                                                                      record-type="SentItemDepartmentInbox"
+                                                                      callback="ctrl.getTrackingSheetCallback">
+                                            </grid-indicator-directive>
                                         </td>
                                         <td md-cell><span
                                                 class="serial-td">{{sentItemDepartmentInbox.docFullSerial}}</span>

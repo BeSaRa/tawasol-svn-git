@@ -566,6 +566,14 @@ module.exports = function (app) {
                 });
         };
 
+        self.getTrackingSheetCallback = function (record, $event) {
+            var action = self.gridActions.find(action => {
+                return action.text === "grid_action_view_tracking_sheet" && action.onlyShortcut;
+            });
+
+            return action.callback(record, action.params, $event);
+        }
+
         /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
@@ -820,6 +828,22 @@ module.exports = function (app) {
                     return true;
                 },
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
+            },
+            // View Tracking Sheet (Shortcut Only)
+            {
+                type: 'action',
+                icon: 'eye',
+                text: 'grid_action_view_tracking_sheet',
+                shortcut: true,
+                onlyShortcut: true,
+                showInView: false,
+                hide: true,
+                permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
+                checkShow: function (action, model) {
+                    return true;
+                },
+                callback: self.viewTrackingSheet,
+                params: ['view_tracking_sheet', 'tabs']
             },
             // Manage
             {

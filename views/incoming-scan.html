@@ -45,6 +45,9 @@
                                             </div>
                                         </th>
                                         <th ng-if="!ctrl.selectedScanIncomings.length" md-column
+                                            md-order-by="">
+                                        </th>
+                                        <th ng-if="!ctrl.selectedScanIncomings.length" md-column
                                             md-order-by="docSubject">
                                             <span>{{lang.subject}}</span>
                                         </th>
@@ -74,6 +77,14 @@
                                     <tr md-row md-select="scanIncoming" grid-right-click-directive model="scanIncoming"
                                         selected-length="{{ctrl.selectedScanIncomings.length ? ctrl.selectedScanIncomings.length : 0}}"
                                         ng-repeat="scanIncoming in searchResults = (ctrl.scanIncomings | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))  track by $index">
+                                        <td md-cell class="indicator-td">
+                                            <!-- View Tracking Sheet -->
+                                            <grid-indicator-directive record="scanIncoming"
+                                                                      indicator-type="trackingSheet"
+                                                                      record-type="incoming"
+                                                                      callback="ctrl.getTrackingSheetCallback">
+                                            </grid-indicator-directive>
+                                        </td>
                                         <td md-cell class="subject">
                                             <!--<grid-document-subject-directive record="scanIncoming"
                                                                              plain-text-only="true">

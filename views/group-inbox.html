@@ -161,6 +161,12 @@
                                             <grid-indicator-directive record="workItem"
                                                                       indicator-type="followupStatus"
                                                                       record-type="workItem"></grid-indicator-directive>
+                                            <!-- View Tracking Sheet -->
+                                            <grid-indicator-directive record="workItem"
+                                                                      indicator-type="trackingSheet"
+                                                                      record-type="WorkItem"
+                                                                      callback="ctrl.getTrackingSheetCallback">
+                                            </grid-indicator-directive>
                                         </td>
                                         <td md-cell><span class="serial-td">{{workItem.generalStepElm.docFullSerial}}</span></td>
                                         <td md-cell class="indicator-td text-right"

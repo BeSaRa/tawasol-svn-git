@@ -62,6 +62,10 @@
                                             </div>
                                         </th>
                                         <th ng-if="!ctrl.selectedRejectedIncomings.length" md-column
+                                            md-order-by="">
+
+                                        </th>
+                                        <th ng-if="!ctrl.selectedRejectedIncomings.length" md-column
                                             md-order-by="docSubject">
                                             <span>{{lang.subject}}</span>
                                         </th>
@@ -92,19 +96,29 @@
                                         model="rejectedIncoming"
                                         selected-length="{{ctrl.selectedRejectedIncomings.length ? ctrl.selectedRejectedIncomings.length : 0}}"
                                         ng-repeat="rejectedIncoming in searchResults = (ctrl.rejectedIncomings | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                                        <td md-cell class="indicator-td">
+                                            <!-- View Tracking Sheet -->
+                                            <grid-indicator-directive record="rejectedIncoming"
+                                                                      indicator-type="trackingSheet"
+                                                                      record-type="incoming"
+                                                                      callback="ctrl.getTrackingSheetCallback">
+                                            </grid-indicator-directive>
+                                        </td>
                                         <td md-cell class="subject">
                                             <!--<grid-document-subject-directive record="rejectedIncoming"
                                                                              plain-text-only="!rejectedIncoming.hasContent()"
                                                                              click-callback="ctrl.viewDocument">
                                             </grid-document-subject-directive>-->
-                                            <a href="" ng-if="rejectedIncoming.hasContent() && ctrl.grid.truncateSubject"
+                                            <a href=""
+                                               ng-if="rejectedIncoming.hasContent() && ctrl.grid.truncateSubject"
                                                class="view-doc subject-internal" md-truncate
                                                tooltip="{{rejectedIncoming.docSubject}}"
                                                ng-click="ctrl.viewDocument(rejectedIncoming, $event)">{{rejectedIncoming.docSubject}}</a>
                                             <span ng-if="!rejectedIncoming.hasContent() && ctrl.grid.truncateSubject"
                                                   class="view-doc subject-internal" md-truncate
                                                   tooltip="{{rejectedIncoming.docSubject}}">{{rejectedIncoming.docSubject}}</span>
-                                            <a href="" ng-if="rejectedIncoming.hasContent() && !ctrl.grid.truncateSubject"
+                                            <a href=""
+                                               ng-if="rejectedIncoming.hasContent() && !ctrl.grid.truncateSubject"
                                                class="view-doc subject-internal"
                                                tooltip="{{rejectedIncoming.docSubject}}"
                                                ng-click="ctrl.viewDocument(rejectedIncoming, $event)">{{rejectedIncoming.docSubject}}</a>

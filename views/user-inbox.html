@@ -115,7 +115,8 @@
                                                 print-user-inbox-bulk="ctrl.printResult"
                                                 total-items="ctrl.totalRecords"
                                                 server-pagination="true"
-                                                table-name="'inbox'">
+                                                table-name="'inbox'"
+                                                view-tracking-sheet-callback="ctrl.getTrackingSheetCallback">
                                         </work-item-inbox-directive>
                                     </md-content>
                                 </md-tab>
@@ -142,7 +143,8 @@
                                                 print-user-inbox-bulk="ctrl.printResult"
                                                 total-items="ctrl.totalRecordsStarred"
                                                 server-pagination="true"
-                                                table-name="'starred'">
+                                                table-name="'starred'"
+                                                view-tracking-sheet-callback="ctrl.getTrackingSheetCallback">
                                         </work-item-inbox-directive>
                                     </md-content>
                                 </md-tab>
@@ -202,7 +204,8 @@
                                                     check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
                                                     selected-work-items="ctrl.selectedUserInboxes"
                                                     sorting-callback="ctrl.getSortedDataForFilter"
-                                                    print-user-inbox-bulk="ctrl.printResult">
+                                                    print-user-inbox-bulk="ctrl.printResult"
+                                                    view-tracking-sheet-callback="ctrl.getTrackingSheetCallback">
                                             </work-item-inbox-directive>
                                         </md-content>
                                     </md-tab-body>

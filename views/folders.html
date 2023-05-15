@@ -222,6 +222,12 @@
                                             <grid-indicator-directive record="workItem"
                                                                       indicator-type="isInternalOutgoing"
                                                                       record-type="WorkItem"></grid-indicator-directive>
+                                            <!-- View Tracking Sheet -->
+                                            <grid-indicator-directive record="workItem"
+                                                                      indicator-type="trackingSheet"
+                                                                      record-type="WorkItem"
+                                                                      callback="ctrl.getTrackingSheetCallback">
+                                            </grid-indicator-directive>
                                         </td>
                                         <td md-cell>
                                             <star-unstar-directive record="workItem"

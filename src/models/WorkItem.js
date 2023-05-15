@@ -1482,6 +1482,10 @@ module.exports = function (app) {
             WorkItem.prototype.getIsFromCentralArchiveIndicator = function () {
                 return indicator.getIsFromCentralArchiveIndicator(this.generalStepElm.fromCentralArchive);
             }
+            WorkItem.prototype.getTrackingSheetIndicator = function () {
+                var employee = employeeService.getEmployee();
+                return employee.hasPermissionTo("VIEW_DOCUMENT'S_TRACKING_SHEET") ? indicator.getTrackingSheetIndicator() : false;
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

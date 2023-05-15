@@ -30,6 +30,7 @@ module.exports = function (app) {
             delete model.actionType_vts;
             delete model.recordGridName;
             delete model.hasSequentialWFIndicator;
+            delete model.trackingSheetIndicator;
             return model;
         });
 
@@ -45,7 +46,7 @@ module.exports = function (app) {
             model.userFromInfo = model.userFromInfo ? new Information(model.userFromInfo) : new Information();
             model.userToInfo = model.userToInfo ? new Information(model.userToInfo) : new Information();
 
-            model.receiverInfo = (model.userToInfo && model.userToInfo.id !== -1)? new Information(model.userToInfo) : new Information(model.userToOuInfo);
+            model.receiverInfo = (model.userToInfo && model.userToInfo.id !== -1) ? new Information(model.userToInfo) : new Information(model.userToOuInfo);
 
             model.userFromOuInfo = model.userFromOuInfo ? new Information(model.userFromOuInfo) : new Information();
             model.userToOuInfo = model.userToOuInfo ? new Information(model.userToOuInfo) : new Information();
@@ -60,6 +61,7 @@ module.exports = function (app) {
 
             model.docClassIndicator = model.docClassName ? model.getDocClassIndicator(model.docClassName) : null;
             model.hasSequentialWFIndicator = model.hasActiveSeqWF() ? model.getSequentialWFIndicator() : null;
+            model.trackingSheetIndicator = model.getTrackingSheetIndicator();
             model.actionType_vts = model.mapActionType();
             model.setMainSiteSubSiteString();
 

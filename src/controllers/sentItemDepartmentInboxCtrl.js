@@ -625,6 +625,13 @@ module.exports = function (app) {
                 .printData(self.sentItemDepartmentInboxes, table, printTitle, searchCriteria, null, null, true);
         };
 
+        self.getTrackingSheetCallback = function (record, $event) {
+            var action = self.gridActions.find(action => {
+                return action.text === "grid_action_view_tracking_sheet" && action.onlyShortcut;
+            });
+
+            return action.callback(record, action.params, $event);
+        }
 
         /**
          * @description Array of actions that can be performed on grid
@@ -832,6 +839,20 @@ module.exports = function (app) {
                     return true;
                 },
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
+            },
+            // View Tracking Sheet (Sticky Only)
+            {
+                type: 'action',
+                icon: 'eye',
+                text: 'grid_action_view_tracking_sheet',
+                permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
+                checkShow: gridService.checkToShowAction,
+                sticky: true,
+                showInView: false,
+                showInViewOnly: true,
+                onlyShortcut: true,
+                callback: self.viewTrackingSheet,
+                params: ['view_tracking_sheet', 'tabs']
             },
             // Manage
             {

@@ -141,6 +141,12 @@
                                             <grid-indicator-directive record="userSentItem"
                                                                       indicator-type="sequentialWF"
                                                                       record-type="EventHistory"></grid-indicator-directive>
+                                            <!-- View Tracking Sheet -->
+                                            <grid-indicator-directive record="userSentItem"
+                                                                      indicator-type="trackingSheet"
+                                                                      record-type="EventHistory"
+                                                                      callback="ctrl.getTrackingSheetCallback">
+                                            </grid-indicator-directive>
                                             <!-- Linked Documents -->
                                             <!--<grid-indicator-directive record="userSentItem"
                                                                       indicator-type="hasLinkedDocs"

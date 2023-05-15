@@ -51,6 +51,10 @@
                                             </div>
                                         </th>
                                         <th ng-if="!ctrl.selectedReadyToSendIncomings.length" md-column
+                                            md-order-by="">
+
+                                        </th>
+                                        <th ng-if="!ctrl.selectedReadyToSendIncomings.length" md-column
                                             md-order-by="docSubject">
                                             <span>{{lang.subject}}</span>
                                         </th>
@@ -81,6 +85,14 @@
                                         model="readyToSendIncoming"
                                         selected-length="{{ctrl.selectedReadyToSendIncomings.length ? ctrl.selectedReadyToSendIncomings.length : 0}}"
                                         ng-repeat="readyToSendIncoming in searchResults = (ctrl.readyToSendIncomings | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                                        <td md-cell class="indicator-td">
+                                            <!-- View Tracking Sheet -->
+                                            <grid-indicator-directive record="readyToSendIncoming"
+                                                                      indicator-type="trackingSheet"
+                                                                      record-type="incoming"
+                                                                      callback="ctrl.getTrackingSheetCallback">
+                                            </grid-indicator-directive>
+                                        </td>
                                         <td md-cell class="subject">
                                             <!--<grid-document-subject-directive record="readyToSendIncoming"
                                                                              plain-text-only="!readyToSendIncoming.hasContent()"

@@ -95,6 +95,12 @@
                                             <grid-indicator-directive record="draftInternal"
                                                                       indicator-type="paperElectronic"
                                                                       record-type="internal"></grid-indicator-directive>
+                                            <!-- View Tracking Sheet -->
+                                            <grid-indicator-directive record="draftInternal"
+                                                                      indicator-type="trackingSheet"
+                                                                      record-type="internal"
+                                                                      callback="ctrl.getTrackingSheetCallback">
+                                            </grid-indicator-directive>
                                         </td>
                                         <td md-cell class="subject">
                                             <!--<grid-document-subject-directive record="draftInternal"

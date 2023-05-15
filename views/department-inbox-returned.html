@@ -135,6 +135,12 @@
                                             <grid-indicator-directive record="returnedDepartmentInbox"
                                                                       indicator-type="hasLinkedDocuments"
                                                                       record-type="workItem"></grid-indicator-directive>
+                                            <!-- View Tracking Sheet -->
+                                            <grid-indicator-directive record="returnedDepartmentInbox"
+                                                                      indicator-type="trackingSheet"
+                                                                      record-type="WorkItem"
+                                                                      callback="ctrl.getTrackingSheetCallback">
+                                            </grid-indicator-directive>
                                         </td>
                                         <td md-cell>
                                           <span class="serial-td">{{returnedDepartmentInbox.generalStepElm.docFullSerial}}</span>

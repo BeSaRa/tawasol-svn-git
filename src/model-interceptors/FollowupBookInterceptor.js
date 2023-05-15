@@ -44,6 +44,7 @@ module.exports = function (app) {
             delete model.statusIndicator;
             delete model.folderInfo;
             delete model.mainSiteSubSiteString;   // added in model when binding main-site-sub-site directive value in grid
+            delete model.trackingSheetIndicator;
             return model;
         });
 
@@ -70,6 +71,8 @@ module.exports = function (app) {
             model.securityLevelIndicator = model.securityLevelLookup ? model.getSecurityLevelIndicator(model.securityLevelLookup) : null;
             model.priorityLevelLookup = lookupService.getLookupByLookupKey(lookupService.priorityLevel, model.priorityLevel);
             model.priorityLevelIndicator = (model.priorityLevelLookup && model.priorityLevelLookup.lookupKey !== 0) ? model.getPriorityLevelIndicator(model.priorityLevelLookup) : null;
+            model.trackingSheetIndicator = model.getTrackingSheetIndicator();
+
             if (model.folderInfo && model.folderInfo.id) {
                 model.folderInfo = new Information(model.folderInfo);
             } else {

@@ -1042,6 +1042,14 @@ module.exports = function (app) {
                 });
         };
 
+        self.getTrackingSheetCallback = function (record, $event) {
+            var action = self.gridActions.find(action => {
+                return action.text === "grid_action_view_tracking_sheet" && action.onlyShortcut;
+            });
+
+            return action.callback(record, action.params, $event);
+        }
+
         self.gridActions = [
             // Document Information
             {

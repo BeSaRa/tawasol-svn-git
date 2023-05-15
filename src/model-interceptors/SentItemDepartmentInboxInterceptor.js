@@ -55,6 +55,7 @@ module.exports = function (app) {
             delete model.mainSiteSubSiteString;
             delete model.sentDateTimeStamp;
             delete model.isInternalOutgoingIndicator;
+            delete model.trackingSheetIndicator;
 
             return model;
         });
@@ -101,6 +102,7 @@ module.exports = function (app) {
             model.numberOfDays = generator.getNumberOfDays(model.sentDate, null);
             model.setMainSiteSubSiteString();
             model.isInternalOutgoingIndicator = model.getIsInternalOutgoingIndicator();
+            model.trackingSheetIndicator = model.getTrackingSheetIndicator();
 
             return model;
         });

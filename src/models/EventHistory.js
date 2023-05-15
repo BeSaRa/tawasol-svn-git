@@ -8,6 +8,7 @@ module.exports = function (app) {
                                           managerService,
                                           rootEntity,
                                           gridService,
+                                          employeeService,
                                           downloadService) {
         'ngInject';
         return function EventHistory(model) {
@@ -256,6 +257,11 @@ module.exports = function (app) {
             EventHistory.prototype.getCommentsIndicator = function (commentsCounts) {
                 return indicator.getCommentsIndicator(commentsCounts);
             };
+
+            EventHistory.prototype.getTrackingSheetIndicator = function () {
+                var employee = employeeService.getEmployee();
+                return employee.hasPermissionTo("VIEW_DOCUMENT'S_TRACKING_SHEET") ? indicator.getTrackingSheetIndicator() : false;
+            }
 
             EventHistory.prototype.getTagsCount = function ($event) {
                 return this.tags && this.tags.length ? this.tags.length : 0;

@@ -7,6 +7,7 @@ module.exports = function (app) {
                                           Lookup,
                                           downloadService,
                                           moment,
+                                          employeeService,
                                           generator) {
         'ngInject';
         return function FollowupBook(model) {
@@ -160,6 +161,11 @@ module.exports = function (app) {
 
             FollowupBook.prototype.getLastCommentsIndicator = function () {
                 return indicator.getLastCommentsIndicator();
+            }
+
+            FollowupBook.prototype.getTrackingSheetIndicator = function () {
+                var employee = employeeService.getEmployee();
+                return employee.hasPermissionTo("VIEW_DOCUMENT'S_TRACKING_SHEET") ? indicator.getTrackingSheetIndicator() : false;
             }
 
             FollowupBook.prototype.viewFromQueue = function (actions, queueName, $event, viewOnly) {

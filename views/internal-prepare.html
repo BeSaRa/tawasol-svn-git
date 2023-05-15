@@ -88,6 +88,12 @@
                                             <grid-indicator-directive record="prepareInternal"
                                                                       indicator-type="paperElectronic"
                                                                       record-type="internal"></grid-indicator-directive>
+                                            <!-- View Tracking Sheet -->
+                                            <grid-indicator-directive record="prepareInternal"
+                                                                      indicator-type="trackingSheet"
+                                                                      record-type="outgoing"
+                                                                      callback="ctrl.getTrackingSheetCallback">
+                                            </grid-indicator-directive>
                                         </td>
                                         <td md-cell class="subject">
                                             <!--<grid-document-subject-directive record="prepareInternal"

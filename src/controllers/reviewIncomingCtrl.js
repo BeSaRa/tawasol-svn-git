@@ -74,13 +74,13 @@ module.exports = function (app) {
                 securityLevel: function (record) {
                     return self.getSortingKey('securityLevel', 'Lookup');
                 },
-                mainSite: function(record){
+                mainSite: function (record) {
                     return self.getSortingKey('mainSite', 'Site');
                 },
-                subSite: function(record){
+                subSite: function (record) {
                     return self.getSortingKey('subSite', 'Site');
                 },
-                creator: function(record){
+                creator: function (record) {
                     return self.getSortingKey('creatorInfo', 'Information');
                 },
                 createdOn: 'createdOn'
@@ -521,7 +521,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.security = function (reviewIncoming, $event) {
-         //   console.log('manage security : ', reviewIncoming);
+            //   console.log('manage security : ', reviewIncoming);
         };
 
         /**
@@ -664,6 +664,14 @@ module.exports = function (app) {
         self.addToBroadcastFollowUp = function (item) {
             item.addToBroadcastFollowUp();
         };
+
+        self.getTrackingSheetCallback = function (record, $event) {
+            var action = self.gridActions.find(action => {
+                return action.text === "grid_action_view_tracking_sheet" && action.onlyShortcut;
+            });
+
+            return action.callback(record, action.params, $event);
+        }
 
         /**
          * @description Array of actions that can be performed on grid
@@ -1016,6 +1024,22 @@ module.exports = function (app) {
                     return true;
                 },
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
+            },
+            // View Tracking Sheet (Shortcut Only)
+            {
+                type: 'action',
+                icon: 'eye',
+                text: 'grid_action_view_tracking_sheet',
+                shortcut: true,
+                onlyShortcut: true,
+                showInView: false,
+                hide: true,
+                permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
+                checkShow: function (action, model) {
+                    return true;
+                },
+                callback: self.viewTrackingSheet,
+                params: ['view_tracking_sheet', 'tabs']
             },
             // Manage
             {

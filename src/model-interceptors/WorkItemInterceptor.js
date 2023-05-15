@@ -83,6 +83,7 @@ module.exports = function (app) {
             delete model.generalStepElm.externalImportData;
             delete model.isInternalOutgoingIndicator;
             delete model.fromCentralArchiveIndicator;
+            delete model.trackingSheetIndicator;
             return model;
         });
 
@@ -146,7 +147,7 @@ module.exports = function (app) {
             model.setMainSiteSubSiteString();
             model.isInternalOutgoingIndicator = model.getIsInternalOutgoingIndicator();
             model.fromCentralArchiveIndicator = model.getIsFromCentralArchiveIndicator();
-
+            model.trackingSheetIndicator = model.getTrackingSheetIndicator();
             return model;
         });
 

@@ -192,6 +192,8 @@ module.exports = function (app) {
             delete model.copyAllAttachments;
             delete model.totalSelectedAttachments;
             delete model.additionalRegistryOUs;
+            delete model.trackingSheetIndicator;
+
             return model;
         });
 
@@ -274,6 +276,8 @@ module.exports = function (app) {
             model.siteFollowUpDueDateIndicator = model.getSiteFollowupDueDateIndicator();
             model.siteFollowUpEndedIndicator = model.getSiteFollowupEndedIndicator();
             model.hasSequentialWFIndicator = model.hasActiveSeqWF() ? model.getSequentialWFIndicator() : null;
+            model.trackingSheetIndicator = model.getTrackingSheetIndicator();
+
             model.setMainSiteSubSiteString();
 
             model.numberOfDays = generator.getNumberOfDays(model.getSiteMaxFollowupDate(), null);

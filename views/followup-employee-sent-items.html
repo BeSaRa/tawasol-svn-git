@@ -110,6 +110,12 @@
                                                 <grid-indicator-directive record="followupSentItems"
                                                                           indicator-type="docClass"
                                                                           record-type="EventHistory"></grid-indicator-directive>
+                                                <!-- View Tracking Sheet -->
+                                                <grid-indicator-directive record="followupSentItems"
+                                                                          indicator-type="trackingSheet"
+                                                                          record-type="EventHistory"
+                                                                          callback="ctrl.getTrackingSheetCallback">
+                                                </grid-indicator-directive>
                                             </td>
                                             <td md-cell><span
                                                     class="serial-td">{{followupSentItems.docFullSerial}}</span>

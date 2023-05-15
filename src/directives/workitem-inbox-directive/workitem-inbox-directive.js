@@ -26,7 +26,8 @@ module.exports = function (app) {
                 printUserInboxBulk: '=?',
                 totalItems: '=?',
                 serverPagination: '=?',
-                tableName: '=?'
+                tableName: '=?',
+                viewTrackingSheetCallback: '=?'
             }
         }
     })

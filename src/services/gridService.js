@@ -1005,7 +1005,8 @@ module.exports = function (app) {
                 outgoingInternal: 'file-sync',
                 email: 'email',
                 sms: 'cellphone-message',
-                message: 'message'
+                message: 'message',
+                trackingSheet: 'eye'
             }
         };
     });

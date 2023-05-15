@@ -749,6 +749,22 @@ module.exports = function (app) {
             }
 
             /**
+             * @description get tracking sheet Indicator
+             * @returns {Indicator}
+             */
+            Indicator.prototype.getTrackingSheetIndicator = function () {
+                return new Indicator({
+                    class: 'indicator',
+                    text: 'grid_action_view_tracking_sheet',
+                    icon: self.getIndicatorIcons('trackingSheet'),
+                    tooltip: 'grid_action_view_tracking_sheet',
+                    legendText: function (indicator) {
+                        return '';
+                    }
+                })
+            }
+
+            /**
              * @description Returns the difference in days and date status(passed/today/coming)
              * @param dateToCheck
              * @param iconType

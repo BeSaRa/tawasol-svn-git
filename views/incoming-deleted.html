@@ -54,6 +54,9 @@
                                             </div>
                                         </th>
                                         <th ng-if="!ctrl.selectedDeletedIncomings.length" md-column
+                                            md-order-by="">
+                                        </th>
+                                        <th ng-if="!ctrl.selectedDeletedIncomings.length" md-column
                                             md-order-by="docSubject">
                                             <span>{{lang.subject}}</span>
                                         </th>
@@ -84,6 +87,14 @@
                                         model="deletedIncoming"
                                         selected-length="{{ctrl.selectedDeletedIncomings.length ? ctrl.selectedDeletedIncomings.length : 0}}"
                                         ng-repeat="deletedIncoming in searchResults = (ctrl.deletedIncomings | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))  track by $index">
+                                        <td md-cell class="indicator-td">
+                                            <!-- View Tracking Sheet -->
+                                            <grid-indicator-directive record="deletedIncoming"
+                                                                      indicator-type="trackingSheet"
+                                                                      record-type="incoming"
+                                                                      callback="ctrl.getTrackingSheetCallback">
+                                            </grid-indicator-directive>
+                                        </td>
                                         <td md-cell class="subject">
 
                                             <a href="" ng-if="deletedIncoming.hasContent() && ctrl.grid.truncateSubject"

@@ -7,6 +7,7 @@ module.exports = function (app) {
                                                      _,
                                                      rootEntity,
                                                      Information,
+                                                     employeeService,
                                                      downloadService) {
         'ngInject';
         return function SentItemDepartmentInbox(model) {
@@ -315,6 +316,11 @@ module.exports = function (app) {
             SentItemDepartmentInbox.prototype.getIsInternalOutgoingIndicator = function () {
                 return this.isInternal ? indicator.getIsInternalOutgoingIndicator(this.isInternal) : null;
             };
+
+            SentItemDepartmentInbox.prototype.getTrackingSheetIndicator = function () {
+                var employee = employeeService.getEmployee();
+                return employee.hasPermissionTo("VIEW_DOCUMENT'S_TRACKING_SHEET") ? indicator.getTrackingSheetIndicator() : false;
+            }
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

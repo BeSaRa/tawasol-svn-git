@@ -42,6 +42,9 @@
                                             </div>
                                         </th>
                                         <th ng-if="!ctrl.selectedReturnedArchiveItems.length" md-column
+                                            md-order-by="">
+                                        </th>
+                                        <th ng-if="!ctrl.selectedReturnedArchiveItems.length" md-column
                                             md-order-by="docSubject">
                                             <span>{{lang.subject}}</span>
                                         </th>
@@ -72,6 +75,14 @@
                                         model="returnedArchiveItem"
                                         selected-length="{{ctrl.selectedReturnedArchiveItems.length ? ctrl.selectedReturnedArchiveItems.length : 0}}"
                                         ng-repeat="returnedArchiveItem in searchResults = (ctrl.returnedArchiveItems | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))  track by $index">
+                                        <td md-cell class="indicator-td">
+                                            <!-- View Tracking Sheet -->
+                                            <grid-indicator-directive record="returnedArchiveItem"
+                                                                      indicator-type="trackingSheet"
+                                                                      record-type="WorkItem"
+                                                                      callback="ctrl.getTrackingSheetCallback">
+                                            </grid-indicator-directive>
+                                        </td>
                                         <td md-cell class="subject">
 
                                             <a href=""

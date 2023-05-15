@@ -227,6 +227,12 @@
                                                                       indicator-type="lastComment"
                                                                       record-type="FollowupBook"
                                                                       callback="ctrl.showLastCommentCallback"></grid-indicator-directive>
+                                            <!-- View Tracking Sheet -->
+                                            <grid-indicator-directive record="record"
+                                                                      indicator-type="trackingSheet"
+                                                                      record-type="FollowupBook"
+                                                                      callback="ctrl.getTrackingSheetCallback">
+                                            </grid-indicator-directive>
                                         </td>
                                         <td md-cell><span class="serial-td">{{record.docFullSerial}}</span></td>
                                         <td md-cell class="indicator-td text-right"
