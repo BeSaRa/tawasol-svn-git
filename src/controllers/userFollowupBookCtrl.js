@@ -33,15 +33,14 @@ module.exports = function (app) {
             self.controllerName = 'userFollowupBookCtrl';
             contextHelpService.setHelpTo('my-followup');
 
-            self.sidebarStatus = false;
+            self.sidebarStatus = true;
 
             self.followupBooks = [];
             self.followupBooksCopy = angular.copy(self.followupBooks);
             self.selectedFollowupBooks = [];
 
             self.folders = _prepareFollowupFolders(folders);
-            self.selectedFolder = null;
-
+            self.selectedFolder = self.folders.find(folder => folder.isDefault === true);
             self.openedDocumentCopy = null;
 
             function _prepareFollowupFolders(folders, showRootFolder) {
@@ -1065,6 +1064,7 @@ module.exports = function (app) {
             self.$onInit = function () {
                 $timeout(function () {
                     self.toggleSidebarFolder();
+                    self.getFolderContent(self.selectedFolder);
                 });
                 _initSearchCriteria();
             };

@@ -483,6 +483,9 @@ module.exports = function (app) {
             Employee.prototype.isRedirectToUserInboxEnabled = function () {
                 return this.isInboxDefaultAfterEntry;
             }
+            Employee.prototype.isViewQuickSendEnabled = function () {
+                return this.canViewQuickSend;
+            }
 
 
             CMSModelInterceptor.runEvent('Employee', 'init', this);

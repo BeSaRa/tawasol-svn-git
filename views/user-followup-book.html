@@ -147,6 +147,10 @@
                                             <span>{{lang.correspondence_sites}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
+                                            md-order-by="privateComment">
+                                            <span>{{lang.comment}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
                                             md-order-by="numberOfDays">
                                             <span>{{lang.number_of_days}}</span>
                                         </th>
@@ -239,6 +243,9 @@
                                         <td md-cell>
                                             <main-site-sub-site-directive
                                                     item="record"></main-site-sub-site-directive>
+                                        </td>
+                                        <td md-cell><span md-truncate class="view-doc subject-internal"
+                                                          tooltip="{{record.privateComment}}">{{record.privateComment}}</span>
                                         </td>
                                         <td md-cell>{{record.numberOfDays}}</td>
                                         <td md-cell ng-if="ctrl.searchCriteriaUsed">

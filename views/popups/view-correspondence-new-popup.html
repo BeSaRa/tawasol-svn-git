@@ -222,6 +222,10 @@
                                 section-title="general_information"
                                 item="ctrl.correspondence"
                                 show-last-action="!ctrl.workItem"></correspondence-item-properties-directive>
+                        <!-- simple reply -->
+                        <quick-reply-directive ng-if="ctrl.canViewQuickReply()"
+                                               work-item="ctrl.workItem"
+                                               reply-on="ctrl.replyOn"></quick-reply-directive>
                         <!-- Quick Actions -->
                         <li>
                             <div class="viewer-actions" flex layout="row" layout-align="start start"

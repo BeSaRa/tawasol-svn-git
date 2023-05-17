@@ -1,0 +1,173 @@
+<li class="document-properties linked simple-reply">
+    <ul class="work-item-properties">
+        <li class="section-title">
+            <div layout="row" layout-align="start center">
+                <span class="manage-span" flex>{{lang.get('reply')}}</span>
+            </div>
+        </li>
+        <li>
+            <form name="distWorkflowItem_form" layout="column" flex class="p10-0">
+                <!-- Organization -->
+                <md-input-container flex class="m0">
+                    <label for="ou">{{lang.select_organization}}</label>
+                    <md-select id="ou" name="ou" required
+                               ng-model-options="{trackBy:'$value.id'}"
+                               ng-change="ctrl.onSearchUsers()"
+                               ng-click="ctrl.loadOrganizationsActionsComments($event)"
+                               ng-model="ctrl.selectedOU"
+                               md-on-close="ctrl.clearSearchText('inlineUserOU')"
+                               data-md-container-class="select-header-container sticky-search-bar">
+                        <md-select-header class="select-header">
+                            <input ng-model="ctrl.inlineUserOUSearchText"
+                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                   placeholder="{{lang.search}}"
+                                   class="select-header-input">
+                        </md-select-header>
+                        <md-option
+                                ng-repeat="organization in ctrl.organizationGroups | translatedNameFilter: ctrl.inlineUserOUSearchText : 'getNameByLanguageRegOUSection'"
+                                ng-value="organization">
+                                        <span
+                                                md-highlight-text="ctrl.inlineUserOUSearchText"
+                                                md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="distWorkflowItem_form.ou.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+                <!-- Users -->
+                <md-input-container flex class="m0">
+                    <label for="user">{{lang.select_user}}</label>
+                    <md-select id="user" name="user"
+                               ng-model="ctrl.selectedUser"
+                               ng-model-options="{trackBy:'$value.id'}"
+                               required ng-disabled="!ctrl.selectedOU"
+                               ng-click="ctrl.loadOrganizationsActionsComments($event)"
+                               md-on-close="ctrl.clearSearchText('inlineUser')"
+                               data-md-container-class="select-header-container sticky-search-bar">
+                        <md-select-header class="select-header">
+                            <input ng-model="ctrl.userSearchText"
+                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                   placeholder="{{lang.search}}"
+                                   class="select-header-input">
+                        </md-select-header>
+                        <md-option
+                                ng-repeat="user in ctrl.users | translatedNameFilter: ctrl.userSearchText"
+                                ng-value="user">
+                                        <span
+                                                md-highlight-text="ctrl.userSearchText"
+                                                md-highlight-flags="i">{{user.getTranslatedName()}}</span>
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="distWorkflowItem_form.user.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+                <!-- Action -->
+                <md-input-container flex class="m0">
+                    <label for="action">{{lang.select_action}}</label>
+                    <md-select required id="action" name="action"
+                               ng-model-options="{trackBy:'$value.id'}"
+                               ng-model="ctrl.distWorkflowItem.action"
+                               ng-click="ctrl.loadOrganizationsActionsComments($event)"
+                               md-on-close="ctrl.clearSearchText('action')"
+                               data-md-container-class="select-header-container sticky-search-bar">
+                        <md-select-header class="select-header">
+                            <input ng-model="ctrl.actionSearchText"
+                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                   placeholder="{{lang.search}}"
+                                   class="select-header-input">
+                        </md-select-header>
+                        <md-option ng-value="action"
+                                   ng-repeat="action in ctrl.workflowActions | translatedNameFilter: ctrl.actionSearchText">
+                                    <span
+                                            md-highlight-text="ctrl.actionSearchText"
+                                            md-highlight-flags="i">{{action.getTranslatedName()}}</span>
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="distWorkflowItem_form.action.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+                <!-- Comment -->
+                <md-input-container flex class="m0">
+                    <label for="comment">{{lang.select_comment}}</label>
+                    <md-select id="comment" name="comment" ng-change="ctrl.onCommentChange()"
+                               ng-model="ctrl.comment"
+                               ng-click="ctrl.loadOrganizationsActionsComments($event)"
+                               md-on-close="ctrl.clearSearchText('comment')"
+                               data-md-container-class="select-header-container sticky-search-bar">
+                        <md-select-header class="select-header">
+                            <input ng-model="ctrl.commentSearchText"
+                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                   placeholder="{{lang.search}}"
+                                   class="select-header-input">
+                        </md-select-header>
+                        <md-option ng-value="comment"
+                                   ng-repeat="comment in ctrl.comments | translatedNameFilter: ctrl.commentSearchText">
+                                    <span
+                                            md-highlight-text="ctrl.commentSearchText"
+                                            md-highlight-flags="i">{{comment.getCommentTitle()}}</span>
+                        </md-option>
+                    </md-select>
+                    <md-button class="md-icon-button cms-select-overlay-button"
+                               ng-click="ctrl.openAddUserCommentDialog($event)">
+                        <md-icon md-svg-icon="plus"></md-icon>
+                    </md-button>
+                </md-input-container>
+                <md-input-container flex class="m0">
+                    <label for="comments"> {{lang.type_your_comment}}</label>
+                    <textarea style="min-height: 150px !important;" overlay-scroll-bar-directive
+                              id="comments" name="comments" rows="7" class="cms-comment textarea-bootstrap"
+                              ng-model="ctrl.distWorkflowItem.comments"
+                              maxlength="2000"
+                              md-maxlength="2000"
+                              ng-required="ctrl.distWorkflowItem.isSecureAction"></textarea>
+                    <div ng-messages="distWorkflowItem_form.comments.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                        <div ng-message="maxlength">{{lang.max_length.change({length: 2000})}}</div>
+                    </div>
+                </md-input-container>
+                <md-input-container flex class="m0">
+                    <md-checkbox ng-model="ctrl.enableReminder"
+                                 ng-change="ctrl.onReminderChanged()">
+                        <span>{{lang.enable_notification}}</span>
+                    </md-checkbox>
+                </md-input-container>
+                <div flex layout="column" ng-if="ctrl.enableReminder">
+                    <!-- Reminder Comment -->
+                    <md-input-container flex class="m0">
+                        <label for="privateComment"> {{lang.type_your_reminder_comments}}</label>
+                        <textarea style="min-height: 150px !important;" overlay-scroll-bar-directive
+                                  id="privateComment" name="privateComment" rows="4"
+                                  class="cms-comment textarea-bootstrap"
+                                  ng-model="ctrl.followUpData.privateComment"
+                                  maxlength="2000"
+                                  md-maxlength="2000"></textarea>
+                        <div ng-messages="distWorkflowItem_form.privateComment.$error">
+                            <div ng-message="maxlength">{{lang.max_length.change({length: 2000})}}</div>
+                        </div>
+                    </md-input-container>
+                    <!-- Reminder Date -->
+                    <md-input-container flex class="cms-datepicker md-block m0">
+                        <label for="dueDate">{{lang.reminder_date}}</label>
+                        <md-datepicker id="dueDate" name="dueDate"
+                                       ng-required="true" md-min-date="ctrl.minDate"
+                                       ng-model="ctrl.distWorkflowItem.dueDate"></md-datepicker>
+                        <div ng-messages="distWorkflowItem_form.dueDate.$error">
+                            <div ng-message="valid">{{lang.invalid_date_format}}</div>
+                            <div ng-message="required">{{lang.field_required}}</div>
+                            <div ng-message="mindate">
+                                {{lang.date_should_be_more_than_equal.change({datevalue: ctrl.minDateString})}}
+                            </div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </form>
+            <md-button class="md-raised md-primary" ng-disabled="ctrl.disableReply || distWorkflowItem_form.$invalid"
+                       ng-click="ctrl.launch($event)">
+                {{lang.send}}
+            </md-button>
+        </li>
+    </ul>
+</li>

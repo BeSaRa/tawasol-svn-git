@@ -1,3 +1,4 @@
+const {UrlService} = require("@uirouter/angularjs");
 module.exports = function (app) {
     app.service('distributionWFService', function (urlService,
                                                    WFUser,
@@ -14,6 +15,8 @@ module.exports = function (app) {
                                                    errorCode,
                                                    langService,
                                                    MinistryAssistant,
+                                                   UserComment,
+                                                   WorkflowAction,
                                                    _) {
         'ngInject';
         var self = this;
@@ -523,5 +526,20 @@ module.exports = function (app) {
             });
         }
 
+
+        /**
+         * @description load ous and action and user comments
+         * @returns {*}
+         */
+        self.loadOrganizationsActionsComments = function () {
+            //organizationGroups + comments + workflowActions
+            return $http.get(urlService.distributionWF + '/quick-send').then(function (result) {
+                return {
+                    organizationGroups: generator.generateCollection(result.data.rs.ouList, WFOrganization),
+                    workflowActions: generator.interceptReceivedCollection('WorkflowAction', generator.generateCollection(result.data.rs.workFlowActionList, WorkflowAction, self._sharedMethods)),
+                    comments: generator.interceptReceivedCollection('UserComment', generator.generateCollection(result.data.rs.userCommentList, UserComment, self._sharedMethods))
+                }
+            });
+        }
     });
 };

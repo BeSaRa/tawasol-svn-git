@@ -1129,5 +1129,12 @@ module.exports = function (app) {
         self.isReviewQueue = function () {
             return self.pageName === 'reviewOutgoing' || self.pageName === 'reviewInternal' || self.pageName === 'reviewIncoming';
         }
+
+        self.canViewQuickReply = function () {
+            var hasReplyAction = self.actions.find(action => {
+                return action.text === 'grid_action_reply';
+            })
+            return hasReplyAction && !hasReplyAction.hide && hasReplyAction.checkShow(hasReplyAction, self.workItem || self.correspondence) && self.employee.isViewQuickSendEnabled();
+        }
     });
 };

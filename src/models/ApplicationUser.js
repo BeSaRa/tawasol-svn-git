@@ -61,6 +61,7 @@ module.exports = function (app) {
             self.enableMobileAccess = false;
             self.isFavSendSecreenDefault = false;
             self.isInboxDefaultAfterEntry = false;
+            self.canViewQuickSend = false;
 
             var collectionResults = [
                 'reminderSmsPriority',

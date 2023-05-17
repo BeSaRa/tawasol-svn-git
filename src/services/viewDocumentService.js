@@ -597,6 +597,17 @@ module.exports = function (app) {
                                 lookups: function (correspondenceService) {
                                     'ngInject';
                                     return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                                },
+                                replyOn: function (distributionWFService, manageLaunchWorkflowService, employeeService) {
+                                    'ngInject';
+                                    if (!employeeService.getEmployee().isViewQuickSendEnabled()) {
+                                        return null;
+                                    }
+                                    if (manageLaunchWorkflowService.isValidLaunchData()) {
+                                        return manageLaunchWorkflowService.getLaunchSelectedItems()[0];
+                                    }
+                                    return distributionWFService
+                                        .loadSenderUserForWorkItem(generalStepElementView);
                                 }
                             }
                         })
