@@ -179,6 +179,12 @@
                                                  tooltip="{{lang[searchedOutgoingDocument.followUpStatusIndicator.tooltip].change({name: searchedOutgoingDocument.followupStatusLookup.getTranslatedName()})}}"
                                         ></md-icon>
                                     </span>
+                                        <!-- View Tracking Sheet -->
+                                        <grid-indicator-directive record="searchedOutgoingDocument"
+                                                                  indicator-type="trackingSheet"
+                                                                  record-type="correspondence"
+                                                                  callback="ctrl.getTrackingSheetCallback">
+                                        </grid-indicator-directive>
                                     </td>
                                     <td md-cell><span
                                             class="serial-td">{{searchedOutgoingDocument.docFullSerial}}</span></td>
@@ -346,6 +352,11 @@
                                         <grid-indicator-directive record="searchedInternalDocument"
                                                                   indicator-type="sequentialWF"
                                                                   record-type="Correspondence"></grid-indicator-directive>
+                                        <!-- View Tracking Sheet -->
+                                        <grid-indicator-directive record="searchedInternalDocument"
+                                                                  indicator-type="trackingSheet"
+                                                                  record-type="correspondence"
+                                                                  callback="ctrl.getTrackingSheetCallback"></grid-indicator-directive>
                                     </td>
                                     <td md-cell><span
                                             class="serial-td">{{searchedInternalDocument.docFullSerial}}</span></td>
@@ -528,7 +539,12 @@
                                         <!-- Sent To RegOU -->
                                         <grid-indicator-directive record="searchedIncomingDocument"
                                                                   indicator-type="isTransferredDocumentIndicator"
-                                                                  record-type="correspondence">
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- View Tracking Sheet -->
+                                        <grid-indicator-directive record="searchedIncomingDocument"
+                                                                  indicator-type="trackingSheet"
+                                                                  record-type="correspondence"
+                                                                  callback="ctrl.getTrackingSheetCallback"></grid-indicator-directive>
                                     </td>
                                     <td md-cell>
                                         <span class="serial-td">{{searchedIncomingDocument.docFullSerial}}</span>
@@ -725,7 +741,12 @@
                                         <!-- Sent To RegOU -->
                                         <grid-indicator-directive record="searchedOutgoingIncomingDocument"
                                                                   indicator-type="isTransferredDocumentIndicator"
-                                                                  record-type="correspondence">
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- View Tracking Sheet -->
+                                        <grid-indicator-directive record="searchedOutgoingIncomingDocument"
+                                                                  indicator-type="trackingSheet"
+                                                                  record-type="correspondence"
+                                                                  callback="ctrl.getTrackingSheetCallback"></grid-indicator-directive>
                                     </td>
                                     <td md-cell><span
                                             class="serial-td">{{searchedOutgoingIncomingDocument.docFullSerial}}</span>
@@ -926,6 +947,11 @@
                                                  tooltip="{{lang[searchedGeneralDocument.followUpStatusIndicator.tooltip].change({name: searchedGeneralDocument.followupStatusLookup.getTranslatedName()})}}"
                                         ></md-icon>
                                     </span>
+                                        <!-- View Tracking Sheet -->
+                                        <grid-indicator-directive record="searchedGeneralDocument"
+                                                                  indicator-type="trackingSheet"
+                                                                  record-type="correspondence"
+                                                                  callback="ctrl.getTrackingSheetCallback"></grid-indicator-directive>
                                     </td>
                                     <td md-cell><span class="serial-td">{{searchedGeneralDocument.docFullSerial}}</span>
                                     </td>

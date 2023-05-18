@@ -1854,6 +1854,22 @@ module.exports = function (app) {
                 },
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid', gridService.grids.search.internal)
             },
+            // View Tracking Sheet (Shortcut Only)
+            {
+                type: 'action',
+                icon: 'eye',
+                text: 'grid_action_view_tracking_sheet',
+                shortcut: true,
+                onlyShortcut: true,
+                showInView: false,
+                hide: true,
+                permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
+                checkShow: function (action, model) {
+                    return true;
+                },
+                callback: self.viewTrackingSheet,
+                params: ['view_tracking_sheet', 'tabs']
+            },
             // add task
             {
                 type: 'action',

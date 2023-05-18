@@ -278,5 +278,13 @@ module.exports = function (app) {
 
             return defer.promise;
         }
+
+        self.getTrackingSheetCallback = function (record, $event) {
+            var action = self.searchScreens[self.selectedTabName].controller.gridActions.find(action => {
+                return action.text === "grid_action_view_tracking_sheet" && action.onlyShortcut;
+            });
+
+            return action.callback(record, action.params, $event);
+        }
     });
 };

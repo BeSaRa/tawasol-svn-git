@@ -755,9 +755,9 @@ module.exports = function (app) {
             Indicator.prototype.getTrackingSheetIndicator = function () {
                 return new Indicator({
                     class: 'indicator',
-                    text: 'grid_action_view_tracking_sheet',
+                    text: 'tracking_sheet',
                     icon: self.getIndicatorIcons('trackingSheet'),
-                    tooltip: 'grid_action_view_tracking_sheet',
+                    tooltip: 'tracking_sheet',
                     legendText: function (indicator) {
                         return '';
                     }
