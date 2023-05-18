@@ -479,6 +479,14 @@
                                             {{ctrl.applicationUser.getTranslatedYesNo('isInboxDefaultAfterEntry')}}</label>
                                     </md-switch>
                                 </div>
+                                <div layout="row">
+                                    <md-switch flex ng-model="ctrl.applicationUser.canViewQuickSend"
+                                               aria-label="{{lang.can_view_quick_reply}}">
+                                        <label>{{lang.can_view_quick_reply}} :
+                                            {{ctrl.applicationUser.getTranslatedYesNo('canViewQuickSend')}}</label>
+                                    </md-switch>
+                                    <span flex></span>
+                                </div>
                             </div>
                         </md-content>
                     </md-tab>

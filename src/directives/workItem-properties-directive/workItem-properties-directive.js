@@ -8,7 +8,7 @@ module.exports = function (app) {
                 'ngInject';
                 var self = this;
                 LangWatcher($scope);
-                self.collapse = false;
+                // self.collapse = false;
                 self.action = null;
 
                 self.toggleCollapse = function ($event) {
@@ -28,7 +28,13 @@ module.exports = function (app) {
             templateUrl: cmsTemplate.getDirective('workItem-properties-template.html'),
             scope: {
                 item: '=',
-                sectionTitle: '@'
+                sectionTitle: '@',
+                collapse: '=?'
+            },
+            link: function (scope, element) {
+                if (scope.ctrl.collapse) {
+                    angular.element(element).find('ul.work-item-properties:first-child').hide();
+                }
             }
         }
     })

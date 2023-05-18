@@ -50,6 +50,7 @@ module.exports = function (app) {
         self.minDateString = moment(self.minDate).format(generator.defaultDateFormat);
         self.privateComment = null;
         self.followUpData = new FollowupBook();
+        self.collapse = false;
 
         /**
          * @description save properties for distWorkItem

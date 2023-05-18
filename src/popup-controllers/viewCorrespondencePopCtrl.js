@@ -71,7 +71,7 @@ module.exports = function (app) {
 
         self.viewURL = '';
         self.employee = employeeService.getEmployee();
-
+        self.isQuickReplyEnabled = self.employee.isViewQuickSendEnabled();
         self.isOfficeOnlineViewer = function (url) {
             return url && url.$$unwrapTrustedValue().indexOf('.aspx') !== -1;
         };
