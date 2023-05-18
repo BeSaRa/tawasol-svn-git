@@ -272,6 +272,11 @@ module.exports = function (app) {
             }
         }
 
+        self.toggleCollapse = function ($event) {
+            self.collapse = !self.collapse;
+            angular.element($event.target).parents('.section-title').next().slideToggle('fast');
+        };
+
         /**
          * @description Clears the searchText for the given field
          * @param fieldType

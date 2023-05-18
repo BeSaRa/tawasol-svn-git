@@ -1,8 +1,11 @@
 <li class="document-properties linked simple-reply">
     <ul class="work-item-properties">
         <li class="section-title">
-            <div layout="row" layout-align="start center">
+            <div layout="row" flex layout-align="start center">
                 <span class="manage-span" flex>{{lang.get('reply')}}</span>
+                <md-button class="md-icon-button collapse-button" ng-click="ctrl.toggleCollapse($event)">
+                    <md-icon md-svg-icon="{{ctrl.collapse ? 'arrow-down-drop-circle' : 'arrow-up-drop-circle'}}"></md-icon>
+                </md-button>
             </div>
         </li>
         <li>
