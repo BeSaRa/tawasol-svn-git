@@ -20,7 +20,7 @@
                                    tooltip=" {{toolbar.currentUserOrganization()}}" tooltip-direction="bottom">
                             <div layout="row" flex layout-align="start center">
                                 <!-- {{toolbar.employee.userOrganization.getTranslatedName()}} -->
-                               <span class="subject-internal over-flow-hidden">{{toolbar.currentUserOrganization()}}</span>
+                                <span class="subject-internal over-flow-hidden">{{toolbar.currentUserOrganization()}}</span>
                                 <md-icon md-svg-icon="chevron-down"></md-icon>
                             </div>
                         </md-button>
@@ -35,8 +35,9 @@
                             <md-menu-item ng-if="!toolbar.isCurrentOrganization(organization)"
                                           ng-repeat="organization in toolbar.employee.ouList | filter: toolbar.ouSearchText track by $index">
                                 <md-button ng-click="toolbar.switchOrganization(organization)">
-                                    <span ng-if="organization.hasRegistry">{{organization.getTranslatedName()}}</span>
-                                    <span ng-if="!organization.hasRegistry">{{organization.regouInfo.getTranslatedName()}} - {{organization.getTranslatedName()}}</span>
+                                    <span ng-if="organization.hasRegistry && toolbar.employee.showRegouInMainToolBar()">{{organization.getTranslatedName()}}</span>
+                                    <span ng-if="!organization.hasRegistry && toolbar.employee.showRegouInMainToolBar()">{{organization.regouInfo.getTranslatedName()}} - {{organization.getTranslatedName()}}</span>
+                                    <span ng-if="!toolbar.employee.showRegouInMainToolBar()">{{organization.getTranslatedName()}}</span>
                                 </md-button>
                             </md-menu-item>
                         </md-menu-content>

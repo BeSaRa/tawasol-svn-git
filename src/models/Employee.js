@@ -70,6 +70,7 @@ module.exports = function (app) {
             self.isFavSendSecreenDefault = false;
             self.isInboxDefaultAfterEntry = false;
             self.isMultipleSigntureAllowed = false;
+            self.isHomeScreenWithRegou = false;
 
             var collectionResults = [
                 'reminderSmsPriority',
@@ -489,6 +490,9 @@ module.exports = function (app) {
             }
             Employee.prototype.isMultipleSignatureAllowed = function () {
                 return this.isMultipleSigntureAllowed;
+            }
+            Employee.prototype.showRegouInMainToolBar = function (){
+                return this.isHomeScreenWithRegou;
             }
 
 

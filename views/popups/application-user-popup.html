@@ -491,6 +491,14 @@
                                             {{ctrl.applicationUser.getTranslatedYesNo('isMultipleSigntureAllowed')}}</label>
                                     </md-switch>
                                 </div>
+                                <div layout="row">
+                                    <md-switch flex ng-model="ctrl.applicationUser.isHomeScreenWithRegou"
+                                               aria-label="{{lang.show_regou_in_main_toolbar}}">
+                                        <label>{{lang.show_regou_in_main_toolbar}} :
+                                            {{ctrl.applicationUser.getTranslatedYesNo('isHomeScreenWithRegou')}}</label>
+                                    </md-switch>
+                                    <span flex></span>
+                                </div>
                             </div>
                         </md-content>
                     </md-tab>

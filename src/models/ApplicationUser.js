@@ -63,6 +63,7 @@ module.exports = function (app) {
             self.isInboxDefaultAfterEntry = false;
             self.canViewQuickSend = false;
             self.isMultipleSigntureAllowed = false;
+            self.isHomeScreenWithRegou = false;
 
             var collectionResults = [
                 'reminderSmsPriority',
@@ -393,6 +394,9 @@ module.exports = function (app) {
             }
             ApplicationUser.prototype.isMultipleSignatureAllowed = function () {
                 return this.isMultipleSigntureAllowed;
+            }
+            ApplicationUser.prototype.showRegouInMainToolBar = function () {
+                return this.isHomeScreenWithRegou;
             }
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
