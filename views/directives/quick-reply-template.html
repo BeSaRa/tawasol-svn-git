@@ -29,9 +29,9 @@
                         <md-option
                                 ng-repeat="organization in ctrl.organizationGroups | translatedNameFilter: ctrl.inlineUserOUSearchText : 'getNameByLanguageRegOUSection'"
                                 ng-value="organization">
-                                        <span
-                                                md-highlight-text="ctrl.inlineUserOUSearchText"
-                                                md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
+                                        <span class="font-size-12"
+                                              md-highlight-text="ctrl.inlineUserOUSearchText"
+                                              md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
                         </md-option>
                     </md-select>
                     <div ng-messages="distWorkflowItem_form.ou.$error">
@@ -57,7 +57,7 @@
                         <md-option
                                 ng-repeat="user in ctrl.users | translatedNameFilter: ctrl.userSearchText"
                                 ng-value="user">
-                                        <span
+                                        <span class="font-size-12"
                                                 md-highlight-text="ctrl.userSearchText"
                                                 md-highlight-flags="i">{{user.getTranslatedName()}}</span>
                         </md-option>
@@ -83,7 +83,7 @@
                         </md-select-header>
                         <md-option ng-value="action"
                                    ng-repeat="action in ctrl.workflowActions | translatedNameFilter: ctrl.actionSearchText">
-                                    <span
+                                    <span class="font-size-12"
                                             md-highlight-text="ctrl.actionSearchText"
                                             md-highlight-flags="i">{{action.getTranslatedName()}}</span>
                         </md-option>
@@ -108,7 +108,7 @@
                         </md-select-header>
                         <md-option ng-value="comment"
                                    ng-repeat="comment in ctrl.comments | translatedNameFilter: ctrl.commentSearchText">
-                                    <span
+                                    <span class="font-size-12"
                                             md-highlight-text="ctrl.commentSearchText"
                                             md-highlight-flags="i">{{comment.getCommentTitle()}}</span>
                         </md-option>
