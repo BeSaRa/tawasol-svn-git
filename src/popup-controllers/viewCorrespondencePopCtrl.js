@@ -71,7 +71,7 @@ module.exports = function (app) {
 
         self.viewURL = '';
         self.employee = employeeService.getEmployee();
-        self.isQuickReplyEnabled = self.employee.isViewQuickSendEnabled();
+
         self.isOfficeOnlineViewer = function (url) {
             return url && url.$$unwrapTrustedValue().indexOf('.aspx') !== -1;
         };
@@ -1054,6 +1054,7 @@ module.exports = function (app) {
             // set the slowConnectionMode when popup opens
             _resetViewModeToggle(true);
             self.hideSlowModeToggleButton = self.psPDFViewerEnabled && self.correspondence && self.correspondence.mimeType === 'application/pdf';
+            self.isQuickReplyEnabled = self.canViewQuickReply();
 
             manageLaunchWorkflowService.clearLaunchData();
             self.model = angular.copy(self.correspondence);
