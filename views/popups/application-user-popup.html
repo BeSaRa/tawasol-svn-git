@@ -485,7 +485,11 @@
                                         <label>{{lang.can_view_quick_reply}} :
                                             {{ctrl.applicationUser.getTranslatedYesNo('canViewQuickSend')}}</label>
                                     </md-switch>
-                                    <span flex></span>
+                                    <md-switch flex ng-model="ctrl.applicationUser.isMultipleSigntureAllowed"
+                                               aria-label="{{lang.is_multiple_signature_allowed}}">
+                                        <label>{{lang.is_multiple_signature_allowed}} :
+                                            {{ctrl.applicationUser.getTranslatedYesNo('isMultipleSigntureAllowed')}}</label>
+                                    </md-switch>
                                 </div>
                             </div>
                         </md-content>

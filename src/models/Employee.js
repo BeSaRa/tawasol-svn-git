@@ -69,6 +69,7 @@ module.exports = function (app) {
             self.userWFDistView = 1;
             self.isFavSendSecreenDefault = false;
             self.isInboxDefaultAfterEntry = false;
+            self.isMultipleSigntureAllowed = false;
 
             var collectionResults = [
                 'reminderSmsPriority',
@@ -485,6 +486,9 @@ module.exports = function (app) {
             }
             Employee.prototype.isViewQuickSendEnabled = function () {
                 return this.canViewQuickSend;
+            }
+            Employee.prototype.isMultipleSignatureAllowed = function () {
+                return this.isMultipleSigntureAllowed;
             }
 
 

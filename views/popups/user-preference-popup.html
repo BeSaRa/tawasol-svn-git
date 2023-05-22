@@ -1259,7 +1259,7 @@
                                 <ng-form layout="row" name="signatureForm">
                                     <div layout="column" flex>
                                         <div layout="row">
-                                            <div>
+                                            <div ng-if="ctrl.canAddMultipleSignature()">
                                                 <label for="add-sign"
                                                        class="md-button md-raised alongside-input md-primary">
                                                         <span layout="row" layout-align="start center">

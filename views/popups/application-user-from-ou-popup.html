@@ -483,6 +483,18 @@
                                             {{ctrl.applicationUser.getTranslatedYesNo('isInboxDefaultAfterEntry')}}</label>
                                     </md-switch>
                                 </div>
+                                <div layout="row">
+                                    <md-switch flex ng-model="ctrl.applicationUser.canViewQuickSend"
+                                               aria-label="{{lang.can_view_quick_reply}}">
+                                        <label>{{lang.can_view_quick_reply}} :
+                                            {{ctrl.applicationUser.getTranslatedYesNo('canViewQuickSend')}}</label>
+                                    </md-switch>
+                                    <md-switch flex ng-model="ctrl.applicationUser.isMultipleSigntureAllowed"
+                                               aria-label="{{lang.is_multiple_signature_allowed}}">
+                                        <label>{{lang.is_multiple_signature_allowed}} :
+                                            {{ctrl.applicationUser.getTranslatedYesNo('isMultipleSigntureAllowed')}}</label>
+                                    </md-switch>
+                                </div>
                             </div>
                         </md-content>
                     </md-tab>

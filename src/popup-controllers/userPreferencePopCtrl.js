@@ -1870,6 +1870,10 @@ module.exports = function (app) {
                 self.selectedOrganization !== self.employee.getOUID();
         }
 
+        self.canAddMultipleSignature = function () {
+            return self.employee.isMultipleSignatureAllowed() || (!self.employee.isMultipleSignatureAllowed() && self.applicationUser.signature.length === 0);
+        }
+
         function _setDefaultSelectedTab() {
             var activeTab = 'general';
             if (selectedTab && self.showTab(selectedTab)) {

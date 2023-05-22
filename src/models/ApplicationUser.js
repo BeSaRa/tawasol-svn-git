@@ -62,6 +62,7 @@ module.exports = function (app) {
             self.isFavSendSecreenDefault = false;
             self.isInboxDefaultAfterEntry = false;
             self.canViewQuickSend = false;
+            self.isMultipleSigntureAllowed = false;
 
             var collectionResults = [
                 'reminderSmsPriority',
@@ -389,6 +390,9 @@ module.exports = function (app) {
             }
             ApplicationUser.prototype.isRedirectToUserInboxEnabled = function () {
                 return this.isInboxDefaultAfterEntry;
+            }
+            ApplicationUser.prototype.isMultipleSignatureAllowed = function () {
+                return this.isMultipleSigntureAllowed;
             }
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
