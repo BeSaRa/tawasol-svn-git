@@ -148,7 +148,7 @@
                                             <thead md-head md-order="ctrl.grid.order"
                                                    md-on-reorder="ctrl.getSortedData">
                                             <tr md-row>
-                                                <th colspan="4" class="table-selector-header"
+                                                <th colspan="8" class="table-selector-header"
                                                     ng-if="ctrl.selectedEmployees.length" md-column>
                                                     <div layout="row" layout-align="start center">
                                                         <span>{{ctrl.selectedEmployees.length}} {{lang.items_selected}} </span>
@@ -171,6 +171,9 @@
                                                     md-order-by="qid"><span>{{lang.qid}}</span>
                                                 </th>
                                                 <th ng-if="!ctrl.selectedEmployees.length" md-column
+                                                    md-order-by="xOU"><span>{{lang.organization_unit}}</span>
+                                                </th>
+                                                <th ng-if="!ctrl.selectedEmployees.length" md-column
                                                     md-order-by="jobTitle">
                                                     {{lang.job_title}}
                                                 </th>
@@ -190,6 +193,7 @@
                                                 <td md-cell>{{employee.fullNameAr}}</td>
                                                 <td md-cell>{{employee.fullNameEn}}</td>
                                                 <td md-cell>{{employee.qid}}</td>
+                                                <td md-cell>{{employee.xOU}}</td>
                                                 <td md-cell>{{employee.xJobTitle}}</td>
                                                 <td md-cell>{{employee.xJobRank}}</td>
                                             </tr>
