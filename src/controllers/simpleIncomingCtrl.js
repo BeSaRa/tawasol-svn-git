@@ -234,7 +234,11 @@ module.exports = function (app) {
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             counterService.loadCounters();
             self.incoming.updateDocumentVersion();
+
+            var isReceivingFromG2g = !!(self.receiveG2G);
+
             if (status) {
+                (isReceivingFromG2g && self.resetAddCorrespondence());
                 toast.success(langService.get('save_success'));
             } else {
                 var successKey = 'incoming_metadata_saved_success';
@@ -255,24 +259,31 @@ module.exports = function (app) {
                 toast.success(langService.get(successKey));
 
                 if (ignoreLaunch) {
+                    (isReceivingFromG2g && self.resetAddCorrespondence());
                     return;
                 }
                 if (self.simpleEdit) {
                     $state.go($stateParams.prevPage === 'userInbox' ? 'app.inbox.user-inbox' : 'app.search-screen');
                     return;
                 }
-                _launchAfterSave();
+                _launchAfterSave(isReceivingFromG2g);
             }
         };
 
-        function _launchAfterSave() {
-            if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')) {
+        function _launchAfterSave(isReceivingFromG2g) {
+            if (!employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')) {
+                (isReceivingFromG2g && self.resetAddCorrespondence());
+            } else {
                 if (centralArchives && self.incoming.hasContent()) {
-                    self.docActionLaunchDistributionWorkflow(self.incoming, false);
+                    self.docActionLaunchDistributionWorkflow(self.incoming, false, isReceivingFromG2g);
                 } else if (!!self.documentInformationExist || !!self.contentFileExist) {
                     dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
                         .then(function () {
-                            self.docActionLaunchDistributionWorkflow(self.incoming);
+                            self.docActionLaunchDistributionWorkflow(self.incoming, null, isReceivingFromG2g);
+                        })
+                        .catch(function (error) {
+                            (isReceivingFromG2g && self.resetAddCorrespondence());
+                            return $q.reject(error);
                         });
                 }
             }
@@ -391,8 +402,9 @@ module.exports = function (app) {
             document.barcodePrint(document);
         };
 
-        self.docActionLaunchDistributionWorkflow = function (document, $event) {
+        self.docActionLaunchDistributionWorkflow = function (document, $event, isReceivingFromG2g) {
             if (!self.incoming.hasContent()) {
+                (isReceivingFromG2g && self.resetAddCorrespondence());
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
@@ -412,6 +424,10 @@ module.exports = function (app) {
                     if (self.employee.isRedirectToUserInboxEnabled()) {
                         $state.go('app.inbox.user-inbox');
                     }
+                })
+                .catch(function (error) {
+                    (isReceivingFromG2g && self.resetAddCorrespondence());
+                    return $q.reject(error)
                 });
         };
 

@@ -256,10 +256,15 @@ module.exports = function (app) {
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             self.incoming.updateDocumentVersion();
             counterService.loadCounters();
+
+            var isReceivingFromG2g = !!(self.receiveG2G);
+
             // once saved/received, don't consider the request as receive/receiveG2G
             self.receive = false;
             self.receiveG2G = false;
+
             if (status) {
+                (isReceivingFromG2g && self.resetAddCorrespondence());
                 toast.success(langService.get('save_success'));
                 self.requestCompleted = true;
                 self.saveInProgress = false;
@@ -282,20 +287,27 @@ module.exports = function (app) {
                 toast.success(langService.get(successKey));
 
                 if (ignoreLaunch) {
+                    (isReceivingFromG2g && self.resetAddCorrespondence());
                     return;
                 }
-                _launchAfterSave();
+                _launchAfterSave(isReceivingFromG2g);
             }
         };
 
-        function _launchAfterSave() {
-            if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')) {
+        function _launchAfterSave(isReceivingFromG2g) {
+            if (!employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')) {
+                (isReceivingFromG2g && self.resetAddCorrespondence());
+            } else {
                 if (centralArchives && self.incoming.hasContent()) {
-                    self.docActionLaunchDistributionWorkflow(self.incoming);
+                    self.docActionLaunchDistributionWorkflow(self.incoming, null, isReceivingFromG2g);
                 } else if (!!self.documentInformationExist || !!self.contentFileExist) {
                     dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
                         .then(function () {
-                            self.docActionLaunchDistributionWorkflow(self.incoming);
+                            self.docActionLaunchDistributionWorkflow(self.incoming, null, isReceivingFromG2g);
+                        })
+                        .catch(function (error) {
+                            (isReceivingFromG2g && self.resetAddCorrespondence());
+                            return $q.reject(error);
                         });
                 }
             }
@@ -414,9 +426,10 @@ module.exports = function (app) {
             document.barcodePrint($event);
         };
 
-        self.docActionLaunchDistributionWorkflow = function (document, $event) {
+        self.docActionLaunchDistributionWorkflow = function (document, $event, isReceivingFromG2g) {
             if (!self.incoming.hasContent()) {
                 dialog.alertMessage(langService.get("content_not_found"));
+                (isReceivingFromG2g && self.resetAddCorrespondence());
                 return;
             }
             var defaultTab = self.employee.isDefaultTabFavoriteAtLaunch() ? 'favorites' : 'users';
@@ -435,6 +448,10 @@ module.exports = function (app) {
                     if (self.employee.isRedirectToUserInboxEnabled()) {
                         $state.go('app.inbox.user-inbox');
                     }
+                })
+                .catch(function (error) {
+                    (isReceivingFromG2g && self.resetAddCorrespondence());
+                    return $q.reject(error)
                 });
         };
 
