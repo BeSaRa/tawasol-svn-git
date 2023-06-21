@@ -60,26 +60,31 @@ module.exports = function (app) {
                             // single sign on
                             rootEntity.checkSSO(1000)
                                 .then(function (authenticationService) {
-                                    authenticationService
-                                        .authenticate(new Credentials({
-                                            isSSO: true
-                                        }))
-                                        .then(function (result) {
-                                            employeeService.setEmployee(result);
-                                            // if (!employeeService.isAdminUser()) {
-                                            //     if (employeeService.hasPermissionTo('LANDING_PAGE'))
-                                            //         $state.go('app.landing-page', {identifier: rootEntity.getRootEntityIdentifier()});
-                                            //     else
-                                            //         $state.go('app.inbox.user-inbox', {identifier: rootEntity.getRootEntityIdentifier()});
-                                            // } else {
-                                            //     $state.go('app.administration.entities', {identifier: rootEntity.getRootEntityIdentifier()});
-                                            // }
-                                            ssoService.resolve('SSO ON');
-                                        })
-                                        .catch(function (reason) {
-                                            ssoService.resolve('SSO FAILED');
-                                            //   console.log("SINGLE SIGN ON FAILED !!", reason);
-                                        })
+                                    tokenService.tokenRefresh().then(function(){
+                                        ssoService.resolve('SSO ON');
+                                    }).catch(function (error) {
+                                        console.log( 'error', error);
+                                        authenticationService
+                                            .authenticate(new Credentials({
+                                                isSSO: true
+                                            }))
+                                            .then(function (result) {
+                                                employeeService.setEmployee(result);
+                                                // if (!employeeService.isAdminUser()) {
+                                                //     if (employeeService.hasPermissionTo('LANDING_PAGE'))
+                                                //         $state.go('app.landing-page', {identifier: rootEntity.getRootEntityIdentifier()});
+                                                //     else
+                                                //         $state.go('app.inbox.user-inbox', {identifier: rootEntity.getRootEntityIdentifier()});
+                                                // } else {
+                                                //     $state.go('app.administration.entities', {identifier: rootEntity.getRootEntityIdentifier()});
+                                                // }
+                                                ssoService.resolve('SSO ON');
+                                            })
+                                            .catch(function (reason) {
+                                                ssoService.resolve('SSO FAILED');
+                                                //   console.log("SINGLE SIGN ON FAILED !!", reason);
+                                            })
+                                    })
                                 })
                                 .catch(function () {
                                     ssoService.resolve('SSO OFF');
@@ -183,7 +188,7 @@ module.exports = function (app) {
                 isMailRoomIntegrationEnabled() {
                     return rootEntity && rootEntity.isMailRoomIntegrationEnabled();
                 },
-                isSigningContractsEnabled(){
+                isSigningContractsEnabled() {
                     return rootEntity && rootEntity.isSigningContractsEnabled();
                 },
                 setCountryVersion: function (versionCountry) {

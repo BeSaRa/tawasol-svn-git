@@ -92,13 +92,13 @@ module.exports = function (app) {
          */
         self.authenticate = function (credentials, reference, allowCurrentSessionInvalidation) {
             // check if the login came from inside application.
-            if (credentials instanceof Credentials === false) {
+            if (!(credentials instanceof Credentials)) {
                 return;
             }
             // set current tawasol root entity identifier.
             credentials.setTawasolEntityId(rootEntity.getRootEntityIdentifier());
             cacheCredentials = angular.copy(credentials);
-            // call backend service to login.
+            // call backend service to log in.
             cacheCredentials.password = encryptionService.encrypt(cacheCredentials.password);
 
             if (reference) {
