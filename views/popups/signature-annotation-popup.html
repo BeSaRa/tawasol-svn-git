@@ -4,13 +4,29 @@
             header-text="{{lang.signatures_options}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
-            <div class="custom-stamp-image-container" ng-repeat="row in ctrl.rows track by $index">
+            <!--<div class="custom-stamp-image-container" ng-repeat="row in ctrl.rows track by $index">
                 <img ng-class="{selected: ctrl.isSelectedSignature(signature)}"
                      ng-click="ctrl.setSelectedSignature(signature)"
                      class="custom-stamp-image"
                      ng-repeat="signature in row track by signature.vsId"
                      ng-src="{{signature.contentElementUrl}}" alt="{{signature.documentTitle}}"/>
+            </div>-->
+            <div ng-repeat="row in ctrl.rows track by $index" class="mb10">
+                <div flex layout="row">
+                    <div ng-repeat="signature in row track by signature.vsId" flex layout="column">
+                        <img flex
+                             ng-src="{{signature.contentElementUrl}}" alt="{{signature.documentTitle}}"
+                             class="custom-stamp-image cursor-pointer"
+                             ng-class="{'selected': ctrl.isSelectedSignature(signature)}"
+                             ng-click="ctrl.setSelectedSignature(signature)">
+                        <span md-truncate
+                              class="custom-stamp-image-title">{{signature.documentTitle}}</span>
+                    </div>
+                    <div flex
+                         ng-repeat="emptySignature in ctrl.getEmptySigns(row) track by $index"></div>
+                </div>
             </div>
+
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">

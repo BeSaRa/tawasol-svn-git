@@ -1094,11 +1094,19 @@ module.exports = function (app) {
                 controller: function (_, signatures, repeatAble) {
                     'ngInject';
                     var ctrl = this;
-                    ctrl.rows = _.chunk(signatures, 4);
+                    var signatureChunkLength = 4;
+                    ctrl.rows = _.chunk(signatures, signatureChunkLength);
                     ctrl.selectedSignature = null;
                     ctrl.repeatAble = repeatAble;
                     ctrl.repeatOption = false;
                     ctrl.inprogress = false;
+
+
+                    ctrl.getEmptySigns = function (chunk) {
+                        var diff = signatureChunkLength - chunk.length;
+                        return (new Array(diff));
+                    };
+
                     /**
                      * @description to check if the given stamp selected or not.
                      * @param signature

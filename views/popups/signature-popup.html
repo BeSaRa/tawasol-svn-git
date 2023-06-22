@@ -18,9 +18,11 @@
                         </div>
                     </md-input-container>
                 </div>
-                <div ng-repeat="signatureChunk in ctrl.signatureChunks track by $index">
+                <div ng-repeat="signatureChunk in ctrl.signatureChunks track by $index" class="mb10">
                     <div flex layout="row">
-                        <div ng-repeat="signature in signatureChunk track by $index" class="position-relative">
+                        <div ng-repeat="signature in signatureChunk track by $index"
+                             flex layout="column"
+                             class="position-relative">
                             <md-icon md-svg-icon="decagram" class="position-absolute"
                                      ng-if="ctrl.rootEntity.isSigningContractsEnabled() && signature.isContractInitial"
                                      tooltip="{{lang.initials}}"></md-icon>
@@ -30,6 +32,8 @@
                                  ng-class="{'selected': ctrl.isSignatureSelected(signature), 'selected-blue': ctrl.isInitialSignatureSelected(signature)}"
                                  ng-click="ctrl.setSelectedSignature(signature, $event)"
                                  width="100" height="100">
+                            <span md-truncate
+                                  class="max-w-100">{{signature.documentTitle}}</span>
                         </div>
                         <div flex
                              ng-repeat="emptySignature in ctrl.getEmptySigns(signatureChunk) track by $index"></div>
