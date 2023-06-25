@@ -25,7 +25,7 @@ const newVersion = correctVersion(major, minor, patch, vType)
 const appVersion = 'v' + newVersion;
 
 pkg.version = newVersion;
-configContent = configContent.replace(/\.setVersionNumber\(.*\)/,`.setVersionNumber(${newVersion})`)
+configContent = configContent.replace(/\.setVersionNumber\(.*\)/,`.setVersionNumber('${newVersion}')`)
 writeFileSync(pkgPath, JSON.stringify(pkg, null, '  '), 'utf-8')
 writeFileSync(configPath, configContent, 'utf-8')
 
